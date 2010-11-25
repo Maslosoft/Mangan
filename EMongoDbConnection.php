@@ -5,7 +5,7 @@
  *
  * @author yohan
  */
-class MongoDbConnection extends CApplicationComponent
+class EMongoDbConnection extends CApplicationComponent
 {
 	private $_dbConnection;
 	private $_db;

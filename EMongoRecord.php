@@ -1,98 +1,25 @@
 <?php
 
-/**
- * Description of MongoRecord
- *
- * @author yohan
- */
-abstract  class MongoRecord extends CModel
+abstract class EMongoRecord extends CModel
 {
-	public static $db;
-	private $_id;
-	private $_new;
-	private $_flatAttributes;
+	public static $db=null;
+	//private $_id;
+	private $_new = false;
 
-	/*
-	 * $_document property to store MongoDB document. Must defined as array in each MongoRecord model.
-	 */
 	protected $_document;
 
 	private static $_models=array();
 
 	public function getDb()
 	{
-		return Yii::app()->getComponent('mongodb')->db;
+		if(self::$db===null)
+			self::$db = Yii::app()->getComponent('mongodb')->db;
+		return self::$db;
 	}
 
-	/*
-	 * Convert collection record from array multi level to flat array.
-	 * Record will only flatted when the array key is not numeric key
-	 * For flatted value it's seperated with "." to identified it's parent
-	 */
-	protected function parseAttributes($attributes,$prefix='')
+	public function setDb(EMongoDbConnection $db)
 	{
-		$flatAttributes=array();
-		foreach($attributes as $key=>$value)
-		{
-			if(is_numeric($key) && is_array($value))
-				$flatAttributes=array_merge($flatAttributes, $this->parseAttributes($value,$key.'.'));
-			 else
-				$flatAttributes[$key]=$value;
-		}
-		return $flatAttributes;
-	}
-
-	protected function init()
-	{
-
-	}
-
-	public function __construct($arg='insert')
-	{
-		if($arg===null) // internally used by populateRecord() and model()
-				return;
-		elseif(is_array($arg))
-		{
-			$this->_document=$arg;
-			return;
-		}
-
-		$this->setScenario($arg);
-		$this->setIsNewRecord(true);
-
-		$this->init();
-
-		$this->attachBehaviors($this->behaviors());
-		$this->afterConstruct();
-	}
-
-	/**
-	 * PHP getter magic method.
-	 * This method is overridden so that MongoDB document can be accessed like properties.
-	 * @param string property name
-	 * @return mixed property value
-	 * @see getAttribute
-	 */
-	public function __get($name)
-	{
-		if(array_key_exists($name,$this->_document))
-			return $this->_document[$name];
-		else
-			return parent::__get($name);
-	}
-
-	/**
-	 * PHP setter magic method.
-	 * This method is overridden so that MongoDB document can be accessed like properties.
-	 * @param string property name
-	 * @param mixed property value
-	 */
-	public function __set($name,$value)
-	{
-		if(array_key_exists($name,$this->_document))
-			$this->_document[$name]=$value;
-		else
-			parent::__set($name,$value);
+		self::$db = $db;
 	}
 
 	public function getAttributes($names=true)
@@ -111,20 +38,71 @@ abstract  class MongoRecord extends CModel
 			return $attrs;
 		}
 		else
-			return $this->$doc;
+			return $doc;
+	}
+
+	public function init(){}
+
+	public function __construct($scenario='insert')
+	{
+		if($scenario===null)  // internally used by populateRecord() and model()
+			return;
+
+		$this->setScenario($scenario);
+		$this->setIsNewRecord(true);
+
+		$this->_document = new EMongoDocument($this->defaultSchema());
+
+		$this->init();
+
+		$this->attachBehaviors($this->behaviors());
+		$this->afterConstruct();
+	}
+
+	public function __get($name)
+	{
+		if(isset($this->_document->$name))
+			return $this->_document->$name;
+		// CComponent throws exeption if __get method not find anything,
+		// in this case we can check if schema allows dynamic creation and
+		// contiune work
+		try
+		{
+			return parent::__get($name);
+		}
+		catch(Exeption $e)
+		{
+			// no getter/behavior event found, check if document allows dynamic creation
+			if(!$this->_document->isBlockedSchema())
+				return $this->_document->$name;
+			else
+				// document is blocked, forward exception futher
+				throw $e;
+		}
+	}
+
+	public function __set($name, $value)
+	{
+		if(isset($this->_document->$name))
+			return $this->_document->$name = $value;
+		try
+		{
+			return parent::__set($name, $value);
+		}
+		catch(Exception $e)
+		{
+			if(!$this->_document->isBlockedSchema())
+				return $this->_document->$name=$value;
+			else
+				throw $e;
+		}
 	}
 
 	abstract protected function getCollectionName();
 
 	public function getCollection()
 	{
-		$collection=$this->collectionName;
-		return $this->db->$collection;
-	}
-
-	public function getIsNewRecord()
-	{
-		   return ($this->_id instanceof  MongoId)?TRUE:FALSE;
+		return $this->db->{$this->getCollectionName()};
 	}
 
 	public function save($runValidation=true,$attributes=null)
@@ -137,22 +115,37 @@ abstract  class MongoRecord extends CModel
 
 	public function insert()
 	{
-		$this->collection->insert($this->_document,array('fsync'=>TRUE));
-		if(!empty($this->_document['_id']))
+		if($this->beforeSave())
 		{
-			$this->_id=$this->_document['_id'];
-			return TRUE;
+			$rawDoc = $this->_document->toArray();
+			$this->collection->insert($rawDoc, array('fsync'=>true));
+
+			if(empty($rawDoc['_id']))
+			{
+				$this->addError('_id', "Can't save document to disk");
+				return true;
+			}
+			else
+			{
+				$this->_document=new EMongoDocument($rawDoc);
+				$this->setIsNewRecord(false);
+				$this->afterSave();
+				return true;
+			}
 		}
 		else
-		{
-			$this->addError('_id', "Can't save document to disk");
-			return FALSE;
-		}
+			return false;
 	}
 
 	public function update()
 	{
-		return $this->collection->save($this->_document,array('fsync'=>TRUE));
+		if($this->beforeSave())
+		{
+			$this->collection->save($this->_document, array('fsync'=>true));
+			$this->afterSave();
+		}
+		else
+			return false;
 	}
 
 	public function delete()
@@ -160,6 +153,7 @@ abstract  class MongoRecord extends CModel
 		if(!$this->getIsNewRecord())
 		{
 			Yii::trace(get_class($this).'.delete()','system.db.ar.CActiveRecord');
+
 			if($this->beforeDelete())
 			{
 				$result=$this->deleteByPk($this->getPrimaryKey())>0;
@@ -170,114 +164,60 @@ abstract  class MongoRecord extends CModel
 				return false;
 		}
 		else
-			throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
+			throw new CDbException(Yii::t('yii','The mongo record cannot be deleted because it is new.'));
 	}
 
 	public function refresh()
 	{
-		Yii::trace(get_class($this).'.refresh()','system.db.ar.CActiveRecord');
-		if(!$this->getIsNewRecord() && ($record=$this->findByPk($this->getPrimaryKey()))!==null)
-		{
-			return true;
-		}
-		else
-			return false;
+		// TODO!!!
 	}
 
 	public function saveAttributes($attributes=array())
 	{
+		// FIXME
 		$this->_document=array_merge($this->_document,$attributes);
 	}
 
-	/**
-	 * @param boolean whether the record is new and should be inserted when calling {@link save}.
-	 * @see getIsNewRecord
-	 */
-	public function setIsNewRecord($value)
+	public function getIsNewRecord()
 	{
-		$this->_new=$value;
+		return $this->_new;
 	}
 
-	/**
-	 * This event is raised before the record is saved.
-	 * @param CEvent the event parameter
-	 * @since 1.0.2
-	 */
+	public function setIsNewRecord($value)
+	{
+		return $this->_new = ($value == true);
+	}
+
 	public function onBeforeSave($event)
 	{
 		$this->raiseEvent('onBeforeSave',$event);
 	}
 
-	/**
-	 * This event is raised after the record is saved.
-	 * @param CEvent the event parameter
-	 * @since 1.0.2
-	 */
 	public function onAfterSave($event)
 	{
 		$this->raiseEvent('onAfterSave',$event);
 	}
 
-	/**
-	 * This event is raised before the record is deleted.
-	 * @param CEvent the event parameter
-	 * @since 1.0.2
-	 */
 	public function onBeforeDelete($event)
 	{
 		$this->raiseEvent('onBeforeDelete',$event);
 	}
 
-	/**
-	 * This event is raised after the record is deleted.
-	 * @param CEvent the event parameter
-	 * @since 1.0.2
-	 */
 	public function onAfterDelete($event)
 	{
 		$this->raiseEvent('onAfterDelete',$event);
 	}
 
-	/**
-	 * This event is raised after the record instance is created by new operator.
-	 * @param CEvent the event parameter
-	 * @since 1.0.2
-	 */
-	public function onAfterConstruct($event)
-	{
-		$this->raiseEvent('onAfterConstruct',$event);
-	}
-
-	/**
-	 * This event is raised before an AR finder performs a find call.
-	 * @param CEvent the event parameter
-	 * @see beforeFind
-	 * @since 1.0.9
-	 */
 	public function onBeforeFind($event)
 	{
 		$this->raiseEvent('onBeforeFind',$event);
 	}
 
-	/**
-	 * This event is raised after the record is instantiated by a find method.
-	 * @param CEvent the event parameter
-	 * @since 1.0.2
-	 */
 	public function onAfterFind($event)
 	{
 		$this->raiseEvent('onAfterFind',$event);
 	}
 
-	/**
-	 * This method is invoked before saving a record (after validation, if any).
-	 * The default implementation raises the {@link onBeforeSave} event.
-	 * You may override this method to do any preparation work for record saving.
-	 * Use {@link isNewRecord} to determine whether the saving is
-	 * for inserting or updating record.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @return boolean whether the saving should be executed. Defaults to true.
-	 */
 	protected function beforeSave()
 	{
 		if($this->hasEventHandler('onBeforeSave'))
@@ -290,25 +230,12 @@ abstract  class MongoRecord extends CModel
 			return true;
 	}
 
-	/**
-	 * This method is invoked after saving a record successfully.
-	 * The default implementation raises the {@link onAfterSave} event.
-	 * You may override this method to do postprocessing after record saving.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 */
 	protected function afterSave()
 	{
 		if($this->hasEventHandler('onAfterSave'))
 			$this->onAfterSave(new CEvent($this));
 	}
 
-	/**
-	 * This method is invoked before deleting a record.
-	 * The default implementation raises the {@link onBeforeDelete} event.
-	 * You may override this method to do any preparation work for record deletion.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @return boolean whether the record should be deleted. Defaults to true.
-	 */
 	protected function beforeDelete()
 	{
 		if($this->hasEventHandler('onBeforeDelete'))
@@ -321,75 +248,36 @@ abstract  class MongoRecord extends CModel
 			return true;
 	}
 
-	/**
-	 * This method is invoked after deleting a record.
-	 * The default implementation raises the {@link onAfterDelete} event.
-	 * You may override this method to do postprocessing after the record is deleted.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 */
 	protected function afterDelete()
 	{
 		if($this->hasEventHandler('onAfterDelete'))
 			$this->onAfterDelete(new CEvent($this));
 	}
 
-	/**
-	 * This method is invoked after a record instance is created by new operator.
-	 * The default implementation raises the {@link onAfterConstruct} event.
-	 * You may override this method to do postprocessing after record creation.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 */
 	protected function afterConstruct()
 	{
 		if($this->hasEventHandler('onAfterConstruct'))
 			$this->onAfterConstruct(new CEvent($this));
 	}
 
-	/**
-	 * Creates an active record instance.
-	 * This method is called by {@link populateRecord} and {@link populateRecords}.
-	 * You may override this method if the instance being created
-	 * depends the attributes that are to be populated to the record.
-	 * For example, by creating a record based on the value of a column,
-	 * you may implement the so-called single-table inheritance mapping.
-	 * @param array list of attribute values for the active records.
-	 * @return CActiveRecord the active record
-	 * @since 1.0.2
-	 */
-	protected function instantiate($document)
-	{
-		$class=get_class($this);
-		$model=new $class(null);
-				$model->_document=array_merge($this->_document,$document);
-				$this->afterFind();
-		return $model;
-	}
-
-	/**
-	 * This method is invoked before an AR finder executes a find call.
-	 * The find calls include {@link find}, {@link findAll}, {@link findByPk},
-	 * {@link findAllByPk}, {@link findByAttributes} and {@link findAllByAttributes}.
-	 * The default implementation raises the {@link onBeforeFind} event.
-	 * If you override this method, make sure you call the parent implementation
-	 * so that the event is raised properly.
-	 * @since 1.0.9
-	 */
 	protected function beforeFind()
 	{
 		if($this->hasEventHandler('onBeforeFind'))
 			$this->onBeforeFind(new CEvent($this));
 	}
 
-	/**
-	 * This method is invoked after each record is instantiated by a find method.
-	 * The default implementation raises the {@link onAfterFind} event.
-	 * You may override this method to do postprocessing after each newly found record is instantiated.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 */
 	protected function afterFind()
 	{
 		if($this->hasEventHandler('onAfterFind'))
 			$this->onAfterFind(new CEvent($this));
+	}
+
+	protected function instantiate($document)
+	{
+		$class=get_class($this);
+		$model=new $class(null);
+		$model->_document=new EMongoDocument($document);
+		return $model;
 	}
 
 	public function find($query=array())
@@ -399,10 +287,7 @@ abstract  class MongoRecord extends CModel
 		else
 			$doc=$this->collection->findOne();
 
-		if($doc!==NULL)
-			return $this->instantiate($doc);
-		else
-			return NULL;
+		return $this->populateRecord($doc);
 	}
 
 	public function findAll($criteria=array())
@@ -414,20 +299,44 @@ abstract  class MongoRecord extends CModel
 
 		if(isset($criteria['limit']))
 			$docs=$docs->limit($criteria['limit']);
+		if(isset($criteria['offset']))
+			$docs=$docs->skip($criteria['offset']);
 		if(isset($criteria['sort']))
 			$docs=$docs->sort($criteria['sort']);
 		return $this->populateRecords($docs);
-
 	}
 
-	protected function populateRecords($documents)
+	public function populateRecord($document, $callAfterFind=true)
+	{
+		if($document!==null)
+		{
+			$record=$this->instantiate($document);
+			$record->setScenario('update');
+			$record->init();
+
+			$record->attachBehaviors($record->behaviors());
+
+			if($callAfterFind)
+				$record->afterFind();
+			return $record;
+		}
+		else
+			return null;
+	}
+
+	public function populateRecords($data, $callAfterFind=true)
 	{
 		$records=array();
-		foreach($documents as $doc)
+		foreach($data as $record)
 		{
-			$records[]=$this->instantiate($doc);
+			$records[] = $this->populateRecord($record, $callAfterFind);
 		}
 		return $records;
+	}
+
+	public function defaultSchema()
+	{
+		return array();
 	}
 
 	public static function model($className=__CLASS__)
