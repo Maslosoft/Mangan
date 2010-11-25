@@ -7,184 +7,188 @@
  */
 abstract  class MongoRecord extends CModel
 {
-    public static $db;
-    private $_id;
-    private $_new;
-    private $_flatAttributes;
-    
-    /*
-     * $_document property to store MongoDB document. Must defined as array in each MongoRecord model.
-     */
-    protected $_document;
-    
-    private static $_models=array();
-    
-    public function getDb()
-    {
-        return Yii::app()->getComponent('mongodb')->db;
-    }
+	public static $db;
+	private $_id;
+	private $_new;
+	private $_flatAttributes;
 
-   
-    /*
-     * Convert collection record from array multi level to flat array.
-     * Record will only flatted when the array key is not numeric key
-     * For flatted value it's seperated with "." to identified it's parent
-     */
-    protected function parseAttributes($attributes,$prefix='')
-    {
-        $flatAttributes=array();
-        foreach($attributes as $key=>$value)
-        {
-            if(is_numeric($key) && is_array($value))
-                $flatAttributes=array_merge($flatAttributes, $this->parseAttributes($value,$key.'.'));
-             else
-                $flatAttributes[$key]=$value;
-        }
-        return $flatAttributes;
-    }
-    protected function init()
-    {
-        
-    }
-    public function __construct($arg='insert')
-    {
-            if($arg===null) // internally used by populateRecord() and model()
-                    return;
-            elseif(is_array($arg))
-            {
-                $this->_document=$arg;
-                return;
-            }
+	/*
+	 * $_document property to store MongoDB document. Must defined as array in each MongoRecord model.
+	 */
+	protected $_document;
 
-            $this->setScenario($arg);
-            $this->setIsNewRecord(true);
+	private static $_models=array();
 
-            $this->init();
+	public function getDb()
+	{
+		return Yii::app()->getComponent('mongodb')->db;
+	}
 
-            $this->attachBehaviors($this->behaviors());
-            $this->afterConstruct();
-    }
+	/*
+	 * Convert collection record from array multi level to flat array.
+	 * Record will only flatted when the array key is not numeric key
+	 * For flatted value it's seperated with "." to identified it's parent
+	 */
+	protected function parseAttributes($attributes,$prefix='')
+	{
+		$flatAttributes=array();
+		foreach($attributes as $key=>$value)
+		{
+			if(is_numeric($key) && is_array($value))
+				$flatAttributes=array_merge($flatAttributes, $this->parseAttributes($value,$key.'.'));
+			 else
+				$flatAttributes[$key]=$value;
+		}
+		return $flatAttributes;
+	}
 
-       /**
-         * PHP getter magic method.
-         * This method is overridden so that MongoDB document can be accessed like properties.
-         * @param string property name
-         * @return mixed property value
-         * @see getAttribute
-         */
-        public function __get($name)
-        {
-                if(array_key_exists($name,$this->_document))
-                        return $this->_document[$name];
-                else
-                        return parent::__get($name);
-        }
+	protected function init()
+	{
 
-        /**
-         * PHP setter magic method.
-         * This method is overridden so that MongoDB document can be accessed like properties.
-         * @param string property name
-         * @param mixed property value
-         */
-        public function __set($name,$value)
-        {
-            if(array_key_exists($name,$this->_document))
-                    $this->_document[$name]=$value;
-            else
-                    parent::__set($name,$value);
-        }
+	}
 
-    public function getAttributes($names=true)
-    {
-            $doc=$this->_document;
-            if(is_array($names))
-            {
-                    $attrs=array();
-                    foreach($names as $name)
-                    {
-                            if(property_exists($this,$name))
-                                    $attrs[$name]=$this->$name;
-                            else
-                                    $attrs[$name]=isset($doc[$name])?$doc[$name]:null;
-                    }
-                    return $attrs;
-            }
-            else
-                    return $this->$doc;
-    }
-    abstract protected function getCollectionName();
-    
-    public function getCollection()
-    {
-        $collection=$this->collectionName;
-        return $this->db->$collection;
-    }
-   
-    public function getIsNewRecord()
-    {
-           return ($this->_id instanceof  MongoId)?TRUE:FALSE;
+	public function __construct($arg='insert')
+	{
+		if($arg===null) // internally used by populateRecord() and model()
+				return;
+		elseif(is_array($arg))
+		{
+			$this->_document=$arg;
+			return;
+		}
 
-    }
-    public function save($runValidation=true,$attributes=null)
-    {
-            if(!$runValidation || $this->validate($this->attributes))
-                    return $this->getIsNewRecord() ? $this->insert() : $this->update();
-            else
-                    return false;
-    }
+		$this->setScenario($arg);
+		$this->setIsNewRecord(true);
 
-    public function insert()
-    {
-        $this->collection->insert($this->_document,array('fsync'=>TRUE));
-        if(!empty($this->_document['_id']))
-        {
-            $this->_id=$this->_document['_id'];
-            return TRUE;
-        }
-        else
-        {
-            $this->addError('_id', "Can't save document to disk");
-            return FALSE;
-        }
-    }
+		$this->init();
 
-    public function update()
-    {
-        return $this->collection->save($this->_document,array('fsync'=>TRUE));
-    }
-    public function delete()
-    {
-        if(!$this->getIsNewRecord())
-        {
-                Yii::trace(get_class($this).'.delete()','system.db.ar.CActiveRecord');
-                if($this->beforeDelete())
-                {
-                        $result=$this->deleteByPk($this->getPrimaryKey())>0;
-                        $this->afterDelete();
-                        return $result;
-                }
-                else
-                        return false;
-        }
-        else
-                throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
-    }
+		$this->attachBehaviors($this->behaviors());
+		$this->afterConstruct();
+	}
 
-    public function refresh()
-    {
-            Yii::trace(get_class($this).'.refresh()','system.db.ar.CActiveRecord');
-            if(!$this->getIsNewRecord() && ($record=$this->findByPk($this->getPrimaryKey()))!==null)
-            {
-                    return true;
-            }
-            else
-                    return false;
-    }
+	/**
+	 * PHP getter magic method.
+	 * This method is overridden so that MongoDB document can be accessed like properties.
+	 * @param string property name
+	 * @return mixed property value
+	 * @see getAttribute
+	 */
+	public function __get($name)
+	{
+		if(array_key_exists($name,$this->_document))
+			return $this->_document[$name];
+		else
+			return parent::__get($name);
+	}
 
-    public function saveAttributes($attributes=array())
-    {
-        $this->_document=array_merge($this->_document,$attributes);
-    }
+	/**
+	 * PHP setter magic method.
+	 * This method is overridden so that MongoDB document can be accessed like properties.
+	 * @param string property name
+	 * @param mixed property value
+	 */
+	public function __set($name,$value)
+	{
+		if(array_key_exists($name,$this->_document))
+			$this->_document[$name]=$value;
+		else
+			parent::__set($name,$value);
+	}
+
+	public function getAttributes($names=true)
+	{
+		$doc=$this->_document;
+		if(is_array($names))
+		{
+			$attrs=array();
+			foreach($names as $name)
+			{
+				if(property_exists($this,$name))
+					$attrs[$name]=$this->$name;
+				else
+					$attrs[$name]=isset($doc[$name])?$doc[$name]:null;
+			}
+			return $attrs;
+		}
+		else
+			return $this->$doc;
+	}
+
+	abstract protected function getCollectionName();
+
+	public function getCollection()
+	{
+		$collection=$this->collectionName;
+		return $this->db->$collection;
+	}
+
+	public function getIsNewRecord()
+	{
+		   return ($this->_id instanceof  MongoId)?TRUE:FALSE;
+	}
+
+	public function save($runValidation=true,$attributes=null)
+	{
+		if(!$runValidation || $this->validate($this->attributes))
+			return $this->getIsNewRecord() ? $this->insert() : $this->update();
+		else
+			return false;
+	}
+
+	public function insert()
+	{
+		$this->collection->insert($this->_document,array('fsync'=>TRUE));
+		if(!empty($this->_document['_id']))
+		{
+			$this->_id=$this->_document['_id'];
+			return TRUE;
+		}
+		else
+		{
+			$this->addError('_id', "Can't save document to disk");
+			return FALSE;
+		}
+	}
+
+	public function update()
+	{
+		return $this->collection->save($this->_document,array('fsync'=>TRUE));
+	}
+
+	public function delete()
+	{
+		if(!$this->getIsNewRecord())
+		{
+			Yii::trace(get_class($this).'.delete()','system.db.ar.CActiveRecord');
+			if($this->beforeDelete())
+			{
+				$result=$this->deleteByPk($this->getPrimaryKey())>0;
+				$this->afterDelete();
+				return $result;
+			}
+			else
+				return false;
+		}
+		else
+			throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
+	}
+
+	public function refresh()
+	{
+		Yii::trace(get_class($this).'.refresh()','system.db.ar.CActiveRecord');
+		if(!$this->getIsNewRecord() && ($record=$this->findByPk($this->getPrimaryKey()))!==null)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public function saveAttributes($attributes=array())
+	{
+		$this->_document=array_merge($this->_document,$attributes);
+	}
+
 	/**
 	 * @param boolean whether the record is new and should be inserted when calling {@link save}.
 	 * @see getIsNewRecord
@@ -340,7 +344,8 @@ abstract  class MongoRecord extends CModel
 		if($this->hasEventHandler('onAfterConstruct'))
 			$this->onAfterConstruct(new CEvent($this));
 	}
-        /**
+
+	/**
 	 * Creates an active record instance.
 	 * This method is called by {@link populateRecord} and {@link populateRecords}.
 	 * You may override this method if the instance being created
@@ -355,10 +360,11 @@ abstract  class MongoRecord extends CModel
 	{
 		$class=get_class($this);
 		$model=new $class(null);
-                $model->_document=array_merge($this->_document,$document);
-                $this->afterFind();
+				$model->_document=array_merge($this->_document,$document);
+				$this->afterFind();
 		return $model;
 	}
+
 	/**
 	 * This method is invoked before an AR finder executes a find call.
 	 * The find calls include {@link find}, {@link findAll}, {@link findByPk},
@@ -374,7 +380,7 @@ abstract  class MongoRecord extends CModel
 			$this->onBeforeFind(new CEvent($this));
 	}
 
-        /**
+	/**
 	 * This method is invoked after each record is instantiated by a find method.
 	 * The default implementation raises the {@link onAfterFind} event.
 	 * You may override this method to do postprocessing after each newly found record is instantiated.
@@ -385,46 +391,46 @@ abstract  class MongoRecord extends CModel
 		if($this->hasEventHandler('onAfterFind'))
 			$this->onAfterFind(new CEvent($this));
 	}
-        public function find($query=array())
-        {
-             if(!empty($query))
-                $doc=$this->collection->findOne($query);
-            else
-                $doc=$this->collection->findOne();
 
-            if($doc!==NULL)
-                return $this->instantiate($doc);
-            else
-                return NULL;
-        }
+	public function find($query=array())
+	{
+		if(!empty($query))
+			$doc=$this->collection->findOne($query);
+		else
+			$doc=$this->collection->findOne();
 
-        public function findAll($criteria=array())
-        {
+		if($doc!==NULL)
+			return $this->instantiate($doc);
+		else
+			return NULL;
+	}
 
-            if(isset($criteria['query']))
-                $docs=$this->collection->find($criteria['query']);
-            else
-                $docs=$this->collection->find();
+	public function findAll($criteria=array())
+	{
+		if(isset($criteria['query']))
+			$docs=$this->collection->find($criteria['query']);
+		else
+			$docs=$this->collection->find();
 
-            if(isset($criteria['limit']))
-                $docs=$docs->limit($criteria['limit']);
-            if(isset($criteria['sort']))
-                $docs=$docs->sort($criteria['sort']);
-            return $this->populateRecords($docs);
+		if(isset($criteria['limit']))
+			$docs=$docs->limit($criteria['limit']);
+		if(isset($criteria['sort']))
+			$docs=$docs->sort($criteria['sort']);
+		return $this->populateRecords($docs);
 
-        }
+	}
 
-        protected function populateRecords($documents)
-        {
-            $records=array();
-            foreach($documents as $doc)
-            {
-                $records[]=$this->instantiate($doc);
-            }
-            return $records;
-        }
-        
-        public static function model($className=__CLASS__)
+	protected function populateRecords($documents)
+	{
+		$records=array();
+		foreach($documents as $doc)
+		{
+			$records[]=$this->instantiate($doc);
+		}
+		return $records;
+	}
+
+	public static function model($className=__CLASS__)
 	{
 		if(isset(self::$_models[$className]))
 			return self::$_models[$className];
@@ -435,7 +441,4 @@ abstract  class MongoRecord extends CModel
 			return $model;
 		}
 	}
-
-
 }
-?>
