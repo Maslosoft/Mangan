@@ -1,47 +1,56 @@
 <?php
 
-abstract class EMongoRecord extends CModel
+abstract class EMongoRecord extends EMongoEmbdedDocument
 {
-	public static $db=null;
-	//private $_id;
-	private $_new = false;
+	/**
+	 * MongoDB Connection object
+	 *
+	 * @var MongoConnection $_db
+	 */
+	protected static $_db;
 
-	protected $_document;
+	private $_new=false;
+
+	/**
+	 * MongoDB special field, always visible
+	 *
+	 * @var mixed $_id
+	 */
+	public $_id;
 
 	private static $_models=array();
 
+	/**
+	 * Returns (and in initial call sets) MongoDB Connection object
+	 *
+	 * @return MongoConnection
+	 */
 	public function getDb()
 	{
-		if(self::$db===null)
-			self::$db = Yii::app()->getComponent('mongodb')->db;
-		return self::$db;
+		if(self::$_db===null)
+			self::$_db = Yii::app()->getComponent('mongodb')->db;
+		return self::$_db;
 	}
 
-	public function setDb(EMongoDbConnection $db)
+	/**
+	 * Set MongoDB connection
+	 *
+	 * @param EMongoDbConnection $conn
+	 */
+	public function setDb(EMongoDbConnection $conn)
 	{
-		self::$db = $db->db;
+		return self::$_db = $conn->db;
 	}
 
-	public function getAttributes($names=true)
+	/**
+	 * Returns primary index key name on a collection (default _id)
+	 *
+	 * @return mixed Key name, or array for composite keys
+	 */
+	public function primaryKey()
 	{
-		$doc=$this->_document;
-		if(is_array($names))
-		{
-			$attrs=array();
-			foreach($names as $name)
-			{
-				if(property_exists($this,$name))
-					$attrs[$name]=$this->$name;
-				else
-					$attrs[$name]=isset($doc[$name])?$doc[$name]:null;
-			}
-			return $attrs;
-		}
-		else
-			return $doc;
+		return '_id';
 	}
-
-	public function init(){}
 
 	public function __construct($scenario='insert')
 	{
@@ -51,58 +60,29 @@ abstract class EMongoRecord extends CModel
 		$this->setScenario($scenario);
 		$this->setIsNewRecord(true);
 
-		$this->_document = new EMongoDocument($this->defaultSchema());
-
 		$this->init();
 
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
+
+		$this->initEmbdedDocuments();
 	}
 
-	public function __get($name)
-	{
-		if(isset($this->_document->$name))
-			return $this->_document->$name;
-		// CComponent throws exeption if __get method not find anything,
-		// in this case we can check if schema allows dynamic creation and
-		// contiune work
-		try
-		{
-			return parent::__get($name);
-		}
-		catch(Exeption $e)
-		{
-			// no getter/behavior event found, check if document allows dynamic creation
-			if(!$this->_document->isBlockedSchema())
-				return $this->_document->$name;
-			else
-				// document is blocked, forward exception futher
-				throw $e;
-		}
-	}
-
-	public function __set($name, $value)
-	{
-		if(isset($this->_document->$name))
-			return $this->_document->$name = $value;
-		try
-		{
-			return parent::__set($name, $value);
-		}
-		catch(Exception $e)
-		{
-			if(!$this->_document->isBlockedSchema())
-				return $this->_document->$name=$value;
-			else
-				throw $e;
-		}
-	}
-
+	/**
+	 * Child implementation must return name of actual colection
+	 *
+	 * @return string
+	 */
 	abstract protected function getCollectionName();
 
+	/**
+	 * Returns MongoDB Collection object
+	 *
+	 * @return MongoCollection
+	 */
 	public function getCollection()
 	{
-		return $this->db->{$this->getCollectionName()};
+		return $this->getDb()->{$this->getCollectionName()};
 	}
 
 	public function save($runValidation=true,$attributes=null)
@@ -115,19 +95,23 @@ abstract class EMongoRecord extends CModel
 
 	public function insert()
 	{
+		if(!$this->getIsNewRecord())
+			throw new CDbException(Yii::t('yii','The active record cannot be inserted to database because it is not new.'));
 		if($this->beforeSave())
 		{
-			$rawDoc = $this->_document->toArray();
-			$this->collection->insert($rawDoc, array('fsync'=>true));
+			$rawData=$this->toArray();
+			if(empty($this->_id))
+				unset($rawData['_id']);
+			$this->getCollection()->insert($rawData, array('fsync'=>true));
 
-			if(empty($rawDoc['_id']))
+			if(empty($rawData['_id']))
 			{
 				$this->addError('_id', "Can't save document to disk");
 				return true;
 			}
 			else
 			{
-				$this->_document=new EMongoDocument($rawDoc);
+				$this->_id=$rawData['_id'];
 				$this->setIsNewRecord(false);
 				$this->afterSave();
 				return true;
@@ -139,9 +123,11 @@ abstract class EMongoRecord extends CModel
 
 	public function update()
 	{
+		if($this->getIsNewRecord())
+			throw new CDbException(Yii::t('yii','The active record cannot be updated because it is new.'));
 		if($this->beforeSave())
 		{
-			$this->collection->save($this->_document, array('fsync'=>true));
+			$this->getCollection()->save($this->toArray(), array('fsync'=>true));
 			$this->afterSave();
 		}
 		else
@@ -153,10 +139,9 @@ abstract class EMongoRecord extends CModel
 		if(!$this->getIsNewRecord())
 		{
 			Yii::trace(get_class($this).'.delete()','system.db.ar.CActiveRecord');
-
 			if($this->beforeDelete())
 			{
-				$result=$this->deleteByPk($this->getPrimaryKey())>0;
+				$result = $this->getCollection()->remove(array('_id'=>$this->_id), array('fsync'=>true, 'justOne'=>true));
 				$this->afterDelete();
 				return $result;
 			}
@@ -164,29 +149,11 @@ abstract class EMongoRecord extends CModel
 				return false;
 		}
 		else
-			throw new CDbException(Yii::t('yii','The mongo record cannot be deleted because it is new.'));
+			throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
 	}
 
-	public function refresh()
-	{
-		// TODO!!!
-	}
-
-	public function saveAttributes($attributes=array())
-	{
-		// FIXME
-		$this->_document=array_merge($this->_document,$attributes);
-	}
-
-	public function getIsNewRecord()
-	{
-		return $this->_new;
-	}
-
-	public function setIsNewRecord($value)
-	{
-		return $this->_new = ($value == true);
-	}
+	//FIXME
+	public function refresh(){}
 
 	public function onBeforeSave($event)
 	{
@@ -218,7 +185,7 @@ abstract class EMongoRecord extends CModel
 		$this->raiseEvent('onAfterFind',$event);
 	}
 
-	protected function beforeSave()
+	public function beforeSave()
 	{
 		if($this->hasEventHandler('onBeforeSave'))
 		{
@@ -254,12 +221,6 @@ abstract class EMongoRecord extends CModel
 			$this->onAfterDelete(new CEvent($this));
 	}
 
-	protected function afterConstruct()
-	{
-		if($this->hasEventHandler('onAfterConstruct'))
-			$this->onAfterConstruct(new CEvent($this));
-	}
-
 	protected function beforeFind()
 	{
 		if($this->hasEventHandler('onBeforeFind'))
@@ -272,53 +233,43 @@ abstract class EMongoRecord extends CModel
 			$this->onAfterFind(new CEvent($this));
 	}
 
-	protected function instantiate($document)
+	public function isNewRecord()
+	{
+		return $this->_new;
+	}
+
+	public function getIsNewRecord()
+	{
+		return $this->_new;
+	}
+
+	public function setIsNewRecord($value)
+	{
+		return $this->_new = ($value == true);
+	}
+
+	public function instantiate(array $document)
 	{
 		$class=get_class($this);
 		$model=new $class(null);
-		$model->_document=new EMongoDocument($document);
+		$model->initEmbdedDocuments();
+		$model->setAttributes($document, false);
 		return $model;
-	}
-
-	public function find($query=array())
-	{
-		if(!empty($query))
-			$doc=$this->collection->findOne($query);
-		else
-			$doc=$this->collection->findOne();
-
-		return $this->populateRecord($doc);
-	}
-
-	public function findAll($criteria=array())
-	{
-		if(isset($criteria['query']))
-			$docs=$this->collection->find($criteria['query']);
-		else
-			$docs=$this->collection->find();
-
-		if(isset($criteria['limit']))
-			$docs=$docs->limit($criteria['limit']);
-		if(isset($criteria['offset']))
-			$docs=$docs->skip($criteria['offset']);
-		if(isset($criteria['sort']))
-			$docs=$docs->sort($criteria['sort']);
-		return $this->populateRecords($docs);
 	}
 
 	public function populateRecord($document, $callAfterFind=true)
 	{
 		if($document!==null)
 		{
-			$record=$this->instantiate($document);
-			$record->setScenario('update');
-			$record->init();
+			$model=$this->instantiate($document);
+			$model->setScenario('update');
+			$model->init();
 
-			$record->attachBehaviors($record->behaviors());
+			$model->attachBehaviors($model->behaviors());
 
 			if($callAfterFind)
-				$record->afterFind();
-			return $record;
+				$model->afterFind();
+			return $model;
 		}
 		else
 			return null;
@@ -334,11 +285,77 @@ abstract class EMongoRecord extends CModel
 		return $records;
 	}
 
-	public function defaultSchema()
+	public function find(array $query=null)
 	{
-		return array();
+		if(!empty($query))
+			$doc=$this->getCollection()->findOne($query);
+		else
+			$doc=$this->getCollection()->findOne();
+
+		return $this->populateRecord($doc);
 	}
 
+	public function findAll(array $query=null, $sort=null, $limit=null, $offset=null)
+	{
+		if($query!==null)
+			$cursor=$this->getCollection()->find($query);
+		else
+			$cursor=$this->getCollection()->find();
+
+		if($limit!==null)
+			$cursor->limit($limit);
+		if($offset!==null)
+			$cursor->skip($offset);
+		if($sort!==null)
+			$cursor->sort($sort);
+
+		return $this->populateRecords($cursor);
+	}
+
+	public function findByPk($queryPk)
+	{
+		$pk=$this->primaryKey();
+		$attributes=array();
+
+		if(is_array($pk))
+		{
+			foreach($pk as $i=>$attributeName)
+			{
+				$attributes[$attributeName]=$queryPk[$i];
+			}
+		}
+		else
+			$attributes[$this->primaryKey()]=$queryPk;
+
+		return $this->findByAttributes($attributes);
+	}
+
+	public function findByAttributes($attributes)
+	{
+		return $this->find($attributes);
+	}
+
+	public function findAllByAttributes($attributes, $sort=null, $limit=null, $offset=null)
+	{
+		return $this->findAll($attributes, $sort, $limit, $offset);
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * The model returned is a static instance of the AR class.
+	 * It is provided for invoking class-level methods (something similar to static class methods.)
+	 *
+	 * EVERY derived AR class must override this method as follows,
+	 * <pre>
+	 * public static function model($className=__CLASS__)
+	 * {
+	 *     return parent::model($className);
+	 * }
+	 * </pre>
+	 *
+	 * @param string $className active record class name.
+	 * @return CActiveRecord active record model instance.
+	 */
 	public static function model($className=__CLASS__)
 	{
 		if(isset(self::$_models[$className]))

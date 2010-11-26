@@ -1,11 +1,22 @@
 <?php
 
+/**
+ * EMongoRecordDataProvider implements a data provider based on EMongoRecord.
+ *
+ * EMongoRecordDataProvider provides data in terms of MongoRecord objects which are
+ * of class {@link modelClass}. It uses the AR {@link CActiveRecord::findAll} method
+ * to retrieve the data from database. The {@link query} property can be used to
+ * specify various query options, such as conditions, sorting, pagination, etc.
+ *
+ * @author canni
+ *
+ */
 class EMongoRecordDataProvider extends CDataProvider
 {
 	/**
 	 * @var string the name of key field. Defaults to '_id', as a mongo default document primary key.
 	 */
-	public $keyField='_id';
+	public $keyField;
 
 	/**
 	 * @var string the primary ActiveRecord class name. The {@link getData()} method
@@ -47,6 +58,14 @@ class EMongoRecordDataProvider extends CDataProvider
 		$this->setId($this->modelClass);
 		foreach($config as $key=>$value)
 			$this->$key=$value;
+
+		if($this->keyField!==null)
+		{
+			if(is_array($this->keyField))
+				throw new CException('This DataProvider cannot handle multi-field primary key!');
+		}
+		else
+			$this->keyField='_id';
 	}
 
 	/**
@@ -73,7 +92,7 @@ class EMongoRecordDataProvider extends CDataProvider
 	 */
 	protected function fetchData()
 	{
-		$criteria = array('query'=>$this->_query);
+		$criteria = array('query'=>$this->_query, 'sort'=>null, 'limit'=>null, 'offset'=>null);
 		if(($pagination=$this->getPagination())!==false)
 		{
 			$pagination->setItemCount($this->getTotalItemCount());
@@ -92,7 +111,7 @@ class EMongoRecordDataProvider extends CDataProvider
 			$criteria['sort']=$sort;
 		}
 
-		return $this->model->findAll($criteria);
+		return $this->model->findAll($criteria['query'], $criteria['sort'], $criteria['limit'], $criteria['offset']);
 	}
 
 	/**
@@ -115,7 +134,7 @@ class EMongoRecordDataProvider extends CDataProvider
 	 */
 	public function calculateTotalItemCount()
 	{
-		return $this->model->collection->count($this->_query);
+		return $this->model->getCollection()->count($this->_query);
 	}
 
 	/**
