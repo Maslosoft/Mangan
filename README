@@ -1,85 +1,165 @@
-This extension is a basic active record for MongoDb. I've used it in my project at This http://rserve.me I have not fully tested it yet but so far it's work like I expected. I share it to you all so you can use it as reference or fix it if it has bugs.
+This extension is an almost complete, ActiveRecord like support for MongoDB for Yii
+It originally started as a fork of [MongoRecord](http://www.yiiframework.com/extension/mongorecord "MongoRecord") extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"), to fix some major bugs, and add full featured suite for [MongoDB](http://http://www.mongodb.org "MongoDB") developers.
 
-Documentation 
+Some key features:
 
-Requirements 
+- Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax
+- Support of schema-less documents with Yii standard rules and validation features
+- (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
 
-Tested with Yii 1.1.2
-Installation 
+##Requirements
 
-Extract the release file under protected/components
-Insert the code below in your config file inside components sections
-'mongodb'=>array(
-                    'class'=>'MongoDbConnection',
-                    'db'=>'rserve'
-                ),
-Usage 
+I've tested it only with Yii 1.1.4
 
-See the following code example, this is an ActiveRecord example for Venue Collection:
+##Basic usage
 
-/**
- * Venue model used for interacting with venue collections in mongodb
- *
- * @author yohan
- */
- 
-class Venue extends MongoRecord
+Just create a model class as You would with normal ActiveRecord
+
+~~~
+[php]
+// example model simple as standard AcriveRecord
+class Client extends EMongoRecord
 {
-/**
- * Default document to store inside a record
- */
-    protected $_document=array(
-        'merchant_id'=>'','name'=>'','desc'=>''
-    );
-/**
- * Return collection or table name 
- */
-    protected function  getCollectionName()
-    {
-        return 'venue';
-    }
- 
-    public static function model($className=__CLASS__)
-    {
-      return parent::model($className);
-    }
+    public $personal_number;
+    public $first_name;
+    public $last_name;
+
     public function rules()
     {
-        return array();
+        return array(
+            array('personal_number, first_name, last_name', 'required'),
+        );
     }
- 
-    public function attributeNames()
+
+    public function attributeLabels()
     {
-        return array();
+        return array(
+            'personal_number'=>'PN',
+        );
     }
- 
- 
- 
- 
+
+    // EVERY model has to have this! (same as CActiveRecord child classes)
+    public static function model($className=__CLASS__)
+    {
+        return parent::model($className);
+    }
 }
-This component was extended from CModel component, just like CActiveRecord component. And it's borrow many method from CActiveRecord. So basically you can use it just like you use CActiveRecord.
+/*
+And this is it ! use this object just as regular ActiveRecord
+for instance:
+$client = new Client;
+$client->first_name='somethin';
+$client->save();
+$clients = Client::model->findAll();
+etc.
+*/
+~~~
 
-the $this->_document property is a default document that will store in MongoDb document. It just like table structure in conventional DB. Because it's like CActiveRecord, you can access and modify the your $_document record just like using class property. For example to insert new record;
+##Embded documents
 
-$venue=new Venue;
-$venue->merchant_id=1;
-$venue->save(FALSE); //disable validation
-You can post your question on http://www.yiiframework.com/forum/index.php?/topic/11887-mongorecord-extensions/.
+*IMPORTANT: Embded documents must extend from EMongoEmbdedDocument instead of EMongoRecord, otherwise whole thing will fail, to work*
 
-To find records, you can use this both method that similar with CActiveRecord methods
 
-$query=array('_id=>new MongoId('4c8377a88ead0ec468000000'));
-ModelName::model()->find($query);
-this method will return MongoRecord instance
 
-$query=array('merchant_id'=>1,'');
-ModelName::model()->findAll($query);
-This method will return an array that contains MongoRecord instance
+~~~
+[php]
+/*
+Embded documents are almost identical as EMongoRecord you only can't save them to DB (with one exception, you can save them if you will do it explicitly)
+Notice: Emnded documents don have static model() method!
 
-The $query is the same query that used in MongoRecord criteria query in PHP MongoDb query function. You can read how to write the criteria query on
+Lest assume we have following embded document:
+*/
+class ClientAddress extends EMongoEmbdedDocument
+{
+    public $city;
+    public $street;
+    public $house;
+    public $apartment;
+    public $zip;
 
-http://www.php.net/manual/en/mongo.queries.php
+    public function rules()
+    {
+        return array(
+            array('city, street, house', 'length', 'max'=>255),
+            array('house, apartment, zip', 'length', 'max'=>10),
+        );
+    }
 
-Note 
+    public function attributeLabels()
+    {
+        return array(
+            'zip'=>'Postal Code',
+        );
+    }
+}
 
-I haven't implement ensure index function because I still confuse where is the best way to ensure the index of document. I though if I do it every time we call find() and findAll() method it will decrease it's performance. May be we need to call it manually to set the index in collection.
+// Now we can add this method to our Client model from previous section:
+// Client model body (...)
+public function embdedDocuments()
+{
+    return array(
+        'address'=>'ClientAddress' // property name => embded document class name
+    );
+}
+// Client model body (...)
+
+// Now start the fun part!
+
+$client = new Client;
+$client->address->city='New York';
+$client->save();
+// it will automatically call validation for model and all embded documents!
+// You even can nest embded documents in embded documents, just define embdedDocuments() method with array of another embded documents
+// IMPORTANT: This mechanism uses recurency, and will not handle with circular nesting, you have to use this feature with care :P
+~~~
+
+##Querying
+
+~~~
+[php]
+// simple find first
+$object = ModelClass::model->find()
+
+// you can pass a query (witch is an simple array)
+$object = ModelClass::model()->find(array('personal_number'=>12345));
+// for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
+
+// finding multiple records
+// simple case by attributes:
+$records = ModelClass::model()->findAllByAttributes(array('city'=>'New York'));
+
+// findAll* methods accepts additional 3 arguments $sort, $limit and $offest refer to PHP manual for how to use them: http://www.php.net/manual/en/class.mongocursor.php
+
+// more advanced case:
+$records = ModelClass::model()->findAll(
+    array('personal_numer'=>array('$mod'=>array(10, 0))), // modulo: personal_number % 10 == 0
+    array('first_name'=>1), // sort by first name ascending
+    10, // limit to 10 records
+    25 // offset 20 / skip first 20 matches
+);
+// analogical this examples also apply to count* methods and delete* methods
+~~~
+
+##Setup
+
+~~~
+[php]
+//just add this to yours import array in config file:
+// (...)
+'ext.mongoDbSiute.*',
+// (...)
+//and add component declaration:
+// (...)
+'mongodb'=>array(
+    'class'=>'EMongoDbConnection',
+    'db'=>'database_name'
+),
+// (...)
+~~~
+
+##Resources
+
+...external resources for this extension...
+
+ * [Project page](http://www.yiiframework/)
+ * [Try out a demo](http://www.yiiframework.com/demos/)

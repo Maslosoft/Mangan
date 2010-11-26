@@ -143,6 +143,8 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 			{
 				$result = $this->getCollection()->remove(array('_id'=>$this->_id), array('fsync'=>true, 'justOne'=>true));
 				$this->afterDelete();
+				$this->_id=null;
+				$this->setIsNewRecord(true);
 				return $result;
 			}
 			else
