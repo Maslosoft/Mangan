@@ -19,7 +19,7 @@ abstract class EMongoRecord extends CModel
 
 	public function setDb(EMongoDbConnection $db)
 	{
-		self::$db = $db;
+		self::$db = $db->db;
 	}
 
 	public function getAttributes($names=true)
