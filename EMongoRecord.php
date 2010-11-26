@@ -152,8 +152,16 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 			throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
 	}
 
-	//FIXME
-	public function refresh(){}
+	public function refresh()
+	{
+		if(!$this->getIsNewRecord())
+		{
+			Yii::trace(get_class($this).'.refresh()','system.db.ar.CActiveRecord');
+			$this->setAttributes($this->getCollection()->find(array('_id'=>$this->_id)), false);
+		}
+		else
+			throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
+	}
 
 	public function onBeforeSave($event)
 	{
