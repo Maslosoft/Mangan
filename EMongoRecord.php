@@ -163,6 +163,19 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 			throw new CDbException(Yii::t('yii','The active record cannot be deleted because it is new.'));
 	}
 
+	public function count(array $query=null)
+	{
+		if($query!==null)
+			return $this->getCollection()->count($query);
+		else
+			return $this->getCollection()->count();
+	}
+
+	public function countByAttributes(array $attributes)
+	{
+		return $this->count($attributes);
+	}
+
 	public function onBeforeSave($event)
 	{
 		$this->raiseEvent('onBeforeSave',$event);
