@@ -2,3 +2,4 @@ Version BETA
 ============
 
 - Added EMongoRecordBehavior
+- Added control field for FSYNC flag in EMongoDbConnection class

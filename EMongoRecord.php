@@ -102,7 +102,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 			$rawData=$this->toArray();
 			if(empty($this->_id))
 				unset($rawData['_id']);
-			$this->getCollection()->insert($rawData, array('fsync'=>true));
+			$this->getCollection()->insert($rawData, array('fsync'=>Yii::app()->getComponent('mongodb')->fsyncFlag));
 
 			if(empty($rawData['_id']))
 			{
@@ -127,7 +127,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 			throw new CDbException(Yii::t('yii','The active record cannot be updated because it is new.'));
 		if($this->beforeSave())
 		{
-			$this->getCollection()->save($this->toArray(), array('fsync'=>true));
+			$this->getCollection()->save($this->toArray(), array('fsync'=>Yii::app()->getComponent('mongodb')->fsyncFlag));
 			$this->afterSave();
 		}
 		else
@@ -141,7 +141,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 			Yii::trace(get_class($this).'.delete()','system.db.ar.CActiveRecord');
 			if($this->beforeDelete())
 			{
-				$result = $this->getCollection()->remove(array('_id'=>$this->_id), array('fsync'=>true, 'justOne'=>true));
+				$result = $this->getCollection()->remove(array('_id'=>$this->_id), array('fsync'=>Yii::app()->getComponent('mongodb')->fsyncFlag, 'justOne'=>true));
 				$this->afterDelete();
 				$this->_id=null;
 				$this->setIsNewRecord(true);

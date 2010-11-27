@@ -13,6 +13,16 @@ class EMongoDbConnection extends CApplicationComponent
 	private $_password;
 	private $_host='localhost';
 
+	/**
+	 * If set to TRUE all internal DB operations will use FSYNC flag with data modification requests
+	 *
+	 * Generally you should whant to have this set to TRUE, exception from this is when You do massive
+	 * inserts/updates/deletes with this set to TRUE they will be horribly slow
+	 *
+	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections
+	 */
+	public $fsyncFlag=true;
+
 	public function  init()
 	{
 		parent::init();
