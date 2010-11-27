@@ -1,4 +1,4 @@
-This extension is an almost complete, ActiveRecord like support for MongoDB for Yii
+This extension is an almost complete, ActiveRecord like support for MongoDB in Yii
 It originally started as a fork of [MongoRecord](http://www.yiiframework.com/extension/mongorecord "MongoRecord") extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"), to fix some major bugs, and add full featured suite for [MongoDB](http://http://www.mongodb.org "MongoDB") developers.
 
 Some key features:
@@ -6,10 +6,16 @@ Some key features:
 - Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax
 - Support of schema-less documents with Yii standard rules and validation features
 - (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
+- Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
+- Records and embded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
+- relation support *idea/concept/example*
+
+*IMPORTANT: please use github version, keeping track of bugfixes and updating this download is hard to catch up*
 
 ##Requirements
 
 I've tested it only with Yii 1.1.4
+it took me long night to write this initial stage, so it may have some bugs, help with testing needed ! :) 
 
 ##Basic usage
 
@@ -23,6 +29,12 @@ class Client extends EMongoRecord
     public $personal_number;
     public $first_name;
     public $last_name;
+
+    // this method must be implemented (its defined as abstract anyway), it have to return Mongo collection name for use with this record(s)
+    public function collectionName()
+    {
+        return 'clients';
+    }
 
     public function rules()
     {
@@ -58,13 +70,13 @@ etc.
 ##Embded documents
 
 *IMPORTANT: Embded documents must extend from EMongoEmbdedDocument instead of EMongoRecord, otherwise whole thing will fail, to work*
-
+*Note: some people reported that embedding regular EMongoRecord works as expected, but i have not tested this, more test/reports needed*
 
 
 ~~~
 [php]
 /*
-Embded documents are almost identical as EMongoRecord you only can't save them to DB (with one exception, you can save them if you will do it explicitly)
+Embded documents are almost identical as EMongoRecord you only can't save them to DB they're saved by the EMongoRecord model witch has them as an embded (with one exception, you can save them if you will do it explicitly)
 Notice: Emnded documents don have static model() method!
 
 Lest assume we have following embded document:
@@ -135,9 +147,67 @@ $records = ModelClass::model()->findAll(
     array('personal_numer'=>array('$mod'=>array(10, 0))), // modulo: personal_number % 10 == 0
     array('first_name'=>1), // sort by first name ascending
     10, // limit to 10 records
-    25 // offset 20 / skip first 20 matches
+    25 // offset 25 / skip first 25 matches
 );
 // analogical this examples also apply to count* methods and delete* methods
+~~~
+
+##Relations
+
+**Note:**
+
+- In NoSQL World Relations are not so obvious as in RDBMS
+- Because NoSQL databases are designed for performance, there is no need of defining something more complex than correct use of find() method and indexing for fetching related records
+- This is just an *idea/concept/example* you can do things in yours preferred way! this is shema-less wold, think different!
+- MongoDB Documentation has a clean examples and how-to's for handling relations, *please* read them for better understanding of relations in NoSQL world
+
+~~~
+[php]
+
+// basic HAS_ONE like relation
+// just define method in yours model class (assume we have client collection, and address colection
+// in client model
+public function address()
+{
+    return Address::model()->findByAttributes(array('attribute_with_client_id'=>$this->primaryKey));
+}
+
+// basic BELONGS_TO relation
+// define in address model
+public function client()
+{
+    return Client::model()->findByPk($this->attribute_with_client_id);
+}
+
+// basic HAS_MANY relation
+// assume we have clients and orders collection
+// define in client
+public function orders()
+{
+    return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
+}
+
+// MANY_MANY is as simple as defining reverse HAS_MANY relation in orders model
+~~~
+
+##DataProvider
+
+~~~
+[php]
+// basic dataprovider returns whole collection (with efficient pagination support out-of-box)
+$dp = new EMongoRecordDataProvider('modelClassNameOrInstance');
+
+// data provider with query
+$dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query array goes heare */));
+
+// data provider, enable sorting (needs to be set explicit)
+$dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query array goes heare */), array(/* standard config array */
+    'sort'=>array(
+        'attributes'=>array(
+            // list of sortable attributes
+        )
+    ),
+));
 ~~~
 
 ##Setup
@@ -146,7 +216,7 @@ $records = ModelClass::model()->findAll(
 [php]
 //just add this to yours import array in config file:
 // (...)
-'ext.mongoDbSiute.*',
+'ext.YiiMongoDbSiute.*',
 // (...)
 //and add component declaration:
 // (...)
@@ -157,9 +227,44 @@ $records = ModelClass::model()->findAll(
 // (...)
 ~~~
 
+##Special topics
+
+**Behaviors**
+
+- You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoRecords)
+- Behaviors may extend from EMongoRecordBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbdedDocsInit and afterEmbdedDocsInit)
+
+**Performance**
+
+- By default all save/update/delete operations performed by internal command sets the FSYNC flag to TRUE, this means, all operations will have to wait for a disk sync!
+- FSYNC in most cases is a good way and do not have massive impact on performance
+- You may want to disable FSYNC flag when doing massive imports/updates/dels, because it will be **horrible** slow!
+- For now fsync can be disabled only by source code modify of EMongoRecord, i'll fix this ASAP
+- You can omit this inserting objects by hand
+
+example massive hand insert:
+
+~~~
+[php]
+// IMPORTANT: This method will NOT trigger models/embded documents validation!
+for($i=0; $i<1000; $i++)
+{
+    $c = new Client;
+
+    $c->getCollection()->insert($c->toArray());
+}
+~~~
+
+##Known bugs
+
+at this stage, it can have some ;]
+
+##Changelog
+
+- Added EMongoRecordBehavior (Support for new events present in EMongoRecord)
+
 ##Resources
 
-...external resources for this extension...
-
- * [Project page](http://www.yiiframework/)
- * [Try out a demo](http://www.yiiframework.com/demos/)
+ * [Project page](https://github.com/canni/YiiMongoDbSuite/)
+ * [MongoDB documentaction](http://www.mongodb.org/display/DOCS/Home)
+ * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
