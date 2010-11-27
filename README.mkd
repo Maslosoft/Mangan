@@ -231,7 +231,6 @@ $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query ar
 ##Special topics
 
 **Behaviors**
-<<<<<<< HEAD
 
 - You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoRecords)
 - Behaviors may extend from EMongoRecordBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbdedDocsInit and afterEmbdedDocsInit)
@@ -258,33 +257,6 @@ for($i=0; $i<1000; $i++)
 }
 ~~~
 
-=======
-
-- You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoRecords)
-- Behaviors may extend from EMongoRecordBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbdedDocsInit and afterEmbdedDocsInit)
-
-**Performance**
-
-- By default all save/update/delete operations performed by internal command sets the FSYNC flag to TRUE, this means, all operations will have to wait for a disk sync!
-- FSYNC in most cases is a good way and do not have massive impact on performance
-- You may want to disable FSYNC flag when doing massive imports/updates/dels, because it will be **horrible** slow!
-- For now fsync can be disabled only by source code modify of EMongoRecord, i'll fix this ASAP
-- You can omit this inserting objects by hand
-
-example massive hand insert:
-
-~~~
-[php]
-// IMPORTANT: This method will NOT trigger models/embded documents validation!
-for($i=0; $i<1000; $i++)
-{
-    $c = new Client;
-
-    $c->getCollection()->insert($c->toArray());
-}
-~~~
-
->>>>>>> 42c141b2f907581f071f6b515256439720ed5cd5
 ##Known bugs
 
 at this stage, it can have some ;]
