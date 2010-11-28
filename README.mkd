@@ -141,46 +141,33 @@ You easily can store arrays in DB!
 ~~~
 [php]
 
-// Define property in Your model or embded document
-public $arrayOfDocs
+// add property for yours array od embded documents
+public $adresses;
 
-// add before save event:
-public function beforeSave()
+// add EmbdedArraysBehavior
+public function behaviors()
 {
-    if(parent::beforeSave()) // Do NOT forgot about this!
-    {
-        $newArray = array();
-        foreach($this->arrayOfDocs as $key=>$doc)
-        {
-            if($doc->validate())
-            {
-                $newArray[$key] = $doc->toArray();
-            }
-            else
-                return false;
-        }
-
-        $this->arrayOfDocs=$newArray;
-        return true;
-    }
-    else
-        return false;
+    return array(
+        array(
+            'class'=>'ext.YiiMongoDbSiute.extra.EmbdedArraysBehavior',
+            'arrayPropertyName'=>'addresses', // name of property
+            'arrayDocClassName'=>'ClientAddress' // class name of documents in array
+        ),
+    );
 }
 
-// and rebuild Yours arrays in afterEmbdedDocsInit event (for populate records after find)
-public function afterEmbdedDocsInit()
+// now You can do:
+
+$c = new Client;
+$c->addresses[0] = new ClientAddress;
+$c->addresses[0]->city='NY';
+$c->save(); // behavior will handle validation of array to
+// or
+
+$c = Client::model()->find();
+foreach($c->addresses as $addr)
 {
-    parent::afterEmbdedDocsInit();
-    if(is_array($this->arrayOfDocs))
-    {
-        $newArray = array();
-        foreach($this->arrayOfDocs as $key=>$doc)
-        {
-            $newArray[$key] = new ModelClass;
-            $newArray[$key]->setAttributes($doc, false); // force set of unsafe attributes
-        }
-        $this->arrayOfDocs = $newArray;
-    }
+    echo $addr->city;
 }
 
 ~~~
