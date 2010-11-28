@@ -252,7 +252,8 @@ example massive hand insert:
 for($i=0; $i<1000; $i++)
 {
     $c = new Client;
-    $v->validate(); // You can ommit this if you whant
+    $c->personal_number = $i;
+    $c->validate(); // You can ommit this if you whant
     $c->getCollection()->insert($c->toArray());
 }
 ~~~
@@ -265,9 +266,16 @@ at this stage, it can have some ;]
 
 - Added EMongoRecordBehavior (Support for new events present in EMongoRecord)
 - Added FSync control field fsyncFlag in EMongoDBConnection class (default set to true)
+- Changed the way of setup, db property name change to dbName
 
 ##Resources
 
  * [Project page](https://github.com/canni/YiiMongoDbSuite/)
  * [MongoDB documentaction](http://www.mongodb.org/display/DOCS/Home)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
+
+##Contribution needed!
+
+- I'm not English native speaker, need someone who can correct/rewrite/write my documentation and/or PHPDoc's in code
+- Any help would be great :)
+- Contact me: darek.krk on a gmail dot com or via PM
