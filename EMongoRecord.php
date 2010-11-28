@@ -5,7 +5,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 	/**
 	 * MongoDB Connection object
 	 *
-	 * @var MongoConnection $_db
+	 * @var EMongoDbConnection $_db
 	 */
 	protected static $_db;
 
@@ -28,7 +28,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 	public function getDb()
 	{
 		if(self::$_db===null)
-			self::$_db = Yii::app()->getComponent('mongodb')->db;
+			self::$_db = Yii::app()->getComponent('mongodb');
 		return self::$_db;
 	}
 
@@ -39,7 +39,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 	 */
 	public function setDb(EMongoDbConnection $conn)
 	{
-		return self::$_db = $conn->db;
+		return self::$_db = $conn;
 	}
 
 	/**
@@ -82,7 +82,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 	 */
 	public function getCollection()
 	{
-		return $this->getDb()->{$this->getCollectionName()};
+		return $this->getDb()->db->{$this->getCollectionName()};
 	}
 
 	public function save($runValidation=true,$attributes=null)

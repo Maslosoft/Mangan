@@ -8,7 +8,7 @@
 class EMongoDbConnection extends CApplicationComponent
 {
 	private $_dbConnection;
-	private $_db;
+	private $_dbName;
 	private $_user;
 	private $_password;
 	private $_host='localhost';
@@ -36,7 +36,7 @@ class EMongoDbConnection extends CApplicationComponent
 			{
 				$this->_dbConnection= new Mongo($this->_host);
 				if($this->_user!==NULL && $this->_password!==NULL)
-						 $this->_dbConnection->$db->authenticate($this->_user, $this->_password);
+						 $this->_dbConnection->{$this->getDbName()}->authenticate($this->_user, $this->_password);
 			}
 			catch(MongoConnectionException $e)
 			{
@@ -46,20 +46,24 @@ class EMongoDbConnection extends CApplicationComponent
 		return $this->_dbConnection;
 	}
 
-	protected function setDb($config)
+	protected function setDbName($name)
 	{
-		$this->_db=$config;
+		$this->_dbName=$name;
+	}
+
+	protected function getDbName()
+	{
+		return $this->_dbName;
 	}
 
 	protected function getDb()
 	{
-		$db=$this->_db;
-		return $this->connection->$db;
+		return $this->getConnection()->{$this->getDbName()};
 	}
 
-	protected function setUser($config)
+	protected function setUser($name)
 	{
-		$this->_user=$config;
+		$this->_user=$name;
 	}
 
 	protected function getUser()
@@ -67,9 +71,9 @@ class EMongoDbConnection extends CApplicationComponent
 		return $this->_user;
 	}
 
-	protected function setPassword($config)
+	protected function setPassword($pass)
 	{
-		$this->_password=$config;
+		$this->_password=$pass;
 	}
 
 	protected function getPassword()
@@ -77,9 +81,9 @@ class EMongoDbConnection extends CApplicationComponent
 		return $this->_password;
 	}
 
-	protected function setHost($config)
+	protected function setHost($host)
 	{
-		$this->_host=$config;
+		$this->_host=$host;
 	}
 
 	protected function getHost()

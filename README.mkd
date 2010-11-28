@@ -222,7 +222,7 @@ $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query ar
 // (...)
 'mongodb'=>array(
     'class'=>'EMongoDbConnection',
-    'db'=>'database_name',
+    'dbName'=>'database_name',
     'fsyncFlag'=>true // whatever to use fsync flag with internal DB operations
 ),
 // (...)
