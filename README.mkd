@@ -149,7 +149,7 @@ public function behaviors()
 {
     return array(
         array(
-            'class'=>'ext.YiiMongoDbSiute.extra.EmbdedArraysBehavior',
+            'class'=>'ext.YiiMongoDbSiute.extra.EEmbdedArraysBehavior',
             'arrayPropertyName'=>'addresses', // name of property
             'arrayDocClassName'=>'ClientAddress' // class name of documents in array
         ),
@@ -314,6 +314,7 @@ at this stage, it can have some ;]
 - Added EMongoRecordBehavior (Support for new events present in EMongoRecord)
 - Added FSync control field fsyncFlag in EMongoDBConnection class (default set to true)
 - Changed the way of setup, db property name change to dbName
+- Added EEmbdedArraysBehavior extra
 
 ##Resources
 

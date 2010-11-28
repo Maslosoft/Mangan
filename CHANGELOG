@@ -1,6 +1,7 @@
 Version BETA
 ============
 
-- Added EMongoRecordBehavior
-- Added control field for FSYNC flag in EMongoDbConnection class
-- Rewritten Connection handling
+- Added EMongoRecordBehavior (Support for new events present in EMongoRecord)
+- Added FSync control field fsyncFlag in EMongoDBConnection class (default set to true)
+- Changed the way of setup, db property name change to dbName
+- Added EEmbdedArraysBehavior extra
