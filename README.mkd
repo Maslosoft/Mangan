@@ -237,6 +237,21 @@ public function orders()
 // MANY_MANY is as simple as defining reverse HAS_MANY relation in orders model
 ~~~
 
+##Gii support
+
+**Model generation**
+
+- you do not have to generate yours models, yours classes are yours models and schemas!
+- Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
+
+**CRUD Generation**
+
+- Gii is not able to generate CRUD, because by default gii expects that CRUD have to be generated for CActiveRecord child classes (EMongoRecord is not child class of CACtiveRecord)
+
+**Forms generation**
+
+- This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
+
 ##DataProvider
 
 ~~~
