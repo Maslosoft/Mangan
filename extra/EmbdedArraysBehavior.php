@@ -20,6 +20,11 @@ class EEmbdedArraysBehavior extends EMongoRecordBehavior
 	{
 		parent::attach($owner);
 
+		// Test if we have correct embding class
+		$testObj = new $this->arrayDocClassName;
+		if(!($testObj instanceof EMongoEmbdedDocument))
+			throw new CException(Yii::t('yii', get_class($testObj).' is not a child class of EMongoEmbdedDocument!'));
+
 		$this->parseExistingArray();
 	}
 
