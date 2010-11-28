@@ -125,6 +125,66 @@ $client->save();
 // IMPORTANT: This mechanism uses recurency, and will not handle with circular nesting, you have to use this feature with care :P
 ~~~
 
+##Arrays
+
+You easily can store arrays in DB!
+
+**Simple arrays**
+
+- just define a property for an array, and store an array in it
+
+**Arrays of embded documents**
+
+- there is no way (i know for now) witch i can easily provide mechanism for this, you have to write Your own
+- i do this in that way:
+
+~~~
+[php]
+
+// Define property in Your model or embded document
+public $arrayOfDocs
+
+// add before save event:
+public function beforeSave()
+{
+    if(parent::beforeSave()) // Do NOT forgot about this!
+    {
+        $newArray = array();
+        foreach($this->arrayOfDocs as $key=>$doc)
+        {
+            if($doc->validate())
+            {
+                $newArray[$key] = $doc->toArray();
+            }
+            else
+                return false;
+        }
+
+        $this->arrayOfDocs=$newArray;
+        return true;
+    }
+    else
+        return false;
+}
+
+// and rebuild Yours arrays in afterEmbdedDocsInit event (for populate records after find)
+public function afterEmbdedDocsInit()
+{
+    parent::afterEmbdedDocsInit();
+    if(is_array($this->arrayOfDocs))
+    {
+        $newArray = array();
+        foreach($this->arrayOfDocs as $key=>$doc)
+        {
+            $newArray[$key] = new ModelClass;
+            $newArray[$key]->setAttributes($doc, false); // force set of unsafe attributes
+        }
+        $this->arrayOfDocs = $newArray;
+    }
+}
+
+~~~
+
 ##Querying
 
 ~~~
