@@ -251,6 +251,8 @@ public function orders()
 **Forms generation**
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
+- When generating a form from mongo record, comment out embded docs array, or you'll see error about array/object creation
+- For embded docs just generate forms in separed way for each one
 
 ##DataProvider
 
