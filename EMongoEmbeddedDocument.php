@@ -2,7 +2,7 @@
 
 abstract class EMongoEmbeddedDocument extends CModel
 {
-	private static $_names=array();
+	private static $_attributes=array();
 
 	/**
 	 * CMap of embedded documents
@@ -65,6 +65,27 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function onAfterEmbeddedDocsInit($event)
 	{
 		$this->raiseEvent('onAfterEmbeddedDocsInit', $event);
+	}
+
+	public function onBeforeToArray($event)
+	{
+		$this->raiseEvent('onBeforeToArray', $event);
+	}
+
+	public function onAfterToArray($event)
+	{
+		$this->raiseEvent('onAfterToArray', $event);
+	}
+
+	protected function beforeToArray()
+	{
+		$this->onBeforeToArray(new CModelEvent($this));
+		return $event->isValid;
+	}
+
+	protected function afterToArray()
+	{
+		$this->onAfterToArray(new CModelEvent($this));
 	}
 
 	protected function beforeEmbeddedDocsInit()
@@ -131,7 +152,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function attributeNames()
 	{
 		$className=get_class($this);
-		if(!isset(self::$_names[$className]))
+		if(!isset(self::$_attributes[$className]))
 		{
 			$class=new ReflectionClass(get_class($this));
 			$names=array();
@@ -145,21 +166,25 @@ abstract class EMongoEmbeddedDocument extends CModel
 			{
 				$names = array_merge($names, $this->_embedded->getKeys());
 			}
-			return self::$_names[$className]=$names;
+			return self::$_attributes[$className]=$names;
 		}
 		else
-			return self::$_names[$className];
+			return self::$_attributes[$className];
 	}
 
 	public function toArray()
 	{
-		$arr = array();
-		foreach($this as $key=>$value)
-			$arr[$key]=$value;
-		if($this->hasEmbeddedDocuments())
-			foreach($this->_embedded as $key=>$value)
-				$arr[$key]=$value->toArray();
-		return $arr;
+		if($this->beforeToArray())
+		{
+			$arr = array();
+			foreach($this as $key=>$value)
+				$arr[$key]=$value;
+			if($this->hasEmbeddedDocuments())
+				foreach($this->_embedded as $key=>$value)
+					$arr[$key]=$value->toArray();
+			$this->afterToArray();
+			return $arr;
+		}
 	}
 
 	/**
@@ -181,5 +206,19 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function setOwner(EMongoEmbeddedDocument $owner)
 	{
 		$this->_owner = $owner;
+	}
+
+	/**
+	 * Override default seScenario method for populating to embedded records
+	 * @see CModel::setScenario()
+	 */
+	public function setScenario($value)
+	{
+		if($this->hasEmbeddedDocuments() && $this->_embedded !== null)
+		{
+			foreach($this->_embedded as $doc)
+				$doc->setScenario($value);
+		}
+		parent::setScenario($value);
 	}
 }
