@@ -75,7 +75,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 		if($this->hasEmbeddedDocuments() && $this->_embedded->contains($name))
 			return $this->_embedded->itemAt($name);
 		else
-			parent::__get($name);
+			return parent::__get($name);
 	}
 
 	public function __set($name, $value)

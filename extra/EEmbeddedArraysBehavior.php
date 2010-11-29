@@ -1,6 +1,6 @@
 <?php
 
-class EEmbdedArraysBehavior extends EMongoRecordBehavior
+class EEmbeddedArraysBehavior extends EMongoRecordBehavior
 {
 	/**
 	 * Name of property witch holds array od documents
@@ -22,8 +22,8 @@ class EEmbdedArraysBehavior extends EMongoRecordBehavior
 
 		// Test if we have correct embding class
 		$testObj = new $this->arrayDocClassName;
-		if(!($testObj instanceof EMongoEmbdedDocument))
-			throw new CException(Yii::t('yii', get_class($testObj).' is not a child class of EMongoEmbdedDocument!'));
+		if(!($testObj instanceof EMongoEmbeddedDocument))
+			throw new CException(Yii::t('yii', get_class($testObj).' is not a child class of EMongoEmbeddedDocument!'));
 
 		$this->parseExistingArray();
 	}
@@ -31,7 +31,7 @@ class EEmbdedArraysBehavior extends EMongoRecordBehavior
 	/**
 	 * Event: initialize array of embded documents
 	 */
-	public function afterEmbdedDocsInit($event)
+	public function afterEmbeddedDocsInit($event)
 	{
 		$this->parseExistingArray();
 	}
