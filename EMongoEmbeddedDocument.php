@@ -1,14 +1,14 @@
 <?php
 
-abstract class EMongoEmbdedDocument extends CModel
+abstract class EMongoEmbeddedDocument extends CModel
 {
 	private static $_names=array();
 
 	/**
 	 * CMap of embded documents
-	 * @var CMap $_embded
+	 * @var CMap $_embedded
 	 */
-	protected $_embded=null;
+	protected $_embedded=null;
 
 	/**
 	 * Constructor.
@@ -23,7 +23,7 @@ abstract class EMongoEmbdedDocument extends CModel
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
 
-		$this->initEmbdedDocuments();
+		$this->initEmbeddedDocuments();
 	}
 
 	/**
@@ -35,45 +35,45 @@ abstract class EMongoEmbdedDocument extends CModel
 	 */
 	public function init(){}
 
-	protected function initEmbdedDocuments()
+	protected function initEmbeddedDocuments()
 	{
-		if(!$this->hasEmbdedDocuments() || !$this->beforeEmbdedDocsInit())
+		if(!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
 			return false;
 
-		$this->_embded = new CMap;
-		foreach($this->embdedDocuments() as $name=>$docClassName)
+		$this->_embedded = new CMap;
+		foreach($this->embeddedDocuments() as $name=>$docClassName)
 		{
-			$this->_embded->add($name, new $docClassName($this->getScenario()));
+			$this->_embedded->add($name, new $docClassName($this->getScenario()));
 		}
-		$this->afterEmbdedDocsInit();
+		$this->afterEmbeddedDocsInit();
 	}
 
-	public function onBeforeEmbdedDocsInit($event)
+	public function onBeforeEmbeddedDocsInit($event)
 	{
-		$this->raiseEvent('onBeforeEmbdedDocsInit', $event);
+		$this->raiseEvent('onBeforeEmbeddedDocsInit', $event);
 	}
 
-	public function onAfterEmbdedDocsInit($event)
+	public function onAfterEmbeddedDocsInit($event)
 	{
-		$this->raiseEvent('onAfterEmbdedDocsInit', $event);
+		$this->raiseEvent('onAfterEmbeddedDocsInit', $event);
 	}
 
-	protected function beforeEmbdedDocsInit()
+	protected function beforeEmbeddedDocsInit()
 	{
 		$event=new CModelEvent($this);
-		$this->onBeforeEmbdedDocsInit($event);
+		$this->onBeforeEmbeddedDocsInit($event);
 		return $event->isValid;
 	}
 
-	protected function afterEmbdedDocsInit()
+	protected function afterEmbeddedDocsInit()
 	{
-		$this->onAfterEmbdedDocsInit(new CModelEvent());
+		$this->onAfterEmbeddedDocsInit(new CModelEvent());
 	}
 
 	public function __get($name)
 	{
-		if($this->hasEmbdedDocuments() && $this->_embded->contains($name))
-			return $this->_embded->itemAt($name);
+		if($this->hasEmbeddedDocuments() && $this->_embedded->contains($name))
+			return $this->_embedded->itemAt($name);
 		else
 			return parent::__get($name);
 	}
@@ -81,14 +81,14 @@ abstract class EMongoEmbdedDocument extends CModel
 	public function __set($name, $value)
 	{
 		if(
-			$this->hasEmbdedDocuments() &&
-			$this->_embded->contains($name)
+			$this->hasEmbeddedDocuments() &&
+			$this->_embedded->contains($name)
 		)
 		{
 			if(is_array($value))
-				return $this->_embded->itemAt($name)->attributes=$value;
-			else if($value instanceof EMongoEmbdedDocument)
-				return $this->_embded->add($name, $value);
+				return $this->_embedded->itemAt($name)->attributes=$value;
+			else if($value instanceof EMongoEmbeddedDocument)
+				return $this->_embedded->add($name, $value);
 		}
 		else
 			parent::__set($name, $value);
@@ -96,8 +96,8 @@ abstract class EMongoEmbdedDocument extends CModel
 
 	public function afterValidate()
 	{
-		if($this->hasEmbdedDocuments())
-			foreach($this->_embded as $doc)
+		if($this->hasEmbeddedDocuments())
+			foreach($this->_embedded as $doc)
 			{
 				if(!$doc->validate())
 				{
@@ -106,15 +106,15 @@ abstract class EMongoEmbdedDocument extends CModel
 			}
 	}
 
-	public function embdedDocuments()
+	public function embeddedDocuments()
 	{
 		return array();
 	}
 
-	public function hasEmbdedDocuments()
+	public function hasEmbeddedDocuments()
 	{
-		//return $this->_embded
-		return count($this->embdedDocuments()) > 0;
+		//return $this->_embedded
+		return count($this->embeddedDocuments()) > 0;
 	}
 
 	/**
@@ -136,9 +136,9 @@ abstract class EMongoEmbdedDocument extends CModel
 				if($property->isPublic() && !$property->isStatic())
 					$names[]=$name;
 			}
-			if($this->hasEmbdedDocuments())
+			if($this->hasEmbeddedDocuments())
 			{
-				$names = array_merge($names, $this->_embded->getKeys());
+				$names = array_merge($names, $this->_embedded->getKeys());
 			}
 			return self::$_names[$className]=$names;
 		}
@@ -151,8 +151,8 @@ abstract class EMongoEmbdedDocument extends CModel
 		$arr = array();
 		foreach($this as $key=>$value)
 			$arr[$key]=$value;
-		if($this->hasEmbdedDocuments())
-			foreach($this->_embded as $key=>$value)
+		if($this->hasEmbeddedDocuments())
+			foreach($this->_embedded as $key=>$value)
 				$arr[$key]=$value->toArray();
 		return $arr;
 	}
