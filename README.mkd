@@ -20,39 +20,43 @@ it took me long night to write this initial stage, so it may have some bugs, hel
 ##Basic usage
 
 Just create a model class as You would with normal ActiveRecord.
-
 Example model simple as standard ActiveRecord:
 
-    class Client extends EMongoRecord
-    {
-        public $personal_number;
-        public $first_name;
-        public $last_name;
+    class Client extends EMongoRecord {
 
-        // this method must be implemented (its defined as abstract anyway), it have to return Mongo collection name for use with this record(s)
-        public function collectionName()
+        // this method must be implemented (its defined as abstract anyway),
+        // it has to return the Mongo collection name for use with this record(s)
+        public function getCollectionName()
         {
-            return 'clients';
-        }
+            public $personal_number;
+            public $first_name;
+            public $last_name;
 
-        public function rules()
-        {
-            return array(
-                array('personal_number, first_name, last_name', 'required'),
-            );
-        }
+            // this method must be implemented (its defined as abstract anyway), it have to return Mongo collection name for use with this record(s)
+            public function collectionName()
+            {
+                return 'clients';
+            }
 
-        public function attributeLabels()
-        {
-            return array(
-                'personal_number'=>'PN',
-            );
-        }
+            public function rules()
+            {
+                return array(
+                    array('personal_number, first_name, last_name', 'required'),
+                );
+            }
 
-        // EVERY model has to have this! (same as CActiveRecord child classes)
-        public static function model($className=__CLASS__)
-        {
-            return parent::model($className);
+            public function attributeLabels()
+            {
+                return array(
+                    'personal_number'=>'PN',
+                );
+            }
+
+            // EVERY model has to have this! (same as CActiveRecord child classes)
+            public static function model($className=__CLASS__)
+            {
+                return parent::model($className);
+            }
         }
     }
 
@@ -104,16 +108,19 @@ Lest assume we have following embedded document:
 
 Now we can add this method to our Client model from previous section:
 
-//Client model body (...)
+    class Client extends EMongoRecord {
 
-    public function embeddedDocuments()
-    {
-        return array(
-            'address'=>'ClientAddress' // property name => embedded document class name
-        );
+        ...
+
+        public function embeddedDocuments()
+        {
+            return array(
+                'address'=>'ClientAddress' // property name => embedded document class name
+            );
+        }
+
+        ...
     }
-
-// Client model body (...)
 
 Now start the fun part!
 
@@ -178,20 +185,18 @@ simple find first
     $object = ModelClass::model->find()
 
 you can pass a query (which is an simple array)
-
     $object = ModelClass::model()->find(array('personal_number'=>12345));
 
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
 finding multiple records
 simple case by attributes:
-
     $records = ModelClass::model()->findAllByAttributes(array('city'=>'New York'));
 
 findAll* methods accepts additional 3 arguments $sort, $limit and $offset refer to PHP manual for how to use them:
 http://www.php.net/manual/en/class.mongocursor.php
 
- more advanced case:
+A more advanced case:
     $records = ModelClass::model()->findAll(
         array('personal_number'=>array('$mod'=>array(10, 0))), // modulo: personal_number % 10 == 0
         array('first_name'=>1), // sort by first name ascending
@@ -212,9 +217,7 @@ analogical this examples also apply to count* methods and delete* methods
 
 ###HAS_ONE relation
 
-just define method in yours model class (assume we have client collection, and address collection
-in client model
-
+just define method in yours model class (assume we have client collection, and address collection in client model
     public function address()
     {
         return Address::model()->findByAttributes(array('attribute_with_client_id'=>$this->primaryKey));
@@ -223,7 +226,6 @@ in client model
 ###BELONGS_TO relation
 
 define in address model
-
     public function client()
     {
         return Client::model()->findByPk($this->attribute_with_client_id);
@@ -232,8 +234,7 @@ define in address model
 ###HAS_MANY relation
 
 assume we have clients and orders collection
-define in client
-
+define in client:
     public function orders()
     {
         return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
@@ -263,15 +264,12 @@ As simple as defining reverse HAS_MANY relation in orders model
 ##DataProvider
 
 basic dataprovider returns whole collection (with efficient pagination support out-of-box)
-
     $dp = new EMongoRecordDataProvider('modelClassNameOrInstance');
 
 data provider with query
-
     $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query array goes here */));
 
 data provider, enable sorting (needs to be set explicit)
-
     $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query array goes here */), array(/* standard config array */
         'sort'=>array(
             'attributes'=>array(
@@ -282,13 +280,10 @@ data provider, enable sorting (needs to be set explicit)
 
 ##Setup
 
-
 Add this to the *import* array in your main.cfg:
-
     'ext.YiiMongoDbSuite.*',
 
 And add the component declaration:
-
     'mongodb'=>array(
         'class'=>'EMongoDbConnection',
         'dbName'=>'database_name',
@@ -312,7 +307,6 @@ And add the component declaration:
 **Massive hand operations**
 
 Example mass insert (you will want to disable fsyncField for this:
-
     for($i=0; $i<1000; $i++)
     {
         $c = new Client;
