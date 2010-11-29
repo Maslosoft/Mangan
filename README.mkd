@@ -22,6 +22,11 @@ it took me long night to write this initial stage, so it may have some bugs, hel
 Just create a model class as You would with normal ActiveRecord.
 Example model simple as standard ActiveRecord:
 
+
+~~~
+[php]
+
+
     class Client extends EMongoRecord {
 
         // this method must be implemented (its defined as abstract anyway),
@@ -61,15 +66,24 @@ Example model simple as standard ActiveRecord:
     }
 
 
+~~~
+
+
 And this is it ! use this object just as regular ActiveRecord
 for instance:
+
+
+~~~
+[php]
+
 
     $client = new Client;
     $client->first_name='something';
     $client->save();
     $clients = Client::model->findAll();
 
-etc.
+
+~~~
 
 
 ##Embedded documents
@@ -81,6 +95,11 @@ Embedded documents are almost identical as EMongoRecord you only can't save them
 Notice: Embedded documents don have static model() method!
 
 Lest assume we have following embedded document:
+
+
+~~~
+[php]
+
 
     class ClientAddress extends EMongoEmbeddedDocument
     {
@@ -106,7 +125,16 @@ Lest assume we have following embedded document:
         }
     }
 
+
+~~~
+
+
 Now we can add this method to our Client model from previous section:
+
+
+~~~
+[php]
+
 
     class Client extends EMongoRecord {
 
@@ -122,11 +150,24 @@ Now we can add this method to our Client model from previous section:
         ...
     }
 
+
+~~~
+
+
 Now start the fun part!
+
+
+~~~
+[php]
+
 
     $client = new Client;
     $client->address->city='New York';
     $client->save();
+
+
+~~~
+
 
 it will automatically call validation for model and all embedded documents!
 You even can nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents
@@ -147,11 +188,14 @@ You easily can store arrays in DB!
 - This is how I accomplish it for now:
 
 
-add a property for your array of embedded documents
+~~~
+[php]
+
+
+    // add a property for your array of embedded documents
     public $addresses;
 
-add EmbeddedArraysBehavior
-
+	// add EmbeddedArraysBehavior
     public function behaviors()
     {
         return array(
@@ -163,14 +207,14 @@ add EmbeddedArraysBehavior
         );
     }
 
-now You can do:
+    // now You can do:
 
     $c = new Client;
     $c->addresses[0] = new ClientAddress;
     $c->addresses[0]->city='NY';
     $c->save(); // behavior will handle validation of array too
 
-or
+    // or
 
     $c = Client::model()->find();
     foreach($c->addresses as $addr)
@@ -178,25 +222,33 @@ or
         echo $addr->city;
     }
 
+
+~~~
+
+
 ##Querying
 
 
-simple find first
+~~~
+[php]
+
+
+    // simple find first
     $object = ModelClass::model->find()
 
-you can pass a query (which is an simple array)
+    // you can pass a query (which is an simple array)
     $object = ModelClass::model()->find(array('personal_number'=>12345));
 
-for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
+    // for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
-finding multiple records
-simple case by attributes:
+    // finding multiple records
+    // simple case by attributes:
     $records = ModelClass::model()->findAllByAttributes(array('city'=>'New York'));
 
-findAll* methods accepts additional 3 arguments $sort, $limit and $offset refer to PHP manual for how to use them:
-http://www.php.net/manual/en/class.mongocursor.php
+    // findAll* methods accepts additional 3 arguments $sort, $limit and $offset refer to PHP manual for how to use them:
+    // http://www.php.net/manual/en/class.mongocursor.php
 
-A more advanced case:
+    // A more advanced case:
     $records = ModelClass::model()->findAll(
         array('personal_number'=>array('$mod'=>array(10, 0))), // modulo: personal_number % 10 == 0
         array('first_name'=>1), // sort by first name ascending
@@ -204,7 +256,11 @@ A more advanced case:
         25 // offset 25 / skip first 25 matches
     );
 
-analogical this examples also apply to count* methods and delete* methods
+    // analogical this examples also apply to count* methods and delete* methods
+
+
+~~~
+
 
 ##Relations
 
@@ -217,28 +273,55 @@ analogical this examples also apply to count* methods and delete* methods
 
 ###HAS_ONE relation
 
-just define method in yours model class (assume we have client collection, and address collection in client model
+
+~~~
+[php]
+
+
+    // just define method in yours model class (assume we have client collection, and address collection in client model
     public function address()
     {
         return Address::model()->findByAttributes(array('attribute_with_client_id'=>$this->primaryKey));
     }
 
+
+~~~
+
+
 ###BELONGS_TO relation
 
-define in address model
+
+~~~
+[php]
+
+
+    // define in address model
     public function client()
     {
         return Client::model()->findByPk($this->attribute_with_client_id);
     }
 
+
+~~~
+
+
 ###HAS_MANY relation
 
-assume we have clients and orders collection
-define in client:
+
+~~~
+[php]
+
+
+    // assume we have clients and orders collection
+    // define in client:
     public function orders()
     {
         return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
     }
+
+
+~~~
+
 
 ###MANY_MANY
 
@@ -263,13 +346,18 @@ As simple as defining reverse HAS_MANY relation in orders model
 
 ##DataProvider
 
-basic dataprovider returns whole collection (with efficient pagination support out-of-box)
+
+~~~
+[php]
+
+
+    // basic dataprovider returns whole collection (with efficient pagination support out-of-box)
     $dp = new EMongoRecordDataProvider('modelClassNameOrInstance');
 
-data provider with query
+    // data provider with query
     $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query array goes here */));
 
-data provider, enable sorting (needs to be set explicit)
+    // data provider, enable sorting (needs to be set explicit)
     $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query array goes here */), array(/* standard config array */
         'sort'=>array(
             'attributes'=>array(
@@ -278,17 +366,30 @@ data provider, enable sorting (needs to be set explicit)
         ),
     ));
 
+
+~~~
+
+
 ##Setup
 
-Add this to the *import* array in your main.cfg:
+
+~~~
+[php]
+
+
+    // Add this to the *import* array in your main.php:
     'ext.YiiMongoDbSuite.*',
 
-And add the component declaration:
+    // And add the component declaration:
     'mongodb'=>array(
         'class'=>'EMongoDbConnection',
         'dbName'=>'database_name',
         'fsyncFlag'=>true // whatever to use fsync flag with internal DB operations
     ),
+
+
+~~~
+
 
 ##Special topics
 
@@ -306,7 +407,12 @@ And add the component declaration:
 
 **Massive hand operations**
 
-Example mass insert (you will want to disable fsyncField for this:
+
+~~~
+[php]
+
+
+    // Example mass insert (you will want to disable fsyncField for this:
     for($i=0; $i<1000; $i++)
     {
         $c = new Client;
@@ -314,6 +420,10 @@ Example mass insert (you will want to disable fsyncField for this:
         $c->validate(); // You can omit this if you want
         $c->getCollection()->insert($c->toArray());
     }
+
+
+~~~
+
 
 ##Known bugs
 Remember, this is not complete yet. So at this stage, it can have some ;]
