@@ -1,0 +1,239 @@
+<?php
+
+class EMongoCriteria extends CComponent
+{
+	public static $operators = array(
+		'greater'		=> '$gt',
+		'greaterEq'		=> '$gte',
+		'less'			=> '$lt',
+		'lessEq'		=> '$lte',
+		'notEq'			=> '$ne',
+		'in'			=> '$in',
+		'notIn'			=> '$nin',
+		'all'			=> '$all',
+		'size'			=> '$size',
+		'exists'		=> '$exists',
+		'notExists'		=> '$exists',
+		'mod'			=> '$mod',
+	);
+
+	const SORT_ASC		= 1;
+	const SORT_DESC		= -1;
+
+	private $_select		= array();
+	private $_limit			= null;
+	private $_offset		= null;
+	private $_conditions	= array();
+	private $_sort			= array();
+
+	/**
+	 * Constructor
+	 * Example criteria:
+	 *
+	 * <PRE>
+	 * 'criteria' = array(
+	 * 	'conditions'=>array(
+	 *		'fieldName1'=>array('greater', 0),
+	 *		'fieldName2'=>array('greaterEq', 10),
+	 *		'fieldName3'=>array('less', 10),
+	 *		'fieldName4'=>array('lessEq', 10),
+	 *		'fieldName5'=>array('notEq', 10),
+	 *		'fieldName6'=>array('in', array(10, 9)),
+	 *		'fieldName7'=>array('notIn', array(10, 9)),
+	 *		'fieldName8'=>array('all', array(10, 9)),
+	 *		'fieldName9'=>array('size', 10),
+	 *		'fieldName10'=>array('exists'),
+	 *		'fieldName11'=>array('notExists'),
+	 *		'fieldName12'=>array('mod', array(10, 9)),
+	 * 	),
+	 * 	'select'=>array('fieldName', 'fieldName2'),
+	 * 	'limit'=>10,
+	 *  'offset'=>20,
+	 *  'sort'=>array('fieldName'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
+	 * );
+	 * </PRE>
+	 * @param unknown_type $criteria
+	 */
+	public function __construct($criteria=null)
+	{
+		if(is_array($criteria))
+		{
+			if(isset($criteria['conditions']))
+				foreach($criteria['conditions'] as $fieldName=>$cond)
+				{
+					call_user_func_array(array($this, array_shift($cond)), array($fieldName, array_shift($cond)));
+				}
+			if(isset($criteria['select']))
+				$this->select($criteria['select']);
+			if(isset($criteria['limit']))
+				$this->limit($criteria['limit']);
+			if(isset($criteria['offset']))
+				$this->offset($criteria['offset']);
+			if(isset($criteria['sort']))
+				$this->setSort($criteria['sort']);
+		}
+	}
+
+	/**
+	 * Merge with other criteria
+	 * Existing fields operators, limit and offet will be overriden
+	 * select fields will be merged
+	 * @param array|EMongoCriteria $criteria
+	 */
+	public function mergeWith($criteria)
+	{
+		if(is_array($criteria))
+			$criteria = new EMongoCriteria($criteria);
+
+		foreach($criteria->_conditions as $fieldName=>$conds)
+		{
+			if(!isset($this->_conditions[$fieldName]))
+				$this->_conditions[$fieldName] = array();
+			foreach($conds as $operator=>$value)
+				$this->_conditions[$fieldName][$operator] = $value;
+		}
+
+		if(!empty($criteria->_limit))
+			$this->_limit	= $criteria->_limit;
+		if(!empty($criteria->_offset))
+			$this->_offset	= $criteria->_offset;
+		if(!empty($criteria->_sort))
+			$this->_sort	= array_merge($this->_sort, $criteria->_sort);
+
+		return $this;
+	}
+
+	/**
+	 * If we have operator add it otherwise call parent implementation
+	 * @see CComponent::__call()
+	 */
+	public function __call($name, $parameters)
+	{
+		if(in_array($name, array_keys(self::$operators)))
+		{
+			switch($name)
+			{
+				case 'exists':
+						$this->addCond($parameters[0], self::$operators[$name], true);
+					break;
+				case 'notExists':
+						$this->addCond($parameters[0], self::$operators[$name], false);
+					break;
+				default:
+					$this->addCond($parameters[0], self::$operators[$name], $parameters[1]);
+			}
+			return $this;
+		}
+		else
+			return parent::__call($name, $parameters);
+	}
+
+	/**
+	 * Return query array
+	 * @return array query array
+	 */
+	public function getQuery()
+	{
+		return $this->_conditions;
+	}
+
+	public function setQuery(array $query)
+	{
+		$this->_query = $query;
+	}
+
+	public function getLimit()
+	{
+		return $this->_limit;
+	}
+
+	public function setLimit($limit)
+	{
+		$this->limit($limit);
+	}
+
+	public function getOffset()
+	{
+		return $this->_offset;
+	}
+
+	public function setOffset($offset)
+	{
+		$this->offset($offset);
+	}
+
+	public function getSort()
+	{
+		return $this->_sort;
+	}
+
+	public function setSort(array $sort)
+	{
+		$this->_sort = $sort;
+	}
+
+	/**
+	 * List of fields to get from DB
+	 * Multiple calls to this method will merge all given fields
+	 *
+	 * @param array $fieldList list of fields to select
+	 */
+	public function select(array $fieldList=null)
+	{
+		if($fieldList!==null)
+			$this->_select = array_merge($this->_select, $fieldList);
+		return $this;
+	}
+
+	/**
+	 * Set linit
+	 * Multiple calls will overrride previous value of limit
+	 *
+	 * @param integer $limit limit
+	 */
+	public function limit($limit)
+	{
+		$this->_limit = intval($limit);
+		return $this;
+	}
+
+	/**
+	 * Set offset
+	 * Multiple calls will override previous value
+	 *
+	 * @param integer $offset offset
+	 */
+	public function offset($offset)
+	{
+		$this->_offset = intval($offset);
+		return $this;
+	}
+
+	/**
+	 * Add sorting, avaliabe orders are: EMongoCriteria::SORT_ASC and EMongoCriteria::SORT_DESC
+	 * Each call will be groupped with previous calls
+	 * @param string $fieldName
+	 * @param integer $order
+	 */
+	public function sort($fieldName, $order)
+	{
+		$this->_sort[$fieldName] = intval($order);
+		return $this;
+	}
+
+	/**
+	 * Add condition
+	 * If specified field already has a condition, values will be merged
+	 * duplicates will be overriden by new values!
+	 * @param string $fieldName
+	 * @param string $op operator
+	 * @param mixed $value
+	 */
+	protected function addCond($fieldName, $op, $value)
+	{
+		if(!isset($this->_conditions[$fieldName]))
+			$this->_conditions[$fieldName] = array();
+
+		$this->_conditions[$fieldName][$op] = $value;
+	}
+}
