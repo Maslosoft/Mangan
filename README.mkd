@@ -31,7 +31,7 @@ class Client extends EMongoRecord
     public $last_name;
 
     // this method must be implemented (its defined as abstract anyway), it have to return Mongo collection name for use with this record(s)
-    public function collectionName()
+    public function getCollectionName()
     {
         return 'clients';
     }
