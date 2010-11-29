@@ -5,11 +5,11 @@ class EMongoRecordBehavior extends CActiveRecordBehavior
 	public function events()
 	{
 		return array_merge(parent::events(), array(
-			'onBeforeEmbdedDocsInit'=>'beforeEmbdedDocsInit',
-			'onAfterEmbdedDocsInit'=>'afterEmbdedDocsInit'
+			'onBeforeEmbeddedDocsInit'=>'beforeEmbeddedDocsInit',
+			'onAfterEmbeddedDocsInit'=>'afterEmbeddedDocsInit'
 		));
 	}
 
-	public function beforeEmbdedDocsInit($event){}
-	public function afterEmbdedDocsInit($event){}
+	public function beforeEmbeddedDocsInit($event){}
+	public function afterEmbeddedDocsInit($event){}
 }

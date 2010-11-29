@@ -1,6 +1,6 @@
 <?php
 
-abstract class EMongoRecord extends EMongoEmbdedDocument
+abstract class EMongoRecord extends EMongoEmbeddedDocument
 {
 	/**
 	 * MongoDB Connection object
@@ -65,7 +65,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
 
-		$this->initEmbdedDocuments();
+		$this->initEmbeddedDocuments();
 	}
 
 	/**
@@ -275,7 +275,7 @@ abstract class EMongoRecord extends EMongoEmbdedDocument
 	{
 		$class=get_class($this);
 		$model=new $class(null);
-		$model->initEmbdedDocuments();
+		$model->initEmbeddedDocuments();
 		$model->setAttributes($document, false);
 		return $model;
 	}
