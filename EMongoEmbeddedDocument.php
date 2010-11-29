@@ -5,7 +5,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	private static $_names=array();
 
 	/**
-	 * CMap of embded documents
+	 * CMap of embedded documents
 	 * @var CMap $_embedded
 	 */
 	protected $_embedded=null;
