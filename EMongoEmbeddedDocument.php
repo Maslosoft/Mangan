@@ -80,10 +80,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function __set($name, $value)
 	{
-		if(
-			$this->hasEmbeddedDocuments() &&
-			$this->_embedded->contains($name)
-		)
+		if($this->hasEmbeddedDocuments() && $this->_embedded->contains($name))
 		{
 			if(is_array($value))
 				return $this->_embedded->itemAt($name)->attributes=$value;
@@ -113,7 +110,6 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function hasEmbeddedDocuments()
 	{
-		//return $this->_embedded
 		return count($this->embeddedDocuments()) > 0;
 	}
 
