@@ -7,7 +7,7 @@ Some key features:
 - Support of schema-less documents with Yii standard rules and validation features
 - (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
-- Records and embded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
+- Records and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
 - relation support *idea/concept/example*
 
 *IMPORTANT: please use github version, keeping track of bugfixes and updating this download is hard to catch up*
@@ -67,21 +67,21 @@ etc.
 */
 ~~~
 
-##Embded documents
+##Embedded documents
 
-*IMPORTANT: Embded documents must extend from EMongoEmbdedDocument instead of EMongoRecord, otherwise whole thing will fail, to work*
+*IMPORTANT: Embedded documents must extend from EMongoEmbeddedDocument instead of EMongoRecord, otherwise whole thing will fail, to work*
 *Note: some people reported that embedding regular EMongoRecord works as expected, but i have not tested this, more test/reports needed*
 
 
 ~~~
 [php]
 /*
-Embded documents are almost identical as EMongoRecord you only can't save them to DB they're saved by the EMongoRecord model witch has them as an embded (with one exception, you can save them if you will do it explicitly)
+Embedded documents are almost identical as EMongoRecord you only can't save them to DB they're saved by the EMongoRecord model witch has them as an embedded (with one exception, you can save them if you will do it explicitly)
 Notice: Emnded documents don have static model() method!
 
-Lest assume we have following embded document:
+Lest assume we have following embedded document:
 */
-class ClientAddress extends EMongoEmbdedDocument
+class ClientAddress extends EMongoEmbeddedDocument
 {
     public $city;
     public $street;
@@ -107,10 +107,10 @@ class ClientAddress extends EMongoEmbdedDocument
 
 // Now we can add this method to our Client model from previous section:
 // Client model body (...)
-public function embdedDocuments()
+public function embeddedDocuments()
 {
     return array(
-        'address'=>'ClientAddress' // property name => embded document class name
+        'address'=>'ClientAddress' // property name => embedded document class name
     );
 }
 // Client model body (...)
@@ -120,8 +120,8 @@ public function embdedDocuments()
 $client = new Client;
 $client->address->city='New York';
 $client->save();
-// it will automatically call validation for model and all embded documents!
-// You even can nest embded documents in embded documents, just define embdedDocuments() method with array of another embded documents
+// it will automatically call validation for model and all embedded documents!
+// You even can nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents
 // IMPORTANT: This mechanism uses recurency, and will not handle with circular nesting, you have to use this feature with care :P
 ~~~
 
@@ -133,7 +133,7 @@ You easily can store arrays in DB!
 
 - just define a property for an array, and store an array in it
 
-**Arrays of embded documents**
+**Arrays of embedded documents**
 
 - there is no way (i know for now) witch i can easily provide mechanism for this, you have to write Your own
 - i do this in that way:
@@ -141,15 +141,15 @@ You easily can store arrays in DB!
 ~~~
 [php]
 
-// add property for yours array od embded documents
+// add property for yours array od embedded documents
 public $adresses;
 
-// add EmbdedArraysBehavior
+// add EmbeddedArraysBehavior
 public function behaviors()
 {
     return array(
         array(
-            'class'=>'ext.YiiMongoDbSiute.extra.EEmbdedArraysBehavior',
+            'class'=>'ext.YiiMongoDbSiute.extra.EEmbeddedArraysBehavior',
             'arrayPropertyName'=>'addresses', // name of property
             'arrayDocClassName'=>'ClientAddress' // class name of documents in array
         ),
@@ -251,8 +251,8 @@ public function orders()
 **Forms generation**
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
-- When generating a form from mongo record, comment out embded docs array, or you'll see error about array/object creation
-- For embded docs just generate forms in separed way for each one
+- When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
+- For embedded docs just generate forms in separed way for each one
 
 ##DataProvider
 
@@ -297,7 +297,7 @@ $dp = new EMongoRecordDataProvider('modelClassNameOrInstance', array(/* query ar
 **Behaviors**
 
 - You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoRecords)
-- Behaviors may extend from EMongoRecordBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbdedDocsInit and afterEmbdedDocsInit)
+- Behaviors may extend from EMongoRecordBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbeddedDocsInit and afterEmbeddedDocsInit)
 
 **Performance**
 
@@ -331,7 +331,7 @@ at this stage, it can have some ;]
 - Added EMongoRecordBehavior (Support for new events present in EMongoRecord)
 - Added FSync control field fsyncFlag in EMongoDBConnection class (default set to true)
 - Changed the way of setup, db property name change to dbName
-- Added EEmbdedArraysBehavior extra
+- Added EEmbeddedArraysBehavior extra
 
 ##Resources
 
