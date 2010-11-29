@@ -11,6 +11,13 @@ abstract class EMongoEmbeddedDocument extends CModel
 	protected $_embedded=null;
 
 	/**
+	 * Hold down owner pointer (if any)
+	 *
+	 * @var EMongoEmbeddedDocument $_owner
+	 */
+	protected $_owner=null;
+
+	/**
 	 * Constructor.
 	 * @param string $scenario name of the scenario that this model is used in.
 	 * See {@link CModel::scenario} on how scenario is used by models.
@@ -43,7 +50,9 @@ abstract class EMongoEmbeddedDocument extends CModel
 		$this->_embedded = new CMap;
 		foreach($this->embeddedDocuments() as $name=>$docClassName)
 		{
-			$this->_embedded->add($name, new $docClassName($this->getScenario()));
+			$doc = new $docClassName($this->getScenario());
+			$doc->setOwner($this);
+			$this->_embedded->add($name, $doc);
 		}
 		$this->afterEmbeddedDocsInit();
 	}
@@ -151,5 +160,26 @@ abstract class EMongoEmbeddedDocument extends CModel
 			foreach($this->_embedded as $key=>$value)
 				$arr[$key]=$value->toArray();
 		return $arr;
+	}
+
+	/**
+	 * Return owner of this document
+	 * @return EMongoEmbeddedDocument
+	 */
+	public function getOwner()
+	{
+		if($this->_owner!==null)
+			return $this->_owner;
+		else
+			return null;
+	}
+
+	/**
+	 * Set owner of this document
+	 * @param EMongoEmbeddedDocument $owner
+	 */
+	public function setOwner(EMongoEmbeddedDocument $owner)
+	{
+		$this->_owner = $owner;
 	}
 }
