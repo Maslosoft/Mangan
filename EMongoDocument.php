@@ -653,7 +653,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$event=new CModelEvent($this);
 			$this->onBeforeFind($event);
+			return $event->isValid;
 		}
+		else
+			return true;
 	}
 
 	/**
