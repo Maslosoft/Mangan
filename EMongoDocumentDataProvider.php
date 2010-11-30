@@ -37,10 +37,9 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * Constructor.
 	 * @param mixed $modelClass the model class (e.g. 'Post') or the model finder instance
 	 * (e.g. <code>Post::model()</code>, <code>Post::model()->published()</code>).
-	 * @param array $query query array witch will be passed to MongoDB collection find() method
 	 * @param array $config configuration (name=>value) to be applied as the initial property values of this class.
 	 */
-	public function __construct($modelClass, $criteria = array(), $config = array())
+	public function __construct($modelClass, $config = array())
 	{
 		if(is_string($modelClass))
 		{
@@ -54,7 +53,11 @@ class EMongoDocumentDataProvider extends CDataProvider
 		}
 
 		$this->_criteria = $this->model->getDbCriteria();
-		$this->_criteria->mergeWith($criteria);
+		if(isset($config['criteria']))
+		{
+			$this->_criteria->mergeWith($config['criteria']);
+			unset($config['criteria']);
+		}
 
 		$this->setId($this->modelClass);
 		foreach($config as $key=>$value)
