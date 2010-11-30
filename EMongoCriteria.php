@@ -15,6 +15,7 @@ class EMongoCriteria extends CComponent
 		'exists'		=> '$exists',
 		'notExists'		=> '$exists',
 		'mod'			=> '$mod',
+		'equals'		=> '$$eq'
 	);
 
 	const SORT_ASC		= 1;
@@ -91,10 +92,18 @@ class EMongoCriteria extends CComponent
 
 		foreach($criteria->_conditions as $fieldName=>$conds)
 		{
-			if(!isset($this->_conditions[$fieldName]))
-				$this->_conditions[$fieldName] = array();
-			foreach($conds as $operator=>$value)
-				$this->_conditions[$fieldName][$operator] = $value;
+			if(
+				is_array($conds) &&
+				count(array_diff(array_keys($conds), array_values(self::$operators))) == 0
+			)
+			{
+				if(!isset($this->_conditions[$fieldName]))
+					$this->_conditions[$fieldName] = array();
+				foreach($conds as $operator=>$value)
+					$this->_conditions[$fieldName][$operator] = $value;
+			}
+			else
+				$this->_conditions[$fieldName] = $conds;
 		}
 
 		if(!empty($criteria->_limit))
@@ -235,9 +244,12 @@ class EMongoCriteria extends CComponent
 	 */
 	protected function addCond($fieldName, $op, $value)
 	{
-		if(!isset($this->_conditions[$fieldName]))
+		if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
 			$this->_conditions[$fieldName] = array();
 
-		$this->_conditions[$fieldName][$op] = $value;
+		if($op != self::$operators['equals'])
+			$this->_conditions[$fieldName][$op] = $value;
+		else
+			$this->_conditions[$fieldName] = $value;
 	}
 }
