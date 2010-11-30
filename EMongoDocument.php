@@ -660,7 +660,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$class=get_class($this);
 		$model=new $class(null);
 		$model->initEmbeddedDocuments();
-		$model->setAttributes($document, false);
+		$model->setAttributes($attributes, false);
 		return $model;
 	}
 
