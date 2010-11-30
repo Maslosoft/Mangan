@@ -46,6 +46,7 @@ class EMongoCriteria extends CComponent
 	 *		'fieldName10'=>array('exists'),
 	 *		'fieldName11'=>array('notExists'),
 	 *		'fieldName12'=>array('mod', array(10, 9)),
+	 * 		'fieldName13'=>array('equals', 1)
 	 * 	),
 	 * 	'select'=>array('fieldName', 'fieldName2'),
 	 * 	'limit'=>10,
