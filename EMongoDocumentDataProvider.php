@@ -31,7 +31,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 */
 	public $model;
 
-	private $_query;
+	private $_criteria;
 
 	/**
 	 * Constructor.
@@ -40,20 +40,21 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * @param array $query query array witch will be passed to MongoDB collection find() method
 	 * @param array $config configuration (name=>value) to be applied as the initial property values of this class.
 	 */
-	public function __construct($modelClass, $query = array(), $config = array())
+	public function __construct($modelClass, $criteria = array(), $config = array())
 	{
 		if(is_string($modelClass))
 		{
 			$this->modelClass = $modelClass;
 			$this->model = EMongoDocument::model($modelClass);
 		}
-		else if($modelClass instanceof EMongoRecord)
+		else if($modelClass instanceof EMongoDocument)
 		{
 			$this->modelClass = get_class($modelClass);
 			$this->model = $modelClass;
 		}
 
-		$this->_query = $query;
+		$this->_criteria = $this->model->getDbCriteria();
+		$this->_criteria->mergeWith($criteria);
 
 		$this->setId($this->modelClass);
 		foreach($config as $key=>$value)
@@ -69,21 +70,24 @@ class EMongoDocumentDataProvider extends CDataProvider
 	}
 
 	/**
-	 * Returns the query criteria.
+	 * Returns the criteria.
 	 * @return array the query criteria
 	 */
-	public function getQuery()
+	public function getCriteria()
 	{
-		return $this->_query;
+		return $this->_criteria;
 	}
 
 	/**
 	 * Sets the query criteria.
 	 * @param array $value the query criteria. Array representing the MongoDB query criteria.
 	 */
-	public function setQuery(array $query)
+	public function setCriteria($criteria)
 	{
-		$this->_query = $query;
+		if(is_array($criteria))
+			$this->_criteria = new EMongoCriteria($criteria);
+		else if($criteria instanceof EMongoCriteria)
+			$this->_criteria = $criteria;
 	}
 
 	/**
@@ -92,13 +96,12 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 */
 	protected function fetchData()
 	{
-		$criteria = array('query'=>$this->_query, 'sort'=>null, 'limit'=>null, 'offset'=>null);
 		if(($pagination=$this->getPagination())!==false)
 		{
 			$pagination->setItemCount($this->getTotalItemCount());
 
-			$criteria['limit']=$pagination->getLimit();
-			$criteria['offset']=$pagination->getOffset();
+			$this->_criteria->setLimit($pagination->getLimit());
+			$this->_criteria->setOffset($pagination->getOffset());
 		}
 
 		if(($sort=$this->getSort())!==false && ($order=$sort->getOrderBy())!='')
@@ -106,12 +109,12 @@ class EMongoDocumentDataProvider extends CDataProvider
 			$sort=array();
 			foreach($this->getSortDirections($order) as $name=>$descending)
 			{
-				$sort[$name]=$descending ? -1 : 1;
+				$sort[$name]=$descending ? EMongoCriteria::SORT_DESC : EMongoCriteria::SORT_ASC;
 			}
-			$criteria['sort']=$sort;
+			$this->_criteria->setSort($sort);
 		}
 
-		return $this->model->findAll($criteria['query'], $criteria['sort'], $criteria['limit'], $criteria['offset']);
+		return $this->model->findAll($this->_criteria);
 	}
 
 	/**
@@ -134,7 +137,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 */
 	public function calculateTotalItemCount()
 	{
-		return $this->model->getCollection()->count($this->_query);
+		return $this->model->count($this->_criteria);
 	}
 
 	/**
