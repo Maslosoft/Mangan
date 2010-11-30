@@ -79,7 +79,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	protected function beforeToArray()
 	{
-		$this->onBeforeToArray(new CModelEvent($this));
+		$event = new CModelEvent($this);
+		$this->onBeforeToArray($event);
 		return $event->isValid;
 	}
 
