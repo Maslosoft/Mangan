@@ -1,6 +1,6 @@
 <?php
 
-class EEmbeddedArraysBehavior extends EMongoRecordBehavior
+class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 {
 	/**
 	 * Name of property witch holds array od documents

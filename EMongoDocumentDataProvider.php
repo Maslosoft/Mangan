@@ -11,7 +11,7 @@
  * @author canni
  *
  */
-class EMongoRecordDataProvider extends CDataProvider
+class EMongoDocumentDataProvider extends CDataProvider
 {
 	/**
 	 * @var string the name of key field. Defaults to '_id', as a mongo default document primary key.
@@ -45,7 +45,7 @@ class EMongoRecordDataProvider extends CDataProvider
 		if(is_string($modelClass))
 		{
 			$this->modelClass = $modelClass;
-			$this->model = EMongoRecord::model($modelClass);
+			$this->model = EMongoDocument::model($modelClass);
 		}
 		else if($modelClass instanceof EMongoRecord)
 		{

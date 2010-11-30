@@ -49,7 +49,7 @@ class EMongoCriteria extends CComponent
 	 * 	'select'=>array('fieldName', 'fieldName2'),
 	 * 	'limit'=>10,
 	 *  'offset'=>20,
-	 *  'sort'=>array('fieldName'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
+	 *  'sort'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
 	 * );
 	 * </PRE>
 	 * @param unknown_type $criteria
@@ -84,6 +84,10 @@ class EMongoCriteria extends CComponent
 	{
 		if(is_array($criteria))
 			$criteria = new EMongoCriteria($criteria);
+		else if(empty($criteria))
+		{
+			return $this;
+		}
 
 		foreach($criteria->_conditions as $fieldName=>$conds)
 		{
@@ -95,9 +99,9 @@ class EMongoCriteria extends CComponent
 
 		if(!empty($criteria->_limit))
 			$this->_limit	= $criteria->_limit;
-		if(!empty($criteria->_offset))
+		if(!empty($newCriteria->_offset))
 			$this->_offset	= $criteria->_offset;
-		if(!empty($criteria->_sort))
+		if(!empty($newCriteria->_sort))
 			$this->_sort	= array_merge($this->_sort, $criteria->_sort);
 
 		return $this;
@@ -132,14 +136,14 @@ class EMongoCriteria extends CComponent
 	 * Return query array
 	 * @return array query array
 	 */
-	public function getQuery()
+	public function getConditions()
 	{
 		return $this->_conditions;
 	}
 
-	public function setQuery(array $query)
+	public function setConditions(array $conditions)
 	{
-		$this->_query = $query;
+		$this->_conditions = $conditions;
 	}
 
 	public function getLimit()
