@@ -83,7 +83,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 *
 	 * @return string collection name
 	 */
-	abstract public function getCollectionName(){}
+	abstract public function getCollectionName();
 
 	/**
 	 * Returns current MongoCollection object
