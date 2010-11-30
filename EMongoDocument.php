@@ -42,6 +42,27 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Constructor {@see setScenario()}
+	 *
+	 * @param string $scenario
+	 */
+	public function __construct($scenario='insert')
+	{
+		if($scenario==null) // internally used by populateRecord() and model()
+			return;
+
+		$this->setScenario($scenario);
+		$this->setIsNewRecord(true);
+
+		$this->init();
+
+		$this->attachBehaviors($this->behaviors());
+		$this->afterConstruct();
+
+		$this->initEmbeddedDocuments();
+	}
+
+	/**
 	 * Get EMongoDB component instance
 	 * By default it is mongodb application component
 	 *
