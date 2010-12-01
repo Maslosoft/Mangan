@@ -23,10 +23,6 @@ Just create a model class as You would with normal ActiveRecord.
 Example model simple as standard ActiveRecord:
 
 
-~~~
-[php]
-
-
     class Client extends EMongoRecord {
 
         // this method must be implemented (its defined as abstract anyway),
@@ -65,25 +61,13 @@ Example model simple as standard ActiveRecord:
         }
     }
 
-
-~~~
-
-
 And this is it ! use this object just as regular ActiveRecord
 for instance:
-
-
-~~~
-[php]
-
 
     $client = new Client;
     $client->first_name='something';
     $client->save();
     $clients = Client::model->findAll();
-
-
-~~~
 
 
 ##Embedded documents
@@ -95,10 +79,6 @@ Embedded documents are almost identical as EMongoRecord you only can't save them
 Notice: Embedded documents don have static model() method!
 
 Lest assume we have following embedded document:
-
-
-~~~
-[php]
 
 
     class ClientAddress extends EMongoEmbeddedDocument
@@ -126,14 +106,7 @@ Lest assume we have following embedded document:
     }
 
 
-~~~
-
-
 Now we can add this method to our Client model from previous section:
-
-
-~~~
-[php]
 
 
     class Client extends EMongoRecord {
@@ -151,22 +124,12 @@ Now we can add this method to our Client model from previous section:
     }
 
 
-~~~
-
-
 Now start the fun part!
-
-
-~~~
-[php]
 
 
     $client = new Client;
     $client->address->city='New York';
     $client->save();
-
-
-~~~
 
 
 it will automatically call validation for model and all embedded documents!
@@ -184,18 +147,15 @@ You easily can store arrays in DB!
 
 **Arrays of embedded documents**
 
-- there is no way (that i know) where i can easily provide mechanism for this, you have to write Your own
+- there is no way (that i know) where i can easily provide mechanism for this, you have to write your own
 - This is how I accomplish it for now:
 
-
-~~~
-[php]
-
+<code>
 
     // add a property for your array of embedded documents
     public $addresses;
 
-	// add EmbeddedArraysBehavior
+    // add EmbeddedArraysBehavior
     public function behaviors()
     {
         return array(
@@ -217,20 +177,12 @@ You easily can store arrays in DB!
     // or
 
     $c = Client::model()->find();
-    foreach($c->addresses as $addr)
-    {
+    foreach($c->addresses as $addr) {
         echo $addr->city;
     }
-
-
-~~~
-
+</code>
 
 ##Querying
-
-
-~~~
-[php]
 
 
     // simple find first
@@ -259,8 +211,6 @@ You easily can store arrays in DB!
     // analogical this examples also apply to count* methods and delete* methods
 
 
-~~~
-
 
 ##Relations
 
@@ -274,10 +224,6 @@ You easily can store arrays in DB!
 ###HAS_ONE relation
 
 
-~~~
-[php]
-
-
     // just define method in yours model class (assume we have client collection, and address collection in client model
     public function address()
     {
@@ -285,14 +231,7 @@ You easily can store arrays in DB!
     }
 
 
-~~~
-
-
 ###BELONGS_TO relation
-
-
-~~~
-[php]
 
 
     // define in address model
@@ -302,14 +241,7 @@ You easily can store arrays in DB!
     }
 
 
-~~~
-
-
 ###HAS_MANY relation
-
-
-~~~
-[php]
 
 
     // assume we have clients and orders collection
@@ -318,9 +250,6 @@ You easily can store arrays in DB!
     {
         return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
     }
-
-
-~~~
 
 
 ###MANY_MANY
@@ -332,7 +261,7 @@ As simple as defining reverse HAS_MANY relation in orders model
 **Model generation**
 
 - you do not have to generate yours models, yours classes are yours models and schemas!
-- Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
+- Gii CAN'T generate models for you! There is no schema witch gii can exam for generation
 
 **CRUD Generation**
 
@@ -342,13 +271,9 @@ As simple as defining reverse HAS_MANY relation in orders model
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
 - When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
-- For embedded docs just generate forms in separed way for each one
+- For embedded docs just generate forms in separated way for each one
 
 ##DataProvider
-
-
-~~~
-[php]
 
 
     // basic dataprovider returns whole collection (with efficient pagination support out-of-box)
@@ -367,14 +292,7 @@ As simple as defining reverse HAS_MANY relation in orders model
     ));
 
 
-~~~
-
-
 ##Setup
-
-
-~~~
-[php]
 
 
     // Add this to the *import* array in your main.php:
@@ -386,9 +304,6 @@ As simple as defining reverse HAS_MANY relation in orders model
         'dbName'=>'database_name',
         'fsyncFlag'=>true // whatever to use fsync flag with internal DB operations
     ),
-
-
-~~~
 
 
 ##Special topics
@@ -408,10 +323,6 @@ As simple as defining reverse HAS_MANY relation in orders model
 **Massive hand operations**
 
 
-~~~
-[php]
-
-
     // Example mass insert (you will want to disable fsyncField for this:
     for($i=0; $i<1000; $i++)
     {
@@ -420,9 +331,6 @@ As simple as defining reverse HAS_MANY relation in orders model
         $c->validate(); // You can omit this if you want
         $c->getCollection()->insert($c->toArray());
     }
-
-
-~~~
 
 
 ##Known bugs
