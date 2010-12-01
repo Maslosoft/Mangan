@@ -63,7 +63,7 @@ class EMongoCriteria extends CComponent
 			if(isset($criteria['conditions']))
 				foreach($criteria['conditions'] as $fieldName=>$cond)
 				{
-					call_user_func_array(array($this, array_shift($cond)), array($fieldName, array_shift($cond)));
+					call_user_func_array(array($this, $fieldName), array(array_shift($cond), array_shift($cond)));
 				}
 			if(isset($criteria['select']))
 				$this->select($criteria['select']);
@@ -121,20 +121,22 @@ class EMongoCriteria extends CComponent
 	 * If we have operator add it otherwise call parent implementation
 	 * @see CComponent::__call()
 	 */
-	public function __call($name, $parameters)
+	public function __call($fieldName, $parameters)
 	{
-		if(in_array($name, array_keys(self::$operators)))
+		$operatorName = array_shift($parameters);
+		$value = array_shift($parameters);
+		if(in_array($operatorName, array_keys(self::$operators)))
 		{
-			switch($name)
+			switch($operatorName)
 			{
 				case 'exists':
-						$this->addCond($parameters[0], self::$operators[$name], true);
+						$this->addCond($fieldName, self::$operators[$operatorName], true);
 					break;
 				case 'notExists':
-						$this->addCond($parameters[0], self::$operators[$name], false);
+						$this->addCond($fieldName, self::$operators[$operatorName], false);
 					break;
 				default:
-					$this->addCond($parameters[0], self::$operators[$name], $parameters[1]);
+					$this->addCond($fieldName, self::$operators[$operatorName], $value);
 			}
 			return $this;
 		}
