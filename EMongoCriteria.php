@@ -4,16 +4,16 @@ class EMongoCriteria extends CComponent
 {
 	public static $operators = array(
 		'greater'		=> '$gt',
-		'greaterEq'		=> '$gte',
+		'greatereq'		=> '$gte',
 		'less'			=> '$lt',
-		'lessEq'		=> '$lte',
-		'notEq'			=> '$ne',
+		'lesseq'		=> '$lte',
+		'noteq'			=> '$ne',
 		'in'			=> '$in',
-		'notIn'			=> '$nin',
+		'notin'			=> '$nin',
 		'all'			=> '$all',
 		'size'			=> '$size',
 		'exists'		=> '$exists',
-		'notExists'		=> '$exists',
+		'notexists'		=> '$exists',
 		'mod'			=> '$mod',
 		'equals'		=> '$$eq'
 	);
@@ -123,7 +123,7 @@ class EMongoCriteria extends CComponent
 	 */
 	public function __call($fieldName, $parameters)
 	{
-		$operatorName = array_shift($parameters);
+		$operatorName = strtolower(array_shift($parameters));
 		$value = array_shift($parameters);
 		if(in_array($operatorName, array_keys(self::$operators)))
 		{
