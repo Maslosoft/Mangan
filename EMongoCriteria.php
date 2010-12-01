@@ -15,7 +15,8 @@ class EMongoCriteria extends CComponent
 		'exists'		=> '$exists',
 		'notexists'		=> '$exists',
 		'mod'			=> '$mod',
-		'equals'		=> '$$eq'
+		'equals'		=> '$$eq',
+		'where'			=> '$where'
 	);
 
 	const SORT_ASC		= 1;
