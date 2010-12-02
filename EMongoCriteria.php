@@ -4,18 +4,19 @@ class EMongoCriteria extends CComponent
 {
 	public static $operators = array(
 		'greater'		=> '$gt',
-		'greaterEq'		=> '$gte',
+		'greatereq'		=> '$gte',
 		'less'			=> '$lt',
-		'lessEq'		=> '$lte',
-		'notEq'			=> '$ne',
+		'lesseq'		=> '$lte',
+		'noteq'			=> '$ne',
 		'in'			=> '$in',
-		'notIn'			=> '$nin',
+		'notin'			=> '$nin',
 		'all'			=> '$all',
 		'size'			=> '$size',
 		'exists'		=> '$exists',
-		'notExists'		=> '$exists',
+		'notexists'		=> '$exists',
 		'mod'			=> '$mod',
-		'equals'		=> '$$eq'
+		'equals'		=> '$$eq',
+		'where'			=> '$where'
 	);
 
 	const SORT_ASC		= 1;
@@ -46,6 +47,7 @@ class EMongoCriteria extends CComponent
 	 *		'fieldName10'=>array('exists'),
 	 *		'fieldName11'=>array('notExists'),
 	 *		'fieldName12'=>array('mod', array(10, 9)),
+	 * 		'fieldName13'=>array('equals', 1)
 	 * 	),
 	 * 	'select'=>array('fieldName', 'fieldName2'),
 	 * 	'limit'=>10,
@@ -62,7 +64,9 @@ class EMongoCriteria extends CComponent
 			if(isset($criteria['conditions']))
 				foreach($criteria['conditions'] as $fieldName=>$cond)
 				{
-					call_user_func_array(array($this, array_shift($cond)), array($fieldName, array_shift($cond)));
+					$operator = strtolower(array_shift($cond));
+					$value = array_shift($cond);
+					call_user_func_array(array($this, $operator), array($fieldName, $value));
 				}
 			if(isset($criteria['select']))
 				$this->select($criteria['select']);
@@ -120,20 +124,23 @@ class EMongoCriteria extends CComponent
 	 * If we have operator add it otherwise call parent implementation
 	 * @see CComponent::__call()
 	 */
-	public function __call($name, $parameters)
+	public function __call($operatorName, $parameters)
 	{
-		if(in_array($name, array_keys(self::$operators)))
+		$fieldName = array_shift($parameters);
+		$value = array_shift($parameters);
+		$operatorName = strtolower($operatorName);
+		if(in_array($operatorName, array_keys(self::$operators)))
 		{
-			switch($name)
+			switch($operatorName)
 			{
 				case 'exists':
-						$this->addCond($parameters[0], self::$operators[$name], true);
+						$this->addCond($fieldName, $operatorName, true);
 					break;
 				case 'notExists':
-						$this->addCond($parameters[0], self::$operators[$name], false);
+						$this->addCond($fieldName, $operatorName, false);
 					break;
 				default:
-					$this->addCond($parameters[0], self::$operators[$name], $parameters[1]);
+					$this->addCond($fieldName, $operatorName, $value);
 			}
 			return $this;
 		}
@@ -244,6 +251,7 @@ class EMongoCriteria extends CComponent
 	 */
 	protected function addCond($fieldName, $op, $value)
 	{
+		$op = self::$operators[$op];
 		if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
 			$this->_conditions[$fieldName] = array();
 

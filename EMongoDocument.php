@@ -185,6 +185,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		return array();
 	}
 
+	public function resetScopes()
+	{
+		$this->_criteria = new EMongoCriteria();
+	}
+
 	/**
 	 * Saves the current record.
 	 *
