@@ -375,7 +375,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		if($this->beforeFind())
 		{
-			$crit = $this->getDbCriteria()->mergeWith($criteria);
+			$crit = new EMongoCriteria();
+			$crit->mergeWith($this->getDbCriteria())->mergeWith($criteria);
 
 			$doc = $this->getCollection()->findOne($crit->getConditions());
 
@@ -451,6 +452,44 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$crit->mergeWith($criteria)->in('_id', $pk);
 
 		return $this->findAll($crit);
+	}
+
+	/**
+	 * Finds document with the specified attributes.
+	 *
+	 * See {@link find()} for detailed explanation about $condition.
+	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|EMongoCriteria $condition query criteria.
+	 * @return the document found. An null is returned if none is found.
+	 */
+	public function findByAttributes(array $attributes)
+	{
+		$criteria = new EMongoCriteria();
+		foreach($attributes as $name=>$value)
+		{
+			$criteria->equals($name, $value);
+		}
+
+		return $this->find($criteria);
+	}
+
+	/**
+	 * Finds all documents with the specified attributes.
+	 *
+	 * See {@link find()} for detailed explanation about $condition.
+	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|EMongoCriteria $condition query criteria.
+	 * @return the document found. An null is returned if none is found.
+	 */
+	public function findAllByAttributes(array $attributes)
+	{
+		$criteria = new EMongoCriteria();
+		foreach($attributes as $name=>$value)
+		{
+			$criteria->equals($name, $value);
+		}
+
+		return $this->findAll($criteria);
 	}
 
 	/**

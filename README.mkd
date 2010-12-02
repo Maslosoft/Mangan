@@ -1,6 +1,14 @@
 This extension is an almost complete, ActiveRecord like support for MongoDB in Yii
 It originally started as a fork of [MongoRecord](http://www.yiiframework.com/extension/mongorecord "MongoRecord") extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"), to fix some major bugs, and add full featured suite for [MongoDB](http://http://www.mongodb.org "MongoDB") developers.
 
+**IMPORTANT!: This is the 1.0 release; This release is not compatible with previous ones, because it adds a lot of new features :) **
+
+New features in 1.0:
+- Named scopes just like in AR
+- Etreamply easy to use criteria object, you don't have to create complex MongoDB query arrays!
+- Better exeption handling
+- A lot more PHPDocs in code 
+
 Features:
 
 - Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax
@@ -344,6 +352,64 @@ Here are a few more examples for using criteria:
 
 
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
+
+###Creating criteria object from an array:
+
+
+~~~
+[php]
+
+
+    // Example criteria
+    $array = array(
+        'conditions'=>array(
+        	// field name => operator definition
+        	'FieldName1'=>array('greater', 10),
+        	'FieldName2'=>array('in', array(1, 2, 3)),
+        	'FieldName3'=>array('exists'),
+        	'FieldName4'=>array('where', 'this.FieldName4 + this.FieldName3 > 10'),
+        ),
+        'limit'=>10,
+        'offset'=>25,
+        'sort'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName4'=>EMongoCriteria::SORT_DESC),
+    );
+	$criteria = new EMongoCriteria($array);
+	// or
+	$clients = ClientModel::model()->findAll($array);
+
+~~~
+
+
+##Names Scopes
+
+Now you can use AR style named scopes just define scopes method in yours model:
+
+
+~~~
+[php]
+
+
+    class Client extends EMongoDocument
+    {
+    	// (...)
+    	
+    	public function scopes()
+    	{
+    	    return array(
+    	    	'scopeName'=>array(/* Array for criteria object creation see above */),
+    	    );
+    	}
+    	
+    	// (...)
+    }
+    
+    // now You can:
+    
+    $all = Client::model()->scopeName()->findAll();
+
+
+~~~
+
 
 ##Relations
 
