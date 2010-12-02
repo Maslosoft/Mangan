@@ -431,7 +431,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		Yii::trace(get_class($this).'.findByPk()','ext.MongoDb.EMongoDocument');
 		$crit = new EMongoCriteria();
-		$crit->mergeWith($criteria)->equals('_id', $pk);
+		$crit->mergeWith($criteria)->_id('==', $pk);
 
 		return $this->find($crit);
 	}

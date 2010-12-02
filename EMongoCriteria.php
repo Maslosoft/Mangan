@@ -282,7 +282,16 @@ class EMongoCriteria extends CComponent
 			$this->_conditions[$fieldName] = array();
 
 		if($op != self::$operators['equals'])
+		{
+			if(
+				!is_array($this->_conditions[$fieldName]) ||
+				count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
+			)
+			{
+				$this->_conditions[$fieldName] = array();
+			}
 			$this->_conditions[$fieldName][$op] = $value;
+		}
 		else
 			$this->_conditions[$fieldName] = $value;
 
