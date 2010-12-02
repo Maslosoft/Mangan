@@ -18,6 +18,7 @@ class EMongoCriteria extends CComponent
 		'notin'			=> '$nin',
 		'all'			=> '$all',
 		'size'			=> '$size',
+		'type'			=> '$type',
 		'exists'		=> '$exists',
 		'notexists'		=> '$exists',
 		'mod'			=> '$mod',

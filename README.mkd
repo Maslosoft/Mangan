@@ -312,6 +312,7 @@ It's that easy. In place of the 'equals' key, you can use any of the following o
 - 'all'       = all
 - 'size'      = size
 - 'exists'    = exists
+- 'type'      = type // BSON type see mongodb docs for this
 - 'notExists' = does not exist
 - 'mod'       = modulo
 - 'equals'    = ==
