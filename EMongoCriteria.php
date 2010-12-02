@@ -36,6 +36,7 @@ class EMongoCriteria extends CComponent
 	private $_offset		= null;
 	private $_conditions	= array();
 	private $_sort			= array();
+	private $_workingFields	= array();
 
 	/**
 	 * Constructor
@@ -133,13 +134,15 @@ class EMongoCriteria extends CComponent
 	 * If we have operator add it otherwise call parent implementation
 	 * @see CComponent::__call()
 	 */
-	public function __call($operatorName, $parameters)
+	public function __call($fieldName, $parameters)
 	{
-		$fieldName = array_shift($parameters);
+		$operatorName = strtolower(array_shift($parameters));
 		$value = array_shift($parameters);
-		$operatorName = strtolower($operatorName);
 		if(in_array($operatorName, array_keys(self::$operators)))
 		{
+			array_push($this->_workingFields, $fieldName);
+			$fieldName = implode('.', $this->_workingFields);
+			$this->_workingFields = array();
 			switch($operatorName)
 			{
 				case 'exists':
@@ -155,6 +158,20 @@ class EMongoCriteria extends CComponent
 		}
 		else
 			return parent::__call($name, $parameters);
+	}
+
+	public function __get($name)
+	{
+		array_push($this->_workingFields, $name);
+		return $this;
+	}
+
+	public function __set($name, $value)
+	{
+		array_push($this->_workingFields, $name);
+		$fieldList = implode('.', $this->_workingFields);
+		$this->_workingFields = array();
+		$this->addCond($fieldList, '==', $value);
 	}
 
 	/**
