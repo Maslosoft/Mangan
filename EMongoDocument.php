@@ -257,7 +257,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				'fsync'=>$this->getMongoDBComponent()->fsyncFlag
 			));
 
-			if($result === true && !empty($rawData['_id'])) // strict comparsion driver may return empty array
+			if($result !== false && !empty($rawData['_id'])) // strict comparsion driver may return empty array
 			{
 				$this->_id = $rawData['_id'];
 				$this->setIsNewRecord(false);
@@ -302,7 +302,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				'fsync'=>$this->getMongoDBComponent()->fsyncFlag
 			));
 
-			if($result === true) // strict comparsion driver may return empty array
+			if($result !== false) // strict comparsion driver may return empty array
 			{
 				$this->afterSave();
 
