@@ -449,7 +449,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		Yii::trace(get_class($this).'.findAllByPk()','ext.MongoDb.EMongoDocument');
 		$crit = new EMongoCriteria();
-		$crit->mergeWith($criteria)->in('_id', $pk);
+		$crit->mergeWith($criteria)->_id('in', $pk);
 
 		return $this->findAll($crit);
 	}
@@ -467,7 +467,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$criteria = new EMongoCriteria();
 		foreach($attributes as $name=>$value)
 		{
-			$criteria->equals($name, $value);
+			$criteria->$name('==', $value);
 		}
 
 		return $this->find($criteria);
@@ -486,7 +486,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$criteria = new EMongoCriteria();
 		foreach($attributes as $name=>$value)
 		{
-			$criteria->equals($name, $value);
+			$criteria->$name('==', $value);
 		}
 
 		return $this->findAll($criteria);
@@ -524,7 +524,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		if($this->beforeDelete())
 		{
 			$crit = new EMongoCriteria();
-			$crit->mergeWith($criteria)->equals('_id', $pk);
+			$crit->mergeWith($criteria)->_id('==', $pk);
 
 			$result = $this->getCollection()->remove($crit->getConditions(), array(
 				'justOne'=>true,

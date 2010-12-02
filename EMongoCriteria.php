@@ -21,6 +21,7 @@ class EMongoCriteria extends CComponent
 		'type'			=> '$type',
 		'exists'		=> '$exists',
 		'notexists'		=> '$exists',
+		'elemMatch'		=> '$elemMatch',
 		'mod'			=> '$mod',
 		'%'				=> '$mod',
 		'equals'		=> '$$eq',
