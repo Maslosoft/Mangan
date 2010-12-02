@@ -271,9 +271,7 @@ Now suppose you want to only retrieve users, that have a status of 1 (active). T
 
 
     $c = new EMongoCriteria;
-    $c->equals('status', 1);
-    // Or You can use:
-    $c->addCond('status', '==', 1);
+    $c->status('==', 1);
     $users = ModelClass::model->findAll($c);
 
 
@@ -289,34 +287,31 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
 
 
     $c = new EMongoCriteria;
-    $c->equals('active', 1)->limit(10);
-    // Or
-    $c->addCond('active', '==', 1)->limit(10);
+    $c->active('==', 1)->limit(10);
+
     $users = ModelClass::model->findAll($c);
 
 
 ~~~
 
 
-the addCond method support short hand operators: ==, <>, !=, >, <, >=, <=, %
-
 It's that easy. In place of the 'equals' key, you can use any of the following operators
 
-- 'greater'   = >
-- 'greaterEq' = >=
-- 'less'      = <
-- 'lessEq'    = <=
-- 'notEq'     = !=
-- 'in'        = in
-- 'notIn'     = not in
-- 'all'       = all
-- 'size'      = size
-- 'exists'    = exists
-- 'type'      = type // BSON type see mongodb docs for this
-- 'notExists' = does not exist
-- 'mod'       = modulo
-- 'equals'    = ==
-- 'where'     = $where JavaScript operator
+- 'greater'   | >
+- 'greaterEq' | >=
+- 'less'      | <
+- 'lessEq'    | <=
+- 'notEq'     | !=, <>
+- 'in'        | 
+- 'notIn'     | 
+- 'all'       | 
+- 'size'      | 
+- 'exists'    | 
+- 'type'      | // BSON type see mongodb docs for this
+- 'notExists' | 
+- 'mod'       | %
+- 'equals'    | ==
+- 'where'     | // JavaScript operator
 
 *NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.Newer versions of mongo db will work, just not the $or operator.
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
@@ -332,29 +327,32 @@ Here are a few more examples for using criteria:
     $criteria = new EMongoCriteria;
 
     // find the single user with the personal_number == 12345
-    $criteria->equals('personal_number', 12345);
-    // or
-    $criteria->addCond('personal_number', '==', 12345);
+    $criteria->personal_number('==', 12345);
+    // OR like this:
+    $criteria->personal_number = 12345; 
+
     $user = User::model->find($criteria);
 
     // find all users in New York. This will search in the embedded document of UserAddress
-    $criteria->equals('address.city', 'New York'));
+    $criteria->address->city('==', 'New York');
+    // Or
+    $criteria->address->city = 'New York';
     $users = User::model()->findAll($criteria);
 
     // Ok now try this. Only active users, only show at most 10 users, and sort by first name, descending, and offset by 20 (pagination):
     // note the sort syntax. it must have an array value and use the => syntax.
-    $criteria->equals('status', 1)->limit(10)->sort(array('firstName' => EMongoCriteria::SORT_DESC))->offset(20);
+    $criteria->status('==', 1)->limit(10)->sort(array('firstName' => EMongoCriteria::SORT_DESC))->offset(20);
     $users = User::model()->findAll($criteria);
 
     // A more advanced case. All users with a personal_number evenly divisible by 10, sorted by first name ascending, limit 10 users, offset by 25 users (pagination), and remove any address fields from the returned result.
-    $criteria->mod('personal_number', array(10, 0))
+    $criteria->personal_number('%', array(10, 0)) // modulo => personal_number % 10 == 0
              ->sort(array('firstName' => EMongoCriteria::SORT_ASC))
              ->limit(10)
              ->offset(25);
     $users = User::model()->findAll($criteria);
 
     // You can even use the where operator with javascript like so:
-    $criteria->where('fieldName', ' expression in javascript ie: this.field > this.field2');
+    $criteria->fieldName('where', ' expression in javascript ie: this.field > this.field2');
     // but remember that this kind of query is a bit slower than normal finds.
 
 
