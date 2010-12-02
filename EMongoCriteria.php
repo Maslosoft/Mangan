@@ -4,10 +4,16 @@ class EMongoCriteria extends CComponent
 {
 	public static $operators = array(
 		'greater'		=> '$gt',
+		'>'				=> '$gt',
 		'greatereq'		=> '$gte',
+		'>='			=> '$gte',
 		'less'			=> '$lt',
+		'<'				=> '$lt',
 		'lesseq'		=> '$lte',
+		'<='			=> '$lte',
 		'noteq'			=> '$ne',
+		'!='			=> '$ne',
+		'<>'			=> '$ne',
 		'in'			=> '$in',
 		'notin'			=> '$nin',
 		'all'			=> '$all',
@@ -15,7 +21,9 @@ class EMongoCriteria extends CComponent
 		'exists'		=> '$exists',
 		'notexists'		=> '$exists',
 		'mod'			=> '$mod',
+		'%'				=> '$mod',
 		'equals'		=> '$$eq',
+		'=='			=> '$$eq',
 		'where'			=> '$where'
 	);
 
@@ -249,7 +257,7 @@ class EMongoCriteria extends CComponent
 	 * @param string $op operator
 	 * @param mixed $value
 	 */
-	protected function addCond($fieldName, $op, $value)
+	public function addCond($fieldName, $op, $value)
 	{
 		$op = self::$operators[$op];
 		if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
@@ -259,5 +267,7 @@ class EMongoCriteria extends CComponent
 			$this->_conditions[$fieldName][$op] = $value;
 		else
 			$this->_conditions[$fieldName] = $value;
+
+		return $this;
 	}
 }

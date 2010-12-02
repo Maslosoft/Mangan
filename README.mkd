@@ -272,6 +272,8 @@ Now suppose you want to only retrieve users, that have a status of 1 (active). T
 
     $c = new EMongoCriteria;
     $c->equals('status', 1);
+    // Or You can use:
+    $c->addCond('status', '==', 1);
     $users = ModelClass::model->findAll($c);
 
 
@@ -288,11 +290,15 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
 
     $c = new EMongoCriteria;
     $c->equals('active', 1)->limit(10);
+    // Or
+    $c->addCond('active', '==', 1)->limit(10);
     $users = ModelClass::model->findAll($c);
 
 
 ~~~
 
+
+the addCond method support short hand operators: ==, <>, !=, >, <, >=, <=, %
 
 It's that easy. In place of the 'equals' key, you can use any of the following operators
 
@@ -325,7 +331,9 @@ Here are a few more examples for using criteria:
     $criteria = new EMongoCriteria;
 
     // find the single user with the personal_number == 12345
-    $criteria->equals('personal_number', 12345));
+    $criteria->equals('personal_number', 12345);
+    // or
+    $criteria->addCond('personal_number', '==', 12345);
     $user = User::model->find($criteria);
 
     // find all users in New York. This will search in the embedded document of UserAddress
@@ -365,7 +373,7 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
     $array = array(
         'conditions'=>array(
         	// field name => operator definition
-        	'FieldName1'=>array('greater', 10),
+        	'FieldName1'=>array('greaterEq', 10), // Or 'FieldName1'=>array('>=', 10)
         	'FieldName2'=>array('in', array(1, 2, 3)),
         	'FieldName3'=>array('exists'),
         	'FieldName4'=>array('where', 'this.FieldName4 + this.FieldName3 > 10'),
