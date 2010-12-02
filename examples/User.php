@@ -15,7 +15,7 @@ class User extends EMongoRecord
   public $company;
 
   /**
-   * this is similar to the get table method. this returns tha name of the
+   * this is similar to the get tableName() method. this returns tha name of the
    * document for this class. this should be in all lowercase.
    */
   public function getCollectionName()

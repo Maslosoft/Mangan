@@ -30,8 +30,12 @@ Example model simple as standard ActiveRecord:
 ##Setup
 
 In your protected/config/main.php config file. Comment out (or delete) the current 'db' array for your database in the components section, and add the following to the file:
+
+
 ~~~
 [php]
+
+
     'import' => array(
       ...
       'ext.YiiMongoDbSuite.*',
@@ -46,7 +50,11 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
         'fsyncFlag' => true,
       ),
     ),
+
+
 ~~~
+
+
 - ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is the ip (or hostname) of your webserver or host.
 - dbName: is the name you want the collections to be stored in. The database name.
 - fsyncFlag is set to true, this makes mongodb make sure all writes to the database are safely stored to disk. Setting this to false will improve speed but writes ar enot confirmed. So unless you are doing massive or large imports or save() then it is better to be set to true. See the performance section below.
@@ -58,13 +66,20 @@ To get started, you can look in the files of the project and there are two examp
 
 That's all you have to do for setup. You can use it very much like the active record.
 Example:
+
+
 ~~~
 [php]
+
+
     $client = new Client;
     $client->first_name='something';
     $client->save();
     $clients = Client::model->findAll();
+
+
 ~~~
+
 
 ##Embedded documents
 
@@ -77,8 +92,11 @@ Notice: Embedded documents don't have a static model() method!
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
 Lest assume we have following embedded document (a full example is in the examples directory):
 
+
 ~~~
 [php]
+
+
     class UserAddress extends EMongoEmbeddedDocument
     {
       public $city;
@@ -102,9 +120,13 @@ Lest assume we have following embedded document (a full example is in the exampl
         );
       }
     }
+
+
 ~~~
 
+
 Now we can add this method to our User model from previous section:
+
 
 ~~~
 [php]
@@ -123,15 +145,25 @@ Now we can add this method to our User model from previous section:
 
       ...
     }
+
+
 ~~~
 
+
 And using it is as easy as Pie!
+
+
 ~~~
 [php]
+
+
     $client = new Client;
     $client->address->city='New York';
     $client->save();
+
+
 ~~~
+
 
 it will automatically call validation for model and all embedded documents!
 You even can nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents
@@ -150,8 +182,11 @@ You easily can store arrays in DB!
 - there is no way (that i know) where i can easily provide mechanism for this, you have to write Your own
 - This is how I accomplish it for now:
 
+
 ~~~
 [php]
+
+
     // add a property for your array of embedded documents
     public $addresses;
 
@@ -166,52 +201,89 @@ You easily can store arrays in DB!
         ),
       );
     }
+
+
 ~~~
 
+
 So for the user, if you want them to be able to save multiple addresses, you can do this:
+
+
 ~~~
 [php]
+
+
     $c = new Client;
     $c->addresses[0] = new ClientAddress;
     $c->addresses[0]->city='NY';
     $c->save(); // behavior will handle validation of array too
+
+
 ~~~
 
+
 or
+
+
 ~~~
 [php]
+
+
     $c = Client::model()->find();
     foreach($c->addresses as $addr)
     {
         echo $addr->city;
     }
+
+
 ~~~
+
 
 ##Querying
 
 This is one of the things that makes this extension great. It's very easy to query for the objects you want.
+
+
 ~~~
 [php]
+
+
     // simple find first. just like normal AR.
     $object = ModelClass::model->find()
+
+
 ~~~
 
 Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.
+
+
 ~~~
 [php]
+
+
     $c = new EMongoCriteria;
-    $c->status('equals', 1);
+    $c->equals('status', 1);
     $users = ModelClass::model->findAll($c);
+
+
 ~~~
+
 
 and now $users will be an array of all users with the status key in their document set to 1. This is a good way to list only active users.
 What's that? You only want to show the 10 most recent activated users? Thats easy too.
+
+
 ~~~
 [php]
+
+
     $c = new EMongoCriteria;
     $c->equals('active', 1)->limit(10);
     $users = ModelClass::model->findAll($c);
+
+
 ~~~
+
 
 It's that easy. In place of the 'equals' key, you can use any of the following operators
 
@@ -228,14 +300,18 @@ It's that easy. In place of the 'equals' key, you can use any of the following o
 - 'notExists' = does not exist
 - 'mod'       = modulo
 - 'equals'    = ==
+- 'where'     = $where JavaScript operator
 
 *NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.Newer versions of mongo db will work, just not the $or operator.
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
 
 Here are a few more examples for using criteria:
+
+
 ~~~
 [php]
-  $c->equals('fieldName', 123)->less('fn', 20)->sort()->limit(20)->offset(10);
+
+
     // first you must create a new criteria object
     $criteria = new EMongoCriteria;
 
@@ -253,7 +329,7 @@ Here are a few more examples for using criteria:
     $users = User::model()->findAll($criteria);
 
     // A more advanced case. All users with a personal_number evenly divisible by 10, sorted by first name ascending, limit 10 users, offset by 25 users (pagination), and remove any address fields from the returned result.
-    $criteria->mod('personal_number' => array(10, 0))
+    $criteria->mod('personal_number', array(10, 0))
              ->sort(array('firstName' => EMongoCriteria::SORT_ASC))
              ->limit(10)
              ->offset(25);
@@ -262,7 +338,11 @@ Here are a few more examples for using criteria:
     // You can even use the where operator with javascript like so:
     $criteria->where('fieldName', ' expression in javascript ie: this.field > this.field2');
     // but remember that this kind of query is a bit slower than normal finds.
+
+
 ~~~
+
+
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
 ##Relations
@@ -279,33 +359,52 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ~~~
 [php]
+
+
     // just define method in yours model class (assume we have client collection, and address collection in client model
     public function address()
     {
       return Address::model()->findByAttributes(array('attribute_with_client_id'=>$this->primaryKey));
     }
+
+
 ~~~
 
+
 ###BELONGS_TO relation
+
+
 ~~~
 [php]
+
+
     // define in address model
     public function client()
     {
       return Client::model()->findByPk($this->attribute_with_client_id);
     }
+
+
 ~~~
 
+
 ###HAS_MANY relation
+
+
 ~~~
 [php]
+
+
     // assume we have clients and orders collection
     // define in client:
     public function orders()
     {
       return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
     }
+
+
 ~~~
+
 
 ###MANY_MANY
 
@@ -320,7 +419,7 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
 
 **CRUD Generation**
 
-- Gii is not able to generate CRUD, because by default gii expects that CRUD have to be generated for CActiveRecord child classes (EMongoDocument is not child class of CACtiveRecord)
+- Gii is not able to generate CRUD, because by default gii expects that CRUD have to be generated for CActiveRecord child classes (EMongoDocument is not child class of CActiveRecord)
 
 **Forms generation**
 
@@ -333,6 +432,8 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
 
 ~~~
 [php]
+
+
     // basic dataprovider returns whole collection (with efficient pagination support out-of-box)
     $dp = new EMongoDocumentDataProvider('modelClassNameOrInstance');
 
@@ -347,27 +448,32 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
             )
         ),
     ));
+
+
 ~~~
+
 
 ##Special topics
 
 **Behaviors**
 
 - You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoDocuments)
-- Behaviors may extend from EMongoDocumentBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbeddedDocsInit and afterEmbeddedDocsInit)
+- Behaviors may extend from EMongoDocumentBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbeddedDocsInit, afterEmbeddedDocsInit, beforeToArray and afterToArray)
 
 **Performance**
 
 - By default all save/update/delete operations performed by internal command sets the FSYNC flag to TRUE, this means, all operations will have to wait for a disk sync!
 - FSYNC in most cases is a good way and do not have massive impact on performance
 - You may want to disable FSYNC flag when doing massive imports/updates/models, because it will be **horrible** slow!
-- Fsync can be disabled by setting up fsyncField in EMongoDbConnection class
+- Fsync can be disabled by setting up fsyncField in EMongoDB class
 
 **Massive hand operations**
 
 
 ~~~
 [php]
+
+
     // Example mass insert (you will want to disable fsyncField for this:
     for($i=0; $i<1000; $i++)
     {
@@ -376,6 +482,8 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
         $c->validate(); // You can omit this if you want
         $c->getCollection()->insert($c->toArray());
     }
+
+
 ~~~
 
 
