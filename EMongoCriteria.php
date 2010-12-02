@@ -145,7 +145,7 @@ class EMongoCriteria extends CComponent
 				case 'exists':
 						$this->addCond($fieldName, $operatorName, true);
 					break;
-				case 'notExists':
+				case 'notexists':
 						$this->addCond($fieldName, $operatorName, false);
 					break;
 				default:
