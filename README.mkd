@@ -358,6 +358,24 @@ Here are a few more examples for using criteria:
 
 ~~~
 
+###Regexp / SQL LIKE replacemt
+
+You can use native PHP Mongo driver class MongoRegex, to query:
+
+
+~~~
+[php]
+
+
+    // Create criteria
+    $criteria = new EMongoCriteria;
+    // Find all records witch have first name starring on a, b and c, case insensitive search
+    $criteria->first_name = new MongoRegex('/^[abc].*/i');
+    $clients = Client::model()->findAll($criteria);
+    // see phpdoc for MongoRegex class for more examples
+
+~~~
+
 
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
