@@ -12,7 +12,7 @@ class EMongoUniqueValidator extends CValidator
 
 		$criteria = new EMongoCriteria;
 		$criteria->{$attribute} = $value;
-		$count = $object::model()->count($criteria);
+		$count = $object->model()->count($criteria);
 
 		if($count !== 0)
 			$this->addError(

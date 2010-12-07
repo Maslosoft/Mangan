@@ -77,7 +77,7 @@ class EMongoCriteria extends CComponent
 				{
 					$operator = strtolower(array_shift($cond));
 					$value = array_shift($cond);
-					call_user_func_array(array($this, $operator), array($fieldName, $value));
+					call_user_func_array(array($this, $fieldName), array($operator, $value));
 				}
 			if(isset($criteria['select']))
 				$this->select($criteria['select']);
