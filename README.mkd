@@ -36,7 +36,7 @@ Limitations:
 
 ##Requirements
 
-- Has only been tested on Yii 1.1.4 and 1.1.5 . If it works for you on an older version please let me know.
+- Yii 1.1.5 is required, yii 1.1.4 do not have onAfterConstruct event whitch is used here
 - MongoDB latest stable is recommended. Untested with older versions.
 
 ##Basic usage
