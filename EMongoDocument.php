@@ -116,7 +116,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getCollection()
 	{
-		if(isset(self::$_collections[$this->getCollectionName()]))
+		if(!isset(self::$_collections[$this->getCollectionName()]))
 			self::$_collections[$this->getCollectionName()] = $this->getDb()->selectCollection($this->getCollectionName());
 
 		return self::$_collections[$this->getCollectionName()];
