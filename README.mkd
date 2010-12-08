@@ -5,7 +5,11 @@ It originally started as a fork of [MongoRecord](http://www.yiiframework.com/ext
 
 **Nasty BUG found! When using multiple Mongo Documents within single script documents, have used only one (first used) collection, because of static field in EMongoDocument, this applies to all version below 1.0.2, please Update asap!**
 
-This is the 1.0.2 release
+This is the 1.1 release
+
+New features in 1.1
+
+- automated efficent index definition for collections, per model
 
 New features in 1.0:
 
@@ -409,6 +413,52 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ~~~
 
+
+##Indexes
+
+Now you can define indexes for yours collections in easy way!
+
+Suite will check for existing of indexes only once, at the first class use, (per script-calls)
+if it not find any of declared indexes it will create them 
+
+Only thing you need is to define the indexes() method in yours model class, see the example:
+
+
+~~~
+[php]
+
+
+    class Client extends EMongoDocument
+    {
+        // ....
+        public function indexes()
+        {
+            return array(
+                // index name is not important, you may write whatever you whant, just must be unique
+                'index1_name'=>array(
+                    // key array holds list of fields for index
+                    // you may define multiple keys for index and multikey indexes
+                    // each key must have a sorting direction SORT_ASC or SORT_DESC
+                    'key'=>array(
+                    	'field_name'=>EMongoCriteria::SORT_ASC
+                    	'field_name.embeded_field'=>EMongoCriteria::SORT_DESC
+                    ),
+                    
+                    // unique, if indexed field must be unique, define a unique key
+                    // if not present, it will not create unique index
+                    'unique'=>true,
+                ),
+            );
+        }
+        // ....
+    }
+
+
+~~~
+
+
+If you whant to disable index existing checking on every page load because of perfomance reasons (recomended for production)
+put $this->ensureIndexes = false; into yours init() method in model class
 
 ##Names Scopes
 

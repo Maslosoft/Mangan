@@ -11,6 +11,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	private $_criteria=null;						// query criteria (used by finder only)
 	private $_collection=null;						// MongoCollection object
 	private static $_models=array();
+	private static $_indexes = array();				// Hold collection indexes array
+
+	protected $ensureIndexes=true;					// Whatever to ensure indexes
 
 	/**
 	 * EMongoDB component static instance
@@ -174,6 +177,65 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$this->_criteria = $criteria;
 		else
 			$this->_criteria = new EMongoCriteria();
+	}
+
+	/**
+	 * This function check indexes and applyes them to the collection if needed
+	 * see CModel::init()
+	 *
+	 * @see EMongoEmbeddedDocument::init()
+	 */
+	public function init()
+	{
+		parent::init();
+
+		if($this->ensureIndexes && empty(self::$_indexes[$this->getCollectionName()]))
+		{
+			$indexInfo = $this->getCollection()->getIndexInfo();
+			array_shift($indexInfo); // strip out default _id index
+
+			$indexes = array();
+			foreach($indexInfo as $index)
+			{
+				$indexes[$index['name']] = array(
+					'key'=>$index['key'],
+					'unique'=>$index['unique'],
+				);
+			}
+			self::$_indexes[$this->getCollectionName()] = $indexes;
+
+			$this->ensureIndexes();
+		}
+	}
+
+	/**
+	 * This function may return array of indexes for this collection
+	 * array sytnatx is:
+	 * return array(
+	 * 	'index_name'=>array('key'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
+	 * 	'index2_name'=>array('key'=>array('fieldName3'=>EMongoCriteria::SORT_ASC, 'unique'=>true),
+	 * );
+	 * @return array list of indexes for this collection
+	 */
+	public function indexes()
+	{
+		return array();
+	}
+
+	private function ensureIndexes()
+	{
+		$indexNames = array_keys(self::$_indexes[$this->getCollectionName()]);
+		foreach($this->indexes() as $name=>$index)
+		{
+			if(!in_array($name, $indexNames))
+			{
+				$this->getCollection()->ensureIndex(
+					$index['key'],
+					array('unique'=>isset($index['unique']) ? $index['unique'] : false, 'name'=>$name)
+				);
+				self::$_indexes[$this->getCollectionName()][$name] = $index;
+			}
+		}
 	}
 
 	/**
