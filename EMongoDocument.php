@@ -9,7 +9,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 {
 	private $_new=false;							// whether this instance is new or not
 	private $_criteria=null;						// query criteria (used by finder only)
-	private $_collection=null;						// MongoCollection object
+	private static $_collections=array();			// MongoCollection object
 	private static $_models=array();
 	private static $_indexes = array();				// Hold collection indexes array
 
@@ -116,10 +116,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getCollection()
 	{
-		if($this->_collection===null)
-			$this->_collection = $this->getDb()->selectCollection($this->getCollectionName());
+		if(isset(self::$_collections[$this->getCollectionName()]))
+			self::$_collections[$this->getCollectionName()] = $this->getDb()->selectCollection($this->getCollectionName());
 
-		return $this->_collection;
+		return self::$_collections[$this->getCollectionName()];
 	}
 
 	/**
@@ -128,7 +128,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function setCollection(MongoCollection $collection)
 	{
-		$this->_collection = $collection;
+		self::$_collections[$this->getCollectionName()] = $collection;
 	}
 
 	/**
