@@ -336,6 +336,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function applyScopes(&$criteria)
 	{
+		if($criteria === null) $criteria = new EMongoCriteria();
 		if(($c=$this->getDbCriteria(false))!==null)
 		{
 			$c->mergeWith($criteria);
@@ -651,7 +652,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		$this->applyScopes($criteria);
 
-		return $this->getCollection()->count($crit->getConditions());
+		return $this->getCollection()->count($criteria->getConditions());
 	}
 
 	/**
