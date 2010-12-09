@@ -88,6 +88,8 @@ class EMongoCriteria extends CComponent
 			if(isset($criteria['sort']))
 				$this->setSort($criteria['sort']);
 		}
+		else if($criteria instanceof EMongoCriteria)
+			$this->mergeWith($criteria);
 	}
 
 	/**

@@ -66,6 +66,31 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Return the primary key field for this collection, defaults to '_id'
+	 * @return string|array field name, or array of fields for composite primary key
+	 */
+	public function primaryKey()
+	{
+		return '_id';
+	}
+
+
+	public function getPrimaryKey()
+	{
+		$pk = $this->primaryKey();
+		if(is_string($pk))
+			return $this->{$pk};
+		else
+		{
+			$return = array();
+			foreach($pk as $pkFiled)
+				$return[] = $this->{$pkFiled};
+
+			return $return;
+		}
+	}
+
+	/**
 	 * Get EMongoDB component instance
 	 * By default it is mongodb application component
 	 *
@@ -154,13 +179,17 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Get current criteria object
-	 * @return EMongoCriteria
+	 * Returns the mongo criteria associated with this model.
+	 * @param boolean $createIfNull whether to create a criteria instance if it does not exist. Defaults to true.
+	 * @return EMongoCriteria the query criteria that is associated with this model.
+	 * This criteria is mainly used by {@link scopes named scope} feature to accumulate
+	 * different criteria specifications.
 	 */
-	public function getDbCriteria()
+	public function getDbCriteria($createIfNull=true)
 	{
 		if($this->_criteria===null)
-			$this->_criteria = new EMongoCriteria();
+			if(($c = $this->defaultScope()) !== array() || $createIfNull)
+				$this->_criteria = new EMongoCriteria($c);
 		return $this->_criteria;
 	}
 
@@ -239,17 +268,80 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Named scopes array
-	 * return array('scopeName'=>array()) for array see EMongoCriteria array initialization
+	 * Returns the declaration of named scopes.
+	 * A named scope represents a query criteria that can be chained together with
+	 * other named scopes and applied to a query. This method should be overridden
+	 * by child classes to declare named scopes for the particular document classes.
+	 * For example, the following code declares two named scopes: 'recently' and
+	 * 'published'.
+	 * <pre>
+	 * return array(
+	 *     'published'=>array(
+	 *           'conditions'=>array(
+	 *                 'status'=>array('==', 1),
+	 *           ),
+	 *     ),
+	 *     'recently'=>array(
+	 *           'sort'=>array('create_time'=>EMongoCriteria::SORT_DESC),
+	 *           'limit'=>5,
+	 *     ),
+	 * );
+	 * </pre>
+	 * If the above scopes are declared in a 'Post' model, we can perform the following
+	 * queries:
+	 * <pre>
+	 * $posts=Post::model()->published()->findAll();
+	 * $posts=Post::model()->published()->recently()->findAll();
+	 * $posts=Post::model()->published()->published()->recently()->find();
+	 * </pre>
+	 *
+	 * @return array the scope definition. The array keys are scope names; the array
+	 * values are the corresponding scope definitions. Each scope definition is represented
+	 * as an array whose keys must be properties of {@link EMongoCriteria}.
 	 */
 	public function scopes()
 	{
 		return array();
 	}
 
-	public function resetScopes()
+	/**
+	 * Returns the default named scope that should be implicitly applied to all queries for this model.
+	 * Note, default scope only applies to SELECT queries. It is ignored for INSERT, UPDATE and DELETE queries.
+	 * The default implementation simply returns an empty array. You may override this method
+	 * if the model needs to be queried with some default criteria (e.g. only active records should be returned).
+	 * @return array the mongo criteria. This will be used as the parameter to the constructor
+	 * of {@link EMongoCriteria}.
+	 */
+	public function defaultScope()
+	{
+		return array();
+	}
+
+	/**
+	 * Resets all scopes and criterias applied including default scope.
+	 *
+	 * @return EMongoDocument
+	 */
+	public function resetScope()
 	{
 		$this->_criteria = new EMongoCriteria();
+		return $this;
+	}
+
+	/**
+	 * Applies the query scopes to the given criteria.
+	 * This method merges {@link dbCriteria} with the given criteria parameter.
+	 * It then resets {@link dbCriteria} to be null.
+	 * @param EMongoCriteria $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
+	 */
+	public function applyScopes(&$criteria)
+	{
+		if(($c=$this->getDbCriteria(false))!==null)
+		{
+			$c->mergeWith($criteria);
+			$criteria=$c;
+			$this->_criteria=null;
+		}
 	}
 
 	/**
@@ -387,7 +479,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			Yii::trace(get_class($this).'.delete()','ext.MongoDb.EMongoDocument');
 			if($this->beforeDelete())
 			{
-				$result = $this->deleteByPk($this->_id);
+				$result = $this->deleteByPk($this->getPrimaryKey());
 
 				if($result)
 				{
@@ -437,10 +529,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		if($this->beforeFind())
 		{
-			$crit = new EMongoCriteria();
-			$crit->mergeWith($this->getDbCriteria())->mergeWith($criteria);
+			$this->applyScopes($criteria);
 
-			$doc = $this->getCollection()->findOne($crit->getConditions());
+			$doc = $this->getCollection()->findOne($criteria->getConditions());
 
 			return $this->populateRecord($doc);
 		}
@@ -458,22 +549,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		Yii::trace(get_class($this).'.findAll()','ext.MongoDb.EMongoDocument');
 		if($this->beforeFind())
 		{
-			if($criteria !== null)
-			{
-				$crit = new EMongoCriteria;
-				$crit->mergeWith($this->getDbCriteria())->mergeWith($criteria);
-			}
-			else
-				$crit = $this->getDbCriteria();
+			$this->applyScopes($criteria);
 
-			$cursor = $this->getCollection()->find($crit->getConditions());
+			$cursor = $this->getCollection()->find($criteria->getConditions());
 
-			if($crit->getSort() !== null)
-				$cursor->sort($crit->getSort());
-			if($crit->getLimit() !== null)
-				$cursor->limit($crit->getLimit());
-			if($crit->getOffset() !== null)
-				$cursor->skip($crit->getOffset());
+			if($criteria->getSort() !== null)
+				$cursor->sort($criteria->getSort());
+			if($criteria->getLimit() !== null)
+				$cursor->limit($criteria->getLimit());
+			if($criteria->getOffset() !== null)
+				$cursor->skip($criteria->getOffset());
 
 			return $this->populateRecords($cursor);
 		}
@@ -492,16 +577,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function findByPk($pk, $criteria=null)
 	{
 		Yii::trace(get_class($this).'.findByPk()','ext.MongoDb.EMongoDocument');
-		$crit = new EMongoCriteria();
-		$crit->mergeWith($criteria)->_id('==', $pk);
+		$criteria = new EMongoCriteria($criteria);
+		$criteria->mergeWith($this->createPkCriteria($pk));
 
-		return $this->find($crit);
+		return $this->find($criteria);
 	}
 
 	/**
 	 * Finds all documents with the specified primary keys.
 	 * In MongoDB world every document has '_id' unique field, so with this method that
-	 * field is in use as PK!
+	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|EMongoCriteria $condition query criteria.
@@ -510,8 +595,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function findAllByPk($pk, $criteria=null)
 	{
 		Yii::trace(get_class($this).'.findAllByPk()','ext.MongoDb.EMongoDocument');
-		$crit = new EMongoCriteria();
-		$crit->mergeWith($criteria)->_id('in', $pk);
+		$criteria = new EMongoCriteria($criteria);
+		$criteria->mergeWith($this->createPkCriteria($pk, true));
 
 		return $this->findAll($crit);
 	}
@@ -563,13 +648,27 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function count($criteria=null)
 	{
 		Yii::trace(get_class($this).'.count()','ext.MongoDb.EMongoDocument');
-		if($criteria !== null)
-		{
-			$crit = clone $this->getDbCriteria();
-			$crit->mergeWith($criteria);
-		}
-		else
-			$crit = $this->getDbCriteria();
+
+		$this->applyScopes($criteria);
+
+		return $this->getCollection()->count($crit->getConditions());
+	}
+
+	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|EMongoCriteria $condition query criteria.
+	 * @return integer Count of all documents satisfying the specified condition.
+	 */
+	public function countByAttributes(array $attributes)
+	{
+		Yii::trace(get_class($this).'.countByAttributes()','ext.MongoDb.EMongoDocument');
+
+		$criteria = new EMongoCriteria;
+		foreach($attributes as $name=>$value)
+			$criteria->$name = $value;
+
+		$this->applyScopes($criteria);
 
 		return $this->getCollection()->count($crit->getConditions());
 	}
@@ -585,10 +684,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
 		if($this->beforeDelete())
 		{
-			$crit = new EMongoCriteria();
-			$crit->mergeWith($criteria)->_id('==', $pk);
+			$this->applyScopes($criteria);
+			$criteria->mergeWith($this->createPkCriteria($pk));
 
-			$result = $this->getCollection()->remove($crit->getConditions(), array(
+			$result = $this->getCollection()->remove($criteria->getConditions(), array(
 				'justOne'=>true,
 				'fsync'=>$this->getMongoDBComponent()->fsyncFlag
 			));
@@ -607,10 +706,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function deleteAll($criteria=null)
 	{
 		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
-		$crit = new EMongoCriteria();
-		$crit->mergeWith($criteria);
+		$this->applyScopes($criteria);
 
-		return $this->getCollection()->remove($crit->getConditions(), array(
+		return $this->getCollection()->remove($criteria->getConditions(), array(
 			'justOne'=>false,
 			'fsync'=>$this->getMongoDBComponent()->fsyncFlag
 		));
@@ -873,5 +971,29 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$model->attachBehaviors($model->behaviors());
 			return $model;
 		}
+	}
+
+	private function createPkCriteria($pk, $multiple)
+	{
+		$pkField = $this->primaryKey();
+		$criteria = new EMongoCriteria();
+
+		if(is_string($pkField))
+		{
+			if(!$multiple)
+				$criteria->{$pkField} = $pk;
+			else
+				$criteria->{$pkField}('in', $pk);
+		}
+		else if(is_array($pkField))
+		{
+			if(!$multiple)
+				for($i=0; $i<count($pkField); $i++)
+					$criteria->{$pkField[$i]} = $pk[$i];
+			else
+				throw new EMongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
+		}
+
+		return $criteria;
 	}
 }
