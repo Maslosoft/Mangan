@@ -5,7 +5,14 @@ It originally started as a fork of [MongoRecord](http://www.yiiframework.com/ext
 
 **Nasty BUG found! When using multiple Mongo Documents within single script documents, have used only one (first used) collection, because of static field in EMongoDocument, this applies to all version below 1.0.2, please Update asap!**
 
-This is the 1.1 release
+This is the 1.2 release
+
+New features in 1.2
+
+- Support for using any other than _id field as a PK
+- Better names scopes handling, support for default scope
+- *Support to have different models in single collection! see Multimodel collection topic*
+- Better memory management, now there is only one collection object instance, per model
 
 New features in 1.1
 
@@ -457,6 +464,32 @@ Only thing you need is to define the indexes() method in yours model class, see 
 ~~~
 
 
+### Own defined Primary Key for collection
+
+Now you can define a own field to be used as a PK for yours collection, see example:
+
+
+~~~
+[php]
+
+
+    class Client extends EMongoDocument
+    {
+        // ...
+        // Define primaryKey method:
+        public function primaryKey()
+        {
+            return 'personal_number'; // Model field name, by default the _id field is used
+        }
+        // Now you can:
+        // Client::model()->findByPk(1234); // personal_number == 1234
+        // ...
+    }
+
+
+~~~
+
+
 If you whant to disable index existing checking on every page load because of perfomance reasons (recomended for production)
 put $this->ensureIndexes = false; into yours init() method in model class
 
@@ -476,7 +509,16 @@ Now you can use AR style named scopes just define scopes method in yours model:
     	public function scopes()
     	{
     	    return array(
-    	    	'scopeName'=>array(/* Array for criteria object creation see above */),
+    	    	'scopeName'=>array(/* Array for criteria object creation see Criteria from array topic */),
+    	    );
+    	}
+    	
+    	public function defaultScope()
+    	{
+    	    return array(
+    	        'conditions'=>array(
+    	        	'active'=>array('==', true),
+    	        ),
     	    );
     	}
     	
@@ -484,7 +526,7 @@ Now you can use AR style named scopes just define scopes method in yours model:
     }
     
     // now You can:
-    
+    // this will find only clients that are active (default scope) and clients matching 'scopeName'
     $all = Client::model()->scopeName()->findAll();
 
 
@@ -601,19 +643,19 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
 
 ##Special topics
 
-**Behaviors**
+###Behaviors
 
 - You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoDocuments)
 - Behaviors may extend from EMongoDocumentBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbeddedDocsInit, afterEmbeddedDocsInit, beforeToArray and afterToArray)
 
-**Performance**
+###Performance
 
 - By default all save/update/delete operations performed by internal command sets the FSYNC flag to TRUE, this means, all operations will have to wait for a disk sync!
 - FSYNC in most cases is a good way and do not have massive impact on performance
 - You may want to disable FSYNC flag when doing massive imports/updates/models, because it will be **horrible** slow!
 - Fsync can be disabled by setting up fsyncField in EMongoDB class
 
-**Massive hand operations**
+###Massive hand operations
 
 
 ~~~
@@ -628,6 +670,96 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
         $c->validate(); // You can omit this if you want
         $c->getCollection()->insert($c->toArray());
     }
+
+
+~~~
+
+
+###Multimodel collections
+
+You can have different models in single collection, example:
+
+
+~~~
+[php]
+
+
+    abstract class Client extends EMongoDocument
+    {
+        public $first_name;
+        public $second_name;
+    
+        // define property for finding type
+    	public $type;
+    	// and some const for better remember
+    	const NORMAL_CLIENT = 0;
+    	const BUISSNESS_CLIENT = 1;
+    	
+    	public function getCollectionName()
+    	{
+    	    return 'clients';
+    	}
+    }
+    
+    class NormalClient extends Client
+    {
+        public $additionalField;
+    
+        public function defaultScope()
+        {
+            return array(
+                'conditions'=>array('type'=>array('==', self::NORMAL_CLIENT)),
+            );
+        }
+        
+        public function beforeSave()
+        {
+            if(parent::beforeSave())
+            {
+                $this->type = self::NORMAL_CLIENT;
+                return true;
+            }
+            else return false
+        }
+        
+        public static function model($className=__CLASS__)
+        {
+            return parent::model($className);
+        }
+    }
+    
+    class BuissnessClient extends Client
+    {
+        public $taxNo;
+    
+        public function defaultScope()
+        {
+            return array(
+                'conditions'=>array('type'=>array('==', self::BUISSNESS_CLIENT)),
+            );
+        }
+        
+        public function beforeSave()
+        {
+            if(parent::beforeSave())
+            {
+                $this->type = self::BUISSNESS_CLIENT;
+                return true;
+            }
+            else return false
+        }
+        
+        public static function model($className=__CLASS__)
+        {
+            return parent::model($className);
+        }
+    }
+    
+    // now you can:
+    $bclients = BuissnessClient::model()->findAll();
+    $clients NormalClient::model()->findAll();
+    
+    // but they're kept in single collection ! 
 
 
 ~~~
