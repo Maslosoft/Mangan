@@ -757,9 +757,9 @@ You can have different models in single collection, example:
     
     // now you can:
     $bclients = BuissnessClient::model()->findAll();
-    $clients NormalClient::model()->findAll();
+    $clients = NormalClient::model()->findAll();
     
-    // but they're kept in single collection ! 
+    // but they're kept in single collection ! and can be indexed with single field etc.
 
 
 ~~~
