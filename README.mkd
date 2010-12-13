@@ -5,7 +5,12 @@ It originally started as a fork of [MongoRecord](http://www.yiiframework.com/ext
 
 **Nasty BUG found! When using multiple Mongo Documents within single script documents, have used only one (first used) collection, because of static field in EMongoDocument, this applies to all version below 1.0.2, please Update asap!**
 
-This is the 1.2 release
+This is the 1.2.1 release
+
+New features in 1.2.1
+
+- **Support for generating CRUD for EMongoDocument models!**
+- Few minor bug fixes
 
 New features in 1.2
 
@@ -600,16 +605,42 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
 
 ##Gii support
 
-**Model generation**
+###Model generation
 
 - you do not have to generate yours models, yours classes are yours models and schemas!
 - Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
 
-**CRUD Generation**
+###CRUD Generation**
 
-- Gii is not able to generate CRUD, because by default gii expects that CRUD have to be generated for CActiveRecord child classes (EMongoDocument is not child class of CActiveRecord)
+Now you can generate CRUD for yours MongoDB Documents! just you have to add generator path to yours Gii config
 
-**Forms generation**
+
+~~~
+[php]
+
+
+    // in yours main.php config file:
+    'modules'=>array(
+        // ...
+        
+        'gii'=>array(
+            'class'=>'system.gii.GiiModule',
+            'password'=>'yours_password_to_gii',
+            // add additional generator path
+            'generatorPaths'=>array(
+                'ext.YiiMongoDbSuite.gii'
+            ),
+        ),
+        
+        // ...
+    ),
+    // Now login to Gii and start using Mongocrud generator !
+
+
+~~~
+
+
+###Forms generation**
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
 - When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
