@@ -599,7 +599,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$criteria = new EMongoCriteria($criteria);
 		$criteria->mergeWith($this->createPkCriteria($pk, true));
 
-		return $this->findAll($crit);
+		return $this->findAll($criteria);
 	}
 
 	/**
