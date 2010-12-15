@@ -610,9 +610,13 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
 - you do not have to generate yours models, yours classes are yours models and schemas!
 - Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
 
-###CRUD Generation**
+###CRUD Generation
 
 Now you can generate CRUD for yours MongoDB Documents! just you have to add generator path to yours Gii config
+
+*Important:* By default generated models will use mongo _id field as a primary key (using MongoId class)
+this generator will use different field as a primary key, if you will override primaryKey() method to return
+something different than '_id'. Note that generator cannot handle with multifield primary key,
 
 
 ~~~
@@ -640,7 +644,7 @@ Now you can generate CRUD for yours MongoDB Documents! just you have to add gene
 ~~~
 
 
-###Forms generation**
+###Forms generation
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
 - When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
