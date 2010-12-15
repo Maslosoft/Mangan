@@ -947,6 +947,30 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Magic search method, provides basic search functionality.
+	 *
+	 * Returns EMongoDocument object ($this) with criteria set to
+	 * rexexp: /$attributeValue/i
+	 * used for Data provider search functionality
+	 * @param boolean $caseSensitive whathever do a case-sensitive search, default to false
+	 * @return EMongoDocument
+	 */
+	public function search($caseSensitive = false)
+	{
+		$criteria = $this->getDbCriteria();
+
+		foreach($this->getSafeAttributeNames() as $attribute)
+		{
+			if($this->$attribute !== null && $this->$attribute !== '')
+				$criteria->$attribute = new MongoRegex($caseSensitive ? '/'.$this->$attribute.'/' : '/'.$this->$attribute.'/i');
+		}
+
+		$this->setDbCriteria($criteria);
+
+		return $this;
+	}
+
+	/**
 	 * Returns the static model of the specified EMongoDocument class.
 	 * The model returned is a static instance of the EMongoDocument class.
 	 * It is provided for invoking class-level methods (something similar to static class methods.)

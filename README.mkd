@@ -5,7 +5,14 @@ It originally started as a fork of [MongoRecord](http://www.yiiframework.com/ext
 
 **Nasty BUG found! When using multiple Mongo Documents within single script documents, have used only one (first used) collection, because of static field in EMongoDocument, this applies to all version below 1.0.2, please Update asap!**
 
-This is the 1.2.1 release
+This is the 1.2.2 release
+
+New features in 1.2.2
+
+- Magic method search() delivered with every EMongoDocument object
+- Gii CRUD generator now uses search method, to provide text search in admin view (by default using case-insensitive regexp)
+- EMongoDocument search() method has one parameter:
+    - $caseSensitive true|false, default to false, whathever to use case-sensitive string comparsion 
 
 New features in 1.2.1
 

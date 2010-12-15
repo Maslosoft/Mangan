@@ -145,7 +145,15 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	 */
 	public function actionAdmin()
 	{
-		$this->render('admin');
+		$model = new <?php echo $this->modelClass; ?>('search');
+		$model->unsetAttributes();
+
+		if(isset($_GET['<?php echo $this->modelClass; ?>']))
+			$model->setAttributes($_GET['<?php echo $this->modelClass; ?>']);
+
+		$this->render('admin', array(
+			'model'=>$model
+		));
 	}
 
 	/**

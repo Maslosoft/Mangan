@@ -23,7 +23,7 @@ $this->menu=array(
 
 <?php echo "<?php"; ?> $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'<?php echo $this->class2id($this->modelClass); ?>-grid',
-	'dataProvider'=>new EMongoDocumentDataProvider('<?php echo $this->modelClass; ?>', array(
+	'dataProvider'=>new EMongoDocumentDataProvider($model->search(), array(
 		'sort'=>array(
 			'attributes'=>array(
 <?php
@@ -40,6 +40,7 @@ if($count>=7)
 			),
 		),
 	)),
+	'filter'=>$model,
 	'columns'=>array(
 <?php
 $count=0;
