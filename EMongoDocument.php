@@ -962,7 +962,22 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		foreach($this->getSafeAttributeNames() as $attribute)
 		{
 			if($this->$attribute !== null && $this->$attribute !== '')
-				$criteria->$attribute = new MongoRegex($caseSensitive ? '/'.$this->$attribute.'/' : '/'.$this->$attribute.'/i');
+			{
+				if(is_array($this->$attribute) || is_object($this->$attribute))
+					$criteria->$attribute = $this->$attribute;
+				else if(preg_match('/^(?:\s*(<>|<=|>=|<|>|=|!=|==))?(.*)$/',$this->$attribute,$matches))
+				{
+					$op = $matches[1];
+					$value = $matches[2];
+
+					if($op === '=') $op = '==';
+
+					if($op !== '')
+						call_user_func(array($criteria, $attribute), $op, is_numeric($value) ? floatval($value) : $value);
+					else
+						$criteria->$attribute = new MongoRegex($caseSensitive ? '/'.$this->$attribute.'/' : '/'.$this->$attribute.'/i');
+				}
+			}
 		}
 
 		$this->setDbCriteria($criteria);

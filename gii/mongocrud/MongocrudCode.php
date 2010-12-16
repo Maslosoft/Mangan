@@ -163,6 +163,11 @@ class MongocrudCode extends CCodeModel
 		return "\$form->textField(\$model,'{$name}')";
 	}
 
+	public function generateInputField($modelClass,$name)
+	{
+		return "CHtml::activeTextField(\$model,'{$name}')";
+	}
+
 	public function guessNameColumn(EMongoDocument $model)
 	{
 		foreach($model->attributeNames() as $name)
