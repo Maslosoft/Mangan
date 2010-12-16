@@ -1,9 +1,7 @@
 This extension is an almost complete, ActiveRecord like support for MongoDB in Yii
 It originally started as a fork of [MongoRecord](www.yiiframework.com/extension/mongorecord "MongoRecord") extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"), to fix some major bugs, and add full featured suite for [MongoDB](http://http://www.mongodb.org "MongoDB") developers.
 
-**IMPORTANT!:**
-
-**Nasty BUG found! When using multiple Mongo Documents within single script documents, have used only one (first used) collection, because of static field in EMongoDocument, this applies to all version below 1.0.2, please Update asap!**
+**IMPORTANT!: Versions below 1.1 are deprecated, they have some major bugs**
 
 This is the 1.2.3 release
 
@@ -12,7 +10,7 @@ New features in 1.2.3
 - Gii CRUD generator, now generates advanced search form in admin (like in regular Yii CRUD generator)
 - Search form now supports comparsion operators ( > | < | >= | <= | <> | != | == | = )
 - In v1.2.2 all search attributes where treated as a string regex, now you can test numbers to, just juse comparsion operators, example:
-    - search for '1234' will try to find a string 1234 (this will not work match if field is numeric)
+    - search for '1234' will try to find a string matching regexp /1234/i (this will not work if field is numeric)
     - search for '= 1234' will try to find numberic value 1234
     - search for '>= 1234' will try to find any record with field greater or equals numeric value 1234 
 
