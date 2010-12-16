@@ -1,12 +1,22 @@
 <?php
+/**
+ * EMongoDB.php
+ *
+ * PHP version 5.2+
+ *
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @copyright	2010 CleverIT
+ * @license		http://www.yiiframework.com/license/ BSD license
+ * @version		1.3
+ * @category	ext
+ * @package		ext.YiiMongoDbSuite
+ *
+ */
 
 /**
  * EMongoDB
  *
  * This is merge work of tyohan, Alexander Makarov and mine
- *
- * @version 0.9
- * @author Dariusz Górecki <darek.krk@gmail.com>
  */
 class EMongoDB extends CApplicationComponent
 {
@@ -56,17 +66,17 @@ class EMongoDB extends CApplicationComponent
 	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections
 	 */
 	public $fsyncFlag=true;
-	
+
 	/**
 	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests
 	 *
-	 * Generally you should whant to have this set to TRUE if you want to  
+	 * Generally you should whant to have this set to TRUE if you want to
 	 * check inserts/updates/deletes actions
 	 *
 	 * @var boolean $safeFlag state of SAFE flag
 	 */
 	public $safeFlag=true;
-	
+
 	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
 	 */
