@@ -91,6 +91,7 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
         'dbName' => 'myDatabaseName',
         'class'     => 'EMongoDB',
         'fsyncFlag' => true,
+        'safe' => true, //new flag used only for update function on MongoGridFS system
       ),
     ),
 
@@ -812,6 +813,106 @@ You can have different models in single collection, example:
 
 
 ~~~
+
+##GidFS implementation
+
+###GridFS parameters (module)
+
+You can have different models in single collection, example:
+
+###GridFS samples
+~~~
+[php]
+
+//create a new image
+$image = new MongoImage();
+$image->filename = '/var/www/myImage.JPG';
+$image->metadata = array('value1'=>1, 'value2'=>2);
+$res = $image->save();
+if($res === true){
+	echo 'save file ok';
+} else {
+	echo 'error saving file';
+}
+
+//find image
+$image = MongoImage::model()->find();
+if($image instanceof MongoImage) {
+	echo 'find ok';
+} else {
+	echo 'error finding object';
+}
+
+//findall images
+$images = MongoImage::model()->findAll();
+if(is_array($images)) {
+	echo 'findall ok';
+}else {
+	echo 'error on findall';
+}
+var_dump($images);
+	
+//delete images
+$image = MongoImage::model()->find();
+if($image instanceof MongoImage){
+	$result = $image->delete();
+	if($result === true) {
+		echo 'delete ok';
+	}else {
+		echo 'delete notok';
+	}
+} else {
+	echo 'no image found to delete';
+}
+
+//deleteAll image
+$result = MongoImage::model()->deleteAll();
+if(is_array($result)===true) {
+	echo ' isarray';
+	if(isset($result['err']) === true ) {
+		echo ' error deleting images:'.$result['err'];
+	} else {
+		echo ' elements deleted:'.$result['n'];
+	}
+}
+
+//deletebyPk image
+$image = MongoImage::model()->find();
+if($image instanceof MongoImage) {
+	$result = MongoImage::model()->deleteByPk($image->_id);
+	if($result === true) {
+		echo 'delete by pk ok';
+	}
+} else {
+	echo 'no image found to delete by pk';
+}
+
+//insert image and update
+$image = new MongoImage();
+$image->filename = '/var/www/myImage.JPG';
+$image->metadata = array('value1'=>1, 'value2'=>2);
+$res = $image->save();
+$image->filename =  '/var/www/myImageUpdated.JPG';
+$image->metadata = array('value1'=>3, 'value2'=>4);
+$res = $image->save();
+if($res === true){
+	echo 'update ok';
+} else {
+	echo 'error updating';
+}
+
+//MongoGridFSFile functions
+$image = MongoImage::model()->find();
+//getBytes function
+$bytes = $image->getBytes();
+//getFilename
+$filename = $image->getFilename();
+//getSize
+$size = $image->getSize();
+//write
+
+~~~
+
 
 
 ##Known bugs

@@ -56,7 +56,17 @@ class EMongoDB extends CApplicationComponent
 	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections
 	 */
 	public $fsyncFlag=true;
-
+	
+	/**
+	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests
+	 *
+	 * Generally you should whant to have this set to TRUE if you want to  
+	 * check inserts/updates/deletes actions
+	 *
+	 * @var boolean $safeFlag state of SAFE flag
+	 */
+	public $safeFlag=true;
+	
 	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
 	 */
