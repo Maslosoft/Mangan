@@ -350,9 +350,8 @@ abstract class EMongoGridFS extends EMongoDocument
 	public function deleteAll($criteria=null)
 	{
 		Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
-		$crit = new EMongoCriteria();
-		$crit->mergeWith($criteria);
-		return $this->getCollection()->remove($crit->getConditions(), array(
+		$this->applyScopes($criteria);
+		return $this->getCollection()->remove($criteria->getConditions(), array(
 			'safe'=>$this->getMongoDBComponent()->safeFlag
 		));
 	}
@@ -368,10 +367,10 @@ abstract class EMongoGridFS extends EMongoDocument
 		if($this->beforeDelete())
 		{
 			Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
-			$crit = new EMongoCriteria();
-			$crit->mergeWith($criteria)->_id('==', $pk);
+			$this->applyScopes($criteria);
+			$criteria->_id('==', $pk);
 
-			$result = $this->getCollection()->remove($crit->getConditions(), array('justOne'=>true));
+			$result = $this->getCollection()->remove($criteria->getConditions(), array('justOne'=>true));
 			$this->afterDelete();
 			return $result;
 		}
