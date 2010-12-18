@@ -684,7 +684,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		$this->applyScopes($criteria);
 
-		return $this->getCollection()->count($crit->getConditions());
+		return $this->getCollection()->count($criteria->getConditions());
 	}
 
 	/**
