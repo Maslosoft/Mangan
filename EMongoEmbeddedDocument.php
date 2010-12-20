@@ -1,14 +1,34 @@
 <?php
+/**
+ * EMongoEmbeddedDocument.php
+ *
+ * PHP version 5.2+
+ *
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @copyright	2010 CleverIT
+ * @license		http://www.yiiframework.com/license/ BSD license
+ * @version		1.3
+ * @category	ext
+ * @package		ext.YiiMongoDbSuite
+ *
+ */
 
 abstract class EMongoEmbeddedDocument extends CModel
 {
-	private static $_names=array();
+	private static $_attributes=array();
 
 	/**
 	 * CMap of embedded documents
 	 * @var CMap $_embedded
 	 */
 	protected $_embedded=null;
+
+	/**
+	 * Hold down owner pointer (if any)
+	 *
+	 * @var EMongoEmbeddedDocument $_owner
+	 */
+	protected $_owner=null;
 
 	/**
 	 * Constructor.
@@ -43,7 +63,9 @@ abstract class EMongoEmbeddedDocument extends CModel
 		$this->_embedded = new CMap;
 		foreach($this->embeddedDocuments() as $name=>$docClassName)
 		{
-			$this->_embedded->add($name, new $docClassName($this->getScenario()));
+			$doc = new $docClassName($this->getScenario());
+			$doc->setOwner($this);
+			$this->_embedded->add($name, $doc);
 		}
 		$this->afterEmbeddedDocsInit();
 	}
@@ -56,6 +78,28 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function onAfterEmbeddedDocsInit($event)
 	{
 		$this->raiseEvent('onAfterEmbeddedDocsInit', $event);
+	}
+
+	public function onBeforeToArray($event)
+	{
+		$this->raiseEvent('onBeforeToArray', $event);
+	}
+
+	public function onAfterToArray($event)
+	{
+		$this->raiseEvent('onAfterToArray', $event);
+	}
+
+	protected function beforeToArray()
+	{
+		$event = new CModelEvent($this);
+		$this->onBeforeToArray($event);
+		return $event->isValid;
+	}
+
+	protected function afterToArray()
+	{
+		$this->onAfterToArray(new CModelEvent($this));
 	}
 
 	protected function beforeEmbeddedDocsInit()
@@ -80,10 +124,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function __set($name, $value)
 	{
-		if(
-			$this->hasEmbeddedDocuments() &&
-			$this->_embedded->contains($name)
-		)
+		if($this->hasEmbeddedDocuments() && $this->_embedded->contains($name))
 		{
 			if(is_array($value))
 				return $this->_embedded->itemAt($name)->attributes=$value;
@@ -113,7 +154,6 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function hasEmbeddedDocuments()
 	{
-		//return $this->_embedded
 		return count($this->embeddedDocuments()) > 0;
 	}
 
@@ -126,7 +166,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function attributeNames()
 	{
 		$className=get_class($this);
-		if(!isset(self::$_names[$className]))
+		if(!isset(self::$_attributes[$className]))
 		{
 			$class=new ReflectionClass(get_class($this));
 			$names=array();
@@ -140,20 +180,59 @@ abstract class EMongoEmbeddedDocument extends CModel
 			{
 				$names = array_merge($names, $this->_embedded->getKeys());
 			}
-			return self::$_names[$className]=$names;
+			return self::$_attributes[$className]=$names;
 		}
 		else
-			return self::$_names[$className];
+			return self::$_attributes[$className];
 	}
 
 	public function toArray()
 	{
-		$arr = array();
-		foreach($this as $key=>$value)
-			$arr[$key]=$value;
-		if($this->hasEmbeddedDocuments())
-			foreach($this->_embedded as $key=>$value)
-				$arr[$key]=$value->toArray();
-		return $arr;
+		if($this->beforeToArray())
+		{
+			$arr = array();
+			foreach($this as $key=>$value)
+				$arr[$key]=$value;
+			if($this->hasEmbeddedDocuments())
+				foreach($this->_embedded as $key=>$value)
+					$arr[$key]=$value->toArray();
+			$this->afterToArray();
+			return $arr;
+		}
+	}
+
+	/**
+	 * Return owner of this document
+	 * @return EMongoEmbeddedDocument
+	 */
+	public function getOwner()
+	{
+		if($this->_owner!==null)
+			return $this->_owner;
+		else
+			return null;
+	}
+
+	/**
+	 * Set owner of this document
+	 * @param EMongoEmbeddedDocument $owner
+	 */
+	public function setOwner(EMongoEmbeddedDocument $owner)
+	{
+		$this->_owner = $owner;
+	}
+
+	/**
+	 * Override default seScenario method for populating to embedded records
+	 * @see CModel::setScenario()
+	 */
+	public function setScenario($value)
+	{
+		if($this->hasEmbeddedDocuments() && $this->_embedded !== null)
+		{
+			foreach($this->_embedded as $doc)
+				$doc->setScenario($value);
+		}
+		parent::setScenario($value);
 	}
 }

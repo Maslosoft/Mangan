@@ -1,6 +1,19 @@
 <?php
+/**
+ * EEmbeddedArraysBehavior.php
+ *
+ * PHP version 5.2+
+ *
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @copyright	2010 CleverIT
+ * @license		http://www.yiiframework.com/license/ BSD license
+ * @version		1.3
+ * @category	ext
+ * @package		ext.YiiMongoDbSuite
+ *
+ */
 
-class EEmbeddedArraysBehavior extends EMongoRecordBehavior
+class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 {
 	/**
 	 * Name of property witch holds array od documents
@@ -41,12 +54,23 @@ class EEmbeddedArraysBehavior extends EMongoRecordBehavior
 		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
 		{
 			$arrayOfDocs = array();
-			foreach($this->getOwner()->{$this->arrayPropertyName} as $key=>$doc)
+			foreach($this->getOwner()->{$this->arrayPropertyName} as $doc)
 			{
-				$arrayOfDocs[$key] = new $this->arrayDocClassName;
-				$arrayOfDocs[$key]->setAttributes($doc, false);
+				$obj = new $this->arrayDocClassName;
+				$obj->setAttributes($doc, false);
+				$arrayOfDocs[] = $obj;
 			}
 			$this->getOwner()->{$this->arrayPropertyName} = $arrayOfDocs;
+		}
+	}
+
+	public function afterValidate($event)
+	{
+		parent::afterValidate($event);
+		foreach($this->getOwner()->{$this->arrayPropertyName} as $doc)
+		{
+			if(!$doc->validate())
+				$this->getOwner()->addErrors($doc->getErrors());
 		}
 	}
 
@@ -55,14 +79,9 @@ class EEmbeddedArraysBehavior extends EMongoRecordBehavior
 		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
 		{
 			$arrayOfDocs = array();
-			foreach($this->getOwner()->{$this->arrayPropertyName} as $key=>$doc)
+			foreach($this->getOwner()->{$this->arrayPropertyName} as $doc)
 			{
-				if($this->getOwner()->{$this->arrayPropertyName}[$key]->validate())
-				{
-					$arrayOfDocs[$key] = $this->getOwner()->{$this->arrayPropertyName}[$key]->toArray();
-				}
-				else
-					return false;
+				$arrayOfDocs[] = $doc->toArray();
 			}
 			$this->getOwner()->{$this->arrayPropertyName} = $arrayOfDocs;
 			return true;
