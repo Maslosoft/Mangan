@@ -76,15 +76,11 @@ Example model simple as standard ActiveRecord:
 
 ##Setup
 
-<<<<<<< HEAD
-    class Client extends EMongoRecord {
-=======
 In your protected/config/main.php config file. Comment out (or delete) the current 'db' array for your database in the components section, and add the following to the file:
 
 
 ~~~
 [php]
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
 
 
     'import' => array(
@@ -106,10 +102,6 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
 
 ~~~
 
-<<<<<<< HEAD
-And this is it ! use this object just as regular ActiveRecord
-for instance:
-=======
 
 - ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is the ip (or hostname) of your webserver or host.
 - dbName: is the name you want the collections to be stored in. The database name.
@@ -122,12 +114,19 @@ To get started, you can look in the files of the project and there are two examp
 
 That's all you have to do for setup. You can use it very much like the active record.
 Example:
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
+
+
+~~~
+[php]
+
 
     $client = new Client;
     $client->first_name='something';
     $client->save();
     $clients = Client::model->findAll();
+
+
+~~~
 
 
 ##Embedded documents
@@ -142,15 +141,11 @@ So if you have a User.php model, and an UserAddress.php model which is the embed
 Lest assume we have following embedded document (a full example is in the examples directory):
 
 
-<<<<<<< HEAD
-    class ClientAddress extends EMongoEmbeddedDocument
-=======
 ~~~
 [php]
 
 
     class UserAddress extends EMongoEmbeddedDocument
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
     {
       public $city;
       public $street;
@@ -175,12 +170,6 @@ Lest assume we have following embedded document (a full example is in the exampl
     }
 
 
-<<<<<<< HEAD
-Now we can add this method to our Client model from previous section:
-
-
-    class Client extends EMongoRecord {
-=======
 ~~~
 
 
@@ -193,7 +182,6 @@ Now we can add this method to our User model from previous section:
 
     class User extends EMongoDocument {
       ...
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
 
       public function embeddedDocuments()
       {
@@ -207,19 +195,22 @@ Now we can add this method to our User model from previous section:
     }
 
 
-<<<<<<< HEAD
-Now start the fun part!
-=======
 ~~~
 
 
 And using it is as easy as Pie!
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
+
+
+~~~
+[php]
 
 
     $client = new Client;
     $client->address->city='New York';
     $client->save();
+
+
+~~~
 
 
 it will automatically call validation for model and all embedded documents!
@@ -236,19 +227,18 @@ You easily can store arrays in DB!
 
 **Arrays of embedded documents**
 
-- there is no way (that i know) where i can easily provide mechanism for this, you have to write your own
+- there is no way (that i know) where i can easily provide mechanism for this, you have to write Your own
 - This is how I accomplish it for now:
 
-<code>
+
+~~~
+[php]
+
 
     // add a property for your array of embedded documents
     public $addresses;
 
-<<<<<<< HEAD
-    // add EmbeddedArraysBehavior
-=======
 	  // add EmbeddedArraysBehavior
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
     public function behaviors()
     {
       return array(
@@ -288,25 +278,25 @@ or
 
 
     $c = Client::model()->find();
-    foreach($c->addresses as $addr) {
+    foreach($c->addresses as $addr)
+    {
         echo $addr->city;
     }
-</code>
+
+
+~~~
+
 
 ##Querying
 
 This is one of the things that makes this extension great. It's very easy to query for the objects you want.
 
 
-<<<<<<< HEAD
-    // simple find first
-=======
 ~~~
 [php]
 
 
     // simple find first. just like normal AR.
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
     $object = ModelClass::model->find()
 
 
@@ -564,6 +554,8 @@ Now you can use AR style named scopes just define scopes method in yours model:
     $all = Client::model()->scopeName()->findAll();
 
 
+~~~
+
 
 ##Relations
 
@@ -577,6 +569,10 @@ Now you can use AR style named scopes just define scopes method in yours model:
 ###HAS_ONE relation
 
 
+~~~
+[php]
+
+
     // just define method in yours model class (assume we have client collection, and address collection in client model
     public function address()
     {
@@ -584,7 +580,14 @@ Now you can use AR style named scopes just define scopes method in yours model:
     }
 
 
+~~~
+
+
 ###BELONGS_TO relation
+
+
+~~~
+[php]
 
 
     // define in address model
@@ -594,7 +597,14 @@ Now you can use AR style named scopes just define scopes method in yours model:
     }
 
 
+~~~
+
+
 ###HAS_MANY relation
+
+
+~~~
+[php]
 
 
     // assume we have clients and orders collection
@@ -603,6 +613,9 @@ Now you can use AR style named scopes just define scopes method in yours model:
     {
       return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
     }
+
+
+~~~
 
 
 ###MANY_MANY
@@ -614,7 +627,7 @@ As simple as defining reverse HAS_MANY relation in orders model. You can view th
 ###Model generation
 
 - you do not have to generate yours models, yours classes are yours models and schemas!
-- Gii CAN'T generate models for you! There is no schema witch gii can exam for generation
+- Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
 
 ###CRUD Generation
 
@@ -654,9 +667,13 @@ something different than '_id'. Note that generator cannot handle with multifiel
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
 - When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
-- For embedded docs just generate forms in separated way for each one
+- For embedded docs just generate forms in separed way for each one
 
 ##DataProvider
+
+
+~~~
+[php]
 
 
     // basic dataprovider returns whole collection (with efficient pagination support out-of-box)
@@ -675,22 +692,7 @@ something different than '_id'. Note that generator cannot handle with multifiel
     ));
 
 
-<<<<<<< HEAD
-##Setup
-
-
-    // Add this to the *import* array in your main.php:
-    'ext.YiiMongoDbSuite.*',
-
-    // And add the component declaration:
-    'mongodb'=>array(
-        'class'=>'EMongoDbConnection',
-        'dbName'=>'database_name',
-        'fsyncFlag'=>true // whatever to use fsync flag with internal DB operations
-    ),
-=======
 ~~~
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
 
 
 ##Special topics
@@ -710,6 +712,10 @@ something different than '_id'. Note that generator cannot handle with multifiel
 ###Massive hand operations
 
 
+~~~
+[php]
+
+
     // Example mass insert (you will want to disable fsyncField for this:
     for($i=0; $i<1000; $i++)
     {
@@ -720,8 +726,6 @@ something different than '_id'. Note that generator cannot handle with multifiel
     }
 
 
-<<<<<<< HEAD
-=======
 ~~~
 
 
@@ -945,7 +949,6 @@ You can have different models in single collection, example:
 ~~~
 
 
->>>>>>> 5ba6c7250df6ee7afc46de6b424f3b210e65e056
 ##Known bugs
 
 - Remember, this is not complete yet. So at this stage, it can have some ;]
