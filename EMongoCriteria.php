@@ -87,7 +87,7 @@ class EMongoCriteria extends CComponent
 		if(is_array($criteria))
 		{
 			if(isset($criteria['conditions']))
-				foreach($criteria['conditions'] as $fieldName=>$condidions)
+				foreach($criteria['conditions'] as $fieldName=>$conditions)
 				{
 					$fieldNameArray = explode('.', $fieldName);
 					if(count($fieldNameArray) === 1)
@@ -95,7 +95,7 @@ class EMongoCriteria extends CComponent
 					else
 						$fieldName = array_pop($fieldNameArray);
 
-					foreach($condidions as $operator => $value)
+					foreach($conditions as $operator => $value)
 					{
 						$this->setWorkingFields($fieldNameArray);
 						$operator = strtolower($operator);
