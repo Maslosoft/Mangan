@@ -347,4 +347,112 @@ class EMongoCriteriaTest extends CTestCase
 			$this->criteria->getOffset()
 		);
 	}
+
+	public function testCriteriaMerge()
+	{
+		$c1 = new EMongoCriteria;
+		$c2 = new EMongoCriteria;
+
+		$c1->fieldName1('>', 10)->fieldName1('<', 100);
+		$c1->fieldName2 = 20;
+		$c1->fieldName4->fieldName5('<', 100);
+		$c1->limit(10)->offset(20)->select(array('fieldName1'))->sort('fieldName1', EMongoCriteria::SORT_ASC);
+
+		$c2->fieldName1 = 20;
+		$c2->fieldName2('%', array(10, 0));
+		$c2->fieldName4->fieldName5('>', 10);
+		$c2->limit(5)->offset(5)->select(array('fieldName2'))->sort('fieldName2', EMongoCriteria::SORT_DESC);
+
+		$c1->mergeWith($c2);
+
+		$this->assertEquals(
+			array(
+				'fieldName1' => 20,
+				'fieldName2' => array(
+					'$mod' => array(10, 0),
+				),
+				'fieldName4.fieldName5' => array(
+					'$lt' => 100,
+					'$gt' => 10,
+				),
+			),
+			$c1->getConditions()
+		);
+
+		$this->assertEquals(
+			5, $c1->getLimit()
+		);
+
+		$this->assertEquals(
+			5, $c1->getOffset()
+		);
+
+		$this->assertEquals(
+			array(
+				'fieldName1', 'fieldName2'
+			),
+			$c1->getSelect()
+		);
+
+		$this->assertEquals(
+			array(
+				'fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC
+			),
+			$c1->getSort()
+		);
+
+		$c2->mergeWith(array(
+			'conditions'=>array(
+				'fieldName1' => array(
+					'>' => 10,
+					'<' => 100,
+				),
+				'fieldName2' => array('==' => 20),
+				'fieldName4.fieldName5' => array(
+					'<' => 100,
+				),
+			),
+			'limit' => 10,
+			'offset' => 20,
+			'select' => array('fieldName1'),
+			'sort' => array('fieldName1' => EMongoCriteria::SORT_ASC)
+		));
+
+		$this->assertEquals(
+			array(
+				'fieldName1' => array(
+					'$gt' => 10,
+					'$lt' => 100,
+				),
+				'fieldName2' => 20,
+				'fieldName4.fieldName5' => array(
+					'$gt' => 10,
+					'$lt' => 100,
+				),
+			),
+			$c2->getConditions()
+		);
+
+		$this->assertEquals(
+			10, $c2->getLimit()
+		);
+
+		$this->assertEquals(
+			20, $c2->getOffset()
+		);
+
+		$this->assertEquals(
+			array(
+				'fieldName2', 'fieldName1'
+			),
+			$c2->getSelect()
+		);
+
+		$this->assertEquals(
+			array(
+				'fieldName2'=>EMongoCriteria::SORT_DESC, 'fieldName1'=>EMongoCriteria::SORT_ASC
+			),
+			$c2->getSort()
+		);
+	}
 }
