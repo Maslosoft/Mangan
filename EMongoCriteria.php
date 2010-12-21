@@ -139,7 +139,7 @@ class EMongoCriteria extends CComponent
 				count(array_diff(array_keys($conds), $opTable)) == 0
 			)
 			{
-				if(is_array($this->_conditions[$fieldName]))
+				if(isset($this->_conditions[$fieldName]) && is_array($this->_conditions[$fieldName]))
 				{
 					foreach($this->_conditions[$fieldName] as $operator => $value)
 						if(!in_array($operator, $opTable))
@@ -177,6 +177,12 @@ class EMongoCriteria extends CComponent
 			$operatorName = strtolower($parameters[0]);
 		if(isset($parameters[1]))
 			$value = $parameters[1];
+
+		if(is_numeric($operatorName))
+		{
+			$operatorName = strtolower(trim($value));
+			$value = (strtolower(trim($value)) === 'exists') ? true : false;
+		}
 
 		if(in_array($operatorName, array_keys(self::$operators)))
 		{
