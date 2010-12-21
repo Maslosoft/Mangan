@@ -38,6 +38,7 @@ class EMongoCriteria extends CComponent
 		'mod'			=> '$mod',
 		'%'				=> '$mod',
 		'equals'		=> '$$eq',
+		'eq'			=> '$$eq',
 		'=='			=> '$$eq',
 		'where'			=> '$where'
 	);
@@ -79,19 +80,30 @@ class EMongoCriteria extends CComponent
 	 *  'sort'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
 	 * );
 	 * </PRE>
-	 * @param unknown_type $criteria
+	 * @param mixed $criteria
 	 */
 	public function __construct($criteria=null)
 	{
 		if(is_array($criteria))
 		{
 			if(isset($criteria['conditions']))
-				foreach($criteria['conditions'] as $fieldName=>$cond)
+				foreach($criteria['conditions'] as $fieldName=>$condidions)
 				{
-					$operator = strtolower(array_shift($cond));
-					$value = array_shift($cond);
-					call_user_func_array(array($this, $fieldName), array($operator, $value));
+					$fieldNameArray = explode('.', $fieldName);
+					if(count($fieldNameArray) === 1)
+						$fieldName = array_shift($fieldNameArray);
+					else
+						$fieldName = array_pop($fieldNameArray);
+
+					foreach($condidions as $operator => $value)
+					{
+						$this->setWorkingFields($fieldNameArray);
+						$operator = strtolower($operator);
+
+						$this->$fieldName($operator, $value);
+					}
 				}
+
 			if(isset($criteria['select']))
 				$this->select($criteria['select']);
 			if(isset($criteria['limit']))
@@ -152,8 +164,11 @@ class EMongoCriteria extends CComponent
 	 */
 	public function __call($fieldName, $parameters)
 	{
-		$operatorName = strtolower(array_shift($parameters));
-		$value = array_shift($parameters);
+		if(isset($parameters[0]))
+			$operatorName = strtolower($parameters[0]);
+		if(isset($parameters[1]))
+			$value = $parameters[1];
+
 		if(in_array($operatorName, array_keys(self::$operators)))
 		{
 			array_push($this->_workingFields, $fieldName);
@@ -173,7 +188,7 @@ class EMongoCriteria extends CComponent
 			return $this;
 		}
 		else
-			return parent::__call($name, $parameters);
+			return parent::__call($fieldName, $parameters);
 	}
 
 	public function __get($name)
@@ -242,6 +257,16 @@ class EMongoCriteria extends CComponent
 	public function setSelect(array $select)
 	{
 		$this->_select = $select;
+	}
+
+	public function getWorkingFields()
+	{
+		return $this->_workingFields;
+	}
+
+	public function setWorkingFields(array $select)
+	{
+		$this->_workingFields = $select;
 	}
 
 	/**
