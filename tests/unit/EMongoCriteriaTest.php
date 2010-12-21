@@ -308,4 +308,43 @@ class EMongoCriteriaTest extends CTestCase
 			$criteria->getSort()
 		);
 	}
+
+	public function testConditionsChaining()
+	{
+		$this->criteria->
+			testField1->testField2('%', array(10, 0))->
+			testField3('==', 12)->
+			sort('testField1', EMongoCriteria::SORT_ASC)->
+			limit(10)->
+			select(array('testField2'))->
+			offset(25);
+
+		$this->assertEquals(
+			array(
+				'testField1.testField2'=>array('$mod'=>array(10, 0)),
+				'testField3'=>12,
+			),
+			$this->criteria->getConditions()
+		);
+
+		$this->assertEquals(
+			array('testField1'=>EMongoCriteria::SORT_ASC),
+			$this->criteria->getSort()
+		);
+
+		$this->assertEquals(
+			10,
+			$this->criteria->getLimit()
+		);
+
+		$this->assertEquals(
+			array('testField2'),
+			$this->criteria->getSelect()
+		);
+
+		$this->assertEquals(
+			25,
+			$this->criteria->getOffset()
+		);
+	}
 }
