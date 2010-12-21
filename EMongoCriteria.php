@@ -128,20 +128,27 @@ class EMongoCriteria extends CComponent
 		if(is_array($criteria))
 			$criteria = new EMongoCriteria($criteria);
 		else if(empty($criteria))
-		{
 			return $this;
-		}
+
+		$opTable = array_values(self::$operators);
 
 		foreach($criteria->_conditions as $fieldName=>$conds)
 		{
 			if(
 				is_array($conds) &&
-				count(array_diff(array_keys($conds), array_values(self::$operators))) == 0
+				count(array_diff(array_keys($conds), $opTable)) == 0
 			)
 			{
-				if(!isset($this->_conditions[$fieldName]))
+				if(is_array($this->_conditions[$fieldName]))
+				{
+					foreach($this->_conditions[$fieldName] as $operator => $value)
+						if(!in_array($operator, $opTable))
+							unset($this->_conditions[$fieldName][$operator]);
+				}
+				else
 					$this->_conditions[$fieldName] = array();
-				foreach($conds as $operator=>$value)
+
+				foreach($conds as $operator => $value)
 					$this->_conditions[$fieldName][$operator] = $value;
 			}
 			else
@@ -154,6 +161,8 @@ class EMongoCriteria extends CComponent
 			$this->_offset	= $criteria->_offset;
 		if(!empty($criteria->_sort))
 			$this->_sort	= array_merge($this->_sort, $criteria->_sort);
+		if(!empty($criteria->_select))
+			$this->_select	= array_merge($this->_select, $criteria->_select);
 
 		return $this;
 	}
