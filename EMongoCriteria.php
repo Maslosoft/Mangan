@@ -234,6 +234,16 @@ class EMongoCriteria extends CComponent
 		$this->_sort = $sort;
 	}
 
+	public function getSelect()
+	{
+		return $this->_select;
+	}
+
+	public function setSelect(array $select)
+	{
+		$this->_select = $select;
+	}
+
 	/**
 	 * List of fields to get from DB
 	 * Multiple calls to this method will merge all given fields
