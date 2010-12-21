@@ -411,6 +411,7 @@ class EMongoCriteriaTest extends CTestCase
 				'fieldName4.fieldName5' => array(
 					'<' => 100,
 				),
+				'fieldName6' => array('notExists'),
 			),
 			'limit' => 10,
 			'offset' => 20,
@@ -429,6 +430,7 @@ class EMongoCriteriaTest extends CTestCase
 					'$gt' => 10,
 					'$lt' => 100,
 				),
+				'fieldName6' => array('$exists' => false)
 			),
 			$c2->getConditions()
 		);
