@@ -2,8 +2,8 @@
 /**
  * CUniqueValidator class file.
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @link http://www.yiiframework.com/
+ * @author Florian Fackler <florian.fackler@mintao.com>
+ * @link http://mintao.com
  * @copyright Copyright &copy; 2008-2010 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
@@ -11,7 +11,7 @@
 /**
  * CUniqueValidator validates that the attribute value is unique in the corresponding database table.
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
+ * @author Florian Fackler <florian.fackler@mintao.com>
  * @version $Id$
  * @package system.validators
  * @since 1.0
