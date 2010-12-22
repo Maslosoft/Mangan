@@ -222,6 +222,34 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Sets the attribute values in a massive way.
+	 * @param array $values attribute values (name=>value) to be set.
+	 * @param boolean $safeOnly whether the assignments should only be done to the safe attributes.
+	 * A safe attribute is one that is associated with a validation rule in the current {@link scenario}.
+	 * @see getSafeAttributeNames
+	 * @see attributeNames
+	 */
+	public function setAttributes($values, $safeOnly=true)
+	{
+		if(!is_array($values))
+			return;
+
+		if($this->hasEmbeddedDocuments())
+		{
+			$attributes=array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
+
+			foreach($this->embeddedDocuments() as $fieldName => $className)
+				if(isset($values[$fieldName]) && isset($attributes[$fieldName]))
+				{
+					$this->$fieldName->setAttributes($values[$fieldName], $safeOnly);
+					unset($values[$fieldName]);
+				}
+		}
+
+		parent::setAttributes($values, $safeOnly);
+	}
+
+	/**
 	 * This function check indexes and applyes them to the collection if needed
 	 * see CModel::init()
 	 *
@@ -541,6 +569,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		Yii::trace(get_class($this).'.find()','ext.MongoDb.EMongoDocument');
 
+		if (is_array($criteria)) $criteria = new EMongoCriteria($criteria);
+
 		if($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
@@ -561,6 +591,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function findAll($criteria=null)
 	{
 		Yii::trace(get_class($this).'.findAll()','ext.MongoDb.EMongoDocument');
+
+		if (is_array($criteria)) $criteria = new EMongoCriteria($criteria);
+
 		if($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
