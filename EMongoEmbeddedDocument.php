@@ -22,12 +22,12 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * @var CMap $_embedded
 	 */
 	protected $_embedded=null;
-	
+
 	/**
 	 * Cacheed values for embeddedDocuments() method vall
 	 * @var array $_embeddedConfig
 	 */
-	protected $_embeddedConfig = null;
+	protected static $_embeddedConfig = array();
 
 	/**
 	 * Hold down owner pointer (if any)
@@ -67,7 +67,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 			return false;
 
 		$this->_embedded = new CMap;
-		$this->_embeddedConfig = $this->embeddedDocuments();
+		if(!isset($this->_embeddedConfig[get_class($this)]))
+			$this->_embeddedConfig[get_class($this)] = $this->embeddedDocuments();
 		$this->afterEmbeddedDocsInit();
 	}
 
@@ -117,13 +118,13 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function __get($name)
 	{
-		if($this->hasEmbeddedDocuments() && isset($this->_embeddedConfig[$name])) {
+		if($this->hasEmbeddedDocuments() && isset($this->_embeddedConfig[get_class($this)][$name])) {
 			// Late creation of embedded documents on first access
 			if (is_null($this->_embedded->itemAt($name))) {
-				$docClassName = $this->_embeddedConfig[$name];
+				$docClassName = $this->_embeddedConfig[get_class($this)][$name];
 				$doc = new $docClassName($this->getScenario());
 				$doc->setOwner($this);
-				$this->_embedded->add($name, $doc);					
+				$this->_embedded->add($name, $doc);
 			}
 			return $this->_embedded->itemAt($name);
 		}
@@ -133,15 +134,15 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function __set($name, $value)
 	{
-		if($this->hasEmbeddedDocuments() && isset($this->_embeddedConfig[$name]))
+		if($this->hasEmbeddedDocuments() && isset($this->_embeddedConfig[get_class($this)][$name]))
 		{
 			if(is_array($value)) {
 				// Late creation of embedded documents on first access
 				if (is_null($this->_embedded->itemAt($name))) {
-					$docClassName = $this->_embeddedConfig[$name];
+					$docClassName = $this->_embeddedConfig[get_class($this)][$name];
 					$doc = new $docClassName($this->getScenario());
 					$doc->setOwner($this);
-					$this->_embedded->add($name, $doc);					
+					$this->_embedded->add($name, $doc);
 				}
 				return $this->_embedded->itemAt($name)->attributes=$value;
 			}
@@ -153,7 +154,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	public function __isset($name) {
-		if($this->hasEmbeddedDocuments() && isset($this->_embeddedConfig[$name]))
+		if($this->hasEmbeddedDocuments() && isset($this->_embeddedConfig[get_class($this)][$name]))
 		{
 			return isset($this->_embedded[$name]);
 		}
@@ -180,6 +181,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 
 	public function hasEmbeddedDocuments()
 	{
+		if(isset($this->_embeddedConfig[get_class($this)]))
+			return true;
 		return count($this->embeddedDocuments()) > 0;
 	}
 
@@ -204,7 +207,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 			}
 			if($this->hasEmbeddedDocuments())
 			{
-				$names = array_merge($names, array_keys($this->_embeddedConfig));
+				$names = array_merge($names, array_keys($this->_embeddedConfig[get_class($this)]));
 			}
 			return self::$_attributes[$className]=$names;
 		}
