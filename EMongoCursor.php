@@ -33,6 +33,12 @@ class EMongoCursor implements Iterator, ArrayAccess, Countable
 	  */
 	 protected $_model;
 
+	 /**
+	  * @var array cache for array access. This guarantees, that for the
+	  *      same index always the same object instance is returned
+	  */
+	 protected $_cache = array();
+
 	/**
 	 * Construct a new EMongoCursor
 	 *
@@ -115,12 +121,18 @@ class EMongoCursor implements Iterator, ArrayAccess, Countable
 		if (!is_numeric($offset)) return null;
 		if (($offset >= $this->_cursor->count()) || ($offset <0)) return null;
 
+		if (isset($this->_cache[$offset])) {
+			return $this->_cache[$offset];
+		}
+
+		// TODO: this is slooooow
 		$this->_cursor->reset();
 		for ($i=0; $i<=$offset; $i++) {
 			$this->_cursor->next();
 		}
 
-		return $this->current();
+		$this->_cache[$offset] = $this->current();
+		return $this->_cache[$offset];
 	}
 
 	/**
