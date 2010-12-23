@@ -20,7 +20,7 @@
  * Cursor object, that behaves much like the MongoCursor,
  * but thisone returns instantiated objects
  */
-class EMongoCursor implements Iterator
+class EMongoCursor implements Iterator, ArrayAccess, Countable
 {
 
 	/**
@@ -85,5 +85,55 @@ class EMongoCursor implements Iterator
 	 */
 	public function valid ( ) {
 		return $this->_cursor->valid();
+	}
+
+	/**
+	 * This method is executed when using the count() function on an object implementing Countable.
+	 * @return integer The custom count as an integer.
+	 */
+	public function count ( ) {
+		return $this->_cursor->count();
+	}
+
+	/**
+	 * Whether a offset exists
+	 * return boolean Returns TRUE on success or FALSE on failure.
+	 */
+	public function offsetExists  ( $offset  ) {
+		if (!is_numeric($offset)) return false;
+		return ($offset < $this->_cursor->count()) && ($offset >=0);
+	}
+
+	/**
+	 * Returns the value at specified offset.
+	 * This method is executed when checking if offset is empty().
+	 * This method will reset the current cursor, and isn't really
+	 * effective. Only use it with small resultsets
+	 * @return EMongoDocument
+	 */
+	public function offsetGet ( $offset ) {
+		if (!is_numeric($offset)) return null;
+		if (($offset >= $this->_cursor->count()) || ($offset <0)) return null;
+
+		$this->_cursor->reset();
+		for ($i=0; $i<=$offset; $i++) {
+			$this->_cursor->next();
+		}
+
+		return $this->current();
+	}
+
+	/**
+	 * This method is not implemented: EMongoCursors are read only!
+	 */
+	public function offsetSet ( $offset , $value ) {
+		throw new EMongoException(Yii::t('yii', 'Changing values of EMongoCursor is not allowed'));
+	}
+
+	/**
+	 * This method is not implemented: EMongoCursors are read only!
+	 */
+	public function offsetUnset ( $offset ) {
+		throw new EMongoException(Yii::t('yii', 'Changing values of EMongoCursor is not allowed'));
 	}
 }
