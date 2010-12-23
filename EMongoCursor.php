@@ -51,6 +51,15 @@ class EMongoCursor implements Iterator, ArrayAccess, Countable
 	}
 
 	/**
+	 * Return MongoCursor for additional tuning
+	 *
+	 * @return MongoCursor the cursor used for this query
+	 */
+	public function getCursor() {
+		return $this->_cursor;
+	}
+
+	/**
 	 * Return the current element
 	 * @return EMongoDocument
 	 */
