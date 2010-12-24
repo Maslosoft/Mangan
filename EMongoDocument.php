@@ -507,7 +507,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				}
 			}
 			$result = $this->getCollection()->insert($rawData, array(
-				'fsync'=>$this->getFsyncFlag()
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag()
 			));
 
 			if($result !== false && !empty($rawData['_id'])) // strict comparsion driver may return empty array
@@ -552,7 +553,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				}
 			}
 			$result = $this->getCollection()->save($rawData, array(
-				'fsync'=>$this->getFsyncFlag()
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag()
 			));
 
 			if($result !== false) // strict comparsion driver may return empty array
@@ -793,7 +795,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 			$result = $this->getCollection()->remove($criteria->getConditions(), array(
 				'justOne'=>true,
-				'fsync'=>$this->getFsyncFlag()
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag()
 			));
 			$this->afterDelete();
 			return $result;
@@ -814,7 +817,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		return $this->getCollection()->remove($criteria->getConditions(), array(
 			'justOne'=>false,
-			'fsync'=>$this->getFsyncFlag()
+			'fsync'=>$this->getFsyncFlag(),
+			'safe'=>$this->getSafeFlag()
 		));
 	}
 

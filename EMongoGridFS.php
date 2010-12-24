@@ -352,7 +352,7 @@ abstract class EMongoGridFS extends EMongoDocument
 		Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
 		$this->applyScopes($criteria);
 		return $this->getCollection()->remove($criteria->getConditions(), array(
-			'safe'=>$this->getMongoDBComponent()->safeFlag
+			'safe'=>$this->getSafeFlag()
 		));
 	}
 
