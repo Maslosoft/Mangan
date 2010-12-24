@@ -4,9 +4,8 @@
  *
  * PHP version 5.2+
  *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Nagy Attila Gábor <nagy.attila.gabor@gmail.com>
- * @copyright	2010 CleverIT
+ * @copyright	2010 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
@@ -22,7 +21,6 @@
  */
 class EMongoCursor implements Iterator
 {
-
 	/**
 	 * @var MongoCursor $_cursor the MongoCursor returned by the query
 	 */
@@ -39,27 +37,31 @@ class EMongoCursor implements Iterator
 	 * @param MongoCursor $cursor the cursor returned by the query
 	 * @param EMongoDocument $model the model for instantiating objects
 	 */
-	public function __construct(MongoCursor $cursor, EMongoDocument $model) {
-		$this->_cursor = $cursor;
-		$this->_model = $model;
+	public function __construct(MongoCursor $cursor, EMongoDocument $model)
+	{
+		$this->_cursor	= $cursor;
+		$this->_model	= $model;
 	}
 
 	/**
 	 * Return the current element
 	 * @return EMongoDocument
 	 */
-	public function current( ) {
+	public function current()
+	{
 		$document = $this->_cursor->current();
-		if (empty($document)) return $document;
+		if(empty($document))
+			return $document;
 
 		return $this->_model->populateRecord($document);
 	}
-	
+
 	/**
 	 * Return the key of the current element
 	 * @return scalar
 	 */
-	public function key ( ) {
+	public function key()
+	{
 		return $this->_cursor->key();
 	}
 
@@ -67,7 +69,8 @@ class EMongoCursor implements Iterator
 	 * Move forward to next element
 	 * @return void
 	 */
-	public function next ( ) {
+	public function next()
+	{
 		$this->_cursor->next();
 	}
 
@@ -75,7 +78,8 @@ class EMongoCursor implements Iterator
 	 * Rewind the Iterator to the first element
 	 * @return void
 	 */
-	public function rewind ( ) {
+	public function rewind()
+	{
 		$this->_cursor->rewind();
 	}
 
@@ -83,7 +87,8 @@ class EMongoCursor implements Iterator
 	 * Checks if current position is valid
 	 * @return boolean
 	 */
-	public function valid ( ) {
+	public function valid()
+	{
 		return $this->_cursor->valid();
 	}
 }
