@@ -721,7 +721,11 @@ something different than '_id'. Note that generator cannot handle with multifiel
 We now can set value for write queries flags FSync and/or Safe on a different scopes:
     - Global scope, by setting it in EMongoDB component class itself (required)
     - Model scope, bu using ModelClass::model()->setFsyncFlag($flagValue) or ModelClass::model()->setSafeFlag($flagValue)
-    - Single Model object by using $singleModelObject->sefFsyncFlag($flag) or $singleModelObject->sefSafeFlag($flag) 
+    - Single Model object by using $singleModelObject->sefFsyncFlag($flag) or $singleModelObject->sefSafeFlag($flag)
+
+State of write queries flags is connected
+    - Setting FSync to false, will set Safe flag to false automatically
+    - Setting Safe flag to true, will set FSync flag to true automatically 
 
 Now, we may whant all DB operations to be synced to disk, and we set global FSync flag in MongoDB component config,
 but we feagure uot that, for ie. massive temporary models like DB logging objects are not important, and for performance
