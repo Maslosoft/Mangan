@@ -249,6 +249,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function setFsyncFlag($flag)
 	{
 		$this->_fsyncFlag = ($flag == true);
+		if(!$this->_fsyncFlag)
+			$this->setSafeFlag(false); // Safe flag implicitly requires FSync flag, disable it if we not use FSync
 	}
 
 	/**
@@ -276,6 +278,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function setSafeFlag($flag)
 	{
 		$this->_safeFlag = ($flag == true);
+		if($this->_safeFlag)
+			$this->setFsyncFlag(true); // safe flag implicitly requires FSync set to true
 	}
 
 	/**
