@@ -7,7 +7,11 @@ to fix some major bugs, and add full featured suite for [MongoDB](http://www.mon
 
 ##Changelog
 
-This is the 1.3.2 release
+This is the 1.3.x release (to be released)
+
+New features in 1.3.x
+
+- Ability to set FSync and Safe flag on different scopes, see the "Write queries flags" documentation part:
 
 New features in 1.3.2
 
@@ -711,6 +715,13 @@ something different than '_id'. Note that generator cannot handle with multifiel
 
 ~~~
 
+
+##Write queries flags
+
+We now can set value for write queries flags FSync and/or Safe on a different scopes:
+    - Global scope, by setting it in EMongoDB component class itself (required)
+    - Model scope, bu using ModelClass::model()->setFsyncFlag($flagValue) or ModelClass::model()->setSafeFlag($flagValue)
+    - Single Model object by using $singleModelObject->sefFsyncFlag($flag) or $singleModelObject->sefSafeFlag($flag) 
 
 ##Special topics
 
