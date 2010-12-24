@@ -252,6 +252,33 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Get Safe flag
+	 *
+	 * It will return the nearest not null value in order:
+	 * - Object level
+	 * - Model level
+	 * - Glopal level (always set)
+	 * @return boolean
+	 */
+	public function getSafeFlag()
+	{
+		if($this->_safeFlag !== null)
+			return $this->_safeFlag; // We have flag set, return it
+		if(self::$_models[get_class($this)]->_safeFlag !== null)
+			return self::$_models[get_class($this)]->_safeFlag; // Model have flag set, return it
+		return $this->getMongoDBComponent()->safeFlag;
+	}
+
+	/**
+	 * Set object level Safe flag
+	 * @param boolean $flag true|false value for Safe flag
+	 */
+	public function setSafeFlag($flag)
+	{
+		$this->_safeFlag = ($flag == true);
+	}
+
+	/**
 	 * Sets the attribute values in a massive way.
 	 * @param array $values attribute values (name=>value) to be set.
 	 * @param boolean $safeOnly whether the assignments should only be done to the safe attributes.
