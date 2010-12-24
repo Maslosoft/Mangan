@@ -723,6 +723,16 @@ We now can set value for write queries flags FSync and/or Safe on a different sc
     - Model scope, bu using ModelClass::model()->setFsyncFlag($flagValue) or ModelClass::model()->setSafeFlag($flagValue)
     - Single Model object by using $singleModelObject->sefFsyncFlag($flag) or $singleModelObject->sefSafeFlag($flag) 
 
+Now, we may whant all DB operations to be synced to disk, and we set global FSync flag in MongoDB component config,
+but we feagure uot that, for ie. massive temporary models like DB logging objects are not important, and for performance
+reasons, we whant to disable FSync for this models only. 
+
+We may do so: LogModelClass::model()->setFsyncFlag(false);
+
+From now on, all LogModelClass objects will be written to DB without waitng to filesystem sync.
+
+For user comfort, FSync and Safe flags may be set just for single model instance by, $singleModelInstance->setFsyncFlag(false), this will not affect any other model instance 
+
 ##Special topics
 
 ###Behaviors
