@@ -1,10 +1,12 @@
 <?php
 /**
- * EMongoDocument.php
+ * EMongoCursor.php
  *
  * PHP version 5.2+
  *
  * @author		Nagy Attila Gábor <nagy.attila.gabor@gmail.com>
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
  * @copyright	2010 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
@@ -24,18 +26,17 @@ class EMongoCursor implements Iterator
 	/**
 	 * @var MongoCursor $_cursor the MongoCursor returned by the query
 	 */
-	 protected $_cursor;
+	protected $_cursor;
 
-	 /**
-	  * @var EMongoDocument $_model the model used for instantiating objects
-	  */
-	 protected $_model;
+	/**
+	 * @var EMongoDocument $_model the model used for instantiating objects
+	 */
+	protected $_model;
 
-	 /**
-	  * @var array cache for array access. This guarantees, that for the
-	  *      same index always the same object instance is returned
-	  */
-	 protected $_cache = array();
+	/**
+	 * @var array cache for object models
+	 */
+	protected $_cache = array();
 
 	/**
 	 * Construct a new EMongoCursor
@@ -65,11 +66,18 @@ class EMongoCursor implements Iterator
 	 */
 	public function current()
 	{
-		$document = $this->_cursor->current();
-		if(empty($document))
-			return $document;
+		if(!isset($this->_cache[$this->_cursor->key()]))
+		{
+			$document = $this->_cursor->current();
+			if(empty($document))
+			{
+				$this->_cache[$this->_cursor->key()] = $document;
+				return $document;
+			}
+			$this->_cache[$this->_cursor->key()] = $this->_model->populateRecord($document);
+		}
 
-		return $this->_model->populateRecord($document);
+		return $this->_cache[$this->_cursor->key()];
 	}
 
 	/**
