@@ -11,7 +11,8 @@ This is the 1.3.x release (to be released)
 
 New features in 1.3.x
 
-- Ability to set FSync and Safe flag on different scopes, see the "Write queries flags" documentation part:
+- Ability to set FSync and Safe flag on different scopes, see the "Write queries flags" documentation part
+- **Ability to use efficent Cursors instead of raw array, returned by the findAll* methods** see "Use Cursor Flag" documentation part
 
 New features in 1.3.2
 
@@ -751,6 +752,20 @@ For user comfort, FSync and Safe flags may be set just for single model instance
 - You may want to disable FSYNC flag when doing massive imports/updates/models, because it will be **horrible** slow!
 - Fsync can be disabled by setting up fsyncField in EMongoDB class
 
+###Use Cursor Flag
+
+Now we can set that all records returned by findAll* methods will return EMongoCursor instead of raw array,
+EMongoCursor implements Iterator interface and can be used with ie. foreach loop.
+
+EMongoCursor will instantinate objects in lazy-loading way, only on first use.
+
+By default useCursor flag is set to FALSE to keep backwards compatibility, note:
+- **Cursor does not implement ArrayAccess interface, because offset access to cursor is very ineffective, and pointless** 
+- You can set useCursor flag in different scopes
+    - globally in EMongoDB class, by setting $useCursor variable
+    - Per model: ModelClass::model()->setUseCursor(true);
+    - And per model instance: $modelInstance->setUseCursor(true);
+    
 ###Massive hand operations
 
 
