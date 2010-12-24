@@ -27,10 +27,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	private		static		$_models		= array();
 	private		static		$_indexes		= array();		// Hold collection indexes array
 
-	private 				$_fsyncFlag			= null;		// Object level FSync flag
-	private 				$_safeFlag			= null;		// Object level Safe flag
+	private 				$_fsyncFlag		= null;			// Object level FSync flag
+	private 				$_safeFlag		= null;			// Object level Safe flag
 
-	protected $ensureIndexes=true;							// Whatever to ensure indexes
+	protected				$useCursor		= null;			// Whatever to return cursor instead on raw array
+	protected				$ensureIndexes	= true;			// Whatever to ensure indexes
 
 	/**
 	 * EMongoDB component static instance
@@ -281,6 +282,33 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$this->_safeFlag = ($flag == true);
 		if($this->_safeFlag)
 			$this->setFsyncFlag(true); // safe flag implicitly requires FSync set to true
+	}
+
+	/**
+	 * Get value of use cursor flag
+	 *
+	 * It will return the nearest not null value in order:
+	 * - Object level
+	 * - Model level
+	 * - Glopal level (always set)
+	 * @return boolean
+	 */
+	public function getUseCursor()
+	{
+		if($this->useCursor !== null)
+			return $this->useCursor; // We have flag set, return it
+		if(self::$_models[get_class($this)]->useCursor !== null)
+			return self::$_models[get_class($this)]->useCursor; // Model have flag set, return it
+		return $this->getMongoDBComponent()->useCursor;
+	}
+
+	/**
+	 * Set object level value of use cursor flag
+	 * @param boolean $useCursor true|false value for use cursor flag
+	 */
+	public function setUseCursor($useCursor)
+	{
+		$this->useCursor = ($useCursor == true);
 	}
 
 	/**
@@ -671,7 +699,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($criteria->getOffset() !== null)
 				$cursor->skip($criteria->getOffset());
 
-			return new EMongoCursor($cursor, $this->model());
+			if($this->getUseCursor())
+				return new EMongoCursor($cursor, $this->model());
+			else
+				return $this->populateRecords($cursor);
 		}
 		return array();
 	}

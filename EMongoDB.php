@@ -79,6 +79,20 @@ class EMongoDB extends CApplicationComponent
 	public $safeFlag=true;
 
 	/**
+	 * If set to TRUE findAll* methods of models, will return {@see EMongoCursor} instead of
+	 * raw array of models.
+	 *
+	 * Generally you should whant to have this set to TRUE as cursor use lazy-loading/instaninating of
+	 * models, this is set to FALSE, by default to keep backwards compatibility.
+	 *
+	 * Note: {@see EMongoCursor} does not implement ArrayAccess interface and cannot be used like an array,
+	 * because offset access to cursor is highly ineffective and pointless.
+	 *
+	 * @var boolean $useCursor state of Use Cursor flag
+	 */
+	public $useCursor=false;
+
+	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
 	 */
 	public function connect()
