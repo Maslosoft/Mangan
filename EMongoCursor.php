@@ -54,7 +54,8 @@ class EMongoCursor implements Iterator, ArrayAccess, Countable
 	 *
 	 * @return MongoCursor the cursor used for this query
 	 */
-	public function getCursor() {
+	public function getCursor()
+	{
 		return $this->_cursor;
 	}
 
