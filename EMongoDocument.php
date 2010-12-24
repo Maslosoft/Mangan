@@ -26,20 +26,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	private		static		$_models		= array();
 	private		static		$_indexes		= array();		// Hold collection indexes array
 
-	/**
-	 * Model level FSync flag use, if set to null, the gloal
-	 * FSync flag from EMongoDB gomponent will be used
-	 * @var boolean modelFsyncFlag
-	 */
-	public		static		$modelFsyncFlag		= null;		// Model level FSync flag
 	private 				$_fsyncFlag			= null;		// Object level FSync flag
-
-	/**
-	 * Model level Safe flag use, if set to null, the gloal
-	 * Safe flag from EMongoDB gomponent will be used
-	 * @var boolean modelSafeFlag
-	 */
-	public		static		$modelSafeFlag		= null;		// Model level Safe flag
 	private 				$_safeFlag			= null;		// Object level Safe flag
 
 	protected $ensureIndexes=true;							// Whatever to ensure indexes
@@ -249,9 +236,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function getFsyncFlag()
 	{
 		if($this->_fsyncFlag !== null)
-			return $this->_fsyncFlag;
-		if(self::$modelFsyncFlag !== null)
-			return self::$modelFsyncFlag;
+			return $this->_fsyncFlag; // We have flag set, return it
+		if(self::$_models[get_class($this)]->_fsyncFlag !== null)
+			return self::$_models[get_class($this)]->_fsyncFlag; // Model have flag set, return it
 		return $this->getMongoDBComponent()->fsyncFlag;
 	}
 
