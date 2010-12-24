@@ -20,13 +20,29 @@
  */
 abstract class EMongoDocument extends EMongoEmbeddedDocument
 {
-	private $_new=false;							// whether this instance is new or not
-	private $_criteria=null;						// query criteria (used by finder only)
-	protected static $_collections=array();			// MongoCollection object
-	private static $_models=array();
-	private static $_indexes = array();				// Hold collection indexes array
+	private					$_new			= false;		// whether this instance is new or not
+	private					$_criteria		= null;			// query criteria (used by finder only)
+	protected	static		$_collections	= array();		// MongoCollection object
+	private		static		$_models		= array();
+	private		static		$_indexes		= array();		// Hold collection indexes array
 
-	protected $ensureIndexes=true;					// Whatever to ensure indexes
+	/**
+	 * Model level FSync flag use, if set to null, the gloal
+	 * FSync flag from EMongoDB gomponent will be used
+	 * @var boolean modelFsyncFlag
+	 */
+	public		static		$modelFsyncFlag		= null;		// Model level FSync flag
+	private 				$_fsyncFlag			= null;		// Object level FSync flag
+
+	/**
+	 * Model level Safe flag use, if set to null, the gloal
+	 * Safe flag from EMongoDB gomponent will be used
+	 * @var boolean modelSafeFlag
+	 */
+	public		static		$modelSafeFlag		= null;		// Model level Safe flag
+	private 				$_safeFlag			= null;		// Object level Safe flag
+
+	protected $ensureIndexes=true;							// Whatever to ensure indexes
 
 	/**
 	 * EMongoDB component static instance
@@ -219,6 +235,33 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$this->_criteria = $criteria;
 		else
 			$this->_criteria = new EMongoCriteria();
+	}
+
+	/**
+	 * Get FSync flag
+	 *
+	 * It will return the nearest not null value in order:
+	 * - Object level
+	 * - Model level
+	 * - Glopal level (always set)
+	 * @return boolean
+	 */
+	public function getFsyncFlag()
+	{
+		if($this->_fsyncFlag !== null)
+			return $this->_fsyncFlag;
+		if(self::$modelFsyncFlag !== null)
+			return self::$modelFsyncFlag;
+		return $this->getMongoDBComponent()->fsyncFlag;
+	}
+
+	/**
+	 * Set object level FSync flag
+	 * @param boolean $flag true|false value for FSync flag
+	 */
+	public function setFsyncFlag($flag)
+	{
+		$this->_fsyncFlag = ($flag == true);
 	}
 
 	/**
@@ -450,7 +493,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				}
 			}
 			$result = $this->getCollection()->insert($rawData, array(
-				'fsync'=>$this->getMongoDBComponent()->fsyncFlag
+				'fsync'=>$this->getFsyncFlag()
 			));
 
 			if($result !== false && !empty($rawData['_id'])) // strict comparsion driver may return empty array
@@ -495,7 +538,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				}
 			}
 			$result = $this->getCollection()->save($rawData, array(
-				'fsync'=>$this->getMongoDBComponent()->fsyncFlag
+				'fsync'=>$this->getFsyncFlag()
 			));
 
 			if($result !== false) // strict comparsion driver may return empty array
@@ -736,7 +779,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 			$result = $this->getCollection()->remove($criteria->getConditions(), array(
 				'justOne'=>true,
-				'fsync'=>$this->getMongoDBComponent()->fsyncFlag
+				'fsync'=>$this->getFsyncFlag()
 			));
 			$this->afterDelete();
 			return $result;
@@ -757,7 +800,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		return $this->getCollection()->remove($criteria->getConditions(), array(
 			'justOne'=>false,
-			'fsync'=>$this->getMongoDBComponent()->fsyncFlag
+			'fsync'=>$this->getFsyncFlag()
 		));
 	}
 
