@@ -16,4 +16,6 @@ advanced.indexing
 advanced.primaryKey
 advanced.namedScopes
 advanced.relations
+advanced.dataProvider
+gii
 special
