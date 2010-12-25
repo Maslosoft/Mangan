@@ -15,4 +15,5 @@ advanced
 advanced.indexing
 advanced.primaryKey
 advanced.namedScopes
+advanced.relations
 special
