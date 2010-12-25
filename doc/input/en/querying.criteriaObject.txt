@@ -129,3 +129,25 @@ $criteria->first_name = new MongoRegex('/[abc].*/i');
 $clients = Client::model()->findAll($criteria);
 // see phpdoc for MongoRegex class for more examples
 ~~~
+
+##Creating criteria object from an array:
+
+~~~
+[php]
+// Example criteria
+$array = array(
+	'conditions'=>array(
+		// field name => operator definition
+		'FieldName1'=>array('greaterEq' => 10), // Or 'FieldName1'=>array('>=' => 10)
+		'FieldName2'=>array('in' => array(1, 2, 3)),
+		'FieldName3'=>array('exists'),
+	),
+	'limit'=>10,
+	'offset'=>25,
+	'sort'=>array('fieldName1' => EMongoCriteria::SORT_ASC, 'fieldName4' => EMongoCriteria::SORT_DESC),
+);
+
+$criteria = new EMongoCriteria($array);
+// or
+$clients = ClientModel::model()->findAll($array);
+~~~

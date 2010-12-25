@@ -11,4 +11,7 @@ basic.arrays.embeddedDocuments
 querying
 querying.simpleQueries
 querying.criteriaObject
+advanced
+advanced.indexing
+advanced.primaryKey
 special
