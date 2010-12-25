@@ -17,5 +17,7 @@ advanced.primaryKey
 advanced.namedScopes
 advanced.relations
 advanced.dataProvider
+advanced.writeFlags
 gii
 special
+special.multimodel

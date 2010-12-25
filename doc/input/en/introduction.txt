@@ -20,3 +20,29 @@ to fix some major bugs, and add full featured suite for [MongoDB](http://www.mon
 
 - Yii 1.1.5 is required, yii 1.1.4 do not have onAfterConstruct event whitch is used here
 - MongoDB latest stable is recommended. Untested with older versions.
+
+##Known bugs
+
+- Remember, this is not complete yet. So at this stage, it can have some ;]
+- If you find any please let me know
+- As said before, it does not work with the OR operators
+
+##Resources
+
+ * [Project page on GitHub](https://github.com/canni/YiiMongoDbSuite)
+ * [MongoDB documentation](http://www.mongodb.org/display/DOCS/Home)
+ * [On-Line version of this documentation](http://canni.github.com/YiiMongoDbSuite)
+ * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
+
+##Contribution needed!
+
+- I'm not English native speaker, need someone who can correct/rewrite/write my documentation and/or PHPDoc's in code
+- Any help would be great :)
+- Contact me: darek.krk on a gmail dot com or via GitHub PM
+
+##Big thanks goes to:
+
+- tyohan: for first inspirations and idea of extension
+- luckysmack: for big help with testing and documentation
+- Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support
+- Nagy Attila Gábor, for big help with new functionality and testing
