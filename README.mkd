@@ -359,21 +359,29 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
 
 It's that easy. In place of the 'equals' key, you can use any of the following operators
 
-- 'greater'   | >
-- 'greaterEq' | >=
-- 'less'      | <
-- 'lessEq'    | <=
-- 'notEq'     | !=, <>
-- 'in'        | 
-- 'notIn'     | 
-- 'all'       | 
-- 'size'      | 
-- 'exists'    | 
-- 'type'      | // BSON type see mongodb docs for this
-- 'notExists' | 
-- 'mod'       | %
-- 'equals'    | ==
-- 'where'     | // JavaScript operator
+
+~~~
+
+
+    - 'greater'   | >
+    - 'greaterEq' | >=
+    - 'less'      | <
+    - 'lessEq'    | <=
+    - 'notEq'     | !=, <>
+    - 'in'        | 
+    - 'notIn'     | 
+    - 'all'       | 
+    - 'size'      | 
+    - 'exists'    | 
+    - 'type'      | // BSON type see mongodb docs for this
+    - 'notExists' | 
+    - 'mod'       | %
+    - 'equals'    | ==
+    - 'where'     | // JavaScript operator
+
+
+~~~
+
 
 *NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.Newer versions of mongo db will work, just not the $or operator.
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
@@ -1011,13 +1019,6 @@ You can have different models in single collection, example:
 - Remember, this is not complete yet. So at this stage, it can have some ;]
 - If you find any please let me know
 - As said before, it does not work with the OR operators
-
-##Changelog
-
-- Added EMongoDocumentBehavior (Support for new events present in EMongoDocument)
-- Added FSync control field fsyncFlag in EMongoDBConnection class (default set to true)
-- Changed the way of setup, db property name change to dbName
-- Added EEmbeddedArraysBehavior extra
 
 ##Resources
 
