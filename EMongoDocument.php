@@ -251,8 +251,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function setFsyncFlag($flag)
 	{
 		$this->_fsyncFlag = ($flag == true);
-		if(!$this->_fsyncFlag)
-			$this->setSafeFlag(false); // Safe flag implicitly requires FSync flag, disable it if we not use FSync
+		if($this->_fsyncFlag)
+			$this->setSafeFlag(true); // Setting FSync flag to true will implicit set safe to true
 	}
 
 	/**
@@ -280,8 +280,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function setSafeFlag($flag)
 	{
 		$this->_safeFlag = ($flag == true);
-		if($this->_safeFlag)
-			$this->setFsyncFlag(true); // safe flag implicitly requires FSync set to true
 	}
 
 	/**
@@ -340,7 +338,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * This function check indexes and applyes them to the collection if needed
+	 * This function check indexes and applies them to the collection if needed
 	 * see CModel::init()
 	 *
 	 * @see EMongoEmbeddedDocument::init()
@@ -370,7 +368,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 	/**
 	 * This function may return array of indexes for this collection
-	 * array sytnatx is:
+	 * array sytntax is:
 	 * return array(
 	 * 	'index_name'=>array('key'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
 	 * 	'index2_name'=>array('key'=>array('fieldName3'=>EMongoCriteria::SORT_ASC, 'unique'=>true),
@@ -518,6 +516,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws CException if the record is not new
+	 * @throws EMongoException on fail of insert or insert of empty document
+	 * @throws MongoCursorException on fail of insert, when safe flag is set to true
+	 * @throws MongoCursorTimeoutException on timeout of db operation , when safe flag is set to true
 	 */
 	public function insert(array $attributes=null)
 	{
@@ -539,12 +540,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						unset($rawData[$key]);
 				}
 			}
+
 			$result = $this->getCollection()->insert($rawData, array(
-				'fsync'=>$this->getFsyncFlag(),
-				'safe'=>$this->getSafeFlag()
+				'fsync'	=> $this->getFsyncFlag(),
+				'safe'	=> $this->getSafeFlag()
 			));
 
-			if($result !== false && !empty($rawData['_id'])) // strict comparsion driver may return empty array
+			if($result !== false) // strict comparison needed
 			{
 				$this->_id = $rawData['_id'];
 				$this->setIsNewRecord(false);
@@ -554,7 +556,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				return true;
 			}
 
-			throw new CException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
+			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
 		return false;
 	}
@@ -567,6 +569,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
 	 * @throws CException if the record is new
+	 * @throws EMongoException on fail of update
+	 * @throws MongoCursorException on fail of update, when safe flag is set to true
+	 * @throws MongoCursorTimeoutException on timeout of db operation , when safe flag is set to true
 	 */
 	public function update(array $attributes=null)
 	{
@@ -590,7 +595,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				'safe'=>$this->getSafeFlag()
 			));
 
-			if($result !== false) // strict comparsion driver may return empty array
+			if($result !== false) // strict comparison needed
 			{
 				$this->afterSave();
 
@@ -615,10 +620,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			{
 				$result = $this->deleteByPk($this->getPrimaryKey());
 
-				if($result)
+				if($result !== false)
 				{
 					$this->afterDelete();
-					$this->_id=null;
 					$this->setIsNewRecord(true);
 					return true;
 				}

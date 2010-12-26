@@ -16,8 +16,6 @@
 /**
  * EMongoGridFS
  *
- * Authorization management, dispatches actions and views on the system
- *
  * @author		Jose Martinez <jmartinez@ibitux.com>
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
  * @copyright	2010 Ibitux
@@ -48,9 +46,9 @@ abstract class EMongoGridFS extends EMongoDocument
 	private $_temporaryFolder = null;
 
 	/**
-	 * Returns current MongoCollection object
+	 * Returns current MongoGridFS object
 	 * By default this method use {@see getCollectionName()}
-	 * @return MongoCollection
+	 * @return MongoGridFS
 	 */
 	public function getCollection()
 	{
