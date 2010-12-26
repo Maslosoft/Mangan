@@ -3,108 +3,54 @@ It originally started as a fork of [MongoRecord](www.yiiframework.com/extension/
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
-**IMPORTANT!: Versions below 1.1 are deprecated, they have some major bugs**
-
 **IMPORTANT!: This version of Documentation in no longer a full documentation of suite!
 Advanced topics has moved to the new place, see below.**
 
 **PLEASE refer to the new FULL-Documentation [page](http://canni.github.com/YiiMongoDbSuite)**
- 
-##Changelog
+
 
 This is the 1.3.3 release
 
-New features in 1.3.3
+# The Key Feature List:
 
-- Ability to set FSync and Safe flag on different scopes, see the "Write queries flags" documentation part
-- **Ability to use efficent Cursors instead of raw array, returned by the findAll* methods** see "Use Cursor Flag" documentation part
-
-New features in 1.3.2
-
-- Fixed bug that find* methods don't accept criteria in array format
-- Lazy loading/creating of embedded documents
-- Little performance boost, save embedded documents configs in static array
-
-New features in 1.3.1
-
-- Fixed few major bugs in EMongoCriteria class
-- *Bugfixes to criteria object had forced to change the criteria object creation from array, please see the updated doc for it*
-- Fixed bug that in massive assign way, embeded documnets always used only safe attributes
-- Setup of PHPUnit testing framework
-- Written test cases for EMongoDB class and EMongoCriteria class 
-
-New features in 1.3
-
-- MongoDB GridFS feature support, thanks to work of: Jose Martinez and Philippe Gaultier
-
-New features in 1.2.3
-
-- Gii CRUD generator, now generates advanced search form in admin (like in regular Yii CRUD generator)
-- Search form now supports comparsion operators ( > | < | >= | <= | <> | != | == | = )
-- In v1.2.2 all search attributes where treated as a string regex, now you can test numbers to, just juse comparsion operators, example:
-    - search for '1234' will try to find a string matching regexp /1234/i (this will not work if field is numeric)
-    - search for '= 1234' will try to find numberic value 1234
-    - search for '>= 1234' will try to find any record with field greater or equals numeric value 1234 
-
-New features in 1.2.2
-
-- Magic method search() delivered with every EMongoDocument object
-- Gii CRUD generator now uses search method, to provide text search in admin view (by default using case-insensitive regexp)
-- EMongoDocument search() method has one parameter:
-    - $caseSensitive true|false, default to false, whathever to use case-sensitive string comparsion 
-
-New features in 1.2.1
-
-- **Support for generating CRUD for EMongoDocument models!**
-- Few minor bug fixes
-
-New features in 1.2
-
-- Support for using any other than _id field as a PK
-- Better names scopes handling, support for default scope
-- *Support to have different models in single collection! see Multimodel collection topic*
-- Better memory management, now there is only one collection object instance, per model
-
-New features in 1.1
-
-- automated efficent index definition for collections, per model
-
-New features in 1.0:
-
-- Named scopes just like in AR
-- Very easy to use criteria object, you don't have to create complex MongoDB query arrays!
-- Better exeption handling
-- A lot more PHPDocs in code 
-
-Features:
+## Features covered from standard Yii ActiveRecord implementation
 
 - Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax
-- Support of schema-less documents with Yii standard rules and validation features
-- Endless Embedded/Nested document support (Embedded documents are their own Model class with their own rules and other methods.
-- (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
+- Named scopes, along with default scope and parameterized scopes, just like in AR
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
-- Records and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
-- relation support *idea/concept/example*
+- Model classes and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
+- Relations support *idea/concept/example*
+- **Support for generating CRUD for EMongoDocument models, with Gii!**
+- Very easy to use criteria object, you don't have to create complex MongoDB query arrays!
 
-Limitations:
+## MongoDB related feature list
+
+- Support of schema-less documents with Yii standard rules and validation features
+- Embedded/Nested document support (Embedded documents have their own Model classes with their own rules and other methods)
+- (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
+- Lazy loading/creating of embedded documents
+- Ability to set FSync and/or Safe flag of DB write operations on different scopes, globally, on model level, and on single model object
+- **Ability to use efficient MongoDB Cursors instead of raw arrays of results, returned by the findAll* methods**
+- MongoDB GridFS feature support, thanks to work of: Jose Martinez and Philippe Gaultier
+- Support for using any other than _id field as a Primary Key, for a collection
+- *Support to have different models in single collection!*
+- automated efficient index definition for collections, per model
+
+## Limitations:
 - The main limitations are only those present in MongoDB itself, like the 4mb data transfer limit. But That's not a big deal either.
-- In it's current incarnation, This extension does NOT work with the OR operator. When we get it working we will remove this line and add an example.
+- In it's current incarnation, This extension does NOT work with the "$or" criteria operator. When we get it working we will remove this line and add an example.
 
 *IMPORTANT: The version on GitHub is more up to date as fixes are pushed to the project. This may or may not get updated on a regular basis*
 
-##Requirements
+## Requirements
 
-- Yii 1.1.5 is required, yii 1.1.4 do not have onAfterConstruct event whitch is used here
+- Yii 1.1.5 is required
 - MongoDB latest stable is recommended. Untested with older versions.
 
-##Basic usage
+## Setup
 
-Just create a model class as You would with normal ActiveRecord.
-Example model simple as standard ActiveRecord:
-
-##Setup
-
-In your protected/config/main.php config file. Comment out (or delete) the current 'db' array for your database in the components section, and add the following to the file:
+In your protected/config/main.php config file. Comment out (or delete) the current 'db' array
+for your database in the components section, and add the following to the file:
 
 
 ~~~
@@ -119,11 +65,12 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
     'components' => array(
       ...
       'mongodb' => array(
+        'class'            => 'EMongoDB',
         'connectionString' => 'mongodb://localhost',
-        'dbName' => 'myDatabaseName',
-        'class'     => 'EMongoDB',
-        'fsyncFlag' => true,
-        'safe' => true, //new flag used only for update function on MongoGridFS system
+        'dbName'           => 'myDatabaseName',
+        'fsyncFlag'        => true,
+        'safe'             => true,
+        'useCursors'       => false
       ),
     ),
 
@@ -131,14 +78,13 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
 ~~~
 
 
-- ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is the ip (or hostname) of your webserver or host.
+- ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example
+  if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is
+  the ip (or hostname) of your webserver or host.
 - dbName: is the name you want the collections to be stored in. The database name.
-- fsyncFlag is set to true, this makes mongodb make sure all writes to the database are safely stored to disk. Setting this to false will improve speed but writes ar enot confirmed. So unless you are doing massive or large imports or save() then it is better to be set to true. See the performance section below.
-- For more info see the [MongoDB connection page on php.net](http://us3.php.net/manual/en/mongo.connecting.php).
-
-To get started, you can look in the files of the project and there are two example files. a User model for the User document as well as a UserAddress model to represent an embedded document.
-- examples/User.php
-- examples/UserAddress.php
+- fsyncFlag if is set to true, this makes mongodb make sure all writes to the database are safely stored to disk. (as default, true)
+- safeFlag if is set to true, mongodb will wait to retrieve status of all write operations, and check if everything went OK. (as default, true)
+- useCursors if is set to true, extension will return EMongoCursor instead of raw pre-populated arrays, form findAll* methods, (default to false, for backwards compatibility)
 
 That's all you have to do for setup. You can use it very much like the active record.
 Example:
@@ -148,25 +94,77 @@ Example:
 [php]
 
 
-    $client = new Client;
+    $client = new Client();
     $client->first_name='something';
     $client->save();
-    $clients = Client::model->findAll();
+    $clients = Client::model()->findAll();
 
 
 ~~~
 
 
-##Embedded documents
+## Basic usage
 
-*IMPORTANT: Embedded documents must extend from EMongoEmbeddedDocument instead of EMongoDocument, otherwise whole thing will fail, to work*
-*Note: some people reported that embedding regular EMongoDocument works as expected, but i have not tested this, more test/reports needed*
+Just define following model:
 
-Embedded documents are almost identical as EMongoDocument you only can't save them to DB they're saved by the EMongoDocument model witch has them as an embedded (with one exception, you can save them if you will do it explicitly)
-Notice: Embedded documents don't have a static model() method!
+~~~
+[php]
+
+
+    class User extends EMongoDocument
+    {
+      public $login;
+      public $name;
+      public $pass;
+
+      // This has to be defined in every model, this is same as with standard Yii ActiveRecord
+      public static function model($className=__CLASS__)
+      {
+        return parent::model($className);
+      }
+
+      // This method is required!
+      public function getCollectionName()
+      {
+        return 'users';
+      }
+
+      public function rules()
+      {
+        return array(
+          array('login, pass', 'required'),
+          array('login, pass', 'length', 'max' => 20),
+          array('name', 'length', 'max' => 255),
+        );
+      }
+      
+      public function attributeLabels()
+      {
+        return array(
+          'login'  => 'User Login',
+          'name'   => 'Full name',
+          'pass'   => 'Password',
+        );
+      }
+    }
+
+
+~~~
+
+
+And thats it! Now start using this User model class like standard Yii AR model
+
+## Embedded documents
+
+*NOTE: For performance reasons embedded documents should extend from EMongoEmbeddedDocument instead of EMongoDocument*
+
+EMongoEmbeddedDocument is almost identical as EMongoDocument, in fact EMongoDocument extends from EMongoEmbeddedDocument
+and adds to it DB connection related stuff.
+
+NOTE: Embedded documents should not have a static model() method!
 
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
-Lest assume we have following embedded document (a full example is in the examples directory):
+Lest assume we have following embedded document:
 
 
 ~~~
@@ -325,7 +323,7 @@ This is one of the things that makes this extension great. It's very easy to que
 
 
     // simple find first. just like normal AR.
-    $object = ModelClass::model->find()
+    $object = ModelClass::model()->find()
 
 
 ~~~
