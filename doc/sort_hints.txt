@@ -18,6 +18,7 @@ advanced.namedScopes
 advanced.relations
 advanced.dataProvider
 advanced.writeFlags
+advanced.gridfs
 gii
 special
 special.multimodel
