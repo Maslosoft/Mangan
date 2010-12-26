@@ -59,38 +59,41 @@ class EMongoDB extends CApplicationComponent
 	private $_mongoConnection;
 
 	/**
-	 * If set to TRUE all internal DB operations will use FSYNC flag with data modification requests
+	 * If set to TRUE all internal DB operations will use FSYNC flag with data modification requests,
+	 * in other words, all write operations will have to wait for a disc sync!
 	 *
-	 * Generally you should whant to have this set to TRUE, exception from this is when You do massive
-	 * inserts/updates/deletes with this set to TRUE they will be horribly slow
+	 * MongoDB default value for this flag is: FALSE.
 	 *
-	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections
+	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections (global scope)
 	 */
-	public $fsyncFlag=true;
+	public $fsyncFlag = false;
 
 	/**
-	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests
+	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests.
 	 *
-	 * Generally you should whant to have this set to TRUE if you want to
-	 * check inserts/updates/deletes actions
+	 * When SAFE flag is set to TRUE driver will wait for the response from DB, and throw an exception
+	 * if something went wrong, is fet to false, driver will only send operation to DB but will not wait
+	 * for response from DB.
 	 *
-	 * @var boolean $safeFlag state of SAFE flag
+	 * MongoDB default value for this flag is: FALSE.
+	 *
+	 * @var boolean $safeFlag state of SAFE flag (global scope)
 	 */
-	public $safeFlag=true;
+	public $safeFlag = false;
 
 	/**
 	 * If set to TRUE findAll* methods of models, will return {@see EMongoCursor} instead of
 	 * raw array of models.
 	 *
-	 * Generally you should whant to have this set to TRUE as cursor use lazy-loading/instaninating of
+	 * Generally you should want to have this set to TRUE as cursor use lazy-loading/instaninating of
 	 * models, this is set to FALSE, by default to keep backwards compatibility.
 	 *
 	 * Note: {@see EMongoCursor} does not implement ArrayAccess interface and cannot be used like an array,
 	 * because offset access to cursor is highly ineffective and pointless.
 	 *
-	 * @var boolean $useCursor state of Use Cursor flag
+	 * @var boolean $useCursor state of Use Cursor flag (global scope)
 	 */
-	public $useCursor=false;
+	public $useCursor = false;
 
 	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
