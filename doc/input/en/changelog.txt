@@ -7,8 +7,8 @@ This is the 1.3.3 release
 
 New features in 1.3.3
 
-- Ability to set FSync and Safe flag on different scopes, see the "Write queries flags" documentation part
-- **Ability to use efficent Cursors instead of raw array, returned by the findAll* methods** see "Use Cursor Flag" documentation part
+- Ability to set FSync and Safe flag on different scopes, see the [Write queries flags][advanced.write-flags] documentation part
+- **Ability to use efficient Cursors instead of raw array, returned by the findAll* methods** see [Use Cursor Flag][special#useCursorFlag] documentation part
 
 New features in 1.3.2
 
@@ -19,14 +19,14 @@ New features in 1.3.2
 New features in 1.3.1
 
 - Fixed few major bugs in EMongoCriteria class
-- *Bugfixes to criteria object had forced to change the criteria object creation from array, please see the updated doc for it*
-- Fixed bug that in massive assign way, embeded documnets always used only safe attributes
+- *Bugfixes to criteria object had forced to change the criteria object creation from array, please see the [updated doc][querying.criteria-object#array] for it*
+- Fixed bug that in massive assign way, embedded documents always used only safe attributes
 - Setup of PHPUnit testing framework
 - Written test cases for EMongoDB class and EMongoCriteria class 
 
 New features in 1.3
 
-- MongoDB GridFS feature support, thanks to work of: Jose Martinez and Philippe Gaultier
+- MongoDB [GridFS feature support][advanced.gridfs], thanks to work of: Jose Martinez and Philippe Gaultier
 
 New features in 1.2.3
 
@@ -46,24 +46,24 @@ New features in 1.2.2
 
 New features in 1.2.1
 
-- **Support for generating CRUD for EMongoDocument models!**
+- **Support for [generating CRUD][gii#crud] for EMongoDocument models!**
 - Few minor bug fixes
 
 New features in 1.2
 
-- Support for using any other than _id field as a PK
+- Support for using any other than [_id field as a Primary Key][advanced.primary-key#ownpk]
 - Better names scopes handling, support for default scope
-- *Support to have different models in single collection! see Multimodel collection topic*
+- *Support to have different models in single collection! see [Multimodel collection topic][special.multimodel]*
 - Better memory management, now there is only one collection object instance, per model
 
 New features in 1.1
 
-- automated efficent index definition for collections, per model
+- [automated efficient index][advanced.indexing] definition for collections, per model
 
 New features in 1.0:
 
-- Named scopes just like in AR
-- Very easy to use criteria object, you don't have to create complex MongoDB query arrays!
+- [Named scopes][advanced.named-scopes] just like in AR
+- Very easy to use [criteria object][querying.criteria-object], you don't have to create complex MongoDB query arrays!
 - Better exeption handling
 - A lot more PHPDocs in code 
 
@@ -75,4 +75,4 @@ Features:
 - (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
 - Records and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
-- relation support *idea/concept/example*
+- [relation support *idea/concept/example*][advanced.relations]

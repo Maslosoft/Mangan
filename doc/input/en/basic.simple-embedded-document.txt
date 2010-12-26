@@ -3,12 +3,12 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 ---
 
-To fully understand this example please refer to [Embedded Documents Models Section][basic.embeddedDocuments]
+To fully understand this example please refer to [Embedded Documents Models Section][basic.embedded-documents]
 
 To use embedded documents you need to do two steps:
 
-1. First create model for embedded document
-(we will add address as embedded document to User model from previous [example][basic.simpleModel] ):
+- First create model for embedded document
+(we will add address as embedded document to User model from previous [example][basic.simple-model] ):
 
 ~~~
 [php]
@@ -44,7 +44,7 @@ class UserAddress extends EMongoEmbeddedDocument
 }
 ~~~
 
-2. Next we have to define `embeddedDocuments()` method in model that will contain embedded document
+- Next we have to define `embeddedDocuments()` method in model that will contain embedded document
 
 Add `embeddedDocument()` method to previous `User` model example: 
 

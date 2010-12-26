@@ -5,7 +5,7 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 # Basic informations about embedded documents
 
-## Must know:
+## Must know: {#mustknow}
 
 - For performance reasons all models of embedded documents should extend from `EMongoEmbeddedDocument` class
 - But the above is not a must, things will still work if you define as embedded child classes of regular `EMongoDocument`
@@ -18,7 +18,7 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
     - EMongoDocument is equipped with all methods needed to save its contents into a MongoDB collection
     - You cannot call ie `save()` method on a EMongoEmbeddedDocument
 
-## Defining embedded documents within document
+## Defining embedded documents within document {#defining}
 
 **This applies to EMongoDocument and EMongoEmbeddedDocument**
 
@@ -47,7 +47,7 @@ $model->address->embeddedExampleField;
 $model->some_other_field_name->embeddedExampleField;
 ~~~
 
-## How to force save of embedded document into collection
+## How to force save of embedded document into collection {#forcesave}
 
 - First we need to get the mongo collection object ie:
     - `$collection = SomeModelClass::model()->getCollection();`

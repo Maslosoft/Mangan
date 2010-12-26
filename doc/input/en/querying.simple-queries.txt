@@ -22,4 +22,4 @@ To understand PK queries refer to [Primary Keys Section][advanced.primaryKeys]
 - All of above methods have the 'All' version, ie: `findAll()`, `findAllByAttributes`
 - They may return an array of models, or models cursor, we'll cover the cursor later
 
-**This is almost the same bahavior like standard Yii ActiveRecord models, refer to them for a basic idea**
+**This is almost the same behavior like standard Yii ActiveRecord models, refer to them for a basic idea**

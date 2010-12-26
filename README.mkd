@@ -486,10 +486,11 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ## Resources
 
- * [Project page](https://github.com/canni/YiiMongoDbSuite)
- * [Documentation](http://canni.github.com/YiiMongoDbSuite) 
+ * [Project page on GitHub](https://github.com/canni/YiiMongoDbSuite)
  * [MongoDB documentation](http://www.mongodb.org/display/DOCS/Home)
+ * [On-Line version of this documentation](http://canni.github.com/YiiMongoDbSuite)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
+ * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
 
 ## Contribution needed!
 

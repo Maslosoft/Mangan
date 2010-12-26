@@ -8,7 +8,7 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 - This is just an *idea/concept/example* you can do things in yours preferred way! this is schema-less world, think different!
 - MongoDB Documentation has a clean examples and how-to's for handling relations, *please* read them for better understanding of relations in NoSQL world
 
-# HAS_ONE relation
+# HAS_ONE relation {#hasone}
 
 ~~~
 [php]
@@ -19,7 +19,7 @@ public function address()
 }
 ~~~
 
-# BELONGS_TO relation
+# BELONGS_TO relation {#belongsto}
 
 ~~~
 [php]
@@ -30,7 +30,7 @@ public function client()
 }
 ~~~
 
-# HAS_MANY relation
+# HAS_MANY relation {#hasmany}
 
 ~~~
 [php]
@@ -44,6 +44,6 @@ public function orders()
 }
 ~~~
 
-# MANY_MANY relation
+# MANY_MANY relation {#manymany}
 
 As simple as defining reverse HAS_MANY relation in orders model. You can view the Example models for details.

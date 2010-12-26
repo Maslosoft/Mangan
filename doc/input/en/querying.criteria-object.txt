@@ -30,7 +30,7 @@ In addition to above the criteria object has additional special methods.
 **NOTE: If you want to add simple criteria, that will use field name that is a method name from the above list,
 you can use the addCond method ie. `$criteria->addCond('limit', '==', 1234);`**
 
-## sort EMongoCriteria method
+## sort EMongoCriteria method {#sort}
 
 The sort method takes two parameters
 
@@ -41,7 +41,7 @@ The sort method takes two parameters
 
 You can call sort method as many times as you wish, the sorting criteria will be mixed together.
 
-## select EMongoCriteria method
+## select EMongoCriteria method {#select}
 
 The select method takes only one argument, array of field names.
 
@@ -53,7 +53,7 @@ you want only specified field list.
 - MongoDB regardless of anything, will always return the _id field within result sets
 - You can call sort method multiple times, all calls will be merged using array_merge function
 
-## List of supported operators
+## List of supported operators {#oplist}
 
 List consist of operators and after `|` available shortcut (if any)
 
@@ -83,7 +83,7 @@ Newer versions of mongodb will work, just not the $or operator.
 
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
 
-## Examples:
+## Examples: {#examples}
 
 ~~~
 [php]
@@ -116,7 +116,7 @@ $criteria->personal_number('%', array(10, 0)) // modulo => personal_number % 10 
 $users = User::model()->findAll($criteria);
 ~~~
 
-##Regexp / SQL LIKE replacement
+##Regexp / SQL LIKE replacement {#regexp}
 
 You can use native PHP Mongo driver class MongoRegex, to query:
 
@@ -130,7 +130,7 @@ $clients = Client::model()->findAll($criteria);
 // see phpdoc for MongoRegex class for more examples
 ~~~
 
-##Creating criteria object from an array:
+##Creating criteria object from an array: {#array}
 
 ~~~
 [php]

@@ -35,7 +35,7 @@ class Client extends EMongoDocument
 $all = Client::model()->scopeName()->findAll();
 ~~~
 
-# Parameterized Named Scopes
+# Parameterized Named Scopes {#pns}
 
 ~~~
 [php]

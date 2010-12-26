@@ -3,12 +3,12 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 ---
 
-# Model generation
+# Model generation {#model}
 
 - you do not have to generate yours models, yours classes are yours models and schemas!
 - Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
 
-# CRUD Generation
+# CRUD Generation {#crud}
 
 Now you can generate CRUD for yours MongoDB Documents! just you have to add generator path to yours Gii config
 
@@ -37,7 +37,7 @@ something different than '_id'. Note that generator cannot handle with multifiel
 ~~~
 
 
-# Forms generation
+# Forms generation {#forms}
 
 - This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
 - When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
