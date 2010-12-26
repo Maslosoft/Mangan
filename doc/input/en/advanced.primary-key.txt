@@ -5,7 +5,8 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 By default YiiMongoDbSuite will always use the `_id` field as a collection primary key.
 
-MongoDB itself guarantee that this field will be unique across collection.
+> [information]
+> MongoDB itself guarantee that `_id` field will be unique across collection.
 
 # The `_id` field {#_id}
 
@@ -23,8 +24,9 @@ To find an model with specified ID use:
 
 `$model->findByPk(new MongoID('4ced75e1eb4ae8ca44000000'));`
 
-*NOTE: You can put any value into an `_id` field, as long as it will be unique across whole collection,
-mongo will create the MongoID object, only if you insert new model to the DB, with _id field set to `NULL`*
+> [information]
+> ### You can put **any** value into an `_id` field
+> MongoDB will auto populate _id field by MongoID objects **only when** it is set to `NULL` 
 
 # Own defined Primary Key for collection {#ownpk}
 

@@ -60,4 +60,6 @@ class Client extends EMongoDocument
 $all = Client::model()->byStatus(1)->findAll();
 ~~~
 
-*NOTE: You can chain multiple named scopes ie. `Client::model()->active()->byStatus(1)->findAll();`*
+> [information]
+> ### You can chain multiple named scopes
+> example: `Client::model()->active()->byStatus(1)->findAll();`

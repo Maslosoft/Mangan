@@ -17,7 +17,7 @@ This section covers some special topics, that need to bye mentioned
 - You may want to disable FSYNC flag when doing massive imports/updates/models, because it will be **horrible** slow!
 - Fsync can be disabled by setting up fsyncField in EMongoDB class
 
-# Use Cursor Flag {#useCursorFlag}
+# Use Cursor Flag {#usecursorflag}
 
 Now we can set that all records returned by findAll* methods will return EMongoCursor instead of raw array,
 EMongoCursor implements Iterator interface and can be used with ie. foreach loop.

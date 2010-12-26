@@ -8,7 +8,7 @@ Now you can define indexes for yours collections in easy way!
 Suite will check for existing of indexes only once, at the first class use, (per script-calls)
 if it not find any of declared indexes it will create them 
 
-Only thing you need is to define the indexes() method in yours model class, see the example:
+Only thing you need is to define the `indexes()` method in yours model class, see the example:
 
 ~~~
 [php]

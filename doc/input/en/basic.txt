@@ -5,5 +5,6 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 This section shows some basic, quick-start usage examples, follow to the next chapters.
 
-*NOTE: `EMongoDocument` and `EMongoEmbeddedDocument` extends standard `CModel` class, you can do with them all
-things that can be done with standard `CModel` objects!*
+> [information]
+> `EMongoDocument` and `EMongoEmbeddedDocument` extends standard `CModel` class, you can do with them all
+> things that can be done with standard `CModel` objects!

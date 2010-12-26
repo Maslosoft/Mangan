@@ -27,8 +27,9 @@ In addition to above the criteria object has additional special methods.
 3. `sort($fieldName, $sortDirection)` this will be covered shortly
 4. `select($array)` this will be covered shortly
 
-**NOTE: If you want to add simple criteria, that will use field name that is a method name from the above list,
-you can use the addCond method ie. `$criteria->addCond('limit', '==', 1234);`**
+> [information]
+> If you want to add simple criteria, that will use field name that is a method name from the above list,
+> you can use the addCond method ie. `$criteria->addCond('limit', '==', 1234);`
 
 ## sort EMongoCriteria method {#sort}
 
@@ -48,16 +49,16 @@ The select method takes only one argument, array of field names.
 By default MongoDB will return all fields from of document, use this method to tell mongo that
 you want only specified field list.
 
-**NOTE:**
-
-- MongoDB regardless of anything, will always return the _id field within result sets
-- You can call sort method multiple times, all calls will be merged using array_merge function
+> [important]
+> - MongoDB regardless of anything, will always return the _id field within result sets
+> - You can call sort method multiple times, all calls will be merged using array_merge function
 
 ## List of supported operators {#oplist}
 
 List consist of operators and after `|` available shortcut (if any)
 
-*NOTE: Operators are case-insensitive*
+> [information]
+> Operators are case-insensitive
 
 ~~~
 - 'greater'   | >
@@ -77,7 +78,8 @@ List consist of operators and after `|` available shortcut (if any)
 - 'elemMatch' |
 ~~~
 
-*NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.*
+> [warning]
+> the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.
 
 Newer versions of mongodb will work, just not the $or operator.
 
