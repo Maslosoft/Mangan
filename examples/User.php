@@ -20,7 +20,7 @@ class User extends EMongoDocument
 	 */
 	public function getCollectionName()
 	{
-		return 'user';
+		return 'users';
 	}
 
 	/**
