@@ -7,14 +7,14 @@ class BasicOperationsTest extends CTestCase
 	public function setUp()
 	{
 		parent::setUp();
-		BasicOperationsTestModel::model()->getCollection()->remove(array(), array(
+		BasicOperationsModel::model()->getCollection()->remove(array(), array(
 			'justOne' => false
 		));
 	}
 
 	public function testToArray()
 	{
-		$model = new BasicOperationsTestModel();
+		$model = new BasicOperationsModel();
 
 		$this->assertEquals(
 			array('_id'=>null, 'field1'=>null, 'field2'=>null),
@@ -40,13 +40,13 @@ class BasicOperationsTest extends CTestCase
 
 	public function testInsert()
 	{
-		$model = new BasicOperationsTestModel();
+		$model = new BasicOperationsModel();
 
 		$model->field1 = 'val1';
 		$model->field2 = 1234;
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			null
 		);
 
@@ -59,20 +59,20 @@ class BasicOperationsTest extends CTestCase
 		$this->assertFalse($model->getIsNewRecord());
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			$model->toArray()
 		);
 	}
 
 	public function testUpdate()
 	{
-		$model = new BasicOperationsTestModel();
+		$model = new BasicOperationsModel();
 
 		$model->field1 = 'val1';
 		$model->field2 = 1234;
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			null
 		);
 
@@ -84,7 +84,7 @@ class BasicOperationsTest extends CTestCase
 		$this->assertFalse($model->getIsNewRecord());
 
 		$this->assertNotEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			$model->toArray()
 		);
 
@@ -92,34 +92,34 @@ class BasicOperationsTest extends CTestCase
 		$this->assertFalse($model->getIsNewRecord());
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			$model->toArray()
 		);
 	}
 
 	public function testDelete()
 	{
-		$model = new BasicOperationsTestModel();
+		$model = new BasicOperationsModel();
 
 		$model->field1 = 'val1';
 		$model->field2 = 1234;
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			null
 		);
 
 		$this->assertTrue($model->save());
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			$model->toArray()
 		);
 
 		$this->assertTrue($model->delete());
 
 		$this->assertEquals(
-			BasicOperationsTestModel::model()->getCollection()->findOne(),
+			BasicOperationsModel::model()->getCollection()->findOne(),
 			null
 		);
 	}

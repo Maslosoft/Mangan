@@ -2,7 +2,7 @@
 
 require_once dirname(__FILE__).'/BasicTestModel.php';
 
-class BasicOperationsTestModel extends BasicTestModel
+class BasicOperationsModel extends BasicTestModel
 {
 	public $field1;
 	public $field2;
