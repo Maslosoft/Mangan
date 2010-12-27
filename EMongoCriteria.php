@@ -14,6 +14,23 @@
  *
  */
 
+/**
+ * EMongoCriteria class
+ *
+ * This class is a helper for building MongoDB query arrays, it support three syntaxes for adding conditions:
+ *
+ * 1. 'equals' syntax:
+ * $criteriaObject->fieldName = $value; // this will produce fieldName == value query
+ * 2. fieldName call syntax
+ * $criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
+ * 3. addCond method
+ * $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
+ *
+ * For operators list {@see EMongoCriteria::$operators}
+ *
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ *
+ */
 class EMongoCriteria extends CComponent
 {
 	public static $operators = array(
@@ -61,19 +78,19 @@ class EMongoCriteria extends CComponent
 	 * <PRE>
 	 * 'criteria' = array(
 	 * 	'conditions'=>array(
-	 *		'fieldName1'=>array('greater', 0),
-	 *		'fieldName2'=>array('greaterEq', 10),
-	 *		'fieldName3'=>array('less', 10),
-	 *		'fieldName4'=>array('lessEq', 10),
-	 *		'fieldName5'=>array('notEq', 10),
-	 *		'fieldName6'=>array('in', array(10, 9)),
-	 *		'fieldName7'=>array('notIn', array(10, 9)),
-	 *		'fieldName8'=>array('all', array(10, 9)),
-	 *		'fieldName9'=>array('size', 10),
+	 *		'fieldName1'=>array('greater' => 0),
+	 *		'fieldName2'=>array('>=' => 10),
+	 *		'fieldName3'=>array('<' => 10),
+	 *		'fieldName4'=>array('lessEq' => 10),
+	 *		'fieldName5'=>array('notEq' => 10),
+	 *		'fieldName6'=>array('in' => array(10, 9)),
+	 *		'fieldName7'=>array('notIn' => array(10, 9)),
+	 *		'fieldName8'=>array('all' => array(10, 9)),
+	 *		'fieldName9'=>array('size' => 10),
 	 *		'fieldName10'=>array('exists'),
 	 *		'fieldName11'=>array('notExists'),
-	 *		'fieldName12'=>array('mod', array(10, 9)),
-	 * 		'fieldName13'=>array('equals', 1)
+	 *		'fieldName12'=>array('mod' => array(10, 9)),
+	 * 		'fieldName13'=>array('==' => 1)
 	 * 	),
 	 * 	'select'=>array('fieldName', 'fieldName2'),
 	 * 	'limit'=>10,
@@ -120,8 +137,10 @@ class EMongoCriteria extends CComponent
 
 	/**
 	 * Merge with other criteria
-	 * Existing fields operators, limit and offet will be overriden
-	 * select fields will be merged
+	 * - Field list operators will be merged
+	 * - Limit and offet will be overriden
+	 * - Select fields list will be merged
+	 * - Sort fields list will be merged
 	 * @param array|EMongoCriteria $criteria
 	 */
 	public function mergeWith($criteria)
