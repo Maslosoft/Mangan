@@ -19,6 +19,7 @@ advanced.relations
 advanced.data-provider
 advanced.write-flags
 advanced.gridfs
+advanced.soft-models
 gii
 special
 special.multimodel
