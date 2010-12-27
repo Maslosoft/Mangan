@@ -19,9 +19,10 @@
  * EMongoCursor
  *
  * Cursor object, that behaves much like the MongoCursor,
- * but thisone returns instantiated objects
+ * but this one returns instantiated objects
  */
-class EMongoCursor implements Iterator
+class EMongoCursor
+implements Iterator, Countable
 {
 	/**
 	 * @var MongoCursor $_cursor the MongoCursor returned by the query
@@ -32,11 +33,6 @@ class EMongoCursor implements Iterator
 	 * @var EMongoDocument $_model the model used for instantiating objects
 	 */
 	protected $_model;
-
-	/**
-	 * @var array cache for object models
-	 */
-	protected $_cache = array();
 
 	/**
 	 * Construct a new EMongoCursor
@@ -66,18 +62,11 @@ class EMongoCursor implements Iterator
 	 */
 	public function current()
 	{
-		if(!isset($this->_cache[$this->_cursor->key()]))
-		{
-			$document = $this->_cursor->current();
-			if(empty($document))
-			{
-				$this->_cache[$this->_cursor->key()] = $document;
-				return $document;
-			}
-			$this->_cache[$this->_cursor->key()] = $this->_model->populateRecord($document);
-		}
+		$document = $this->_cursor->current();
+		if(empty($document))
+			return $document;
 
-		return $this->_cache[$this->_cursor->key()];
+		return $this->_model->populateRecord($document);
 	}
 
 	/**
@@ -114,5 +103,46 @@ class EMongoCursor implements Iterator
 	public function valid()
 	{
 		return $this->_cursor->valid();
+	}
+
+	/**
+	 * Returns the number of documents found
+	 * {@see http://www.php.net/manual/en/mongocursor.count.php}
+	 * @param boolean $foundOnly default FALSE
+	 * @return integer count of documents found
+	 */
+	public function count($foundOnly = false)
+	{
+		return $this->_cursor->count($foundOnly);
+	}
+
+	/**
+	 * Apply a limit to this cursor
+	 * {@see http://www.php.net/manual/en/mongocursor.limit.php}
+	 * @param integer $limit new limit
+	 */
+	public function limit($limit)
+	{
+		$this->_cursor->limit($limit);
+	}
+
+	/**
+	 * Skip a $offset records
+	 * {@see http://www.php.net/manual/en/mongocursor.skip.php}
+	 * @param integer $skip new skip
+	 */
+	public function offset($offset)
+	{
+		$this->_cursor->offset($offset);
+	}
+
+	/**
+	 * Apply sorting directives
+	 * {@see http://www.php.net/manual/en/mongocursor.sort.php}
+	 * @param array $sort sorting directives
+	 */
+	public function sort(array $fields)
+	{
+		$this->_cursor->sort($fields);
 	}
 }
