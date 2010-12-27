@@ -234,6 +234,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 			$this->afterToArray();
 			return $arr;
 		}
+		else
+			return array();
 	}
 
 	/**
