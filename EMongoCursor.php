@@ -35,11 +35,6 @@ implements Iterator, Countable
 	protected $_model;
 
 	/**
-	 * @var array cache for object models
-	 */
-	protected $_cache = array();
-
-	/**
 	 * Construct a new EMongoCursor
 	 *
 	 * @param MongoCursor $cursor the cursor returned by the query
@@ -67,18 +62,11 @@ implements Iterator, Countable
 	 */
 	public function current()
 	{
-		if(!isset($this->_cache[$this->_cursor->key()]))
-		{
-			$document = $this->_cursor->current();
-			if(empty($document))
-			{
-				$this->_cache[$this->_cursor->key()] = $document;
-				return $document;
-			}
-			$this->_cache[$this->_cursor->key()] = $this->_model->populateRecord($document);
-		}
+		$document = $this->_cursor->current();
+		if(empty($document))
+			return $document;
 
-		return $this->_cache[$this->_cursor->key()];
+		return $this->_model->populateRecord($document);
 	}
 
 	/**
