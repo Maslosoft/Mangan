@@ -19,9 +19,10 @@
  * EMongoCursor
  *
  * Cursor object, that behaves much like the MongoCursor,
- * but thisone returns instantiated objects
+ * but this one returns instantiated objects
  */
-class EMongoCursor implements Iterator
+class EMongoCursor
+implements Iterator, Countable
 {
 	/**
 	 * @var MongoCursor $_cursor the MongoCursor returned by the query
@@ -114,5 +115,14 @@ class EMongoCursor implements Iterator
 	public function valid()
 	{
 		return $this->_cursor->valid();
+	}
+
+	/**
+	 * Returns the number of documents found
+	 * @return integer count of documents found
+	 */
+	public function count()
+	{
+		return $this->_cursor->count(true);
 	}
 }
