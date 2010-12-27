@@ -107,10 +107,42 @@ implements Iterator, Countable
 
 	/**
 	 * Returns the number of documents found
+	 * {@see http://www.php.net/manual/en/mongocursor.count.php}
+	 * @param boolean $foundOnly default FALSE
 	 * @return integer count of documents found
 	 */
-	public function count()
+	public function count($foundOnly = false)
 	{
-		return $this->_cursor->count(true);
+		return $this->_cursor->count($foundOnly);
+	}
+
+	/**
+	 * Apply a limit to this cursor
+	 * {@see http://www.php.net/manual/en/mongocursor.limit.php}
+	 * @param integer $limit new limit
+	 */
+	public function limit($limit)
+	{
+		$this->_cursor->limit($limit);
+	}
+
+	/**
+	 * Skip a $offset records
+	 * {@see http://www.php.net/manual/en/mongocursor.skip.php}
+	 * @param integer $skip new skip
+	 */
+	public function offset($offset)
+	{
+		$this->_cursor->offset($offset);
+	}
+
+	/**
+	 * Apply sorting directives
+	 * {@see http://www.php.net/manual/en/mongocursor.sort.php}
+	 * @param array $sort sorting directives
+	 */
+	public function sort(array $fields)
+	{
+		$this->_cursor->sort($fields);
 	}
 }
