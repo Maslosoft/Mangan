@@ -73,6 +73,12 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		$this->_attributeNames[] = $name;
 	}
 
+	public function initSoftAttributes($attributes)
+	{
+		foreach($attributes as $name)
+			$this->initSoftAttribute($name);
+	}
+
 	public function attributeNames()
 	{
 		return array_merge($this->_attributeNames, parent::attributeNames());
@@ -84,8 +90,12 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		$model=new $class(null);
 		$model->initEmbeddedDocuments();
 
-		foreach(array_diff(array_keys($attributes), parent::attributeNames()) as $softAttributeName)
-			$model->initSoftAttribute($softAttributeName);
+		$this->initSoftAttributes(
+			array_diff(
+				array_keys($attributes),
+				parent::attributeNames()
+			)
+		);
 
 		$model->setAttributes($attributes, false);
 		return $model;
@@ -114,5 +124,10 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		}
 		else
 			return array();
+	}
+
+	public function getSoftAttributeNames()
+	{
+		return $this->_attributeNames;
 	}
 }
