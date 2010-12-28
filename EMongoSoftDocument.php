@@ -90,7 +90,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		$model=new $class(null);
 		$model->initEmbeddedDocuments();
 
-		$this->initSoftAttributes(
+		$model->initSoftAttributes(
 			array_diff(
 				array_keys($attributes),
 				parent::attributeNames()
