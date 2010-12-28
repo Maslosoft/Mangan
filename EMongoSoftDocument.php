@@ -101,29 +101,18 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		return $model;
 	}
 
-	public function toArray()
+	/**
+	 * This method does the actual convertion to an array
+	 * Does not fire any events
+	 * @return array an associative array of the contents of this object
+	 */
+	protected function _toArray()
 	{
-		if($this->beforeToArray())
-		{
-			$arr = array();
-			$class=new ReflectionClass(get_class($this));
-			foreach($class->getProperties() as $property)
-			{
-				$name=$property->getName();
-				if($property->isPublic() && !$property->isStatic())
-					$arr[$name] = $this->$name;
-			}
-			if($this->hasEmbeddedDocuments())
-				foreach($this->_embedded as $key=>$value)
-					$arr[$key]=$value->toArray();
-
-			foreach($this->softAttributes as $key => $value)
-				$arr[$key]=$value;
-			$this->afterToArray();
-			return $arr;
-		}
-		else
-			return array();
+		$arr = parent::_toArray();
+		foreach($this->softAttributes as $key => $value)
+			$arr[$key]=$value;
+		$this->afterToArray();
+		return $arr;
 	}
 
 	public function getSoftAttributeNames()
