@@ -111,7 +111,6 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		$arr = parent::_toArray();
 		foreach($this->softAttributes as $key => $value)
 			$arr[$key]=$value;
-		$this->afterToArray();
 		return $arr;
 	}
 
