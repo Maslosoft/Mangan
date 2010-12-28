@@ -25,8 +25,10 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	protected $softAttributes = array();
 
-	private $_attributeNames = array();
-
+	/**
+	 * Adds soft attributes support to magic __get method
+	 * @see EMongoEmbeddedDocument::__get()
+	 */
 	public function __get($name)
 	{
 		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
@@ -37,6 +39,10 @@ abstract class EMongoSoftDocument extends EMongoDocument
 			return parent::__get($name);
 	}
 
+	/**
+	 * Adds soft attributes support to magic __set method
+	 * @see EMongoEmbeddedDocument::__set()
+	 */
 	public function __set($name, $value)
 	{
 		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
@@ -47,6 +53,10 @@ abstract class EMongoSoftDocument extends EMongoDocument
 			parent::__set($name, $value);
 	}
 
+	/**
+	 * Adds soft attributes support to magic __isset method
+	 * @see EMongoEmbeddedDocument::__isset()
+	 */
 	public function __isset($name)
 	{
 		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
@@ -55,6 +65,10 @@ abstract class EMongoSoftDocument extends EMongoDocument
 			return parent::__isset($name);
 	}
 
+	/**
+	 * Adds soft attributes support to magic __unset method
+	 * @see CComponent::__unset()
+	 */
 	public function __unset($name)
 	{
 		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
@@ -67,23 +81,39 @@ abstract class EMongoSoftDocument extends EMongoDocument
 			parent::__unset($name);
 	}
 
+	/**
+	 * Initializes a soft attribute, before it can be used
+	 * @param string $name attribute name
+	 */
 	public function initSoftAttribute($name)
 	{
-		$this->softAttributes[$name] = null;
-		$this->_attributeNames[] = $name;
+		if(!array_key_exists($name, $this->softAttributes))
+			$this->softAttributes[$name] = null;
 	}
 
+	/**
+	 * Initializes a soft attributes, from given list, before they can be used
+	 * @param mixed $attributes attribute names list
+	 */
 	public function initSoftAttributes($attributes)
 	{
 		foreach($attributes as $name)
 			$this->initSoftAttribute($name);
 	}
 
+	/**
+	 * Return the list of attribute names of this model, with respect of initialized soft attributes
+	 * @see EMongoEmbeddedDocument::attributeNames()
+	 */
 	public function attributeNames()
 	{
-		return array_merge($this->_attributeNames, parent::attributeNames());
+		return array_merge(array_keys($this->softAttributes), parent::attributeNames());
 	}
 
+	/**
+	 * Instantiate the model object from given document, with respect of soft attributes
+	 * @see EMongoDocument::instantiate()
+	 */
 	protected function instantiate($attributes)
 	{
 		$class=get_class($this);
@@ -114,8 +144,15 @@ abstract class EMongoSoftDocument extends EMongoDocument
 		return $arr;
 	}
 
+	/**
+	 * Return the actual list of soft attributes being used by this model
+	 * @return array list of initialized soft attributes
+	 */
 	public function getSoftAttributeNames()
 	{
-		return $this->_attributeNames;
+		return array_diff(
+			array_keys($this->softAttributes),
+			parent::attributeNames()
+		);
 	}
 }
