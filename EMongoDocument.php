@@ -347,7 +347,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		parent::init();
 
-		if($this->ensureIndexes && empty(self::$_indexes[$this->getCollectionName()]))
+		if($this->ensureIndexes && !isset(self::$_indexes[$this->getCollectionName()]))
 		{
 			$indexInfo = $this->getCollection()->getIndexInfo();
 			array_shift($indexInfo); // strip out default _id index
