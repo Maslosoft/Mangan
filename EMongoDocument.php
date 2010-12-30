@@ -465,7 +465,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function applyScopes(&$criteria)
 	{
-		if($criteria === null) $criteria = new EMongoCriteria();
+		if($criteria === null)
+			$criteria = new EMongoCriteria();
+		else if(is_array($criteria))
+		{
+			$criteria = new EMongoCriteria($criteria);
+		}
+
 		if(($c=$this->getDbCriteria(false))!==null)
 		{
 			$c->mergeWith($criteria);
@@ -690,8 +696,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		Yii::trace(get_class($this).'.find()','ext.MongoDb.EMongoDocument');
 
-		if (is_array($criteria)) $criteria = new EMongoCriteria($criteria);
-
 		if($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
@@ -718,8 +722,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		if($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
-
-			$cursor = $this->getCollection()->find($criteria->getConditions());
 
 			if($criteria->getSort() !== null)
 				$cursor->sort($criteria->getSort());
