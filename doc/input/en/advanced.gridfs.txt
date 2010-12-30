@@ -49,7 +49,15 @@ class Image extends EMongoGridFS
 }
 ~~~
 
-**IMPORTANT: every EMongoGridFS has a special field "filename", that is mandatory!**
+> [important]
+> Every EMongoGridFS has a special field "filename", that is mandatory!
+
+<!-- # -->
+
+> [information]
+> `EMongoGridFS` has a feature that holds files in temporary folder, between operations,
+> it can be set on global level in EMongoDB class, by setting property `gridFStemporaryFolder` to some dirname,
+> or on model/object level by using `gridFStemporaryFolder()` setter
 
 This part of documentation is not yet complete, for now, follow usage examples:
 
