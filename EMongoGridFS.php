@@ -6,6 +6,8 @@
  *
  * @author		Jose Martinez <jmartinez@ibitux.com>
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
  * @copyright	2010 Ibitux
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		SVN: $Revision: $
@@ -18,6 +20,8 @@
  *
  * @author		Jose Martinez <jmartinez@ibitux.com>
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
  * @copyright	2010 Ibitux
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		SVN: $Revision: $
@@ -59,25 +63,13 @@ abstract class EMongoGridFS extends EMongoDocument
 	}
 
 	/**
-	 * Set current MongoGridFSFile
-	 * This setter is only used to populate model during factory init
-	 * @param MongoGridFSFile $gridFs
-	 * @return void
-	 */
-	public function setGridFsFile($gridFs)
-	{
-		//TODO:manage in another way gridFSFile, maybe attach this function as behavior
-		$this->_gridFSFile = $gridFs;
-	}
-
-	/**
 	 * Sets temporary folder, used for updates
 	 * @param string $value
 	 * @return void
 	 */
 	public function setTemporaryFolder($value)
 	{
-		$this->_temporaryFolder = $value;
+		$this->_temporaryFolder = rtrim($value, DIRECTORY_SEPARATOR);
 	}
 
 	/**
@@ -86,7 +78,11 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function getTemporaryFolder()
 	{
-		return $this->_temporaryFolder;
+		if($this->_temporaryFolder !== null)
+			return $this->_temporaryFolder;
+		if(self::$_models[get_class($this)]->_temporaryFolder !== null)
+			return self::$_models[get_class($this)]->_temporaryFolder;
+		return $this->getMongoDBComponent()->gridFStemporaryFolder;
 	}
 
 	/**
@@ -271,8 +267,7 @@ abstract class EMongoGridFS extends EMongoDocument
 		if($document instanceof MongoGridFSFile)
 		{
 			$model = parent::populateRecord($document->file, $callAfterFind);
-			//TODO: this part of the populate record should be created in parent class to avoid public setter
-			$model->setGridFsFile($document);
+			$model->_gridFSFile = $document;
 			return $model;
 		}
 		else
@@ -350,29 +345,8 @@ abstract class EMongoGridFS extends EMongoDocument
 		Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
 		$this->applyScopes($criteria);
 		return $this->getCollection()->remove($criteria->getConditions(), array(
-			'safe'=>$this->getSafeFlag()
+			'fsync'=>$this->getFsyncFlag(),
+			'safe'=>$this->getSafeFlag(),
 		));
 	}
-
-	/**
-	 * Deletes document with the specified primary key.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
-	 */
-	public function deleteByPk($pk, $criteria=null)
-	{
-		if($this->beforeDelete())
-		{
-			Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
-			$this->applyScopes($criteria);
-			$criteria->_id('==', $pk);
-
-			$result = $this->getCollection()->remove($criteria->getConditions(), array('justOne'=>true));
-			$this->afterDelete();
-			return $result;
-		}
-		return false;
-	}
-
 }
