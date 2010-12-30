@@ -69,7 +69,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function setTemporaryFolder($value)
 	{
-		$this->_temporaryFolder = $value;
+		$this->_temporaryFolder = rtrim($value, DIRECTORY_SEPARATOR);
 	}
 
 	/**
@@ -78,7 +78,11 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function getTemporaryFolder()
 	{
-		return $this->_temporaryFolder;
+		if($this->_temporaryFolder !== null)
+			return $this->_temporaryFolder;
+		if(self::$_models[get_class($this)]->_temporaryFolder !== null)
+			return self::$_models[get_class($this)]->_temporaryFolder;
+		return $this->getMongoDBComponent()->gridFStemporaryFolder;
 	}
 
 	/**

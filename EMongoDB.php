@@ -96,6 +96,13 @@ class EMongoDB extends CApplicationComponent
 	public $useCursor = false;
 
 	/**
+	 * Storage location for temporary files used by the GridFS Feature.
+	 * If set to null, component will not use temporary storage
+	 * @var string $gridFStemporaryFolder
+	 */
+	public $gridFStemporaryFolder = null;
+
+	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
 	 */
 	public function connect()
