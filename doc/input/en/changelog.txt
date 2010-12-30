@@ -9,6 +9,7 @@ New features in 1.3.4
 
 - Added "Soft" Documents support, soft documents do not have fixed attribute lists, for more info see [soft models section][advanced.soft-models]
 - Added support for global temporary folder used by GridFS
+- Added missing deleteByPk method to `EmongoDocument`
 
 New features in 1.3.3
 

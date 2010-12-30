@@ -637,6 +637,31 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Deletes document with the specified primary key.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|EMongoCriteria $condition query criteria.
+	 */
+	public function deleteByPk($pk, $criteria=null)
+	{
+		if($this->beforeDelete())
+		{
+			Yii::trace(get_class($this).'.delete()','ext.MongoDb.EMongoDocument');
+			$this->applyScopes($criteria);
+			$criteria->_id('==', $pk);
+
+			$result = $this->getCollection()->remove($criteria->getConditions(), array(
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag(),
+				'justOne'=>true
+			));
+
+			$this->afterDelete();
+			return $result;
+		}
+	}
+
+	/**
 	 * Repopulates this active record with the latest data.
 	 * @return boolean whether the row still exists in the database. If true, the latest data will be populated to this active record.
 	 */
