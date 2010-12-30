@@ -8,6 +8,7 @@ This is the 1.3.4 release (to be released)
 New features in 1.3.4
 
 - Added "Soft" Documents support, soft documents do not have fixed attribute lists, for more info see [soft models section][advanced.soft-models]
+- Added support for global temporary folder used by GridFS
 
 New features in 1.3.3
 
