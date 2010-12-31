@@ -14,7 +14,7 @@
  *
  */
 
-class MongocrudCode extends CCodeModel
+class MongoCRUDCode extends CCodeModel
 {
 	public $model;
 	public $controller;
