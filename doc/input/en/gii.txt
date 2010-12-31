@@ -5,8 +5,8 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 # Model generation {#model}
 
-- you do not have to generate yours models, yours classes are yours models and schemas!
-- Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
+Since version 1.3.4 you can generate mongo document models based on existing SQL tables, just enable gii generators
+provided within package (see below) and use `MongoModel` generator. 
 
 # CRUD Generation {#crud}
 

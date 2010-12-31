@@ -9,7 +9,7 @@ Advanced topics has moved to the new place, see below.**
 **PLEASE refer to the new FULL-Documentation [page](http://canni.github.com/YiiMongoDbSuite)**
 
 
-This is the 1.3.3 release
+This is the 1.3.4 release
 
 # The Key Feature List:
 
