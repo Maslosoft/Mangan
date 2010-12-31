@@ -71,6 +71,14 @@ $('.form .row.model-class').toggle($('#{$class}_tableName').val().substring($('#
 		</div>
 		<?php echo $form->error($model,'modelClass'); ?>
 	</div>
+	<div class="row model-class">
+		<?php echo $form->label($model,'mongoCollectionName',array('required'=>true)); ?>
+		<?php echo $form->textField($model,'mongoCollectionName', array('size'=>65)); ?>
+		<div class="tooltip">
+		This is the name of collection to use with generated model
+		</div>
+		<?php echo $form->error($model,'mongoCollectionName'); ?>
+	</div>
 	<div class="row sticky">
 		<?php echo $form->labelEx($model,'baseClass'); ?>
 		<?php echo $form->textField($model,'baseClass',array('size'=>65)); ?>

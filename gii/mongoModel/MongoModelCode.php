@@ -5,8 +5,9 @@ class MongoModelCode extends CCodeModel
 	public $tablePrefix;
 	public $tableName;
 	public $modelClass;
+	public $mongoCollectionName;
 	public $modelPath='application.models';
-	public $baseClass='CActiveRecord';
+	public $baseClass='EMongoDocument';
 
 	/**
 	 * @var array list of candidate relation code. The array are indexed by AR class names and relation names.
@@ -18,12 +19,12 @@ class MongoModelCode extends CCodeModel
 	{
 		return array_merge(parent::rules(), array(
 			array('tablePrefix, baseClass, tableName, modelClass, modelPath', 'filter', 'filter'=>'trim'),
-			array('tableName, modelPath, baseClass', 'required'),
-			array('tablePrefix, tableName, modelPath', 'match', 'pattern'=>'/^(\w+[\w\.]*|\*?|\w+\.\*)$/', 'message'=>'{attribute} should only contain word characters, dots, and an optional ending asterisk.'),
+			array('tableName, modelPath, baseClass, mongoCollectionName', 'required'),
+			array('tablePrefix, tableName, modelPath, mongoCollectionName', 'match', 'pattern'=>'/^(\w+[\w\.]*|\*?|\w+\.\*)$/', 'message'=>'{attribute} should only contain word characters, dots, and an optional ending asterisk.'),
 			array('tableName', 'validateTableName', 'skipOnError'=>true),
-			array('tablePrefix, modelClass, baseClass', 'match', 'pattern'=>'/^[a-zA-Z_]\w*$/', 'message'=>'{attribute} should only contain word characters.'),
+			array('tablePrefix, modelClass, baseClass, mongoCollectionName', 'match', 'pattern'=>'/^[a-zA-Z_]\w*$/', 'message'=>'{attribute} should only contain word characters.'),
 			array('modelPath', 'validateModelPath', 'skipOnError'=>true),
-			array('baseClass, modelClass', 'validateReservedWord', 'skipOnError'=>true),
+			array('baseClass, modelClass, mongoCollectionName', 'validateReservedWord', 'skipOnError'=>true),
 			array('baseClass', 'validateBaseClass', 'skipOnError'=>true),
 			array('tablePrefix, modelPath, baseClass', 'sticky'),
 		));
@@ -94,10 +95,12 @@ class MongoModelCode extends CCodeModel
 			$params=array(
 				'tableName'=>$schema==='' ? $tableName : $schema.'.'.$tableName,
 				'modelClass'=>$className,
+				'collectionName'=>$this->mongoCollectionName,
 				'columns'=>$table->columns,
 				'labels'=>$this->generateLabels($table),
 				'rules'=>$this->generateRules($table),
 				'relations'=>isset($this->relations[$className]) ? $this->relations[$className] : array(),
+				'primaryKey'=>$table->primaryKey,
 			);
 			$this->files[]=new CCodeFile(
 				Yii::getPathOfAlias($this->modelPath).'/'.$className.'.php',
@@ -130,8 +133,8 @@ class MongoModelCode extends CCodeModel
 		$class=@Yii::import($this->baseClass,true);
 		if(!is_string($class) || !$this->classExists($class))
 			$this->addError('baseClass', "Class '{$this->baseClass}' does not exist or has syntax error.");
-		else if($class!=='CActiveRecord' && !is_subclass_of($class,'CActiveRecord'))
-			$this->addError('baseClass', "'{$this->model}' must extend from CActiveRecord.");
+		else if($class!=='EMongoDocument' && !is_subclass_of($class,'EMongoDocument'))
+			$this->addError('baseClass', "'{$this->model}' must extend from EMongoDocument.");
 	}
 
 	public function getTableSchema($tableName)
