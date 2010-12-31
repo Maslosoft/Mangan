@@ -1,6 +1,6 @@
 <?php
 
-class ModelCode extends CCodeModel
+class MongoModelCode extends CCodeModel
 {
 	public $tablePrefix;
 	public $tableName;
