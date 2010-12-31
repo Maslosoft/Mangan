@@ -11,7 +11,7 @@ Advanced topics has moved to the new place, see below.**
 
 This is the 1.3.4 release
 
-# The Key Feature List:
+## The Key Feature List:
 
 ### Features covered from standard Yii ActiveRecord implementation
 
