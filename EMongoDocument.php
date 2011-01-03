@@ -461,7 +461,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Applies the query scopes to the given criteria.
 	 * This method merges {@link dbCriteria} with the given criteria parameter.
 	 * It then resets {@link dbCriteria} to be null.
-	 * @param EMongoCriteria $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
+	 * @param EMongoCriteria|array $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
 	 */
 	public function applyScopes(&$criteria)
 	{
@@ -650,22 +650,23 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function deleteByPk($pk, $criteria=null)
 	{
+		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
 		if($this->beforeDelete())
 		{
-			Yii::trace(get_class($this).'.delete()','ext.MongoDb.EMongoDocument');
 			$this->applyScopes($criteria);
-			$criteria->_id('==', $pk);
+			$criteria->mergeWith($this->createPkCriteria($pk));
 
 			$result = $this->getCollection()->remove($criteria->getConditions(), array(
+				'justOne'=>true,
 				'fsync'=>$this->getFsyncFlag(),
-				'safe'=>$this->getSafeFlag(),
-				'justOne'=>true
+				'safe'=>$this->getSafeFlag()
 			));
-
 			$this->afterDelete();
 			return $result;
 		}
+		return false;
 	}
+
 
 	/**
 	 * Repopulates this active record with the latest data.
@@ -844,31 +845,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$this->applyScopes($criteria);
 
 		return $this->getCollection()->count($criteria->getConditions());
-	}
-
-	/**
-	 * Deletes document with the specified primary key.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
-	 */
-	public function deleteByPk($pk, $criteria=null)
-	{
-		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
-		if($this->beforeDelete())
-		{
-			$this->applyScopes($criteria);
-			$criteria->mergeWith($this->createPkCriteria($pk));
-
-			$result = $this->getCollection()->remove($criteria->getConditions(), array(
-				'justOne'=>true,
-				'fsync'=>$this->getFsyncFlag(),
-				'safe'=>$this->getSafeFlag()
-			));
-			$this->afterDelete();
-			return $result;
-		}
-		return false;
 	}
 
 	/**
