@@ -71,8 +71,8 @@ for your database in the components section, and add the following to the file:
         'connectionString' => 'mongodb://localhost',
         'dbName'           => 'myDatabaseName',
         'fsyncFlag'        => true,
-        'safe'             => true,
-        'useCursors'       => false
+        'safeFlag'         => true,
+        'useCursor'        => false
       ),
     ),
 

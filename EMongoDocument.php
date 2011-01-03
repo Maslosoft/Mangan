@@ -239,7 +239,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if($this->_fsyncFlag !== null)
 			return $this->_fsyncFlag; // We have flag set, return it
-		if(self::$_models[get_class($this)]->_fsyncFlag !== null)
+		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->_fsyncFlag !== null))
 			return self::$_models[get_class($this)]->_fsyncFlag; // Model have flag set, return it
 		return $this->getMongoDBComponent()->fsyncFlag;
 	}
@@ -268,7 +268,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if($this->_safeFlag !== null)
 			return $this->_safeFlag; // We have flag set, return it
-		if(self::$_models[get_class($this)]->_safeFlag !== null)
+		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->_safeFlag !== null))
 			return self::$_models[get_class($this)]->_safeFlag; // Model have flag set, return it
 		return $this->getMongoDBComponent()->safeFlag;
 	}
