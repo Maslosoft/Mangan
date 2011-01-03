@@ -466,7 +466,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function applyScopes(&$criteria)
 	{
 		if($criteria === null)
+		{
 			$criteria = new EMongoCriteria();
+		}
 		else if(is_array($criteria))
 		{
 			$criteria = new EMongoCriteria($criteria);
