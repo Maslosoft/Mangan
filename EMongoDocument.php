@@ -473,6 +473,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$criteria = new EMongoCriteria($criteria);
 		}
+		else
+			throw new EMongoException('Cannot apply scopes to criteria');
 
 		if(($c=$this->getDbCriteria(false))!==null)
 		{
@@ -719,8 +721,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function findAll($criteria=null)
 	{
 		Yii::trace(get_class($this).'.findAll()','ext.MongoDb.EMongoDocument');
-
-		if (is_array($criteria)) $criteria = new EMongoCriteria($criteria);
 
 		if($this->beforeFind())
 		{
