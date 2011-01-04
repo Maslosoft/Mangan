@@ -473,7 +473,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$criteria = new EMongoCriteria($criteria);
 		}
-		else
+		else if(!($criteria instanceof EMongoCriteria))
 			throw new EMongoException('Cannot apply scopes to criteria');
 
 		if(($c=$this->getDbCriteria(false))!==null)
