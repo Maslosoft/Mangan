@@ -726,6 +726,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$this->applyScopes($criteria);
 
+			$cursor = $this->getCollection()->find($criteria->getConditions());
+
 			if($criteria->getSort() !== null)
 				$cursor->sort($criteria->getSort());
 			if($criteria->getLimit() !== null)
