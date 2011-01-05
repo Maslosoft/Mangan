@@ -284,9 +284,18 @@ class EMongoCriteria extends CComponent
 		$this->_sort = $sort;
 	}
 
-	public function getSelect()
+	/**
+	 * Return selected fields
+	 *
+	 * @param boolean $forCursor MongoCursor::fields() method requires
+	 *                the fields to be specified as a hashmap. When this
+	 *                parameter is set to true, then we'll return
+	 *                the fields in this format
+	 */
+	public function getSelect($forCursor = false)
 	{
-		return $this->_select;
+		if (!$forCursor) return $this->_select;
+		return array_fill_keys($this->_select, true); // PHP 5.2.0+ required!
 	}
 
 	public function setSelect(array $select)

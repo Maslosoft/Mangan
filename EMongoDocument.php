@@ -705,7 +705,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$this->applyScopes($criteria);
 
-			$doc = $this->getCollection()->findOne($criteria->getConditions());
+			$doc = $this->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
 
 			return $this->populateRecord($doc);
 		}
@@ -734,6 +734,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$cursor->limit($criteria->getLimit());
 			if($criteria->getOffset() !== null)
 				$cursor->skip($criteria->getOffset());
+			if($criteria->getSelect())
+				$cursor->fields($criteria->getSelect(true));
 
 			if($this->getUseCursor())
 				return new EMongoCursor($cursor, $this->model());
