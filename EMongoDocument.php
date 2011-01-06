@@ -577,13 +577,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
+	 * @param boolean modify if set true only selected attributes will be replaced, and not
+	 * the whole document
 	 * @return boolean whether the update is successful
 	 * @throws CException if the record is new
 	 * @throws EMongoException on fail of update
 	 * @throws MongoCursorException on fail of update, when safe flag is set to true
 	 * @throws MongoCursorTimeoutException on timeout of db operation , when safe flag is set to true
 	 */
-	public function update(array $attributes=null)
+	public function update(array $attributes=null, $modify = false)
 	{
 		if($this->getIsNewRecord())
 			throw new CDbException(Yii::t('yii','The EMongoDocument cannot be updated because it is new.'));
@@ -594,16 +596,28 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			// filter attributes if set in param
 			if($attributes!==null)
 			{
+				if (!in_array('_id', $attributes) && !$modify) $attributes[] = '_id'; // This is very easy to forget
+
 				foreach($rawData as $key=>$value)
 				{
 					if(!in_array($key, $attributes))
 						unset($rawData[$key]);
 				}
 			}
-			$result = $this->getCollection()->save($rawData, array(
-				'fsync'=>$this->getFsyncFlag(),
-				'safe'=>$this->getSafeFlag()
-			));
+			if ($modify) {
+				$result = $this->getCollection()->update(
+					array('_id' => $this->_id),
+					array('$set' => $rawData),
+					array(
+					'fsync'=>$this->getFsyncFlag(),
+					'safe'=>$this->getSafeFlag()
+				));
+			} else {
+				$result = $this->getCollection()->save($rawData, array(
+					'fsync'=>$this->getFsyncFlag(),
+					'safe'=>$this->getSafeFlag()
+				));
+			}
 
 			if($result !== false) // strict comparison needed
 			{
