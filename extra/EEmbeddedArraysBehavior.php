@@ -30,13 +30,14 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	 */
 	public $arrayDocClassName;
 
+	private $_cache;
+
 	public function attach($owner)
 	{
 		parent::attach($owner);
 
 		// Test if we have correct embding class
-		$testObj = new $this->arrayDocClassName;
-		if(!($testObj instanceof EMongoEmbeddedDocument))
+		if(!is_subclass_of($this->arrayDocClassName, 'EMongoEmbeddedDocument'))
 			throw new CException(Yii::t('yii', get_class($testObj).' is not a child class of EMongoEmbeddedDocument!'));
 
 		$this->parseExistingArray();
@@ -75,19 +76,31 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 		}
 	}
 
-	public function beforeSave($event)
+	public function beforeToArray($event)
 	{
 		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
 		{
 			$arrayOfDocs = array();
-			foreach($this->getOwner()->{$this->arrayPropertyName} as $doc)
+			$this->_cache = $this->getOwner()->{$this->arrayPropertyName};
+
+			foreach($this->_cache as $doc)
 			{
 				$arrayOfDocs[] = $doc->toArray();
 			}
+
 			$this->getOwner()->{$this->arrayPropertyName} = $arrayOfDocs;
 			return true;
 		}
 		else
 			return false;
+	}
+
+	/**
+	 * Event: re-initialize array of embedded documents which where toArray()ized by beforeSave()
+	 */
+	public function afterToArray($event)
+	{
+		$this->getOwner()->{$this->arrayPropertyName} = $this->_cache;
+		$this->_cache = null;
 	}
 }
