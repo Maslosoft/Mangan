@@ -62,6 +62,11 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 */
 	public function findAll($criteria=null)
 	{
+		if (is_null($criteria))
+			$criteria = new EMongoCriteria(array());
+		elseif (is_array($criteria))
+			$criteria = new EMongoCriteria($criteria);
+
 		$ret = parent::findAll($criteria);
 		if (!$criteria->getSelect())
 			return $ret;
