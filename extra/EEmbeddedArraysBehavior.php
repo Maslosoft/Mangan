@@ -30,6 +30,8 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	 */
 	public $arrayDocClassName;
 
+	private $_cache;
+
 	public function attach($owner)
 	{
 		parent::attach($owner);
@@ -74,15 +76,18 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 		}
 	}
 
-	public function beforeSave($event)
+	public function beforeToArray($event)
 	{
 		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
 		{
 			$arrayOfDocs = array();
-			foreach($this->getOwner()->{$this->arrayPropertyName} as $doc)
+			$this->_cache = $this->getOwner()->{$this->arrayPropertyName};
+
+			foreach($this->_cache as $doc)
 			{
 				$arrayOfDocs[] = $doc->toArray();
 			}
+
 			$this->getOwner()->{$this->arrayPropertyName} = $arrayOfDocs;
 			return true;
 		}
@@ -93,8 +98,9 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	/**
 	 * Event: re-initialize array of embedded documents which where toArray()ized by beforeSave()
 	 */
-	public function afterSave($event)
+	public function afterToArray($event)
 	{
-		$this->parseExistingArray();
+		$this->getOwner()->{$this->arrayPropertyName} = $this->_cache;
+		$this->_cache = null;
 	}
 }
