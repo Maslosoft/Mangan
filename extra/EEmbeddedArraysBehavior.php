@@ -90,4 +90,12 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 		else
 			return false;
 	}
+
+	/**
+	 * Event: re-initialize array of embedded documents which where toArray()ized by beforeSave()
+	 */
+	public function afterSave($event)
+	{
+		$this->parseExistingArray();
+	}
 }
