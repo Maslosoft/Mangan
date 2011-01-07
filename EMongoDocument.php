@@ -387,10 +387,18 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			if(!in_array($name, $indexNames))
 			{
-				$this->getCollection()->ensureIndex(
-					$index['key'],
-					array('unique'=>isset($index['unique']) ? $index['unique'] : false, 'name'=>$name)
-				);
+				if(version_compare(Mongo::VERSION, '1.0.2','>=') === true)
+				{
+					$this->getCollection()->ensureIndex(
+						$index['key'],
+						array('unique'=>isset($index['unique']) ? $index['unique'] : false, 'name'=>$name)
+					);
+				} else {
+					$this->getCollection()->ensureIndex(
+						$index['key'],
+						isset($index['unique']) ? $index['unique'] : false
+					);
+				}
 				self::$_indexes[$this->getCollectionName()][$name] = $index;
 			}
 		}
@@ -550,11 +558,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						unset($rawData[$key]);
 				}
 			}
-
-			$result = $this->getCollection()->insert($rawData, array(
-				'fsync'	=> $this->getFsyncFlag(),
-				'safe'	=> $this->getSafeFlag()
-			));
+			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+			{
+				$result = $this->getCollection()->insert($rawData, array(
+					'fsync'	=> $this->getFsyncFlag(),
+					'safe'	=> $this->getSafeFlag()
+				));
+			} else {
+				$result = $this->getCollection()->insert($rawData, CPropertyValue::ensureBoolean($this->getSafeFlag()));
+			}
 
 			if($result !== false) // strict comparison needed
 			{
@@ -613,10 +625,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 					'safe'=>$this->getSafeFlag()
 				));
 			} else {
-				$result = $this->getCollection()->save($rawData, array(
-					'fsync'=>$this->getFsyncFlag(),
-					'safe'=>$this->getSafeFlag()
-				));
+				if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+				{
+					$result = $this->getCollection()->save($rawData, array(
+						'fsync'=>$this->getFsyncFlag(),
+						'safe'=>$this->getSafeFlag()
+					));
+				} else {
+					$result = $this->getCollection()->save($rawData);
+				}
 			}
 
 			if($result !== false) // strict comparison needed
@@ -673,12 +690,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$this->applyScopes($criteria);
 			$criteria->mergeWith($this->createPkCriteria($pk));
-
-			$result = $this->getCollection()->remove($criteria->getConditions(), array(
-				'justOne'=>true,
-				'fsync'=>$this->getFsyncFlag(),
-				'safe'=>$this->getSafeFlag()
-			));
+			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+			{
+				$result = $this->getCollection()->remove($criteria->getConditions(), array(
+					'justOne'=>true,
+					'fsync'=>$this->getFsyncFlag(),
+					'safe'=>$this->getSafeFlag()
+				));
+			} else {
+				$result = $this->getCollection()->remove($criteria->getConditions(), true);
+			}
 			$this->afterDelete();
 			return $result;
 		}
@@ -877,12 +898,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
 		$this->applyScopes($criteria);
-
-		return $this->getCollection()->remove($criteria->getConditions(), array(
-			'justOne'=>false,
-			'fsync'=>$this->getFsyncFlag(),
-			'safe'=>$this->getSafeFlag()
-		));
+		if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+		{
+			return $this->getCollection()->remove($criteria->getConditions(), array(
+				'justOne'=>false,
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag()
+			));
+		} else {
+			return $this->getCollection()->remove($criteria->getConditions(), false);
+		}
 	}
 
 	/**
