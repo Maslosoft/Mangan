@@ -11,9 +11,12 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.2.2
  */
 
+/**
+ * @since v1.2.2
+ */
 class MongoCRUDCode extends CCodeModel
 {
 	public $model;

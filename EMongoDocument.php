@@ -41,6 +41,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	private 				$_safeFlag		= null;			// Object level Safe flag
 
 	protected				$useCursor		= null;			// Whatever to return cursor instead on raw array
+
+	/**
+	 * @var boolean $ensureIndexes whatever to check and create non existing indexes of collection
+	 * @since v1.1
+	 */
 	protected				$ensureIndexes	= true;			// Whatever to ensure indexes
 
 	/**
@@ -100,6 +105,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Return the primary key field for this collection, defaults to '_id'
 	 * @return string|array field name, or array of fields for composite primary key
+	 * @since v1.2.2
 	 */
 	public function primaryKey()
 	{
@@ -107,6 +113,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 
+	/**
+	 * @since v1.2.2
+	 */
 	public function getPrimaryKey()
 	{
 		$pk = $this->primaryKey();
@@ -367,6 +376,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * see CModel::init()
 	 *
 	 * @see EMongoEmbeddedDocument::init()
+	 * @since v1.1
 	 */
 	public function init()
 	{
@@ -399,12 +409,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * 	'index2_name'=>array('key'=>array('fieldName3'=>EMongoCriteria::SORT_ASC, 'unique'=>true),
 	 * );
 	 * @return array list of indexes for this collection
+	 * @since v1.1
 	 */
 	public function indexes()
 	{
 		return array();
 	}
 
+	/**
+	 * @since v1.1
+	 */
 	private function ensureIndexes()
 	{
 		$indexNames = array_keys(self::$_indexes[$this->getCollectionName()]);
@@ -474,6 +488,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * if the model needs to be queried with some default criteria (e.g. only active records should be returned).
 	 * @return array the mongo criteria. This will be used as the parameter to the constructor
 	 * of {@link EMongoCriteria}.
+	 * @since v1.2.2
 	 */
 	public function defaultScope()
 	{
@@ -497,6 +512,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * This method merges {@link dbCriteria} with the given criteria parameter.
 	 * It then resets {@link dbCriteria} to be null.
 	 * @param EMongoCriteria|array $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
+	 * @since v1.2.2
 	 */
 	public function applyScopes(&$criteria)
 	{
@@ -914,6 +930,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|EMongoCriteria $condition query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.2.2
 	 */
 	public function countByAttributes(array $attributes)
 	{
@@ -1203,6 +1220,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * used for Data provider search functionality
 	 * @param boolean $caseSensitive whathever do a case-sensitive search, default to false
 	 * @return EMongoDocument
+	 * @since v1.2.2
 	 */
 	public function search($caseSensitive = false)
 	{
@@ -1263,6 +1281,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		}
 	}
 
+	/**
+	 * @since v1.2.2
+	 */
 	private function createPkCriteria($pk, $multiple=false)
 	{
 		$pkField = $this->primaryKey();
