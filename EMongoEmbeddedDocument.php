@@ -11,11 +11,11 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- * @since		v1.0
+ * @since		v1.0.8
  */
 
 /**
- * @since v1.0
+ * @since v1.0.8
  */
 abstract class EMongoEmbeddedDocument extends CModel
 {
@@ -24,7 +24,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	/**
 	 * CMap of embedded documents
 	 * @var CMap $_embedded
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected $_embedded=null;
 
@@ -39,7 +39,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * Hold down owner pointer (if any)
 	 *
 	 * @var EMongoEmbeddedDocument $_owner
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected $_owner=null;
 
@@ -48,7 +48,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * @param string $scenario name of the scenario that this model is used in.
 	 * See {@link CModel::scenario} on how scenario is used by models.
 	 * @see getScenario
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function __construct($scenario='insert')
 	{
@@ -70,7 +70,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function init(){}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected function initEmbeddedDocuments()
 	{
@@ -84,7 +84,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function onBeforeEmbeddedDocsInit($event)
 	{
@@ -92,7 +92,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function onAfterEmbeddedDocsInit($event)
 	{
@@ -100,7 +100,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function onBeforeToArray($event)
 	{
@@ -108,7 +108,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function onAfterToArray($event)
 	{
@@ -116,7 +116,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected function beforeToArray()
 	{
@@ -126,7 +126,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected function afterToArray()
 	{
@@ -134,7 +134,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected function beforeEmbeddedDocsInit()
 	{
@@ -144,7 +144,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	protected function afterEmbeddedDocsInit()
 	{
@@ -152,7 +152,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function __get($name)
 	{
@@ -171,7 +171,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function __set($name, $value)
 	{
@@ -208,7 +208,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function afterValidate()
 	{
@@ -223,7 +223,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function embeddedDocuments()
 	{
@@ -231,7 +231,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function hasEmbeddedDocuments()
 	{
@@ -245,7 +245,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * By default, this method returns all public properties of the class.
 	 * You may override this method to change the default.
 	 * @return array list of attribute names. Defaults to all public properties of the class.
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function attributeNames()
 	{
@@ -274,7 +274,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * Returns the given object as an associative array
 	 * Fires beforeToArray and afterToArray events
 	 * @return array an associative array of the contents of this object
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function toArray()
 	{
@@ -314,7 +314,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	/**
 	 * Return owner of this document
 	 * @return EMongoEmbeddedDocument
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function getOwner()
 	{
@@ -327,7 +327,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	/**
 	 * Set owner of this document
 	 * @param EMongoEmbeddedDocument $owner
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function setOwner(EMongoEmbeddedDocument $owner)
 	{
@@ -337,7 +337,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	/**
 	 * Override default seScenario method for populating to embedded records
 	 * @see CModel::setScenario()
-	 * @since v1.0
+	 * @since v1.0.8
 	 */
 	public function setScenario($value)
 	{
