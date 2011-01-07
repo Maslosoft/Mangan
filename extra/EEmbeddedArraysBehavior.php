@@ -79,6 +79,9 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 		}
 	}
 
+	/**
+	 * @since v1.0.2
+	 */
 	public function afterValidate($event)
 	{
 		parent::afterValidate($event);

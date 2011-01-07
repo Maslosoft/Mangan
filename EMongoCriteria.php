@@ -233,12 +233,18 @@ class EMongoCriteria extends CComponent
 			return parent::__call($fieldName, $parameters);
 	}
 
+	/**
+	 * @since v1.0.2
+	 */
 	public function __get($name)
 	{
 		array_push($this->_workingFields, $name);
 		return $this;
 	}
 
+	/**
+	 * @since v1.0.2
+	 */
 	public function __set($name, $value)
 	{
 		array_push($this->_workingFields, $name);
