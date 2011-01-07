@@ -8,7 +8,7 @@
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2010 Ibitux
+ * @copyright	2011 Ibitux
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		SVN: $Revision: $
  * @category	ext
@@ -23,7 +23,7 @@
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2010 Ibitux
+ * @copyright	2011 Ibitux
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		SVN: $Revision: $
  * @category	ext
