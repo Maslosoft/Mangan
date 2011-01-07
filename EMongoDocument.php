@@ -23,7 +23,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 {
 	private					$_new			= false;		// whether this instance is new or not
 	private					$_criteria		= null;			// query criteria (used by finder only)
+
+	/**
+	 * Static array that holds mongo collection object instances,
+	 * protected access since v1.3
+	 *
+	 * @var array $_collections static array of loaded collection objects
+	 * @since v1.3
+	 */
 	protected	static		$_collections	= array();		// MongoCollection object
+
 	private		static		$_models		= array();
 	private		static		$_indexes		= array();		// Hold collection indexes array
 
