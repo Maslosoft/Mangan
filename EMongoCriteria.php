@@ -291,6 +291,7 @@ class EMongoCriteria extends CComponent
 	 *                the fields to be specified as a hashmap. When this
 	 *                parameter is set to true, then we'll return
 	 *                the fields in this format
+	 * @since v1.3.1
 	 */
 	public function getSelect($forCursor = false)
 	{
@@ -298,16 +299,25 @@ class EMongoCriteria extends CComponent
 		return array_fill_keys($this->_select, true); // PHP 5.2.0+ required!
 	}
 
+	/**
+	 * @since v1.3.1
+	 */
 	public function setSelect(array $select)
 	{
 		$this->_select = $select;
 	}
 
+	/**
+	 * @since v1.3.1
+	 */
 	public function getWorkingFields()
 	{
 		return $this->_workingFields;
 	}
 
+	/**
+	 * @since v1.3.1
+	 */
 	public function setWorkingFields(array $select)
 	{
 		$this->_workingFields = $select;

@@ -325,6 +325,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * A safe attribute is one that is associated with a validation rule in the current {@link scenario}.
 	 * @see getSafeAttributeNames
 	 * @see attributeNames
+	 * @since v1.3.1
 	 */
 	public function setAttributes($values, $safeOnly=true)
 	{
