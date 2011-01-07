@@ -558,15 +558,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						unset($rawData[$key]);
 				}
 			}
+
 			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-			{
 				$result = $this->getCollection()->insert($rawData, array(
 					'fsync'	=> $this->getFsyncFlag(),
 					'safe'	=> $this->getSafeFlag()
 				));
-			} else {
+			else
 				$result = $this->getCollection()->insert($rawData, CPropertyValue::ensureBoolean($this->getSafeFlag()));
-			}
 
 			if($result !== false) // strict comparison needed
 			{
@@ -616,24 +615,25 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						unset($rawData[$key]);
 				}
 			}
-			if ($modify) {
+
+			if($modify)
 				$result = $this->getCollection()->update(
 					array('_id' => $this->_id),
 					array('$set' => $rawData),
 					array(
-					'fsync'=>$this->getFsyncFlag(),
-					'safe'=>$this->getSafeFlag()
-				));
-			} else {
+						'fsync'=>$this->getFsyncFlag(),
+						'safe'=>$this->getSafeFlag()
+					)
+				);
+			else
+			{
 				if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-				{
 					$result = $this->getCollection()->save($rawData, array(
 						'fsync'=>$this->getFsyncFlag(),
 						'safe'=>$this->getSafeFlag()
 					));
-				} else {
+				else
 					$result = $this->getCollection()->save($rawData);
-				}
 			}
 
 			if($result !== false) // strict comparison needed
@@ -690,16 +690,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$this->applyScopes($criteria);
 			$criteria->mergeWith($this->createPkCriteria($pk));
+
 			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-			{
 				$result = $this->getCollection()->remove($criteria->getConditions(), array(
 					'justOne'=>true,
 					'fsync'=>$this->getFsyncFlag(),
 					'safe'=>$this->getSafeFlag()
 				));
-			} else {
+			else
 				$result = $this->getCollection()->remove($criteria->getConditions(), true);
-			}
+
 			$this->afterDelete();
 			return $result;
 		}
@@ -898,16 +898,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
 		$this->applyScopes($criteria);
+
 		if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-		{
 			return $this->getCollection()->remove($criteria->getConditions(), array(
 				'justOne'=>false,
 				'fsync'=>$this->getFsyncFlag(),
 				'safe'=>$this->getSafeFlag()
 			));
-		} else {
+		else
 			return $this->getCollection()->remove($criteria->getConditions(), false);
-		}
 	}
 
 	/**
