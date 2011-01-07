@@ -11,9 +11,12 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.0
  */
 
+/**
+ * @since v1.0
+ */
 class EMongoDocumentBehavior extends CActiveRecordBehavior
 {
 	public function events()

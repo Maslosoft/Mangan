@@ -29,10 +29,14 @@
  * For operators list {@see EMongoCriteria::$operators}
  *
  * @author		Dariusz Górecki <darek.krk@gmail.com>
- *
+ * @since		v1.0
  */
 class EMongoCriteria extends CComponent
 {
+	/**
+	 * @since v1.0
+	 * @var array $operators supported operators lists
+	 */
 	public static $operators = array(
 		'greater'		=> '$gt',
 		'>'				=> '$gt',
@@ -99,6 +103,7 @@ class EMongoCriteria extends CComponent
 	 * );
 	 * </PRE>
 	 * @param mixed $criteria
+	 * @since v1.0
 	 */
 	public function __construct($criteria=null)
 	{
@@ -142,6 +147,7 @@ class EMongoCriteria extends CComponent
 	 * - Select fields list will be merged
 	 * - Sort fields list will be merged
 	 * @param array|EMongoCriteria $criteria
+	 * @since v1.0
 	 */
 	public function mergeWith($criteria)
 	{
@@ -190,6 +196,7 @@ class EMongoCriteria extends CComponent
 	/**
 	 * If we have operator add it otherwise call parent implementation
 	 * @see CComponent::__call()
+	 * @since v1.0
 	 */
 	public function __call($fieldName, $parameters)
 	{
@@ -243,42 +250,64 @@ class EMongoCriteria extends CComponent
 	/**
 	 * Return query array
 	 * @return array query array
+	 * @since v1.0
 	 */
 	public function getConditions()
 	{
 		return $this->_conditions;
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function setConditions(array $conditions)
 	{
 		$this->_conditions = $conditions;
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function getLimit()
 	{
 		return $this->_limit;
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function setLimit($limit)
 	{
 		$this->limit($limit);
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function getOffset()
 	{
 		return $this->_offset;
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function setOffset($offset)
 	{
 		$this->offset($offset);
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function getSort()
 	{
 		return $this->_sort;
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	public function setSort(array $sort)
 	{
 		$this->_sort = $sort;
@@ -328,6 +357,7 @@ class EMongoCriteria extends CComponent
 	 * Multiple calls to this method will merge all given fields
 	 *
 	 * @param array $fieldList list of fields to select
+	 * @since v1.0
 	 */
 	public function select(array $fieldList=null)
 	{
@@ -341,6 +371,7 @@ class EMongoCriteria extends CComponent
 	 * Multiple calls will overrride previous value of limit
 	 *
 	 * @param integer $limit limit
+	 * @since v1.0
 	 */
 	public function limit($limit)
 	{
@@ -353,6 +384,7 @@ class EMongoCriteria extends CComponent
 	 * Multiple calls will override previous value
 	 *
 	 * @param integer $offset offset
+	 * @since v1.0
 	 */
 	public function offset($offset)
 	{
@@ -365,6 +397,7 @@ class EMongoCriteria extends CComponent
 	 * Each call will be groupped with previous calls
 	 * @param string $fieldName
 	 * @param integer $order
+	 * @since v1.0
 	 */
 	public function sort($fieldName, $order)
 	{
@@ -379,6 +412,7 @@ class EMongoCriteria extends CComponent
 	 * @param string $fieldName
 	 * @param string $op operator
 	 * @param mixed $value
+	 * @since v1.0
 	 */
 	public function addCond($fieldName, $op, $value)
 	{
