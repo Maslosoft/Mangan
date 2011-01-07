@@ -3,7 +3,13 @@ It originally started as a fork of [MongoRecord](www.yiiframework.com/extension/
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
+<a href="http://flattr.com/thing/112051/Yii-MongoDB-Suite" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
+</a>
+
 **PLEASE refer to the new FULL-Documentation [page](http://canni.github.com/YiiMongoDbSuite)**
+
+*Work-around for using the `OR` operator with this extension provided in [comments](http://www.yiiframework.com/extension/yiimongodbsuite/#c2450)*
 
 This is the 1.3.5 release
 
