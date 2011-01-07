@@ -242,6 +242,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * This method does the actual convertion to an array
 	 * Does not fire any events
 	 * @return array an associative array of the contents of this object
+	 * @since v1.3.4
 	 */
 	protected function _toArray()
 	{

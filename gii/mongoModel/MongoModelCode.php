@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @since v1.3.4
+ */
 class MongoModelCode extends CCodeModel
 {
 	public $tablePrefix;

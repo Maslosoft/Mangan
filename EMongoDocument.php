@@ -692,6 +692,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|EMongoCriteria $condition query criteria.
+	 * @since v1.3.4
 	 */
 	public function deleteByPk($pk, $criteria=null)
 	{
