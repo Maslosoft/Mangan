@@ -18,6 +18,7 @@ advanced.named-scopes
 advanced.relations
 advanced.data-provider
 advanced.write-flags
+advanced.partial-update
 advanced.gridfs
 advanced.soft-models
 gii
