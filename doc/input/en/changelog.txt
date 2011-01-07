@@ -3,11 +3,15 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 ---
 
-This is the 1.3.5 release
+This is the **1.3.5** release
 
 New features in 1.3.5
 
-// TODO
+- A lot of BUGs fixed, improved code readability, better in-code documentation, better exception handling
+- Added support for PHP Mongo driver versions below 1.0.5
+- **Ability to do *Extreme Efficent* document partial updates, that make use of MongoDB `$set` operator/feature**
+- Support for partial loading of documents from DB
+- Improved EEmbeddedArraysBehavior class implementation, with cache support
 
 New features in 1.3.4
 
