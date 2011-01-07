@@ -6,28 +6,31 @@
  *
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2010 CleverIT http://www.cleverit.com.pl
+ * @copyright	2011 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.3.4
  */
 
 /**
  * EmongoSoftDocument cass
+ * @since v1.3.4
  */
 abstract class EMongoSoftDocument extends EMongoDocument
 {
 	/**
 	 * Array that holds initialized soft attributes
 	 * @var array $softAttributes
+	 * @since v1.3.4
 	 */
 	protected $softAttributes = array();
 
 	/**
 	 * Adds soft attributes support to magic __get method
 	 * @see EMongoEmbeddedDocument::__get()
+	 * @since v1.3.4
 	 */
 	public function __get($name)
 	{
@@ -42,6 +45,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Adds soft attributes support to magic __set method
 	 * @see EMongoEmbeddedDocument::__set()
+	 * @since v1.3.4
 	 */
 	public function __set($name, $value)
 	{
@@ -56,6 +60,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Adds soft attributes support to magic __isset method
 	 * @see EMongoEmbeddedDocument::__isset()
+	 * @since v1.3.4
 	 */
 	public function __isset($name)
 	{
@@ -68,6 +73,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Adds soft attributes support to magic __unset method
 	 * @see CComponent::__unset()
+	 * @since v1.3.4
 	 */
 	public function __unset($name)
 	{
@@ -84,6 +90,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Initializes a soft attribute, before it can be used
 	 * @param string $name attribute name
+	 * @since v1.3.4
 	 */
 	public function initSoftAttribute($name)
 	{
@@ -94,6 +101,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Initializes a soft attributes, from given list, before they can be used
 	 * @param mixed $attributes attribute names list
+	 * @since v1.3.4
 	 */
 	public function initSoftAttributes($attributes)
 	{
@@ -104,6 +112,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Return the list of attribute names of this model, with respect of initialized soft attributes
 	 * @see EMongoEmbeddedDocument::attributeNames()
+	 * @since v1.3.4
 	 */
 	public function attributeNames()
 	{
@@ -113,6 +122,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Instantiate the model object from given document, with respect of soft attributes
 	 * @see EMongoDocument::instantiate()
+	 * @since v1.3.4
 	 */
 	protected function instantiate($attributes)
 	{
@@ -135,6 +145,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 * This method does the actual convertion to an array
 	 * Does not fire any events
 	 * @return array an associative array of the contents of this object
+	 * @since v1.3.4
 	 */
 	protected function _toArray()
 	{
@@ -147,6 +158,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	/**
 	 * Return the actual list of soft attributes being used by this model
 	 * @return array list of initialized soft attributes
+	 * @since v1.3.4
 	 */
 	public function getSoftAttributeNames()
 	{
