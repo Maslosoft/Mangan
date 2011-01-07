@@ -27,6 +27,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	/**
 	 * Cacheed values for embeddedDocuments() method vall
 	 * @var array $_embeddedConfig
+	 * @since v1.3.2
 	 */
 	protected static $_embeddedConfig = array();
 
@@ -154,6 +155,10 @@ abstract class EMongoEmbeddedDocument extends CModel
 			parent::__set($name, $value);
 	}
 
+	/**
+	 * @since v1.3.2
+	 * @see CComponent::__isset()
+	 */
 	public function __isset($name) {
 		if($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name]))
 		{
