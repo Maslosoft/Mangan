@@ -13,6 +13,7 @@
  * @version		SVN: $Revision: $
  * @category	ext
  * @package		ext.YiiMongoDbSuite
+ * @since		v1.3
  */
 
 /**
@@ -27,6 +28,7 @@
  * @version		SVN: $Revision: $
  * @category	ext
  * @package		ext.YiiMongoDbSuite
+ * @since		v1.3
  *
  */
 abstract class EMongoGridFS extends EMongoDocument
@@ -40,6 +42,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	/**
 	 * Every EMongoGridFS object has to have one
 	 * @var String $filename
+	 * @since v1.3
 	 */
 	public $filename = null; // mandatory
 
@@ -53,6 +56,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * Returns current MongoGridFS object
 	 * By default this method use {@see getCollectionName()}
 	 * @return MongoGridFS
+	 * @since v1.3
 	 */
 	public function getCollection()
 	{
@@ -65,7 +69,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	/**
 	 * Sets temporary folder, used for updates
 	 * @param string $value
-	 * @return void
+	 * @since v1.3
 	 */
 	public function setTemporaryFolder($value)
 	{
@@ -75,6 +79,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	/**
 	 * Gets temporary folder, used for updates
 	 * @return string
+	 * @since v1.3
 	 */
 	public function getTemporaryFolder()
 	{
@@ -96,6 +101,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws CException if the record is not new
+	 * @since v1.3
 	 */
 	public function insert(array $attributes=null)
 	{
@@ -151,6 +157,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @throws CDbException
 	 * @throws CException
 	 * @return boolean whether the insert success
+	 * @since v1.3
 	 */
 	public function insertWithPk($pk, array $attributes=null) {
 		if(!($pk instanceof MongoId))
@@ -208,6 +215,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
 	 * @throws CException if the record is new
+	 * @since v1.3
 	 */
 	public function update(array $attributes=null)
 	{
@@ -260,6 +268,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * This parameter is added in version 1.0.3.
 	 * @return EMongoDocument the newly created document. The class of the object is the same as the model class.
 	 * Null is returned if the input data is false.
+	 * @since v1.3
 	 */
 	public function populateRecord($document, $callAfterFind=true)
 	{
@@ -279,6 +288,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * GetSize wrapper of MongoGridFSFile function
 	 * @return integer file size
 	 * False is returned if error
+	 * @since v1.3
 	 */
 	public function getSize()
 	{
@@ -294,6 +304,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * GetFilename wrapper of MongoGridFSFile function
 	 * @return string filename
 	 * False is returned if error
+	 * @since v1.3
 	 */
 	public function getFilename()
 	{
@@ -309,6 +320,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * getBytes wrapper of MongoGridFSFile function
 	 * @return string string of bytes
 	 * False is returned if error
+	 * @since v1.3
 	 */
 	public function getBytes()
 	{
@@ -323,6 +335,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * Writes this file to the system
 	 * @param string $filename The location to which to write the file. If none is given, the stored filename will be used.
 	 * @return integer number of bytes written
+	 * @since v1.3
 	 */
 	public function write($filename=null)
 	{
@@ -339,6 +352,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|EMongoCriteria $condition query criteria.
 	 * @return array whether the delete succeeds
+	 * @since v1.3
 	 */
 	public function deleteAll($criteria=null)
 	{

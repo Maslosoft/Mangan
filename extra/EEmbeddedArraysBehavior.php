@@ -11,15 +11,19 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.0
  */
 
+/**
+ * @since v1.0
+ */
 class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 {
 	/**
 	 * Name of property witch holds array od documents
 	 *
 	 * @var string $arrayPropertyName
+	 * @since v1.0
 	 */
 	public $arrayPropertyName;
 
@@ -27,11 +31,16 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	 * Class name of doc in array
 	 *
 	 * @var string $arrayDocClassName
+	 * @since v1.0
 	 */
 	public $arrayDocClassName;
 
 	private $_cache;
 
+	/**
+	 * @since v1.0
+	 * @see CBehavior::attach()
+	 */
 	public function attach($owner)
 	{
 		parent::attach($owner);
@@ -45,12 +54,16 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 
 	/**
 	 * Event: initialize array of embded documents
+	 * @since v1.0
 	 */
 	public function afterEmbeddedDocsInit($event)
 	{
 		$this->parseExistingArray();
 	}
 
+	/**
+	 * @since v1.0
+	 */
 	private function parseExistingArray()
 	{
 		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
@@ -66,6 +79,9 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 		}
 	}
 
+	/**
+	 * @since v1.0.2
+	 */
 	public function afterValidate($event)
 	{
 		parent::afterValidate($event);

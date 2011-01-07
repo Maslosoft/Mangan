@@ -11,9 +11,12 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.2.2
  */
 
+/**
+ * @since v1.2.2
+ */
 class MongoCRUDCode extends CCodeModel
 {
 	public $model;
@@ -177,6 +180,9 @@ class MongoCRUDCode extends CCodeModel
 		return "\$form->textField(\$model,'{$name}')";
 	}
 
+	/**
+	 * @since v1.2.3
+	 */
 	public function generateInputField($modelClass,$name)
 	{
 		return "CHtml::activeTextField(\$model,'{$name}')";
