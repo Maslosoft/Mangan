@@ -177,6 +177,9 @@ class MongoCRUDCode extends CCodeModel
 		return "\$form->textField(\$model,'{$name}')";
 	}
 
+	/**
+	 * @since v1.2.3
+	 */
 	public function generateInputField($modelClass,$name)
 	{
 		return "CHtml::activeTextField(\$model,'{$name}')";
