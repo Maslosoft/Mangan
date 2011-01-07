@@ -499,6 +499,7 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 ## Resources
 
  * [Project page on GitHub](https://github.com/canni/YiiMongoDbSuite)
+ * [Report a BUG](https://github.com/canni/YiiMongoDbSuite/issues)
  * [MongoDB documentation](http://www.mongodb.org/display/DOCS/Home)
  * [On-Line version of this documentation](http://canni.github.com/YiiMongoDbSuite)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
