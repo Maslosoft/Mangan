@@ -1,15 +1,7 @@
 <?php
 
-class BasicOperationsTest extends CTestCase
+class BasicOperationsTest extends BaseDBTest
 {
-	public function setUp()
-	{
-		parent::setUp();
-		BasicOperationsModel::model()->getCollection()->remove(array(), array(
-			'justOne' => false
-		));
-	}
-
 	public function testToArray()
 	{
 		$model = new BasicOperationsModel();
