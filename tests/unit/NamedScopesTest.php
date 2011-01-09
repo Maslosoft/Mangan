@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(__FILE__).'/testModels/NamedScopesModel.php';
-
 class NamedScopesTest extends CTestCase
 {
 	public function testDefaultScope()

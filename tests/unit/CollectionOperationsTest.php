@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(__FILE__).'/testModels/BasicOperationsModel.php';
-
 class CollectionOperationsTest extends CTestCase
 {
 	public function testGetSetCollection()
