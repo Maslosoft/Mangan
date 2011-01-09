@@ -1,3 +1,5 @@
+This project testing suite is located in project [canni/YiiMongoDbSuite-testingApp](https://github.com/canni/YiiMongoDbSuite-testingApp)
+on Github
 
 These tests are designed to be executed inside of an testing application,
 you may use the [provided one](https://github.com/canni/YiiMongoDbSuite-testingApp) to run tests.
@@ -6,4 +8,4 @@ The canni/YiiMongoDbSuite-testingApp project on github, is dedicated to execute 
 use them inside Yours Yii application instance.
 
 You may do `git clone git://github.com/canni/YiiMongoDbSuite-testingApp.git` to pull pre-configured
-testing app and try on Your own.
+testing app with test suite, and try on Your own.
