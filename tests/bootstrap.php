@@ -14,8 +14,10 @@
  *
  */
 
-$yiit=dirname(__FILE__).'/../vendor/yii/framework/yiit.php';
-$config=dirname(__FILE__).'/../config/test.php';
+$appDir=dirname(__FILE__).'/../../..';
+
+$yiit=$appDir.'/vendor/yii/framework/yiit.php';
+$config=$appDir.'/config/test.php';
 
 require_once($yiit);
 
