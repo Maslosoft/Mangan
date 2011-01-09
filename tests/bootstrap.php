@@ -21,4 +21,7 @@ $config=$appDir.'/config/test.php';
 
 require_once($yiit);
 
+Yii::setPathOfAlias('testModels', dirname(__FILE__).'/unit/testModels');
+Yii::import('testModels.*');
+
 Yii::createWebApplication($config);
