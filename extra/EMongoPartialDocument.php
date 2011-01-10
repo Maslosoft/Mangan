@@ -114,7 +114,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 		$loadedFields = array_keys($attributes);
 
-		if(count($unloadedFields) < count($model->attributeNames()))
+		if(count($loadedFields) < count($model->attributeNames()))
 		{
 			$model->_isPartial		= true;
 			$model->_loadedFields	= $loadedFields;
