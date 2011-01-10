@@ -17,7 +17,7 @@
 /**
  * EMongoDocument
  *
- * @property MongoDB $db read-only
+ * @property-read MongoDB $db
  * @since v1.0
  */
 abstract class EMongoDocument extends EMongoEmbeddedDocument
