@@ -58,6 +58,30 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		);
 	}
 
+	public function loadAttributes($attributes = array())
+	{
+		$document = $this->getCollection()->findOne(
+			array('_id' => $this->_id),
+			$attributes
+		);
+
+		unset($document['_id']);
+
+		$attributesSum = array_merge($this->_loadedFields, array_keys($document));
+
+		if(count($attributesSum) === count($this->attributeNames()))
+		{
+			$this->_isPartial		= false;
+			$this->_loadedFields	= null;
+		}
+		else
+		{
+			$this->_loadedFields = $attributesSum;
+		}
+
+		$this->setAttributes($document, false);
+	}
+
 	/**
 	 * Updates the row represented by this active record.
 	 * All loaded attributes will be saved to the database.
