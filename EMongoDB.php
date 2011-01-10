@@ -6,18 +6,19 @@
  *
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2010 CleverIT http://www.cleverit.com.pl
+ * @copyright	2011 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since v1.0
  */
 
 /**
  * EMongoDB
  *
  * This is merge work of tyohan, Alexander Makarov and mine
+ * @since v1.0
  */
 class EMongoDB extends CApplicationComponent
 {
@@ -28,6 +29,7 @@ class EMongoDB extends CApplicationComponent
      * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
      *
      * @example mongodb://localhost:27017
+     * @since v1.0
      */
     public $connectionString;
 
@@ -35,16 +37,19 @@ class EMongoDB extends CApplicationComponent
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
 	 * effective when the EMongoDB object is used as an application component.
+	 * @since v1.0
 	 */
 	public $autoConnect = true;
 
 	/**
      * @var false|string $persistentConnection false for non-persistent connection, string for persistent connection id to use
+     * @since v1.0
      */
     public $persistentConnection = false;
 
     /**
      * @var string $dbName name of the Mongo database to use
+     * @since v1.0
      */
     public $dbName = null;
 
@@ -65,6 +70,7 @@ class EMongoDB extends CApplicationComponent
 	 * MongoDB default value for this flag is: FALSE.
 	 *
 	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections (global scope)
+	 * @since v1.0
 	 */
 	public $fsyncFlag = false;
 
@@ -104,6 +110,7 @@ class EMongoDB extends CApplicationComponent
 
 	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
+	 * @since v1.0
 	 */
 	public function connect()
 	{
@@ -116,6 +123,7 @@ class EMongoDB extends CApplicationComponent
 	 *
 	 * @return Mongo
 	 * @throws EMongoException
+	 * @since v1.0
 	 */
 	public function getConnection()
 	{
@@ -156,6 +164,7 @@ class EMongoDB extends CApplicationComponent
 	 * Set the connection
 	 *
 	 * @param Mongo $connection
+	 * @since v1.0
 	 */
 	public function setConnection(Mongo $connection)
 	{
@@ -164,6 +173,7 @@ class EMongoDB extends CApplicationComponent
 
 	/**
 	 * Get MongoDB instance
+	 * @since v1.0
 	 */
 	public function getDbInstance()
 	{
@@ -177,6 +187,7 @@ class EMongoDB extends CApplicationComponent
 	 * Set MongoDB instance
 	 * Enter description here ...
 	 * @param string $name
+	 * @since v1.0
 	 */
 	public function setDbInstance($name)
 	{
@@ -186,6 +197,7 @@ class EMongoDB extends CApplicationComponent
 	/**
 	 * Closes the currently active Mongo connection.
 	 * It does nothing if the connection is already closed.
+	 * @since v1.0
 	 */
 	protected function close(){
         if($this->_mongoConnection!==null){
@@ -197,6 +209,7 @@ class EMongoDB extends CApplicationComponent
 
 	/**
 	 * If we have don't use presist connection, close it
+	 * @since v1.0
 	 */
 	public function __destruct(){
         if(!$this->persistentConnection){
@@ -206,9 +219,10 @@ class EMongoDB extends CApplicationComponent
 
     /**
      * Drop the current DB
+     * @since v1.0
      */
     public function dropDb()
     {
-    	$this->getDb()->drop();
+    	$this->_mongoDb->drop();
     }
 }

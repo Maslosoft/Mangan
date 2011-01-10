@@ -6,12 +6,12 @@
  *
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2010 CleverIT http://www.cleverit.com.pl
+ * @copyright	2011 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.0
  */
 
 /**
@@ -23,18 +23,20 @@
  * specify various query options, such as conditions, sorting, pagination, etc.
  *
  * @author canni
- *
+ * @since v1.0
  */
 class EMongoDocumentDataProvider extends CDataProvider
 {
 	/**
 	 * @var string the name of key field. Defaults to '_id', as a mongo default document primary key.
+	 * @since v1.0
 	 */
 	public $keyField;
 
 	/**
 	 * @var string the primary ActiveRecord class name. The {@link getData()} method
 	 * will return a list of objects of this class.
+	 * @since v1.0
 	 */
 	public $modelClass;
 
@@ -42,6 +44,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * @var EMongoRecord the AR finder instance (e.g. <code>Post::model()</code>).
 	 * This property can be set by passing the finder instance as the first parameter
 	 * to the constructor.
+	 * @since v1.0
 	 */
 	public $model;
 
@@ -52,6 +55,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * @param mixed $modelClass the model class (e.g. 'Post') or the model finder instance
 	 * (e.g. <code>Post::model()</code>, <code>Post::model()->published()</code>).
 	 * @param array $config configuration (name=>value) to be applied as the initial property values of this class.
+	 * @since v1.0
 	 */
 	public function __construct($modelClass, $config = array())
 	{
@@ -89,6 +93,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	/**
 	 * Returns the criteria.
 	 * @return array the query criteria
+	 * @since v1.0
 	 */
 	public function getCriteria()
 	{
@@ -98,6 +103,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	/**
 	 * Sets the query criteria.
 	 * @param array $value the query criteria. Array representing the MongoDB query criteria.
+	 * @since v1.0
 	 */
 	public function setCriteria($criteria)
 	{
@@ -110,6 +116,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	/**
 	 * Fetches the data from the persistent data storage.
 	 * @return array list of data items
+	 * @since v1.0
 	 */
 	protected function fetchData()
 	{
@@ -137,6 +144,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	/**
 	 * Fetches the data item keys from the persistent data storage.
 	 * @return array list of data item keys.
+	 * @since v1.0
 	 */
 	protected function fetchKeys()
 	{
@@ -151,6 +159,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	/**
 	 * Calculates the total number of data items.
 	 * @return integer the total number of data items.
+	 * @since v1.0
 	 */
 	public function calculateTotalItemCount()
 	{
@@ -161,6 +170,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * Converts the "ORDER BY" clause into an array representing the sorting directions.
 	 * @param string $order the "ORDER BY" clause.
 	 * @return array the sorting directions (field name => whether it is descending sort)
+	 * @since v1.0
 	 */
 	protected function getSortDirections($order)
 	{

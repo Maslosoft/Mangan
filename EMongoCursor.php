@@ -7,7 +7,7 @@
  * @author		Nagy Attila Gábor <nagy.attila.gabor@gmail.com>
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2010 CleverIT http://www.cleverit.com.pl
+ * @copyright	2011 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
@@ -20,17 +20,20 @@
  *
  * Cursor object, that behaves much like the MongoCursor,
  * but this one returns instantiated objects
+ * @since v1.3.4
  */
 class EMongoCursor
 implements Iterator, Countable
 {
 	/**
 	 * @var MongoCursor $_cursor the MongoCursor returned by the query
+	 * @since v1.3.4
 	 */
 	protected $_cursor;
 
 	/**
 	 * @var EMongoDocument $_model the model used for instantiating objects
+	 * @since v1.3.4
 	 */
 	protected $_model;
 
@@ -39,6 +42,7 @@ implements Iterator, Countable
 	 *
 	 * @param MongoCursor $cursor the cursor returned by the query
 	 * @param EMongoDocument $model the model for instantiating objects
+	 * @since v1.3.4
 	 */
 	public function __construct(MongoCursor $cursor, EMongoDocument $model)
 	{
@@ -50,6 +54,7 @@ implements Iterator, Countable
 	 * Return MongoCursor for additional tuning
 	 *
 	 * @return MongoCursor the cursor used for this query
+	 * @since v1.3.4
 	 */
 	public function getCursor()
 	{
@@ -59,6 +64,7 @@ implements Iterator, Countable
 	/**
 	 * Return the current element
 	 * @return EMongoDocument
+	 * @since v1.3.4
 	 */
 	public function current()
 	{
@@ -72,6 +78,7 @@ implements Iterator, Countable
 	/**
 	 * Return the key of the current element
 	 * @return scalar
+	 * @since v1.3.4
 	 */
 	public function key()
 	{
@@ -81,6 +88,7 @@ implements Iterator, Countable
 	/**
 	 * Move forward to next element
 	 * @return void
+	 * @since v1.3.4
 	 */
 	public function next()
 	{
@@ -90,6 +98,7 @@ implements Iterator, Countable
 	/**
 	 * Rewind the Iterator to the first element
 	 * @return void
+	 * @since v1.3.4
 	 */
 	public function rewind()
 	{
@@ -99,6 +108,7 @@ implements Iterator, Countable
 	/**
 	 * Checks if current position is valid
 	 * @return boolean
+	 * @since v1.3.4
 	 */
 	public function valid()
 	{
@@ -110,6 +120,7 @@ implements Iterator, Countable
 	 * {@see http://www.php.net/manual/en/mongocursor.count.php}
 	 * @param boolean $foundOnly default FALSE
 	 * @return integer count of documents found
+	 * @since v1.3.4
 	 */
 	public function count($foundOnly = false)
 	{
@@ -120,6 +131,7 @@ implements Iterator, Countable
 	 * Apply a limit to this cursor
 	 * {@see http://www.php.net/manual/en/mongocursor.limit.php}
 	 * @param integer $limit new limit
+	 * @since v1.3.4
 	 */
 	public function limit($limit)
 	{
@@ -130,6 +142,7 @@ implements Iterator, Countable
 	 * Skip a $offset records
 	 * {@see http://www.php.net/manual/en/mongocursor.skip.php}
 	 * @param integer $skip new skip
+	 * @since v1.3.4
 	 */
 	public function offset($offset)
 	{
@@ -140,6 +153,7 @@ implements Iterator, Countable
 	 * Apply sorting directives
 	 * {@see http://www.php.net/manual/en/mongocursor.sort.php}
 	 * @param array $sort sorting directives
+	 * @since v1.3.4
 	 */
 	public function sort(array $fields)
 	{
