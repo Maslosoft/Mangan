@@ -5,7 +5,8 @@
  * PHP version 5.2+
  *
  * @author		Nagy Attila Gabor
- * @copyright	2010 CleverIT http://www.cleverit.com.pl
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @copyright	2011 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
@@ -16,21 +17,22 @@
 /**
  * EMongoPartialDocument
  *
+ * @property-read boolean $isPartial
  */
 abstract class EMongoPartialDocument extends EMongoDocument
 {
 	protected $_dirtyFields = array(); // Fields that have been loaded and thus needs update
-	protected $_isPartial = false; // Wether the document has been partially loaded
+	protected $_isPartial = false; // Whatever the document has been partially loaded
 
 	/**
 	 * Returns if this document is only partially loaded
 	 * @return boolean true if the document is partially loaded
 	 */
-	public function isPartial()
+	public function getIsPartial()
 	{
 		return $this->_isPartial;
 	}
-	
+
 	/**
 	 * Finds a single EMongoDocument with the specified condition.
 	 * @param array|EMongoCriteria $condition query criteria.
@@ -80,7 +82,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 			}
 		}
 	}
-	
+
 	/**
 	 * Updates the row represented by this active record.
 	 * All loaded attributes will be saved to the database.
