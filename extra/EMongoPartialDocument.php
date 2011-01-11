@@ -58,6 +58,28 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		);
 	}
 
+	/**
+	 * Check if this attribute is loaded, and if not, then return null
+	 */
+	public function __get($name)
+	{
+		if($this->hasEmbeddedDocuments() &&
+		   isset(self::$_embeddedConfig[get_class($this)][$name]) && 
+		   $this->_isPartial && 
+		   !in_array($name, $this->_loadedFields)) 
+		{
+			return null;
+		}
+		else
+			return parent::__get($name);
+	}
+
+	/**
+	 * Loads additional, previously unloaded attributes
+	 * to this document.
+	 * @param array $attributes attributes to be loaded
+	 * @retrun boolean wether the load was successfull
+	 */
 	public function loadAttributes($attributes = array())
 	{
 		$document = $this->getCollection()->findOne(
@@ -80,6 +102,8 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		}
 
 		$this->setAttributes($document, false);
+
+		return true;
 	}
 
 	/**
@@ -101,7 +125,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	{
 		if($this->_isPartial)
 		{
-			$attributes = count($attributes) > 0 ? array_intersect($attributes, $this->_loadedFields) : $attributes;
+			$attributes = count($attributes) > 0 ? array_intersect($attributes, $this->_loadedFields) : array_diff($this->_loadedFields, array('_id'));
 			return parent::update($attributes, true);
 		}
 
