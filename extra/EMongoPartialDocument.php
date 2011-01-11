@@ -58,6 +58,12 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		);
 	}
 
+	/**
+	 * Loads additional, previously unloaded attributes
+	 * to this document.
+	 * @param array $attributes attributes to be loaded
+	 * @retrun boolean wether the load was successfull
+	 */
 	public function loadAttributes($attributes = array())
 	{
 		$document = $this->getCollection()->findOne(
@@ -80,6 +86,8 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		}
 
 		$this->setAttributes($document, false);
+
+		return true;
 	}
 
 	/**
