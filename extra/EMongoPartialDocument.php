@@ -24,15 +24,15 @@
 abstract class EMongoPartialDocument extends EMongoDocument
 {
 	protected $_loadedFields	= array();	// Fields that have not been loaded from DB
-	protected $_isPartial		= false;	// Whatever the document has been partially loaded
+	protected $_partial		= false;	// Whatever the document has been partially loaded
 
 	/**
 	 * Returns if this document is only partially loaded
 	 * @return boolean true if the document is partially loaded
 	 */
-	public function getIsPartial()
+	public function isPartial()
 	{
-		return $this->_isPartial;
+		return $this->_partial;
 	}
 
 	/**
@@ -63,11 +63,12 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 */
 	public function __get($name)
 	{
-		if($this->hasEmbeddedDocuments() &&
-		   isset(self::$_embeddedConfig[get_class($this)][$name]) && 
-		   $this->_isPartial && 
-		   !in_array($name, $this->_loadedFields)) 
-		{
+		if(
+			$this->hasEmbeddedDocuments() &&
+			isset(self::$_embeddedConfig[get_class($this)][$name]) &&
+			$this->_isPartial &&
+			!in_array($name, $this->_loadedFields)
+		){
 			return null;
 		}
 		else
@@ -78,7 +79,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 * Loads additional, previously unloaded attributes
 	 * to this document.
 	 * @param array $attributes attributes to be loaded
-	 * @retrun boolean wether the load was successfull
+	 * @return boolean wether the load was successfull
 	 */
 	public function loadAttributes($attributes = array())
 	{
@@ -93,7 +94,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 		if(count($attributesSum) === count($this->attributeNames()))
 		{
-			$this->_isPartial		= false;
+			$this->_partial			= false;
 			$this->_loadedFields	= null;
 		}
 		else
@@ -123,7 +124,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 */
 	public function update(array $attributes=null, $modify = false)
 	{
-		if($this->_isPartial)
+		if($this->_partial)
 		{
 			$attributes = count($attributes) > 0 ? array_intersect($attributes, $this->_loadedFields) : array_diff($this->_loadedFields, array('_id'));
 			return parent::update($attributes, true);
