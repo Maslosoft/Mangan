@@ -66,7 +66,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		if(
 			$this->hasEmbeddedDocuments() &&
 			isset(self::$_embeddedConfig[get_class($this)][$name]) &&
-			$this->_isPartial &&
+			$this->_partial &&
 			!in_array($name, $this->_loadedFields)
 		){
 			return null;
@@ -141,7 +141,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 		if(count($loadedFields) < count($model->attributeNames()))
 		{
-			$model->_isPartial		= true;
+			$model->_partial		= true;
 			$model->_loadedFields	= $loadedFields;
 		}
 
