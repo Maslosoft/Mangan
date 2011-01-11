@@ -51,7 +51,7 @@ class NormalClient extends Client
 	public function defaultScope()
 	{
 		return array(
-			'conditions'=>array('type'=>array('==', self::NORMAL_CLIENT)),
+			'conditions'=>array('type'=>array('==' => self::NORMAL_CLIENT)),
 		);
 	}
 
@@ -78,7 +78,7 @@ class BusinessClient extends Client
 	public function defaultScope()
 	{
 		return array(
-			'conditions'=>array('type'=>array('==', self::BUSINESS_CLIENT)),
+			'conditions'=>array('type'=>array('==' => self::BUSINESS_CLIENT)),
 		);
 	}
 
