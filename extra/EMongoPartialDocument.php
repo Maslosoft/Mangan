@@ -101,7 +101,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	{
 		if($this->_isPartial)
 		{
-			$attributes = count($attributes) > 0 ? array_intersect($attributes, $this->_loadedFields) : $attributes;
+			$attributes = count($attributes) > 0 ? array_intersect($attributes, $this->_loadedFields) : array_diff($this->_loadedFields, array('_id'));
 			return parent::update($attributes, true);
 		}
 
