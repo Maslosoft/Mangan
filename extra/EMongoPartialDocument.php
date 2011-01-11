@@ -59,6 +59,22 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	}
 
 	/**
+	 * Check if this attribute is loaded, and if not, then return null
+	 */
+	public function __get($name)
+	{
+		if($this->hasEmbeddedDocuments() &&
+		   isset(self::$_embeddedConfig[get_class($this)][$name]) && 
+		   $this->_isPartial && 
+		   !in_array($name, $this->_loadedFields)) 
+		{
+			return null;
+		}
+		else
+			return parent::__get($name);
+	}
+
+	/**
 	 * Loads additional, previously unloaded attributes
 	 * to this document.
 	 * @param array $attributes attributes to be loaded
