@@ -17,14 +17,13 @@
 /**
  * EMongoPartialDocument
  *
- * @property-read boolean $isPartial
  * @property-read array $loadedFields
  * @property-read array $unloadedFields
  */
 abstract class EMongoPartialDocument extends EMongoDocument
 {
 	protected $_loadedFields	= array();	// Fields that have not been loaded from DB
-	protected $_partial		= false;	// Whatever the document has been partially loaded
+	protected $_partial			= false;	// Whatever the document has been partially loaded
 
 	/**
 	 * Returns if this document is only partially loaded
@@ -64,9 +63,9 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	public function __get($name)
 	{
 		if(
+			$this->_partial &&
 			$this->hasEmbeddedDocuments() &&
 			isset(self::$_embeddedConfig[get_class($this)][$name]) &&
-			$this->_partial &&
 			!in_array($name, $this->_loadedFields)
 		){
 			return null;
