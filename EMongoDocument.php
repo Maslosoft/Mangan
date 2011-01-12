@@ -328,7 +328,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if($this->useCursor !== null)
 			return $this->useCursor; // We have flag set, return it
-		if(self::$_models[get_class($this)]->useCursor !== null)
+		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->useCursor !== null))
 			return self::$_models[get_class($this)]->useCursor; // Model have flag set, return it
 		return $this->getMongoDBComponent()->useCursor;
 	}
