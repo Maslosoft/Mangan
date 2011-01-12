@@ -153,7 +153,6 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		$rows=array();
 		foreach(require($fileName) as $alias=>$row)
 		{
-			//TODO: should handle embedded documents need to be checked
 			$this->getDbConnection()->{$collectionName}->save($row);
 			$rows[$alias]=$row;
 		}
