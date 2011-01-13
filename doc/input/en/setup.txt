@@ -21,7 +21,7 @@ Add the following to the file:
 		'connectionString'	=> 'mongodb://localhost',
 		'dbName'			=> 'myDatabaseName',
 		'fsyncFlag'			=> false,
-		'safe'				=> false,
+		'safeFlag'			=> false,
 		'useCursor'			=> false,
 	),
 	// ...
