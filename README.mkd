@@ -11,7 +11,7 @@ to fix some major bugs, and add full featured suite for [MongoDB](http://www.mon
 
 *Work-around for using the `OR` operator with this extension provided in [comments](http://www.yiiframework.com/extension/yiimongodbsuite/#c2450)*
 
-This is the 1.3.5 release
+This is the 1.3.6 release
 
 ## Added in this release:
 
