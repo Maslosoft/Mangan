@@ -2,11 +2,12 @@
 /**
  * EMongoDbFixtureManager
  *
- * @author    Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright 2010-2011 Ibitux
- * @license   http://www.yiiframework.com/license/ BSD license
- * @category  tests
- * @package   ext.YiiMongoDbSuite.tests
+ * @author		Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright	2010-2011 Ibitux
+ * @license		http://www.yiiframework.com/license/ BSD license
+ * @category	tests
+ * @package		ext.YiiMongoDbSuite.tests
+ * @since		v1.3.6
  */
 
 /**
@@ -32,11 +33,12 @@
  * the database. If this file is not found, all available fixtures will be loaded
  * into the database.
  *
- * @author    Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright 2010-2011 Ibitux
- * @license   http://www.yiiframework.com/license/ BSD license
- * @category  tests
- * @package   ext.YiiMongoDbSuite.tests
+ * @author		Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright	2010-2011 Ibitux
+ * @license		http://www.yiiframework.com/license/ BSD license
+ * @category	tests
+ * @package		ext.YiiMongoDbSuite.tests
+ * @since		v1.3.6
  */
 class EMongoDbFixtureManager extends CApplicationComponent
 {

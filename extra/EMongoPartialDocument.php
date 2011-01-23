@@ -11,7 +11,7 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since		v1.3.6
  */
 
 /**
@@ -19,6 +19,7 @@
  *
  * @property-read array $loadedFields
  * @property-read array $unloadedFields
+ * @since	v1.3.6
  */
 abstract class EMongoPartialDocument extends EMongoDocument
 {
