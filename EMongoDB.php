@@ -223,6 +223,6 @@ class EMongoDB extends CApplicationComponent
      */
     public function dropDb()
     {
-    	$this->_mongoDb->drop();
+		$this->_mongoDb->drop();
     }
 }
