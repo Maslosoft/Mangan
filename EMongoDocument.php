@@ -692,7 +692,31 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			throw new CException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
 	}
+	/**
+	 * Atomic, in-place update method.
+	 *
+	 * @param EMongoModifier $modifier updating rules to apply
+	 * @param EMongoCriteria $criteria condition to limit updating rules
+	 * @return bool
+	 */
+	public function updateAll($modifier, $criteria=null) {
+		Yii::trace(get_class($this).'.updateAll()','ext.MongoDb.EMongoDocument');
 
+		$this->applyScopes($criteria);
+		if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag(),
+				'upsert'=>false,
+				'multiple'=>true
+			));
+		else
+			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
+				'upsert'=>false,
+				'multiple'=>true
+			));
+		return $result;
+	}
 	/**
 	 * Deletes the row corresponding to this EMongoDocument.
 	 * @return boolean whether the deletion is successful.
