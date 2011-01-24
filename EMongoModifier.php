@@ -28,7 +28,7 @@
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
  * @since		xxx
  */
-class EMongoModifier //extends CComponent
+class EMongoModifier extends CComponent
 {
 	/**
 	 * @since xxx
