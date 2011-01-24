@@ -158,7 +158,7 @@ class EMongoCriteria extends CComponent
 
 		$opTable = array_values(self::$operators);
 
-		foreach($criteria->_conditions as $fieldName=>$conds)
+		foreach($criteria->getConditions() as $fieldName=>$conds)
 		{
 			if(
 				is_array($conds) &&
@@ -181,14 +181,14 @@ class EMongoCriteria extends CComponent
 				$this->_conditions[$fieldName] = $conds;
 		}
 
-		if(!empty($criteria->_limit))
-			$this->_limit	= $criteria->_limit;
-		if(!empty($criteria->_offset))
-			$this->_offset	= $criteria->_offset;
-		if(!empty($criteria->_sort))
-			$this->_sort	= array_merge($this->_sort, $criteria->_sort);
-		if(!empty($criteria->_select))
-			$this->_select	= array_merge($this->_select, $criteria->_select);
+		if(!empty($criteria->getLimit()))
+			$this->_limit	= $criteria->getLimit();
+		if(!empty($criteria->getOffset()))
+			$this->_offset	= $criteria->getOffset();
+		if(!empty($criteria->getSort()))
+			$this->_sort	= array_merge($this->_sort, $criteria->getSort());
+		if(!empty($criteria->getSelect()))
+			$this->_select	= array_merge($this->_select, $criteria->getSelect());
 
 		return $this;
 	}
