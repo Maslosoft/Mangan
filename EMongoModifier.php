@@ -141,5 +141,16 @@ class EMongoModifier extends CComponent
 		$this->_fields[$fieldName] = array(self::$modifiers[$modifier]=>$value);
 		return $this;
 	}
+	/**
+	 * Check if we have modifiers to apply
+	 * @return boolean
+	 */
+	public function getCanApply() {
+		if(count($this->_fields) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 

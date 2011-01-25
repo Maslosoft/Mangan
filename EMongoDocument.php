@@ -701,21 +701,25 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function updateAll($modifier, $criteria=null) {
 		Yii::trace(get_class($this).'.updateAll()','ext.MongoDb.EMongoDocument');
-
-		$this->applyScopes($criteria);
-		if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
-				'fsync'=>$this->getFsyncFlag(),
-				'safe'=>$this->getSafeFlag(),
-				'upsert'=>false,
-				'multiple'=>true
-			));
-		else
-			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
-				'upsert'=>false,
-				'multiple'=>true
-			));
-		return $result;
+		if($modifier->canApply === true) 
+		{
+			$this->applyScopes($criteria);
+			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
+					'fsync'=>$this->getFsyncFlag(),
+					'safe'=>$this->getSafeFlag(),
+					'upsert'=>false,
+					'multiple'=>true
+				));
+			else
+				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
+					'upsert'=>false,
+					'multiple'=>true
+				));
+			return $result;
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * Deletes the row corresponding to this EMongoDocument.
