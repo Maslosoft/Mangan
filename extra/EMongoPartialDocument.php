@@ -42,7 +42,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 */
 	public function getLoadedFields()
 	{
-		return $this->_loadedFields;
+		return $this->_partial ? $this->_loadedFields : array();
 	}
 
 	/**
@@ -52,10 +52,10 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 */
 	public function getUnloadedFields()
 	{
-		return array_diff(
+		return $this->_partial ? array_diff(
 			$this->_loadedFields,
 			$this->attributeNames()
-		);
+		) : array();
 	}
 
 	/**
@@ -73,6 +73,28 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		}
 		else
 			return parent::__get($name);
+	}
+
+	/**
+	 * If user explicitly sets the unloaded embedded field, consider it as an loaded one, if model is partially loaded
+	 * @see EMongoEmbeddedDocument::__set()
+	 */
+	public function __set($name, $value)
+	{
+		$return = parent::__set($name, $value);
+
+		if($this->_partial && !in_array($name, $this->_loadedFields))
+		{
+			$this->_loadedFields[] = $name;
+
+			if(count($this->_loadedFields) === count($this->attributeNames()))
+			{
+				$this->_partial		= false;
+				$this->loadedFields	= null;
+			}
+		}
+
+		return $return;
 	}
 
 	/**
