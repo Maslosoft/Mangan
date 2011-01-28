@@ -1,10 +1,9 @@
 Title:  Massive Partial Updates
-ShortTitle: Massive Partial updates
 Author: Philippe Gaultier <pgaultier@gmail.com>
 
 ---
 
-Since the `v1.x.x` You can perform *partial updates* of multiple documents.
+Since the `v1.3.6` You can perform *partial updates* of multiple documents.
 
 ~~~
 [php]

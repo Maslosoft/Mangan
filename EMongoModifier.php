@@ -24,12 +24,12 @@
  * For modifiers list {@see EMongoModifier::$modifiers}
  *
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @since		xxx
+ * @since		v1.3.6
  */
 class EMongoModifier extends CComponent
 {
 	/**
-	 * @since xxx
+	 * @since v1.3.6
 	 * @var array $modifiers supported modifiers
 	 */
 	public static $modifiers = array(
@@ -66,7 +66,7 @@ class EMongoModifier extends CComponent
 	 * );
 	 * </PRE>
 	 * @param array $modifier basic definition of modifiers
-	 * @since xxx
+	 * @since v1.3.6
 	 */
 	public function __construct($modifier=null)
 	{
