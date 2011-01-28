@@ -695,13 +695,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Atomic, in-place update method.
 	 *
+	 * @since v1.3.6
 	 * @param EMongoModifier $modifier updating rules to apply
 	 * @param EMongoCriteria $criteria condition to limit updating rules
 	 * @return bool
 	 */
 	public function updateAll($modifier, $criteria=null) {
 		Yii::trace(get_class($this).'.updateAll()','ext.MongoDb.EMongoDocument');
-		if($modifier->canApply === true) 
+		if($modifier->canApply === true)
 		{
 			$this->applyScopes($criteria);
 			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
