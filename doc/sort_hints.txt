@@ -19,6 +19,7 @@ advanced.relations
 advanced.data-provider
 advanced.write-flags
 advanced.partial-update
+advanced.partial-batch-update
 advanced.gridfs
 advanced.soft-models
 gii

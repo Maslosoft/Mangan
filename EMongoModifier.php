@@ -18,9 +18,7 @@
  *
  * This class is a helper for building MongoDB atomic updates
  *
- * 1. fieldName call syntax
- * $criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
- * 2. addCond method
+ * 1. addCond method
  * $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
  *
  * For modifiers list {@see EMongoModifier::$modifiers}
