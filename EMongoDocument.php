@@ -392,7 +392,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			{
 				$indexes[$index['name']] = array(
 					'key'=>$index['key'],
-					'unique'=>$index['unique'],
+					'unique'=>isset($index['unique']) ? $index['unique'] : false,
 				);
 			}
 			self::$_indexes[$this->getCollectionName()] = $indexes;
