@@ -663,16 +663,19 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			}
 
 			if($modify)
+			{
+				if(isset($rawData['_id']) === true)
+					unset($rawData['_id']);
 				$result = $this->getCollection()->update(
 					array('_id' => $this->_id),
 					array('$set' => $rawData),
 					array(
 						'fsync'=>$this->getFsyncFlag(),
-						'safe'=>$this->getSafeFlag()
+						'safe'=>$this->getSafeFlag(),
+						'multiple'=>false
 					)
 				);
-			else
-			{
+			} else {
 				if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
 					$result = $this->getCollection()->save($rawData, array(
 						'fsync'=>$this->getFsyncFlag(),
