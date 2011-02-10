@@ -93,7 +93,7 @@ class EMongoModifier extends CComponent
 		{
 			foreach($rule as $operator=>$value)
 			{
-				if(is_array($modifier[$operator]))
+				if(isset($modifier[$operator]) && is_array($modifier[$operator]))
 				{
 					$modifier[$operator] = array_merge($modifier[$operator], array($fieldName=>$value));
 				} else {
