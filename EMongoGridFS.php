@@ -47,12 +47,6 @@ abstract class EMongoGridFS extends EMongoDocument
 	public $filename = null; // mandatory
 
 	/**
-	 * Indicates the temporary folder where we will save updated files to ensure we dont loose data
-	 * @var string $_temporaryFolder
-	 */
-	private $_temporaryFolder = null;
-
-	/**
 	 * Returns current MongoGridFS object
 	 * By default this method use {@see getCollectionName()}
 	 * @return MongoGridFS
@@ -64,30 +58,6 @@ abstract class EMongoGridFS extends EMongoDocument
 			self::$_collections[$this->getCollectionName()] = $this->getDb()->getGridFS($this->getCollectionName());
 
 		return self::$_collections[$this->getCollectionName()];
-	}
-
-	/**
-	 * Sets temporary folder, used for updates
-	 * @param string $value
-	 * @since v1.3
-	 */
-	public function setTemporaryFolder($value)
-	{
-		$this->_temporaryFolder = rtrim($value, DIRECTORY_SEPARATOR);
-	}
-
-	/**
-	 * Gets temporary folder, used for updates
-	 * @return string
-	 * @since v1.3
-	 */
-	public function getTemporaryFolder()
-	{
-		if($this->_temporaryFolder !== null)
-			return $this->_temporaryFolder;
-		if(self::$_models[get_class($this)]->_temporaryFolder !== null)
-			return self::$_models[get_class($this)]->_temporaryFolder;
-		return $this->getMongoDBComponent()->gridFStemporaryFolder;
 	}
 
 	/**
@@ -223,41 +193,19 @@ abstract class EMongoGridFS extends EMongoDocument
 		if($this->getIsNewRecord())
 			throw new CDbException(Yii::t('yii','The EMongoDocument cannot be updated because it is new.'));
 
-		if($this->getTemporaryFolder() === null)
-			Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'() be careful, you are updating without safe mode, please enter your temporary folder', 'ext.MongoDb.EMongoGridFS');
-		else
-			$this->write($this->getTemporaryFolder().$this->getFilename());
-
-		//keep old values
-		$id = $this->_id;
-		$filename = $this->getFilename();
-		$gridFSFile = $this->_gridFSFile;
-
-		if($this->deleteByPk($id) !== false)
-		{
-			$result =  $this->insertWithPk($this->_id, $attributes);
-			if($result === true)
-				return true;
-			else
+		if(is_file($this->filename) === true) {
+			if($this->deleteByPk($this->_id) !== false)
 			{
-				if($this->getTemporaryFolder() !== false)
-				{
-					//recover old file
-					$this->_gridFSFile = $gridFSFile;
-					$this->filename = $filename;
-					$this->insertWithPk($id, $attributes);
-				}
+				$result =  $this->insertWithPk($this->_id, $attributes);
+				if($result === true)
+					return true;
 				else
-					throw new CDbException(Yii::t('yii','Unable to update MongoGridFSFile.'));
-
-				return false;
+					return false;
 			}
+		} else {
+			return parent::update($attributes, true);
 		}
-		else
-			throw new CDbException(Yii::t('yii','Unable to delete old MongoGridFSFile.'));
-		return false;
 	}
-
 
 	/**
 	 * Creates an EMongoGridFS with the given attributes.
