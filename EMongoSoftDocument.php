@@ -78,11 +78,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	public function __unset($name)
 	{
 		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
-		{
 			unset($this->softAttributes[$name]);
-			$names = array_flip($this->_attributeNames);
-			unset($this->_attributeNames[$names[$name]]);
-		}
 		else
 			parent::__unset($name);
 	}
