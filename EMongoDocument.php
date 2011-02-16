@@ -843,7 +843,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		if($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
-
 			$cursor = $this->getCollection()->find($criteria->getConditions());
 
 			if($criteria->getSort() !== null)
@@ -1281,7 +1280,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		$this->setDbCriteria($criteria);
 
-		return $this;
+		return new EMongoDocumentDataProvider($this);
 	}
 
 	/**
