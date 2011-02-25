@@ -1,6 +1,6 @@
 <?php
 /**
- * EMongoException.php
+ * MongocrudGenerator.php
  *
  * PHP version 5.2+
  *
@@ -11,11 +11,17 @@
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- * @since		v1.0
+ * @since		v1.2.2
  */
 
+Yii::setPathOfAlias('mongoExtRoot', realpath(implode(DIRECTORY_SEPARATOR, array(
+	dirname(__FILE__), '..', '..',
+))));
+
 /**
- * EMongoException
- * @since v1.0
+ * @since v1.2.2
  */
-class EMongoException extends CException {}
+class MongoCRUDGenerator extends CCodeGenerator
+{
+	public $codeModel = 'mongoExtRoot.gii.mongoCRUD.MongoCRUDCode';
+}
