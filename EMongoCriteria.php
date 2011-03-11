@@ -202,7 +202,7 @@ class EMongoCriteria extends CComponent
 	{
 		if(isset($parameters[0]))
 			$operatorName = strtolower($parameters[0]);
-		if(isset($parameters[1]))
+		if(isset($parameters[1]) || ($parameters[1] === null))
 			$value = $parameters[1];
 
 		if(is_numeric($operatorName))
