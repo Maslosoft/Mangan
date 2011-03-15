@@ -31,7 +31,7 @@ class User extends EMongoDocument // Notice: We extend EMongoDocument class inst
 	{
 		return array(
 			array('login, email, personal_no', 'required'),
-			array('personal_no', 'numeric', 'integerOnly' => true),
+			array('personal_no', 'numerical', 'integerOnly' => true),
 			array('email', 'email'),
 		);
 	}
@@ -49,7 +49,7 @@ class User extends EMongoDocument // Notice: We extend EMongoDocument class inst
 	 */
 	public static function model($className=__CLASS__)
 	{
-		return parent::model($classname);
+		return parent::model($className);
 	}
 }
 ~~~
