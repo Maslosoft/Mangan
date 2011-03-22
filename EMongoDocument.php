@@ -766,24 +766,19 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function deleteByPk($pk, $criteria=null)
 	{
 		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
-		if($this->beforeDelete())
-		{
-			$this->applyScopes($criteria);
-			$criteria->mergeWith($this->createPkCriteria($pk));
+		$this->applyScopes($criteria);
+		$criteria->mergeWith($this->createPkCriteria($pk));
 
-			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-				$result = $this->getCollection()->remove($criteria->getConditions(), array(
-					'justOne'=>true,
-					'fsync'=>$this->getFsyncFlag(),
-					'safe'=>$this->getSafeFlag()
-				));
-			else
-				$result = $this->getCollection()->remove($criteria->getConditions(), true);
+		if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+			$result = $this->getCollection()->remove($criteria->getConditions(), array(
+				'justOne'=>true,
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag()
+			));
+		else
+			$result = $this->getCollection()->remove($criteria->getConditions(), true);
 
-			$this->afterDelete();
-			return $result;
-		}
-		return false;
+		return $result;
 	}
 
 
