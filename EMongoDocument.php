@@ -319,13 +319,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Get value of use cursor flag
 	 *
 	 * It will return the nearest not null value in order:
+	 * - Criteria level
 	 * - Object level
 	 * - Model level
 	 * - Glopal level (always set)
 	 * @return boolean
 	 */
-	public function getUseCursor()
+	public function getUseCursor($criteria = null)
 	{
+		if($criteria !== null && $criteria->getUseCursor() !== null)
+			return $criteria->getUseCursor();
 		if($this->useCursor !== null)
 			return $this->useCursor; // We have flag set, return it
 		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->useCursor !== null))
@@ -855,7 +858,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($criteria->getSelect())
 				$cursor->fields($criteria->getSelect(true));
 
-			if($this->getUseCursor())
+			if($this->getUseCursor($criteria))
 				return new EMongoCursor($cursor, $this->model());
 			else
 				return $this->populateRecords($cursor);
