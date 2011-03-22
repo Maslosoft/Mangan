@@ -615,9 +615,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($result !== false) // strict comparison needed
 			{
 				$this->_id = $rawData['_id'];
+				$this->afterSave();
 				$this->setIsNewRecord(false);
 				$this->setScenario('update');
-				$this->afterSave();
 
 				return true;
 			}
