@@ -36,6 +36,31 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	public $arrayDocClassName;
 
 	private $_cache;
+	
+	/**
+	 * This flag shows us if we're connected to an embedded document
+	 *
+	 * @var boolean $_embeddedOwner
+	 */
+	private $_embeddedOwner;
+	
+	public function events() {
+		if (!$this->_embeddedOwner) {
+			return parent::events();
+		}
+		else {
+			// If attached to an embedded document these events are not defined
+			// and would throw an error if attached to
+			$events = parent::events();
+			unset($events['onBeforeSave']);
+			unset($events['onAfterSave']);
+			unset($events['onBeforeDelete']);
+			unset($events['onAfterDelete']);
+			unset($events['onBeforeFind']);
+			unset($events['onAfterFind']);
+			return $events;
+		}
+	}
 
 	/**
 	 * @since v1.0
@@ -43,11 +68,13 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	 */
 	public function attach($owner)
 	{
-		parent::attach($owner);
-
 		// Test if we have correct embding class
 		if(!is_subclass_of($this->arrayDocClassName, 'EMongoEmbeddedDocument'))
 			throw new CException(Yii::t('yii', get_class($testObj).' is not a child class of EMongoEmbeddedDocument!'));
+		
+		$this->_embeddedOwner = !($owner instanceof EMongoDocument);
+		
+		parent::attach($owner);
 
 		$this->parseExistingArray();
 	}
@@ -73,6 +100,16 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 			{
 				$obj = new $this->arrayDocClassName;
 				$obj->setAttributes($doc, false);
+				
+				// If any EEmbeddedArraysBehavior is attached,
+				// then we should trigger parsing of the newly set
+				// attributes
+				foreach (array_keys($obj->behaviors()) as $name) {
+					$behavior = $obj->asa($name);
+					if ($behavior instanceof EEmbeddedArraysBehavior) {
+						$behavior->parseExistingArray();
+					}
+				}
 				$arrayOfDocs[] = $obj;
 			}
 			$this->getOwner()->{$this->arrayPropertyName} = $arrayOfDocs;
