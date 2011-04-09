@@ -74,6 +74,7 @@ class EMongoCriteria extends CComponent
 	private $_conditions	= array();
 	private $_sort			= array();
 	private $_workingFields	= array();
+	private $_useCursor		= null;
 
 	/**
 	 * Constructor
@@ -135,6 +136,8 @@ class EMongoCriteria extends CComponent
 				$this->offset($criteria['offset']);
 			if(isset($criteria['sort']))
 				$this->setSort($criteria['sort']);
+			if(isset($criteria['useCursor']))
+				$this->setUseCursor($criteria['useCursor']);
 		}
 		else if($criteria instanceof EMongoCriteria)
 			$this->mergeWith($criteria);
@@ -317,6 +320,22 @@ class EMongoCriteria extends CComponent
 	public function setSort(array $sort)
 	{
 		$this->_sort = $sort;
+	}
+
+	/**
+	 * @since v1.3.7
+	 */
+	public function getUseCursor()
+	{
+		return $this->_useCursor;
+	}
+
+	/**
+	 * @since v1.3.7
+	 */
+	public function setUseCursor($useCursor)
+	{
+		$this->_useCursor = $useCursor;
 	}
 
 	/**
