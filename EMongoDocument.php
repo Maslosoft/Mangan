@@ -596,7 +596,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 			else
 				$result = $this->getCollection()->insert($rawData, CPropertyValue::ensureBoolean($this->getSafeFlag()));
 
-			if ($result !== false) // strict comparison needed {
+			if ($result !== false) // strict comparison needed
+            {
 				$this->_id = $rawData['_id'];
 				$this->setIsNewRecord(false);
 				$this->setScenario('update');
@@ -607,7 +608,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 
 			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
-		return false;
+        return false;
 	}
 
 	/**
@@ -664,7 +665,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 					$result = $this->getCollection()->save($rawData);
 			}
 
-			if ($result !== false) // strict comparison needed {
+			if ($result !== false) // strict comparison needed
+            {
 				$this->afterSave();
 
 				return true;
