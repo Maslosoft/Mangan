@@ -851,7 +851,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($criteria->getOffset() !== null)
 				$cursor->skip($criteria->getOffset());
 			if($criteria->getSelect())
-				$cursor->fields($criteria->getSelect(true));
+				$cursor->fields($criteria->getSelect());
 
 			if($this->getUseCursor($criteria))
 				return new EMongoCursor($cursor, $this->model());

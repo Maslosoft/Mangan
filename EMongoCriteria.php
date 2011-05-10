@@ -348,10 +348,9 @@ class EMongoCriteria extends CComponent
 	 *                the fields in this format
 	 * @since v1.3.1
 	 */
-	public function getSelect($forCursor = false)
+	public function getSelect()
 	{
-		if (!$forCursor) return $this->_select;
-		return array_fill_keys($this->_select, true); // PHP 5.2.0+ required!
+		return $this->_select;
 	}
 
 	/**
@@ -359,7 +358,17 @@ class EMongoCriteria extends CComponent
 	 */
 	public function setSelect(array $select)
 	{
-		$this->_select = $select;
+		$this->_select = array();
+		// Convert the select array to field=>true/false format
+		foreach ($select as $key=>$value) {
+			if (is_int($key)) {
+				$this->_select[$value] = true;
+			}
+			else
+			{
+				$this->_select[$key] = $value;
+			}
+		}
 	}
 
 	/**
@@ -388,7 +397,7 @@ class EMongoCriteria extends CComponent
 	public function select(array $fieldList=null)
 	{
 		if($fieldList!==null)
-			$this->_select = array_merge($this->_select, $fieldList);
+			$this->setSelect(array_merge($this->_select, $fieldList));
 		return $this;
 	}
 
