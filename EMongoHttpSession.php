@@ -46,7 +46,7 @@ class EMongoHttpSession extends CHttpSession
 
 	public function destroySession($id)
 	{
-		$this->_collection->remove(array('_id'=>$id, array('justOne'=>true)));
+		$this->_collection->remove(array('_id'=>$id));
 		return true;
 	}
 
