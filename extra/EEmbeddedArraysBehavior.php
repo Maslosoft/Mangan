@@ -36,14 +36,14 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	public $arrayDocClassName;
 
 	private $_cache;
-	
+
 	/**
 	 * This flag shows us if we're connected to an embedded document
 	 *
 	 * @var boolean $_embeddedOwner
 	 */
 	private $_embeddedOwner;
-	
+
 	public function events() {
 		if (!$this->_embeddedOwner) {
 			return parent::events();
@@ -70,10 +70,10 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	{
 		// Test if we have correct embding class
 		if(!is_subclass_of($this->arrayDocClassName, 'EMongoEmbeddedDocument'))
-			throw new CException(Yii::t('yii', get_class($testObj).' is not a child class of EMongoEmbeddedDocument!'));
-		
+			throw new CException(Yii::t('yii', $this->arrayDocClassName.' is not a child class of EMongoEmbeddedDocument!'));
+
 		$this->_embeddedOwner = !($owner instanceof EMongoDocument);
-		
+
 		parent::attach($owner);
 
 		$this->parseExistingArray();
@@ -101,7 +101,7 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 				$obj = new $this->arrayDocClassName;
 				$obj->setAttributes($doc, false);
 				$obj->setOwner($this->getOwner());
-				
+
 				// If any EEmbeddedArraysBehavior is attached,
 				// then we should trigger parsing of the newly set
 				// attributes
