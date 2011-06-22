@@ -5,18 +5,20 @@
  * PHP version 5.2+
  *
  * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @copyright	2010 CleverIT
+ * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright	2011 CleverIT http://www.cleverit.com.pl
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		1.3
  * @category	ext
  * @package		ext.YiiMongoDbSuite
- *
+ * @since v1.0
  */
 
 /**
  * EMongoDB
  *
  * This is merge work of tyohan, Alexander Makarov and mine
+ * @since v1.0
  */
 class EMongoDB extends CApplicationComponent
 {
@@ -27,6 +29,7 @@ class EMongoDB extends CApplicationComponent
      * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
      *
      * @example mongodb://localhost:27017
+     * @since v1.0
      */
     public $connectionString;
 
@@ -34,16 +37,19 @@ class EMongoDB extends CApplicationComponent
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
 	 * effective when the EMongoDB object is used as an application component.
+	 * @since v1.0
 	 */
 	public $autoConnect = true;
 
 	/**
      * @var false|string $persistentConnection false for non-persistent connection, string for persistent connection id to use
+     * @since v1.0
      */
     public $persistentConnection = false;
 
     /**
      * @var string $dbName name of the Mongo database to use
+     * @since v1.0
      */
     public $dbName = null;
 
@@ -58,27 +64,53 @@ class EMongoDB extends CApplicationComponent
 	private $_mongoConnection;
 
 	/**
-	 * If set to TRUE all internal DB operations will use FSYNC flag with data modification requests
+	 * If set to TRUE all internal DB operations will use FSYNC flag with data modification requests,
+	 * in other words, all write operations will have to wait for a disc sync!
 	 *
-	 * Generally you should whant to have this set to TRUE, exception from this is when You do massive
-	 * inserts/updates/deletes with this set to TRUE they will be horribly slow
+	 * MongoDB default value for this flag is: FALSE.
 	 *
-	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections
+	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections (global scope)
+	 * @since v1.0
 	 */
-	public $fsyncFlag=true;
+	public $fsyncFlag = false;
 
 	/**
-	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests
+	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests.
 	 *
-	 * Generally you should whant to have this set to TRUE if you want to
-	 * check inserts/updates/deletes actions
+	 * When SAFE flag is set to TRUE driver will wait for the response from DB, and throw an exception
+	 * if something went wrong, is fet to false, driver will only send operation to DB but will not wait
+	 * for response from DB.
 	 *
-	 * @var boolean $safeFlag state of SAFE flag
+	 * MongoDB default value for this flag is: FALSE.
+	 *
+	 * @var boolean $safeFlag state of SAFE flag (global scope)
 	 */
-	public $safeFlag=true;
+	public $safeFlag = false;
+
+	/**
+	 * If set to TRUE findAll* methods of models, will return {@see EMongoCursor} instead of
+	 * raw array of models.
+	 *
+	 * Generally you should want to have this set to TRUE as cursor use lazy-loading/instaninating of
+	 * models, this is set to FALSE, by default to keep backwards compatibility.
+	 *
+	 * Note: {@see EMongoCursor} does not implement ArrayAccess interface and cannot be used like an array,
+	 * because offset access to cursor is highly ineffective and pointless.
+	 *
+	 * @var boolean $useCursor state of Use Cursor flag (global scope)
+	 */
+	public $useCursor = false;
+
+	/**
+	 * Storage location for temporary files used by the GridFS Feature.
+	 * If set to null, component will not use temporary storage
+	 * @var string $gridFStemporaryFolder
+	 */
+	public $gridFStemporaryFolder = null;
 
 	/**
 	 * Connect to DB if connection is already connected this method doeas nothing
+	 * @since v1.0
 	 */
 	public function connect()
 	{
@@ -91,6 +123,7 @@ class EMongoDB extends CApplicationComponent
 	 *
 	 * @return Mongo
 	 * @throws EMongoException
+	 * @since v1.0
 	 */
 	public function getConnection()
 	{
@@ -131,6 +164,7 @@ class EMongoDB extends CApplicationComponent
 	 * Set the connection
 	 *
 	 * @param Mongo $connection
+	 * @since v1.0
 	 */
 	public function setConnection(Mongo $connection)
 	{
@@ -139,6 +173,7 @@ class EMongoDB extends CApplicationComponent
 
 	/**
 	 * Get MongoDB instance
+	 * @since v1.0
 	 */
 	public function getDbInstance()
 	{
@@ -152,6 +187,7 @@ class EMongoDB extends CApplicationComponent
 	 * Set MongoDB instance
 	 * Enter description here ...
 	 * @param string $name
+	 * @since v1.0
 	 */
 	public function setDbInstance($name)
 	{
@@ -161,6 +197,7 @@ class EMongoDB extends CApplicationComponent
 	/**
 	 * Closes the currently active Mongo connection.
 	 * It does nothing if the connection is already closed.
+	 * @since v1.0
 	 */
 	protected function close(){
         if($this->_mongoConnection!==null){
@@ -172,6 +209,7 @@ class EMongoDB extends CApplicationComponent
 
 	/**
 	 * If we have don't use presist connection, close it
+	 * @since v1.0
 	 */
 	public function __destruct(){
         if(!$this->persistentConnection){
@@ -181,9 +219,10 @@ class EMongoDB extends CApplicationComponent
 
     /**
      * Drop the current DB
+     * @since v1.0
      */
     public function dropDb()
     {
-    	$this->getDb()->drop();
+		$this->_mongoDb->drop();
     }
 }

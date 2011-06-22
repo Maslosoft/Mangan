@@ -3,98 +3,69 @@ It originally started as a fork of [MongoRecord](http://www.yiiframework.com/ext
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
-**IMPORTANT!: Versions below 1.1 are deprecated, they have some major bugs**
+<a href="http://flattr.com/thing/112051/Yii-MongoDB-Suite" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
+</a>
 
-##Changelog
+**PLEASE refer to the new FULL-Documentation [page](http://canni.github.com/YiiMongoDbSuite)**
 
-This is the 1.3.2 release
+*Work-around for using the `OR` operator with this extension provided in [comments](http://www.yiiframework.com/extension/yiimongodbsuite/#c2450)*
 
-New features in 1.3.2
+This is the 1.3.6 release
 
-- Fixed bug that find* methods don't accept criteria in array format
-- Lazy loading/creating of embedded documents
-- Little performance boost, save embedded documents configs in static array
+## Added in this release:
 
-New features in 1.3.1
+- Few annoying bugs fixed
+- Documentation corrects
+- **Added `EMongoPartialDocument` class, that supports full-featured partial loading of documents from DB**
+- **Added fixtures manager, that can replace the Yii default one, and work with Mongo model**
+- **Ability to do massive [partial updates of multiple documents][advanced.partial-batch-update]**
 
-- Fixed few major bugs in EMongoCriteria class
-- *Bugfixes to criteria object had forced to change the criteria object creation from array, please see the updated doc for it*
-- Fixed bug that in massive assign way, embeded documnets always used only safe attributes
-- Setup of PHPUnit testing framework
-- Written test cases for EMongoDB class and EMongoCriteria class 
+## The Key Feature List:
 
-New features in 1.3
-
-- MongoDB GridFS feature support, thanks to work of: Jose Martinez and Philippe Gaultier
-
-New features in 1.2.3
-
-- Gii CRUD generator, now generates advanced search form in admin (like in regular Yii CRUD generator)
-- Search form now supports comparsion operators ( > | < | >= | <= | <> | != | == | = )
-- In v1.2.2 all search attributes where treated as a string regex, now you can test numbers to, just juse comparsion operators, example:
-    - search for '1234' will try to find a string matching regexp /1234/i (this will not work if field is numeric)
-    - search for '= 1234' will try to find numberic value 1234
-    - search for '>= 1234' will try to find any record with field greater or equals numeric value 1234 
-
-New features in 1.2.2
-
-- Magic method search() delivered with every EMongoDocument object
-- Gii CRUD generator now uses search method, to provide text search in admin view (by default using case-insensitive regexp)
-- EMongoDocument search() method has one parameter:
-    - $caseSensitive true|false, default to false, whathever to use case-sensitive string comparsion 
-
-New features in 1.2.1
-
-- **Support for generating CRUD for EMongoDocument models!**
-- Few minor bug fixes
-
-New features in 1.2
-
-- Support for using any other than _id field as a PK
-- Better names scopes handling, support for default scope
-- *Support to have different models in single collection! see Multimodel collection topic*
-- Better memory management, now there is only one collection object instance, per model
-
-New features in 1.1
-
-- automated efficent index definition for collections, per model
-
-New features in 1.0:
-
-- Named scopes just like in AR
-- Very easy to use criteria object, you don't have to create complex MongoDB query arrays!
-- Better exeption handling
-- A lot more PHPDocs in code 
-
-Features:
+### Features covered from standard Yii ActiveRecord implementation
 
 - Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax
-- Support of schema-less documents with Yii standard rules and validation features
-- Endless Embedded/Nested document support (Embedded documents are their own Model class with their own rules and other methods.
-- (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
+- Named scopes, along with default scope and parameterized scopes, just like in AR
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
-- Records and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
-- relation support *idea/concept/example*
+- Model classes and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
+- Relations support *idea/concept/example*
+- **Support for generating CRUD for EMongoDocument models, with Gii!**
+- **Support for generating mongo document models from existing SQL tables!**
+- Very easy to use criteria object, you don't have to create complex MongoDB query arrays!
 
-Limitations:
+### MongoDB related feature list
+
+- Support of schema-less documents with Yii standard rules and validation features
+- Embedded/Nested document support (Embedded documents have their own Model classes with their own rules and other methods)
+- (almost, limited only by MongoDB 4MB limit of single document) endless document embedding/nesting
+- Lazy loading/creating of embedded documents
+- Ability to set FSync and/or Safe flag of DB write operations on different scopes, globally, on model level, and on single model object
+- **Ability to use efficient MongoDB Cursors instead of raw arrays of results, returned by the findAll* methods**
+- MongoDB GridFS feature support, thanks to work of: Jose Martinez and Philippe Gaultier
+- Support for using any other than _id field as a Primary Key, for a collection
+- *Support to have different models in single collection!*
+- automated efficient index definition for collections, per model
+- Support "Soft" documents, documents that do not have fixed list of attributes
+- **Ability to do *Extreme Efficent* document partial updates, that make use of MongoDB `$set` operator/feature**
+- Support for PHP Mongo driver versions below 1.0.5
+- Support for partial loading of documents from DB
+
+## Limitations:
 - The main limitations are only those present in MongoDB itself, like the 4mb data transfer limit. But That's not a big deal either.
-- In it's current incarnation, This extension does NOT work with the OR operator. When we get it working we will remove this line and add an example.
+- In it's current incarnation, This extension does NOT work with the "$or" criteria operator. When we get it working we will remove this line and add an example.
 
 *IMPORTANT: The version on GitHub is more up to date as fixes are pushed to the project. This may or may not get updated on a regular basis*
 
-##Requirements
+## Requirements
 
-- Yii 1.1.5 is required, yii 1.1.4 do not have onAfterConstruct event whitch is used here
+- Yii 1.1.5 is required
 - MongoDB latest stable is recommended. Untested with older versions.
 
-##Basic usage
+## Setup
 
-Just create a model class as You would with normal ActiveRecord.
-Example model simple as standard ActiveRecord:
-
-##Setup
-
-In your protected/config/main.php config file. Comment out (or delete) the current 'db' array for your database in the components section, and add the following to the file:
+In your protected/config/main.php config file. Comment out (or delete) the current 'db' array
+for your database in the components section, and add the following to the file:
 
 
 ~~~
@@ -109,11 +80,12 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
     'components' => array(
       ...
       'mongodb' => array(
+        'class'            => 'EMongoDB',
         'connectionString' => 'mongodb://localhost',
-        'dbName' => 'myDatabaseName',
-        'class'     => 'EMongoDB',
-        'fsyncFlag' => true,
-        'safe' => true, //new flag used only for update function on MongoGridFS system
+        'dbName'           => 'myDatabaseName',
+        'fsyncFlag'        => true,
+        'safeFlag'         => true,
+        'useCursor'        => false
       ),
     ),
 
@@ -121,14 +93,13 @@ In your protected/config/main.php config file. Comment out (or delete) the curre
 ~~~
 
 
-- ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is the ip (or hostname) of your webserver or host.
+- ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example
+  if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is
+  the ip (or hostname) of your webserver or host.
 - dbName: is the name you want the collections to be stored in. The database name.
-- fsyncFlag is set to true, this makes mongodb make sure all writes to the database are safely stored to disk. Setting this to false will improve speed but writes ar enot confirmed. So unless you are doing massive or large imports or save() then it is better to be set to true. See the performance section below.
-- For more info see the [MongoDB connection page on php.net](http://us3.php.net/manual/en/mongo.connecting.php).
-
-To get started, you can look in the files of the project and there are two example files. a User model for the User document as well as a UserAddress model to represent an embedded document.
-- examples/User.php
-- examples/UserAddress.php
+- fsyncFlag if is set to true, this makes mongodb make sure all writes to the database are safely stored to disk. (as default, true)
+- safeFlag if is set to true, mongodb will wait to retrieve status of all write operations, and check if everything went OK. (as default, true)
+- useCursors if is set to true, extension will return EMongoCursor instead of raw pre-populated arrays, form findAll* methods, (default to false, for backwards compatibility)
 
 That's all you have to do for setup. You can use it very much like the active record.
 Example:
@@ -138,25 +109,77 @@ Example:
 [php]
 
 
-    $client = new Client;
+    $client = new Client();
     $client->first_name='something';
     $client->save();
-    $clients = Client::model->findAll();
+    $clients = Client::model()->findAll();
 
 
 ~~~
 
 
-##Embedded documents
+## Basic usage
 
-*IMPORTANT: Embedded documents must extend from EMongoEmbeddedDocument instead of EMongoDocument, otherwise whole thing will fail, to work*
-*Note: some people reported that embedding regular EMongoDocument works as expected, but i have not tested this, more test/reports needed*
+Just define following model:
 
-Embedded documents are almost identical as EMongoDocument you only can't save them to DB they're saved by the EMongoDocument model witch has them as an embedded (with one exception, you can save them if you will do it explicitly)
-Notice: Embedded documents don't have a static model() method!
+~~~
+[php]
+
+
+    class User extends EMongoDocument
+    {
+      public $login;
+      public $name;
+      public $pass;
+
+      // This has to be defined in every model, this is same as with standard Yii ActiveRecord
+      public static function model($className=__CLASS__)
+      {
+        return parent::model($className);
+      }
+
+      // This method is required!
+      public function getCollectionName()
+      {
+        return 'users';
+      }
+
+      public function rules()
+      {
+        return array(
+          array('login, pass', 'required'),
+          array('login, pass', 'length', 'max' => 20),
+          array('name', 'length', 'max' => 255),
+        );
+      }
+      
+      public function attributeLabels()
+      {
+        return array(
+          'login'  => 'User Login',
+          'name'   => 'Full name',
+          'pass'   => 'Password',
+        );
+      }
+    }
+
+
+~~~
+
+
+And thats it! Now start using this User model class like standard Yii AR model
+
+## Embedded documents
+
+*NOTE: For performance reasons embedded documents should extend from EMongoEmbeddedDocument instead of EMongoDocument*
+
+EMongoEmbeddedDocument is almost identical as EMongoDocument, in fact EMongoDocument extends from EMongoEmbeddedDocument
+and adds to it DB connection related stuff.
+
+NOTE: Embedded documents should not have a static model() method!
 
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
-Lest assume we have following embedded document (a full example is in the examples directory):
+Lest assume we have following embedded document:
 
 
 ~~~
@@ -235,7 +258,7 @@ it will automatically call validation for model and all embedded documents!
 You even can nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents
 *IMPORTANT*: This mechanism uses recurrency, and will not handle with circular nesting, you have to use this feature with care :P
 
-##Arrays
+## Arrays
 
 You easily can store arrays in DB!
 
@@ -305,7 +328,7 @@ or
 ~~~
 
 
-##Querying
+## Querying
 
 This is one of the things that makes this extension great. It's very easy to query for the objects you want.
 
@@ -315,7 +338,7 @@ This is one of the things that makes this extension great. It's very easy to que
 
 
     // simple find first. just like normal AR.
-    $object = ModelClass::model->find()
+    $object = ModelClass::model()->find()
 
 
 ~~~
@@ -354,21 +377,29 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
 
 It's that easy. In place of the 'equals' key, you can use any of the following operators
 
-- 'greater'   | >
-- 'greaterEq' | >=
-- 'less'      | <
-- 'lessEq'    | <=
-- 'notEq'     | !=, <>
-- 'in'        | 
-- 'notIn'     | 
-- 'all'       | 
-- 'size'      | 
-- 'exists'    | 
-- 'type'      | // BSON type see mongodb docs for this
-- 'notExists' | 
-- 'mod'       | %
-- 'equals'    | ==
-- 'where'     | // JavaScript operator
+
+~~~
+
+
+    - 'greater'   | >
+    - 'greaterEq' | >=
+    - 'less'      | <
+    - 'lessEq'    | <=
+    - 'notEq'     | !=, <>
+    - 'in'        | 
+    - 'notIn'     | 
+    - 'all'       | 
+    - 'size'      | 
+    - 'exists'    | 
+    - 'type'      | // BSON type see mongodb docs for this
+    - 'notExists' | 
+    - 'mod'       | %
+    - 'equals'    | ==
+    - 'where'     | // JavaScript operator
+
+
+~~~
+
 
 *NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.Newer versions of mongo db will work, just not the $or operator.
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
@@ -415,7 +446,7 @@ Here are a few more examples for using criteria:
 
 ~~~
 
-###Regexp / SQL LIKE replacemt
+### Regexp / SQL LIKE replacemt
 
 You can use native PHP Mongo driver class MongoRegex, to query:
 
@@ -436,7 +467,7 @@ You can use native PHP Mongo driver class MongoRegex, to query:
 
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
-##Creating criteria object from an array:
+## Creating criteria object from an array:
 
 
 ~~~
@@ -462,537 +493,30 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 ~~~
 
 
-##Indexes
-
-Now you can define indexes for yours collections in easy way!
-
-Suite will check for existing of indexes only once, at the first class use, (per script-calls)
-if it not find any of declared indexes it will create them 
-
-Only thing you need is to define the indexes() method in yours model class, see the example:
-
-
-~~~
-[php]
-
-
-    class Client extends EMongoDocument
-    {
-        // ....
-        public function indexes()
-        {
-            return array(
-                // index name is not important, you may write whatever you whant, just must be unique
-                'index1_name'=>array(
-                    // key array holds list of fields for index
-                    // you may define multiple keys for index and multikey indexes
-                    // each key must have a sorting direction SORT_ASC or SORT_DESC
-                    'key'=>array(
-                    	'field_name'=>EMongoCriteria::SORT_ASC
-                    	'field_name.embeded_field'=>EMongoCriteria::SORT_DESC
-                    ),
-                    
-                    // unique, if indexed field must be unique, define a unique key
-                    // if not present, it will not create unique index
-                    'unique'=>true,
-                ),
-            );
-        }
-        // ....
-    }
-
-
-~~~
-
-
-### Own defined Primary Key for collection
-
-Now you can define a own field to be used as a PK for yours collection, see example:
-
-
-~~~
-[php]
-
-
-    class Client extends EMongoDocument
-    {
-        // ...
-        // Define primaryKey method:
-        public function primaryKey()
-        {
-            return 'personal_number'; // Model field name, by default the _id field is used
-        }
-        // Now you can:
-        // Client::model()->findByPk(1234); // personal_number == 1234
-        // ...
-    }
-
-
-~~~
-
-
-If you whant to disable index existing checking on every page load because of perfomance reasons (recomended for production)
-put $this->ensureIndexes = false; into yours init() method in model class
-
-##Names Scopes
-
-Now you can use AR style named scopes just define scopes method in yours model:
-
-
-~~~
-[php]
-
-
-    class Client extends EMongoDocument
-    {
-    	// (...)
-    	
-    	public function scopes()
-    	{
-    	    return array(
-    	    	'scopeName'=>array(/* Array for criteria object creation see Criteria from array topic */),
-    	    );
-    	}
-    	
-    	public function defaultScope()
-    	{
-    	    return array(
-    	        'conditions'=>array(
-    	        	'active'=>array('==', true),
-    	        ),
-    	    );
-    	}
-    	
-    	// (...)
-    }
-    
-    // now You can:
-    // this will find only clients that are active (default scope) and clients matching 'scopeName'
-    $all = Client::model()->scopeName()->findAll();
-
-
-~~~
-
-
-##Relations
-
-**Note:**
-
-- In NoSQL World Relations are not so obvious as in RDBMS
-- Because NoSQL databases are designed for performance, there is no need of defining something more complex than correct use of find() method and indexing for fetching related records
-- This is just an *idea/concept/example* you can do things in yours preferred way! this is schema-less wold, think different!
-- MongoDB Documentation has a clean examples and how-to's for handling relations, *please* read them for better understanding of relations in NoSQL world
-
-###HAS_ONE relation
-
-
-~~~
-[php]
-
-
-    // just define method in yours model class (assume we have client collection, and address collection in client model
-    public function address()
-    {
-      return Address::model()->findByAttributes(array('attribute_with_client_id'=>$this->primaryKey));
-    }
-
-
-~~~
-
-
-###BELONGS_TO relation
-
-
-~~~
-[php]
-
-
-    // define in address model
-    public function client()
-    {
-      return Client::model()->findByPk($this->attribute_with_client_id);
-    }
-
-
-~~~
-
-
-###HAS_MANY relation
-
-
-~~~
-[php]
-
-
-    // assume we have clients and orders collection
-    // define in client:
-    public function orders()
-    {
-      return Client::model()->findAllByAttributes(array('client_id'=>$this->primaryKey()));
-    }
-
-
-~~~
-
-
-###MANY_MANY
-
-As simple as defining reverse HAS_MANY relation in orders model. You can view the Example models for details.
-
-##Gii support
-
-###Model generation
-
-- you do not have to generate yours models, yours classes are yours models and schemas!
-- Gii CAN'T generate models for you! there is no schema witch gii can exam for generation
-
-###CRUD Generation
-
-Now you can generate CRUD for yours MongoDB Documents! just you have to add generator path to yours Gii config
-
-*Important:* By default generated models will use mongo _id field as a primary key (using MongoId class)
-this generator will use different field as a primary key, if you will override primaryKey() method to return
-something different than '_id'. Note that generator cannot handle with multifield primary key,
-
-
-~~~
-[php]
-
-
-    // in yours main.php config file:
-    'modules'=>array(
-        // ...
-        
-        'gii'=>array(
-            'class'=>'system.gii.GiiModule',
-            'password'=>'yours_password_to_gii',
-            // add additional generator path
-            'generatorPaths'=>array(
-                'ext.YiiMongoDbSuite.gii'
-            ),
-        ),
-        
-        // ...
-    ),
-    // Now login to Gii and start using Mongocrud generator !
-
-
-~~~
-
-
-###Forms generation
-
-- This is a good news, Gii can generate the worst part of developer job, forms for mongo records ;]
-- When generating a form from mongo record, comment out embedded docs array, or you'll see error about array/object creation
-- For embedded docs just generate forms in separed way for each one
-
-##DataProvider
-
-
-~~~
-[php]
-
-
-    // basic dataprovider returns whole collection (with efficient pagination support out-of-box)
-    $dp = new EMongoDocumentDataProvider('modelClassNameOrInstance');
-
-    // data provider with query
-    $dp = new EMongoDocumentDataProvider('modelClassNameOrInstance', array(/* query array goes here */));
-
-    // data provider, enable sorting (needs to be set explicit)
-    $dp = new EMongoDocumentDataProvider('modelClassNameOrInstance', array(/* query array goes here */), array(/* standard config array */
-        'sort'=>array(
-            'attributes'=>array(
-                // list of sortable attributes
-            )
-        ),
-    ));
-
-
-~~~
-
-
-##Special topics
-
-###Behaviors
-
-- You can use existing CActiveRecordBehaviors as long as they do not mess up with CActiveRecord explicit stuff (ie. behaviors that add relation handling will fail to work with EMongoDocuments)
-- Behaviors may extend from EMongoDocumentBehavior class, standard AR behavior class can't use extra events witch are available here (beforeEmbeddedDocsInit, afterEmbeddedDocsInit, beforeToArray and afterToArray)
-
-###Performance
-
-- By default all save/update/delete operations performed by internal command sets the FSYNC flag to TRUE, this means, all operations will have to wait for a disk sync!
-- FSYNC in most cases is a good way and do not have massive impact on performance
-- You may want to disable FSYNC flag when doing massive imports/updates/models, because it will be **horrible** slow!
-- Fsync can be disabled by setting up fsyncField in EMongoDB class
-
-###Massive hand operations
-
-
-~~~
-[php]
-
-
-    // Example mass insert (you will want to disable fsyncField for this:
-    for($i=0; $i<1000; $i++)
-    {
-        $c = new Client;
-        $c->personal_number = $i;
-        $c->validate(); // You can omit this if you want
-        $c->getCollection()->insert($c->toArray());
-    }
-
-
-~~~
-
-
-###Multimodel collections
-
-You can have different models in single collection, example:
-
-
-~~~
-[php]
-
-
-    abstract class Client extends EMongoDocument
-    {
-        public $first_name;
-        public $second_name;
-    
-        // define property for finding type
-    	public $type;
-    	// and some const for better remember
-    	const NORMAL_CLIENT = 0;
-    	const BUISSNESS_CLIENT = 1;
-    	
-    	public function getCollectionName()
-    	{
-    	    return 'clients';
-    	}
-    }
-    
-    class NormalClient extends Client
-    {
-        public $additionalField;
-    
-        public function defaultScope()
-        {
-            return array(
-                'conditions'=>array('type'=>array('==', self::NORMAL_CLIENT)),
-            );
-        }
-        
-        public function beforeSave()
-        {
-            if(parent::beforeSave())
-            {
-                $this->type = self::NORMAL_CLIENT;
-                return true;
-            }
-            else return false
-        }
-        
-        public static function model($className=__CLASS__)
-        {
-            return parent::model($className);
-        }
-    }
-    
-    class BuissnessClient extends Client
-    {
-        public $taxNo;
-    
-        public function defaultScope()
-        {
-            return array(
-                'conditions'=>array('type'=>array('==', self::BUISSNESS_CLIENT)),
-            );
-        }
-        
-        public function beforeSave()
-        {
-            if(parent::beforeSave())
-            {
-                $this->type = self::BUISSNESS_CLIENT;
-                return true;
-            }
-            else return false
-        }
-        
-        public static function model($className=__CLASS__)
-        {
-            return parent::model($className);
-        }
-    }
-    
-    // now you can:
-    $bclients = BuissnessClient::model()->findAll();
-    $clients = NormalClient::model()->findAll();
-    
-    // but they're kept in single collection ! and can be indexed with single field etc.
-
-
-~~~
-
-##GidFS implementation
-
-###GridFS parameters (module)
-
-You can have different models in single collection, example:
-
-###GridFS samples
-
-
-~~~
-[php]
-
-	Yii::import('ext.YiiMongoDbSuite.examples.MongoImage');
-    //create a new image
-    $image = new MongoImage();
-    $image->filename = '/var/www/myImage.JPG';
-    $image->metadata = array('value1'=>1, 'value2'=>2);
-    $res = $image->save();
-    if($res === true)
-    {
-        echo 'save file ok';
-    }
-    else
-    {
-        echo 'error saving file';
-    }
-    
-    //find image
-    $image = MongoImage::model()->find();
-    if($image instanceof MongoImage)
-    {
-        echo 'find ok';
-    }
-    else
-    {
-        echo 'error finding object';
-    }
-    
-    //findall images
-    $images = MongoImage::model()->findAll();
-    if(is_array($images))
-    {
-        echo 'findall ok';
-    }
-    else
-    {
-        echo 'error on findall';
-    }
-    
-    var_dump($images);
-        
-    //delete images
-    $image = MongoImage::model()->find();
-    if($image instanceof MongoImage)
-    {
-        $result = $image->delete();
-        if($result === true)
-        {
-            echo 'delete ok';
-        }
-        else
-        {
-            echo 'delete notok';
-        }
-    }
-    else
-    {
-        echo 'no image found to delete';
-    }
-    
-    //deleteAll image
-    $result = MongoImage::model()->deleteAll();
-    if(is_array($result)===true)
-    {
-        echo ' isarray';
-        if(isset($result['err']) === true )
-        {
-            echo ' error deleting images:'.$result['err'];
-        }
-        else
-        {
-            echo ' elements deleted:'.$result['n'];
-        }
-    }
-    
-    //deletebyPk image
-    $image = MongoImage::model()->find();
-    if($image instanceof MongoImage)
-    {
-        $result = MongoImage::model()->deleteByPk($image->_id);
-        if($result === true)
-        {
-            echo 'delete by pk ok';
-        }
-    }
-    else
-    {
-        echo 'no image found to delete by pk';
-    }
-    
-    //insert image and update
-    $image = new MongoImage();
-    $image->filename = '/var/www/myImage.JPG';
-    $image->metadata = array('value1'=>1, 'value2'=>2);
-    $res = $image->save();
-    $image->filename =  '/var/www/myImageUpdated.JPG';
-    $image->metadata = array('value1'=>3, 'value2'=>4);
-    $res = $image->save();
-    if($res === true)
-    {
-        echo 'update ok';
-    }
-    else
-    {
-        echo 'error updating';
-    }
-    
-    //MongoGridFSFile functions
-    $image = MongoImage::model()->find();
-    //getBytes function
-    $bytes = $image->getBytes();
-    //getFilename
-    $filename = $image->getFilename();
-    //getSize
-    $size = $image->getSize();
-    //write
-	$image->write();
-
-~~~
-
-
-##Known bugs
+## Known bugs
 
 - Remember, this is not complete yet. So at this stage, it can have some ;]
 - If you find any please let me know
 - As said before, it does not work with the OR operators
 
-##Changelog
+## Resources
 
-- Added EMongoDocumentBehavior (Support for new events present in EMongoDocument)
-- Added FSync control field fsyncFlag in EMongoDBConnection class (default set to true)
-- Changed the way of setup, db property name change to dbName
-- Added EEmbeddedArraysBehavior extra
-
-##Resources
-
- * [Project page](https://github.com/canni/YiiMongoDbSuite/)
+ * [Project page on GitHub](https://github.com/canni/YiiMongoDbSuite)
+ * [Report a BUG](https://github.com/canni/YiiMongoDbSuite/issues)
  * [MongoDB documentation](http://www.mongodb.org/display/DOCS/Home)
+ * [On-Line version of this documentation](http://canni.github.com/YiiMongoDbSuite)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
+ * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
 
-##Contribution needed!
+## Contribution needed!
 
 - I'm not English native speaker, need someone who can correct/rewrite/write my documentation and/or PHPDoc's in code
 - Any help would be great :)
 - Contact me: darek.krk on a gmail dot com or via PM
 
-##Big thanks goes to:
+## Big thanks goes to:
 
 - tyohan: for first inspirations and idea of extension
 - luckysmack: for big help with testing and documentation
 - Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support
+- Nagy Attila Gábor, for big help with new functionality and testing

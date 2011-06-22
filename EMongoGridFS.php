@@ -6,25 +6,29 @@
  *
  * @author		Jose Martinez <jmartinez@ibitux.com>
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2010 Ibitux
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright	2011 Ibitux
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		SVN: $Revision: $
  * @category	ext
  * @package		ext.YiiMongoDbSuite
+ * @since		v1.3
  */
 
 /**
  * EMongoGridFS
  *
- * Authorization management, dispatches actions and views on the system
- *
  * @author		Jose Martinez <jmartinez@ibitux.com>
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2010 Ibitux
+ * @author		Dariusz Górecki <darek.krk@gmail.com>
+ * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright	2011 Ibitux
  * @license		http://www.yiiframework.com/license/ BSD license
  * @version		SVN: $Revision: $
  * @category	ext
  * @package		ext.YiiMongoDbSuite
+ * @since		v1.3
  *
  */
 abstract class EMongoGridFS extends EMongoDocument
@@ -38,19 +42,15 @@ abstract class EMongoGridFS extends EMongoDocument
 	/**
 	 * Every EMongoGridFS object has to have one
 	 * @var String $filename
+	 * @since v1.3
 	 */
 	public $filename = null; // mandatory
 
 	/**
-	 * Indicates the temporary folder where we will save updated files to ensure we dont loose data
-	 * @var string $_temporaryFolder
-	 */
-	private $_temporaryFolder = null;
-
-	/**
-	 * Returns current MongoCollection object
+	 * Returns current MongoGridFS object
 	 * By default this method use {@see getCollectionName()}
-	 * @return MongoCollection
+	 * @return MongoGridFS
+	 * @since v1.3
 	 */
 	public function getCollection()
 	{
@@ -58,37 +58,6 @@ abstract class EMongoGridFS extends EMongoDocument
 			self::$_collections[$this->getCollectionName()] = $this->getDb()->getGridFS($this->getCollectionName());
 
 		return self::$_collections[$this->getCollectionName()];
-	}
-
-	/**
-	 * Set current MongoGridFSFile
-	 * This setter is only used to populate model during factory init
-	 * @param MongoGridFSFile $gridFs
-	 * @return void
-	 */
-	public function setGridFsFile($gridFs)
-	{
-		//TODO:manage in another way gridFSFile, maybe attach this function as behavior
-		$this->_gridFSFile = $gridFs;
-	}
-
-	/**
-	 * Sets temporary folder, used for updates
-	 * @param string $value
-	 * @return void
-	 */
-	public function setTemporaryFolder($value)
-	{
-		$this->_temporaryFolder = $value;
-	}
-
-	/**
-	 * Gets temporary folder, used for updates
-	 * @return string
-	 */
-	public function getTemporaryFolder()
-	{
-		return $this->_temporaryFolder;
 	}
 
 	/**
@@ -102,6 +71,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws CException if the record is not new
+	 * @since v1.3
 	 */
 	public function insert(array $attributes=null)
 	{
@@ -157,6 +127,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @throws CDbException
 	 * @throws CException
 	 * @return boolean whether the insert success
+	 * @since v1.3
 	 */
 	public function insertWithPk($pk, array $attributes=null) {
 		if(!($pk instanceof MongoId))
@@ -214,6 +185,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
 	 * @throws CException if the record is new
+	 * @since v1.3
 	 */
 	public function update(array $attributes=null)
 	{
@@ -221,41 +193,19 @@ abstract class EMongoGridFS extends EMongoDocument
 		if($this->getIsNewRecord())
 			throw new CDbException(Yii::t('yii','The EMongoDocument cannot be updated because it is new.'));
 
-		if($this->getTemporaryFolder() === null)
-			Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'() be careful, you are updating without safe mode, please enter your temporary folder', 'ext.MongoDb.EMongoGridFS');
-		else
-			$this->write($this->getTemporaryFolder().$this->getFilename());
-
-		//keep old values
-		$id = $this->_id;
-		$filename = $this->getFilename();
-		$gridFSFile = $this->_gridFSFile;
-
-		if($this->deleteByPk($id) !== false)
-		{
-			$result =  $this->insertWithPk($this->_id, $attributes);
-			if($result === true)
-				return true;
-			else
+		if(is_file($this->filename) === true) {
+			if($this->deleteByPk($this->_id) !== false)
 			{
-				if($this->getTemporaryFolder() !== false)
-				{
-					//recover old file
-					$this->_gridFSFile = $gridFSFile;
-					$this->filename = $filename;
-					$this->insertWithPk($id, $attributes);
-				}
+				$result =  $this->insertWithPk($this->_id, $attributes);
+				if($result === true)
+					return true;
 				else
-					throw new CDbException(Yii::t('yii','Unable to update MongoGridFSFile.'));
-
-				return false;
+					return false;
 			}
+		} else {
+			return parent::update($attributes, true);
 		}
-		else
-			throw new CDbException(Yii::t('yii','Unable to delete old MongoGridFSFile.'));
-		return false;
 	}
-
 
 	/**
 	 * Creates an EMongoGridFS with the given attributes.
@@ -266,6 +216,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * This parameter is added in version 1.0.3.
 	 * @return EMongoDocument the newly created document. The class of the object is the same as the model class.
 	 * Null is returned if the input data is false.
+	 * @since v1.3
 	 */
 	public function populateRecord($document, $callAfterFind=true)
 	{
@@ -273,8 +224,7 @@ abstract class EMongoGridFS extends EMongoDocument
 		if($document instanceof MongoGridFSFile)
 		{
 			$model = parent::populateRecord($document->file, $callAfterFind);
-			//TODO: this part of the populate record should be created in parent class to avoid public setter
-			$model->setGridFsFile($document);
+			$model->_gridFSFile = $document;
 			return $model;
 		}
 		else
@@ -286,6 +236,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * GetSize wrapper of MongoGridFSFile function
 	 * @return integer file size
 	 * False is returned if error
+	 * @since v1.3
 	 */
 	public function getSize()
 	{
@@ -301,6 +252,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * GetFilename wrapper of MongoGridFSFile function
 	 * @return string filename
 	 * False is returned if error
+	 * @since v1.3
 	 */
 	public function getFilename()
 	{
@@ -316,6 +268,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * getBytes wrapper of MongoGridFSFile function
 	 * @return string string of bytes
 	 * False is returned if error
+	 * @since v1.3
 	 */
 	public function getBytes()
 	{
@@ -330,6 +283,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * Writes this file to the system
 	 * @param string $filename The location to which to write the file. If none is given, the stored filename will be used.
 	 * @return integer number of bytes written
+	 * @since v1.3
 	 */
 	public function write($filename=null)
 	{
@@ -346,35 +300,15 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|EMongoCriteria $condition query criteria.
 	 * @return array whether the delete succeeds
+	 * @since v1.3
 	 */
 	public function deleteAll($criteria=null)
 	{
 		Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
 		$this->applyScopes($criteria);
 		return $this->getCollection()->remove($criteria->getConditions(), array(
-			'safe'=>$this->getMongoDBComponent()->safeFlag
+			'fsync'=>$this->getFsyncFlag(),
+			'safe'=>$this->getSafeFlag(),
 		));
 	}
-
-	/**
-	 * Deletes document with the specified primary key.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
-	 */
-	public function deleteByPk($pk, $criteria=null)
-	{
-		if($this->beforeDelete())
-		{
-			Yii::trace('Trace: '.__CLASS__.'::'.__FUNCTION__.'()', 'ext.MongoDb.EMongoGridFS');
-			$this->applyScopes($criteria);
-			$criteria->_id('==', $pk);
-
-			$result = $this->getCollection()->remove($criteria->getConditions(), array('justOne'=>true));
-			$this->afterDelete();
-			return $result;
-		}
-		return false;
-	}
-
 }

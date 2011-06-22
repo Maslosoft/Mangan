@@ -123,27 +123,16 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
 	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new EMongoDocumentDataProvider('<?php echo $this->modelClass; ?>');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
-
-	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
+	public function actionIndex()
 	{
 		$model = new <?php echo $this->modelClass; ?>('search');
 		$model->unsetAttributes();
@@ -151,7 +140,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 		if(isset($_GET['<?php echo $this->modelClass; ?>']))
 			$model->setAttributes($_GET['<?php echo $this->modelClass; ?>']);
 
-		$this->render('admin', array(
+		$this->render('index', array(
 			'model'=>$model
 		));
 	}

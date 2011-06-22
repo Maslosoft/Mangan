@@ -4,54 +4,25 @@
  * - $this: the ModelCode object
  * - $tableName: the table name for this class (prefix is already removed if necessary)
  * - $modelClass: the model class name
+ * - $collectionName: the mongo collection name to use
  * - $columns: list of table columns (name=>CDbColumnSchema)
  * - $labels: list of attribute labels (name=>label)
  * - $rules: list of validation rules
  * - $relations: list of relations (name=>relation declaration)
+ * - $primaryKey: primary key name
  */
 ?>
 <?php echo "<?php\n"; ?>
 
 /**
- * This is the model class for table "<?php echo $tableName; ?>".
- *
- * The followings are the available columns in table '<?php echo $tableName; ?>':
-<?php foreach($columns as $column): ?>
- * @property <?php echo $column->type.' $'.$column->name."\n"; ?>
-<?php endforeach; ?>
-<?php if(!empty($relations)): ?>
- *
- * The followings are the available model relations:
-<?php foreach($relations as $name=>$relation): ?>
- * @property <?php
-	if (preg_match("~^array\(self::([^,]+), '([^']+)', '([^']+)'\)$~", $relation, $matches))
-    {
-        $relationType = $matches[1];
-        $relationModel = $matches[2];
-
-        switch($relationType){
-            case 'HAS_ONE':
-                echo $relationModel.' $'.$name."\n";
-            break;
-            case 'BELONGS_TO':
-                echo $relationModel.' $'.$name."\n";
-            break;
-            case 'HAS_MANY':
-                echo $relationModel.'[] $'.$name."\n";
-            break;
-            case 'MANY_MANY':
-                echo $relationModel.'[] $'.$name."\n";
-            break;
-            default:
-                echo 'mixed $'.$name."\n";
-        }
-	}
-    ?>
-<?php endforeach; ?>
-<?php endif; ?>
+ * This is the MongoDB Document model class based on table "<?php echo $tableName; ?>".
  */
 class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 {
+<?php foreach($columns as $column): ?>
+	public <?php echo '$'.$column->name.";\n"; ?>
+<?php endforeach; ?>
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return <?php echo $modelClass; ?> the static model class
@@ -62,11 +33,19 @@ class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * returns the primary key field for this model
 	 */
-	public function tableName()
+	public function primaryKey()
 	{
-		return '<?php echo $tableName; ?>';
+		return <?php var_export($primaryKey); ?>;
+	}
+
+	/**
+	 * @return string the associated collection name
+	 */
+	public function getCollectionName()
+	{
+		return '<?php echo $collectionName; ?>';
 	}
 
 	/**
@@ -87,20 +66,6 @@ class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-<?php foreach($relations as $name=>$relation): ?>
-			<?php echo "'$name' => $relation,\n"; ?>
-<?php endforeach; ?>
-		);
-	}
-
-	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -110,35 +75,5 @@ class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 			<?php echo "'$name' => '$label',\n"; ?>
 <?php endforeach; ?>
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-
-<?php
-foreach($columns as $name=>$column)
-{
-	if($column->type==='string')
-	{
-		echo "\t\t\$criteria->compare('$name',\$this->$name,true);\n";
-	}
-	else
-	{
-		echo "\t\t\$criteria->compare('$name',\$this->$name);\n";
-	}
-}
-?>
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 }

@@ -16,10 +16,9 @@ echo "\$this->breadcrumbs=array(
 ?>
 
 $this->menu=array(
-	array('label'=>'List <?php echo $this->modelClass; ?>', 'url'=>array('index')),
+	array('label'=>'Manage <?php echo $this->modelClass; ?>', 'url'=>array('index')),
 	array('label'=>'Create <?php echo $this->modelClass; ?>', 'url'=>array('create')),
 	array('label'=>'View <?php echo $this->modelClass; ?>', 'url'=>array('view', 'id'=>$model-><?php echo $this->modelObject->primaryKey(); ?>)),
-	array('label'=>'Manage <?php echo $this->modelClass; ?>', 'url'=>array('admin')),
 );
 ?>
 
