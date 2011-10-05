@@ -3,6 +3,10 @@ It originally started as a fork of [MongoRecord](www.yiiframework.com/extension/
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
+**IMPORTANT Info:** I've developed this extension as a hobby project. Now I had stopped using Yii in my hobby and work projects.
+I'm no longer maintaining this code. My codebase is available for easy fork/download on a github. Feel free to continue my work,
+YMDS already has active community, you can find support mostly on google groups (described bellow).
+
 <a href="http://flattr.com/thing/112051/Yii-MongoDB-Suite" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
 </a>
