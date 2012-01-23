@@ -66,6 +66,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	public $connectionID='mongodb';
 
 	private $_mongoDb;
+	
 	private $_fixtures;
 	private $_rows;				// fixture name, row alias => row
 	private $_records;			// fixture name, row alias => record (or class name)
@@ -79,6 +80,9 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		parent::init();
 		if($this->basePath===null)
 			$this->basePath=Yii::getPathOfAlias('application.tests.fixtures');
+		elseif(strpos($this->basePath, 'application.') === 0) {
+			$this->basePath=Yii::getPathOfAlias($this->basePath);
+		}
 		$this->prepare();
 	}
 
@@ -149,8 +153,10 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	public function loadFixture($collectionName)
 	{
 		$fileName=$this->basePath.DIRECTORY_SEPARATOR.$collectionName.'.php';
-		if(!is_file($fileName))
+		if(!is_file($fileName)) {
+			echo "Could not find fixture: ".$fileName;
 			return false;
+		}
 
 		$rows=array();
 		foreach(require($fileName) as $alias=>$row)
