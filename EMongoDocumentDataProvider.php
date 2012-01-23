@@ -113,6 +113,21 @@ class EMongoDocumentDataProvider extends CDataProvider
 			$this->_criteria = $criteria;
 	}
 
+    /**
+	 * Returns the sort object.
+	 * @return EMongoSort the sorting object. If this is false, it means the sorting is disabled.
+	 */
+	public function getSort()
+	{
+		if($this->_sort===null)
+		{
+			$this->_sort=new EMongoSort;
+			if(($id=$this->getId())!='')
+				$this->_sort->sortVar=$id.'_sort';
+		}
+		return $this->_sort;
+	}
+
 	/**
 	 * Fetches the data from the persistent data storage.
 	 * @return array list of data items
@@ -128,7 +143,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 			$this->_criteria->setOffset($pagination->getOffset());
 		}
 
-		if(($sort=$this->getSort())!==false && ($order=$sort->getOrderBy())!='')
+		/*if(($sort=$this->getSort())!==false && ($order=$sort->getOrderBy())!='')
 		{
 			$sort=array();
 			foreach($this->getSortDirections($order) as $name=>$descending)
@@ -136,6 +151,10 @@ class EMongoDocumentDataProvider extends CDataProvider
 				$sort[$name]=$descending ? EMongoCriteria::SORT_DESC : EMongoCriteria::SORT_ASC;
 			}
 			$this->_criteria->setSort($sort);
+		}*/
+        if(($sort=$this->getSort())!==false)
+		{
+			$sort->applyOrder($this->_criteria);
 		}
 
 		return $this->model->findAll($this->_criteria);
