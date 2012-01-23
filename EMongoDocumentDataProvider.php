@@ -49,6 +49,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	public $model;
 
 	private $_criteria;
+        private $_sort;
 
 	/**
 	 * Constructor.
