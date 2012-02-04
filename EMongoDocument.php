@@ -815,7 +815,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 
 		if ($this->beforeFind()) {
 			$this->applyScopes($criteria);
-
 			$cursor = $this->getCollection()->find($criteria->getConditions());
 
 			if ($criteria->getSort() !== null)
@@ -1277,13 +1276,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 	*/
 	public static function model($className=__CLASS__)
 	{
-		if (isset(self::$_models[$className]))
-			return self::$_models[$className];
-		else {
-			$model=self::$_models[$className]=new $className(null);
-			$model->attachBehaviors($model->behaviors());
-			return $model;
-		}
+                $model=self::$_models[$className]=new $className(null);
+                $model->attachBehaviors($model->behaviors());
+                return $model;
 	}
 
 	/**
