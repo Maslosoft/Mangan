@@ -70,6 +70,8 @@ class EMongoDocumentDataProvider extends CDataProvider
 			$this->modelClass = get_class($modelClass);
 			$this->model = $modelClass;
 		}
+        else
+            throw new EMongoException('Invalid model type for ' . __CLASS__);
 
 		$this->_criteria = $this->model->getDbCriteria();
 		if(isset($config['criteria']))
