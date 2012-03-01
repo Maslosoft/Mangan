@@ -33,6 +33,12 @@ class EMongoDB extends CApplicationComponent
      */
     public $connectionString;
 
+	/**
+     * @var string 
+     * The name of the replica set to connect to.
+     */	
+	public $replicaSet;
+	
     /**
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
@@ -135,15 +141,16 @@ class EMongoDB extends CApplicationComponent
 				if(empty($this->connectionString))
 					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
 
+				$connectionConfig = array();
+				$connectionConfig['connect'] = $this->autoConnect;
+				
 				if($this->persistentConnection !== false)
-					$this->_mongoConnection = new Mongo($this->connectionString, array(
-						'connect'=>$this->autoConnect,
-						'persist'=>$this->persistentConnection
-					));
-				else
-					$this->_mongoConnection = new Mongo($this->connectionString, array(
-						'connect'=>$this->autoConnect,
-					));
+					$connectionConfig['persist'] = $this->persistentConnection;
+				
+				if(!empty($this->replicaSet))
+					$connectionConfig['replicaSet'] = $this->replicaSet;
+	
+				$this->_mongoConnection = new Mongo($this->connectionString, $connectionConfig);
 
 				return $this->_mongoConnection;
 			}
