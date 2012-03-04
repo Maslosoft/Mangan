@@ -587,6 +587,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 						unset($rawData[$key]);
 				}
 			}
+            // Check for individual pk
+            $pk = $this->primaryKey();
+            if ('_id' !== $pk && 0 !== $this->countByAttributes(array($pk => $this->{$pk}))) {
+                throw new CDbException(
+                    Yii::t(
+                        'yii',
+                        'The EMongoDocument cannot be inserted because the primary key already exists.'
+                    )
+                );
+            }
 
 			if (version_compare(Mongo::VERSION, '1.0.5','>=') === true)
 				$result = $this->getCollection()->insert($rawData, array(
@@ -794,9 +804,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 
 		if ($this->beforeFind()) {
 			$this->applyScopes($criteria);
-
 			$doc = $this->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
-
 			return $this->populateRecord($doc);
 		}
 		return null;
@@ -1276,9 +1284,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 	*/
 	public static function model($className=__CLASS__)
 	{
-                $model=self::$_models[$className]=new $className(null);
-                $model->attachBehaviors($model->behaviors());
-                return $model;
+        $model=self::$_models[$className]=new $className(null);
+        $model->attachBehaviors($model->behaviors());
+        return $model;
 	}
 
 	/**
@@ -1290,19 +1298,21 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 		$criteria = new EMongoCriteria();
 
 		if (is_string($pkField)) {
-            if (!$multiple) {
-                if ('_id' === $pkField && is_string($pk)) {
-                    $pk = new MongoId($pk);
-                }
+            if ('_id' === $pkField && ! $pk instanceof MongoId)
+                $pk = new MongoId($pk);
+            if (!$multiple)
 				$criteria->{$pkField} = $pk;
-            }
 			else
 				$criteria->{$pkField}('in', $pk);
 		}
 		else if (is_array($pkField)) {
 			if (!$multiple)
-				for ($i=0; $i<count($pkField); $i++)
+                for ($i=0; $i<count($pkField); $i++) {
+                    $pkField = $pk[$i];
+                    if ('_id' === $pkField[$i] && ! $pk[$i] instanceof MongoId)
+                        $pk[$i] = new MongoId($pk[$i]);
 					$criteria->{$pkField[$i]} = $pk[$i];
+                }
 			else
 				throw new EMongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
 		}
