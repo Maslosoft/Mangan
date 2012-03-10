@@ -23,17 +23,23 @@
 class EMongoDB extends CApplicationComponent
 {
 	/**
-	 * @var string host:port
-	 *
-	 * Correct syntax is:
-	 * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
-	 *
-	 * @example mongodb://localhost:27017
-	 * @since v1.0
-	 */
-	public $connectionString;
+     * @var string host:port
+     *
+     * Correct syntax is:
+     * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
+     *
+     * @example mongodb://localhost:27017
+     * @since v1.0
+     */
+    public $connectionString;
 
 	/**
+     * @var string
+     * The name of the replica set to connect to.
+     */
+	public $replicaSet;
+
+    /**
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
 	 * effective when the EMongoDB object is used as an application component.
@@ -135,15 +141,16 @@ class EMongoDB extends CApplicationComponent
 				if(empty($this->connectionString))
 					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
 
+				$connectionConfig = array();
+				$connectionConfig['connect'] = $this->autoConnect;
+
 				if($this->persistentConnection !== false)
-					$this->_mongoConnection = new Mongo($this->connectionString, array(
-						'connect'=>$this->autoConnect,
-						'persist'=>$this->persistentConnection
-					));
-				else
-					$this->_mongoConnection = new Mongo($this->connectionString, array(
-						'connect'=>$this->autoConnect,
-					));
+					$connectionConfig['persist'] = $this->persistentConnection;
+
+				if(!empty($this->replicaSet))
+					$connectionConfig['replicaSet'] = $this->replicaSet;
+
+				$this->_mongoConnection = new Mongo($this->connectionString, $connectionConfig);
 
 				return $this->_mongoConnection;
 			}
