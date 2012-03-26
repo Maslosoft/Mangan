@@ -28,7 +28,9 @@ class EMongoUniqueValidator extends CValidator
 			return;
 
 		$criteria = new EMongoCriteria;
-		$criteria->{$attribute} = $value;
+		if(!$object->getIsNewRecord())
+			$criteria->addCond('_id', '!=', $object->getPrimaryKey());
+		$criteria->addCond($attribute, '==', $value);
 		$count = $object->model()->count($criteria);
 
 		if($count !== 0)
