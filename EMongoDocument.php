@@ -1296,23 +1296,31 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument {
 	{
 		$pkField = $this->primaryKey();
 		$criteria = new EMongoCriteria();
-
 		if (is_string($pkField)) {
-            if ('_id' === $pkField && ! $pk instanceof MongoId)
-                $pk = new MongoId($pk);
-            if (!$multiple)
+			if ('_id' === $pkField) {
+				if ((strlen($pk) === 24) && !$pk instanceof MongoId) {
+					// Assumption: if dealing with _id field and it's a 24-digit string .. should be an Mongo ObjectID
+					Yii::trace(get_class($this).".createPkCriteria() .. converting key value ($pk) to MongoId",'ext.MongoDb.EMongoDocument');
+					$pk = new MongoId($pk);
+				} elseif (is_numeric($pk)) {
+					// Assumption: need to bless as int, as string != int when looking up primary keys
+					Yii::trace(get_class($this).".createPkCriteria() .. casting ($pk) to int",'ext.MongoDb.EMongoDocument');
+					$pk = (int)$pk;
+				}
+			}
+			if (!$multiple)
 				$criteria->{$pkField} = $pk;
 			else
 				$criteria->{$pkField}('in', $pk);
 		}
 		else if (is_array($pkField)) {
 			if (!$multiple)
-                for ($i=0; $i<count($pkField); $i++) {
-                    $pkField = $pk[$i];
-                    if ('_id' === $pkField[$i] && ! $pk[$i] instanceof MongoId)
-                        $pk[$i] = new MongoId($pk[$i]);
+				for ($i=0; $i<count($pkField); $i++) {
+					$pkField = $pk[$i];
+					if ('_id' === $pkField[$i] && ! $pk[$i] instanceof MongoId)
+						$pk[$i] = new MongoId($pk[$i]);
 					$criteria->{$pkField[$i]} = $pk[$i];
-                }
+				}
 			else
 				throw new EMongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
 		}
