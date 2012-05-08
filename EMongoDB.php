@@ -23,23 +23,35 @@
 class EMongoDB extends CApplicationComponent
 {
 	/**
-     * @var string host:port
-     *
-     * Correct syntax is:
-     * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
-     *
-     * @example mongodb://localhost:27017
-     * @since v1.0
-     */
-    public $connectionString;
+	 * @var string host:port
+	 *
+	 * Correct syntax is:
+	 * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
+	 *
+	 * @example mongodb://localhost:27017
+	 * @since v1.0
+	 */
+	public $connectionString;
+	
+	/**
+	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will 
+	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting 
+	 * to a server that was not even listed.
+	 *
+	 * @example myReplicaSet
+	 * @since v1.3.7
+	 */
+	public $replicaSet = null;
+	
+	/**
+	 * @var int timeout For how long the driver should try to connect to the database (in milliseconds).
+	 *
+	 * @example 2000
+	 * @since v1.3.7
+	 */
+	public $timeout = 2000;
 
 	/**
-     * @var string
-     * The name of the replica set to connect to.
-     */
-	public $replicaSet;
-
-    /**
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
 	 * effective when the EMongoDB object is used as an application component.
@@ -140,17 +152,21 @@ class EMongoDB extends CApplicationComponent
 				Yii::trace('Opening MongoDB connection', 'ext.MongoDb.EMongoDB');
 				if(empty($this->connectionString))
 					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
-
-				$connectionConfig = array();
-				$connectionConfig['connect'] = $this->autoConnect;
-
+				
+				$options = array( 'connect'=>$this->autoConnect );
+				
 				if($this->persistentConnection !== false)
-					$connectionConfig['persist'] = $this->persistentConnection;
+					$options['persist'] = $this->persistentConnection;
+				
+				if( !is_null( $this->replicaSet ) )
+					$options['replicaSet'] = $this->replicaSet;
+				
+				if( !is_null( $this->timeout ) )
+					$options['timeout'] = $this->timeout;
 
-				if(!empty($this->replicaSet))
-					$connectionConfig['replicaSet'] = $this->replicaSet;
-
-				$this->_mongoConnection = new Mongo($this->connectionString, $connectionConfig);
+				$this->_mongoConnection = new Mongo($this->connectionString, $options);
+				
+					
 
 				return $this->_mongoConnection;
 			}
