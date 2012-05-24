@@ -15,7 +15,8 @@
  */
 
 /**
- * EmongoSoftDocument cass
+ * EmongoSoftDocument
+ * 
  * @since v1.3.4
  */
 abstract class EMongoSoftDocument extends EMongoDocument

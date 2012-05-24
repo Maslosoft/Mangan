@@ -15,7 +15,7 @@
  */
 
 /**
- * EMongoCriteria class
+ * EMongoCriteria
  *
  * This class is a helper for building MongoDB query arrays, it support three syntaxes for adding conditions:
  *

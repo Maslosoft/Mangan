@@ -15,6 +15,8 @@
  */
 
 /**
+ * EMongoDocumentBehavior
+ * 
  * @since v1.0
  */
 class EMongoDocumentBehavior extends CActiveRecordBehavior

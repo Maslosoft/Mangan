@@ -14,9 +14,9 @@
  */
 
 /**
- * EMongoModifier class
+ * EMongoModifier
  *
- * This class is a helper for building MongoDB atomic updates
+ * Helper for building MongoDB atomic updates.
  *
  * 1. addCond method
  * $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value

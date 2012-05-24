@@ -15,7 +15,9 @@
  */
 
 /**
- * EMongoRecordDataProvider implements a data provider based on EMongoRecord.
+ * EMongoRecordDataProvider
+ * 
+ * Implements a data provider based on EMongoRecord.
  *
  * EMongoRecordDataProvider provides data in terms of MongoRecord objects which are
  * of class {@link modelClass}. It uses the AR {@link CActiveRecord::findAll} method

@@ -15,6 +15,8 @@
  */
 
 /**
+ * EMongoEmbeddedDocument
+ * 
  * @since v1.0.8
  */
 abstract class EMongoEmbeddedDocument extends CModel

@@ -16,6 +16,7 @@
 
 /**
  * EMongoException
+ * 
  * @since v1.0
  */
 class EMongoException extends CException {}
