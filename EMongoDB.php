@@ -166,8 +166,6 @@ class EMongoDB extends CApplicationComponent
 
 				$this->_mongoConnection = new Mongo($this->connectionString, $options);
 				
-					
-
 				return $this->_mongoConnection;
 			}
 			catch(MongoConnectionException $e)
