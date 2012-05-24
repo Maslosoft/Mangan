@@ -4,7 +4,7 @@ class User extends EMongoDocument
 {
 	/**
 	 * A public variable should be defined for each key=>value you want in the
-	 * model. Just like if it were a column in a mysql database
+	 * model. Just like if it were a column in a SQL database
 	 */
 	public $username;
 	public $email;
@@ -15,18 +15,29 @@ class User extends EMongoDocument
 	public $company;
 
 	/**
-	 * this is similar to the get tableName() method. this returns tha name of the
-	 * document for this class. this should be in all lowercase.
+	 * Returns the static model of the specified AR class.
+	 * @param string $className class name
+	 * @return User the static model class.
+	 */
+	public static function model($className = __CLASS__)
+	{
+		return parent::model($className);
+	}
+
+	/**
+	 * Similar to the get tableName() method.
+	 * @return string The name of the document for this class.
 	 */
 	public function getCollectionName()
 	{
+		// Should be in all lowercase.
 		return 'users';
 	}
 
 	/**
 	 * If we override this method to return something different than '_id',
 	 * internal methods as findByPk etc. will be using returned field name as a primary key
-	 * @return string|array field name of primary key, or array for composited key
+	 * @return string|array field name of primary key, or array for composited key.
 	 */
 	public function primaryKey()
 	{
@@ -34,45 +45,32 @@ class User extends EMongoDocument
 	}
 
 	/**
-	 * This is defined as normal. Nothing has changed here
-	 *
-	 * @return array
+	 * This is defined as normal. Nothing has changed here.
+	 * @return array validation rules for model attributes.
 	 */
-	public function rules() {
+	public function rules()
+	{
 		return array(
 			array('personal_number, first_name, last_name', 'required'),
 		);
 	}
 
 	/**
-	 * This returns attribute labels for each public variable that will be stored
-	 * as key in the database. Is defined just as normal with mysql
-	 *
+	 * Returns attribute labels for each public variable that will be stored
+	 * as key in the database. It is defined just as normal with SQL models.
 	 * @return array
 	 */
 	public function attributeLabels()
 	{
 		return array(
-			'username'			=> 'UserName',
-			'email'				=> 'EMail',
-			'personal_number'	=> 'PN',
-			'first_name'		=> 'First Name',
-			'last_name'			=> 'Last Name',
-			'client'			=> 'Client',
-			'company'			=> 'Company',
+			'username' => 'UserName',
+			'email' => 'EMail',
+			'personal_number' => 'PN',
+			'first_name' => 'First Name',
+			'last_name' => 'Last Name',
+			'client' => 'Client',
+			'company' => 'Company',
 		);
-	}
-
-	/**
-	 * Returns the class name just as nornal.
-	 *
-	 * @static
-	 * @param string $className
-	 * @return
-	 */
-	public static function model($className = __CLASS__)
-	{
-		return parent::model($className);
 	}
 
 	/**
@@ -85,7 +83,7 @@ class User extends EMongoDocument
 	 */
 	public function client()
 	{
-		return Client::model()->findByAttributes(array('client'=>$this->getPrimaryKey()));
+		return Client::model()->findByAttributes(array('client' => $this->getPrimaryKey()));
 	}
 
 	/**
@@ -106,7 +104,7 @@ class User extends EMongoDocument
 	 */
 	public function orders()
 	{
-		return Orders::model()->findAllByAttributes(array('client_id'=>$this->getPrimaryKey()));
+		return Orders::model()->findAllByAttributes(array('client_id' => $this->getPrimaryKey()));
 	}
 
 	// This method would be in the posts model. the tags key in the document is
@@ -125,14 +123,14 @@ class User extends EMongoDocument
 	 */
 	public function tags()
 	{
-		return Posts::model()->findAllByAttributes(array('post_id'=>$this->post_id));
+		return Posts::model()->findAllByAttributes(array('post_id' => $this->post_id));
 	}
 
 	// This method would be in the tags model. each tag is a document that has a
 	// relation to the objects _id.
 	public function Posts()
 	{
-		return Tags::model()->findAllByAttributes(array('tag_id'=>$this->tag_id));
+		return Tags::model()->findAllByAttributes(array('tag_id' => $this->tag_id));
 	}
 
 	/**
@@ -142,7 +140,7 @@ class User extends EMongoDocument
 	 * Where 'name' is the name of this embedded document, and how it will appear
 	 * as a key in the document.And 'Model' is the name of the model that holds
 	 * the embedded documents information. For the example below, see the
-	 * UserAddress.php file for an example
+	 * UserAddress.php file for an example.
 	 *
 	 * @return array
 	 */
@@ -153,4 +151,5 @@ class User extends EMongoDocument
 			'address' => 'UserAddress',
 		);
 	}
+
 }

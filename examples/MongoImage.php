@@ -32,26 +32,29 @@ class MongoImage extends EMongoGridFS
 	public $metadata;
 
 	/**
-	 * this is similar to the get tableName() method. this returns tha name of the
-	 * document for this class. this should be in all lowercase.
+	 * Similar to the get tableName() method.
+	 * @return string The name of the document for this class.
 	 */
 	public function getCollectionName()
 	{
+		// Should be in all lowercase.
 		return 'images';
 	}
 
 	/**
 	 * Returns the static model of the specified AR class.
-	 *
 	 * @param string $className class name
-	 *
-	 * @return CompaniesDb the static model class
+	 * @return MongoImage the static model class.
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
 
+	/**
+	 * This is defined as normal. Nothing has changed here.
+	 * @return array validation rules for model attributes.
+	 */
 	public function rules()
 	{
 		return array(
