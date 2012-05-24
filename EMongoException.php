@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EMongoException.php
  *
@@ -19,4 +20,7 @@
  * 
  * @since v1.0
  */
-class EMongoException extends CException {}
+class EMongoException extends CException
+{
+	
+}

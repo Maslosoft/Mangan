@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EMongoSoftDocument.php
  *
@@ -35,8 +36,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function __get($name)
 	{
-		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
-		{
+		if (array_key_exists($name, $this->softAttributes)) { // Use of array_key_exists is mandatory !!!
 			return $this->softAttributes[$name];
 		}
 		else
@@ -50,8 +50,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function __set($name, $value)
 	{
-		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
-		{
+		if (array_key_exists($name, $this->softAttributes)) { // Use of array_key_exists is mandatory !!!
 			$this->softAttributes[$name] = $value;
 		}
 		else
@@ -65,7 +64,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function __isset($name)
 	{
-		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
+		if (array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
 			return true;
 		else
 			return parent::__isset($name);
@@ -78,7 +77,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function __unset($name)
 	{
-		if(array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
+		if (array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
 			unset($this->softAttributes[$name]);
 		else
 			parent::__unset($name);
@@ -91,7 +90,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function initSoftAttribute($name)
 	{
-		if(!array_key_exists($name, $this->softAttributes))
+		if (!array_key_exists($name, $this->softAttributes))
 			$this->softAttributes[$name] = null;
 	}
 
@@ -102,7 +101,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function initSoftAttributes($attributes)
 	{
-		foreach($attributes as $name)
+		foreach ($attributes as $name)
 			$this->initSoftAttribute($name);
 	}
 
@@ -123,15 +122,14 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	protected function instantiate($attributes)
 	{
-		$class=get_class($this);
-		$model=new $class(null);
+		$class = get_class($this);
+		$model = new $class(null);
 		$model->initEmbeddedDocuments();
 
 		$model->initSoftAttributes(
-			array_diff(
-				array_keys($attributes),
-				parent::attributeNames()
-			)
+				array_diff(
+						array_keys($attributes), parent::attributeNames()
+				)
 		);
 
 		$model->setAttributes($attributes, false);
@@ -147,8 +145,8 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	protected function _toArray()
 	{
 		$arr = parent::_toArray();
-		foreach($this->softAttributes as $key => $value)
-			$arr[$key]=$value;
+		foreach ($this->softAttributes as $key => $value)
+			$arr[$key] = $value;
 		return $arr;
 	}
 
@@ -159,9 +157,7 @@ abstract class EMongoSoftDocument extends EMongoDocument
 	 */
 	public function getSoftAttributeNames()
 	{
-		return array_diff(
-			array_keys($this->softAttributes),
-			parent::attributeNames()
-		);
+		return array_diff(array_keys($this->softAttributes), parent::attributeNames());
 	}
+
 }
