@@ -42,7 +42,12 @@
 class EMongoLogRoute extends CLogRoute
 {
 	/**
-	 * @var string Collection name
+	 * @var string Mongo DB component.
+	 */
+	public $mongo = 'mongodb';
+
+	/**
+	 * @var string Collection name.
 	 */
 	public $collectionName = 'yiilogs';
 
@@ -67,27 +72,27 @@ class EMongoLogRoute extends CLogRoute
 	//public $installCappedCollection = false;
 
 	/**
-	 * @var boolean forces the update to be synced to disk before returning success.
+	 * @var boolean Force the update to be synced to disk before returning success.
 	 */
 	public $fsync = false;
 
 	/**
-	 * @var boolean the program will wait for the database response.
+	 * @var boolean The program will wait for the database response.
 	 */
 	public $safe = false;
 
 	/**
-	 * @var boolean if "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
+	 * @var boolean If "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
 	 */
 	public $timeout = null;
 
 	/**
-	 * @var array insert options
+	 * @var array Insert options.
 	 */
 	private $_options;
 
 	/**
-	 * @var MongoCollection
+	 * @var MongoCollection Collection object used.
 	 */
 	private $_collection;
 
@@ -97,7 +102,6 @@ class EMongoLogRoute extends CLogRoute
 	 * @since v1.0
 	 */
 	protected static $_emongoDb;
-	protected static $_collections = array();
 
 	/**
 	 * Get EMongoDB component instance.
@@ -107,7 +111,7 @@ class EMongoLogRoute extends CLogRoute
 	public function getMongoDBComponent()
 	{
 		if (self::$_emongoDb === null)
-			self::$_emongoDb = Yii::app()->getComponent('mongodb');
+			self::$_emongoDb = Yii::app()->getComponent($this->mongodb);
 
 		return self::$_emongoDb;
 	}
@@ -123,15 +127,14 @@ class EMongoLogRoute extends CLogRoute
 
 	/**
 	 * Returns current MongoCollection object.
-	 * @param string $collectionName
 	 * @return MongoCollection
 	 */
-	public function getCollection($collectionName)
+	public function getCollection()
 	{
-		if (!isset(self::$_collections[$collectionName]))
-			self::$_collections[$collectionName] = $this->getDb()->selectCollection($collectionName);
+		if (!isset($this->_collection))
+			$this->_collection = $this->getDb()->selectCollection($this->collectionName);
 
-		return self::$_collections[$collectionName];
+		return $this->_collection;
 	}
 
 	/**
@@ -142,7 +145,7 @@ class EMongoLogRoute extends CLogRoute
 	{
 		parent::init();
 
-		$this->_collection = $this->getCollection($this->collectionName);
+		$this->_collection = $this->getCollection();
 		$this->_options = array(
 			'fsync' => $this->fsync
 			, 'safe' => $this->safe
