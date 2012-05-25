@@ -20,11 +20,11 @@
  * This class is a helper for building MongoDB query arrays, it support three syntaxes for adding conditions:
  *
  * 1. 'equals' syntax:
- * $criteriaObject->fieldName = $value; // this will produce fieldName == value query
+ *	$criteriaObject->fieldName = $value; // this will produce fieldName == value query
  * 2. fieldName call syntax
- * $criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
+ *	$criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
  * 3. addCond method
- * $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
+ *	$criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
  *
  * For operators list {@see EMongoCriteria::$operators}
  *
