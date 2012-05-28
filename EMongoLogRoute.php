@@ -23,7 +23,7 @@
  * ),
  * 
  * Options:
- * mongo					: mongo component name			: default mongodb
+ * mongodb					: mongo component name			: default mongodb
  * collectionName			: collaction name				: default yiilog
  * message					: message column name			: default message
  * level					: level column name				: default level
@@ -44,7 +44,7 @@ class EMongoLogRoute extends CLogRoute
 	/**
 	 * @var string Mongo DB component.
 	 */
-	public $mongo = 'mongodb';
+	public $mongodb = 'mongodb';
 
 	/**
 	 * @var string Collection name.
