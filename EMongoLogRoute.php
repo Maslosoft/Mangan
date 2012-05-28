@@ -11,15 +11,15 @@
  *
  * Example, in config/main.php:
  * 'log'=>array(
- *		'class'=>'CLogRouter',
- *		'routes'=>array(
- *			array(
- *				'class'=>'ext.EMongoDbLogRoute',
- *				'levels'=>'trace, info, error, warning',
- *				'categories' => 'system.*',
- *				'collectionName' => 'yiilog',
- *			),
- *		),
+ * 		'class'=>'CLogRouter',
+ * 		'routes'=>array(
+ * 			array(
+ * 				'class'=>'ext.EMongoDbLogRoute',
+ * 				'levels'=>'trace, info, error, warning',
+ * 				'categories' => 'system.*',
+ * 				'collectionName' => 'yiilog',
+ * 			),
+ * 		),
  * ),
  * 
  * Options:
@@ -52,9 +52,29 @@ class EMongoLogRoute extends CLogRoute
 	public $collectionName = 'yiilogs';
 
 	/**
-	 * @var string timestamp type name float or date
+	 * @var string timestamp type name: 'float', 'date', 'string'
 	 */
 	public $timestampType = 'float';
+
+	/**
+	 * @var string message column name
+	 */
+	public $message = 'message';
+
+	/**
+	 * @var string level column name
+	 */
+	public $level = 'level';
+
+	/**
+	 * @var string category column name
+	 */
+	public $category = 'category';
+
+	/**
+	 * @var string timestamp column name
+	 */
+	public $timestamp = 'timestamp';
 
 	/**
 	 * @var integer capped collection size
@@ -168,14 +188,19 @@ class EMongoLogRoute extends CLogRoute
 	protected function processLogs($logs)
 	{
 		foreach ($logs as $log) {
-			$this->_collection->insert(
-				array(
-					$this->message => $log[0],
-					$this->level => $log[1],
-					$this->category => $log[2],
-					$this->timestamp => ($this->timestampType === 'date') ? new MongoDate(round($log[3])) : $log[3]
-					),
-				$this->_options
+			if ($this->timestampType === 'date')
+				$timestamp = new MongoDate(round($log[3]));
+			else if ($this->timestampType === 'string')
+				$timestamp = date('Y-m-d H:i:s', $log[3]);
+			else
+				$timestamp = $log[3];
+
+			$this->_collection->insert(array(
+				$this->message => $log[0],
+				$this->level => $log[1],
+				$this->category => $log[2],
+				$this->timestamp => $timestamp,
+					), $this->_options
 			);
 		}
 	}
