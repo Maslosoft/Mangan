@@ -76,12 +76,12 @@ List consist of operators and after `|` available shortcut (if any)
 - 'mod'       | %
 - 'equals'    | ==
 - 'elemMatch' |
+- 'or' |
 ~~~
 
 > [warning]
-> the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.
+> the $or operator in newer versions of mongodb. It works only with versions MongoDB 1.5.3+
 
-Newer versions of mongodb will work, just not the $or operator.
 
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
 
@@ -116,6 +116,14 @@ $criteria->personal_number('%', array(10, 0)) // modulo => personal_number % 10 
 	->limit(10)
 	->offset(25);
 $users = User::model()->findAll($criteria);
+
+//using $or operator
+
+//Find all contacts where the FirstName can be Paris OR City can be Paris
+$criteria = new EMongoCriteria();
+$criteria->addCond('contactFirstname', 'or', 'Paris');
+$criteria->addCond('contactCity', 'or', 'Paris');
+$contacts = ContactsDb::model()->findAll($criteria);
 ~~~
 
 ##Regexp / SQL LIKE replacement {#regexp}

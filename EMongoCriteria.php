@@ -63,7 +63,7 @@ class EMongoCriteria extends CComponent
 		'eq'			=> '$$eq',
 		'=='			=> '$$eq',
 		'where'			=> '$where',
-		'or'			=> '$or',
+		'or'			=> '$or'
 	);
 
 	const SORT_ASC		= 1;
@@ -75,6 +75,7 @@ class EMongoCriteria extends CComponent
 	private $_conditions	= array();
 	private $_sort			= array();
 	private $_workingFields	= array();
+	private $_useCursor		= null;
 
 	/**
 	 * Constructor
@@ -136,6 +137,8 @@ class EMongoCriteria extends CComponent
 				$this->offset($criteria['offset']);
 			if(isset($criteria['sort']))
 				$this->setSort($criteria['sort']);
+			if(isset($criteria['useCursor']))
+				$this->setUseCursor($criteria['useCursor']);
 		}
 		else if($criteria instanceof EMongoCriteria)
 			$this->mergeWith($criteria);
@@ -205,7 +208,6 @@ class EMongoCriteria extends CComponent
 			$operatorName = strtolower($parameters[0]);
 		if(isset($parameters[1]))
 			$value = $parameters[1];
-
 		if(is_numeric($operatorName))
 		{
 			$operatorName = strtolower(trim($value));
@@ -321,18 +323,32 @@ class EMongoCriteria extends CComponent
 	}
 
 	/**
+	 * @since v1.3.7
+	 */
+	public function getUseCursor()
+	{
+		return $this->_useCursor;
+	}
+
+	/**
+	 * @since v1.3.7
+	 */
+	public function setUseCursor($useCursor)
+	{
+		$this->_useCursor = $useCursor;
+	}
+
+	/**
 	 * Return selected fields
 	 *
 	 * @param boolean $forCursor MongoCursor::fields() method requires
-	 *                the fields to be specified as a hashmap. When this
-	 *                parameter is set to true, then we'll return
-	 *                the fields in this format
+	 * the fields to be specified as a hashmap. When this parameter is set
+	 * to true, then we'll return the fields in this format.
 	 * @since v1.3.1
 	 */
-	public function getSelect($forCursor = false)
+	public function getSelect()
 	{
-		if (!$forCursor) return $this->_select;
-		return array_fill_keys($this->_select, true); // PHP 5.2.0+ required!
+		return $this->_select;
 	}
 
 	/**
@@ -340,7 +356,14 @@ class EMongoCriteria extends CComponent
 	 */
 	public function setSelect(array $select)
 	{
-		$this->_select = $select;
+		$this->_select = array();
+		// Convert the select array to field=>true/false format
+		foreach ($select as $key=>$value) {
+			if (is_int($key))
+				$this->_select[$value] = true;
+			else
+				$this->_select[$key] = $value;
+		}
 	}
 
 	/**
@@ -369,7 +392,7 @@ class EMongoCriteria extends CComponent
 	public function select(array $fieldList=null)
 	{
 		if($fieldList!==null)
-			$this->_select = array_merge($this->_select, $fieldList);
+			$this->setSelect(array_merge($this->_select, $fieldList));
 		return $this;
 	}
 
@@ -424,29 +447,33 @@ class EMongoCriteria extends CComponent
 	public function addCond($fieldName, $op, $value)
 	{
 		$op = self::$operators[$op];
-			
-		if($op == '$where' || $op == '$or') {
-			$this->_conditions[$op] = $value;
-			return;
-		}
 		
-		if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
-			$this->_conditions[$fieldName] = array();
-
-		if($op != self::$operators['equals'])
+		if($op == self::$operators['or']) 
 		{
-			if(
-				!is_array($this->_conditions[$fieldName]) ||
-				count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
-			)
+			if(!isset($this->_conditions[$op])) 
 			{
-				$this->_conditions[$fieldName] = array();
+				$this->_conditions[$op] = array();
 			}
-			$this->_conditions[$fieldName][$op] = $value;
-		}
-		else
-			$this->_conditions[$fieldName] = $value;
+			$this->_conditions[$op][] = array($fieldName=>$value);
+		} else {
 
+			if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
+				$this->_conditions[$fieldName] = array();
+	
+			if($op != self::$operators['equals'])
+			{
+				if(
+					!is_array($this->_conditions[$fieldName]) ||
+					count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
+				)
+				{
+					$this->_conditions[$fieldName] = array();
+				}
+				$this->_conditions[$fieldName][$op] = $value;
+			}
+			else
+				$this->_conditions[$fieldName] = $value;
+		}
 		return $this;
 	}
 }

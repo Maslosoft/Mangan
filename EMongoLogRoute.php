@@ -129,13 +129,15 @@ class EMongoLogRoute extends CLogRoute
 	 */
 	public function setCollection($collectionName)
 	{
-		if (self::$_emongoDb === null)
+		if (self::$_emongoDb === null) {
 			self::$_emongoDb = Yii::app()->getComponent($this->mongodb);
-
-		if (!isset($this->_collection))
+			if(!(self::$_emongoDb instanceof EMongoDB))
+				throw new EMongoException('EMongoHttpSession.mongodb is invalid');
+		}
+		if (!isset($this->_collection)) {
 			$db = self::$_emongoDb->getDbInstance();
 			$this->_collection = $db->selectCollection($collectionName);
-
+		}
 		return $this->_collection;
 	}
 
