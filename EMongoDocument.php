@@ -73,7 +73,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$this->getDbCriteria()->mergeWith($scopes[$name]);
 			return $this;
 		}
-
 		return parent::__call($name, $parameters);
 	}
 
@@ -360,7 +359,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 					unset($values[$fieldName]);
 				}
 		}
-
 		parent::setAttributes($values, $safeOnly);
 	}
 
@@ -610,7 +608,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 				return true;
 			}
-
 			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
 		return false;
@@ -685,7 +682,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @since v1.3.6
 	 * @param EMongoModifier $modifier updating rules to apply
 	 * @param EMongoCriteria $criteria condition to limit updating rules
-	 * @return bool
+	 * @return boolean
 	 */
 	public function updateAll($modifier, $criteria = null)
 	{
@@ -890,7 +887,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		foreach ($attributes as $name => $value) {
 			$criteria->$name('==', $value);
 		}
-
 		return $this->find($criteria);
 	}
 
@@ -909,7 +905,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		foreach ($attributes as $name => $value) {
 			$criteria->$name('==', $value);
 		}
-
 		return $this->findAll($criteria);
 	}
 
@@ -1201,7 +1196,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Creates a list of documents based on the input data.
 	 * This method is internally used by the find methods.
-	 * @param array $data list of attribute values for the active records.
+	 * @param MongoCursor $cursor Results found to populate active records.
 	 * @param boolean $callAfterFind whether to call {@link afterFind} after each record is populated.
 	 * This parameter is added in version 1.0.3.
 	 * @param string $index the name of the attribute whose value will be used as indexes of the query result array.
@@ -1209,10 +1204,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @return array list of active records.
 	 * @since v1.0
 	 */
-	public function populateRecords($data, $callAfterFind = true, $index = null)
+	public function populateRecords($cursor, $callAfterFind = true, $index = null)
 	{
-		$records = array();
-		foreach ($data as $attributes) {
+		$records = array();		
+		foreach ($cursor as $attributes) {
 			if (($record = $this->populateRecord($attributes, $callAfterFind)) !== null) {
 				if ($index === null)
 					$records[] = $record;
@@ -1286,7 +1281,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Create primary key criteria.
 	 * @since v1.2.2
+	 * @param mixed $pk Primary key value
+	 * @param boolean $multiple Whether to find multiple records.
+	 * @return EMongoCriteria
+	 * @throws EMongoException 
 	 */
 	private function createPkCriteria($pk, $multiple = false)
 	{
@@ -1320,7 +1320,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			else
 				throw new EMongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
 		}
-
 		return $criteria;
 	}
 
