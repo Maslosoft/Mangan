@@ -89,8 +89,8 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 			if(count($this->_loadedFields) === count($this->attributeNames()))
 			{
-				$this->_partial		= false;
-				$this->loadedFields	= null;
+				$this->_partial = false;
+				$this->_loadedFields = null;
 			}
 		}
 
