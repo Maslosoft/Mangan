@@ -158,7 +158,7 @@ class EMongoLogRoute extends CLogRoute
 	}
 
 	/**
-	 * Initializes the route.
+	 * Initialize the route.
 	 * This method is invoked after the route is created by the route manager.
 	 */
 	public function init()
@@ -176,6 +176,22 @@ class EMongoLogRoute extends CLogRoute
 	}
 
 	/**
+	 * Return the formatted timestamp.
+	 * @param float $timestamp Timestamp as given by log function.
+	 * @return mixed 
+	 */
+	protected function formatTimestamp($timestamp)
+	{
+		if ($this->timestampType === 'date')
+			$timestamp = new MongoDate(round($timestamp));
+		else if ($this->timestampType === 'string')
+			$timestamp = date('Y-m-d H:i:s', $timestamp);
+		else
+			$timestamp = $timestamp;
+		return $timestamp;
+	}
+
+	/**
 	 * Processes log messages and sends them to specific destination.
 	 * @param array $logs list of messages.  Each array elements represents one message
 	 * with the following structure:
@@ -188,18 +204,11 @@ class EMongoLogRoute extends CLogRoute
 	protected function processLogs($logs)
 	{
 		foreach ($logs as $log) {
-			if ($this->timestampType === 'date')
-				$timestamp = new MongoDate(round($log[3]));
-			else if ($this->timestampType === 'string')
-				$timestamp = date('Y-m-d H:i:s', $log[3]);
-			else
-				$timestamp = $log[3];
-
 			$this->_collection->insert(array(
 				$this->message => $log[0],
 				$this->level => $log[1],
 				$this->category => $log[2],
-				$this->timestamp => $timestamp,
+				$this->timestamp => $this->formatTimestamp($log[3]),
 					), $this->_options
 			);
 		}
