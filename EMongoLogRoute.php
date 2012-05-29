@@ -11,8 +11,8 @@
  *
  * Example, in config/main.php:
  * 'log'=>array(
- * 		'class'=>'CLogRouter',
- * 		'routes'=>array(
+ * 		'class' => 'CLogRouter',
+ * 		'routes' => array(
  * 			array(
  * 				'class'=>'ext.EMongoDbLogRoute',
  * 				'levels'=>'trace, info, error, warning',
@@ -124,35 +124,17 @@ class EMongoLogRoute extends CLogRoute
 	protected static $_emongoDb;
 
 	/**
-	 * Get EMongoDB component instance.
-	 * By default it is mongodb application component
-	 * @return EMongoDB
+	 * Returns current MongoCollection object.
+	 * @return MongoCollection
 	 */
-	public function getMongoDBComponent()
+	public function setCollection($collectionName)
 	{
 		if (self::$_emongoDb === null)
 			self::$_emongoDb = Yii::app()->getComponent($this->mongodb);
 
-		return self::$_emongoDb;
-	}
-
-	/**
-	 * Get raw MongoDB instance.
-	 * @return MongoDB
-	 */
-	public function getDb()
-	{
-		return $this->getMongoDBComponent()->getDbInstance();
-	}
-
-	/**
-	 * Returns current MongoCollection object.
-	 * @return MongoCollection
-	 */
-	public function getCollection()
-	{
 		if (!isset($this->_collection))
-			$this->_collection = $this->getDb()->selectCollection($this->collectionName);
+			$db = self::$_emongoDb->getDbInstance();
+			$this->_collection = $db->selectCollection($collectionName);
 
 		return $this->_collection;
 	}
@@ -165,7 +147,7 @@ class EMongoLogRoute extends CLogRoute
 	{
 		parent::init();
 
-		$this->_collection = $this->getCollection();
+		$this->setCollection($this->collectionName);
 		$this->_options = array(
 			'fsync' => $this->fsync
 			, 'safe' => $this->safe
