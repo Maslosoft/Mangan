@@ -29,7 +29,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Static array that holds mongo collection object instances,
 	 * protected access since v1.3
-	 *
 	 * @var array $_collections static array of loaded collection objects
 	 * @since v1.3
 	 */
@@ -47,22 +46,21 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	protected $ensureIndexes = true;   // Whatever to ensure indexes
 
 	/**
-	 * EMongoDB component static instance
+	 * EMongoDB component static instance.
 	 * @var EMongoDB $_emongoDb;
 	 * @since v1.0
 	 */
 	protected static $_emongoDb;
 
 	/**
-	 * MongoDB special field, every document has to have this
-	 *
+	 * MongoDB special field, every document has to have this.
 	 * @var mixed $_id
 	 * @since v1.0
 	 */
 	public $_id;
 
 	/**
-	 * Add scopes functionality
+	 * Add scopes functionality.
 	 * @see CComponent::__call()
 	 * @since v1.0
 	 */
@@ -77,8 +75,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Constructor {@see setScenario()}
-	 *
+	 * Constructor {@see setScenario()}.
 	 * @param string $scenario
 	 * @since v1.0
 	 */
@@ -99,8 +96,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Return the primary key field for this collection, defaults to '_id'
-	 * @return string|array field name, or array of fields for composite primary key
+	 * Return the primary key field for this collection, defaults to '_id'.
+	 * @return string|array field name, or array of fields for composite primary key.
 	 * @since v1.2.2
 	 */
 	public function primaryKey()
@@ -109,6 +106,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Get the primary key value.
+	 * @return mixed string for single key, array for compound keys.
 	 * @since v1.2.2
 	 */
 	public function getPrimaryKey()
@@ -120,15 +119,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$return = array();
 			foreach ($pk as $pkFiled)
 				$return[] = $this->{$pkFiled};
-
 			return $return;
 		}
 	}
 
 	/**
-	 * Get EMongoDB component instance
-	 * By default it is mongodb application component
-	 *
+	 * Get EMongoDB the component instance,  defaults to 'mongodb' application component.
 	 * @return EMongoDB
 	 * @since v1.0
 	 */
@@ -136,12 +132,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if (self::$_emongoDb === null)
 			self::$_emongoDb = Yii::app()->getComponent('mongodb');
-
 		return self::$_emongoDb;
 	}
 
 	/**
-	 * Set EMongoDB component instance
+	 * Set EMongoDB component instance.
 	 * @param EMongoDB $component
 	 * @since v1.0
 	 */
@@ -151,7 +146,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Get raw MongoDB instance
+	 * Get raw MongoDB instance.
 	 * @return MongoDB
 	 * @since v1.0
 	 */
@@ -166,15 +161,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 *
 	 * this is read-only defined only at class define
 	 * if you want to set different collection during run-time
-	 * use {@see setCollection()}
-	 *
+	 * use {@see setCollection()}.
 	 * @return string collection name
 	 * @since v1.0
 	 */
 	abstract public function getCollectionName();
 
 	/**
-	 * Returns current MongoCollection object
+	 * Returns current MongoCollection object.
 	 * By default this method use {@see getCollectionName()}
 	 * @return MongoCollection
 	 * @since v1.0
@@ -352,7 +346,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if (!is_array($values))
 			return;
-
 		if ($this->hasEmbeddedDocuments()) {
 			$attributes = array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
 
@@ -504,12 +497,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function applyScopes(&$criteria)
 	{
-		if ($criteria === null) {
+		if ($criteria === null)
 			$criteria = new EMongoCriteria();
-		}
-		else if (is_array($criteria)) {
+		else if (is_array($criteria))
 			$criteria = new EMongoCriteria($criteria);
-		}
 		else if (!($criteria instanceof EMongoCriteria))
 			throw new EMongoException('Cannot apply scopes to criteria');
 
@@ -608,7 +599,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$this->afterSave();
 				$this->setIsNewRecord(false);
 				$this->setScenario('update');
-
 				return true;
 			}
 			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
@@ -648,7 +638,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						unset($rawData[$key]);
 				}
 			}
-
 			if ($modify) {
 				if (isset($rawData['_id']) === true)
 					unset($rawData['_id']);
@@ -659,7 +648,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 					'multiple' => false
 						)
 				);
-			} else {
+			}
+			else {
 				if (version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
 					$result = $this->getCollection()->save($rawData, array(
 						'fsync' => $this->getFsyncFlag(),
@@ -668,13 +658,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				else
 					$result = $this->getCollection()->save($rawData);
 			}
-
 			if ($result !== false) { // strict comparison needed
 				$this->afterSave();
-
 				return true;
 			}
-
 			throw new CException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
 	}
@@ -705,9 +692,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 					'multiple' => true
 						));
 			return $result;
-		} else {
-			return false;
 		}
+		else
+			return false;
 	}
 
 	/**
@@ -884,9 +871,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function findByAttributes(array $attributes)
 	{
 		$criteria = new EMongoCriteria();
-		foreach ($attributes as $name => $value) {
+		foreach ($attributes as $name => $value)
 			$criteria->$name('==', $value);
-		}
+
 		return $this->find($criteria);
 	}
 
@@ -902,9 +889,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function findAllByAttributes(array $attributes)
 	{
 		$criteria = new EMongoCriteria();
-		foreach ($attributes as $name => $value) {
+		foreach ($attributes as $name => $value)
 			$criteria->$name('==', $value);
-		}
+
 		return $this->findAll($criteria);
 	}
 
@@ -1206,7 +1193,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function populateRecords($cursor, $callAfterFind = true, $index = null)
 	{
-		$records = array();		
+		$records = array();
 		foreach ($cursor as $attributes) {
 			if (($record = $this->populateRecord($attributes, $callAfterFind)) !== null) {
 				if ($index === null)
@@ -1286,7 +1273,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param mixed $pk Primary key value
 	 * @param boolean $multiple Whether to find multiple records.
 	 * @return EMongoCriteria
-	 * @throws EMongoException 
+	 * @throws EMongoException
 	 */
 	private function createPkCriteria($pk, $multiple = false)
 	{

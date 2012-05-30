@@ -447,19 +447,18 @@ class EMongoCriteria extends CComponent
 	public function addCond($fieldName, $op, $value)
 	{
 		$op = self::$operators[$op];
-		
-		if($op == self::$operators['or']) 
+
+		if($op == self::$operators['or'])
 		{
-			if(!isset($this->_conditions[$op])) 
+			if(!isset($this->_conditions[$op]))
 			{
 				$this->_conditions[$op] = array();
 			}
 			$this->_conditions[$op][] = array($fieldName=>$value);
 		} else {
-
 			if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
 				$this->_conditions[$fieldName] = array();
-	
+
 			if($op != self::$operators['equals'])
 			{
 				if(

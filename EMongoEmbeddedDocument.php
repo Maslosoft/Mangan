@@ -219,9 +219,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 	{
 		if ($this->hasEmbeddedDocuments())
 			foreach ($this->_embedded as $doc) {
-				if (!$doc->validate()) {
+				if (!$doc->validate())
 					$this->addErrors($doc->getErrors());
-				}
 			}
 	}
 

@@ -45,11 +45,16 @@ class EMongoModifier extends CComponent
 		'rename'	=> '$rename',
 	);
 
-	private $_fields = array();
 	/**
-	 * Constructor
+	 * @var array 
+	 */
+	private $_fields = array();
+	
+	/**
+	 * Constructor.
+	 * 
 	 * Modifier sample:
-	 *
+	 * 
 	 * <PRE>
 	 * 'modifier' = array(
 	 *	'fieldName1'=>array('inc' => $incValue),
@@ -82,8 +87,9 @@ class EMongoModifier extends CComponent
 		else if($modifier instanceof EMongoModifier)
 			$this->mergeWith($modifier);
 	}
+	
 	/**
-	 * Compute modifier to be able to initiate request
+	 * Compute modifier to be able to initiate request.
 	 * @return array
 	 */
 	public function getModifiers()
@@ -94,23 +100,25 @@ class EMongoModifier extends CComponent
 			foreach($rule as $operator=>$value)
 			{
 				if(isset($modifier[$operator]) && is_array($modifier[$operator]))
-				{
 					$modifier[$operator] = array_merge($modifier[$operator], array($fieldName=>$value));
-				} else {
+				else
 					$modifier[$operator] = array($fieldName=>$value);
-				}
 			}
 		}
 		return $modifier;
 	}
+	
+	/**
+	 * @return array
+	 */
 	public function getFields()
 	{
 		return $this->_fields;
 	}
+	
 	/**
 	 * Add a new set of modifiers to current modifiers. If modifiers has already been
 	 * added for specific field, they will be overwritten.
-	 *
 	 * @param EMongoModifier $modifier modifier to merge into current object
 	 * @return EMongoModifier
 	 */
@@ -128,7 +136,7 @@ class EMongoModifier extends CComponent
 		return $this;
 	}
 	/**
-	 * Add a new modifier rule to specific field
+	 * Add a new modifier rule to specific field.
 	 * @param string $fieldName name of the field we want to update
 	 * @param string $modifier  type of the modifier @see EMongoModifier::$modifiers
 	 * @param mixed  $value     value used by the modifier
@@ -140,15 +148,15 @@ class EMongoModifier extends CComponent
 		return $this;
 	}
 	/**
-	 * Check if we have modifiers to apply
+	 * Check if we have modifiers to apply.
 	 * @return boolean
 	 */
-	public function getCanApply() {
-		if(count($this->_fields) > 0) {
+	public function getCanApply()
+	{
+		if(count($this->_fields) > 0)
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
 }
 

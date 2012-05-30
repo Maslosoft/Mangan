@@ -33,7 +33,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @var String $filename
 	 * @since v1.3
 	 */
-	public $filename = null; // mandatory
+	public $filename = null; // required
 
 	/**
 	 * Returns current MongoGridFS object
@@ -99,7 +99,6 @@ abstract class EMongoGridFS extends EMongoDocument
 				$this->afterSave();
 				return true;
 			}
-
 			throw new CException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
 		return false;
@@ -130,7 +129,6 @@ abstract class EMongoGridFS extends EMongoDocument
 						unset($rawData[$key]);
 				}
 			}
-
 			// check file
 			$filename = "";
 			if (!array_key_exists('filename', $rawData))
@@ -182,9 +180,8 @@ abstract class EMongoGridFS extends EMongoDocument
 				else
 					return false;
 			}
-		} else {
+		} else
 			return parent::update($attributes, true);
-		}
 	}
 
 	/**

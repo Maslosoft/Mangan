@@ -17,7 +17,7 @@
 
 /**
  * EMongoRecordDataProvider
- * 
+ *
  * Implements a data provider based on EMongoRecord.
  *
  * EMongoRecordDataProvider provides data in terms of MongoRecord objects which are
@@ -50,7 +50,13 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * @since v1.0
 	 */
 	public $model;
+	/**
+	 * @var EMongoCriteria
+	 */
 	private $_criteria;
+	/**
+	 * @var EMongoSort
+	 */
 	private $_sort;
 
 	/**
@@ -151,9 +157,8 @@ class EMongoDocumentDataProvider extends CDataProvider
 		  }
 		  $this->_criteria->setSort($sort);
 		  } */
-		if (($sort = $this->getSort()) !== false) {
+		if (($sort = $this->getSort()) !== false)
 			$sort->applyOrder($this->_criteria);
-		}
 
 		return $this->model->findAll($this->_criteria);
 	}
@@ -166,9 +171,9 @@ class EMongoDocumentDataProvider extends CDataProvider
 	protected function fetchKeys()
 	{
 		$keys = array();
-		foreach ($this->getData() as $i => $data) {
+		foreach ($this->getData() as $i => $data)
 			$keys[$i] = $data->{$this->keyField};
-		}
+
 		return $keys;
 	}
 

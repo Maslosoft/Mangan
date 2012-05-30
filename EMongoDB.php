@@ -27,7 +27,6 @@ class EMongoDB extends CApplicationComponent
 	 *
 	 * Correct syntax is:
 	 * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
-	 *
 	 * @example mongodb://localhost:27017
 	 * @since v1.0
 	 */
@@ -37,7 +36,6 @@ class EMongoDB extends CApplicationComponent
 	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will 
 	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting 
 	 * to a server that was not even listed.
-	 *
 	 * @example myReplicaSet
 	 * @since v1.3.7
 	 */
@@ -45,7 +43,6 @@ class EMongoDB extends CApplicationComponent
 	
 	/**
 	 * @var int timeout For how long the driver should try to connect to the database (in milliseconds).
-	 *
 	 * @example 2000
 	 * @since v1.3.7
 	 */
@@ -157,10 +154,8 @@ class EMongoDB extends CApplicationComponent
 				
 				if($this->persistentConnection !== false)
 					$options['persist'] = $this->persistentConnection;
-				
 				if( !is_null( $this->replicaSet ) )
 					$options['replicaSet'] = $this->replicaSet;
-				
 				if( !is_null( $this->timeout ) )
 					$options['timeout'] = $this->timeout;
 

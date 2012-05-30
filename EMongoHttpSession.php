@@ -48,12 +48,12 @@ class EMongoDbHttpSession extends CHttpSession
 	/**
 	 * @var string level data name
 	 */
-	public $dataColumn="data";
+	public $dataColumn='data';
 
 	/**
 	 * @var string expire column name
 	 */
-	public $expireColumn="expire";
+	public $expireColumn='expire';
 
 	/**
 	 * @var boolean forces the update to be synced to disk before returning success.
@@ -149,7 +149,7 @@ class EMongoDbHttpSession extends CHttpSession
 	 * @param string $sessionName session name
 	 * @return boolean whether session is opened successfully
 	 */
-	public function openSession($savePath,$sessionName)
+	public function openSession($savePath, $sessionName)
 	{
 		$this->gcSession(0);
 	}
