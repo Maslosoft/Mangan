@@ -60,13 +60,14 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws CException if the record is not new
+	 * @throws EMongoException if the record is not new
+	 * @throws EMongoException
 	 * @since v1.3
 	 */
 	public function insert(array $attributes = null)
 	{
 		if (!$this->getIsNewRecord())
-			throw new CDbException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
 		if ($this->beforeSave()) {
 			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
 			$rawData = $this->toArray();
@@ -81,9 +82,9 @@ abstract class EMongoGridFS extends EMongoDocument
 				}
 			}
 			// check file
-			$filename = "";
+			$filename = '';
 			if (!array_key_exists('filename', $rawData))
-				throw new CException(Yii::t('yii', 'We need a filename'));
+				throw new EMongoException(Yii::t('yii', 'We need a filename'));
 			else {
 				$filename = $rawData['filename'];
 				unset($rawData['filename']);
@@ -99,7 +100,7 @@ abstract class EMongoGridFS extends EMongoDocument
 				$this->afterSave();
 				return true;
 			}
-			throw new CException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
+			throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 		}
 		return false;
 	}
@@ -108,15 +109,15 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * Insertion by Primary Key inserts a MongoGridFSFile forcing the MongoID
 	 * @param MongoId $pk
 	 * @param array $attributes
-	 * @throws CDbException
-	 * @throws CException
+	 * @throws EMongoException
+	 * @throws EMongoException
 	 * @return boolean whether the insert success
 	 * @since v1.3
 	 */
 	public function insertWithPk($pk, array $attributes = null)
 	{
 		if (!($pk instanceof MongoId))
-			throw new CDbException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database primary key is not defined.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database primary key is not defined.'));
 		if ($this->beforeSave()) {
 			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
 			$rawData = $this->toArray();
@@ -132,7 +133,7 @@ abstract class EMongoGridFS extends EMongoDocument
 			// check file
 			$filename = "";
 			if (!array_key_exists('filename', $rawData))
-				throw new CException(Yii::t('yii', 'We need a filename'));
+				throw new EMongoException(Yii::t('yii', 'We need a filename'));
 			else {
 				$filename = $rawData['filename'];
 				unset($rawData['filename']);
@@ -151,7 +152,7 @@ abstract class EMongoGridFS extends EMongoDocument
 				return true;
 			}
 
-			throw new CException(Yii::t('yii', 'Can\'t save document to disk, or try to save empty document!'));
+			throw new EMongoException(Yii::t('yii', 'Can\'t save document to disk, or try to save empty document!'));
 		}
 		return false;
 	}
@@ -163,14 +164,14 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
-	 * @throws CException if the record is new
+	 * @throws EMongoException if the record is new
 	 * @since v1.3
 	 */
 	public function update(array $attributes = null)
 	{
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
 		if ($this->getIsNewRecord())
-			throw new CDbException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
 
 		if (is_file($this->filename) === true) {
 			if ($this->deleteByPk($this->_id) !== false) {

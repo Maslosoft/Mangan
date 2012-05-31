@@ -138,20 +138,21 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 * @param boolean modify if set true only selected attributes will be replaced, and not
 	 * the whole document
 	 * @return boolean whether the update is successful
-	 * @throws CException if the record is new
-	 * @throws EMongoException on fail of update
-	 * @throws MongoCursorException on fail of update, when safe flag is set to true
-	 * @throws MongoCursorTimeoutException on timeout of db operation , when safe flag is set to true
+	 * @throws EMongoException if the record is new
+	 * @throws EMongoException on fail of update, when safe flag is set to true
+	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function update(array $attributes=null, $modify = false)
 	{
 		if($this->_partial)
 		{
-			$attributes = count($attributes) > 0 ? array_intersect($attributes, $this->_loadedFields) : array_diff($this->_loadedFields, array('_id'));
+			if(count($attributes) > 0)
+				$attributes = array_intersect($attributes, $this->_loadedFields)
+			else
+				$attributes = array_diff($this->_loadedFields, array('_id'));
 			return parent::update($attributes, true);
 		}
-
 		return parent::update($attributes, $modify);
 	}
 
@@ -163,8 +164,8 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 		if(count($loadedFields) < count($model->attributeNames()))
 		{
-			$model->_partial		= true;
-			$model->_loadedFields	= $loadedFields;
+			$model->_partial = true;
+			$model->_loadedFields = $loadedFields;
 		}
 
 		return $model;

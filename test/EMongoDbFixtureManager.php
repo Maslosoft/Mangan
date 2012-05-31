@@ -96,7 +96,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		{
 			$this->_mongoDb=Yii::app()->getComponent($this->connectionID)->getDbInstance();
 			if(!$this->_mongoDb instanceof MongoDB)
-				throw new CException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
+				throw new EMongoException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
 					array('{id}'=>$this->connectionID)));
 		}
 		return $this->_mongoDb;
@@ -175,9 +175,8 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	protected function isCollection($collectionName) {
 		if ($this->_collectionList === null) {
 			$this->_collectionList = array();
-			foreach($this->getDbConnection()->listCollections() as $collection) {
+			foreach($this->getDbConnection()->listCollections() as $collection)
 				$this->_collectionList[] = $collection->getName();
-			}
 		}
 		return in_array($collectionName, $this->_collectionList);
 	}
@@ -203,9 +202,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 				{
 					$collectionName=substr($file,0,-4);
 					if($this->isCollection($collectionName) === true)
-					{
 						$this->_fixtures[$collectionName]=$path;
-					}
 				}
 			}
 			closedir($folder);

@@ -553,16 +553,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws CException if the record is not new
+	 * @throws EMongoException if the record is not new
 	 * @throws EMongoException on fail of insert or insert of empty document
-	 * @throws MongoCursorException on fail of insert, when safe flag is set to true
-	 * @throws MongoCursorTimeoutException on timeout of db operation , when safe flag is set to true
+	 * @throws EMongoException on fail of insert, when safe flag is set to true
+	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function insert(array $attributes = null)
 	{
 		if (!$this->getIsNewRecord())
-			throw new CDbException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
 		if ($this->beforeSave()) {
 			Yii::trace(get_class($this) . '.insert()', 'ext.MongoDb.EMongoDocument');
 			$rawData = $this->toArray();
@@ -579,10 +579,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			// Check for individual pk
 			$pk = $this->primaryKey();
 			if ('_id' !== $pk && 0 !== $this->countByAttributes(array($pk => $this->{$pk}))) {
-				throw new CDbException(
-						Yii::t(
-								'yii', 'The EMongoDocument cannot be inserted because the primary key already exists.'
-						)
+				throw new EMongoException(
+						Yii::t('yii', 'The EMongoDocument cannot be inserted because the primary key already exists.')
 				);
 			}
 
@@ -615,16 +613,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param boolean modify if set true only selected attributes will be replaced, and not
 	 * the whole document
 	 * @return boolean whether the update is successful
-	 * @throws CException if the record is new
+	 * @throws EMongoException if the record is new
 	 * @throws EMongoException on fail of update
-	 * @throws MongoCursorException on fail of update, when safe flag is set to true
-	 * @throws MongoCursorTimeoutException on timeout of db operation , when safe flag is set to true
+	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function update(array $attributes = null, $modify = false)
 	{
 		if ($this->getIsNewRecord())
-			throw new CDbException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
 		if ($this->beforeSave()) {
 			Yii::trace(get_class($this) . '.update()', 'ext.MongoDb.EMongoDocument');
 			$rawData = $this->toArray();
@@ -662,7 +659,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$this->afterSave();
 				return true;
 			}
-			throw new CException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
+			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
 		}
 	}
 
@@ -700,7 +697,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Deletes the row corresponding to this EMongoDocument.
 	 * @return boolean whether the deletion is successful.
-	 * @throws CException if the record is new
+	 * @throws EMongoException if the record is new
 	 * @since v1.0
 	 */
 	public function delete()
@@ -722,7 +719,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				return false;
 		}
 		else
-			throw new CDbException(Yii::t('yii', 'The EMongoDocument cannot be deleted because it is new.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be deleted because it is new.'));
 	}
 
 	/**

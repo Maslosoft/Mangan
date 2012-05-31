@@ -91,7 +91,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 
 		if ($this->keyField !== null) {
 			if (is_array($this->keyField))
-				throw new CException('This DataProvider cannot handle multi-field primary key!');
+				throw new EMongoException('This DataProvider cannot handle multi-field primary key!');
 		}
 		else
 			$this->keyField = '_id';
