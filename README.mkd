@@ -14,10 +14,6 @@ YiiMongoDbSuite originally started as a fork of [MongoRecord](www.yiiframework.c
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
-<a href="http://flattr.com/thing/112051/Yii-MongoDB-Suite" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
-</a>
-
 **PLEASE refer to the new FULL-Documentation [page](http://canni.github.com/YiiMongoDbSuite)**
 
 *Work-around for using the `OR` operator with this extension provided in [comments](http://www.yiiframework.com/extension/yiimongodbsuite/#c2450)*
@@ -66,7 +62,7 @@ This is the heavy dev branch!
 ## Requirements
 
 - Yii 1.1.5 is required
-- MongoDB latest stable is recommended. Untested with older versions.
+- MongoDB 1.8 is recommended. Untested with older versions.
 
 ## Setup
 
@@ -76,8 +72,6 @@ for your database in the components section, and add the following to the file:
 
 ~~~
 [php]
-
-
     'import' => array(
       ...
       'ext.YiiMongoDbSuite.*',
@@ -94,18 +88,16 @@ for your database in the components section, and add the following to the file:
         'useCursor'        => false
       ),
     ),
-
-
 ~~~
 
 
 - ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example
   if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is
   the ip (or hostname) of your webserver or host.
-- dbName: is the name you want the collections to be stored in. The database name.
-- fsyncFlag if is set to true, this makes mongodb make sure all writes to the database are safely stored to disk. (as default, true)
-- safeFlag if is set to true, mongodb will wait to retrieve status of all write operations, and check if everything went OK. (as default, true)
-- useCursors if is set to true, extension will return EMongoCursor instead of raw pre-populated arrays, form findAll* methods, (default to false, for backwards compatibility)
+- dbName: The database name, where your collections will be be stored in.
+- fsyncFlag If set to true, this makes mongodb make sure all writes to the database are safely stored to disk (true by default).
+- safeFlag If set to true, mongodb will wait to retrieve status of all write operations, and check if everything went OK (true by default).
+- useCursors If set to true, extension will return EMongoCursor instead of raw pre-populated arrays, from findAll* methods (defaults to false for backwards compatibility).
 
 That's all you have to do for setup. You can use it very much like the active record.
 Example:
@@ -113,14 +105,10 @@ Example:
 
 ~~~
 [php]
-
-
     $client = new Client();
     $client->first_name='something';
     $client->save();
     $clients = Client::model()->findAll();
-
-
 ~~~
 
 
@@ -130,8 +118,6 @@ Just define following model:
 
 ~~~
 [php]
-
-
     class User extends EMongoDocument
     {
       public $login;
@@ -147,9 +133,10 @@ Just define following model:
       // This method is required!
       public function getCollectionName()
       {
-        return 'users';
+        return 'users'; // should be lowercase.
       }
 
+      // same as CActiveRecord
       public function rules()
       {
         return array(
@@ -158,7 +145,8 @@ Just define following model:
           array('name', 'length', 'max' => 255),
         );
       }
-      
+
+      // same as CActiveRecord
       public function attributeLabels()
       {
         return array(
@@ -168,19 +156,17 @@ Just define following model:
         );
       }
     }
-
-
 ~~~
 
 
-And thats it! Now start using this User model class like standard Yii AR model
+And that's it! Now start using this User model class like standard Yii AR model.
 
 ## Embedded documents
 
-*NOTE: For performance reasons embedded documents should extend from EMongoEmbeddedDocument instead of EMongoDocument*
+*NOTE: For performance reasons embedded documents should extend from EMongoEmbeddedDocument instead of EMongoDocument.*
 
 EMongoEmbeddedDocument is almost identical as EMongoDocument, in fact EMongoDocument extends from EMongoEmbeddedDocument
-and adds to it DB connection related stuff.
+and adds to it the DB connection and related functions.
 
 NOTE: Embedded documents should not have a static model() method!
 
@@ -190,8 +176,6 @@ Lest assume we have following embedded document:
 
 ~~~
 [php]
-
-
     class UserAddress extends EMongoEmbeddedDocument
     {
       public $city;
@@ -215,8 +199,6 @@ Lest assume we have following embedded document:
         );
       }
     }
-
-
 ~~~
 
 
@@ -225,8 +207,6 @@ Now we can add this method to our User model from previous section:
 
 ~~~
 [php]
-
-
     class User extends EMongoDocument {
       ...
 
@@ -240,29 +220,23 @@ Now we can add this method to our User model from previous section:
 
       ...
     }
-
-
 ~~~
 
 
-And using it is as easy as Pie!
+And using it is as easy as π!
 
 
 ~~~
 [php]
-
-
     $client = new Client;
     $client->address->city='New York';
     $client->save();
-
-
 ~~~
 
 
-it will automatically call validation for model and all embedded documents!
-You even can nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents
-*IMPORTANT*: This mechanism uses recurrency, and will not handle with circular nesting, you have to use this feature with care :P
+This will automatically call validation for the model and all its embedded documents.
+You can even nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents.
+*IMPORTANT*: This mechanism uses recurrency, and will not handle circular nesting, so use this feature with care :P
 
 ## Arrays
 
@@ -280,12 +254,10 @@ You easily can store arrays in DB!
 
 ~~~
 [php]
-
-
     // add a property for your array of embedded documents
     public $addresses;
 
-	  // add EmbeddedArraysBehavior
+    // add EmbeddedArraysBehavior
     public function behaviors()
     {
       return array(
@@ -296,8 +268,6 @@ You easily can store arrays in DB!
         ),
       );
     }
-
-
 ~~~
 
 
@@ -306,14 +276,10 @@ So for the user, if you want them to be able to save multiple addresses, you can
 
 ~~~
 [php]
-
-
     $c = new Client;
     $c->addresses[0] = new ClientAddress;
     $c->addresses[0]->city='NY';
     $c->save(); // behavior will handle validation of array too
-
-
 ~~~
 
 
@@ -341,12 +307,8 @@ This is one of the things that makes this extension great. It's very easy to que
 
 ~~~
 [php]
-
-
     // simple find first. just like normal AR.
     $object = ModelClass::model()->find()
-
-
 ~~~
 
 Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.
@@ -354,13 +316,9 @@ Now suppose you want to only retrieve users, that have a status of 1 (active). T
 
 ~~~
 [php]
-
-
     $c = new EMongoCriteria;
     $c->status('==', 1);
     $users = ModelClass::model->findAll($c);
-
-
 ~~~
 
 
@@ -370,14 +328,10 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
 
 ~~~
 [php]
-
-
     $c = new EMongoCriteria;
     $c->active('==', 1)->limit(10);
 
     $users = ModelClass::model->findAll($c);
-
-
 ~~~
 
 
@@ -385,8 +339,6 @@ It's that easy. In place of the 'equals' key, you can use any of the following o
 
 
 ~~~
-
-
     - 'greater'   | >
     - 'greaterEq' | >=
     - 'less'      | <
@@ -402,12 +354,10 @@ It's that easy. In place of the 'equals' key, you can use any of the following o
     - 'mod'       | %
     - 'equals'    | ==
     - 'where'     | // JavaScript operator
-
-
 ~~~
 
 
-*NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed.Newer versions of mongo db will work, just not the $or operator.
+*NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed. Newer versions of MongoDB will work, just not the $or operator.
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
 
 Here are a few more examples for using criteria:
@@ -415,8 +365,6 @@ Here are a few more examples for using criteria:
 
 ~~~
 [php]
-
-
     // first you must create a new criteria object
     $criteria = new EMongoCriteria;
 
@@ -448,8 +396,6 @@ Here are a few more examples for using criteria:
     // You can even use the where operator with javascript like so:
     $criteria->fieldName('where', ' expression in javascript ie: this.field > this.field2');
     // but remember that this kind of query is a bit slower than normal finds.
-
-
 ~~~
 
 ### Regexp / SQL LIKE replacemt
@@ -459,15 +405,12 @@ You can use native PHP Mongo driver class MongoRegex, to query:
 
 ~~~
 [php]
-
-
     // Create criteria
     $criteria = new EMongoCriteria;
     // Find all records witch have first name starring on a, b and c, case insensitive search
     $criteria->first_name = new MongoRegex('/[abc].*/i');
     $clients = Client::model()->findAll($criteria);
     // see phpdoc for MongoRegex class for more examples
-
 ~~~
 
 
@@ -478,8 +421,6 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ~~~
 [php]
-
-
     // Example criteria
     $array = array(
         'conditions'=>array(
@@ -495,7 +436,6 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 	$criteria = new EMongoCriteria($array);
 	// or
 	$clients = ClientModel::model()->findAll($array);
-
 ~~~
 
 
@@ -507,22 +447,23 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ## Resources
 
- * [Project page on GitHub](https://github.com/canni/YiiMongoDbSuite)
- * [Report a BUG](https://github.com/canni/YiiMongoDbSuite/issues)
- * [MongoDB documentation](http://www.mongodb.org/display/DOCS/Home)
- * [On-Line version of this documentation](http://canni.github.com/YiiMongoDbSuite)
+ * [Project Page on GitHub](https://github.com/digitick/yii-mongodb-suite)
+ * [Report a Bug](https://github.com/digitick/yii-mongodb-suite/issues)
+ * [MongoDB Documentation](http://www.mongodb.org/display/DOCS/Home)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
  * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
 
 ## Contribution needed!
 
-- I'm not English native speaker, need someone who can correct/rewrite/write my documentation and/or PHPDoc's in code
 - Any help would be great :)
-- Contact me: darek.krk on a gmail dot com or via PM
 
 ## Big thanks goes to:
 
-- tyohan: for first inspirations and idea of extension
-- luckysmack: for big help with testing and documentation
-- Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support
-- Nagy Attila Gábor, for big help with new functionality and testing
+We stand upon the shoulders of giants.
+
+- canni, for leading continued development, bug testing, and merging contributions.
+- tyohan, for first inspirations and the extension's concept.
+- luckysmack, for big help with testing and documentation.
+- Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support.
+- Nagy Attila Gábor, for big help with new functionality and testing.
+
