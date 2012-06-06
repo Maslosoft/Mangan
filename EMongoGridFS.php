@@ -29,19 +29,22 @@ abstract class EMongoGridFS extends EMongoDocument
 	private $_gridFSFile;
 
 	/**
+	 * @var string Raw binary data. If set, will use this instead of file contents as specified by 'filename'. 
+	 */
+	private $_bytes;
+
+	/**
 	 * Every EMongoGridFS object has to have one
 	 * @var String $filename
 	 * @since v1.3
 	 */
-	public $filename = null; // required
+	public $filename = null;
 
 	/**
 	 * Returns current MongoGridFS object
 	 * By default this method use {@see getCollectionName()}
 	 * @return MongoGridFS
-	 * @since v1.3
 	 */
-
 	public function getCollection()
 	{
 		if (!isset(self::$_collections[$this->getCollectionName()]))
@@ -67,40 +70,15 @@ abstract class EMongoGridFS extends EMongoDocument
 	public function insert(array $attributes = null)
 	{
 		if (!$this->getIsNewRecord())
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to the database because it is not new.'));
 		if ($this->beforeSave()) {
 			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
 			$rawData = $this->toArray();
 			// free the '_id' container if empty, mongo will not populate it if exists
 			if (empty($rawData['_id']))
 				unset($rawData['_id']);
-			// filter attributes if set in param
-			if ($attributes !== null) {
-				foreach ($rawData as $key => $value) {
-					if (!in_array($key, $attributes))
-						unset($rawData[$key]);
-				}
-			}
-			// check file
-			$filename = '';
-			if (!array_key_exists('filename', $rawData))
-				throw new EMongoException(Yii::t('yii', 'We need a filename'));
-			else {
-				$filename = $rawData['filename'];
-				unset($rawData['filename']);
-			}
 
-			$result = $this->getCollection()->put($filename, $rawData);
-			if ($result !== false) { // strict comparsion driver may return empty array
-				$this->_id = $result;
-				//TODO: should be set in parent class
-				$this->_gridFSFile = $this->getCollection()->findOne(array('_id' => $this->_id));
-				$this->setIsNewRecord(false);
-				$this->setScenario('update');
-				$this->afterSave();
-				return true;
-			}
-			throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+			return $this->store($rawData, $attributes);
 		}
 		return false;
 	}
@@ -117,44 +95,56 @@ abstract class EMongoGridFS extends EMongoDocument
 	public function insertWithPk($pk, array $attributes = null)
 	{
 		if (!($pk instanceof MongoId))
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database primary key is not defined.'));
+			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to the database beacuse its primary key is not defined.'));
 		if ($this->beforeSave()) {
 			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
 			$rawData = $this->toArray();
 			$rawData['_id'] = $pk;
 
-			// filter attributes if set in param
-			if ($attributes !== null) {
-				foreach ($rawData as $key => $value) {
-					if (!in_array($key, $attributes))
-						unset($rawData[$key]);
-				}
-			}
-			// check file
-			$filename = "";
-			if (!array_key_exists('filename', $rawData))
-				throw new EMongoException(Yii::t('yii', 'We need a filename'));
-			else {
-				$filename = $rawData['filename'];
-				unset($rawData['filename']);
-			}
-
-			$result = $this->getCollection()->put($filename, $rawData);
-
-			if ($result !== false) { // strict comparsion driver may return empty array
-				$this->_id = $result;
-				//TODO: should be set in parent class
-				$this->_gridFSFile = $this->getCollection()->findOne(array('_id' => $this->_id));
-				$this->setIsNewRecord(false);
-				$this->setScenario('update');
-				$this->afterSave();
-
-				return true;
-			}
-
-			throw new EMongoException(Yii::t('yii', 'Can\'t save document to disk, or try to save empty document!'));
+			return $this->store($rawData, $attributes);
 		}
 		return false;
+	}
+
+	/**
+	 * Store a document.
+	 * @param array $rawData
+	 * @param array $attributes
+	 * @return boolean True on success
+	 * @throws EMongoException 
+	 */
+	protected function store($rawData, $attributes)
+	{
+		// filter attributes if set in param
+		if ($attributes !== null) {
+			foreach ($rawData as $key => $value) {
+				if (!in_array($key, $attributes))
+					unset($rawData[$key]);
+			}
+		}
+
+		if (!isset($rawData['filename']))
+			throw new EMongoException(Yii::t('yii', 'A filename is required to save a GridFS document.'));
+
+		// store bytes directly or store file
+		if (isset($this->_bytes))
+			$result = $this->getCollection()->storeBytes($this->_bytes, $rawData);
+		else {
+			$filename = $rawData['filename'];
+			unset($rawData['filename']);
+			$result = $this->getCollection()->storeFile($filename, $rawData);
+		}
+
+		if ($result !== false) { // strict compare because driver may return empty array
+			$this->_id = $result;
+			//TODO: should be set in parent class
+			$this->_gridFSFile = $this->getCollection()->findOne(array('_id' => $this->_id));
+			$this->setIsNewRecord(false);
+			$this->setScenario('update');
+			$this->afterSave();
+			return true;
+		}
+		throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 	}
 
 	/**
@@ -209,6 +199,15 @@ abstract class EMongoGridFS extends EMongoDocument
 	}
 
 	/**
+	 * Set raw bytes. If set, will use this instead of file contents as specified by 'filename'. 
+	 * @param string $bytes 
+	 */
+	public function setBytes($bytes)
+	{
+		$this->_bytes = $bytes;
+	}
+
+	/**
 	 * Returns the file size
 	 * GetSize wrapper of MongoGridFSFile function
 	 * @return integer file size
@@ -252,6 +251,8 @@ abstract class EMongoGridFS extends EMongoDocument
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
 		if (method_exists($this->_gridFSFile, 'getBytes') === true)
 			return $this->_gridFSFile->getBytes();
+		else if (isset($this->_bytes))
+			return $this->_bytes;
 		else
 			return false;
 	}
