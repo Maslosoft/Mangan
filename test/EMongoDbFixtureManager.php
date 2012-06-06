@@ -80,9 +80,9 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		parent::init();
 		if($this->basePath===null)
 			$this->basePath=Yii::getPathOfAlias('application.tests.fixtures');
-		elseif(strpos($this->basePath, 'application.') === 0) {
+		else if(strpos($this->basePath, 'application.') === 0)
 			$this->basePath=Yii::getPathOfAlias($this->basePath);
-		}
+
 		$this->prepare();
 	}
 
@@ -172,7 +172,8 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 * @param string $collectionName collection name
 	 * @return boolean
 	 */
-	protected function isCollection($collectionName) {
+	protected function isCollection($collectionName)
+	{
 		if ($this->_collectionList === null) {
 			$this->_collectionList = array();
 			foreach($this->getDbConnection()->listCollections() as $collection)

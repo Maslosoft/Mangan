@@ -116,9 +116,9 @@ class EMongoDbHttpSession extends CHttpSession
 			'fsync' => $this->fsync,
 			'safe' => $this->safe
 		);
-		if (!is_null($this->timeout)) {
+		if (!is_null($this->timeout))
 			$this->options['timeout'] = $this->timeout;
-		}
+
 		parent::init();
 	}
 	

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EMongoPartialDocument.php
  *
@@ -23,13 +24,14 @@
  */
 abstract class EMongoPartialDocument extends EMongoDocument
 {
-	protected $_loadedFields	= array();	// Fields that have not been loaded from DB
-	protected $_partial			= false;	// Whatever the document has been partially loaded
+	protected $_loadedFields = array(); // Fields that have not been loaded from DB
+	protected $_partial = false; // Whatever the document has been partially loaded
 
 	/**
 	 * Returns if this document is only partially loaded
 	 * @return boolean true if the document is partially loaded
 	 */
+
 	public function isPartial()
 	{
 		return $this->_partial;
@@ -53,9 +55,8 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	public function getUnloadedFields()
 	{
 		return $this->_partial ? array_diff(
-			$this->_loadedFields,
-			$this->attributeNames()
-		) : array();
+						$this->_loadedFields, $this->attributeNames()
+				) : array();
 	}
 
 	/**
@@ -64,13 +65,12 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	public function __get($name)
 	{
 		if(
-			$this->_partial &&
-			$this->hasEmbeddedDocuments() &&
-			isset(self::$_embeddedConfig[get_class($this)][$name]) &&
-			!in_array($name, $this->_loadedFields)
-		){
+				$this->_partial &&
+				$this->hasEmbeddedDocuments() &&
+				isset(self::$_embeddedConfig[get_class($this)][$name]) &&
+				!in_array($name, $this->_loadedFields)
+		)
 			return null;
-		}
 		else
 			return parent::__get($name);
 	}
@@ -106,8 +106,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	public function loadAttributes($attributes = array())
 	{
 		$document = $this->getCollection()->findOne(
-			array('_id' => $this->_id),
-			$attributes
+				array('_id' => $this->_id), $attributes
 		);
 
 		unset($document['_id']);
@@ -116,11 +115,10 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 		if(count($attributesSum) === count($this->attributeNames()))
 		{
-			$this->_partial			= false;
-			$this->_loadedFields	= null;
+			$this->_partial = false;
+			$this->_loadedFields = null;
 		}
-		else
-		{
+		else {
 			$this->_loadedFields = $attributesSum;
 		}
 
@@ -143,12 +141,12 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function update(array $attributes=null, $modify = false)
+	public function update(array $attributes = null, $modify = false)
 	{
 		if($this->_partial)
 		{
-			if(count($attributes) > 0)
-				$attributes = array_intersect($attributes, $this->_loadedFields)
+			if (count($attributes) > 0)
+				$attributes = array_intersect($attributes, $this->_loadedFields);
 			else
 				$attributes = array_diff($this->_loadedFields, array('_id'));
 			return parent::update($attributes, true);

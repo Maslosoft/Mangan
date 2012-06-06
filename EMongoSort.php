@@ -55,9 +55,9 @@ class EMongoSort extends CSort
 			return is_array($this->defaultOrder) ? $this->defaultOrder : array(); // use the defaultOrder
 		else {
 			$orders = array();
-			foreach ($directions as $attribute => $direction) {
+			foreach ($directions as $attribute => $direction)
 				$orders[$attribute] = $direction;
-			}
+
 			return $orders;
 		}
 	}
@@ -128,21 +128,23 @@ class EMongoSort extends CSort
 			$this->_directions = array();
 			if (isset($_GET[$this->sortVar])) {
 				$attributes = explode($this->separators[0], $_GET[$this->sortVar]);
-				foreach ($attributes as $attribute) {
-					if (($pos = strrpos($attribute, $this->separators[1])) !== false) {
+				foreach ($attributes as $attribute)
+				{
+					if (($pos = strrpos($attribute, $this->separators[1])) !== false)
+					{
 						$descending = substr($attribute, $pos + 1) === $this->descTag;
 						if ($descending) {
 							$attribute = substr($attribute, 0, $pos);
 							$direction = EMongoCriteria::SORT_DESC;
 						}
-						else {
+						else
 							$direction = EMongoCriteria::SORT_ASC;
-						}
 					}
 					else
 						$direction = EMongoCriteria::SORT_ASC;
 
-					if (($this->resolveAttribute($attribute)) !== false) {
+					if (($this->resolveAttribute($attribute)) !== false)
+					{
 						$this->_directions[$attribute] = $direction;
 						if (!$this->multiSort)
 							return $this->_directions;
@@ -178,7 +180,8 @@ class EMongoSort extends CSort
 	public function createUrl($controller, $directions)
 	{
 		$sorts = array();
-		foreach ($directions as $attribute => $direction) {
+		foreach ($directions as $attribute => $direction)
+		{
 			if ($direction == EMongoCriteria::SORT_DESC)
 				$sorts[] = $attribute;
 			else

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EEmbeddedArraysBehavior.php
  *
@@ -34,7 +35,6 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	 * @since v1.0
 	 */
 	public $arrayDocClassName;
-
 	private $_cache;
 
 	/**
@@ -44,10 +44,10 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	 */
 	private $_embeddedOwner;
 
-	public function events() {
-		if (!$this->_embeddedOwner) {
+	public function events()
+	{
+		if (!$this->_embeddedOwner)
 			return parent::events();
-		}
 		else {
 			// If attached to an embedded document these events are not defined
 			// and would throw an error if attached to
@@ -69,8 +69,8 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	public function attach($owner)
 	{
 		// Test if we have correct embding class
-		if(!is_subclass_of($this->arrayDocClassName, 'EMongoEmbeddedDocument'))
-			throw new EMongoException(Yii::t('yii', $this->arrayDocClassName.' is not a child class of EMongoEmbeddedDocument.'));
+		if (!is_subclass_of($this->arrayDocClassName, 'EMongoEmbeddedDocument'))
+			throw new EMongoException(Yii::t('yii', $this->arrayDocClassName . ' is not a child class of EMongoEmbeddedDocument.'));
 
 		$this->_embeddedOwner = !($owner instanceof EMongoDocument);
 
@@ -107,9 +107,8 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 				// attributes
 				foreach (array_keys($obj->behaviors()) as $name) {
 					$behavior = $obj->asa($name);
-					if ($behavior instanceof EEmbeddedArraysBehavior) {
+					if ($behavior instanceof EEmbeddedArraysBehavior)
 						$behavior->parseExistingArray();
-					}
 				}
 				$arrayOfDocs[] = $obj;
 			}
@@ -132,8 +131,7 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 
 	public function beforeToArray($event)
 	{
-		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
-		{
+		if (is_array($this->getOwner()->{$this->arrayPropertyName})) {
 			$arrayOfDocs = array();
 			$this->_cache = $this->getOwner()->{$this->arrayPropertyName};
 
