@@ -2,10 +2,11 @@
 /**
  * CUniqueValidator class file.
  *
+ * @author Ianaré Sévi
  * @author Florian Fackler <florian.fackler@mintao.com>
  * @link http://mintao.com
- * @copyright Copyright &copy; 2008-2010 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @copyright Copyright (c) 2008-2010 Yii Software LLC
+ * @license New BSD license
  */
 
 /**

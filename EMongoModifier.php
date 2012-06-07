@@ -1,16 +1,13 @@
 <?php
+
 /**
- * EMongoModifier.php
- *
- * PHP version 5.2+
- *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2011 Ibitux http://www.ibitux.com
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		xxx
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- *
+ * @author Ianaré Sévi
+ * @author Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright 2011 Ibitux http://www.ibitux.com
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
@@ -46,15 +43,15 @@ class EMongoModifier extends CComponent
 	);
 
 	/**
-	 * @var array 
+	 * @var array
 	 */
 	private $_fields = array();
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * Modifier sample:
-	 * 
+	 *
 	 * <PRE>
 	 * 'modifier' = array(
 	 *	'fieldName1'=>array('inc' => $incValue),
@@ -87,7 +84,7 @@ class EMongoModifier extends CComponent
 		else if($modifier instanceof EMongoModifier)
 			$this->mergeWith($modifier);
 	}
-	
+
 	/**
 	 * Compute modifier to be able to initiate request.
 	 * @return array
@@ -107,7 +104,7 @@ class EMongoModifier extends CComponent
 		}
 		return $modifier;
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -115,7 +112,7 @@ class EMongoModifier extends CComponent
 	{
 		return $this->_fields;
 	}
-	
+
 	/**
 	 * Add a new set of modifiers to current modifiers. If modifiers has already been
 	 * added for specific field, they will be overwritten.

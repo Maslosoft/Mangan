@@ -1,13 +1,11 @@
 <?php
 /**
- * EMongoDbFixtureManager
- *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2010-2011 Ibitux
- * @license		http://www.yiiframework.com/license/ BSD license
- * @category	tests
- * @package		ext.YiiMongoDbSuite.tests
- * @since		v1.3.6
+ * @author Ianaré Sévi
+ * @author Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright 2010-2011 Ibitux
+ * @license New BSD license
+ * @category tests
+ * @package ext.YiiMongoDbSuite.tests
  */
 
 /**
@@ -33,12 +31,7 @@
  * the database. If this file is not found, all available fixtures will be loaded
  * into the database.
  *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2010-2011 Ibitux
- * @license		http://www.yiiframework.com/license/ BSD license
- * @category	tests
- * @package		ext.YiiMongoDbSuite.tests
- * @since		v1.3.6
+ * @since v1.3.6
  */
 class EMongoDbFixtureManager extends CApplicationComponent
 {
@@ -66,7 +59,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	public $connectionID='mongodb';
 
 	private $_mongoDb;
-	
+
 	private $_fixtures;
 	private $_rows;				// fixture name, row alias => row
 	private $_records;			// fixture name, row alias => record (or class name)
@@ -153,7 +146,8 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	public function loadFixture($collectionName)
 	{
 		$fileName=$this->basePath.DIRECTORY_SEPARATOR.$collectionName.'.php';
-		if(!is_file($fileName)) {
+		if(!is_file($fileName))
+		{
 			echo "Could not find fixture: ".$fileName;
 			return false;
 		}
@@ -174,7 +168,8 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 */
 	protected function isCollection($collectionName)
 	{
-		if ($this->_collectionList === null) {
+		if ($this->_collectionList === null)
+		{
 			$this->_collectionList = array();
 			foreach($this->getDbConnection()->listCollections() as $collection)
 				$this->_collectionList[] = $collection->getName();

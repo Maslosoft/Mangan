@@ -1,43 +1,35 @@
 <?php
 
 /**
- * EMongoEmbeddedDocument.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since		v1.0.8
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
  * EMongoEmbeddedDocument
- * 
+ *
  * @since v1.0.8
  */
 abstract class EMongoEmbeddedDocument extends CModel
 {
-	private static $_attributes = array();
-
 	/**
 	 * CMap of embedded documents
 	 * @var CMap $_embedded
 	 * @since v1.0.8
 	 */
 	protected $_embedded = null;
-
 	/**
 	 * Cacheed values for embeddedDocuments() method vall
 	 * @var array $_embeddedConfig
 	 * @since v1.3.2
 	 */
 	protected static $_embeddedConfig = array();
-
 	/**
 	 * Hold down owner pointer (if any)
 	 *
@@ -45,6 +37,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * @since v1.0.8
 	 */
 	protected $_owner = null;
+
+	private static $_attributes = array();
 
 	/**
 	 * Constructor.
@@ -72,7 +66,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function init()
 	{
-		
+
 	}
 
 	/**

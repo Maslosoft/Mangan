@@ -1,13 +1,16 @@
 <?php
 
 /**
+ * @author Ianaré Sévi (merge into EMongoDB)
  * @author aoyagikouhei (original author)
- * @author ianaré sévi (merge into EMongoDB)
- * 
- * @license New BSD License
- *
- * Install
- * Extract the release file under protected/extensions
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
+ */
+
+/**
+ * EMongoHttpSession
  * 
  * Example, in config/main.php:
  * 	'session' => array(

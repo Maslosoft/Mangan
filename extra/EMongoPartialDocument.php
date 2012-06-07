@@ -1,23 +1,20 @@
 <?php
 
 /**
- * EMongoPartialDocument.php
- *
- * PHP version 5.2+
- *
- * @author		Nagy Attila Gabor
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since		v1.3.6
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
  * EMongoPartialDocument
  *
+ * @author Nagy Attila Gabor
  * @property-read array $loadedFields
  * @property-read array $unloadedFields
  * @since	v1.3.6

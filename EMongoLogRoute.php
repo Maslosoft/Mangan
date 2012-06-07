@@ -1,14 +1,17 @@
 <?php
 
 /**
+ * @author Ianaré Sévi (merge into EMongoDB)
  * @author aoyagikouhei (original author)
- * @author ianaré sévi (merge into EMongoDB)
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
+ */
+
+/**
+ * EMongoLogRoute
  * 
- * @license New BSD License
- *
- * Install
- * Extract the release file under protected/extensions
- *
  * Example, in config/main.php:
  * 'log'=>array(
  * 		'class' => 'CLogRouter',
@@ -21,7 +24,7 @@
  * 			),
  * 		),
  * ),
- * 
+ *
  * Options:
  * connectionID				: mongo component name			: default mongodb
  * collectionName			: collaction name				: default yiilog
@@ -162,7 +165,7 @@ class EMongoLogRoute extends CLogRoute
 	/**
 	 * Return the formatted timestamp.
 	 * @param float $timestamp Timestamp as given by log function.
-	 * @return mixed 
+	 * @return mixed
 	 */
 	protected function formatTimestamp($timestamp)
 	{

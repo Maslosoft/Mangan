@@ -1,18 +1,14 @@
 <?php
 
 /**
- * EMongoDocumentDataProvider.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since		v1.0
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
@@ -35,14 +31,12 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * @since v1.0
 	 */
 	public $keyField;
-
 	/**
 	 * @var string the primary ActiveRecord class name. The {@link getData()} method
 	 * will return a list of objects of this class.
 	 * @since v1.0
 	 */
 	public $modelClass;
-
 	/**
 	 * @var EMongoRecord the AR finder instance (e.g. <code>Post::model()</code>).
 	 * This property can be set by passing the finder instance as the first parameter
@@ -91,7 +85,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 
 		if ($this->keyField !== null) {
 			if (is_array($this->keyField))
-				throw new EMongoException('This DataProvider cannot handle multi-field primary key!');
+				throw new EMongoException('This DataProvider cannot handle multi-field primary key.');
 		}
 		else
 			$this->keyField = '_id';

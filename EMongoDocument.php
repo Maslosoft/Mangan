@@ -1,18 +1,14 @@
 <?php
 
 /**
- * EMongoDocument.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since		v1.0
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
@@ -563,14 +559,17 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if (!$this->getIsNewRecord())
 			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
-		if ($this->beforeSave()) {
+
+		if ($this->beforeSave())
+		{
 			Yii::trace(get_class($this) . '.insert()', 'ext.MongoDb.EMongoDocument');
 			$rawData = $this->toArray();
 			// free the '_id' container if empty, mongo will not populate it if exists
 			if (empty($rawData['_id']))
 				unset($rawData['_id']);
 			// filter attributes if set in param
-			if ($attributes !== null) {
+			if ($attributes !== null)
+			{
 				foreach ($rawData as $key => $value) {
 					if (!in_array($key, $attributes))
 						unset($rawData[$key]);
@@ -599,7 +598,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$this->setScenario('update');
 				return true;
 			}
-			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
+			throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 		}
 		return false;
 	}
@@ -659,7 +658,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$this->afterSave();
 				return true;
 			}
-			throw new EMongoException(Yii::t('yii', 'Can\t save document to disk, or try to save empty document!'));
+			throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 		}
 	}
 
@@ -950,7 +949,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function deleteAll($criteria = null)
 	{
-		Yii::trace(get_class($this) . '.deleteByPk()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace(get_class($this) . '.deleteAll()', 'ext.MongoDb.EMongoDocument');
 		$this->applyScopes($criteria);
 
 		if (version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
@@ -1216,7 +1215,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		$criteria = $this->getDbCriteria();
 
-		foreach ($this->getSafeAttributeNames() as $attribute) {
+		foreach ($this->getSafeAttributeNames() as $attribute)
+		{
 			if ($this->$attribute !== null && $this->$attribute !== '') {
 				if (is_array($this->$attribute) || is_object($this->$attribute))
 					$criteria->$attribute = $this->$attribute;
@@ -1293,7 +1293,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			else
 				$criteria->{$pkField}('in', $pk);
 		}
-		else if (is_array($pkField)) {
+		else if (is_array($pkField))
+		{
 			if (!$multiple)
 				for ($i = 0; $i < count($pkField); $i++) {
 					$pkField = $pk[$i];

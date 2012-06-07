@@ -1,17 +1,13 @@
 <?php
 /**
- * EMongoDB.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since v1.0
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
@@ -31,16 +27,16 @@ class EMongoDB extends CApplicationComponent
 	 * @since v1.0
 	 */
 	public $connectionString;
-	
+
 	/**
-	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will 
-	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting 
+	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will
+	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting
 	 * to a server that was not even listed.
 	 * @example myReplicaSet
 	 * @since v1.3.7
 	 */
 	public $replicaSet = null;
-	
+
 	/**
 	 * @var int timeout For how long the driver should try to connect to the database (in milliseconds).
 	 * @example 2000
@@ -149,9 +145,9 @@ class EMongoDB extends CApplicationComponent
 				Yii::trace('Opening MongoDB connection', 'ext.MongoDb.EMongoDB');
 				if(empty($this->connectionString))
 					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
-				
+
 				$options = array( 'connect'=>$this->autoConnect );
-				
+
 				if($this->persistentConnection !== false)
 					$options['persist'] = $this->persistentConnection;
 				if( !is_null( $this->replicaSet ) )
@@ -160,7 +156,7 @@ class EMongoDB extends CApplicationComponent
 					$options['timeout'] = $this->timeout;
 
 				$this->_mongoConnection = new Mongo($this->connectionString, $options);
-				
+
 				return $this->_mongoConnection;
 			}
 			catch(MongoConnectionException $e)
