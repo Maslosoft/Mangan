@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author aoyagikouhei (original author)
  * @author ianaré sévi (merge into EMongoDB)
@@ -9,16 +10,16 @@
  * Extract the release file under protected/extensions
  * 
  * Example, in config/main.php:
- *	'session' => array(
- *		'class' => 'ext.EMongoDbHttpSession',
- *		'collectionName' => 'yiisession',
- *		'idColumn' => 'id',
- *		'dataColumn' => 'data',
- *		'expireColumn' => 'expire',
- *	),
+ * 	'session' => array(
+ * 		'class' => 'ext.EMongoDbHttpSession',
+ * 		'collectionName' => 'yiisession',
+ * 		'idColumn' => 'id',
+ * 		'dataColumn' => 'data',
+ * 		'expireColumn' => 'expire',
+ * 	),
  *
  * Options:
- * mongodb				: mongo component name			: default mongodb
+ * connectionID			: mongo component name			: default mongodb
  * collectionName		: collaction name				: default yiisession
  * idColumn				: id column name				: default id
  * dataColumn			: data column name				: default dada
@@ -28,17 +29,17 @@
  * timeout				: timeout miliseconds			: default null
  *
  */
-class EMongoDbHttpSession extends CHttpSession
+class EMongoHttpSession extends CHttpSession
 {
 	/**
 	 * @var string Mongo DB component.
 	 */
-	public $mongodb = 'mongodb';
-	
+	public $connectionID = 'mongodb';
+
 	/**
 	 * @var string Collection name
 	 */
-	public $collectionName="yiisession";
+	public $collectionName = 'yiisession';
 
 	/**
 	 * @var string id column name
@@ -48,12 +49,12 @@ class EMongoDbHttpSession extends CHttpSession
 	/**
 	 * @var string level data name
 	 */
-	public $dataColumn='data';
+	public $dataColumn = 'data';
 
 	/**
 	 * @var string expire column name
 	 */
-	public $expireColumn='expire';
+	public $expireColumn = 'expire';
 
 	/**
 	 * @var boolean forces the update to be synced to disk before returning success.
@@ -71,7 +72,7 @@ class EMongoDbHttpSession extends CHttpSession
 	public $timeout = null;
 
 	/**
-	 * @var Mongo mongo Db collection
+	 * @var MongoCollection mongo Db collection
 	 */
 	private $_collection;
 
@@ -91,12 +92,12 @@ class EMongoDbHttpSession extends CHttpSession
 	 * Returns current MongoCollection object.
 	 * @return MongoCollection
 	 */
-	public function setCollection($collectionName)
+	protected function setCollection($collectionName)
 	{
 		if (self::$_emongoDb === null) {
-			self::$_emongoDb = Yii::app()->getComponent($this->mongodb);
-			if(!(self::$_emongoDb instanceof EMongoDB))
-				throw new EMongoException('EMongoHttpSession.mongodb is invalid');
+			self::$_emongoDb = Yii::app()->getComponent($this->connectionID);
+			if (!(self::$_emongoDb instanceof EMongoDB))
+				throw new EMongoException('EMongoHttpSession.connectionID is invalid');
 		}
 		if (!isset($this->_collection)) {
 			$db = self::$_emongoDb->getDbInstance();
@@ -104,29 +105,28 @@ class EMongoDbHttpSession extends CHttpSession
 		}
 		return $this->_collection;
 	}
-	
+
 	/**
 	 * Initializes the route.
 	 * This method is invoked after the route is created by the route manager.
 	 */
 	public function init()
 	{
-		$this->setCollection($this->_collectionName);
+		$this->setCollection($this->collectionName);
 		$this->_options = array(
 			'fsync' => $this->fsync,
 			'safe' => $this->safe
 		);
 		if (!is_null($this->timeout))
-			$this->options['timeout'] = $this->timeout;
-
+			$this->_options['timeout'] = $this->timeout;
 		parent::init();
 	}
-	
+
 	protected function getData($id)
 	{
 		return $this->_collection->findOne(array($this->idColumn => $id), array($this->dataColumn));
 	}
-	
+
 	protected function getExipireTime()
 	{
 		return time() + $this->getTimeout();
@@ -141,7 +141,7 @@ class EMongoDbHttpSession extends CHttpSession
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Session open handler.
 	 * Do not call this method directly.
@@ -153,7 +153,7 @@ class EMongoDbHttpSession extends CHttpSession
 	{
 		$this->gcSession(0);
 	}
-	
+
 	/**
 	 * Session read handler.
 	 * Do not call this method directly.
@@ -165,7 +165,7 @@ class EMongoDbHttpSession extends CHttpSession
 		$row = $this->getData($id);
 		return is_null($row) ? '' : $row[$this->dataColumn];
 	}
-	
+
 	/**
 	 * Session write handler.
 	 * Do not call this method directly.
@@ -173,21 +173,21 @@ class EMongoDbHttpSession extends CHttpSession
 	 * @param string $data session data
 	 * @return boolean whether session write is successful
 	 */
-	public function writeSession($id,$data)
+	public function writeSession($id, $data)
 	{
-		$opts = $this->options;
-		$opts['upsert'] = true;
+		$options = $this->_options;
+		$options['upsert'] = true;
 		return $this->_collection->update(
-			array($this->idColumn => $id)
-			,array(
-				$this->dataColumn => $data,
-				$this->expireColumn => $this->getExipireTime(),
-				$this->idColumn => $id
-		)
-		,$opts
+				array($this->idColumn => $id),
+				array(
+					$this->dataColumn => $data,
+					$this->expireColumn => $this->getExipireTime(),
+					$this->idColumn => $id
+				),
+				$options
 		);
 	}
-	
+
 	/**
 	 * Session destroy handler.
 	 * Do not call this method directly.
@@ -197,9 +197,9 @@ class EMongoDbHttpSession extends CHttpSession
 	public function destroySession($id)
 	{
 		return $this->_collection->remove(
-			array($this->idColumn => $id), $this->options);
+						array($this->idColumn => $id), $this->_options);
 	}
-	
+
 	/**
 	 * Session GC (garbage collection) handler.
 	 * Do not call this method directly.
@@ -208,37 +208,40 @@ class EMongoDbHttpSession extends CHttpSession
 	 */
 	public function gcSession($maxLifetime)
 	{
-		return $this->_collection->remove(
-			array($this->expireColumn => array('$lt' => time())), $this->options);
+		return $this->_collection->remove(array($this->expireColumn => array('$lt' => time())), $this->_options);
 	}
-	
+
 	/**
 	 * Updates the current session id with a newly generated one.
 	 * Please refer to {@link http://php.net/session_regenerate_id} for more details.
 	 * @param boolean $deleteOldSession Whether to delete the old associated session file or not.
 	 * @since 1.1.8
 	 */
-	public function regenerateID($deleteOldSession=false)
+	public function regenerateID($deleteOldSession = false)
 	{
-		$oldId = session_id();;
+		$oldId = session_id();
+		;
 		parent::regenerateID(false);
 		$newId = session_id();
 		$row = $this->getData($oldId);
 		if (is_null($row)) {
 			$this->_collection->insert(array(
-			$this->idColumn => $newId
-			,$this->expireColumn => $this->getExipireTime()
-			), $this->options);
-		} else if ($deleteOldSession) {
+				$this->idColumn => $newId
+				, $this->expireColumn => $this->getExipireTime()
+					), $this->_options);
+		}
+		else if ($deleteOldSession) {
 			$this->_collection->update(
-				array($this->idColumn => $oldId)
-				,array($this->idColumn => $newId)
-				,$this->options
+					array($this->idColumn => $oldId)
+					, array($this->idColumn => $newId)
+					, $this->_options
 			);
-		} else {
+		}
+		else {
 			$row[$this->idColumn] = $newId;
 			unset($row['_id']);
-			$this->_collection->insert($row, $this->options);
+			$this->_collection->insert($row, $this->_options);
 		}
 	}
+
 }

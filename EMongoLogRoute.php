@@ -23,7 +23,7 @@
  * ),
  * 
  * Options:
- * mongodb					: mongo component name			: default mongodb
+ * connectionID				: mongo component name			: default mongodb
  * collectionName			: collaction name				: default yiilog
  * message					: message column name			: default message
  * level					: level column name				: default level
@@ -44,7 +44,7 @@ class EMongoLogRoute extends CLogRoute
 	/**
 	 * @var string Mongo DB component.
 	 */
-	public $mongodb = 'mongodb';
+	public $connectionID = 'mongodb';
 
 	/**
 	 * @var string Collection name.
@@ -127,12 +127,12 @@ class EMongoLogRoute extends CLogRoute
 	 * Returns current MongoCollection object.
 	 * @return MongoCollection
 	 */
-	public function setCollection($collectionName)
+	protected function setCollection($collectionName)
 	{
 		if (self::$_emongoDb === null) {
-			self::$_emongoDb = Yii::app()->getComponent($this->mongodb);
+			self::$_emongoDb = Yii::app()->getComponent($this->connectionID);
 			if(!(self::$_emongoDb instanceof EMongoDB))
-				throw new EMongoException('EMongoHttpSession.mongodb is invalid');
+				throw new EMongoException('EMongoHttpSession.connectionID is invalid');
 		}
 		if (!isset($this->_collection)) {
 			$db = self::$_emongoDb->getDbInstance();
