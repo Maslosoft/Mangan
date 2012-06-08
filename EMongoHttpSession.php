@@ -11,7 +11,7 @@
 
 /**
  * EMongoHttpSession
- * 
+ *
  * Example, in config/main.php:
  * 	'session' => array(
  * 		'class' => 'ext.EMongoDbHttpSession',
@@ -38,58 +38,42 @@ class EMongoHttpSession extends CHttpSession
 	 * @var string Mongo DB component.
 	 */
 	public $connectionID = 'mongodb';
-
 	/**
 	 * @var string Collection name
 	 */
 	public $collectionName = 'yiisession';
-
 	/**
 	 * @var string id column name
 	 */
 	public $idColumn = 'id';
-
 	/**
 	 * @var string level data name
 	 */
 	public $dataColumn = 'data';
-
 	/**
 	 * @var string expire column name
 	 */
 	public $expireColumn = 'expire';
-
 	/**
 	 * @var boolean forces the update to be synced to disk before returning success.
 	 */
 	public $fsync = false;
-
 	/**
 	 * @var boolean the program will wait for the database response.
 	 */
 	public $safe = false;
-
 	/**
 	 * @var boolean if "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
 	 */
 	public $timeout = null;
-
-	/**
-	 * @var MongoCollection mongo Db collection
-	 */
-	private $_collection;
-
 	/**
 	 * @var array insert options
 	 */
 	private $_options;
-
 	/**
-	 * EMongoDB component static instance
-	 * @var EMongoDB $_emongoDb;
-	 * @since v1.0
+	 * @var MongoCollection mongo Db collection
 	 */
-	protected static $_emongoDb;
+	private $_collection;
 
 	/**
 	 * Returns current MongoCollection object.
@@ -97,14 +81,13 @@ class EMongoHttpSession extends CHttpSession
 	 */
 	protected function setCollection($collectionName)
 	{
-		if (self::$_emongoDb === null) {
-			self::$_emongoDb = Yii::app()->getComponent($this->connectionID);
-			if (!(self::$_emongoDb instanceof EMongoDB))
+		if (!isset($this->_collection))
+		{
+			$db = Yii::app()->getComponent($this->connectionID);
+			if (!($db instanceof EMongoDB))
 				throw new EMongoException('EMongoHttpSession.connectionID is invalid');
-		}
-		if (!isset($this->_collection)) {
-			$db = self::$_emongoDb->getDbInstance();
-			$this->_collection = $db->selectCollection($collectionName);
+
+			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);
 		}
 		return $this->_collection;
 	}

@@ -11,7 +11,7 @@
 
 /**
  * EMongoLogRoute
- * 
+ *
  * Example, in config/main.php:
  * 'log'=>array(
  * 		'class' => 'CLogRouter',
@@ -48,32 +48,26 @@ class EMongoLogRoute extends CLogRoute
 	 * @var string Mongo DB component.
 	 */
 	public $connectionID = 'mongodb';
-
 	/**
 	 * @var string Collection name.
 	 */
 	public $collectionName = 'yiilogs';
-
 	/**
 	 * @var string timestamp type name: 'float', 'date', 'string'
 	 */
 	public $timestampType = 'float';
-
 	/**
 	 * @var string message column name
 	 */
 	public $message = 'message';
-
 	/**
 	 * @var string level column name
 	 */
 	public $level = 'level';
-
 	/**
 	 * @var string category column name
 	 */
 	public $category = 'category';
-
 	/**
 	 * @var string timestamp column name
 	 */
@@ -98,33 +92,22 @@ class EMongoLogRoute extends CLogRoute
 	 * @var boolean Force the update to be synced to disk before returning success.
 	 */
 	public $fsync = false;
-
 	/**
 	 * @var boolean The program will wait for the database response.
 	 */
 	public $safe = false;
-
 	/**
 	 * @var boolean If "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
 	 */
 	public $timeout = null;
-
 	/**
 	 * @var array Insert options.
 	 */
 	private $_options;
-
 	/**
 	 * @var MongoCollection Collection object used.
 	 */
 	private $_collection;
-
-	/**
-	 * EMongoDB component static instance
-	 * @var EMongoDB $_emongoDb;
-	 * @since v1.0
-	 */
-	protected static $_emongoDb;
 
 	/**
 	 * Returns current MongoCollection object.
@@ -132,14 +115,13 @@ class EMongoLogRoute extends CLogRoute
 	 */
 	protected function setCollection($collectionName)
 	{
-		if (self::$_emongoDb === null) {
-			self::$_emongoDb = Yii::app()->getComponent($this->connectionID);
-			if(!(self::$_emongoDb instanceof EMongoDB))
+		if (!isset($this->_collection))
+		{
+			$db = Yii::app()->getComponent($this->connectionID);
+			if (!($db instanceof EMongoDB))
 				throw new EMongoException('EMongoHttpSession.connectionID is invalid');
-		}
-		if (!isset($this->_collection)) {
-			$db = self::$_emongoDb->getDbInstance();
-			$this->_collection = $db->selectCollection($collectionName);
+
+			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);
 		}
 		return $this->_collection;
 	}

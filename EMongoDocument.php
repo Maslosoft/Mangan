@@ -342,7 +342,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if (!is_array($values))
 			return;
-		if ($this->hasEmbeddedDocuments()) {
+		if ($this->hasEmbeddedDocuments())
+		{
 			$attributes = array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
 
 			foreach ($this->embeddedDocuments() as $fieldName => $className)
@@ -370,7 +371,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			array_shift($indexInfo); // strip out default _id index
 
 			$indexes = array();
-			foreach ($indexInfo as $index) {
+			foreach ($indexInfo as $index)
+			{
 				$indexes[$index['name']] = array(
 					'key' => $index['key'],
 					'unique' => isset($index['unique']) ? $index['unique'] : false,
@@ -403,7 +405,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	private function ensureIndexes()
 	{
 		$indexNames = array_keys(self::$_indexes[$this->getCollectionName()]);
-		foreach ($this->indexes() as $name => $index) {
+		foreach ($this->indexes() as $name => $index)
+		{
 			if (!in_array($name, $indexNames)) {
 				if (version_compare(Mongo::VERSION, '1.0.2', '>=') === true) {
 					$this->getCollection()->ensureIndex(
