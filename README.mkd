@@ -22,19 +22,20 @@ This is the heavy dev branch!
 
 ## The Key Feature List:
 
-### Features covered from standard Yii ActiveRecord implementation
+### Features Covered From Standard Yii Implementations
 
-- Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax
-- Named scopes, along with default scope and parameterized scopes, just like in AR
+- Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax.
+- Named scopes, along with default scope and parameterized scopes, just like in AR.
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
 - Model classes and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
-- Relations support *idea/concept/example*
-- **Support for generating CRUD for EMongoDocument models, with Gii!**
-- **Support for generating mongo document models from existing SQL tables!**
-- Very easy to use criteria object, you don't have to create complex MongoDB query arrays!
-- **Fixtures manager, that can replace the Yii default one, and work with Mongo model**
+- Relations support *idea/concept/example*.
+- **Support for generating CRUD for EMongoDocument models, with Gii!**.
+- **Support for generating mongo document models from existing SQL tables!**.
+- Use MongoDB for LogRoute and HttpSession.
+- Easy to use criteria object, you don't have to create complex MongoDB query arrays.
+- **Fixtures manager, that can replace the Yii default one, and work with Mongo model.**
 
-### MongoDB related feature list
+### MongoDB Related Feature List
 
 - Support of schema-less documents with Yii standard rules and validation features
 - Embedded/Nested document support (Embedded documents have their own Model classes with their own rules and other methods)
@@ -42,7 +43,7 @@ This is the heavy dev branch!
 - Lazy loading/creating of embedded documents
 - Ability to set FSync and/or Safe flag of DB write operations on different scopes, globally, on model level, and on single model object
 - **Ability to use efficient MongoDB Cursors instead of raw arrays of results, returned by the findAll* methods**
-- MongoDB GridFS feature support, thanks to work of: Jose Martinez and Philippe Gaultier
+- MongoDB GridFS feature support, thanks to work of Jose Martinez and Philippe Gaultier
 - Support for using any other than _id field as a Primary Key, for a collection
 - *Support to have different models in single collection!*
 - automated efficient index definition for collections, per model
@@ -53,7 +54,7 @@ This is the heavy dev branch!
 - **`EMongoPartialDocument` class, that supports full-featured partial loading of documents from DB**
 - **Ability to do massive [partial updates of multiple documents][advanced.partial-batch-update]**
 
-## Limitations:
+## Limitations
 - The main limitations are only those present in MongoDB itself, like the 4mb data transfer limit. But That's not a big deal either.
 - In it's current incarnation, This extension does NOT work with the "$or" criteria operator. When we get it working we will remove this line and add an example.
 
@@ -61,14 +62,14 @@ This is the heavy dev branch!
 
 ## Requirements
 
-- Yii 1.1.5 is required
+- Yii 1.1.5 is required.
 - MongoDB 1.8 is recommended. Untested with older versions.
+
 
 ## Setup
 
 In your protected/config/main.php config file. Comment out (or delete) the current 'db' array
 for your database in the components section, and add the following to the file:
-
 
 ~~~
 [php]
@@ -76,7 +77,6 @@ for your database in the components section, and add the following to the file:
       ...
       'ext.YiiMongoDbSuite.*',
     ),
-
     'components' => array(
       ...
       'mongodb' => array(
@@ -90,7 +90,6 @@ for your database in the components section, and add the following to the file:
     ),
 ~~~
 
-
 - ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example
   if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is
   the ip (or hostname) of your webserver or host.
@@ -100,8 +99,7 @@ for your database in the components section, and add the following to the file:
 - useCursors If set to true, extension will return EMongoCursor instead of raw pre-populated arrays, from findAll* methods (defaults to false for backwards compatibility).
 
 That's all you have to do for setup. You can use it very much like the active record.
-Example:
-
+For example:
 
 ~~~
 [php]
@@ -112,7 +110,7 @@ Example:
 ~~~
 
 
-## Basic usage
+## Basic Usage
 
 Just define following model:
 
@@ -158,10 +156,9 @@ Just define following model:
     }
 ~~~
 
-
 And that's it! Now start using this User model class like standard Yii AR model.
 
-## Embedded documents
+## Embedded Documents
 
 *NOTE: For performance reasons embedded documents should extend from EMongoEmbeddedDocument instead of EMongoDocument.*
 
@@ -172,7 +169,6 @@ NOTE: Embedded documents should not have a static model() method!
 
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
 Lest assume we have following embedded document:
-
 
 ~~~
 [php]
@@ -201,9 +197,7 @@ Lest assume we have following embedded document:
     }
 ~~~
 
-
 Now we can add this method to our User model from previous section:
-
 
 ~~~
 [php]
@@ -222,9 +216,7 @@ Now we can add this method to our User model from previous section:
     }
 ~~~
 
-
 And using it is as easy as π!
-
 
 ~~~
 [php]
@@ -232,7 +224,6 @@ And using it is as easy as π!
     $client->address->city='New York';
     $client->save();
 ~~~
-
 
 This will automatically call validation for the model and all its embedded documents.
 You can even nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents.
@@ -250,7 +241,6 @@ You easily can store arrays in DB!
 
 - there is no way (that i know) where i can easily provide mechanism for this, you have to write Your own
 - This is how I accomplish it for now:
-
 
 ~~~
 [php]
@@ -270,9 +260,7 @@ You easily can store arrays in DB!
     }
 ~~~
 
-
 So for the user, if you want them to be able to save multiple addresses, you can do this:
-
 
 ~~~
 [php]
@@ -282,28 +270,21 @@ So for the user, if you want them to be able to save multiple addresses, you can
     $c->save(); // behavior will handle validation of array too
 ~~~
 
-
 or
-
 
 ~~~
 [php]
-
-
     $c = Client::model()->find();
     foreach($c->addresses as $addr)
     {
         echo $addr->city;
     }
-
-
 ~~~
 
 
 ## Querying
 
 This is one of the things that makes this extension great. It's very easy to query for the objects you want.
-
 
 ~~~
 [php]
@@ -313,7 +294,6 @@ This is one of the things that makes this extension great. It's very easy to que
 
 Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.
 
-
 ~~~
 [php]
     $c = new EMongoCriteria;
@@ -321,10 +301,8 @@ Now suppose you want to only retrieve users, that have a status of 1 (active). T
     $users = ModelClass::model->findAll($c);
 ~~~
 
-
 and now $users will be an array of all users with the status key in their document set to 1. This is a good way to list only active users.
 What's that? You only want to show the 10 most recent activated users? Thats easy too.
-
 
 ~~~
 [php]
@@ -334,9 +312,7 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
     $users = ModelClass::model->findAll($c);
 ~~~
 
-
-It's that easy. In place of the 'equals' key, you can use any of the following operators
-
+It's that easy. In place of the 'equals' key, you can use any of the following operators:
 
 ~~~
     - 'greater'   | >
@@ -356,12 +332,10 @@ It's that easy. In place of the 'equals' key, you can use any of the following o
     - 'where'     | // JavaScript operator
 ~~~
 
-
 *NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed. Newer versions of MongoDB will work, just not the $or operator.
 For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
 
 Here are a few more examples for using criteria:
-
 
 ~~~
 [php]
@@ -398,10 +372,10 @@ Here are a few more examples for using criteria:
     // but remember that this kind of query is a bit slower than normal finds.
 ~~~
 
-### Regexp / SQL LIKE replacemt
+
+### Regexp / SQL LIKE Replacemt
 
 You can use native PHP Mongo driver class MongoRegex, to query:
-
 
 ~~~
 [php]
@@ -413,11 +387,9 @@ You can use native PHP Mongo driver class MongoRegex, to query:
     // see phpdoc for MongoRegex class for more examples
 ~~~
 
-
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
-## Creating criteria object from an array:
-
+### Creating Criteria Objects From Arrays
 
 ~~~
 [php]
@@ -433,17 +405,17 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
         'offset'=>25,
         'sort'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName4'=>EMongoCriteria::SORT_DESC),
     );
-	$criteria = new EMongoCriteria($array);
-	// or
-	$clients = ClientModel::model()->findAll($array);
+    $criteria = new EMongoCriteria($array);
+    // or
+    $clients = ClientModel::model()->findAll($array);
 ~~~
-
 
 ## Known bugs
 
 - Remember, this is not complete yet. So at this stage, it can have some ;]
-- If you find any please let me know
-- As said before, it does not work with the OR operators
+- If you find any please let me know.
+- As said before, it does not work with the OR operators.
+
 
 ## Resources
 
@@ -453,13 +425,15 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
  * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
 
+
 ## Contribution needed!
 
 - Any help would be great :)
 
-## Big thanks goes to:
 
-We stand upon the shoulders of giants.
+## Acknowledgments
+
+We stand upon the shoulders of giants:
 
 - canni, for leading continued development, bug testing, and merging contributions.
 - tyohan, for first inspirations and the extension's concept.
