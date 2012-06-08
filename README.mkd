@@ -18,7 +18,7 @@ to fix some major bugs, and add full featured suite for [MongoDB](http://www.mon
 
 *Work-around for using the `OR` operator with this extension provided in [comments](http://www.yiiframework.com/extension/yiimongodbsuite/#c2450)*
 
-This is the heavy dev branch!
+The current version is 1.4.
 
 ## The Key Feature List:
 
@@ -320,13 +320,13 @@ It's that easy. In place of the 'equals' key, you can use any of the following o
     - 'less'      | <
     - 'lessEq'    | <=
     - 'notEq'     | !=, <>
-    - 'in'        | 
-    - 'notIn'     | 
-    - 'all'       | 
-    - 'size'      | 
-    - 'exists'    | 
+    - 'in'        |
+    - 'notIn'     |
+    - 'all'       |
+    - 'size'      |
+    - 'exists'    |
     - 'type'      | // BSON type see mongodb docs for this
-    - 'notExists' | 
+    - 'notExists' |
     - 'mod'       | %
     - 'equals'    | ==
     - 'where'     | // JavaScript operator
@@ -345,7 +345,7 @@ Here are a few more examples for using criteria:
     // find the single user with the personal_number == 12345
     $criteria->personal_number('==', 12345);
     // OR like this:
-    $criteria->personal_number = 12345; 
+    $criteria->personal_number = 12345;
 
     $user = User::model->find($criteria);
 
