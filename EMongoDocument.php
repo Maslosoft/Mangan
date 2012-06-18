@@ -1262,9 +1262,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public static function model($className = __CLASS__)
 	{
-		$model = self::$_models[$className] = new $className(null);
-		$model->attachBehaviors($model->behaviors());
-		return $model;
+		if(isset(self::$_models[$className]))
+			return self::$_models[$className];
+		else
+		{
+			$model=self::$_models[$className]=new $className(null);
+			$model->attachBehaviors($model->behaviors());
+			return $model;
+		}
 	}
 
 	/**
