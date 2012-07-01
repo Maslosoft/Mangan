@@ -3,7 +3,7 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 ---
 
-You can have different models in single collection, example:
+You can have different models in a single collection, example:
 
 ~~~
 [php]
@@ -104,7 +104,7 @@ Now we can:
 ~~~
 [php]
 // now you can:
-$bclients = BuissnessClient::model()->findAll();
+$bclients = BusinessClient::model()->findAll();
 $clients = NormalClient::model()->findAll();
 
 $allClients = Client::model()->findAll();
