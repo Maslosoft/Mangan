@@ -3,7 +3,7 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 ---
 
-You can have different models in single collection, example:
+You can have different models in a single collection, example:
 
 ~~~
 [php]
@@ -14,9 +14,6 @@ class Client extends EMongoDocument
 
 	// define property for finding type
 	public $type;
-	// and some const for better remember
-	const NORMAL_CLIENT = 0;
-	const BUSINESS_CLIENT = 1;
 		
 	public function getCollectionName()
 	{
@@ -28,11 +25,8 @@ class Client extends EMongoDocument
 	 */
 	protected function instantiate($attributes)
 	{
-		if($attributes['type'] == self::NORMAL_CLIENT)
-			$model = new NormalClient(null); // We have to set scenario to null, it will be set, by populateRecord, later
-		else if($attributes['type'] == self::BUSINESS_CLIENT)
-			$model = new BusinessClient(null);
-
+		$class = get_class($this);
+		$model = new $class(null);
 		$model->initEmbeddedDocuments(); // We have to do it manually here!
 		$model->setAttributes($attributes, false);
 		return $model;
@@ -42,16 +36,11 @@ class Client extends EMongoDocument
 	{
 		return parent::model($className);
 	}
-}
-	
-class NormalClient extends Client
-{
-	public $additionalField;
 
 	public function defaultScope()
 	{
 		return array(
-			'conditions'=>array('type'=>array('==' => self::NORMAL_CLIENT)),
+			'conditions'=>array('type'=>array('==' => get_class($this))
 		);
 	}
 
@@ -59,11 +48,16 @@ class NormalClient extends Client
 	{
 		if(parent::beforeSave())
 		{
-			$this->type = self::NORMAL_CLIENT;
+			$this->type =  get_class($this);
 			return true;
 		}
 		else return false
 	}
+}
+	
+class NormalClient extends Client
+{
+	public $additionalField;
 
 	public static function model($className=__CLASS__)
 	{
@@ -75,22 +69,6 @@ class BusinessClient extends Client
 {
 	public $taxNo;
 
-	public function defaultScope()
-	{
-		return array(
-			'conditions'=>array('type'=>array('==' => self::BUSINESS_CLIENT)),
-		);
-	}
-
-	public function beforeSave()
-	{
-		if(parent::beforeSave())
-		{
-			$this->type = self::BUSINESS_CLIENT;
-			return true;
-		}
-		else return false
-	}
 
 	public static function model($className=__CLASS__)
 	{
@@ -104,7 +82,7 @@ Now we can:
 ~~~
 [php]
 // now you can:
-$bclients = BuissnessClient::model()->findAll();
+$bclients = BusinessClient::model()->findAll();
 $clients = NormalClient::model()->findAll();
 
 $allClients = Client::model()->findAll();
