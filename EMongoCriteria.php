@@ -62,7 +62,8 @@ class EMongoCriteria extends CComponent
 		'equals'		=> '$$eq',
 		'eq'			=> '$$eq',
 		'=='			=> '$$eq',
-		'where'			=> '$where'
+		'where'			=> '$where',
+		'or'			=> '$or'
 	);
 
 	const SORT_ASC		= 1;
@@ -74,6 +75,7 @@ class EMongoCriteria extends CComponent
 	private $_conditions	= array();
 	private $_sort			= array();
 	private $_workingFields	= array();
+	private $_useCursor		= null;
 
 	/**
 	 * Constructor
@@ -135,6 +137,8 @@ class EMongoCriteria extends CComponent
 				$this->offset($criteria['offset']);
 			if(isset($criteria['sort']))
 				$this->setSort($criteria['sort']);
+			if(isset($criteria['useCursor']))
+				$this->setUseCursor($criteria['useCursor']);
 		}
 		else if($criteria instanceof EMongoCriteria)
 			$this->mergeWith($criteria);
@@ -202,7 +206,7 @@ class EMongoCriteria extends CComponent
 	{
 		if(isset($parameters[0]))
 			$operatorName = strtolower($parameters[0]);
-		if(isset($parameters[1]))
+		if(isset($parameters[1]) || ($parameters[1] === null))
 			$value = $parameters[1];
 
 		if(is_numeric($operatorName))
@@ -320,6 +324,22 @@ class EMongoCriteria extends CComponent
 	}
 
 	/**
+	 * @since v1.3.7
+	 */
+	public function getUseCursor()
+	{
+		return $this->_useCursor;
+	}
+
+	/**
+	 * @since v1.3.7
+	 */
+	public function setUseCursor($useCursor)
+	{
+		$this->_useCursor = $useCursor;
+	}
+
+	/**
 	 * Return selected fields
 	 *
 	 * @param boolean $forCursor MongoCursor::fields() method requires
@@ -423,23 +443,33 @@ class EMongoCriteria extends CComponent
 	public function addCond($fieldName, $op, $value)
 	{
 		$op = self::$operators[$op];
-		if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
-			$this->_conditions[$fieldName] = array();
-
-		if($op != self::$operators['equals'])
+		
+		if($op == self::$operators['or']) 
 		{
-			if(
-				!is_array($this->_conditions[$fieldName]) ||
-				count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
-			)
+			if(!isset($this->_conditions[$op])) 
 			{
-				$this->_conditions[$fieldName] = array();
+				$this->_conditions[$op] = array();
 			}
-			$this->_conditions[$fieldName][$op] = $value;
+			$this->_conditions[$op][] = array($fieldName=>$value);
+		} else {
+		
+			if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
+				$this->_conditions[$fieldName] = array();
+	
+			if($op != self::$operators['equals'])
+			{
+				if(
+					!is_array($this->_conditions[$fieldName]) ||
+					count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
+				)
+				{
+					$this->_conditions[$fieldName] = array();
+				}
+				$this->_conditions[$fieldName][$op] = $value;
+			}
+			else
+				$this->_conditions[$fieldName] = $value;
 		}
-		else
-			$this->_conditions[$fieldName] = $value;
-
 		return $this;
 	}
 }

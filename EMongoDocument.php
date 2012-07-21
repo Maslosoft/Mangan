@@ -319,13 +319,16 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Get value of use cursor flag
 	 *
 	 * It will return the nearest not null value in order:
+	 * - Criteria level
 	 * - Object level
 	 * - Model level
 	 * - Glopal level (always set)
 	 * @return boolean
 	 */
-	public function getUseCursor()
+	public function getUseCursor($criteria = null)
 	{
+		if($criteria !== null && $criteria->getUseCursor() !== null)
+			return $criteria->getUseCursor();
 		if($this->useCursor !== null)
 			return $this->useCursor; // We have flag set, return it
 		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->useCursor !== null))
@@ -615,9 +618,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($result !== false) // strict comparison needed
 			{
 				$this->_id = $rawData['_id'];
+				$this->afterSave();
 				$this->setIsNewRecord(false);
 				$this->setScenario('update');
-				$this->afterSave();
 
 				return true;
 			}
@@ -766,24 +769,19 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function deleteByPk($pk, $criteria=null)
 	{
 		Yii::trace(get_class($this).'.deleteByPk()','ext.MongoDb.EMongoDocument');
-		if($this->beforeDelete())
-		{
-			$this->applyScopes($criteria);
-			$criteria->mergeWith($this->createPkCriteria($pk));
+		$this->applyScopes($criteria);
+		$criteria->mergeWith($this->createPkCriteria($pk));
 
-			if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
-				$result = $this->getCollection()->remove($criteria->getConditions(), array(
-					'justOne'=>true,
-					'fsync'=>$this->getFsyncFlag(),
-					'safe'=>$this->getSafeFlag()
-				));
-			else
-				$result = $this->getCollection()->remove($criteria->getConditions(), true);
+		if(version_compare(Mongo::VERSION, '1.0.5','>=') === true)
+			$result = $this->getCollection()->remove($criteria->getConditions(), array(
+				'justOne'=>true,
+				'fsync'=>$this->getFsyncFlag(),
+				'safe'=>$this->getSafeFlag()
+			));
+		else
+			$result = $this->getCollection()->remove($criteria->getConditions(), true);
 
-			$this->afterDelete();
-			return $result;
-		}
-		return false;
+		return $result;
 	}
 
 
@@ -855,7 +853,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($criteria->getSelect())
 				$cursor->fields($criteria->getSelect(true));
 
-			if($this->getUseCursor())
+			if($this->getUseCursor($criteria))
 				return new EMongoCursor($cursor, $this->model());
 			else
 				return $this->populateRecords($cursor);
