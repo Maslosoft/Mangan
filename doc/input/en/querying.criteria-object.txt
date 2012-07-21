@@ -97,7 +97,7 @@ $criteria->personal_number('==', 12345);
 // OR like this:
 $criteria->personal_number = 12345; 
 
-$user = User::model->find($criteria);
+$user = User::model()->find($criteria);
 
 // find all users in New York. This will search in the embedded document of UserAddress
 $criteria->address->city('==', 'New York');

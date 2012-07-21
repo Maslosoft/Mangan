@@ -45,5 +45,5 @@ Short example:
 $client = new Client;
 $client->first_name='something';
 $client->save();
-$clients = Client::model->findAll();
+$clients = Client::model()->findAll();
 ~~~

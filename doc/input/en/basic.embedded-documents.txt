@@ -22,11 +22,11 @@ Author: Dariusz Górecki <darek.krk@gmail.com>
 
 **This applies to EMongoDocument and EMongoEmbeddedDocument**
 
-Just define the `embeddedDocuments()` method in yours model class, it should return array of
+Just define the `embeddedDocuments()` method in your model class, it should return an array of
 simple key => value pairs.
 
-- Array values are class names that will be used to instantinate embedded documents
-- Array keys are treated as property names of given embedded document class 
+- Array values are class names that will be used to instantiate embedded documents
+- Array keys are treated as property names of the given embedded document class 
 
 example:
 
@@ -42,7 +42,7 @@ public function embeddedDocuments()
 	);
 }
 
-// this will give you access to propeties of model:
+// this will give you access to properties of model:
 $model->address->embeddedExampleField;
 $model->some_other_field_name->embeddedExampleField;
 ~~~

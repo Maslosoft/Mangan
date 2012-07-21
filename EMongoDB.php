@@ -1,17 +1,13 @@
 <?php
 /**
- * EMongoDB.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since v1.0
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
@@ -23,17 +19,32 @@
 class EMongoDB extends CApplicationComponent
 {
 	/**
-     * @var string host:port
-     *
-     * Correct syntax is:
-     * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
-     *
-     * @example mongodb://localhost:27017
-     * @since v1.0
-     */
-    public $connectionString;
+	 * @var string host:port
+	 *
+	 * Correct syntax is:
+	 * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
+	 * @example mongodb://localhost:27017
+	 * @since v1.0
+	 */
+	public $connectionString;
 
-    /**
+	/**
+	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will
+	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting
+	 * to a server that was not even listed.
+	 * @example myReplicaSet
+	 * @since v1.3.7
+	 */
+	public $replicaSet = null;
+
+	/**
+	 * @var int timeout For how long the driver should try to connect to the database (in milliseconds).
+	 * @example 2000
+	 * @since v1.3.7
+	 */
+	public $timeout = 2000;
+
+	/**
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
 	 * effective when the EMongoDB object is used as an application component.
@@ -42,25 +53,25 @@ class EMongoDB extends CApplicationComponent
 	public $autoConnect = true;
 
 	/**
-     * @var false|string $persistentConnection false for non-persistent connection, string for persistent connection id to use
-     * @since v1.0
-     */
-    public $persistentConnection = false;
+	 * @var false|string $persistentConnection false for non-persistent connection, string for persistent connection id to use
+	 * @since v1.0
+	 */
+	public $persistentConnection = false;
 
-    /**
-     * @var string $dbName name of the Mongo database to use
-     * @since v1.0
-     */
-    public $dbName = null;
+	/**
+	 * @var string $dbName name of the Mongo database to use
+	 * @since v1.0
+	 */
+	public $dbName = null;
 
-    /**
-     * @var MongoDB $_mongoDb instance of MongoDB driver
-     */
-    private $_mongoDb;
+	/**
+	 * @var MongoDB $_mongoDb instance of MongoDB driver
+	 */
+	private $_mongoDb;
 
-    /**
-     * @var Mongo $_mongoConnection instance of MongoDB driver
-     */
+	/**
+	 * @var Mongo $_mongoConnection instance of MongoDB driver
+	 */
 	private $_mongoConnection;
 
 	/**
@@ -78,7 +89,7 @@ class EMongoDB extends CApplicationComponent
 	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests.
 	 *
 	 * When SAFE flag is set to TRUE driver will wait for the response from DB, and throw an exception
-	 * if something went wrong, is fet to false, driver will only send operation to DB but will not wait
+	 * if something went wrong, is set to false, driver will only send operation to DB but will not wait
 	 * for response from DB.
 	 *
 	 * MongoDB default value for this flag is: FALSE.
@@ -91,7 +102,7 @@ class EMongoDB extends CApplicationComponent
 	 * If set to TRUE findAll* methods of models, will return {@see EMongoCursor} instead of
 	 * raw array of models.
 	 *
-	 * Generally you should want to have this set to TRUE as cursor use lazy-loading/instaninating of
+	 * Generally you should want to have this set to TRUE as cursor use lazy-loading/instantiating of
 	 * models, this is set to FALSE, by default to keep backwards compatibility.
 	 *
 	 * Note: {@see EMongoCursor} does not implement ArrayAccess interface and cannot be used like an array,
@@ -109,7 +120,7 @@ class EMongoDB extends CApplicationComponent
 	public $gridFStemporaryFolder = null;
 
 	/**
-	 * Connect to DB if connection is already connected this method doeas nothing
+	 * Connect to DB if connection is already connected this method does nothing
 	 * @since v1.0
 	 */
 	public function connect()
@@ -135,15 +146,16 @@ class EMongoDB extends CApplicationComponent
 				if(empty($this->connectionString))
 					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
 
+				$options = array( 'connect'=>$this->autoConnect );
+
 				if($this->persistentConnection !== false)
-					$this->_mongoConnection = new Mongo($this->connectionString, array(
-						'connect'=>$this->autoConnect,
-						'persist'=>$this->persistentConnection
-					));
-				else
-					$this->_mongoConnection = new Mongo($this->connectionString, array(
-						'connect'=>$this->autoConnect,
-					));
+					$options['persist'] = $this->persistentConnection;
+				if( !is_null( $this->replicaSet ) )
+					$options['replicaSet'] = $this->replicaSet;
+				if( !is_null( $this->timeout ) )
+					$options['timeout'] = $this->timeout;
+
+				$this->_mongoConnection = new Mongo($this->connectionString, $options);
 
 				return $this->_mongoConnection;
 			}
@@ -200,29 +212,29 @@ class EMongoDB extends CApplicationComponent
 	 * @since v1.0
 	 */
 	protected function close(){
-        if($this->_mongoConnection!==null){
-            $this->_mongoConnection->close();
-            $this->_mongoConnection=null;
-            Yii::trace('Closing MongoDB connection', 'ext.MongoDb.EMongoDB');
-        }
+		if($this->_mongoConnection!==null){
+			$this->_mongoConnection->close();
+			$this->_mongoConnection=null;
+			Yii::trace('Closing MongoDB connection', 'ext.MongoDb.EMongoDB');
+		}
 	}
 
 	/**
-	 * If we have don't use presist connection, close it
+	 * If we have don't use persist connection, close it
 	 * @since v1.0
 	 */
 	public function __destruct(){
-        if(!$this->persistentConnection){
-            $this->close();
-        }
-    }
+		if(!$this->persistentConnection){
+			$this->close();
+		}
+	}
 
-    /**
-     * Drop the current DB
-     * @since v1.0
-     */
-    public function dropDb()
-    {
+	/**
+	 * Drop the current DB
+	 * @since v1.0
+	 */
+	public function dropDb()
+	{
 		$this->_mongoDb->drop();
-    }
+	}
 }

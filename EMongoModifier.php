@@ -1,22 +1,19 @@
 <?php
+
 /**
- * EMongoModifier.php
- *
- * PHP version 5.2+
- *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2011 Ibitux http://www.ibitux.com
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		xxx
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- *
+ * @author Ianaré Sévi
+ * @author Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright 2011 Ibitux http://www.ibitux.com
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
- * EMongoModifier class
+ * EMongoModifier
  *
- * This class is a helper for building MongoDB atomic updates
+ * Helper for building MongoDB atomic updates.
  *
  * 1. addCond method
  * $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
@@ -45,9 +42,14 @@ class EMongoModifier extends CComponent
 		'rename'	=> '$rename',
 	);
 
-	private $_fields = array();
 	/**
-	 * Constructor
+	 * @var array
+	 */
+	private $_fields = array();
+
+	/**
+	 * Constructor.
+	 *
 	 * Modifier sample:
 	 *
 	 * <PRE>
@@ -82,8 +84,9 @@ class EMongoModifier extends CComponent
 		else if($modifier instanceof EMongoModifier)
 			$this->mergeWith($modifier);
 	}
+
 	/**
-	 * Compute modifier to be able to initiate request
+	 * Compute modifier to be able to initiate request.
 	 * @return array
 	 */
 	public function getModifiers()
@@ -94,23 +97,25 @@ class EMongoModifier extends CComponent
 			foreach($rule as $operator=>$value)
 			{
 				if(isset($modifier[$operator]) && is_array($modifier[$operator]))
-				{
 					$modifier[$operator] = array_merge($modifier[$operator], array($fieldName=>$value));
-				} else {
+				else
 					$modifier[$operator] = array($fieldName=>$value);
-				}
 			}
 		}
 		return $modifier;
 	}
+
+	/**
+	 * @return array
+	 */
 	public function getFields()
 	{
 		return $this->_fields;
 	}
+
 	/**
 	 * Add a new set of modifiers to current modifiers. If modifiers has already been
 	 * added for specific field, they will be overwritten.
-	 *
 	 * @param EMongoModifier $modifier modifier to merge into current object
 	 * @return EMongoModifier
 	 */
@@ -128,7 +133,7 @@ class EMongoModifier extends CComponent
 		return $this;
 	}
 	/**
-	 * Add a new modifier rule to specific field
+	 * Add a new modifier rule to specific field.
 	 * @param string $fieldName name of the field we want to update
 	 * @param string $modifier  type of the modifier @see EMongoModifier::$modifiers
 	 * @param mixed  $value     value used by the modifier
@@ -140,15 +145,15 @@ class EMongoModifier extends CComponent
 		return $this;
 	}
 	/**
-	 * Check if we have modifiers to apply
+	 * Check if we have modifiers to apply.
 	 * @return boolean
 	 */
-	public function getCanApply() {
-		if(count($this->_fields) > 0) {
+	public function getCanApply()
+	{
+		if(count($this->_fields) > 0)
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
 }
 

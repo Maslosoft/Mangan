@@ -1,30 +1,26 @@
 <?php
 /**
- * EMongoCriteria.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- *
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
- * EMongoCriteria class
+ * EMongoCriteria
  *
  * This class is a helper for building MongoDB query arrays, it support three syntaxes for adding conditions:
  *
  * 1. 'equals' syntax:
- * $criteriaObject->fieldName = $value; // this will produce fieldName == value query
+ *	$criteriaObject->fieldName = $value; // this will produce fieldName == value query
  * 2. fieldName call syntax
- * $criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
+ *	$criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
  * 3. addCond method
- * $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
+ *	$criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
  *
  * For operators list {@see EMongoCriteria::$operators}
  *
@@ -206,9 +202,8 @@ class EMongoCriteria extends CComponent
 	{
 		if(isset($parameters[0]))
 			$operatorName = strtolower($parameters[0]);
-		if(isset($parameters[1]) || ($parameters[1] === null))
+		if(isset($parameters[1]))
 			$value = $parameters[1];
-
 		if(is_numeric($operatorName))
 		{
 			$operatorName = strtolower(trim($value));
@@ -343,15 +338,13 @@ class EMongoCriteria extends CComponent
 	 * Return selected fields
 	 *
 	 * @param boolean $forCursor MongoCursor::fields() method requires
-	 *                the fields to be specified as a hashmap. When this
-	 *                parameter is set to true, then we'll return
-	 *                the fields in this format
+	 * the fields to be specified as a hashmap. When this parameter is set
+	 * to true, then we'll return the fields in this format.
 	 * @since v1.3.1
 	 */
-	public function getSelect($forCursor = false)
+	public function getSelect()
 	{
-		if (!$forCursor) return $this->_select;
-		return array_fill_keys($this->_select, true); // PHP 5.2.0+ required!
+		return $this->_select;
 	}
 
 	/**
@@ -359,7 +352,14 @@ class EMongoCriteria extends CComponent
 	 */
 	public function setSelect(array $select)
 	{
-		$this->_select = $select;
+		$this->_select = array();
+		// Convert the select array to field=>true/false format
+		foreach ($select as $key=>$value) {
+			if (is_int($key))
+				$this->_select[$value] = true;
+			else
+				$this->_select[$key] = $value;
+		}
 	}
 
 	/**
@@ -388,7 +388,7 @@ class EMongoCriteria extends CComponent
 	public function select(array $fieldList=null)
 	{
 		if($fieldList!==null)
-			$this->_select = array_merge($this->_select, $fieldList);
+			$this->setSelect(array_merge($this->_select, $fieldList));
 		return $this;
 	}
 
@@ -443,19 +443,18 @@ class EMongoCriteria extends CComponent
 	public function addCond($fieldName, $op, $value)
 	{
 		$op = self::$operators[$op];
-		
-		if($op == self::$operators['or']) 
+
+		if($op == self::$operators['or'])
 		{
-			if(!isset($this->_conditions[$op])) 
+			if(!isset($this->_conditions[$op]))
 			{
 				$this->_conditions[$op] = array();
 			}
 			$this->_conditions[$op][] = array($fieldName=>$value);
 		} else {
-		
 			if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
 				$this->_conditions[$fieldName] = array();
-	
+
 			if($op != self::$operators['equals'])
 			{
 				if(

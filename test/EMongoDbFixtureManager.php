@@ -1,13 +1,11 @@
 <?php
 /**
- * EMongoDbFixtureManager
- *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2010-2011 Ibitux
- * @license		http://www.yiiframework.com/license/ BSD license
- * @category	tests
- * @package		ext.YiiMongoDbSuite.tests
- * @since		v1.3.6
+ * @author Ianaré Sévi
+ * @author Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright 2010-2011 Ibitux
+ * @license New BSD license
+ * @category tests
+ * @package ext.YiiMongoDbSuite.tests
  */
 
 /**
@@ -33,12 +31,7 @@
  * the database. If this file is not found, all available fixtures will be loaded
  * into the database.
  *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright	2010-2011 Ibitux
- * @license		http://www.yiiframework.com/license/ BSD license
- * @category	tests
- * @package		ext.YiiMongoDbSuite.tests
- * @since		v1.3.6
+ * @since v1.3.6
  */
 class EMongoDbFixtureManager extends CApplicationComponent
 {
@@ -66,6 +59,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	public $connectionID='mongodb';
 
 	private $_mongoDb;
+
 	private $_fixtures;
 	private $_rows;				// fixture name, row alias => row
 	private $_records;			// fixture name, row alias => record (or class name)
@@ -79,6 +73,9 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		parent::init();
 		if($this->basePath===null)
 			$this->basePath=Yii::getPathOfAlias('application.tests.fixtures');
+		else if(strpos($this->basePath, 'application.') === 0)
+			$this->basePath=Yii::getPathOfAlias($this->basePath);
+
 		$this->prepare();
 	}
 
@@ -92,7 +89,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		{
 			$this->_mongoDb=Yii::app()->getComponent($this->connectionID)->getDbInstance();
 			if(!$this->_mongoDb instanceof MongoDB)
-				throw new CException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
+				throw new EMongoException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
 					array('{id}'=>$this->connectionID)));
 		}
 		return $this->_mongoDb;
@@ -150,7 +147,10 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	{
 		$fileName=$this->basePath.DIRECTORY_SEPARATOR.$collectionName.'.php';
 		if(!is_file($fileName))
+		{
+			echo "Could not find fixture: ".$fileName;
 			return false;
+		}
 
 		$rows=array();
 		foreach(require($fileName) as $alias=>$row)
@@ -166,12 +166,13 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 * @param string $collectionName collection name
 	 * @return boolean
 	 */
-	protected function isCollection($collectionName) {
-		if ($this->_collectionList === null) {
+	protected function isCollection($collectionName)
+	{
+		if ($this->_collectionList === null)
+		{
 			$this->_collectionList = array();
-			foreach($this->getDbConnection()->listCollections() as $collection) {
+			foreach($this->getDbConnection()->listCollections() as $collection)
 				$this->_collectionList[] = $collection->getName();
-			}
 		}
 		return in_array($collectionName, $this->_collectionList);
 	}
@@ -197,9 +198,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 				{
 					$collectionName=substr($file,0,-4);
 					if($this->isCollection($collectionName) === true)
-					{
 						$this->_fixtures[$collectionName]=$path;
-					}
 				}
 			}
 			closedir($folder);

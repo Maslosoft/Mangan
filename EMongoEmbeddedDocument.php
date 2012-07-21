@@ -1,47 +1,44 @@
 <?php
+
 /**
- * EMongoEmbeddedDocument.php
- *
- * PHP version 5.2+
- *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @author		Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright	2011 CleverIT http://www.cleverit.com.pl
- * @license		http://www.yiiframework.com/license/ BSD license
- * @version		1.3
- * @category	ext
- * @package		ext.YiiMongoDbSuite
- * @since		v1.0.8
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
+ * @version 1.3
+ * @category ext
+ * @package ext.YiiMongoDbSuite
  */
 
 /**
+ * EMongoEmbeddedDocument
+ *
  * @since v1.0.8
  */
 abstract class EMongoEmbeddedDocument extends CModel
 {
-	private static $_attributes=array();
-
 	/**
 	 * CMap of embedded documents
 	 * @var CMap $_embedded
 	 * @since v1.0.8
 	 */
-	protected $_embedded=null;
-
+	protected $_embedded = null;
 	/**
 	 * Cacheed values for embeddedDocuments() method vall
 	 * @var array $_embeddedConfig
 	 * @since v1.3.2
 	 */
 	protected static $_embeddedConfig = array();
-
 	/**
 	 * Hold down owner pointer (if any)
 	 *
 	 * @var EMongoEmbeddedDocument $_owner
 	 * @since v1.0.8
 	 */
-	protected $_owner=null;
+	protected $_owner = null;
+
+	private static $_attributes = array();
 
 	/**
 	 * Constructor.
@@ -50,7 +47,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * @see getScenario
 	 * @since v1.0.8
 	 */
-	public function __construct($scenario='insert')
+	public function __construct($scenario = 'insert')
 	{
 		$this->setScenario($scenario);
 		$this->init();
@@ -67,18 +64,21 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * initial property values.)
 	 * @since 1.0.8
 	 */
-	public function init(){}
+	public function init()
+	{
+
+	}
 
 	/**
 	 * @since v1.0.8
 	 */
 	protected function initEmbeddedDocuments()
 	{
-		if(!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
+		if (!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
 			return false;
 
 		$this->_embedded = new CMap;
-		if(!isset(self::$_embeddedConfig[get_class($this)]))
+		if (!isset(self::$_embeddedConfig[get_class($this)]))
 			self::$_embeddedConfig[get_class($this)] = $this->embeddedDocuments();
 		$this->afterEmbeddedDocsInit();
 	}
@@ -138,7 +138,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	protected function beforeEmbeddedDocsInit()
 	{
-		$event=new CModelEvent($this);
+		$event = new CModelEvent($this);
 		$this->onBeforeEmbeddedDocsInit($event);
 		return $event->isValid;
 	}
@@ -156,7 +156,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function __get($name)
 	{
-		if($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
+		if ($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
 			// Late creation of embedded documents on first access
 			if (is_null($this->_embedded->itemAt($name))) {
 				$docClassName = self::$_embeddedConfig[get_class($this)][$name];
@@ -175,9 +175,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function __set($name, $value)
 	{
-		if($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name]))
-		{
-			if(is_array($value)) {
+		if ($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
+			if (is_array($value)) {
 				// Late creation of embedded documents on first access
 				if (is_null($this->_embedded->itemAt($name))) {
 					$docClassName = self::$_embeddedConfig[get_class($this)][$name];
@@ -185,9 +184,9 @@ abstract class EMongoEmbeddedDocument extends CModel
 					$doc->setOwner($this);
 					$this->_embedded->add($name, $doc);
 				}
-				return $this->_embedded->itemAt($name)->attributes=$value;
+				return $this->_embedded->itemAt($name)->attributes = $value;
 			}
-			else if($value instanceof EMongoEmbeddedDocument)
+			else if ($value instanceof EMongoEmbeddedDocument)
 				return $this->_embedded->add($name, $value);
 		}
 		else
@@ -198,9 +197,9 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * @since v1.3.2
 	 * @see CComponent::__isset()
 	 */
-	public function __isset($name) {
-		if($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name]))
-		{
+	public function __isset($name)
+	{
+		if ($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
 			return isset($this->_embedded[$name]);
 		}
 		else
@@ -212,13 +211,10 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function afterValidate()
 	{
-		if($this->hasEmbeddedDocuments())
-			foreach($this->_embedded as $doc)
-			{
-				if(!$doc->validate())
-				{
+		if ($this->hasEmbeddedDocuments())
+			foreach ($this->_embedded as $doc) {
+				if (!$doc->validate())
 					$this->addErrors($doc->getErrors());
-				}
 			}
 	}
 
@@ -235,7 +231,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function hasEmbeddedDocuments()
 	{
-		if(isset(self::$_embeddedConfig[get_class($this)]))
+		if (isset(self::$_embeddedConfig[get_class($this)]))
 			return true;
 		return count($this->embeddedDocuments()) > 0;
 	}
@@ -249,22 +245,19 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function attributeNames()
 	{
-		$className=get_class($this);
-		if(!isset(self::$_attributes[$className]))
-		{
-			$class=new ReflectionClass(get_class($this));
-			$names=array();
-			foreach($class->getProperties() as $property)
-			{
-				$name=$property->getName();
-				if($property->isPublic() && !$property->isStatic())
-					$names[]=$name;
+		$className = get_class($this);
+		if (!isset(self::$_attributes[$className])) {
+			$class = new ReflectionClass(get_class($this));
+			$names = array();
+			foreach ($class->getProperties() as $property) {
+				$name = $property->getName();
+				if ($property->isPublic() && !$property->isStatic())
+					$names[] = $name;
 			}
-			if($this->hasEmbeddedDocuments())
-			{
+			if ($this->hasEmbeddedDocuments()) {
 				$names = array_merge($names, array_keys(self::$_embeddedConfig[get_class($this)]));
 			}
-			return self::$_attributes[$className]=$names;
+			return self::$_attributes[$className] = $names;
 		}
 		else
 			return self::$_attributes[$className];
@@ -278,8 +271,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function toArray()
 	{
-		if($this->beforeToArray())
-		{
+		if ($this->beforeToArray()) {
 			$arr = $this->_toArray();
 			$this->afterToArray();
 			return $arr;
@@ -297,16 +289,15 @@ abstract class EMongoEmbeddedDocument extends CModel
 	protected function _toArray()
 	{
 		$arr = array();
-		$class=new ReflectionClass(get_class($this));
-		foreach($class->getProperties() as $property)
-		{
-			$name=$property->getName();
-			if($property->isPublic() && !$property->isStatic())
+		$class = new ReflectionClass(get_class($this));
+		foreach ($class->getProperties() as $property) {
+			$name = $property->getName();
+			if ($property->isPublic() && !$property->isStatic())
 				$arr[$name] = $this->$name;
 		}
-		if($this->hasEmbeddedDocuments())
-			foreach($this->_embedded as $key=>$value)
-				$arr[$key]=$value->toArray();
+		if ($this->hasEmbeddedDocuments())
+			foreach ($this->_embedded as $key => $value)
+				$arr[$key] = $value->toArray();
 
 		return $arr;
 	}
@@ -318,7 +309,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function getOwner()
 	{
-		if($this->_owner!==null)
+		if ($this->_owner !== null)
 			return $this->_owner;
 		else
 			return null;
@@ -341,11 +332,11 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function setScenario($value)
 	{
-		if($this->hasEmbeddedDocuments() && $this->_embedded !== null)
-		{
-			foreach($this->_embedded as $doc)
+		if ($this->hasEmbeddedDocuments() && $this->_embedded !== null) {
+			foreach ($this->_embedded as $doc)
 				$doc->setScenario($value);
 		}
 		parent::setScenario($value);
 	}
+
 }
