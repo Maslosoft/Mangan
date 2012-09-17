@@ -122,6 +122,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	{
 		if ($this->_sort === null) {
 			$this->_sort = new EMongoSort;
+			$this->_sort->model = $this->model;
 			if (($id = $this->getId()) != '')
 				$this->_sort->sortVar = $id . '_sort';
 		}

@@ -22,6 +22,12 @@ class EMongoSort extends CSort
 	private $_directions;
 
 	/**
+	 *
+	 * @var EMongoDocument
+	 */
+	public $model = null;
+
+	/**
 	 * Modifies the query criteria by changing its {@link EMongoRecordDataProvider::order} property.
 	 * This method will use {@link directions} to determine which columns need to be sorted.
 	 * They will be put in the ORDER BY clause. If the criteria already has non-empty {@link EMongoRecordDataProvider::order} value,
@@ -32,6 +38,21 @@ class EMongoSort extends CSort
 	{
 		$order = $this->getOrderBy();
 		if (!empty($order)) {
+			// i18n patch
+			if(isset($this->model) && isset($this->model->meta))
+			{
+				$directions = [];
+				foreach($order as $attribute => $direction)
+				{
+					if($this->model->meta->$attribute->i18n)
+					{
+						$attribute = sprintf('%s.%s', $attribute, Yii::app()->language);
+					}
+					$directions[$attribute] = $direction;
+				}
+				$order = $directions;
+			}
+
 			$criteria->setSort($order);
 			// todo JOIN this new array properly with existing sort criteria - it just overwrites it now
 			//if(!empty($criteria->order))
@@ -109,7 +130,11 @@ class EMongoSort extends CSort
 	 */
 	public function resolveLabel($attribute)
 	{
-		// todo provide support for getAttributeLabel()
+		// support for getAttributeLabel()
+		if($this->model)
+		{
+			return $this->model->getAttributeLabel($attribute);
+		}
 		return $attribute;
 	}
 
@@ -143,14 +168,16 @@ class EMongoSort extends CSort
 					if (($this->resolveAttribute($attribute)) !== false)
 					{
 						$this->_directions[$attribute] = $direction;
-						if (!$this->multiSort)
-							return $this->_directions;
+						if (!$this->multiSort){
+							break;
+						}
 					}
 				}
 			}
 			if ($this->_directions === array() && is_array($this->defaultOrder))
 				$this->_directions = $this->defaultOrder;
 		}
+
 		return $this->_directions;
 	}
 
