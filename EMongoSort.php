@@ -66,7 +66,7 @@ class EMongoSort extends CSort
 	 * This can be put in the ORDER BY clause of a SQL statement.
 	 * @since 1.1.0
 	 */
-	public function getOrderBy()
+	public function getOrderBy($criteria = null)
 	{
 		$directions = $this->getDirections();
 		if (empty($directions))
