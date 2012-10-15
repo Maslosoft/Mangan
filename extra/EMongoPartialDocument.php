@@ -64,7 +64,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 		if(
 				$this->_partial &&
 				$this->hasEmbeddedDocuments() &&
-				isset(self::$_embeddedConfig[get_class($this)][$name]) &&
+				$this->meta->embedded &&
 				!in_array($name, $this->_loadedFields)
 		)
 			return null;

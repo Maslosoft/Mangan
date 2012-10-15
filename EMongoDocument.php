@@ -19,6 +19,22 @@
  */
 abstract class EMongoDocument extends EMongoEmbeddedDocument
 {
+/**
+	 * Alias to _id
+	 * @KoBindable(false)
+	 * @see MMongoDocument::setId()
+	 * @see MMongoDocument::getId()
+	 * @var mixed
+	 */
+	public $_id;
+
+	/**
+	 * @Label('Database ID')
+	 * @Persistent(false)
+	 * @var string
+	 */
+	public $id;
+
 	private $_new = false;  // whether this instance is new or not
 	private $_criteria = null;	// query criteria (used by finder only)
 
@@ -49,13 +65,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	protected static $_emongoDb;
 
 	/**
-	 * MongoDB special field, every document has to have this.
-	 * @var mixed $_id
-	 * @since v1.0
-	 */
-	public $_id;
-
-	/**
 	 * Add scopes functionality.
 	 * @see CComponent::__call()
 	 * @since v1.0
@@ -76,8 +85,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param string $scenario
 	 * @since v1.0
 	 */
-	public function __construct($scenario = 'insert')
+	public function __construct($scenario = 'insert', $lang = '')
 	{
+		$this->setLang($lang);
+//		$this->meta = MModelMeta::create($this);
+		$this->_class = get_class($this);
+
 		if($scenario == null) // internally used by populateRecord() and model()
 			return;
 
@@ -90,6 +103,24 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$this->afterConstruct();
 
 		$this->initEmbeddedDocuments();
+	}
+
+	public function getId()
+	{
+		return (string)$this->_id;
+	}
+
+	public function setId($value)
+	{
+		if($value)
+		{
+			$this->_id = new MongoId((string)$value);
+		}
+		else
+		{
+			$this->_id = null;
+		}
+		
 	}
 
 	/**
@@ -163,7 +194,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @return string collection name
 	 * @since v1.0
 	 */
-	abstract public function getCollectionName();
+	public function getCollectionName()
+	{
+		return get_class($this);
+	}
 
 	/**
 	 * Returns current MongoCollection object.
@@ -329,33 +363,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function setUseCursor($useCursor)
 	{
 		$this->useCursor = ($useCursor == true);
-	}
-
-	/**
-	 * Sets the attribute values in a massive way.
-	 * @param array $values attribute values (name=>value) to be set.
-	 * @param boolean $safeOnly whether the assignments should only be done to the safe attributes.
-	 * A safe attribute is one that is associated with a validation rule in the current {@link scenario}.
-	 * @see getSafeAttributeNames
-	 * @see attributeNames
-	 * @since v1.3.1
-	 */
-	public function setAttributes($values, $safeOnly = true)
-	{
-		if(!is_array($values))
-			return;
-		if($this->hasEmbeddedDocuments())
-		{
-			$attributes = array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
-
-			foreach($this->embeddedDocuments() as $fieldName => $className)
-				if(isset($values[$fieldName]) && isset($attributes[$fieldName]))
-				{
-					$this->$fieldName->setAttributes($values[$fieldName], $safeOnly);
-					unset($values[$fieldName]);
-				}
-		}
-		parent::setAttributes($values, $safeOnly);
 	}
 
 	/**
@@ -600,13 +607,24 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				);
 			}
 
-			if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
-				$result = $this->getCollection()->insert($rawData, array(
-					 'fsync' => $this->getFsyncFlag(),
-					 'safe' => $this->getSafeFlag()
-						  ));
-			else
-				$result = $this->getCollection()->insert($rawData, CPropertyValue::ensureBoolean($this->getSafeFlag()));
+			try
+			{
+				if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
+					$result = $this->getCollection()->insert($rawData, array(
+						 'fsync' => $this->getFsyncFlag(),
+						 'safe' => $this->getSafeFlag()
+							  ));
+				else
+					$result = $this->getCollection()->insert($rawData, CPropertyValue::ensureBoolean($this->getSafeFlag()));
+			}
+			catch(Exception $e)
+			{
+				var_dump($rawData);
+				var_dump($e->getMessage());
+				exit;
+//				var_dump($rawData);
+				throw $e;
+			}
 
 			if($result !== false)
 			{ // strict comparison needed
@@ -1180,9 +1198,37 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	protected function instantiate($attributes)
 	{
 		$class = get_class($this);
-		$model = new $class(null);
+		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
-		$model->setAttributes($attributes, false);
+		foreach($model->toArray() as $field => $value)
+		{
+			if(isset($attributes[$field]))
+			{
+				if($this->meta->$field->i18n)
+				{
+					if(!is_array($attributes[$field]))
+					{
+						$attributes[$field] = [];
+					}
+
+					foreach(Yii::app()->languages as $lang => $langName)
+					{
+						if(isset($attributes[$field][$lang]))
+						{
+							$model->setAttribute($field, $attributes[$field][$lang], $lang);
+						}
+						else
+						{
+							$model->setAttribute($field, $this->meta->$field->default, $lang);
+						}
+					}
+				}
+				else
+				{
+					$model->setAttribute($field, $attributes[$field]);
+				}
+			}
+		}
 		return $model;
 	}
 
@@ -1207,11 +1253,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$model->attachBehaviors($model->behaviors());
 
 			if($callAfterFind)
+			{
 				$model->afterFind();
+			}
 			return $model;
 		}
 		else
+		{
 			return null;
+		}
 	}
 
 	/**
@@ -1283,29 +1333,23 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Returns the static model of the specified EMongoDocument class.
-	 * The model returned is a static instance of the EMongoDocument class.
+	 * Returns the static model of the specified MMongoDocument class.
+	 * The model returned is a static instance of the MMongoDocument class.
 	 * It is provided for invoking class-level methods (something similar to static class methods.)
-	 *
-	 * EVERY derived EMongoDocument class must override this method as follows,
-	 * <pre>
-	 * public static function model($className=__CLASS__)
-	 * {
-	 * 	return parent::model($className);
-	 * }
-	 * </pre>
-	 *
-	 * @param string $className EMongoDocument class name.
-	 * @return EMongoDocument EMongoDocument model instance.
-	 * @since v1.0
+	 * @param string $lang
+	 * @return MMongoDocument EMongoDocument model instance.
 	 */
-	public static function model($className = __CLASS__)
+	public static function model($lang = null)
 	{
+		$className = get_called_class();
 		if(isset(self::$_models[$className]))
+		{
+			self::$_models[$className]->setLang($lang);
 			return self::$_models[$className];
+		}
 		else
 		{
-			$model = self::$_models[$className] = new $className(null);
+			$model = self::$_models[$className] = new $className(null, $lang);
 			$model->attachBehaviors($model->behaviors());
 			return $model;
 		}

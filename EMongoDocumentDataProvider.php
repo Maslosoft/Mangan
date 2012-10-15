@@ -64,7 +64,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	{
 		if (is_string($modelClass)) {
 			$this->modelClass = $modelClass;
-			$this->model = EMongoDocument::model($modelClass);
+			$this->model = $modelClass::model();
 		}
 		else if ($modelClass instanceof EMongoDocument) {
 			$this->modelClass = get_class($modelClass);

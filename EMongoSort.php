@@ -42,14 +42,43 @@ class EMongoSort extends CSort
 			if(isset($this->model) && isset($this->model->meta))
 			{
 				$directions = [];
-				foreach($order as $attribute => $direction)
+				foreach($order as $name => $direction)
 				{
-					if($this->model->meta->$attribute->i18n)
+					// TODO Add support for DEFAULT (i18nAllowDefault)and ANY (i18nAllowAny) attribute, 
+					// by adding them to sort list instead of current language
+					if($this->model->meta->$name->i18n)
 					{
-						$attribute = sprintf('%s.%s', $attribute, Yii::app()->language);
+						$attribute = sprintf('%s.%s', $name, Yii::app()->language);
+					}
+					else
+					{
+						$attribute = $name;
 					}
 					$directions[$attribute] = $direction;
+					/*
+					TODO If sorting on subfields that are empty, null, or non existent,
+					they are always first (in ASC order) so below code has no effect 
+					if($this->model->meta->$name->i18nAllowDefault)
+					{
+						var_dump('blasf');
+						$attribute = sprintf('%s.%s', $name, Yii::app()->defaultLanguage);
+						$directions[$attribute] = $direction;
+					}
+					if($this->model->meta->$name->i18nAllowAny)
+					{
+						foreach(Yii::app()->languages as $lang => $langName)
+						{
+							if($lang == Yii::app()->language)
+							{
+								continue;
+							}
+							$attribute = sprintf('%s.%s', $name, $lang);
+							$directions[$attribute] = $direction;
+						}
+					}
+					*/
 				}
+				//var_dump($directions);
 				$order = $directions;
 			}
 
@@ -97,7 +126,8 @@ class EMongoSort extends CSort
 			return $label;
 		$directions = $this->getDirections();
 		if (isset($directions[$attribute])) {
-			$class = ($directions[$attribute] == EMongoCriteria::SORT_DESC) ? 'desc' : 'asc';
+			// FIXME This is workoround for bug in css, switch desc and asc if needed
+			$class = ($directions[$attribute] == EMongoCriteria::SORT_DESC) ? 'asc' : 'desc';
 			if (isset($htmlOptions['class']))
 				$htmlOptions['class'].=' ' . $class;
 			else

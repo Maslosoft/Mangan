@@ -16,20 +16,18 @@
  *
  * @since v1.0.8
  */
-abstract class EMongoEmbeddedDocument extends CModel
+abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 {
 	/**
-	 * CMap of embedded documents
-	 * @var CMap $_embedded
-	 * @since v1.0.8
+	 * This holds type of this embedded document
+	 * @todo When creating embedded document instance from mongo data,
+	 * check this variable and instantiate properly, by creating array of config
+	 * with stored values, and array field 'class' with this value, and than call
+	 * Yii::createComponent
+	 * @var string
 	 */
-	protected $_embedded = null;
-	/**
-	 * Cacheed values for embeddedDocuments() method vall
-	 * @var array $_embeddedConfig
-	 * @since v1.3.2
-	 */
-	protected static $_embeddedConfig = array();
+	public $_class = null;
+
 	/**
 	 * Hold down owner pointer (if any)
 	 *
@@ -38,7 +36,38 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	protected $_owner = null;
 
+	/**
+	 * @todo Check if it is nessesary
+	 * @var type
+	 */
 	private static $_attributes = array();
+
+	/**
+	 * Model metadata
+	 * @Persistent(false)
+	 * @var MModelMeta
+	 */
+//	public $meta = null;
+	private static $_meta = [];
+
+	/**
+	 * Current document language
+	 * @var string
+	 */
+	private $_lang = '';
+
+	/**
+	 * Array with raw i18n attributes (with all language versions)
+	 * @Persistent(false)
+	 * @var mixed[]
+	 */
+	public $rawI18N = null;
+
+	/**
+	 * Array with all not directly accessed fields values
+	 * @var mixed[]
+	 */
+	private $_virtualValues = [];
 
 	/**
 	 * Constructor.
@@ -47,13 +76,16 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 * @see getScenario
 	 * @since v1.0.8
 	 */
-	public function __construct($scenario = 'insert')
+	public function __construct($scenario = 'insert', $lang = '')
 	{
+		$this->setLang($lang);
+//		$this->meta = MModelMeta::create($this);
+		$this->_class = get_class($this);
 		$this->setScenario($scenario);
 		$this->init();
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
-
+		
 		$this->initEmbeddedDocuments();
 	}
 
@@ -77,9 +109,6 @@ abstract class EMongoEmbeddedDocument extends CModel
 		if (!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
 			return false;
 
-		$this->_embedded = new CMap;
-		if (!isset(self::$_embeddedConfig[get_class($this)]))
-			self::$_embeddedConfig[get_class($this)] = $this->embeddedDocuments();
 		$this->afterEmbeddedDocsInit();
 	}
 
@@ -152,45 +181,79 @@ abstract class EMongoEmbeddedDocument extends CModel
 	}
 
 	/**
-	 * @since v1.0.8
+	 * Support for get accessors for fields
+	 * Also dot notation is supported for embedded documents, which can be used
+	 * while getting fields with variable variables
+	 * @example Fieldname: testField; get method: getTestField;
+	 * @param string $name
+	 * @return mixed result of get<fieldName> function
 	 */
 	public function __get($name)
 	{
-		if ($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
-			// Late creation of embedded documents on first access
-			if (is_null($this->_embedded->itemAt($name))) {
-				$docClassName = self::$_embeddedConfig[get_class($this)][$name];
-				$doc = new $docClassName($this->getScenario());
-				$doc->setOwner($this);
-				$this->_embedded->add($name, $doc);
-			}
-			return $this->_embedded->itemAt($name);
+		if(strstr($name, '.'))
+		{
+			$parts = explode('.', $name, 2);
+			return $this->{$parts[0]}->{$parts[1]};
 		}
-		else
-			return parent::__get($name);
+		if($this->meta->$name)
+		{
+			if($this->meta->$name->readonly)
+			{
+				return $this->getAttribute($name);
+			}
+			if($this->meta->$name->callGet)
+			{
+				return $this->{$this->meta->$name->methodGet}();
+			}
+			if($this->meta->$name->i18n)
+			{
+				return $this->getAttribute($name);
+			}
+			if($this->meta->$name->embedded)
+			{
+				return $this->getAttribute($name);
+			}
+		}
+		return parent::__get($name);
 	}
 
 	/**
-	 * @since v1.0.8
+	 * Support for set accessors for fields
+	 * Also dot notation is supported for embedded documents, which can be used
+	 * while getting fields with variable variables
+	 * @example Fieldname: testField; set method: setTestField;
+	 * @param string $name
+	 * @param mixed $value
+	 * @return mixed result of get<fieldName> function
 	 */
 	public function __set($name, $value)
 	{
-		if ($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
-			if (is_array($value)) {
-				// Late creation of embedded documents on first access
-				if (is_null($this->_embedded->itemAt($name))) {
-					$docClassName = self::$_embeddedConfig[get_class($this)][$name];
-					$doc = new $docClassName($this->getScenario());
-					$doc->setOwner($this);
-					$this->_embedded->add($name, $doc);
-				}
-				return $this->_embedded->itemAt($name)->attributes = $value;
-			}
-			else if ($value instanceof EMongoEmbeddedDocument)
-				return $this->_embedded->add($name, $value);
+		if(strstr($name, '.'))
+		{
+			$parts = explode('.', $name, 2);
+			$this->{$parts[0]}->{$parts[1]} = $value;
+			return $this->{$parts[0]}->{$parts[1]} = $value;
 		}
-		else
-			parent::__set($name, $value);
+		if($this->meta->$name)
+		{
+			if($this->meta->$name->readonly)
+			{
+				return '';
+			}
+			if($this->meta->$name->callSet)
+			{
+				return $this->{$this->meta->$name->methodSet}($value);
+			}
+			if($this->meta->$name->embedded)
+			{
+				return $this->setAttribute($name, $value);
+			}
+			if($this->meta->$name->i18n)
+			{
+				return $this->setAttribute($name, $value);
+			}
+		}
+		return parent::__set($name, $value);
 	}
 
 	/**
@@ -199,8 +262,8 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function __isset($name)
 	{
-		if ($this->hasEmbeddedDocuments() && isset(self::$_embeddedConfig[get_class($this)][$name])) {
-			return isset($this->_embedded[$name]);
+		if ($this->meta->$name->embedded) {
+			return isset($this->_virtualValues[$name]);
 		}
 		else
 			return parent::__isset($name);
@@ -212,10 +275,60 @@ abstract class EMongoEmbeddedDocument extends CModel
 	public function afterValidate()
 	{
 		if ($this->hasEmbeddedDocuments())
-			foreach ($this->_embedded as $doc) {
-				if (!$doc->validate())
-					$this->addErrors($doc->getErrors());
+			foreach ($this->meta->properties('embedded') as $field => $className)
+			{
+				if($this->meta->$field->embeddedArray)
+				{
+					foreach($this->$field as $doc)
+					{
+						if($doc instanceof EMongoEmbeddedDocument)
+						{
+							if(!$doc->validate())
+							{
+								$this->addErrors($doc->getErrors());
+							}
+						}
+					}
+				}
+				else
+				{
+					if($this->$field instanceof EMongoEmbeddedDocument)
+					{
+						if(!$this->$field->validate())
+						{
+							$this->addErrors($this->$field->getErrors());
+						}
+					}
+				}
 			}
+	}
+
+	/**
+	 * @todo Detect if we deal with built-in validator or user validator
+	 * FIXME Add support for user defined validators, currently disabled
+	 * name, consider this in converting utility! @see CValidator::builtInValidators
+	 * Each build in validator annotation should implement IBuiltInValidatorAnnotation to distinguish it from other validators
+	 * @return CValidator[]
+	 */
+	public function rules()
+	{
+		$result = [];
+		foreach($this->meta->fields() as $field => $meta)
+		{
+			foreach($meta as $type => $value)
+			{
+				if($value instanceof IBuiltInValidatorAnnotation)
+				{
+					$type = preg_replace('~Validator$~', '', $type);
+					$result[] = array_merge([$field, $type], $value->toArray());
+				}
+				elseif($value instanceof EValidatorAnnotation)
+				{
+					// TODO
+				}
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -223,7 +336,7 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function embeddedDocuments()
 	{
-		return array();
+		return $this->meta->properties('embedded');
 	}
 
 	/**
@@ -231,8 +344,6 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function hasEmbeddedDocuments()
 	{
-		if (isset(self::$_embeddedConfig[get_class($this)]))
-			return true;
 		return count($this->embeddedDocuments()) > 0;
 	}
 
@@ -245,22 +356,19 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	public function attributeNames()
 	{
-		$className = get_class($this);
-		if (!isset(self::$_attributes[$className])) {
-			$class = new ReflectionClass(get_class($this));
-			$names = array();
-			foreach ($class->getProperties() as $property) {
-				$name = $property->getName();
-				if ($property->isPublic() && !$property->isStatic())
-					$names[] = $name;
-			}
-			if ($this->hasEmbeddedDocuments()) {
-				$names = array_merge($names, array_keys(self::$_embeddedConfig[get_class($this)]));
-			}
-			return self::$_attributes[$className] = $names;
+		if(!isset(self::$_attributes[$className]))
+		{
+			return self::$_attributes[$className] = array_keys((array)$this->meta->fields());
 		}
 		else
+		{
 			return self::$_attributes[$className];
+		}
+	}
+	
+	public function attributeLabels()
+	{
+		return $this->meta->properties('label');
 	}
 
 	/**
@@ -288,17 +396,243 @@ abstract class EMongoEmbeddedDocument extends CModel
 	 */
 	protected function _toArray()
 	{
-		$arr = array();
-		$class = new ReflectionClass(get_class($this));
-		foreach ($class->getProperties() as $property) {
-			$name = $property->getName();
-			if ($property->isPublic() && !$property->isStatic())
-				$arr[$name] = $this->$name;
-		}
-		if ($this->hasEmbeddedDocuments())
-			foreach ($this->_embedded as $key => $value)
-				$arr[$key] = $value->toArray();
+		$arr = [];
+		foreach($this->meta->fields() as $name => $field)
+		{
+			// Type check is required here, so by default attribute is persistent
+			if($field->persistent !== false)
+			{
 
+//				if($field->embedded)
+//				{
+//					if($field->embeddedArray)
+//					{
+//						$arr[$name] = $this->getAttribute($name)->toArray();
+//					}
+//					else
+//					{
+//						$arr[$name] = $this->getAttribute($name)->toArray();
+//					}
+//				}
+//				else
+//				{
+//					$arr[$name] = $this->getAttribute($name);
+//				}
+
+				if($field->i18n)
+				{
+					foreach(Yii::app()->languages as $lang => $langName)
+					{
+						if($field->embedded)
+						{
+							if($field->embeddedArray)
+							{
+								$value = [];
+								foreach($this->getAttribute($name, $lang) as $docValue)
+								{
+									$value[] = $docValue->toArray();
+								}
+							}
+							else
+							{
+								$value = $this->getAttribute($name, $lang)->toArray();
+							}
+						}
+						else
+						{
+							$value = $this->getAttribute($name, $lang);
+						}
+						$arr[$name][$lang] = $value;
+					}
+				}
+				else
+				{
+					if($field->embedded)
+					{
+						if($field->embeddedArray)
+						{
+							$value = [];
+							foreach($this->getAttribute($name) as $docValue)
+							{
+								$value[] = $docValue->toArray();
+							}
+						}
+						else
+						{
+							$value = $this->getAttribute($name)->toArray();
+						}
+					}
+					else
+					{
+						$value = $this->getAttribute($name);
+					}
+					$arr[$name] = $value;
+				}
+			}
+		}
+		$arr['_class'] = get_class($this);
+		return $arr;
+	}
+
+
+
+	/**
+	 * Get raw attribute, as is stored in db
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function getAttribute($name, $lang = '')
+	{
+		if(!$this->meta->$name->direct)
+		{
+			if($this->meta->$name->i18n)
+			{
+				if(!$lang)
+				{
+					$lang = $this->getLang();
+				}
+				$value = $this->_virtualValues[$name][$lang];
+//				if($this->meta->$name->embedded)
+//				{
+//					$value = $this->_instantiateEmbedded($name, $value);
+//				}
+				return $value;
+			}
+			else
+			{
+				if(!isset($this->_virtualValues[$name]))
+				{
+					$this->_virtualValues[$name] = $this->meta->$name->default;
+				}
+				$value = $this->_virtualValues[$name];
+				if(null === $value && $this->meta->$name->embedded)
+				{
+					$value = $this->_instantiateEmbedded($name, $value);
+					var_dump($value);
+				}
+				return $value;
+			}
+		}
+		else
+		{
+			return $this->$name;
+		}
+	}
+
+	/**
+	 * Set raw attribute
+	 * @param string $name
+	 * @param mixed $value
+	 */
+	public function setAttribute($name, $value, $lang = '')
+	{
+		if(!$this->meta->$name->direct)
+		{
+			if($this->meta->$name->embedded)
+			{
+				if($this->meta->$name->embeddedArray)
+				{
+					$docs = [];
+					foreach((array)$value as $docValue)
+					{
+						$docs[] = $this->_instantiateEmbedded($name, $docValue);
+					}
+					$value = $docs;
+				}
+				else
+				{
+					$value = $this->_instantiateEmbedded($name, $value);
+				}
+			}
+			if($this->meta->$name->i18n)
+			{
+				if(!$lang)
+				{
+					$lang = $this->getLang();
+				}
+				$this->_virtualValues[$name][$lang] = $value;
+			}
+			else
+			{
+				$this->_virtualValues[$name] = $value;
+			}
+		}
+		else
+		{
+			$this->$name = $value;
+		}
+	}
+
+	/**
+	 * Sets the attribute values in a massive way.
+	 * @param array $values attribute values (name=>value) to be set.
+	 * @param boolean $safeOnly whether the assignments should only be done to the safe attributes.
+	 * A safe attribute is one that is associated with a validation rule in the current {@link scenario}.
+	 * @see getSafeAttributeNames
+	 * @see attributeNames
+	 * @since v1.3.1
+	 */
+	public function setAttributes($values, $safeOnly = true)
+	{
+		if(!is_array($values))
+			return;
+		if($this->hasEmbeddedDocuments())
+		{
+			$attributes = array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
+
+			foreach($this->embeddedDocuments() as $fieldName => $className)
+			{
+				if(isset($values[$fieldName]) && isset($attributes[$fieldName]))
+				{
+					// TODO Check if it's ok
+//					$this->$fieldName->setAttributes($values[$fieldName], $safeOnly);
+					$this->setAttribute($fieldName, $values[$fieldName]);
+					unset($values[$fieldName]);
+				}
+			}
+		}
+		parent::setAttributes($values, $safeOnly);
+	}
+
+	/**
+	 * Get current language code, defaults to Yii::app()->language
+	 * @return string
+	 */
+	public function getLang()
+	{
+		if(!$this->_lang)
+		{
+			$this->_lang = Yii::app()->language;
+		}
+		return $this->_lang;
+	}
+
+	/**
+	 * Set current language, but only if it is defined in application languages
+	 * @param string $value
+	 */
+	public function setLang($value)
+	{
+		if(in_array($value, array_keys(Yii::app()->languages)))
+		{
+			$this->_lang = $value;
+		}
+	}
+
+	public function getRawI18N()
+	{
+		$arr = [];
+		foreach($this->meta->fields() as $name => $field)
+		{
+			if($field->i18n)
+			{
+				foreach(Yii::app()->languages as $lang => $langName)
+				{
+					$value = $this->getAttribute($name, $lang);
+					$arr[$name][$lang] = $value;
+				}
+			}
+		}
 		return $arr;
 	}
 
@@ -325,18 +659,67 @@ abstract class EMongoEmbeddedDocument extends CModel
 		$this->_owner = $owner;
 	}
 
+	public function getMeta()
+	{
+		$id = get_class($this);
+		if(!isset(self::$_meta[$id]))
+		{
+			self::$_meta[$id] = MModelMeta::create($this);
+		}
+		return self::$_meta[$id];
+	}
+
 	/**
-	 * Override default seScenario method for populating to embedded records
+	 * Override default setScenario method for populating to embedded records
 	 * @see CModel::setScenario()
+	 * @todo Set scenario for embedded documents
 	 * @since v1.0.8
 	 */
 	public function setScenario($value)
 	{
-		if ($this->hasEmbeddedDocuments() && $this->_embedded !== null) {
-			foreach ($this->_embedded as $doc)
-				$doc->setScenario($value);
-		}
+//		if($this->hasEmbeddedDocuments() && $this->_embedded !== null)
+//		{
+//			foreach($this->_embedded as $doc)
+//			{
+//				$doc->setScenario($value);
+//			}
+//		}
 		parent::setScenario($value);
+	}
+
+	/**
+	 * Create instance of embedded document, based on defined type or
+	 * __class field if it is set in data
+	 * @param type $name
+	 * @param type $value
+	 */
+	private function _instantiateEmbedded($name, $value = [])
+	{
+		if($value instanceof EMongoEmbeddedDocument)
+		{
+			return $value;
+		}
+		if(isset($value['_class']) && $value['_class'])
+		{
+			$docClassName = $value['_class'];
+		}
+		else
+		{
+			$docClassName = $this->meta->$name->embedded;
+		}
+		// This is for automatic doc type, and if its new instance
+		// TODO Default class name should be configurable
+		if($docClassName === true)
+		{
+			$docClassName = 'EMongoSoftDocument';
+		}
+		$doc = new $docClassName($this->getScenario(), $this->getLang());
+		$doc->setOwner($this);
+		if($value)
+		{
+			$doc->setAttributes($value);
+		}
+		return $doc;
 	}
 
 }
