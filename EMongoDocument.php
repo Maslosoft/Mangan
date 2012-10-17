@@ -87,10 +87,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function __construct($scenario = 'insert', $lang = '')
 	{
-		$this->setLang($lang);
-//		$this->meta = MModelMeta::create($this);
 		$this->_class = get_class($this);
 		$this->meta->initModel($this);
+		$this->setLang($lang);
 		
 		if($scenario == null) // internally used by populateRecord() and model()
 			return;
@@ -193,7 +192,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getCollectionName()
 	{
-		return get_class($this);
+		return $this->_class;
 	}
 
 	/**
@@ -289,8 +288,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if($this->_fsyncFlag !== null)
 			return $this->_fsyncFlag; // We have flag set, return it
-		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->_fsyncFlag !== null))
-			return self::$_models[get_class($this)]->_fsyncFlag; // Model have flag set, return it
+		if((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_fsyncFlag !== null))
+			return self::$_models[$this->_class]->_fsyncFlag; // Model have flag set, return it
 		return $this->getMongoDBComponent()->fsyncFlag;
 	}
 
@@ -318,8 +317,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if($this->_safeFlag !== null)
 			return $this->_safeFlag; // We have flag set, return it
-		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->_safeFlag !== null))
-			return self::$_models[get_class($this)]->_safeFlag; // Model have flag set, return it
+		if((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_safeFlag !== null))
+			return self::$_models[$this->_class]->_safeFlag; // Model have flag set, return it
 		return $this->getMongoDBComponent()->safeFlag;
 	}
 
@@ -348,8 +347,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			return $criteria->getUseCursor();
 		if($this->useCursor !== null)
 			return $this->useCursor; // We have flag set, return it
-		if((isset(self::$_models[get_class($this)]) === true) && (self::$_models[get_class($this)]->useCursor !== null))
-			return self::$_models[get_class($this)]->useCursor; // Model have flag set, return it
+		if((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->useCursor !== null))
+			return self::$_models[$this->_class]->useCursor; // Model have flag set, return it
 		return $this->getMongoDBComponent()->useCursor;
 	}
 
@@ -581,7 +580,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		if($this->beforeSave())
 		{
-			Yii::trace(get_class($this) . '.insert()', 'ext.MongoDb.EMongoDocument');
+			Yii::trace($this->_class . '.insert()', 'ext.MongoDb.EMongoDocument');
 			$rawData = $this->toArray();
 			// free the '_id' container if empty, mongo will not populate it if exists
 			if(empty($rawData['_id']))
@@ -657,7 +656,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
 		if($this->beforeSave())
 		{
-			Yii::trace(get_class($this) . '.update()', 'ext.MongoDb.EMongoDocument');
+			Yii::trace($this->_class . '.update()', 'ext.MongoDb.EMongoDocument');
 			$rawData = $this->toArray();
 //			var_dump($rawData);
 			// filter attributes if set in param
@@ -713,7 +712,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function updateAll($modifier, $criteria = null)
 	{
-		Yii::trace(get_class($this) . '.updateAll()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.updateAll()', 'ext.MongoDb.EMongoDocument');
 		if($modifier->canApply === true)
 		{
 			$this->applyScopes($criteria);
@@ -745,7 +744,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		if(!$this->getIsNewRecord())
 		{
-			Yii::trace(get_class($this) . '.delete()', 'ext.MongoDb.EMongoDocument');
+			Yii::trace($this->_class . '.delete()', 'ext.MongoDb.EMongoDocument');
 			if($this->beforeDelete())
 			{
 				$result = $this->deleteByPk($this->getPrimaryKey());
@@ -775,7 +774,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function deleteByPk($pk, $criteria = null)
 	{
-		Yii::trace(get_class($this) . '.deleteByPk()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.deleteByPk()', 'ext.MongoDb.EMongoDocument');
 		if($this->beforeDelete())
 		{
 			$this->applyScopes($criteria);
@@ -801,7 +800,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function refresh()
 	{
-		Yii::trace(get_class($this) . '.refresh()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.refresh()', 'ext.MongoDb.EMongoDocument');
 		if(!$this->getIsNewRecord() && $this->getCollection()->count(array('_id' => $this->_id)) == 1)
 		{
 			$this->setAttributes($this->getCollection()->find(array('_id' => $this->_id)), false);
@@ -823,7 +822,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function find($criteria = null)
 	{
-		Yii::trace(get_class($this) . '.find()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.find()', 'ext.MongoDb.EMongoDocument');
 
 		if($this->beforeFind())
 		{
@@ -843,7 +842,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function findAll($criteria = null)
 	{
-		Yii::trace(get_class($this) . '.findAll()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.findAll()', 'ext.MongoDb.EMongoDocument');
 
 		if($this->beforeFind())
 		{
@@ -878,7 +877,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function findByPk($pk, $criteria = null)
 	{
-		Yii::trace(get_class($this) . '.findByPk()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.findByPk()', 'ext.MongoDb.EMongoDocument');
 		$criteria = new EMongoCriteria($criteria);
 		$criteria->mergeWith($this->createPkCriteria($pk));
 
@@ -897,7 +896,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function findAllByPk($pk, $criteria = null)
 	{
-		Yii::trace(get_class($this) . '.findAllByPk()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.findAllByPk()', 'ext.MongoDb.EMongoDocument');
 		$criteria = new EMongoCriteria($criteria);
 		$criteria->mergeWith($this->createPkCriteria($pk, true));
 
@@ -949,7 +948,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function count($criteria = null)
 	{
-		Yii::trace(get_class($this) . '.count()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.count()', 'ext.MongoDb.EMongoDocument');
 
 		$this->applyScopes($criteria);
 
@@ -965,7 +964,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function countByAttributes(array $attributes)
 	{
-		Yii::trace(get_class($this) . '.countByAttributes()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.countByAttributes()', 'ext.MongoDb.EMongoDocument');
 
 		$criteria = new EMongoCriteria;
 		foreach($attributes as $name => $value)
@@ -985,7 +984,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function exists(EMongoCriteria $criteria)
 	{
-		Yii::trace(get_class($this) . '.exists()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.exists()', 'ext.MongoDb.EMongoDocument');
 		return $this->count($criteria) > 0;
 	}
 
@@ -998,7 +997,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function deleteAll($criteria = null)
 	{
-		Yii::trace(get_class($this) . '.deleteAll()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.deleteAll()', 'ext.MongoDb.EMongoDocument');
 		$this->applyScopes($criteria);
 
 		if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
@@ -1194,7 +1193,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function instantiate($attributes)
 	{
-		$class = get_class($this);
+		$class = $this->_class;
 		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
 		foreach($model->toArray() as $field => $value)
@@ -1371,13 +1370,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				if((strlen($pk) === 24) && !$pk instanceof MongoId)
 				{
 					// Assumption: if dealing with _id field and it's a 24-digit string .. should be an Mongo ObjectID
-					Yii::trace(get_class($this) . ".createPkCriteria() .. converting key value ($pk) to MongoId", 'ext.MongoDb.EMongoDocument');
+					Yii::trace($this->_class . ".createPkCriteria() .. converting key value ($pk) to MongoId", 'ext.MongoDb.EMongoDocument');
 					$pk = new MongoId($pk);
 				}
 				elseif(is_numeric($pk))
 				{
 					// Assumption: need to bless as int, as string != int when looking up primary keys
-					Yii::trace(get_class($this) . ".createPkCriteria() .. casting ($pk) to int", 'ext.MongoDb.EMongoDocument');
+					Yii::trace($this->_class . ".createPkCriteria() .. casting ($pk) to int", 'ext.MongoDb.EMongoDocument');
 					$pk = (int)$pk;
 				}
 			}
