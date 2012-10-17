@@ -82,6 +82,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 //		$this->meta = MModelMeta::create($this);
 		$this->_class = get_class($this);
 		$this->setScenario($scenario);
+		$this->meta->initModel($this);
 		$this->init();
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
@@ -195,21 +196,26 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			$parts = explode('.', $name, 2);
 			return $this->{$parts[0]}->{$parts[1]};
 		}
-		if($this->meta->$name)
+		if($name == 'meta')
 		{
-			if($this->meta->$name->readonly)
+			return $this->getMeta();
+		}
+		$meta = self::$_meta[$this->_class]->$name;
+		if($meta)
+		{
+			if($meta->readonly)
 			{
 				return $this->getAttribute($name);
 			}
-			if($this->meta->$name->callGet)
+			if($meta->callGet)
 			{
-				return $this->{$this->meta->$name->methodGet}();
+				return $this->{$meta->methodGet}();
 			}
-			if($this->meta->$name->i18n)
+			if($meta->i18n)
 			{
 				return $this->getAttribute($name);
 			}
-			if($this->meta->$name->embedded)
+			if($meta->embedded)
 			{
 				return $this->getAttribute($name);
 			}
@@ -234,21 +240,22 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			$this->{$parts[0]}->{$parts[1]} = $value;
 			return $this->{$parts[0]}->{$parts[1]} = $value;
 		}
-		if($this->meta->$name)
+		$meta = self::$_meta[$this->_class]->$name;
+		if($meta)
 		{
-			if($this->meta->$name->readonly)
+			if($meta->readonly)
 			{
 				return '';
 			}
-			if($this->meta->$name->callSet)
+			if($meta->callSet)
 			{
-				return $this->{$this->meta->$name->methodSet}($value);
+				return $this->{$meta->methodSet}($value);
 			}
-			if($this->meta->$name->embedded)
+			if($meta->embedded)
 			{
 				return $this->setAttribute($name, $value);
 			}
-			if($this->meta->$name->i18n)
+			if($meta->i18n)
 			{
 				return $this->setAttribute($name, $value);
 			}
@@ -402,23 +409,6 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			// Type check is required here, so by default attribute is persistent
 			if($field->persistent !== false)
 			{
-
-//				if($field->embedded)
-//				{
-//					if($field->embeddedArray)
-//					{
-//						$arr[$name] = $this->getAttribute($name)->toArray();
-//					}
-//					else
-//					{
-//						$arr[$name] = $this->getAttribute($name)->toArray();
-//					}
-//				}
-//				else
-//				{
-//					$arr[$name] = $this->getAttribute($name);
-//				}
-
 				if($field->i18n)
 				{
 					foreach(Yii::app()->languages as $lang => $langName)
@@ -454,6 +444,8 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 							$value = [];
 							foreach($this->getAttribute($name) as $docValue)
 							{
+//								var_dump($name);
+//								var_dump($docValue->toArray());
 								$value[] = $docValue->toArray();
 							}
 						}
@@ -483,16 +475,17 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function getAttribute($name, $lang = '')
 	{
-		if(!$this->meta->$name->direct)
+		$meta = self::$_meta[$this->_class]->$name;
+		if(!$meta->direct)
 		{
-			if($this->meta->$name->i18n)
+			if($meta->i18n)
 			{
 				if(!$lang)
 				{
 					$lang = $this->getLang();
 				}
 				$value = $this->_virtualValues[$name][$lang];
-//				if($this->meta->$name->embedded)
+//				if($meta->embedded)
 //				{
 //					$value = $this->_instantiateEmbedded($name, $value);
 //				}
@@ -502,13 +495,14 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			{
 				if(!isset($this->_virtualValues[$name]))
 				{
-					$this->_virtualValues[$name] = $this->meta->$name->default;
+					$this->_virtualValues[$name] = $meta->default;
 				}
 				$value = $this->_virtualValues[$name];
-				if(null === $value && $this->meta->$name->embedded)
+				if(null === $value && $meta->embedded)
 				{
+//					var_dump($name);
+//					var_dump($this);
 					$value = $this->_instantiateEmbedded($name, $value);
-					var_dump($value);
 				}
 				return $value;
 			}
@@ -526,11 +520,12 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function setAttribute($name, $value, $lang = '')
 	{
-		if(!$this->meta->$name->direct)
+		$meta = self::$_meta[$this->_class]->$name;
+		if(!$meta->direct)
 		{
-			if($this->meta->$name->embedded)
+			if($meta->embedded)
 			{
-				if($this->meta->$name->embeddedArray)
+				if($meta->embeddedArray)
 				{
 					$docs = [];
 					foreach((array)$value as $docValue)
@@ -544,7 +539,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 					$value = $this->_instantiateEmbedded($name, $value);
 				}
 			}
-			if($this->meta->$name->i18n)
+			if($meta->i18n)
 			{
 				if(!$lang)
 				{
@@ -621,19 +616,20 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 
 	public function getRawI18N()
 	{
-		$arr = [];
+		$result = new stdClass();
 		foreach($this->meta->fields() as $name => $field)
 		{
 			if($field->i18n)
 			{
+				$result->$name = new stdClass();
 				foreach(Yii::app()->languages as $lang => $langName)
 				{
 					$value = $this->getAttribute($name, $lang);
-					$arr[$name][$lang] = $value;
+					$result->$name->$lang = $value;
 				}
 			}
 		}
-		return $arr;
+		return $result;
 	}
 
 	/**

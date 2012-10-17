@@ -90,7 +90,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$this->setLang($lang);
 //		$this->meta = MModelMeta::create($this);
 		$this->_class = get_class($this);
-
+		$this->meta->initModel($this);
+		
 		if($scenario == null) // internally used by populateRecord() and model()
 			return;
 
@@ -112,15 +113,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 	public function setId($value)
 	{
-		if($value)
+		if(!$value instanceof MongoId)
 		{
-			$this->_id = new MongoId((string)$value);
+			$value = new MongoId($value);
 		}
-		else
-		{
-			$this->_id = null;
-		}
-		
+		$this->_id = $value;
 	}
 
 	/**
