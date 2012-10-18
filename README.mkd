@@ -1,3 +1,21 @@
+#This branch relies on annotations, and it's quite different from original one#
+
+**NOTE:** *Model classes are **not** compatible with original one, however migration should not be a big deal, see [migration guide](@todo)*
+
+Key highlights include:
+
+* [Rich metadata model](@todo)
+* [i18n fields](@todo)
+* [Arbitrary type of embedded and embedded arrays of documents](@todo)
+* [Automatic get/set for public properties](@todo)
+* [*Very* light model code](@todo)
+* [See all attribute properties at glance](@todo)
+
+Requirements
+
+* PHP 5.4
+* Latest Yii - tesed with 1.1.12
+
 This extension will add (one day) full featured Mongo DB support for Yii.
 
 The goal of this extension is to cleanup and merge some of the various Mongo DB extensions available for Yii, and package them into a full-feature suite.
@@ -440,4 +458,3 @@ We stand upon the shoulders of giants:
 - luckysmack, for big help with testing and documentation.
 - Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support.
 - Nagy Attila Gábor, for big help with new functionality and testing.
-

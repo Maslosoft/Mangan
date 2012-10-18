@@ -1196,7 +1196,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$class = $this->_class;
 		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
-		foreach($model->toArray() as $field => $value)
+		foreach($this->meta->fields() as $field => $value)
 		{
 			if(isset($attributes[$field]))
 			{

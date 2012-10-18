@@ -9,6 +9,7 @@
  * @version 1.3
  * @category ext
  * @package ext.YiiMongoDbSuite
+ * @property MModelMeta $meta Model metadata
  */
 
 /**
@@ -481,6 +482,8 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	/**
 	 * Get raw attribute, as is stored in db
 	 * @param string $name
+	 * @param string $lang Language of sttribute, or _all to get all languages as array
+	 * @todo $lang param _all is experimental, do not use
 	 * @return mixed
 	 */
 	public function getAttribute($name, $lang = '')
@@ -494,10 +497,17 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 				{
 					$lang = $this->getLang();
 				}
-				$value = $this->_virtualValues[$name][$lang];
-				if(null === $value && $meta->embedded)
+				if($lang == '_all')
 				{
-					$value = $this->_instantiateEmbedded($name, $value);
+					$value = $this->_virtualValues[$name];
+				}
+				else
+				{
+					$value = $this->_virtualValues[$name][$lang];
+//					if(null === $value && $meta->embedded)
+//					{
+//						$value = $this->_instantiateEmbedded($name, $value);
+//					}
 				}
 				return $value;
 			}
@@ -508,10 +518,10 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 					$this->_virtualValues[$name] = $meta->default;
 				}
 				$value = $this->_virtualValues[$name];
-				if(null === $value && $meta->embedded)
-				{
-					$value = $this->_instantiateEmbedded($name, $value);
-				}
+//				if(null === $value && $meta->embedded)
+//				{
+//					$value = $this->_instantiateEmbedded($name, $value);
+//				}
 				return $value;
 			}
 		}
@@ -524,6 +534,8 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	/**
 	 * Set raw attribute
 	 * @param string $name
+	 * @param string $lang Language of sttribute, or _all to set all languages as array
+	 * @todo $lang param _all is experimental, do not use
 	 * @param mixed $value
 	 */
 	public function setAttribute($name, $value, $lang = '')
@@ -553,7 +565,14 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 				{
 					$lang = $this->getLang();
 				}
-				$this->_virtualValues[$name][$lang] = $value;
+				if($lang == '_all')
+				{
+					$this->_virtualValues[$name] = $value;
+				}
+				else
+				{
+					$this->_virtualValues[$name][$lang] = $value;
+				}
 			}
 			else
 			{
