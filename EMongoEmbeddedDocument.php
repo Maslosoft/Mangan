@@ -311,27 +311,27 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	}
 
 	/**
-	 * @todo Detect if we deal with built-in validator or user validator
-	 * FIXME Add support for user defined validators, currently disabled
-	 * name, consider this in converting utility! @see CValidator::builtInValidators
-	 * Each build in validator annotation should implement IBuiltInValidatorAnnotation to distinguish it from other validators
-	 * @return CValidator[]
+	 * Validation rules based on validator annotations
+	 * @return mixed[][]
 	 */
 	public function rules()
 	{
+		$pattern = '~Validator$~';
 		$result = [];
 		foreach($this->meta->fields() as $field => $meta)
 		{
 			foreach($meta as $type => $value)
 			{
-				if($value instanceof IBuiltInValidatorAnnotation)
+				if(preg_match($pattern, $type))
 				{
-					$type = preg_replace('~Validator$~', '', $type);
-					$result[] = array_merge([$field, $type], $value->toArray());
-				}
-				elseif($value instanceof EValidatorAnnotation)
-				{
-					// TODO
+					$type = preg_replace($pattern, '', $type);
+					$value = (array)$value;
+					if(isset($value['class']))
+					{
+						$type = $value['class'];
+						unset($value['class']);
+					}
+					$result[] = array_merge([$field, $type], $value);
 				}
 			}
 		}
