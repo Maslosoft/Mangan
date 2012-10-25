@@ -21,10 +21,6 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 {
 	/**
 	 * This holds type of this embedded document
-	 * @todo When creating embedded document instance from mongo data,
-	 * check this variable and instantiate properly, by creating array of config
-	 * with stored values, and array field 'class' with this value, and than call
-	 * Yii::createComponent
 	 * @var string
 	 */
 	public $_class = null;
@@ -59,6 +55,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	/**
 	 * Array with raw i18n attributes (with all language versions)
 	 * @Persistent(false)
+	 * @Readonly
 	 * @var mixed[]
 	 */
 	public $rawI18N = null;
@@ -199,25 +196,14 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		{
 			return $this->getMeta();
 		}
-		$meta = self::$_meta[$this->_class]->$name;
+		$meta = $this->meta->$name;
 		if($meta)
 		{
-			if($meta->readonly)
-			{
-				return $this->getAttribute($name);
-			}
 			if($meta->callGet)
 			{
 				return $this->{$meta->methodGet}();
 			}
-			if($meta->i18n)
-			{
-				return $this->getAttribute($name);
-			}
-			if($meta->embedded)
-			{
-				return $this->getAttribute($name);
-			}
+			return $this->getAttribute($name);
 		}
 		return parent::__get($name);
 	}
@@ -239,7 +225,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			$this->{$parts[0]}->{$parts[1]} = $value;
 			return $this->{$parts[0]}->{$parts[1]} = $value;
 		}
-		$meta = self::$_meta[$this->_class]->$name;
+		$meta = $this->meta->$name;
 		if($meta)
 		{
 			if($meta->readonly)
@@ -250,14 +236,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			{
 				return $this->{$meta->methodSet}($value);
 			}
-			if($meta->embedded)
-			{
-				return $this->setAttribute($name, $value);
-			}
-			if($meta->i18n)
-			{
-				return $this->setAttribute($name, $value);
-			}
+			return $this->setAttribute($name, $value);
 		}
 		return parent::__set($name, $value);
 	}
@@ -273,7 +252,9 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			return isset($this->_virtualValues[$name]);
 		}
 		else
+		{
 			return parent::__isset($name);
+		}
 	}
 
 	/**
@@ -419,21 +400,35 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 							if($field->embeddedArray)
 							{
 								$value = [];
-								foreach($this->getAttribute($name, $lang) as $docValue)
+								foreach((array)$this->getAttribute($name, $lang) as $docValue)
 								{
-									if(!$docValue instanceof EMongoEmbeddedDocument)
+									if(!$docValue instanceof CModel)
 									{
 										continue;
 									}
-									$value[] = $docValue->toArray();
+									if(method_exists($docValue, 'toArray'))
+									{
+										$value[] = $docValue->toArray();
+									}
+									else
+									{
+										$value[] = $docValue->attributes;
+									}
 								}
 							}
 							else
 							{
 								$value = $this->getAttribute($name, $lang);
-								if($value instanceof EMongoEmbeddedDocument)
+								if($value instanceof CModel)
 								{
-									$value = $value->toArray();
+									if(method_exists($value, 'toArray'))
+									{
+										$value = $value->toArray();
+									}
+									else
+									{
+										$value = $value->attributes;
+									}
 								}
 								else
 								{
@@ -457,14 +452,34 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 							$value = [];
 							foreach($this->getAttribute($name) as $docValue)
 							{
-//								var_dump($name);
-//								var_dump($docValue->toArray());
-								$value[] = $docValue->toArray();
+								if(!$docValue instanceof CModel)
+								{
+									continue;
+								}
+								if(method_exists($docValue, 'toArray'))
+								{
+									$value[] = $docValue->toArray();
+								}
+								else
+								{
+									$value[] = $docValue->attributes;
+								}
 							}
 						}
 						else
 						{
-							$value = $this->getAttribute($name)->toArray();
+							$value = $this->getAttribute($name);
+							if($value instanceof CModel)
+							{
+								if(method_exists($value, 'toArray'))
+								{
+									$value = $value->toArray();
+								}
+								else
+								{
+									$value = $value->attributes;
+								}
+							}
 						}
 					}
 					else
@@ -488,7 +503,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function getAttribute($name, $lang = '')
 	{
-		$meta = self::$_meta[$this->_class]->$name;
+		$meta = $this->meta->$name;
 		if(!$meta->direct)
 		{
 			if($meta->i18n)
@@ -504,24 +519,25 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 				else
 				{
 					$value = $this->_virtualValues[$name][$lang];
-//					if(null === $value && $meta->embedded)
-//					{
-//						$value = $this->_instantiateEmbedded($name, $value);
-//					}
+				}
+				// TODO
+				if($value === 'null')
+				{
+					return null;
 				}
 				return $value;
 			}
 			else
 			{
-				if(!isset($this->_virtualValues[$name]))
+				if(!array_key_exists($name, $this->_virtualValues))
 				{
 					$this->_virtualValues[$name] = $meta->default;
 				}
 				$value = $this->_virtualValues[$name];
-//				if(null === $value && $meta->embedded)
-//				{
-//					$value = $this->_instantiateEmbedded($name, $value);
-//				}
+				if($value === 'null')
+				{
+					return null;
+				}
 				return $value;
 			}
 		}
@@ -540,7 +556,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function setAttribute($name, $value, $lang = '')
 	{
-		$meta = self::$_meta[$this->_class]->$name;
+		$meta = $this->meta->$name;
 		if(!$meta->direct)
 		{
 			if($meta->embedded)
@@ -548,15 +564,19 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 				if($meta->embeddedArray)
 				{
 					$docs = [];
-					foreach((array)$value as $docValue)
+					foreach((array)$value as $key => $docValue)
 					{
-						$docs[] = $this->_instantiateEmbedded($name, $docValue);
+						if($docValue === null || $docValue === 'null' || $docValue == 'undefined')
+						{
+							continue;
+						}
+						$docs[] = $this->_instantiateEmbedded($name, $key, $docValue);
 					}
 					$value = $docs;
 				}
 				else
 				{
-					$value = $this->_instantiateEmbedded($name, $value);
+					$value = $this->_instantiateEmbedded($name, null, $value);
 				}
 			}
 			if($meta->i18n)
@@ -586,37 +606,6 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	}
 
 	/**
-	 * Sets the attribute values in a massive way.
-	 * @param array $values attribute values (name=>value) to be set.
-	 * @param boolean $safeOnly whether the assignments should only be done to the safe attributes.
-	 * A safe attribute is one that is associated with a validation rule in the current {@link scenario}.
-	 * @see getSafeAttributeNames
-	 * @see attributeNames
-	 * @since v1.3.1
-	 */
-	public function setAttributes($values, $safeOnly = true)
-	{
-		if(!is_array($values))
-			return;
-		if($this->hasEmbeddedDocuments())
-		{
-			$attributes = array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
-
-			foreach($this->embeddedDocuments() as $fieldName => $className)
-			{
-				if(isset($values[$fieldName]) && isset($attributes[$fieldName]))
-				{
-					// TODO Check if it's ok
-//					$this->$fieldName->setAttributes($values[$fieldName], $safeOnly);
-					$this->setAttribute($fieldName, $values[$fieldName]);
-					unset($values[$fieldName]);
-				}
-			}
-		}
-		parent::setAttributes($values, $safeOnly);
-	}
-
-	/**
 	 * Get current language code, defaults to Yii::app()->language
 	 * @return string
 	 */
@@ -625,6 +614,10 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		if(!$this->_lang)
 		{
 			$this->_lang = Yii::app()->language;
+		}
+		if($this->_owner)
+		{
+			return $this->_owner->getLang();
 		}
 		return $this->_lang;
 	}
@@ -641,9 +634,9 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		}
 		if(in_array($value, array_keys(Yii::app()->languages)))
 		{
-//			throw new Exception($value);
 			$this->_lang = $value;
 		}
+		return $this;
 	}
 
 	public function getRawI18N()
@@ -713,39 +706,106 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 //		}
 		parent::setScenario($value);
 	}
+	
+	public function getScenario() {
+		if($this->_owner)
+		{
+			return $this->_owner->getScenario();
+		}
+		return parent::getScenario();
+	}
 
 	/**
 	 * Create instance of embedded document, based on defined type or
 	 * __class field if it is set in data
 	 * @param type $name
-	 * @param type $value
+	 * @param type $attributes
 	 */
-	private function _instantiateEmbedded($name, $value = [])
+	private function _instantiateEmbedded($name, $key, $attributes = [])
 	{
-		if($value instanceof EMongoEmbeddedDocument)
+		if($attributes instanceof EMongoEmbeddedDocument)
 		{
-			return $value;
+			$attributes->setScenario($this->getScenario());
+			$attributes->setOwner($this);
+			return $attributes;
 		}
-		if(isset($value['_class']) && $value['_class'])
+		else
 		{
-			$docClassName = $value['_class'];
+			$attributes = (array)$attributes;
+		}
+		// When setAttributes from external array, (with only one language parameter)
+		// new instance MUST NOT be created, instead exising instance MUST be updated
+		if(isset($this->_virtualValues[$name]))
+		{
+			if($this->meta->$name->embeddedArray)
+			{
+				if(array_key_exists($key, $this->_virtualValues[$name]))
+				{
+					$model = $this->_virtualValues[$name][$key];
+				}
+			}
+			else
+			{
+				$model = $this->$name;
+			}
+		}
+		if(isset($attributes['_class']) && $attributes['_class'])
+		{
+			$docClassName = $attributes['_class'];
 		}
 		else
 		{
 			$docClassName = $this->meta->$name->embedded;
 		}
 		// This is for automatic doc type, and if its new instance
-		// TODO Default class name should be configurable
-		if($docClassName === true)
+		// TODO Global default class name should be configurable, so simple @Embedded could be used
+		if(!$docClassName)
 		{
-			$docClassName = 'EMongoSoftDocument';
+			throw new UnexpectedValueException(sprintf("Class for embedded field '%s' in class '%s' not defined, use @Embedded('ClassName') to define it", $name, $this->_class));
 		}
-		$doc = new $docClassName($this->getScenario(), $this->getLang());
-		$doc->setOwner($this);
-		if($value)
+		if(!$model instanceof EMongoEmbeddedDocument)
 		{
-			$doc->setAttributes($value);
+			$model = new $docClassName($this->getScenario(), $this->getLang());
 		}
-		return $doc;
+		$model->setOwner($this);
+		if($model instanceof DevExampleEmbedded)
+		{
+			$nic = '';
+		}
+		if($attributes && is_array($attributes))
+		{
+			foreach($model->meta->fields() as $field => $meta)
+			{
+				if(isset($attributes[$field]))
+				{
+					if($meta->i18n)
+					{
+						// TODO This is sloopy, will fail with international arrays
+						// Difference here is by setting data either from db (with language keys) or normal assign - from post - without language keys
+						// However this can be probably detected by using if(isset($this->_virtualValues[$name]))... code fragment from above
+						// With new instance, loop should be used, if not new, use params as is, need further investigation
+						if(!is_array($attributes[$field]))
+						{
+							$model->setAttribute($field, $attributes[$field]);
+						}
+						else
+						{
+							foreach(Yii::app()->languages as $lang => $langName)
+							{
+								if(array_key_exists($lang, $attributes[$field]))
+								{
+									$model->setAttribute($field, $attributes[$field][$lang], $lang);
+								}
+							}
+						}
+					}
+					else
+					{
+						$model->setAttribute($field, $attributes[$field]);
+					}
+				}
+			}
+		}
+		return $model;
 	}
 }
