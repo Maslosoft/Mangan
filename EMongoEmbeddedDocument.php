@@ -9,7 +9,7 @@
  * @version 1.3
  * @category ext
  * @package ext.YiiMongoDbSuite
- * @property MModelMeta $meta Model metadata
+ * @property EComponentMeta $meta Model metadata
  */
 
 /**
@@ -42,7 +42,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	/**
 	 * Model metadata
 	 * @Persistent(false)
-	 * @var MModelMeta
+	 * @var EComponentMeta
 	 */
 	private static $_meta = [];
 
@@ -684,7 +684,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	{
 		if(!isset(self::$_meta[$this->_class]))
 		{
-			self::$_meta[$this->_class] = MModelMeta::create($this);
+			self::$_meta[$this->_class] = Yii::app()->addendum->meta($this);
 		}
 		return self::$_meta[$this->_class];
 	}
