@@ -503,7 +503,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function getAttribute($name, $lang = '')
 	{
-		$meta = $this->meta->$name;
+		$meta = $this->getMeta()->$name;
 		if(!$meta->direct)
 		{
 			if($meta->i18n)
@@ -556,7 +556,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function setAttribute($name, $value, $lang = '')
 	{
-		$meta = $this->meta->$name;
+		$meta = $this->getMeta()->$name;
 		if(!$meta->direct)
 		{
 			if($meta->embedded)
@@ -566,7 +566,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 					$docs = [];
 					foreach((array)$value as $key => $docValue)
 					{
-						if($docValue === null || $docValue === 'null' || $docValue == 'undefined')
+						if($docValue === null || $docValue === 'null' || $docValue == 'undefined' || $docValue === '')
 						{
 							continue;
 						}
