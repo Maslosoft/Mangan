@@ -20,6 +20,13 @@
 abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 {
 	/**
+	 * This holds key for document order
+	 * @SafeValidator
+	 * @var string
+	 */
+	public $_key = '';
+
+	/**
 	 * This holds type of this embedded document
 	 * @var string
 	 */
@@ -365,11 +372,11 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 * @return array an associative array of the contents of this object
 	 * @since v1.0.8
 	 */
-	public function toArray()
+	public function toArray($associative = true)
 	{
 		if($this->beforeToArray())
 		{
-			$arr = $this->_toArray();
+			$arr = $this->_toArray($associative);
 			$this->afterToArray();
 			return $arr;
 		}
@@ -383,7 +390,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 * @return array an associative array of the contents of this object
 	 * @since v1.3.4
 	 */
-	protected function _toArray()
+	protected function _toArray($associative = true)
 	{
 		$arr = [];
 		foreach($this->meta->fields() as $name => $field)
@@ -395,103 +402,77 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 				{
 					foreach(Yii::app()->languages as $lang => $langName)
 					{
-						if($field->embedded)
-						{
-							if($field->embeddedArray)
-							{
-								$value = [];
-								foreach((array)$this->getAttribute($name, $lang) as $docValue)
-								{
-									if(!$docValue instanceof CModel)
-									{
-										continue;
-									}
-									if(method_exists($docValue, 'toArray'))
-									{
-										$value[] = $docValue->toArray();
-									}
-									else
-									{
-										$value[] = $docValue->attributes;
-									}
-								}
-							}
-							else
-							{
-								$value = $this->getAttribute($name, $lang);
-								if($value instanceof CModel)
-								{
-									if(method_exists($value, 'toArray'))
-									{
-										$value = $value->toArray();
-									}
-									else
-									{
-										$value = $value->attributes;
-									}
-								}
-								else
-								{
-									$value = $field->default;
-								}
-							}
-						}
-						else
-						{
-							$value = $this->getAttribute($name, $lang);
-						}
-						$arr[$name][$lang] = $value;
+
+						$arr[$name][$lang] = $this->_attributeToArray($field, $name, $lang, $associative);
 					}
 				}
 				else
 				{
-					if($field->embedded)
-					{
-						if($field->embeddedArray)
-						{
-							$value = [];
-							foreach($this->getAttribute($name) as $docValue)
-							{
-								if(!$docValue instanceof CModel)
-								{
-									continue;
-								}
-								if(method_exists($docValue, 'toArray'))
-								{
-									$value[] = $docValue->toArray();
-								}
-								else
-								{
-									$value[] = $docValue->attributes;
-								}
-							}
-						}
-						else
-						{
-							$value = $this->getAttribute($name);
-							if($value instanceof CModel)
-							{
-								if(method_exists($value, 'toArray'))
-								{
-									$value = $value->toArray();
-								}
-								else
-								{
-									$value = $value->attributes;
-								}
-							}
-						}
-					}
-					else
-					{
-						$value = $this->getAttribute($name);
-					}
-					$arr[$name] = $value;
+					$arr[$name] = $this->_attributeToArray($field, $name, null, $associative);
 				}
 			}
 		}
 		$arr['_class'] = $this->_class;
 		return $arr;
+	}
+
+	protected function _attributeToArray($field, $name, $lang, $associative = true)
+	{
+		if($field->embedded)
+		{
+			if($field->embeddedArray)
+			{
+				$value = [];
+				foreach((array)$this->getAttribute($name, $lang) as $key => $docValue)
+				{
+					if(!$docValue instanceof CModel)
+					{
+						continue;
+					}
+					if(!$docValue->_key)
+					{
+						$docValue->_key = (string)new MongoId();
+					}
+					$key = $docValue->_key;
+					if(method_exists($docValue, 'toArray'))
+					{
+						$value[$key] = $docValue->toArray();
+					}
+					else
+					{
+						$value[$key] = $docValue->attributes;
+					}
+					if(!$associative)
+					{
+						$value = array_values($value);
+					}
+				}
+			}
+			else
+			{
+				$value = $this->getAttribute($name, $lang);
+				if($value instanceof CModel)
+				{
+					if(method_exists($value, 'toArray'))
+					{
+						$value = $value->toArray();
+					}
+					else
+					{
+						$value = $value->attributes;
+					}
+				}
+				else
+				{
+					$value = $field->default;
+				}
+			}
+		}
+		else
+		{
+			$value = $this->getAttribute($name, $lang);
+		}
+		return $value;
 	}
 
 	/**
@@ -570,7 +551,13 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 						{
 							continue;
 						}
-						$docs[] = $this->_instantiateEmbedded($name, $key, $docValue);
+						if(!$docValue['_key'])
+						{
+							$docValue['_key'] = (string)new MongoId();
+						}
+						$key = $docValue['_key'];
+						$doc = $this->_instantiateEmbedded($name, $key, $docValue);
+						$docs[$key] = $doc;
 					}
 					$value = $docs;
 				}
@@ -706,8 +693,9 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 //		}
 		parent::setScenario($value);
 	}
-	
-	public function getScenario() {
+
+	public function getScenario()
+	{
 		if($this->_owner)
 		{
 			return $this->_owner->getScenario();
@@ -726,6 +714,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		if($attributes instanceof EMongoEmbeddedDocument)
 		{
 			$attributes->setScenario($this->getScenario());
+//			$attributes->_key = $key;
 			$attributes->setOwner($this);
 			return $attributes;
 		}
@@ -767,6 +756,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		{
 			$model = new $docClassName($this->getScenario(), $this->getLang());
 		}
+//		$model->_key = $key;
 		$model->setOwner($this);
 		if($model instanceof DevExampleEmbedded)
 		{

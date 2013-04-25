@@ -87,6 +87,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function __construct($scenario = 'insert', $lang = '')
 	{
+		$this->_key = (string)new MongoId();
 		$this->_class = get_class($this);
 		$this->meta->initModel($this);
 		$this->setLang($lang);
@@ -657,7 +658,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		if($this->beforeSave())
 		{
 			Yii::trace($this->_class . '.update()', 'ext.MongoDb.EMongoDocument');
-			$rawData = $this->toArray();
+			$rawData = $this->toArray(false);
 //			var_dump($rawData);
 			// filter attributes if set in param
 			if($attributes !== null)
