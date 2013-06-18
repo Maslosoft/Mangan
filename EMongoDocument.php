@@ -417,7 +417,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			if(!in_array($name, $indexNames))
 			{
-				if(version_compare(Mongo::VERSION, '1.0.2', '>=') === true)
+				if(version_compare(MongoClient::VERSION, '1.0.2', '>=') === true)
 				{
 					$this->getCollection()->ensureIndex(
 							  $index['key'], array('unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name)
@@ -606,7 +606,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 			try
 			{
-				if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
+				if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
 					$result = $this->getCollection()->insert($rawData, array(
 						 'fsync' => $this->getFsyncFlag(),
 						 'safe' => $this->getSafeFlag()
@@ -686,7 +686,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			}
 			else
 			{
-				if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
+				if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
 					$result = $this->getCollection()->save($rawData, array(
 						 'fsync' => $this->getFsyncFlag(),
 						 'safe' => $this->getSafeFlag()
@@ -717,7 +717,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		if($modifier->canApply === true)
 		{
 			$this->applyScopes($criteria);
-			if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
+			if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
 				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
 					 'fsync' => $this->getFsyncFlag(),
 					 'safe' => $this->getSafeFlag(),
@@ -781,7 +781,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$this->applyScopes($criteria);
 			$criteria->mergeWith($this->createPkCriteria($pk));
 
-			if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
+			if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
 				$result = $this->getCollection()->remove($criteria->getConditions(), array(
 					 'justOne' => true,
 					 'fsync' => $this->getFsyncFlag(),
@@ -1001,7 +1001,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		Yii::trace($this->_class . '.deleteAll()', 'ext.MongoDb.EMongoDocument');
 		$this->applyScopes($criteria);
 
-		if(version_compare(Mongo::VERSION, '1.0.5', '>=') === true)
+		if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
 			return $this->getCollection()->remove($criteria->getConditions(), array(
 							'justOne' => false,
 							'fsync' => $this->getFsyncFlag(),

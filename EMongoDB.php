@@ -70,7 +70,7 @@ class EMongoDB extends CApplicationComponent
 	private $_mongoDb;
 
 	/**
-	 * @var Mongo $_mongoConnection instance of MongoDB driver
+	 * @var MongoClient $_mongoConnection instance of MongoDB driver
 	 */
 	private $_mongoConnection;
 
@@ -132,7 +132,7 @@ class EMongoDB extends CApplicationComponent
 	/**
 	 * Returns Mongo connection instance if not exists will create new
 	 *
-	 * @return Mongo
+	 * @return MongoClient
 	 * @throws EMongoException
 	 * @since v1.0
 	 */
@@ -153,9 +153,9 @@ class EMongoDB extends CApplicationComponent
 				if( !is_null( $this->replicaSet ) )
 					$options['replicaSet'] = $this->replicaSet;
 				if( !is_null( $this->timeout ) )
-					$options['timeout'] = $this->timeout;
-
-				$this->_mongoConnection = new Mongo($this->connectionString, $options);
+					$options['connectTimeoutMS'] = $this->timeout;
+				
+				$this->_mongoConnection = new MongoClient($this->connectionString, $options);
 
 				return $this->_mongoConnection;
 			}
@@ -175,10 +175,10 @@ class EMongoDB extends CApplicationComponent
 	/**
 	 * Set the connection
 	 *
-	 * @param Mongo $connection
+	 * @param MongoClient $connection
 	 * @since v1.0
 	 */
-	public function setConnection(Mongo $connection)
+	public function setConnection(MongoClient $connection)
 	{
 		$this->_mongoConnection = $connection;
 	}
