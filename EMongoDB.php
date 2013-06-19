@@ -153,7 +153,17 @@ class EMongoDB extends CApplicationComponent
 				if( !is_null( $this->replicaSet ) )
 					$options['replicaSet'] = $this->replicaSet;
 				if( !is_null( $this->timeout ) )
-					$options['connectTimeoutMS'] = $this->timeout;
+				{
+					if(version_compare(MongoClient::VERSION, '1.3.4', '>=') === true)
+					{
+						$options['connectTimeoutMS'] = $this->timeout;
+					}
+					else
+					{
+						$options['timeout'] = $this->timeout;
+					}
+				}
+					
 				
 				$this->_mongoConnection = new MongoClient($this->connectionString, $options);
 
