@@ -28,6 +28,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 
 	/**
 	 * This holds type of this embedded document
+	 * @SafeValidator
 	 * @var string
 	 */
 	public $_class = null;
@@ -724,6 +725,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		}
 		// When setAttributes from external array, (with only one language parameter)
 		// new instance MUST NOT be created, instead exising instance MUST be updated
+		// EXCEPT When a different type should be set
 		if(isset($this->_virtualValues[$name]))
 		{
 			if($this->meta->$name->embeddedArray)
@@ -750,8 +752,16 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		// TODO Global default class name should be configurable, so simple @Embedded could be used
 		if(!$docClassName)
 		{
-			throw new UnexpectedValueException(sprintf("Class for embedded field '%s' in class '%s' not defined, use @Embedded('ClassName') to define it", $name, $this->_class));
+			throw new UnexpectedValueException(sprintf("Class for embedded field '%s' in class '%s' not defined, use @Embedded('ClassName') to define default class", $name, $this->_class));
 		}
+		
+		// Check if model should be replaced by different type
+		if($model instanceof EMongoEmbeddedDocument && $model->_class && $model->_class !== $docClassName)
+		{
+			$model = null;
+		}
+
+		// Create a new instance if need
 		if(!$model instanceof EMongoEmbeddedDocument)
 		{
 			$model = new $docClassName($this->getScenario(), $this->getLang());
