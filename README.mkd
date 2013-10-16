@@ -90,8 +90,7 @@ The current version is 1.4.
 In your protected/config/main.php config file. Comment out (or delete) the current 'db' array
 for your database in the components section, and add the following to the file:
 
-~~~
-[php]
+~~~php
     'import' => array(
       ...
       'ext.YiiMongoDbSuite.*',
@@ -120,8 +119,7 @@ for your database in the components section, and add the following to the file:
 That's all you have to do for setup. You can use it very much like the active record.
 For example:
 
-~~~
-[php]
+~~~php
     $client = new Client();
     $client->first_name='something';
     $client->save();
@@ -133,8 +131,7 @@ For example:
 
 Just define following model:
 
-~~~
-[php]
+~~~php
     class User extends EMongoDocument
     {
       /**
@@ -170,8 +167,7 @@ and adds to it the DB connection and related functions.
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
 Lest assume we have following embedded document:
 
-~~~
-[php]
+~~~php
     class UserAddress extends EMongoEmbeddedDocument
     {
       /**
@@ -208,8 +204,7 @@ Lest assume we have following embedded document:
 
 Now we can add this document to our User model from previous section:
 
-~~~
-[php]
+~~~php
     class User extends EMongoDocument {
       ...
 
@@ -223,8 +218,7 @@ Now we can add this document to our User model from previous section:
 
 And using it is as easy as π!
 
-~~~
-[php]
+~~~php
     $client = new Client;
     $client->address->city='New York';
     $client->save();
@@ -245,9 +239,8 @@ You easily can store arrays in DB!
 **Arrays of embedded documents**
 
 - Just need to add @EmbeddedArray annotation:
-
-~~~
-[php]
+- 
+~~~php
     
     /**
      * @EmbeddedArray('UserAddress')
@@ -258,8 +251,7 @@ You easily can store arrays in DB!
 
 So for the user, if you want them to be able to save multiple addresses, you can do this:
 
-~~~
-[php]
+~~~php
     $c = new Client;
     $c->addresses[0] = new ClientAddress;
     $c->addresses[0]->city='NY';
@@ -268,8 +260,7 @@ So for the user, if you want them to be able to save multiple addresses, you can
 
 or
 
-~~~
-[php]
+~~~php
     $c = Client::model()->find();
     foreach($c->addresses as $addr)
     {
@@ -282,16 +273,14 @@ or
 
 This is one of the things that makes this extension great. It's very easy to query for the objects you want.
 
-~~~
-[php]
+~~~php
     // simple find first. just like normal AR.
     $object = ModelClass::model()->find()
 ~~~
 
 Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.
 
-~~~
-[php]
+~~~php
     $c = new EMongoCriteria;
     $c->status('==', 1);
     $users = ModelClass::model->findAll($c);
@@ -300,8 +289,7 @@ Now suppose you want to only retrieve users, that have a status of 1 (active). T
 and now $users will be an array of all users with the status key in their document set to 1. This is a good way to list only active users.
 What's that? You only want to show the 10 most recent activated users? Thats easy too.
 
-~~~
-[php]
+~~~php
     $c = new EMongoCriteria;
     $c->active('==', 1)->limit(10);
 
@@ -333,8 +321,7 @@ For examples and use for how to use these operators effectively, use the [MongoD
 
 Here are a few more examples for using criteria:
 
-~~~
-[php]
+~~~php
     // first you must create a new criteria object
     $criteria = new EMongoCriteria;
 
@@ -373,8 +360,7 @@ Here are a few more examples for using criteria:
 
 You can use native PHP Mongo driver class MongoRegex, to query:
 
-~~~
-[php]
+~~~php
     // Create criteria
     $criteria = new EMongoCriteria;
     // Find all records witch have first name starring on a, b and c, case insensitive search
@@ -387,8 +373,7 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ### Creating Criteria Objects From Arrays
 
-~~~
-[php]
+~~~php
     // Example criteria
     $array = array(
         'conditions'=>array(
