@@ -214,7 +214,7 @@ Now we can add this document to our User model from previous section:
       ...
 
       /**
-       * @Embeddded('UserAddress')
+       * @Embedded('UserAddress')
       public $address = null;
 
       ...
@@ -252,7 +252,7 @@ You easily can store arrays in DB!
     /**
      * @EmbeddedArray('UserAddress')
      */
-    public $addresses;
+    public $addresses = array();
     
 ~~~
 
