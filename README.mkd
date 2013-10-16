@@ -1,6 +1,7 @@
-#This branch relies on annotations, and it's quite different from original one#
+#Yii Mangan#
+##This branch relies on annotations, and it's quite different from original one##
 
-**NOTE:** *Model classes are **not** compatible with original one, however migration should not be a big deal, see [migration guide](@todo)*
+**NOTE:** Model classes are **not** compatible with original one, however migration should not be a big deal, see [migration guide](@todo)*
 
 Key highlights include:
 
@@ -136,41 +137,24 @@ Just define following model:
 [php]
     class User extends EMongoDocument
     {
+      /**
+       * @Label('User login')
+       * @RequiredValidator
+       */
       public $login;
+      
+      /**
+       * @Label('Full name')
+       * @LengthValidator(max => 255)
+       */
       public $name;
+      
+      /**
+       * @Label('Password')
+       * @RequiredValidator
+       * @LengthValidator(min => 6, max => 20)
+       */
       public $pass;
-
-      // This has to be defined in every model, this is same as with standard Yii ActiveRecord
-      public static function model($className=__CLASS__)
-      {
-        return parent::model($className);
-      }
-
-      // This method is required!
-      public function getCollectionName()
-      {
-        return 'users'; // should be lowercase.
-      }
-
-      // same as CActiveRecord
-      public function rules()
-      {
-        return array(
-          array('login, pass', 'required'),
-          array('login, pass', 'length', 'max' => 20),
-          array('name', 'length', 'max' => 255),
-        );
-      }
-
-      // same as CActiveRecord
-      public function attributeLabels()
-      {
-        return array(
-          'login'  => 'User Login',
-          'name'   => 'Full name',
-          'pass'   => 'Password',
-        );
-      }
     }
 ~~~
 
@@ -183,8 +167,6 @@ And that's it! Now start using this User model class like standard Yii AR model.
 EMongoEmbeddedDocument is almost identical as EMongoDocument, in fact EMongoDocument extends from EMongoEmbeddedDocument
 and adds to it the DB connection and related functions.
 
-NOTE: Embedded documents should not have a static model() method!
-
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
 Lest assume we have following embedded document:
 
@@ -192,43 +174,48 @@ Lest assume we have following embedded document:
 [php]
     class UserAddress extends EMongoEmbeddedDocument
     {
+      /**
+       * @Label('City')
+       * @LengthValidator(max => 255)
+       */
       public $city;
+      
+      /**
+       * @Label('Street')
+       * @LengthValidator(max => 255)
+       */
       public $street;
+      
+      /**
+       * @Label('Home number')
+       * @LengthValidator(max => 255)
+       */
       public $house;
+      
+      /**
+       * @Label('Apartment number')
+       * @LengthValidator(max => 10)
+       */
       public $apartment;
+      
+      /**
+       * @Label('Postal code')
+       * @LengthValidator(max => 6)
+       */
       public $zip;
-
-      public function rules()
-      {
-        return array(
-          array('city, street, house', 'length', 'max'=>255),
-          array('house, apartment, zip', 'length', 'max'=>10),
-        );
-      }
-
-      public function attributeLabels()
-      {
-        return array(
-          'zip'=>'Postal Code',
-        );
-      }
     }
 ~~~
 
-Now we can add this method to our User model from previous section:
+Now we can add this document to our User model from previous section:
 
 ~~~
 [php]
     class User extends EMongoDocument {
       ...
 
-      public function embeddedDocuments()
-      {
-        return array(
-          // property name => embedded document class name
-          'address'=>'UserAddress'
-        );
-      }
+      /**
+       * @Embeddded('UserAddress')
+      public $address = null;
 
       ...
     }
@@ -244,7 +231,7 @@ And using it is as easy as π!
 ~~~
 
 This will automatically call validation for the model and all its embedded documents.
-You can even nest embedded documents in embedded documents, just define embeddedDocuments() method with array of another embedded documents.
+You can even nest embedded documents in embedded documents and array of embbedded document, also mix any embedded document types!
 *IMPORTANT*: This mechanism uses recurrency, and will not handle circular nesting, so use this feature with care :P
 
 ## Arrays
@@ -253,29 +240,20 @@ You easily can store arrays in DB!
 
 **Simple arrays**
 
-- just define a property for an array, and store an array in it.
+- Just define a property for an array, and store an array in it.
 
 **Arrays of embedded documents**
 
-- there is no way (that i know) where i can easily provide mechanism for this, you have to write Your own
-- This is how I accomplish it for now:
+- Just need to add @EmbeddedArray annotation:
 
 ~~~
 [php]
-    // add a property for your array of embedded documents
+    
+    /**
+     * @EmbeddedArray('UserAddress')
+     */
     public $addresses;
-
-    // add EmbeddedArraysBehavior
-    public function behaviors()
-    {
-      return array(
-        array(
-          'class'=>'ext.YiiMongoDbSuite.extra.EEmbeddedArraysBehavior',
-          'arrayPropertyName'=>'addresses', // name of property
-          'arrayDocClassName'=>'ClientAddress' // class name of documents in array
-        ),
-      );
-    }
+    
 ~~~
 
 So for the user, if you want them to be able to save multiple addresses, you can do this:
@@ -437,11 +415,14 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 
 ## Resources
 
- * [Project Page on GitHub](https://github.com/digitick/yii-mongodb-suite)
- * [Report a Bug](https://github.com/digitick/yii-mongodb-suite/issues)
+ * [Project website](http://maslosoft.com/en/open-source/yii-mangan/)
+ * [Project Page on GitHub](https://github.com/Maslosoft/YiiMangan)
+ * [Report a Bug](https://github.com/Maslosoft/YiiMangan/issues)
  * [MongoDB Documentation](http://www.mongodb.org/display/DOCS/Home)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
  * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
+ * [Yii Addendum](http://maslosoft.com/en/open-source/yii-addendum/)
+ * [PHP Addendum library](http://code.google.com/p/addendum/)
 
 
 ## Contribution needed!
