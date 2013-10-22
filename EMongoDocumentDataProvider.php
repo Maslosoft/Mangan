@@ -157,6 +157,16 @@ class EMongoDocumentDataProvider extends CDataProvider
 
 		return $this->model->findAll($this->_criteria);
 	}
+	
+	/**
+	 * Returns the data items currently available, ensures that result is at leas empty array
+	 * @param boolean $refresh whether the data should be re-fetched from persistent storage.
+	 * @return array the list of data items currently available in this data provider.
+	 */
+	public function getData($refresh=false)
+	{
+		return parent::getData($refresh)?:[];
+	}
 
 	/**
 	 * Fetches the data item keys from the persistent data storage.

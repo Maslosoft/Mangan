@@ -1194,14 +1194,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function instantiate($attributes)
 	{
-		$class = $this->_class;
+		$class = isset($attributes['_class']) ? $attributes['_class'] : $this->_class;
 		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
-		foreach($this->meta->fields() as $field => $value)
+		foreach($model->meta->fields() as $field => $value)
 		{
 			if(isset($attributes[$field]))
 			{
-				if($this->meta->$field->i18n)
+				if($model->meta->$field->i18n)
 				{
 					if(!is_array($attributes[$field]))
 					{
@@ -1216,7 +1216,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						}
 						else
 						{
-							$model->setAttribute($field, $this->meta->$field->default, $lang);
+							$model->setAttribute($field, $model->meta->$field->default, $lang);
 						}
 					}
 				}
