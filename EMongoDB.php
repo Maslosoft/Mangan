@@ -10,6 +10,8 @@
  * @package ext.YiiMongoDbSuite
  */
 
+Yii::setPathOfAlias('yii-mangan', __DIR__);
+
 /**
  * EMongoDB
  *
