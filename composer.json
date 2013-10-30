@@ -1,5 +1,5 @@
 {
-	"name": "maslosoft/yii-mongodb-suite",
+	"name": "maslosoft/yii-mangan",
 	"type": "yii-extension",
 	"license": "GNU LESSER GENERAL PUBLIC LICENSE",
 	"authors": [
@@ -11,6 +11,6 @@
 		}
 	],
 	"require": {
-		"maslosoft/yii-addendum": "dev-master"
+		"maslosoft/yii-addendum": "*"
 	}
 }
