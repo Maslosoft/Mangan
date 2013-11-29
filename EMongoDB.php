@@ -11,6 +11,7 @@
  */
 
 Yii::setPathOfAlias('yii-mangan', __DIR__);
+Yii::import('yii-mangan.models.*');
 
 /**
  * EMongoDB
