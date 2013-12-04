@@ -1,8 +1,17 @@
 <?php
 
 /**
+ * @author Piotr Maselkowski, Maslosoft
+ * @copyright 2013 Maslosoft http://maslosoft.com
+ * @license New BSD license
+ * @version 2.0.1
+ * @category ext
+ * @package maslosoft/yii-mangan
+ */
+
+/**
  * Class for storing embedded files
- *
+ * @since 2.0.1
  * @author Piotr
  */
 class EMongoFile extends EMongoEmbeddedDocument
@@ -13,15 +22,13 @@ class EMongoFile extends EMongoEmbeddedDocument
 	 * @var MongoId
 	 */
 	public $id = null;
-
-	public $db = null;
+	private $_db = null;
 
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		parent::__construct($scenario, $lang);
 		$this->setId(new MongoId);
-		$this->db = Yii::app()->mongodb->getDbInstance();
-		
+		$this->_db = Yii::app()->mongodb->getDbInstance();
 	}
 
 	public function getId()
@@ -89,18 +96,22 @@ class EMongoFile extends EMongoEmbeddedDocument
 			'parentId' => $this->getId(),
 			'isTemp' => false
 		];
-		return $this->db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
+
+		return $this->_db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
 	}
 
 	/**
 	 * Send file to the browser
-	 * TODO Set proper content type
 	 * @param MongoGridFSFile $file
 	 */
 	protected function _send(MongoGridFSFile $file)
 	{
+		$meta = (object) $file->file;
 		header(sprintf('Content-Length: %d', $file->getSize()));
-		header(sprintf('Content-Type: %s', 'image/jpeg'));
+		header(sprintf('Content-Type: %s', $meta->contentType));
+		header(sprintf('ETag: %s', $meta->md5));
+		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->sec)));
+		header(sprintf('Content-Disposition: filename="%s"', basename($meta->filename)));
 
 		// Cache it
 		header('Pragma: public');
@@ -128,7 +139,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 			'isTemp' => false
 		];
 
-		$this->db->getGridFS()->put($tempName, CMap::mergeArray($data, $params));
+		$this->_db->getGridFS()->put($tempName, CMap::mergeArray($data, $params));
 	}
 
 }

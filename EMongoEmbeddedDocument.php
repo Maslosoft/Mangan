@@ -4,18 +4,21 @@
  * @author Ianaré Sévi
  * @author Dariusz Górecki <darek.krk@gmail.com>
  * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @author Piotr Maselkowski, Maslosoft
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @copyright 2013 Maslosoft http://maslosoft.com
  * @license New BSD license
- * @version 1.3
+ * @version 2.0.1
  * @category ext
- * @package ext.YiiMongoDbSuite
- * @property EComponentMeta $meta Model metadata
+ * @package maslosoft/yii-mangan
+
  */
 
 /**
  * EMongoEmbeddedDocument
  *
  * @since v1.0.8
+ * @property EComponentMeta $meta Model metadata
  */
 abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 {
@@ -112,7 +115,9 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	protected function initEmbeddedDocuments()
 	{
 		if(!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
+		{
 			return false;
+		}
 
 		$this->afterEmbeddedDocsInit();
 	}
@@ -271,6 +276,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	public function afterValidate()
 	{
 		if($this->hasEmbeddedDocuments())
+		{
 			foreach($this->meta->properties('embedded') as $field => $className)
 			{
 				if($this->meta->$field->embeddedArray)
@@ -297,6 +303,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 					}
 				}
 			}
+		}
 	}
 
 	/**
@@ -653,9 +660,31 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	public function getOwner()
 	{
 		if($this->_owner !== null)
+		{
 			return $this->_owner;
+		}
 		else
+		{
 			return null;
+		}
+	}
+
+	/**
+	 * Return root document of this document
+	 * This can be used to attach events like afterDelete to root object
+	 * @return EMongoEmbeddedDocument
+	 * @since 2.0.1
+	 */
+	public function getRoot()
+	{
+		if($this->_owner !== null)
+		{
+			return $this->_owner->getRoot();
+		}
+		else
+		{
+			return $this;
+		}
 	}
 
 	/**

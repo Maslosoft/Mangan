@@ -1,8 +1,17 @@
 <?php
 
 /**
+ * @author Piotr Maselkowski, Maslosoft
+ * @copyright 2013 Maslosoft http://maslosoft.com
+ * @license New BSD license
+ * @version 2.0.1
+ * @category ext
+ * @package maslosoft/yii-mangan
+ */
+
+/**
  * Class for storing embedded images
- *
+ * @since 2.0.1
  * @author Piotr
  */
 class EMongoImage extends EMongoFile
@@ -31,6 +40,7 @@ class EMongoImage extends EMongoFile
 		if (!$result)
 		{
 			$result = $this->_get();
+			$originalFilename = $result->file['filename'];
 			$fileName = tempnam('/tmp/', __CLASS__);
 			$result->write($fileName);
 
@@ -45,7 +55,7 @@ class EMongoImage extends EMongoFile
 				$image->resize($params->width, $params->height)->save($fileName);
 			}
 
-			$this->_set($fileName, $fileName, $params->toArray());
+			$this->_set($fileName, $originalFilename, $params->toArray());
 			unlink($fileName);
 			$result = $this->_get($params->toArray());
 		}
