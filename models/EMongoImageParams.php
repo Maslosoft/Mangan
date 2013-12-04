@@ -11,6 +11,7 @@
 
 /**
  * Description of EMongoImageParams
+ * @since 2.0.2
  * @property int $width Width of image
  * @property int $height Height of image
  * @property bool $adaptive If true adaptive (with crop) resize will be used, if false best match scalling will be used
