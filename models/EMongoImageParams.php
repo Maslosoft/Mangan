@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * @author Piotr Maselkowski, Maslosoft
+ * @copyright 2013 Maslosoft http://maslosoft.com
+ * @license New BSD license
+ * @version 2.0.1
+ * @category ext
+ * @package maslosoft/yii-mangan
+ */
+
+/**
  * Description of EMongoImageParams
  * @property int $width Width of image
  * @property int $height Height of image
