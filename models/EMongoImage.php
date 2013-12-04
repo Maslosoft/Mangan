@@ -22,7 +22,7 @@ class EMongoImage extends EMongoFile
 		{
 			return $this->_get();
 		}
-		
+
 		// Get resized image
 		$params->isTemp = true;
 		$result = $this->_get($params->toArray());
@@ -52,6 +52,14 @@ class EMongoImage extends EMongoFile
 //		var_dump($result);
 //		exit;
 		return $result;
+	}
+
+	/**
+	 * Send file to browser
+	 */
+	public function send(EMongoImageParams $params = null)
+	{
+		$this->_send($this->get($params));
 	}
 
 }

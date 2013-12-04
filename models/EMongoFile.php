@@ -52,6 +52,14 @@ class EMongoFile extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Send file to browser
+	 */
+	public function send()
+	{
+		$this->_send($this->_get());
+	}
+
+	/**
 	 * Set file data
 	 * @param CUploadedFile $file
 	 */
@@ -82,6 +90,24 @@ class EMongoFile extends EMongoEmbeddedDocument
 			'isTemp' => false
 		];
 		return $this->db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
+	}
+
+	/**
+	 * Send file to the browser
+	 * TODO Set proper content type
+	 * @param MongoGridFSFile $file
+	 */
+	protected function _send(MongoGridFSFile $file)
+	{
+		header(sprintf('Content-Length: %d', $file->getSize()));
+		header(sprintf('Content-Type: %s', 'image/jpeg'));
+
+		// Cache it
+		header('Pragma: public');
+		header('Cache-Control: max-age=86400');
+		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
+		echo $file->getBytes();
+		Yii::app()->end();
 	}
 
 	/**
