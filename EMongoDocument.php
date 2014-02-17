@@ -855,6 +855,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			if($criteria->getSelect())
 				$cursor->fields($criteria->getSelect(true));
 
+			if ($this->getMongoDBComponent()->enableProfiling) {
+				Yii::log('ext.YiiMongoDbSuite.EMongoDocument.findAll()'.PHP_EOL.var_export($cursor->explain(), true), 'profile', 'ext.YiiMongoDbSuite');
+			}
+
 			if($this->getUseCursor())
 				return new EMongoCursor($cursor, $this->model());
 			else
