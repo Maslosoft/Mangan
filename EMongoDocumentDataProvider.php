@@ -26,6 +26,8 @@
  */
 class EMongoDocumentDataProvider extends CDataProvider
 {
+	public static $CLS = __CLASS__;
+	
 	/**
 	 * @var string the name of key field. Defaults to '_id', as a mongo default document primary key.
 	 * @since v1.0

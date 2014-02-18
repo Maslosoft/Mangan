@@ -16,7 +16,17 @@
  */
 class EMongoImage extends EMongoFile
 {
+	/**
+	 * Image width
+	 * @var int
+	 */
+	public $width = 0;
 
+	/**
+	 * Image height
+	 * @var int
+	 */
+	public $height = 0;
 	/**
 	 * Get resized image
 	 * @param int $width
