@@ -22,6 +22,18 @@ class EMongoFile extends EMongoEmbeddedDocument
 	 * @var MongoId
 	 */
 	public $id = null;
+
+	/**
+	 * NOTE: This is also in gridfs, here is added to avoid querying gridfs just to get filename
+	 * @var string
+	 */
+	public $filename = '';
+
+	/**
+	 * NOTE: Same not as for $filename field
+	 * @var string
+	 */
+	public $contentType = '';
 	private $_db = null;
 
 	public function __construct($scenario = 'insert', $lang = '')
@@ -29,6 +41,21 @@ class EMongoFile extends EMongoEmbeddedDocument
 		parent::__construct($scenario, $lang);
 		$this->setId(new MongoId);
 		$this->_db = Yii::app()->mongodb->getDbInstance();
+	}
+
+	public function setOwner(\EMongoEmbeddedDocument $owner)
+	{
+		parent::setOwner($owner);
+		$root = $owner->getRoot();
+		if ($root->hasEvent('onAfterDelete'))
+		{
+			$onAfterDelete = function($event)
+			{
+				$this->_onAfterDelete($event);
+			};
+			$onAfterDelete->bindTo($this);
+			$root->onAfterDelete = $onAfterDelete;
+		}
 	}
 
 	public function getId()
@@ -123,6 +150,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 
 	/**
 	 * Set file with optional criteria params
+	 * FIXME This MUST remove old files when replaceing file!
 	 * @param string $tempName
 	 * @param string $fileName
 	 * @param mixed[] $params
@@ -139,7 +167,21 @@ class EMongoFile extends EMongoEmbeddedDocument
 			'isTemp' => false
 		];
 
+		$this->filename = $fileName;
+		$this->contentType = $mime;
+
 		$this->_db->getGridFS()->put($tempName, CMap::mergeArray($data, $params));
+	}
+
+	/**
+	 * This is fired after delete to remove chunks from gridfs
+	 */
+	protected function _onAfterDelete()
+	{
+		$criteria = [
+			'parentId' => $this->getId()
+		];
+		$this->_db->getGridFS()->remove($criteria);
 	}
 
 }

@@ -36,8 +36,8 @@ class EMongoImage extends EMongoFile
 	 */
 	public function get(EMongoImageParams $params = null)
 	{
-		// Get original image
-		if (!$params)
+		// Get original image or file if it is not image
+		if (!$params || !$this->isImage($this->filename))
 		{
 			return $this->_get();
 		}
@@ -50,6 +50,7 @@ class EMongoImage extends EMongoFile
 		if (!$result)
 		{
 			$result = $this->_get();
+
 			$originalFilename = $result->file['filename'];
 			$fileName = tempnam('/tmp/', __CLASS__);
 			$result->write($fileName);
@@ -72,6 +73,27 @@ class EMongoImage extends EMongoFile
 //		var_dump($result);
 //		exit;
 		return $result;
+	}
+
+	/**
+	 * Return true if it is really image
+	 * @return bool
+	 */
+	public function isImage($name)
+	{
+		return in_array(strtolower(CFileHelper::getExtension($name)), ['jpg', 'jpeg', 'gif', 'png']);
+	}
+
+	protected function _set($tempName, $fileName, $params = array())
+	{
+		if($this->isImage($fileName))
+		{
+			$thumb = PhpThumbFactory::create($tempName);
+			$dimensions = (object)$thumb->getCurrentDimensions();
+			$this->width = $dimensions->width;
+			$this->height = $dimensions->height;
+		}
+		parent::_set($tempName, $fileName, $params);
 	}
 
 	/**
