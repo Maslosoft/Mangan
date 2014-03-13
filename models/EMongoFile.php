@@ -94,6 +94,14 @@ class EMongoFile extends EMongoEmbeddedDocument
 	}
 
 	/**
+	 * Stream file to browser
+	 */
+	public function stream()
+	{
+		$this->_stream($this->_get());
+	}
+
+	/**
 	 * Set file data
 	 * @param CUploadedFile $file
 	 */
@@ -148,6 +156,28 @@ class EMongoFile extends EMongoEmbeddedDocument
 		Yii::app()->end();
 	}
 
+	protected function _stream(MongoGridFSFile $file)
+	{
+		$meta = (object) $file->file;
+		ob_end_clean();
+		ob_implicit_flush();
+		header(sprintf('Content-Length: %d', $file->getSize()));
+		header(sprintf('Content-Type: %s', $meta->contentType));
+		header(sprintf('ETag: %s', $meta->md5));
+		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->sec)));
+		header(sprintf('Content-Disposition: filename="%s"', basename($meta->filename)));
+
+		// Cache it
+		header('Pragma: public');
+		header('Cache-Control: max-age=86400');
+		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
+		$stream = $file->getResource();
+
+		while (!feof($stream)) {
+			 echo fread($stream, 8192);
+		}
+		Yii::app()->end();
+	}
 	/**
 	 * Set file with optional criteria params
 	 * FIXME This MUST remove old files when replaceing file!

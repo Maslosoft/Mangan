@@ -104,4 +104,11 @@ class EMongoImage extends EMongoFile
 		$this->_send($this->get($params));
 	}
 
+	/**
+	 * Stream file to browser
+	 */
+	public function stream(EMongoImageParams $params = null)
+	{
+		$this->_stream($this->get($params));
+	}
 }
