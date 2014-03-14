@@ -371,7 +371,12 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 
 	public function attributeLabels()
 	{
-		return $this->meta->properties('label');
+		$labels = [];
+		foreach($this->meta->properties('label') as $key => $label)
+		{
+			$labels[$key] = Yii::t('', $label);
+		}
+		return $labels;
 	}
 
 	/**

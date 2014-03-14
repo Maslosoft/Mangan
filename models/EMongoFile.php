@@ -28,6 +28,8 @@ class EMongoFile extends EMongoEmbeddedDocument
 	 * @var string
 	 */
 	public $filename = '';
+	
+	public $size = '';
 
 	/**
 	 * NOTE: Same not as for $filename field
@@ -43,7 +45,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 		$this->_db = Yii::app()->mongodb->getDbInstance();
 	}
 
-	public function setOwner(\EMongoEmbeddedDocument $owner)
+	public function setOwner(EMongoEmbeddedDocument $owner)
 	{
 		parent::setOwner($owner);
 		$root = $owner->getRoot();
@@ -160,7 +162,6 @@ class EMongoFile extends EMongoEmbeddedDocument
 	{
 		$meta = (object) $file->file;
 		ob_end_clean();
-		ob_implicit_flush();
 		header(sprintf('Content-Length: %d', $file->getSize()));
 		header(sprintf('Content-Type: %s', $meta->contentType));
 		header(sprintf('ETag: %s', $meta->md5));
@@ -175,6 +176,8 @@ class EMongoFile extends EMongoEmbeddedDocument
 
 		while (!feof($stream)) {
 			 echo fread($stream, 8192);
+			ob_flush();
+			flush();
 		}
 		Yii::app()->end();
 	}
@@ -199,6 +202,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 
 		$this->filename = $fileName;
 		$this->contentType = $mime;
+		$this->size = filesize($tempName);
 
 		$this->_db->getGridFS()->put($tempName, CMap::mergeArray($data, $params));
 	}
