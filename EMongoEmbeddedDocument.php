@@ -802,10 +802,6 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		}
 //		$model->_key = $key;
 		$model->setOwner($this);
-		if($model instanceof DevExampleEmbedded)
-		{
-			$nic = '';
-		}
 		if($attributes && is_array($attributes))
 		{
 			foreach($model->meta->fields() as $field => $meta)
