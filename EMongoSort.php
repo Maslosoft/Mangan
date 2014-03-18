@@ -126,8 +126,7 @@ class EMongoSort extends CSort
 			return $label;
 		$directions = $this->getDirections();
 		if (isset($directions[$attribute])) {
-			// FIXME This is workoround for bug in css, switch desc and asc if needed
-			$class = ($directions[$attribute] == EMongoCriteria::SORT_DESC) ? 'asc' : 'desc';
+			$class = ($directions[$attribute] == EMongoCriteria::SORT_DESC) ? 'desc' : 'asc';
 			if (isset($htmlOptions['class']))
 				$htmlOptions['class'].=' ' . $class;
 			else
