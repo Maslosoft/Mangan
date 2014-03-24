@@ -943,7 +943,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|EMongoCriteria $criteria query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.0
 	 */
@@ -959,7 +959,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array $attributes query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.2.2
 	 */
@@ -969,7 +969,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		$criteria = new EMongoCriteria;
 		foreach($attributes as $name => $value)
+		{
 			$criteria->$name = $value;
+		}
 
 		$this->applyScopes($criteria);
 
@@ -1002,13 +1004,43 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		$this->applyScopes($criteria);
 
 		if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
+		{
 			return $this->getCollection()->remove($criteria->getConditions(), array(
 							'justOne' => false,
 							'fsync' => $this->getFsyncFlag(),
 							'safe' => $this->getSafeFlag()
 					  ));
+		}
 		else
+		{
 			return $this->getCollection()->remove($criteria->getConditions(), false);
+		}
+	}
+
+	/**
+	 * Deletes one document with the specified primary keys.
+	 * <b>Does not raise beforeDelete</b>
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|EMongoCriteria $condition query criteria.
+	 * @since v1.0
+	 */
+	public function deleteOne($criteria = null)
+	{
+		Yii::trace($this->_class . '.deleteOne()', 'ext.MongoDb.EMongoDocument');
+		$this->applyScopes($criteria);
+
+		if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
+		{
+			return $this->getCollection()->remove($criteria->getConditions(), array(
+							'justOne' => true,
+							'fsync' => $this->getFsyncFlag(),
+							'safe' => $this->getSafeFlag()
+					  ));
+		}
+		else
+		{
+			return $this->getCollection()->remove($criteria->getConditions(), false);
+		}
 	}
 
 	/**

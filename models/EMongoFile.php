@@ -105,7 +105,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 
 	/**
 	 * Set file data
-	 * @param CUploadedFile $file
+	 * @param CUploadedFile|string $file
 	 */
 	public function set($file)
 	{
@@ -183,7 +183,6 @@ class EMongoFile extends EMongoEmbeddedDocument
 	}
 	/**
 	 * Set file with optional criteria params
-	 * FIXME This MUST remove old files when replaceing file!
 	 * @param string $tempName
 	 * @param string $fileName
 	 * @param mixed[] $params
@@ -194,6 +193,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 		$mime = $info->file($tempName);
 
 		$data = [
+			'_id' => new MongoId(),
 			'parentId' => $this->getId(),
 			'filename' => $fileName,
 			'contentType' => $mime,
@@ -203,8 +203,20 @@ class EMongoFile extends EMongoEmbeddedDocument
 		$this->filename = $fileName;
 		$this->contentType = $mime;
 		$this->size = filesize($tempName);
+		$params = CMap::mergeArray($data, $params);
 
-		$this->_db->getGridFS()->put($tempName, CMap::mergeArray($data, $params));
+		// Replace existing file, remove previous
+		if(!$params['isTemp'])
+		{
+			$oldFiles = [
+				'parentId' => $this->getId()
+			];
+			$this->_db->getGridFS()->remove($oldFiles);
+		}
+		
+		// Store new file
+		$this->_db->getGridFS()->put($tempName, $params);
+		
 	}
 
 	/**

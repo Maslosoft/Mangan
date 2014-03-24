@@ -525,7 +525,14 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			{
 				if(!array_key_exists($name, $this->_virtualValues))
 				{
-					$this->_virtualValues[$name] = $meta->default;
+					if($meta->embedded)
+					{
+						$this->_virtualValues[$name] = $this->_instantiateEmbedded($name);
+					}
+					else
+					{
+						$this->_virtualValues[$name] = $meta->default;
+					}
 				}
 				$value = $this->_virtualValues[$name];
 				if($value === 'null')
@@ -744,7 +751,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 * @param type $name
 	 * @param type $attributes
 	 */
-	private function _instantiateEmbedded($name, $key, $attributes = [])
+	private function _instantiateEmbedded($name, $key = null, $attributes = [])
 	{
 		if($attributes instanceof EMongoEmbeddedDocument)
 		{
@@ -787,6 +794,12 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		if(!$docClassName)
 		{
 			throw new UnexpectedValueException(sprintf("Class for embedded field '%s' in class '%s' not defined, use @Embedded('ClassName') to define default class", $name, $this->_class));
+		}
+
+		// It default class is not set, but something is embedded use null
+		if(!is_string($docClassName))
+		{
+			return null;
 		}
 		
 		// Check if model should be replaced by different type
