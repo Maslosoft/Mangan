@@ -50,6 +50,10 @@ class EMongoImage extends EMongoFile
 		if (!$result)
 		{
 			$result = $this->_get();
+			if(!$result)
+			{
+				throw new Exception('File not found');
+			}
 
 			$originalFilename = $result->file['filename'];
 			$fileName = tempnam('/tmp/', __CLASS__);

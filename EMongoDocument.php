@@ -198,7 +198,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 	/**
 	 * This method determines if collection can store different types of documents.<br />
-	 * If it returns FALSE object type might depend on `_class` attribute value.<br />
+	 * If it returns FALSE object type <em>might</em> depend on `_class` attribute value.<br />
 	 * It it returns TRUE object type will be set to current model instance type
 	 */
 	public function isCollectionHomogenous()
