@@ -81,6 +81,13 @@ class EMongoDocumentDataProvider extends CDataProvider
 			unset($config['criteria']);
 		}
 
+		if(!$this->_criteria->getSelect())
+		{
+			$fields = array_keys($this->model->meta->fields());
+			$fields = array_fill_keys($fields, true);
+			$this->_criteria->setSelect($fields);
+		}
+
 		$this->setId($this->modelClass);
 		foreach ($config as $key => $value)
 			$this->$key = $value;
