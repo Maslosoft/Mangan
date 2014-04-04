@@ -684,7 +684,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	/**
 	 * Return root document of this document
 	 * This can be used to attach events like afterDelete to root object
-	 * @return EMongoEmbeddedDocument
+	 * @return EMongoDocument
 	 * @since 2.0.1
 	 */
 	public function getRoot()
