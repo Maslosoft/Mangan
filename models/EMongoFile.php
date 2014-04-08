@@ -28,8 +28,24 @@ class EMongoFile extends EMongoEmbeddedDocument
 	 * @var string
 	 */
 	public $filename = '';
-	
-	public $size = '';
+
+	/**
+	 * Size in bytes NOTE: @see $filename
+	 * @var int
+	 */
+	public $size = 0;
+
+	/**
+	 * Root document class
+	 * @var string Class name
+	 */
+	public $rootClass = '';
+
+	/**
+	 * Root document ID
+	 * @var MongoId
+	 */
+	public $rootId = '';
 
 	/**
 	 * NOTE: Same not as for $filename field
@@ -133,8 +149,12 @@ class EMongoFile extends EMongoEmbeddedDocument
 			'parentId' => $this->getId(),
 			'isTemp' => false
 		];
-
-		return $this->_db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
+		$file = $this->_db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
+		if(null === $file)
+		{
+			throw new Exception('File not found');
+		}
+		return $file;
 	}
 
 	/**
@@ -191,10 +211,14 @@ class EMongoFile extends EMongoEmbeddedDocument
 	{
 		$info = new finfo(FILEINFO_MIME);
 		$mime = $info->file($tempName);
-
+		/**
+		 * TODO Check if root data is saved corectly
+		 */
 		$data = [
 			'_id' => new MongoId(),
 			'parentId' => $this->getId(),
+			'rootClass' => $this->getRoot()->_class,
+			'rootId' => $this->getRoot()->id,
 			'filename' => $fileName,
 			'contentType' => $mime,
 			'isTemp' => false
