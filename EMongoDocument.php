@@ -592,17 +592,25 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		if($this->beforeSave())
 		{
 			Yii::trace($this->_class . '.insert()', 'ext.MongoDb.EMongoDocument');
+
+			// Ensure that id is set
+			if(!$this->getId())
+			{
+				$this->setId(new MongoId);
+			}
 			$rawData = $this->toArray();
-			// free the '_id' container if empty, mongo will not populate it if exists
-			if(empty($rawData['_id']))
-				unset($rawData['_id']);
+			
 			// filter attributes if set in param
 			if($attributes !== null)
 			{
+				// Ensure id
+				$attributes['_id'] = true;
 				foreach($rawData as $key => $value)
 				{
 					if(!in_array($key, $attributes))
+					{
 						unset($rawData[$key]);
+					}
 				}
 			}
 			// Check for individual pk
@@ -626,10 +634,6 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			}
 			catch(Exception $e)
 			{
-				var_dump($rawData);
-				var_dump($e->getMessage());
-				exit;
-//				var_dump($rawData);
 				throw $e;
 			}
 
@@ -662,14 +666,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function update(array $attributes = null, $modify = false)
 	{
-//		var_dump('update...');
 		if($this->getIsNewRecord())
 			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
 		if($this->beforeSave())
 		{
 			Yii::trace($this->_class . '.update()', 'ext.MongoDb.EMongoDocument');
 			$rawData = $this->toArray(false);
-//			var_dump($rawData);
+
 			// filter attributes if set in param
 			if($attributes !== null)
 			{

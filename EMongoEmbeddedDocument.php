@@ -281,7 +281,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			{
 				if($this->meta->$field->embeddedArray)
 				{
-					foreach($this->$field as $doc)
+					foreach((array)$this->$field as $doc)
 					{
 						if($doc instanceof EMongoEmbeddedDocument)
 						{
