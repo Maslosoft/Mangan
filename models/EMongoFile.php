@@ -149,20 +149,19 @@ class EMongoFile extends EMongoEmbeddedDocument
 			'parentId' => $this->getId(),
 			'isTemp' => false
 		];
-		$file = $this->_db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
-		if(null === $file)
-		{
-			throw new Exception('File not found');
-		}
-		return $file;
+		return $this->_db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
 	}
 
 	/**
 	 * Send file to the browser
 	 * @param MongoGridFSFile $file
 	 */
-	protected function _send(MongoGridFSFile $file)
+	protected function _send(MongoGridFSFile $file = null)
 	{
+		if(null === $file)
+		{
+			throw new Exception('File not found');
+		}
 		$meta = (object) $file->file;
 		header(sprintf('Content-Length: %d', $file->getSize()));
 		header(sprintf('Content-Type: %s', $meta->contentType));
@@ -214,11 +213,13 @@ class EMongoFile extends EMongoEmbeddedDocument
 		/**
 		 * TODO Check if root data is saved corectly
 		 */
+		$rootId = $this->getRoot()->id;
+		$rootId = $rootId instanceof MongoId ? $rootId : new MongoId($rootId);
 		$data = [
 			'_id' => new MongoId(),
 			'parentId' => $this->getId(),
 			'rootClass' => $this->getRoot()->_class,
-			'rootId' => $this->getRoot()->id,
+			'rootId' => $rootId,
 			'filename' => $fileName,
 			'contentType' => $mime,
 			'isTemp' => false
