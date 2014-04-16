@@ -753,6 +753,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	private function _instantiateEmbedded($name, $key = null, $attributes = [])
 	{
+		$model = null;
 		if($attributes instanceof EMongoEmbeddedDocument)
 		{
 			$attributes->setScenario($this->getScenario());
@@ -803,7 +804,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		}
 		
 		// Check if model should be replaced by different type
-		if($model instanceof EMongoEmbeddedDocument && $model->_class && $model->_class !== $docClassName)
+		if($model && $model instanceof EMongoEmbeddedDocument && $model->_class && $model->_class !== $docClassName)
 		{
 			$model = null;
 		}
