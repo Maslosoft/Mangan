@@ -24,37 +24,37 @@ class MongoCRUDCode extends CCodeModel
 
 	public function rules()
 	{
-		return array_merge(parent::rules(), array(
-			array('model, controller', 'filter', 'filter'=>'trim'),
-			array('model, controller, baseControllerClass', 'required'),
-			array('model', 'match', 'pattern'=>'/^\w+[\w+\\.]*$/', 'message'=>'{attribute} should only contain word characters and dots.'),
-			array('controller', 'match', 'pattern'=>'/^\w+[\w+\\/]*$/', 'message'=>'{attribute} should only contain word characters and slashes.'),
-			array('baseControllerClass', 'match', 'pattern'=>'/^[a-zA-Z_]\w*$/', 'message'=>'{attribute} should only contain word characters.'),
-			array('baseControllerClass', 'validateReservedWord', 'skipOnError'=>true),
-			array('model', 'validateModel'),
-			array('baseControllerClass', 'sticky'),
-		));
+		return array_merge(parent::rules(), [
+			['model, controller', 'filter', 'filter'=>'trim'],
+			['model, controller, baseControllerClass', 'required'],
+			['model', 'match', 'pattern'=>'/^\w+[\w+\\.]*$/', 'message'=>'{attribute} should only contain word characters and dots.'],
+			['controller', 'match', 'pattern'=>'/^\w+[\w+\\/]*$/', 'message'=>'{attribute} should only contain word characters and slashes.'],
+			['baseControllerClass', 'match', 'pattern'=>'/^[a-zA-Z_]\w*$/', 'message'=>'{attribute} should only contain word characters.'],
+			['baseControllerClass', 'validateReservedWord', 'skipOnError'=>true],
+			['model', 'validateModel'],
+			['baseControllerClass', 'sticky'],
+		]);
 	}
 
 	public function requiredTemplates()
 	{
-		return array(
+		return [
 			'controller.php',
-		);
+		];
 	}
 
 	public function attributeLabels()
 	{
-		return array_merge(parent::attributeLabels(), array(
+		return array_merge(parent::attributeLabels(), [
 			'model'=>'Model Class',
 			'controller'=>'Controller ID',
 			'baseControllerClass'=>'Base Controller Class',
-		));
+		]);
 	}
 
 	public function successMessage()
 	{
-		$link=CHtml::link('try it now', Yii::app()->createUrl($this->controller), array('target'=>'_blank'));
+		$link=CHtml::link('try it now', Yii::app()->createUrl($this->controller), ['target'=>'_blank']);
 		return "The controller has been generated successfully. You may $link.";
 	}
 
@@ -76,13 +76,13 @@ class MongoCRUDCode extends CCodeModel
 
 	public function prepare()
 	{
-		$this->files=array();
+		$this->files=[];
 		$templatePath=$this->templatePath;
 		$controllerTemplateFile=$templatePath.DIRECTORY_SEPARATOR.'controller.php';
 
 		$this->files[]=new CCodeFile(
 			$this->controllerFile,
-			$this->render($controllerTemplateFile, array('this'=>$this))
+			$this->render($controllerTemplateFile, ['this'=>$this])
 		);
 
 		$files=scandir($templatePath);
@@ -92,7 +92,7 @@ class MongoCRUDCode extends CCodeModel
 			{
 				$this->files[]=new CCodeFile(
 					$this->viewPath.DIRECTORY_SEPARATOR.$file,
-					$this->render($templatePath.'/'.$file, array('this'=>$this))
+					$this->render($templatePath.'/'.$file, ['this'=>$this])
 				);
 			}
 		}

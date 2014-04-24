@@ -99,10 +99,10 @@ class EMongoHttpSession extends CHttpSession
 	public function init()
 	{
 		$this->setCollection($this->collectionName);
-		$this->_options = array(
+		$this->_options = [
 			'fsync' => $this->fsync,
 			'safe' => $this->safe
-		);
+		];
 		if (!is_null($this->timeout))
 			$this->_options['timeout'] = $this->timeout;
 		parent::init();
@@ -110,7 +110,7 @@ class EMongoHttpSession extends CHttpSession
 
 	protected function getData($id)
 	{
-		return $this->_collection->findOne(array($this->idColumn => $id), array($this->dataColumn));
+		return $this->_collection->findOne([$this->idColumn => $id], [$this->dataColumn]);
 	}
 
 	protected function getExipireTime()
@@ -164,12 +164,12 @@ class EMongoHttpSession extends CHttpSession
 		$options = $this->_options;
 		$options['upsert'] = true;
 		return $this->_collection->update(
-				array($this->idColumn => $id),
-				array(
+				[$this->idColumn => $id],
+				[
 					$this->dataColumn => $data,
 					$this->expireColumn => $this->getExipireTime(),
 					$this->idColumn => $id
-				),
+				],
 				$options
 		);
 	}
@@ -183,7 +183,7 @@ class EMongoHttpSession extends CHttpSession
 	public function destroySession($id)
 	{
 		return $this->_collection->remove(
-						array($this->idColumn => $id), $this->_options);
+						[$this->idColumn => $id], $this->_options);
 	}
 
 	/**
@@ -194,7 +194,7 @@ class EMongoHttpSession extends CHttpSession
 	 */
 	public function gcSession($maxLifetime)
 	{
-		return $this->_collection->remove(array($this->expireColumn => array('$lt' => time())), $this->_options);
+		return $this->_collection->remove([$this->expireColumn => ['$lt' => time()]], $this->_options);
 	}
 
 	/**
@@ -211,15 +211,15 @@ class EMongoHttpSession extends CHttpSession
 		$newId = session_id();
 		$row = $this->getData($oldId);
 		if (is_null($row)) {
-			$this->_collection->insert(array(
+			$this->_collection->insert([
 				$this->idColumn => $newId
 				, $this->expireColumn => $this->getExipireTime()
-					), $this->_options);
+					], $this->_options);
 		}
 		else if ($deleteOldSession) {
 			$this->_collection->update(
-					array($this->idColumn => $oldId)
-					, array($this->idColumn => $newId)
+					[$this->idColumn => $oldId]
+					, [$this->idColumn => $newId]
 					, $this->_options
 			);
 		}

@@ -88,7 +88,7 @@ class EMongoImage extends EMongoFile
 		return in_array(strtolower(CFileHelper::getExtension($name)), ['jpg', 'jpeg', 'gif', 'png']);
 	}
 
-	protected function _set($tempName, $fileName, $params = array())
+	protected function _set($tempName, $fileName, $params = [])
 	{
 		if($this->isImage($fileName))
 		{

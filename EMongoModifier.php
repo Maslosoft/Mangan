@@ -29,7 +29,7 @@ class EMongoModifier extends CComponent
 	 * @since v1.3.6
 	 * @var array $modifiers supported modifiers
 	 */
-	public static $modifiers = array(
+	public static $modifiers = [
 		'inc'		=> '$inc',
 		'set'		=> '$set',
 		'unset'		=> '$unset',
@@ -40,12 +40,12 @@ class EMongoModifier extends CComponent
 		'pull'		=> '$pull',
 		'pullAll'	=> '$pullAll',
 		'rename'	=> '$rename',
-	);
+	];
 
 	/**
 	 * @var array
 	 */
-	private $_fields = array();
+	private $_fields = [];
 
 	/**
 	 * Constructor.
@@ -77,7 +77,7 @@ class EMongoModifier extends CComponent
 			foreach($modifier as $fieldName=>$rules)
 			{
 				foreach($rules as $mod=>$value) {
-					$this->_fields[$fieldName] = array(self::$modifiers[$mod] => $value);
+					$this->_fields[$fieldName] = [self::$modifiers[$mod] => $value];
 				}
 			}
 		}
@@ -91,15 +91,15 @@ class EMongoModifier extends CComponent
 	 */
 	public function getModifiers()
 	{
-		$modifier = array();
+		$modifier = [];
 		foreach($this->_fields as $fieldName=>$rule)
 		{
 			foreach($rule as $operator=>$value)
 			{
 				if(isset($modifier[$operator]) && is_array($modifier[$operator]))
-					$modifier[$operator] = array_merge($modifier[$operator], array($fieldName=>$value));
+					$modifier[$operator] = array_merge($modifier[$operator], [$fieldName=>$value]);
 				else
-					$modifier[$operator] = array($fieldName=>$value);
+					$modifier[$operator] = [$fieldName=>$value];
 			}
 		}
 		return $modifier;
@@ -141,7 +141,7 @@ class EMongoModifier extends CComponent
 	 */
 	public function addModifier($fieldName, $modifier, $value)
 	{
-		$this->_fields[$fieldName] = array(self::$modifiers[$modifier]=>$value);
+		$this->_fields[$fieldName] = [self::$modifiers[$modifier]=>$value];
 		return $this;
 	}
 	/**

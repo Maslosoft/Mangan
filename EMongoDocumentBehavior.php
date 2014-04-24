@@ -21,12 +21,12 @@ class EMongoDocumentBehavior extends CActiveRecordBehavior
 
 	public function events()
 	{
-		return array_merge(parent::events(), array(
+		return array_merge(parent::events(), [
 					'onBeforeEmbeddedDocsInit' => 'beforeEmbeddedDocsInit',
 					'onAfterEmbeddedDocsInit' => 'afterEmbeddedDocsInit',
 					'onBeforeToArray' => 'beforeToArray',
 					'onAfterToArray' => 'afterToArray'
-				));
+				]);
 	}
 
 	public function beforeEmbeddedDocsInit($event)

@@ -16,9 +16,9 @@
  * @since		v1.2.2
  */
 
-Yii::setPathOfAlias('mongoExtRoot', realpath(implode(DIRECTORY_SEPARATOR, array(
+Yii::setPathOfAlias('mongoExtRoot', realpath(implode(DIRECTORY_SEPARATOR, [
 	dirname(__FILE__), '..', '..',
-))));
+])));
 
 /**
  * @since v1.2.2

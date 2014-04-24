@@ -149,7 +149,7 @@ class EMongoDB extends CApplicationComponent
 				if(empty($this->connectionString))
 					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
 
-				$options = array( 'connect'=>$this->autoConnect );
+				$options = [ 'connect'=>$this->autoConnect ];
 
 				if($this->persistentConnection !== false)
 					$options['persist'] = $this->persistentConnection;
@@ -166,8 +166,8 @@ class EMongoDB extends CApplicationComponent
 						$options['timeout'] = $this->timeout;
 					}
 				}
-					
-				
+
+
 				$this->_mongoConnection = new MongoClient($this->connectionString, $options);
 
 				return $this->_mongoConnection;
@@ -177,7 +177,7 @@ class EMongoDB extends CApplicationComponent
 				throw new EMongoException(Yii::t(
 					'yii',
 					'EMongoDB failed to open connection: {error}',
-					array('{error}'=>$e->getMessage())
+					['{error}'=>$e->getMessage()]
 				), $e->getCode());
 			}
 		}

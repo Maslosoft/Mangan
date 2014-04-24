@@ -8,10 +8,10 @@ class UserAddress extends EMongoEmbeddedDocuemnt
 
 	public function rules()
 	{
-		return array(
-			array('city, street, house', 'length', 'max'=>255),
-			array('house, apartment, zip', 'length', 'max'=>10),
-		);
+		return [
+			['city, street, house', 'length', 'max'=>255],
+			['house, apartment, zip', 'length', 'max'=>10],
+		];
 	}
 
 	/**
@@ -21,8 +21,8 @@ class UserAddress extends EMongoEmbeddedDocuemnt
 	 */
 	public function attributeLabels()
 	{
-		return array(
+		return [
 			'zip' => 'Postal Code',
-		);
+		];
 	}
 }

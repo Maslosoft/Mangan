@@ -19,11 +19,11 @@ $('#{$class}_model').bind('keyup change', function(){
 
 <p>This generator generates a controller and views that implement CRUD operations for the specified MongoDB data model.</p>
 
-<?php $form=$this->beginWidget('CCodeForm', array('model'=>$model)); ?>
+<?php $form=$this->beginWidget('CCodeForm', ['model'=>$model]); ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'model'); ?>
-		<?php echo $form->textField($model,'model',array('size'=>65)); ?>
+		<?php echo $form->textField($model,'model',['size'=>65]); ?>
 		<div class="tooltip">
 			Model class is case-sensitive. It can be either a class name (e.g. <code>Post</code>)
 		    or the path alias of the class file (e.g. <code>application.models.Post</code>).
@@ -34,7 +34,7 @@ $('#{$class}_model').bind('keyup change', function(){
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'controller'); ?>
-		<?php echo $form->textField($model,'controller',array('size'=>65)); ?>
+		<?php echo $form->textField($model,'controller',['size'=>65]); ?>
 		<div class="tooltip">
 			Controller ID is case-sensitive. CRUD controllers are often named after
 			the model class name that they are dealing with. Below are some examples:
@@ -53,7 +53,7 @@ $('#{$class}_model').bind('keyup change', function(){
 
 	<div class="row sticky">
 		<?php echo $form->labelEx($model,'baseControllerClass'); ?>
-		<?php echo $form->textField($model,'baseControllerClass',array('size'=>65)); ?>
+		<?php echo $form->textField($model,'baseControllerClass',['size'=>65]); ?>
 		<div class="tooltip">
 			This is the class that the new CRUD controller class will extend from.
 			Please make sure the class exists and can be autoloaded.

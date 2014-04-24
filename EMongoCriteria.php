@@ -33,7 +33,7 @@ class EMongoCriteria extends CComponent
 	 * @since v1.0
 	 * @var array $operators supported operators lists
 	 */
-	public static $operators = array(
+	public static $operators = [
 		'greater'		=> '$gt',
 		'>'				=> '$gt',
 		'greatereq'		=> '$gte',
@@ -60,17 +60,17 @@ class EMongoCriteria extends CComponent
 		'=='			=> '$$eq',
 		'where'			=> '$where',
 		'or'			=> '$or'
-	);
+	];
 
 	const SORT_ASC		= 1;
 	const SORT_DESC		= -1;
 
-	private $_select		= array();
+	private $_select		= [];
 	private $_limit			= null;
 	private $_offset		= null;
-	private $_conditions	= array();
-	private $_sort			= array();
-	private $_workingFields	= array();
+	private $_conditions	= [];
+	private $_sort			= [];
+	private $_workingFields	= [];
 	private $_useCursor		= null;
 
 	/**
@@ -172,7 +172,7 @@ class EMongoCriteria extends CComponent
 							unset($this->_conditions[$fieldName][$operator]);
 				}
 				else
-					$this->_conditions[$fieldName] = array();
+					$this->_conditions[$fieldName] = [];
 
 				foreach($conds as $operator => $value)
 					$this->_conditions[$fieldName][$operator] = $value;
@@ -218,7 +218,7 @@ class EMongoCriteria extends CComponent
 		{
 			array_push($this->_workingFields, $fieldName);
 			$fieldName = implode('.', $this->_workingFields);
-			$this->_workingFields = array();
+			$this->_workingFields = [];
 			switch($operatorName)
 			{
 				case 'exists':
@@ -252,7 +252,7 @@ class EMongoCriteria extends CComponent
 	{
 		array_push($this->_workingFields, $name);
 		$fieldList = implode('.', $this->_workingFields);
-		$this->_workingFields = array();
+		$this->_workingFields = [];
 		$this->addCond($fieldList, '==', $value);
 	}
 
@@ -356,7 +356,7 @@ class EMongoCriteria extends CComponent
 	 */
 	public function setSelect(array $select)
 	{
-		$this->_select = array();
+		$this->_select = [];
 		// Convert the select array to field=>true/false format
 		foreach ($select as $key=>$value) {
 			if (is_int($key))
@@ -452,12 +452,12 @@ class EMongoCriteria extends CComponent
 		{
 			if(!isset($this->_conditions[$op]))
 			{
-				$this->_conditions[$op] = array();
+				$this->_conditions[$op] = [];
 			}
-			$this->_conditions[$op][] = array($fieldName=>$value);
+			$this->_conditions[$op][] = [$fieldName=>$value];
 		} else {
 			if(!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
-				$this->_conditions[$fieldName] = array();
+				$this->_conditions[$fieldName] = [];
 
 			if($op != self::$operators['equals'])
 			{
@@ -466,7 +466,7 @@ class EMongoCriteria extends CComponent
 					count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
 				)
 				{
-					$this->_conditions[$fieldName] = array();
+					$this->_conditions[$fieldName] = [];
 				}
 				$this->_conditions[$fieldName][$op] = $value;
 			}

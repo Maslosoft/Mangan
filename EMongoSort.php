@@ -44,7 +44,7 @@ class EMongoSort extends CSort
 				$directions = [];
 				foreach($order as $name => $direction)
 				{
-					// TODO Add support for DEFAULT (i18nAllowDefault)and ANY (i18nAllowAny) attribute, 
+					// TODO Add support for DEFAULT (i18nAllowDefault)and ANY (i18nAllowAny) attribute,
 					// by adding them to sort list instead of current language
 					if($this->model->meta->$name->i18n)
 					{
@@ -57,7 +57,7 @@ class EMongoSort extends CSort
 					$directions[$attribute] = $direction;
 					/*
 					TODO If sorting on subfields that are empty, null, or non existent,
-					they are always first (in ASC order) so below code has no effect 
+					they are always first (in ASC order) so below code has no effect
 					if($this->model->meta->$name->i18nAllowDefault)
 					{
 						var_dump('blasf');
@@ -99,9 +99,9 @@ class EMongoSort extends CSort
 	{
 		$directions = $this->getDirections();
 		if (empty($directions))
-			return is_array($this->defaultOrder) ? $this->defaultOrder : array(); // use the defaultOrder
+			return is_array($this->defaultOrder) ? $this->defaultOrder : []; // use the defaultOrder
 		else {
-			$orders = array();
+			$orders = [];
 			foreach ($directions as $attribute => $direction)
 				$orders[$attribute] = $direction;
 
@@ -117,7 +117,7 @@ class EMongoSort extends CSort
 	 * @param array $htmlOptions additional HTML attributes for the hyperlink tag
 	 * @return string the generated hyperlink
 	 */
-	public function link($attribute, $label = null, $htmlOptions = array())
+	public function link($attribute, $label = null, $htmlOptions = [])
 	{
 		// todo make sure this works with relations?
 		if ($label === null)
@@ -140,9 +140,9 @@ class EMongoSort extends CSort
 			$direction = EMongoCriteria::SORT_ASC;
 
 		if ($this->multiSort)
-			$directions = array_merge(array($attribute => $direction), $directions);
+			$directions = array_merge([$attribute => $direction], $directions);
 		else
-			$directions = array($attribute => $direction);
+			$directions = [$attribute => $direction];
 
 		$url = $this->createUrl(Yii::app()->getController(), $directions);
 
@@ -176,7 +176,7 @@ class EMongoSort extends CSort
 	public function getDirections()
 	{
 		if ($this->_directions === null) {
-			$this->_directions = array();
+			$this->_directions = [];
 			if (isset($_GET[$this->sortVar])) {
 				$attributes = explode($this->separators[0], $_GET[$this->sortVar]);
 				foreach ($attributes as $attribute)
@@ -203,7 +203,7 @@ class EMongoSort extends CSort
 					}
 				}
 			}
-			if ($this->_directions === array() && is_array($this->defaultOrder))
+			if ($this->_directions === [] && is_array($this->defaultOrder))
 				$this->_directions = $this->defaultOrder;
 		}
 
@@ -232,7 +232,7 @@ class EMongoSort extends CSort
 	 */
 	public function createUrl($controller, $directions)
 	{
-		$sorts = array();
+		$sorts = [];
 		foreach ($directions as $attribute => $direction)
 		{
 			if ($direction == EMongoCriteria::SORT_DESC)

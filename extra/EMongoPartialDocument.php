@@ -21,7 +21,7 @@
  */
 abstract class EMongoPartialDocument extends EMongoDocument
 {
-	protected $_loadedFields = array(); // Fields that have not been loaded from DB
+	protected $_loadedFields = []; // Fields that have not been loaded from DB
 	protected $_partial = false; // Whatever the document has been partially loaded
 
 	/**
@@ -41,7 +41,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 */
 	public function getLoadedFields()
 	{
-		return $this->_partial ? $this->_loadedFields : array();
+		return $this->_partial ? $this->_loadedFields : [];
 	}
 
 	/**
@@ -53,7 +53,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	{
 		return $this->_partial ? array_diff(
 						$this->_loadedFields, $this->attributeNames()
-				) : array();
+				) : [];
 	}
 
 	/**
@@ -100,10 +100,10 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 * @param array $attributes attributes to be loaded
 	 * @return boolean wether the load was successfull
 	 */
-	public function loadAttributes($attributes = array())
+	public function loadAttributes($attributes = [])
 	{
 		$document = $this->getCollection()->findOne(
-				array('_id' => $this->_id), $attributes
+				['_id' => $this->_id], $attributes
 		);
 
 		unset($document['_id']);
@@ -145,7 +145,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 			if (count($attributes) > 0)
 				$attributes = array_intersect($attributes, $this->_loadedFields);
 			else
-				$attributes = array_diff($this->_loadedFields, array('_id'));
+				$attributes = array_diff($this->_loadedFields, ['_id']);
 			return parent::update($attributes, true);
 		}
 		return parent::update($attributes, $modify);

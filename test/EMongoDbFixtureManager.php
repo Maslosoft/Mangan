@@ -90,7 +90,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 			$this->_mongoDb=Yii::app()->getComponent($this->connectionID)->getDbInstance();
 			if(!$this->_mongoDb instanceof MongoDB)
 				throw new EMongoException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
-					array('{id}'=>$this->connectionID)));
+					['{id}'=>$this->connectionID]));
 		}
 		return $this->_mongoDb;
 	}
@@ -152,7 +152,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 			return false;
 		}
 
-		$rows=array();
+		$rows=[];
 		foreach(require($fileName) as $alias=>$row)
 		{
 			$this->getDbConnection()->{$collectionName}->save($row);
@@ -170,7 +170,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	{
 		if ($this->_collectionList === null)
 		{
-			$this->_collectionList = array();
+			$this->_collectionList = [];
 			foreach($this->getDbConnection()->listCollections() as $collection)
 				$this->_collectionList[] = $collection->getName();
 		}
@@ -186,7 +186,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	{
 		if($this->_fixtures===null)
 		{
-			$this->_fixtures=array();
+			$this->_fixtures=[];
 			$folder=opendir($this->basePath);
 			$suffixLen=strlen($this->initScriptSuffix);
 			while($file=readdir($folder))
@@ -212,7 +212,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 */
 	public function truncateCollection($collectionName)
 	{
-		$this->getDbConnection()->{$collectionName}->remove(array());
+		$this->getDbConnection()->{$collectionName}->remove([]);
 	}
 
 	/**
@@ -240,8 +240,8 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 */
 	public function load($fixtures)
 	{
-		$this->_rows=array();
-		$this->_records=array();
+		$this->_rows=[];
+		$this->_records=[];
 		foreach($fixtures as $fixtureName=>$collectionName)
 		{
 			if($collectionName[0]===':')

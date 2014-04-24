@@ -91,7 +91,7 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	{
 		if(is_array($this->getOwner()->{$this->arrayPropertyName}))
 		{
-			$arrayOfDocs = array();
+			$arrayOfDocs = [];
 			foreach($this->getOwner()->{$this->arrayPropertyName} as $doc)
 			{
 				$obj = new $this->arrayDocClassName;
@@ -128,7 +128,7 @@ class EEmbeddedArraysBehavior extends EMongoDocumentBehavior
 	public function beforeToArray($event)
 	{
 		if (is_array($this->getOwner()->{$this->arrayPropertyName})) {
-			$arrayOfDocs = array();
+			$arrayOfDocs = [];
 			$this->_cache = $this->getOwner()->{$this->arrayPropertyName};
 
 			foreach($this->_cache as $doc)

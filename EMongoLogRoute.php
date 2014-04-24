@@ -135,10 +135,10 @@ class EMongoLogRoute extends CLogRoute
 		parent::init();
 
 		$this->setCollection($this->collectionName);
-		$this->_options = array(
+		$this->_options = [
 			'fsync' => $this->fsync
 			, 'safe' => $this->safe
-		);
+		];
 		if (!is_null($this->timeout)) {
 			$this->_options['timeout'] = $this->timeout;
 		}
@@ -173,12 +173,12 @@ class EMongoLogRoute extends CLogRoute
 	protected function processLogs($logs)
 	{
 		foreach ($logs as $log) {
-			$this->_collection->insert(array(
+			$this->_collection->insert([
 				$this->message => $log[0],
 				$this->level => $log[1],
 				$this->category => $log[2],
 				$this->timestamp => $this->formatTimestamp($log[3]),
-					), $this->_options
+					], $this->_options
 			);
 		}
 	}

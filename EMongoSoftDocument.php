@@ -23,7 +23,7 @@ class EMongoSoftDocument extends EMongoDocument
 	 * @var array $softAttributes
 	 * @since v1.3.4
 	 */
-	protected $softAttributes = array();
+	protected $softAttributes = [];
 
 	/**
 	 * Adds soft attributes support to magic __get method

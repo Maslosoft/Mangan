@@ -139,7 +139,7 @@ abstract class EMongoGridFS extends EMongoDocument
 		{
 			$this->_id = $result;
 			//TODO: should be set in parent class
-			$this->_gridFSFile = $this->getCollection()->findOne(array('_id' => $this->_id));
+			$this->_gridFSFile = $this->getCollection()->findOne(['_id' => $this->_id]);
 			$this->setIsNewRecord(false);
 			$this->setScenario('update');
 			$this->afterSave();

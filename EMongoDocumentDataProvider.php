@@ -27,7 +27,7 @@
 class EMongoDocumentDataProvider extends CDataProvider
 {
 	public static $CLS = __CLASS__;
-	
+
 	/**
 	 * @var string the name of key field. Defaults to '_id', as a mongo default document primary key.
 	 * @since v1.0
@@ -62,7 +62,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 * @param array $config configuration (name=>value) to be applied as the initial property values of this class.
 	 * @since v1.0
 	 */
-	public function __construct($modelClass, $config = array())
+	public function __construct($modelClass, $config = [])
 	{
 		if (is_string($modelClass)) {
 			$this->modelClass = $modelClass;
@@ -166,7 +166,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 
 		return $this->model->findAll($this->_criteria);
 	}
-	
+
 	/**
 	 * Returns the data items currently available, ensures that result is at leas empty array
 	 * @param boolean $refresh whether the data should be re-fetched from persistent storage.
@@ -184,7 +184,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	 */
 	protected function fetchKeys()
 	{
-		$keys = array();
+		$keys = [];
 		foreach ($this->getData() as $i => $data)
 			$keys[$i] = $data->{$this->keyField};
 
@@ -210,7 +210,7 @@ class EMongoDocumentDataProvider extends CDataProvider
 	protected function getSortDirections($order)
 	{
 		$segs = explode(',', $order);
-		$directions = array();
+		$directions = [];
 		foreach ($segs as $seg) {
 			if (preg_match('/(.*?)(\s+(desc|asc))?$/i', trim($seg), $matches))
 				$directions[$matches[1]] = isset($matches[3]) && !strcasecmp($matches[3], 'desc');

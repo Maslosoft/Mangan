@@ -50,9 +50,9 @@ class User extends EMongoDocument
 	 */
 	public function rules()
 	{
-		return array(
-			array('personal_number, first_name, last_name', 'required'),
-		);
+		return [
+			['personal_number, first_name, last_name', 'required'],
+		];
 	}
 
 	/**
@@ -62,7 +62,7 @@ class User extends EMongoDocument
 	 */
 	public function attributeLabels()
 	{
-		return array(
+		return [
 			'username' => 'UserName',
 			'email' => 'EMail',
 			'personal_number' => 'PN',
@@ -70,7 +70,7 @@ class User extends EMongoDocument
 			'last_name' => 'Last Name',
 			'client' => 'Client',
 			'company' => 'Company',
-		);
+		];
 	}
 
 	/**
@@ -83,7 +83,7 @@ class User extends EMongoDocument
 	 */
 	public function client()
 	{
-		return Client::model()->findByAttributes(array('client' => $this->getPrimaryKey()));
+		return Client::model()->findByAttributes(['client' => $this->getPrimaryKey()]);
 	}
 
 	/**
@@ -104,7 +104,7 @@ class User extends EMongoDocument
 	 */
 	public function orders()
 	{
-		return Orders::model()->findAllByAttributes(array('client_id' => $this->getPrimaryKey()));
+		return Orders::model()->findAllByAttributes(['client_id' => $this->getPrimaryKey()]);
 	}
 
 	// This method would be in the posts model. the tags key in the document is
@@ -123,14 +123,14 @@ class User extends EMongoDocument
 	 */
 	public function tags()
 	{
-		return Posts::model()->findAllByAttributes(array('post_id' => $this->post_id));
+		return Posts::model()->findAllByAttributes(['post_id' => $this->post_id]);
 	}
 
 	// This method would be in the tags model. each tag is a document that has a
 	// relation to the objects _id.
 	public function Posts()
 	{
-		return Tags::model()->findAllByAttributes(array('tag_id' => $this->tag_id));
+		return Tags::model()->findAllByAttributes(['tag_id' => $this->tag_id]);
 	}
 
 	/**
@@ -147,9 +147,9 @@ class User extends EMongoDocument
 	public function embeddedDocuments()
 	{
 		// property name => embedded document class name
-		return array(
+		return [
 			'address' => 'UserAddress',
-		);
+		];
 	}
 
 }

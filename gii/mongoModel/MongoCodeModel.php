@@ -9,40 +9,40 @@ class MongoCodeModel extends CCodeModel
 	public $baseClass = 'MongoRecord';
 	public $baseClassDir = 'base';
 	public $mergeBaseClasses = false;
-	protected $_modelPaths = array();
+	protected $_modelPaths = [];
 
-	protected $_tagPaths = array('application.components.mongo.models');
+	protected $_tagPaths = ['application.components.mongo.models'];
 
-	protected $_classTags = array();
-	protected $_fieldTags = array();
+	protected $_classTags = [];
+	protected $_fieldTags = [];
 
 	public function rules()
 	{
-		return array_merge(parent::rules(), array(
-			 array('baseClass, modelPath', 'filter', 'filter' => 'trim'),
-			 array('modelPath, baseClass', 'required'),
-			 array('tableName, modelPath', 'match', 'pattern' => '/^(\w+[\w\.\s]*|\*?|\w+\.\*)$/', 'message' => '{attribute} should only contain word characters, dots, and an optional ending asterisk.'),
-			 array('modelClass, baseClass', 'match', 'pattern' => '/^[a-zA-Z_]\w*$/', 'message' => '{attribute} should only contain word characters.'),
-			 array('modelPath', 'validateModelPaths', 'skipOnError' => true),
-			 array('baseClass, modelClass', 'validateReservedWord', 'skipOnError' => true),
-			 array('baseClass', 'validateBaseClass', 'skipOnError' => true),
-			 array('modelPath, baseClass', 'sticky'),
-		));
+		return array_merge(parent::rules(), [
+			 ['baseClass, modelPath', 'filter', 'filter' => 'trim'],
+			 ['modelPath, baseClass', 'required'],
+			 ['tableName, modelPath', 'match', 'pattern' => '/^(\w+[\w\.\s]*|\*?|\w+\.\*)$/', 'message' => '{attribute} should only contain word characters, dots, and an optional ending asterisk.'],
+			 ['modelClass, baseClass', 'match', 'pattern' => '/^[a-zA-Z_]\w*$/', 'message' => '{attribute} should only contain word characters.'],
+			 ['modelPath', 'validateModelPaths', 'skipOnError' => true],
+			 ['baseClass, modelClass', 'validateReservedWord', 'skipOnError' => true],
+			 ['baseClass', 'validateBaseClass', 'skipOnError' => true],
+			 ['modelPath, baseClass', 'sticky'],
+		]);
 	}
 
 	public function attributeLabels()
 	{
-		return array_merge(parent::attributeLabels(), array(
+		return array_merge(parent::attributeLabels(), [
 			 'modelPath' => 'Model Paths',
 			 'baseClass' => 'Base Class',
-		));
+		]);
 	}
 
 	public function requiredTemplates()
 	{
-		return array(
+		return [
 			 'model.php',
-		);
+		];
 	}
 
 	public function init()
@@ -100,8 +100,8 @@ class MongoCodeModel extends CCodeModel
 
 	protected function extractTags($comment)
 	{
-		$matches = array();
-		$tags = array();
+		$matches = [];
+		$tags = [];
 		preg_match_all('~@(\w+)\s+(.+)~', $comment, $matches);
 		foreach($matches[1] as $i => $name)
 		{
@@ -110,7 +110,7 @@ class MongoCodeModel extends CCodeModel
 			if(class_exists($className))
 			{
 
-				$tags[] = array($name => $matches[2][$i]);
+				$tags[] = [$name => $matches[2][$i]];
 			}
 		}
 		var_dump($tags);
@@ -150,7 +150,7 @@ class MongoCodeModel extends CCodeModel
 
 	public function generateLabels($table)
 	{
-		$labels = array();
+		$labels = [];
 		foreach($table->columns as $column)
 		{
 			if($column->label)
@@ -159,7 +159,7 @@ class MongoCodeModel extends CCodeModel
 			}
 			else
 			{
-				$label = ucwords(trim(strtolower(str_replace(array('-', '_'), ' ', preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $column->name)))));
+				$label = ucwords(trim(strtolower(str_replace(['-', '_'], ' ', preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $column->name)))));
 				$label = preg_replace('/\s+/', ' ', $label);
 				if(strcasecmp(substr($label, -3), ' id') === 0)
 					$label = substr($label, 0, -3);
@@ -173,12 +173,12 @@ class MongoCodeModel extends CCodeModel
 
 	public function generateRules($table)
 	{
-		$rules = array();
-		$required = array();
-		$integers = array();
-		$numerical = array();
-		$length = array();
-		$safe = array();
+		$rules = [];
+		$required = [];
+		$integers = [];
+		$numerical = [];
+		$length = [];
+		$safe = [];
 		foreach($table->columns as $column)
 		{
 			if($column->isPrimaryKey && $table->sequenceName !== null)
@@ -195,18 +195,18 @@ class MongoCodeModel extends CCodeModel
 			else if(!$column->isPrimaryKey && !$r)
 				$safe[] = $column->name;
 		}
-		if($required !== array())
+		if($required !== [])
 			$rules[] = "array('" . implode(', ', $required) . "', 'required')";
-		if($integers !== array())
+		if($integers !== [])
 			$rules[] = "array('" . implode(', ', $integers) . "', 'numerical', 'integerOnly'=>true)";
-		if($numerical !== array())
+		if($numerical !== [])
 			$rules[] = "array('" . implode(', ', $numerical) . "', 'numerical')";
-		if($length !== array())
+		if($length !== [])
 		{
 			foreach($length as $len => $cols)
 				$rules[] = "array('" . implode(', ', $cols) . "', 'length', 'max'=>$len)";
 		}
-		if($safe !== array())
+		if($safe !== [])
 			$rules[] = "array('" . implode(', ', $safe) . "', 'safe')";
 
 		return $rules;

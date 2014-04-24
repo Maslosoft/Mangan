@@ -48,7 +48,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 * @todo Check if it is nessesary
 	 * @var type
 	 */
-	private static $_attributes = array();
+	private static $_attributes = [];
 
 	/**
 	 * Model metadata
@@ -394,7 +394,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 			return $arr;
 		}
 		else
-			return array();
+			return [];
 	}
 
 	/**
@@ -817,7 +817,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		{
 			return null;
 		}
-		
+
 		// Check if model should be replaced by different type
 		if($model && $model instanceof EMongoEmbeddedDocument && $model->_class && $model->_class !== $docClassName)
 		{
