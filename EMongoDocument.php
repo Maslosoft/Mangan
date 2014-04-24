@@ -44,9 +44,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @var array $_collections static array of loaded collection objects
 	 * @since v1.3
 	 */
-	protected static $_collections = array();  // MongoCollection object
-	private static $_models = array();
-	private static $_indexes = array();  // Hold collection indexes array
+	protected static $_collections = [];  // MongoCollection object
+	private static $_models = [];
+	private static $_indexes = [];  // Hold collection indexes array
 	private $_fsyncFlag = null;	// Object level FSync flag
 	private $_safeFlag = null;	// Object level Safe flag
 	protected $useCursor = null;	// Whatever to return cursor instead on raw array
@@ -142,7 +142,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			return $this->{$pk};
 		else
 		{
-			$return = array();
+			$return = [];
 			foreach($pk as $pkFiled)
 				$return[] = $this->{$pkFiled};
 			return $return;
@@ -265,7 +265,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function getDbCriteria($createIfNull = true)
 	{
 		if($this->_criteria === null)
-			if(($c = $this->defaultScope()) !== array() || $createIfNull)
+			if(($c = $this->defaultScope()) !== [] || $createIfNull)
 				$this->_criteria = new EMongoCriteria($c);
 		return $this->_criteria;
 	}
@@ -388,13 +388,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$indexInfo = $this->getCollection()->getIndexInfo();
 			array_shift($indexInfo); // strip out default _id index
 
-			$indexes = array();
+			$indexes = [];
 			foreach($indexInfo as $index)
 			{
-				$indexes[$index['name']] = array(
+				$indexes[$index['name']] = [
 					 'key' => $index['key'],
 					 'unique' => isset($index['unique']) ? $index['unique'] : false,
-				);
+				];
 			}
 			self::$_indexes[$this->getCollectionName()] = $indexes;
 
@@ -414,7 +414,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function indexes()
 	{
-		return array();
+		return [];
 	}
 
 	/**
@@ -430,7 +430,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				if(version_compare(MongoClient::VERSION, '1.0.2', '>=') === true)
 				{
 					$this->getCollection()->ensureIndex(
-							  $index['key'], array('unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name)
+							  $index['key'], ['unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name]
 					);
 				}
 				else
@@ -479,7 +479,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function scopes()
 	{
-		return array();
+		return [];
 	}
 
 	/**
@@ -493,7 +493,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function defaultScope()
 	{
-		return array();
+		return [];
 	}
 
 	/**
@@ -599,7 +599,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$this->setId(new MongoId);
 			}
 			$rawData = $this->toArray();
-			
+
 			// filter attributes if set in param
 			if($attributes !== null)
 			{
@@ -615,7 +615,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			}
 			// Check for individual pk
 			$pk = $this->primaryKey();
-			if('_id' !== $pk && 0 !== $this->countByAttributes(array($pk => $this->{$pk})))
+			if('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
 			{
 				throw new EMongoException(
 						  Yii::t('yii', 'The EMongoDocument cannot be inserted because the primary key already exists.')
@@ -625,10 +625,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			try
 			{
 				if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
-					$result = $this->getCollection()->insert($rawData, array(
+					$result = $this->getCollection()->insert($rawData, [
 						 'fsync' => $this->getFsyncFlag(),
 						 'safe' => $this->getSafeFlag()
-							  ));
+							  ]);
 				else
 					$result = $this->getCollection()->insert($rawData, CPropertyValue::ensureBoolean($this->getSafeFlag()));
 			}
@@ -690,20 +690,20 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				if(isset($rawData['_id']) === true)
 					unset($rawData['_id']);
 				$result = $this->getCollection()->update(
-						  array('_id' => $this->_id), array('$set' => $rawData), array(
+						  ['_id' => $this->_id], ['$set' => $rawData], [
 					 'fsync' => $this->getFsyncFlag(),
 					 'safe' => $this->getSafeFlag(),
 					 'multiple' => false
-						  )
+						  ]
 				);
 			}
 			else
 			{
 				if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
-					$result = $this->getCollection()->save($rawData, array(
+					$result = $this->getCollection()->save($rawData, [
 						 'fsync' => $this->getFsyncFlag(),
 						 'safe' => $this->getSafeFlag()
-							  ));
+							  ]);
 				else
 					$result = $this->getCollection()->save($rawData);
 			}
@@ -731,17 +731,17 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		{
 			$this->applyScopes($criteria);
 			if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
-				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
+				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), [
 					 'fsync' => $this->getFsyncFlag(),
 					 'safe' => $this->getSafeFlag(),
 					 'upsert' => false,
 					 'multiple' => true
-						  ));
+						  ]);
 			else
-				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), array(
+				$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), [
 					 'upsert' => false,
 					 'multiple' => true
-						  ));
+						  ]);
 			return $result;
 		}
 		else
@@ -795,11 +795,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			$criteria->mergeWith($this->createPkCriteria($pk));
 
 			if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
-				$result = $this->getCollection()->remove($criteria->getConditions(), array(
+				$result = $this->getCollection()->remove($criteria->getConditions(), [
 					 'justOne' => true,
 					 'fsync' => $this->getFsyncFlag(),
 					 'safe' => $this->getSafeFlag()
-						  ));
+						  ]);
 			else
 				$result = $this->getCollection()->remove($criteria->getConditions(), true);
 
@@ -815,9 +815,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function refresh()
 	{
 		Yii::trace($this->_class . '.refresh()', 'ext.MongoDb.EMongoDocument');
-		if(!$this->getIsNewRecord() && $this->getCollection()->count(array('_id' => $this->_id)) == 1)
+		if(!$this->getIsNewRecord() && $this->getCollection()->count(['_id' => $this->_id]) == 1)
 		{
-			$this->setAttributes($this->getCollection()->find(array('_id' => $this->_id)), false);
+			$this->setAttributes($this->getCollection()->find(['_id' => $this->_id]), false);
 			return true;
 		}
 		else
@@ -876,7 +876,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			else
 				return $this->populateRecords($cursor);
 		}
-		return array();
+		return [];
 	}
 
 	/**
@@ -1018,11 +1018,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
 		{
-			return $this->getCollection()->remove($criteria->getConditions(), array(
+			return $this->getCollection()->remove($criteria->getConditions(), [
 							'justOne' => false,
 							'fsync' => $this->getFsyncFlag(),
 							'safe' => $this->getSafeFlag()
-					  ));
+					  ]);
 		}
 		else
 		{
@@ -1042,18 +1042,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		Yii::trace($this->_class . '.deleteOne()', 'ext.MongoDb.EMongoDocument');
 		$this->applyScopes($criteria);
 
-		if(version_compare(MongoClient::VERSION, '1.0.5', '>=') === true)
-		{
-			return $this->getCollection()->remove($criteria->getConditions(), array(
-							'justOne' => true,
-							'fsync' => $this->getFsyncFlag(),
-							'safe' => $this->getSafeFlag()
-					  ));
-		}
-		else
-		{
-			return $this->getCollection()->remove($criteria->getConditions(), false);
-		}
+		return $this->getCollection()->remove($criteria->getConditions(), [
+					'justOne' => true,
+					'fsync' => $this->getFsyncFlag(),
+					'safe' => $this->getSafeFlag()
+		]);
 	}
 
 	/**
@@ -1326,7 +1319,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function populateRecords($cursor, $callAfterFind = true, $index = null)
 	{
-		$records = array();
+		$records = [];
 		foreach($cursor as $attributes)
 		{
 			if(($record = $this->populateRecord($attributes, $callAfterFind)) !== null)
@@ -1369,7 +1362,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 						$op = '==';
 
 					if($op !== '')
-						call_user_func(array($criteria, $attribute), $op, is_numeric($value) ? floatval($value) : $value);
+						call_user_func([$criteria, $attribute], $op, is_numeric($value) ? floatval($value) : $value);
 					else
 						$criteria->$attribute = new MongoRegex($caseSensitive ? '/' . $this->$attribute . '/' : '/' . $this->$attribute . '/i');
 				}
