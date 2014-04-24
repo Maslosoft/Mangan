@@ -180,7 +180,10 @@ class EMongoFile extends EMongoEmbeddedDocument
 	protected function _stream(MongoGridFSFile $file)
 	{
 		$meta = (object) $file->file;
-		ob_end_clean();
+		if(ob_get_length())
+		{
+			ob_end_clean();
+		}
 		header(sprintf('Content-Length: %d', $file->getSize()));
 		header(sprintf('Content-Type: %s', $meta->contentType));
 		header(sprintf('ETag: %s', $meta->md5));
