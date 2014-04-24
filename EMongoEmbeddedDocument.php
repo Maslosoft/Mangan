@@ -260,7 +260,7 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 	 */
 	public function __isset($name)
 	{
-		if($this->meta->$name->embedded)
+		if(!empty($this->meta->$name->embedded))
 		{
 			return isset($this->_virtualValues[$name]);
 		}
@@ -500,52 +500,67 @@ abstract class EMongoEmbeddedDocument extends CModel implements IAnnotated
 		$meta = $this->getMeta()->$name;
 		if(!$meta->direct)
 		{
-			if($meta->i18n)
+			if(!$lang)
 			{
-				if(!$lang)
-				{
-					$lang = $this->getLang();
-				}
-				if($lang == '_all')
-				{
-					$value = $this->_virtualValues[$name];
-				}
-				else
-				{
-					$value = $this->_virtualValues[$name][$lang];
-				}
-				// TODO
-				if($value === 'null')
-				{
-					return null;
-				}
-				return $value;
+				$lang = $this->getLang();
 			}
-			else
+			// Init defaults
+			if(!isset($this->_virtualValues[$name]) || ($meta->i18n && !isset($this->_virtualValues[$name][$lang])))
 			{
-				if(!array_key_exists($name, $this->_virtualValues))
+				$value = $meta->default;
+				if($meta->embedded)
 				{
-					if($meta->embedded)
+					if($meta->embeddedArray)
 					{
-						$this->_virtualValues[$name] = $this->_instantiateEmbedded($name);
+						$value = [];
 					}
 					else
 					{
-						$this->_virtualValues[$name] = $meta->default;
+						$value = $this->_instantiateEmbedded($name);
 					}
 				}
-				$value = $this->_virtualValues[$name];
-				if($value === 'null')
+				if($meta->i18n)
 				{
-					return null;
+					$this->_virtualValues[$name][$lang] = $value;
 				}
-				return $value;
+				else
+				{
+					$this->_virtualValues[$name] = $value;
+				}
+			}
+			// Return value
+			if ($meta->i18n)
+			{
+				return $this->_getSanitized($meta, $this->_virtualValues[$name][$lang]);
+			}
+			else
+			{
+				return $this->_getSanitized($meta, $this->_virtualValues[$name]);
 			}
 		}
 		else
 		{
-			return $this->$name;
+			return $this->_getSanitized($meta, $this->$name);
 		}
+	}
+
+	private function _getSanitized($meta, $value)
+	{
+		$sanitizer = null;
+		if($meta->sanitizer)
+		{
+//			$sanitizer = new $meta->sanitizer;
+			var_dump($meta->sanitizer);
+		}
+		else
+		{
+			$type = gettype($meta->default);
+			if($type === 'NULL')
+			{
+				return $value;
+			}
+		}
+		return $value;
 	}
 
 	/**
