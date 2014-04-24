@@ -201,9 +201,13 @@ class EMongoCriteria extends CComponent
 	public function __call($fieldName, $parameters)
 	{
 		if(isset($parameters[0]))
+		{
 			$operatorName = strtolower($parameters[0]);
-		if(isset($parameters[1]))
+		}
+		if(array_key_exists(1, $parameters))
+		{
 			$value = $parameters[1];
+		}
 		if(is_numeric($operatorName))
 		{
 			$operatorName = strtolower(trim($value));
