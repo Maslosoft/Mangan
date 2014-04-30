@@ -12,5 +12,10 @@
 	],
 	"require": {
 		"maslosoft/addendum": "*"
+	},
+	"autoload": {
+		"psr-0": {
+			"Maslosoft\\Mangan": "./"
+		}
 	}
 }
