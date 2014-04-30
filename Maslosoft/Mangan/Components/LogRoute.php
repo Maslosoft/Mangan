@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author Ianaré Sévi (merge into EMongoDB)
+ * @author Ianaré Sévi (merge into MongoDB)
  * @author aoyagikouhei (original author)
  * @license New BSD license
  * @version 1.3
@@ -9,8 +9,10 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan\Components;
+
 /**
- * EMongoLogRoute
+ * LogRoute
  *
  * Example, in config/main.php:
  * 'log'=>array(
@@ -40,34 +42,41 @@
  */
 
 /**
- * EMongoLogRoute routes log messages to MongoDB.
+ * LogRoute routes log messages to MongoDB.
  */
-class EMongoLogRoute extends CLogRoute
+class LogRoute extends CLogRoute
 {
+
 	/**
 	 * @var string Mongo DB component.
 	 */
 	public $connectionID = 'mongodb';
+
 	/**
 	 * @var string Collection name.
 	 */
 	public $collectionName = 'yiilogs';
+
 	/**
 	 * @var string timestamp type name: 'float', 'date', 'string'
 	 */
 	public $timestampType = 'float';
+
 	/**
 	 * @var string message column name
 	 */
 	public $message = 'message';
+
 	/**
 	 * @var string level column name
 	 */
 	public $level = 'level';
+
 	/**
 	 * @var string category column name
 	 */
 	public $category = 'category';
+
 	/**
 	 * @var string timestamp column name
 	 */
@@ -92,18 +101,22 @@ class EMongoLogRoute extends CLogRoute
 	 * @var boolean Force the update to be synced to disk before returning success.
 	 */
 	public $fsync = false;
+
 	/**
 	 * @var boolean The program will wait for the database response.
 	 */
 	public $safe = false;
+
 	/**
 	 * @var boolean If "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
 	 */
 	public $timeout = null;
+
 	/**
 	 * @var array Insert options.
 	 */
 	private $_options;
+
 	/**
 	 * @var MongoCollection Collection object used.
 	 */
@@ -118,8 +131,10 @@ class EMongoLogRoute extends CLogRoute
 		if (!isset($this->_collection))
 		{
 			$db = Yii::app()->getComponent($this->connectionID);
-			if (!($db instanceof EMongoDB))
-				throw new EMongoException('EMongoHttpSession.connectionID is invalid');
+			if (!($db instanceof \Maslosoft\Mangan\MongoDB))
+			{
+				throw new \Maslosoft\Mangan\MongoException('HttpSession.connectionID is invalid');
+			}
 
 			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);
 		}
@@ -139,7 +154,8 @@ class EMongoLogRoute extends CLogRoute
 			'fsync' => $this->fsync
 			, 'safe' => $this->safe
 		];
-		if (!is_null($this->timeout)) {
+		if (!is_null($this->timeout))
+		{
 			$this->_options['timeout'] = $this->timeout;
 		}
 	}
@@ -152,11 +168,17 @@ class EMongoLogRoute extends CLogRoute
 	protected function formatTimestamp($timestamp)
 	{
 		if ($this->timestampType === 'date')
+		{
 			$timestamp = new MongoDate(round($timestamp));
-		else if ($this->timestampType === 'string')
+		}
+		elseif ($this->timestampType === 'string')
+		{
 			$timestamp = date('Y-m-d H:i:s', $timestamp);
+		}
 		else
+		{
 			$timestamp = $timestamp;
+		}
 		return $timestamp;
 	}
 
@@ -172,7 +194,8 @@ class EMongoLogRoute extends CLogRoute
 	 */
 	protected function processLogs($logs)
 	{
-		foreach ($logs as $log) {
+		foreach ($logs as $log)
+		{
 			$this->_collection->insert([
 				$this->message => $log[0],
 				$this->level => $log[1],

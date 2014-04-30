@@ -11,12 +11,14 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
 /**
- * EMongoException
+ * \Maslosoft\Mangan\MongoException
  *
  * @since v1.0
  */
-class EMongoException extends CException
+class MongoException extends CException
 {
 
 }

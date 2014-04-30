@@ -10,7 +10,7 @@ class MongoModelCode extends CCodeModel
 	public $modelClass;
 	public $mongoCollectionName;
 	public $modelPath='application.models';
-	public $baseClass='EMongoDocument';
+	public $baseClass=\Maslosoft\Mangan\Document::class;
 
 	/**
 	 * @var array list of candidate relation code. The array are indexed by AR class names and relation names.
@@ -135,9 +135,13 @@ class MongoModelCode extends CCodeModel
 	{
 		$class=@Yii::import($this->baseClass,true);
 		if(!is_string($class) || !$this->classExists($class))
+		{
 			$this->addError('baseClass', "Class '{$this->baseClass}' does not exist or has syntax error.");
-		else if($class!=='EMongoDocument' && !is_subclass_of($class,'EMongoDocument'))
-			$this->addError('baseClass', "'{$this->model}' must extend from EMongoDocument.");
+		}
+		else if($class!==Maslosoft\Mangan\Document::class && !is_subclass_of($class,  Maslosoft\Mangan\Document::class))
+		{
+			$this->addError('baseClass', "'{$this->model}' must extend from " . Maslosoft\Mangan\Document::class . ".");
+		}
 	}
 
 	public function getTableSchema($tableName)

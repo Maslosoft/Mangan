@@ -11,15 +11,29 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
+use CComponent;
+use CEvent;
+use CModelEvent;
+use Exception;
+use MMongoDocument;
+use MongoCollection;
+use MongoCursor;
+use MongoId;
+use MongoRegex;
+use Yii;
+
 /**
- * EMongoDocument
+ * Document
  *
  * @property-read MongoDB $db
  * @since v1.0
  */
-abstract class EMongoDocument extends EMongoEmbeddedDocument
+abstract class Document extends EmbeddedDocument
 {
-/**
+
+	/**
 	 * Alias to _id
 	 * @KoBindable(false)
 	 * @see MMongoDocument::setId()
@@ -34,9 +48,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @var string
 	 */
 	public $id;
-
 	private $_new = false;  // whether this instance is new or not
-	private $_criteria = null;	// query criteria (used by finder only)
+	private $_criteria = null; // query criteria (used by finder only)
 
 	/**
 	 * Static array that holds mongo collection object instances,
@@ -47,19 +60,19 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	protected static $_collections = [];  // MongoCollection object
 	private static $_models = [];
 	private static $_indexes = [];  // Hold collection indexes array
-	private $_fsyncFlag = null;	// Object level FSync flag
-	private $_safeFlag = null;	// Object level Safe flag
-	protected $useCursor = null;	// Whatever to return cursor instead on raw array
+	private $_fsyncFlag = null; // Object level FSync flag
+	private $_safeFlag = null; // Object level Safe flag
+	protected $useCursor = null; // Whatever to return cursor instead on raw array
 
 	/**
 	 * @var boolean $ensureIndexes whatever to check and create non existing indexes of collection
 	 * @since v1.1
 	 */
-	protected $ensureIndexes = true;	// Whatever to ensure indexes
+	protected $ensureIndexes = true; // Whatever to ensure indexes
 
 	/**
-	 * EMongoDB component static instance.
-	 * @var EMongoDB $_emongoDb;
+	 * MongoDB component static instance.
+	 * @var MongoDB $_emongoDb;
 	 * @since v1.0
 	 */
 	protected static $_emongoDb;
@@ -72,7 +85,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function __call($name, $parameters)
 	{
 		$scopes = $this->scopes();
-		if(isset($scopes[$name]))
+		if (isset($scopes[$name]))
 		{
 			$this->getDbCriteria()->mergeWith($scopes[$name]);
 			return $this;
@@ -87,13 +100,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function __construct($scenario = 'insert', $lang = '')
 	{
-		$this->_key = (string)new MongoId();
+		$this->_key = (string) new MongoId();
 		$this->_class = get_class($this);
 		$this->meta->initModel($this);
 		$this->setLang($lang);
 
 		// internally used by populateRecord() and model()
-		if($scenario == null)
+		if ($scenario == null)
 		{
 			return;
 		}
@@ -111,12 +124,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 	public function getId()
 	{
-		return (string)$this->_id;
+		return (string) $this->_id;
 	}
 
 	public function setId($value)
 	{
-		if(!$value instanceof MongoId)
+		if (!$value instanceof MongoId)
 		{
 			$value = new MongoId($value);
 		}
@@ -141,14 +154,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function getPrimaryKey()
 	{
 		$pk = $this->primaryKey();
-		if(is_string($pk))
+		if (is_string($pk))
 		{
 			return $this->{$pk};
 		}
 		else
 		{
 			$return = [];
-			foreach($pk as $pkFiled)
+			foreach ($pk as $pkFiled)
 			{
 				$return[] = $this->{$pkFiled};
 			}
@@ -157,13 +170,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Get EMongoDB the component instance,  defaults to 'mongodb' application component.
-	 * @return EMongoDB
+	 * Get MongoDB the component instance,  defaults to 'mongodb' application component.
+	 * @return MongoDB
 	 * @since v1.0
 	 */
 	public function getMongoDBComponent()
 	{
-		if(self::$_emongoDb === null)
+		if (self::$_emongoDb === null)
 		{
 			self::$_emongoDb = Yii::app()->getComponent('mongodb');
 		}
@@ -171,11 +184,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Set EMongoDB component instance.
-	 * @param EMongoDB $component
+	 * Set MongoDB component instance.
+	 * @param MongoDB $component
 	 * @since v1.0
 	 */
-	public function setMongoDBComponent(EMongoDB $component)
+	public function setMongoDBComponent(MongoDB $component)
 	{
 		self::$_emongoDb = $component;
 	}
@@ -223,7 +236,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getCollection()
 	{
-		if(!isset(self::$_collections[$this->getCollectionName()]))
+		if (!isset(self::$_collections[$this->getCollectionName()]))
 		{
 			self::$_collections[$this->getCollectionName()] = $this->getDb()->selectCollection($this->getCollectionName());
 		}
@@ -267,18 +280,18 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Returns the mongo criteria associated with this model.
 	 * @param boolean $createIfNull whether to create a criteria instance if it does not exist. Defaults to true.
-	 * @return EMongoCriteria the query criteria that is associated with this model.
+	 * @return Criteria the query criteria that is associated with this model.
 	 * This criteria is mainly used by {@link scopes named scope} feature to accumulate
 	 * different criteria specifications.
 	 * @since v1.0
 	 */
 	public function getDbCriteria($createIfNull = true)
 	{
-		if($this->_criteria === null)
+		if ($this->_criteria === null)
 		{
-			if(($c = $this->defaultScope()) !== [] || $createIfNull)
+			if (($c = $this->defaultScope()) !== [] || $createIfNull)
 			{
-				$this->_criteria = new EMongoCriteria($c);
+				$this->_criteria = new Criteria($c);
 			}
 		}
 		return $this->_criteria;
@@ -287,22 +300,22 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Set girrent object, this will override previous criteria
 	 *
-	 * @param EMongoCriteria $criteria
+	 * @param Criteria $criteria
 	 * @since v1.0
 	 */
 	public function setDbCriteria($criteria)
 	{
-		if(is_array($criteria))
+		if (is_array($criteria))
 		{
-			$this->_criteria = new EMongoCriteria($criteria);
+			$this->_criteria = new Criteria($criteria);
 		}
-		else if($criteria instanceof EMongoCriteria)
+		else if ($criteria instanceof Criteria)
 		{
 			$this->_criteria = $criteria;
 		}
 		else
 		{
-			$this->_criteria = new EMongoCriteria();
+			$this->_criteria = new Criteria();
 		}
 	}
 
@@ -317,11 +330,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getFsyncFlag()
 	{
-		if($this->_fsyncFlag !== null)
+		if ($this->_fsyncFlag !== null)
 		{
 			return $this->_fsyncFlag; // We have flag set, return it
 		}
-		if((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_fsyncFlag !== null))
+		if ((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_fsyncFlag !== null))
 		{
 			return self::$_models[$this->_class]->_fsyncFlag; // Model have flag set, return it
 		}
@@ -335,7 +348,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function setFsyncFlag($flag)
 	{
 		$this->_fsyncFlag = ($flag == true);
-		if($this->_fsyncFlag)
+		if ($this->_fsyncFlag)
 		{
 			$this->setSafeFlag(true); // Setting FSync flag to true will implicit set safe to true
 		}
@@ -352,11 +365,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getSafeFlag()
 	{
-		if($this->_safeFlag !== null)
+		if ($this->_safeFlag !== null)
 		{
 			return $this->_safeFlag; // We have flag set, return it
 		}
-		if((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_safeFlag !== null))
+		if ((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_safeFlag !== null))
 		{
 			return self::$_models[$this->_class]->_safeFlag; // Model have flag set, return it
 		}
@@ -384,15 +397,15 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function getUseCursor($criteria = null)
 	{
-		if($criteria !== null && $criteria->getUseCursor() !== null)
+		if ($criteria !== null && $criteria->getUseCursor() !== null)
 		{
 			return $criteria->getUseCursor();
 		}
-		if($this->useCursor !== null)
+		if ($this->useCursor !== null)
 		{
 			return $this->useCursor; // We have flag set, return it
 		}
-		if((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->useCursor !== null))
+		if ((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->useCursor !== null))
 		{
 			return self::$_models[$this->_class]->useCursor; // Model have flag set, return it
 		}
@@ -419,17 +432,17 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	{
 		parent::init();
 
-		if($this->ensureIndexes && !isset(self::$_indexes[$this->getCollectionName()]))
+		if ($this->ensureIndexes && !isset(self::$_indexes[$this->getCollectionName()]))
 		{
 			$indexInfo = $this->getCollection()->getIndexInfo();
 			array_shift($indexInfo); // strip out default _id index
 
 			$indexes = [];
-			foreach($indexInfo as $index)
+			foreach ($indexInfo as $index)
 			{
 				$indexes[$index['name']] = [
-					 'key' => $index['key'],
-					 'unique' => isset($index['unique']) ? $index['unique'] : false,
+					'key' => $index['key'],
+					'unique' => isset($index['unique']) ? $index['unique'] : false,
 				];
 			}
 			self::$_indexes[$this->getCollectionName()] = $indexes;
@@ -442,8 +455,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * This function may return array of indexes for this collection
 	 * array syntax is:
 	 * return array(
-	 * 	'index_name'=>array('key'=>array('fieldName1'=>EMongoCriteria::SORT_ASC, 'fieldName2'=>EMongoCriteria::SORT_DESC),
-	 * 	'index2_name'=>array('key'=>array('fieldName3'=>EMongoCriteria::SORT_ASC, 'unique'=>true),
+	 * 	'index_name'=>array('key'=>array('fieldName1'=>Criteria::SORT_ASC, 'fieldName2'=>Criteria::SORT_DESC),
+	 * 	'index2_name'=>array('key'=>array('fieldName3'=>Criteria::SORT_ASC, 'unique'=>true),
 	 * );
 	 * @return array list of indexes for this collection
 	 * @since v1.1
@@ -459,12 +472,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	private function ensureIndexes()
 	{
 		$indexNames = array_keys(self::$_indexes[$this->getCollectionName()]);
-		foreach($this->indexes() as $name => $index)
+		foreach ($this->indexes() as $name => $index)
 		{
-			if(!in_array($name, $indexNames))
+			if (!in_array($name, $indexNames))
 			{
 				$this->getCollection()->ensureIndex(
-						  $index['key'], ['unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name]
+						$index['key'], ['unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name]
 				);
 				self::$_indexes[$this->getCollectionName()][$name] = $index;
 			}
@@ -486,7 +499,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * 		),
 	 * 	),
 	 * 	'recently'=>array(
-	 * 		'sort'=>array('create_time'=>EMongoCriteria::SORT_DESC),
+	 * 		'sort'=>array('create_time'=>Criteria::SORT_DESC),
 	 * 		'limit'=>5,
 	 * 	),
 	 * );
@@ -501,7 +514,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 *
 	 * @return array the scope definition. The array keys are scope names; the array
 	 * values are the corresponding scope definitions. Each scope definition is represented
-	 * as an array whose keys must be properties of {@link EMongoCriteria}.
+	 * as an array whose keys must be properties of {@link Criteria}.
 	 * @since v1.0
 	 */
 	public function scopes()
@@ -515,7 +528,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * The default implementation simply returns an empty array. You may override this method
 	 * if the model needs to be queried with some default criteria (e.g. only active records should be returned).
 	 * @return array the mongo criteria. This will be used as the parameter to the constructor
-	 * of {@link EMongoCriteria}.
+	 * of {@link Criteria}.
 	 * @since v1.2.2
 	 */
 	public function defaultScope()
@@ -526,12 +539,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Resets all scopes and criteria applied including default scope.
 	 *
-	 * @return EMongoDocument
+	 * @return Document
 	 * @since v1.0
 	 */
 	public function resetScope()
 	{
-		$this->_criteria = new EMongoCriteria();
+		$this->_criteria = new Criteria();
 		return $this;
 	}
 
@@ -539,24 +552,24 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Applies the query scopes to the given criteria.
 	 * This method merges {@link dbCriteria} with the given criteria parameter.
 	 * It then resets {@link dbCriteria} to be null.
-	 * @param EMongoCriteria|array $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
+	 * @param Criteria|array $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
 	 * @since v1.2.2
 	 */
 	public function applyScopes(&$criteria)
 	{
-		if($criteria === null)
+		if ($criteria === null)
 		{
-			$criteria = new EMongoCriteria();
+			$criteria = new Criteria();
 		}
-		elseif(is_array($criteria))
+		elseif (is_array($criteria))
 		{
-			$criteria = new EMongoCriteria($criteria);
+			$criteria = new Criteria($criteria);
 		}
-		elseif(!($criteria instanceof EMongoCriteria))
+		elseif (!($criteria instanceof Criteria))
 		{
-			throw new EMongoException('Cannot apply scopes to criteria');
+			throw new MongoException('Cannot apply scopes to criteria');
 		}
-		if(($c = $this->getDbCriteria(false)) !== null)
+		if (($c = $this->getDbCriteria(false)) !== null)
 		{
 			$c->mergeWith($criteria);
 			$criteria = $c;
@@ -590,7 +603,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function save($runValidation = true, $attributes = null)
 	{
-		if(!$runValidation || $this->validate($attributes))
+		if (!$runValidation || $this->validate($attributes))
 		{
 			return $this->getIsNewRecord() ? $this->insert($attributes) : $this->update($attributes);
 		}
@@ -610,37 +623,37 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws EMongoException if the record is not new
-	 * @throws EMongoException on fail of insert or insert of empty document
-	 * @throws EMongoException on fail of insert, when safe flag is set to true
-	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
+	 * @throws MongoException if the record is not new
+	 * @throws MongoException on fail of insert or insert of empty document
+	 * @throws MongoException on fail of insert, when safe flag is set to true
+	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function insert(array $attributes = null)
 	{
-		if(!$this->getIsNewRecord())
+		if (!$this->getIsNewRecord())
 		{
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to database because it is not new.'));
+			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to database because it is not new.'));
 		}
-		if($this->beforeSave())
+		if ($this->beforeSave())
 		{
-			Yii::trace($this->_class . '.insert()', 'ext.MongoDb.EMongoDocument');
+			Yii::trace($this->_class . '.insert()', 'Maslosoft.Mangan.Document');
 
 			// Ensure that id is set
-			if(!$this->getId())
+			if (!$this->getId())
 			{
 				$this->setId(new MongoId);
 			}
 			$rawData = $this->toArray();
 
 			// filter attributes if set in param
-			if($attributes !== null)
+			if ($attributes !== null)
 			{
 				// Ensure id
 				$attributes['_id'] = true;
-				foreach($rawData as $key => $value)
+				foreach ($rawData as $key => $value)
 				{
-					if(!in_array($key, $attributes))
+					if (!in_array($key, $attributes))
 					{
 						unset($rawData[$key]);
 					}
@@ -648,10 +661,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 			}
 			// Check for individual pk
 			$pk = $this->primaryKey();
-			if('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
+			if ('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
 			{
-				throw new EMongoException(
-						  Yii::t('yii', 'The EMongoDocument cannot be inserted because the primary key already exists.')
+				throw new MongoException(
+				Yii::t('yii', 'The Document cannot be inserted because the primary key already exists.')
 				);
 			}
 
@@ -662,12 +675,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 					'safe' => $this->getSafeFlag()
 				]);
 			}
-			catch(Exception $e)
+			catch (Exception $e)
 			{
 				throw $e;
 			}
 
-			if($result !== false)
+			if ($result !== false)
 			{ // strict comparison needed
 				$this->_id = $rawData['_id'];
 				$this->afterSave();
@@ -675,7 +688,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$this->setScenario('update');
 				return true;
 			}
-			throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+			throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 		}
 		return false;
 	}
@@ -689,50 +702,50 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param boolean modify if set true only selected attributes will be replaced, and not
 	 * the whole document
 	 * @return boolean whether the update is successful
-	 * @throws EMongoException if the record is new
-	 * @throws EMongoException on fail of update
-	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
+	 * @throws MongoException if the record is new
+	 * @throws MongoException on fail of update
+	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function update(array $attributes = null, $modify = false)
 	{
-		if($this->getIsNewRecord())
+		if ($this->getIsNewRecord())
 		{
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
+			throw new MongoException(Yii::t('yii', 'The Document cannot be updated because it is new.'));
 		}
-		if($this->beforeSave())
+		if ($this->beforeSave())
 		{
-			Yii::trace($this->_class . '.update()', 'ext.MongoDb.EMongoDocument');
+			Yii::trace($this->_class . '.update()', 'Maslosoft.Mangan.Document');
 			$rawData = $this->toArray(false);
 
 			// filter attributes if set in param
-			if($attributes !== null)
+			if ($attributes !== null)
 			{
-				if(!in_array('_id', $attributes) && !$modify)
+				if (!in_array('_id', $attributes) && !$modify)
 				{
 					$attributes[] = '_id'; // This is very easy to forget
 				}
 
-				foreach($rawData as $key => $value)
+				foreach ($rawData as $key => $value)
 				{
-					if(!in_array($key, $attributes))
+					if (!in_array($key, $attributes))
 					{
 						unset($rawData[$key]);
 					}
 				}
 			}
-			if($modify)
+			if ($modify)
 			{
-				if(isset($rawData['_id']) === true)
+				if (isset($rawData['_id']) === true)
 				{
 					unset($rawData['_id']);
 				}
 				$result = $this->getCollection()->update(
-						  ['_id' => $this->_id], ['$set' => $rawData], [
-					 'fsync' => $this->getFsyncFlag(),
-					 'safe' => $this->getSafeFlag(),
-					 'multiple' => false
-						  ]
+						['_id' => $this->_id], ['$set' => $rawData], [
+					'fsync' => $this->getFsyncFlag(),
+					'safe' => $this->getSafeFlag(),
+					'multiple' => false
+						]
 				);
 			}
 			else
@@ -742,12 +755,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 					'safe' => $this->getSafeFlag()
 				]);
 			}
-			if($result !== false)
+			if ($result !== false)
 			{ // strict comparison needed
 				$this->afterSave();
 				return true;
 			}
-			throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+			throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 		}
 	}
 
@@ -755,14 +768,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Atomic, in-place update method.
 	 *
 	 * @since v1.3.6
-	 * @param EMongoModifier $modifier updating rules to apply
-	 * @param EMongoCriteria $criteria condition to limit updating rules
+	 * @param \Maslosoft\Mangan\Modifier $modifier updating rules to apply
+	 * @param Criteria $criteria condition to limit updating rules
 	 * @return boolean
 	 */
 	public function updateAll($modifier, $criteria = null)
 	{
-		Yii::trace($this->_class . '.updateAll()', 'ext.MongoDb.EMongoDocument');
-		if($modifier->canApply === true)
+		Yii::trace($this->_class . '.updateAll()', 'Maslosoft.Mangan.Document');
+		if ($modifier->canApply === true)
 		{
 			$this->applyScopes($criteria);
 			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), [
@@ -780,21 +793,21 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Deletes the row corresponding to this EMongoDocument.
+	 * Deletes the row corresponding to this Document.
 	 * @return boolean whether the deletion is successful.
-	 * @throws EMongoException if the record is new
+	 * @throws MongoException if the record is new
 	 * @since v1.0
 	 */
 	public function delete()
 	{
-		if(!$this->getIsNewRecord())
+		if (!$this->getIsNewRecord())
 		{
-			Yii::trace($this->_class . '.delete()', 'ext.MongoDb.EMongoDocument');
-			if($this->beforeDelete())
+			Yii::trace($this->_class . '.delete()', 'Maslosoft.Mangan.Document');
+			if ($this->beforeDelete())
 			{
 				$result = $this->deleteByPk($this->getPrimaryKey());
 
-				if($result !== false)
+				if ($result !== false)
 				{
 					$this->afterDelete();
 					$this->setIsNewRecord(true);
@@ -812,7 +825,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		}
 		else
 		{
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be deleted because it is new.'));
+			throw new MongoException(Yii::t('yii', 'The Document cannot be deleted because it is new.'));
 		}
 	}
 
@@ -820,13 +833,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @since v1.0
 	 */
 	public function deleteByPk($pk, $criteria = null)
 	{
-		Yii::trace($this->_class . '.deleteByPk()', 'ext.MongoDb.EMongoDocument');
-		if($this->beforeDelete())
+		Yii::trace($this->_class . '.deleteByPk()', 'Maslosoft.Mangan.Document');
+		if ($this->beforeDelete())
 		{
 			$this->applyScopes($criteria);
 			$criteria->mergeWith($this->createPkCriteria($pk));
@@ -848,8 +861,8 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function refresh()
 	{
-		Yii::trace($this->_class . '.refresh()', 'ext.MongoDb.EMongoDocument');
-		if(!$this->getIsNewRecord() && $this->getCollection()->count(['_id' => $this->_id]) == 1)
+		Yii::trace($this->_class . '.refresh()', 'Maslosoft.Mangan.Document');
+		if (!$this->getIsNewRecord() && $this->getCollection()->count(['_id' => $this->_id]) == 1)
 		{
 			$this->setAttributes($this->getCollection()->find(['_id' => $this->_id]), false);
 			return true;
@@ -861,20 +874,20 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	}
 
 	/**
-	 * Finds a single EMongoDocument with the specified condition.
-	 * @param array|EMongoCriteria $criteria query criteria.
+	 * Finds a single Document with the specified condition.
+	 * @param array|Criteria $criteria query criteria.
 	 *
-	 * If an array, it is treated as the initial values for constructing a {@link EMongoCriteria} object;
-	 * Otherwise, it should be an instance of {@link EMongoCriteria}.
+	 * If an array, it is treated as the initial values for constructing a {@link Criteria} object;
+	 * Otherwise, it should be an instance of {@link Criteria}.
 	 *
-	 * @return EMongoDocument the record found. Null if no record is found.
+	 * @return Document the record found. Null if no record is found.
 	 * @since v1.0
 	 */
 	public function find($criteria = null)
 	{
-		Yii::trace($this->_class . '.find()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.find()', 'Maslosoft.Mangan.Document');
 
-		if($this->beforeFind())
+		if ($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
 			$doc = $this->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
@@ -886,38 +899,38 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @return array list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAll($criteria = null)
 	{
-		Yii::trace($this->_class . '.findAll()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.findAll()', 'Maslosoft.Mangan.Document');
 
-		if($this->beforeFind())
+		if ($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
 			$cursor = $this->getCollection()->find($criteria->getConditions());
 
-			if($criteria->getSort() !== null)
+			if ($criteria->getSort() !== null)
 			{
 				$cursor->sort($criteria->getSort());
 			}
-			if($criteria->getLimit() !== null)
+			if ($criteria->getLimit() !== null)
 			{
 				$cursor->limit($criteria->getLimit());
 			}
-			if($criteria->getOffset() !== null)
+			if ($criteria->getOffset() !== null)
 			{
 				$cursor->skip($criteria->getOffset());
 			}
-			if($criteria->getSelect())
+			if ($criteria->getSelect())
 			{
 				$cursor->fields($criteria->getSelect(true));
 			}
-			if($this->getUseCursor())
+			if ($this->getUseCursor())
 			{
-				return new EMongoCursor($cursor, $this->model());
+				return new Cursor($cursor, $this->model());
 			}
 			else
 			{
@@ -933,14 +946,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * field is in use as PK!
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @return the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findByPk($pk, $criteria = null)
 	{
-		Yii::trace($this->_class . '.findByPk()', 'ext.MongoDb.EMongoDocument');
-		$criteria = new EMongoCriteria($criteria);
+		Yii::trace($this->_class . '.findByPk()', 'Maslosoft.Mangan.Document');
+		$criteria = new Criteria($criteria);
 		$criteria->mergeWith($this->createPkCriteria($pk));
 
 		return $this->find($criteria);
@@ -952,14 +965,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @return the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAllByPk($pk, $criteria = null)
 	{
-		Yii::trace($this->_class . '.findAllByPk()', 'ext.MongoDb.EMongoDocument');
-		$criteria = new EMongoCriteria($criteria);
+		Yii::trace($this->_class . '.findAllByPk()', 'Maslosoft.Mangan.Document');
+		$criteria = new Criteria($criteria);
 		$criteria->mergeWith($this->createPkCriteria($pk, true));
 
 		return $this->findAll($criteria);
@@ -970,14 +983,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 *
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @return the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findByAttributes(array $attributes)
 	{
-		$criteria = new EMongoCriteria();
-		foreach($attributes as $name => $value)
+		$criteria = new Criteria();
+		foreach ($attributes as $name => $value)
 		{
 			$criteria->$name('==', $value);
 		}
@@ -989,14 +1002,14 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 *
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @return the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAllByAttributes(array $attributes)
 	{
-		$criteria = new EMongoCriteria();
-		foreach($attributes as $name => $value)
+		$criteria = new Criteria();
+		foreach ($attributes as $name => $value)
 		{
 			$criteria->$name('==', $value);
 		}
@@ -1007,13 +1020,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|EMongoCriteria $criteria query criteria.
+	 * @param array|Criteria $criteria query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.0
 	 */
 	public function count($criteria = null)
 	{
-		Yii::trace($this->_class . '.count()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.count()', 'Maslosoft.Mangan.Document');
 
 		$this->applyScopes($criteria);
 
@@ -1029,10 +1042,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	public function countByAttributes(array $attributes)
 	{
-		Yii::trace($this->_class . '.countByAttributes()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.countByAttributes()', 'Maslosoft.Mangan.Document');
 
-		$criteria = new EMongoCriteria;
-		foreach($attributes as $name => $value)
+		$criteria = new Criteria;
+		foreach ($attributes as $name => $value)
 		{
 			$criteria->$name = $value;
 		}
@@ -1049,9 +1062,9 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param array $params parameters to be bound to an SQL statement.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
-	public function exists(EMongoCriteria $criteria)
+	public function exists(Criteria $criteria)
 	{
-		Yii::trace($this->_class . '.exists()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.exists()', 'Maslosoft.Mangan.Document');
 		return $this->count($criteria) > 0;
 	}
 
@@ -1059,12 +1072,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|EMongoCriteria $condition query criteria.
+	 * @param array|Criteria $condition query criteria.
 	 * @since v1.0
 	 */
 	public function deleteAll($criteria = null)
 	{
-		Yii::trace($this->_class . '.deleteAll()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.deleteAll()', 'Maslosoft.Mangan.Document');
 		$this->applyScopes($criteria);
 
 		return $this->getCollection()->remove($criteria->getConditions(), [
@@ -1078,12 +1091,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * Deletes one document with the specified primary keys.
 	 * <b>Does not raise beforeDelete</b>
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|EMongoCriteria $criteria query criteria.
+	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteOne($criteria = null)
 	{
-		Yii::trace($this->_class . '.deleteOne()', 'ext.MongoDb.EMongoDocument');
+		Yii::trace($this->_class . '.deleteOne()', 'Maslosoft.Mangan.Document');
 		$this->applyScopes($criteria);
 
 		return $this->getCollection()->remove($criteria->getConditions(), [
@@ -1172,7 +1185,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function beforeSave()
 	{
-		if($this->hasEventHandler('onBeforeSave'))
+		if ($this->hasEventHandler('onBeforeSave'))
 		{
 			$event = new CModelEvent($this);
 			$this->onBeforeSave($event);
@@ -1193,7 +1206,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function afterSave()
 	{
-		if($this->hasEventHandler('onAfterSave'))
+		if ($this->hasEventHandler('onAfterSave'))
 		{
 			$this->onAfterSave(new CEvent($this));
 		}
@@ -1209,7 +1222,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function beforeDelete()
 	{
-		if($this->hasEventHandler('onBeforeDelete'))
+		if ($this->hasEventHandler('onBeforeDelete'))
 		{
 			$event = new CModelEvent($this);
 			$this->onBeforeDelete($event);
@@ -1230,7 +1243,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function afterDelete()
 	{
-		if($this->hasEventHandler('onAfterDelete'))
+		if ($this->hasEventHandler('onAfterDelete'))
 		{
 			$this->onAfterDelete(new CEvent($this));
 		}
@@ -1250,7 +1263,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function beforeFind()
 	{
-		if($this->hasEventHandler('onBeforeFind'))
+		if ($this->hasEventHandler('onBeforeFind'))
 		{
 			$event = new CModelEvent($this);
 			$this->onBeforeFind($event);
@@ -1271,7 +1284,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 */
 	protected function afterFind()
 	{
-		if($this->hasEventHandler('onAfterFind'))
+		if ($this->hasEventHandler('onAfterFind'))
 		{
 			$this->onAfterFind(new CEvent($this));
 		}
@@ -1283,12 +1296,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * You may override this method if the instance being created
 	 * depends the attributes that are to be populated to the record.
 	 * @param array $attributes list of attribute values for the active records.
-	 * @return EMongoDocument the document
+	 * @return Document the document
 	 * @since v1.0
 	 */
 	protected function instantiate($attributes)
 	{
-		if($this->isCollectionHomogenous())
+		if ($this->isCollectionHomogenous())
 		{
 			$class = $this->_class;
 		}
@@ -1298,20 +1311,20 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 		}
 		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
-		foreach($model->meta->fields() as $field => $value)
+		foreach ($model->meta->fields() as $field => $value)
 		{
-			if(isset($attributes[$field]))
+			if (isset($attributes[$field]))
 			{
-				if($model->meta->$field->i18n)
+				if ($model->meta->$field->i18n)
 				{
-					if(!is_array($attributes[$field]))
+					if (!is_array($attributes[$field]))
 					{
 						$attributes[$field] = [];
 					}
 
-					foreach(Yii::app()->languages as $lang => $langName)
+					foreach (Yii::app()->languages as $lang => $langName)
 					{
-						if(isset($attributes[$field][$lang]))
+						if (isset($attributes[$field][$lang]))
 						{
 							$model->setAttribute($field, $attributes[$field][$lang], $lang);
 						}
@@ -1336,13 +1349,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @param array $document attribute values (column name=>column value)
 	 * @param boolean $callAfterFind whether to call {@link afterFind} after the record is populated.
 	 * This parameter is added in version 1.0.3.
-	 * @return EMongoDocument the newly created document. The class of the object is the same as the model class.
+	 * @return Document the newly created document. The class of the object is the same as the model class.
 	 * Null is returned if the input data is false.
 	 * @since v1.0
 	 */
 	public function populateRecord($document, $callAfterFind = true)
 	{
-		if($document !== null)
+		if ($document !== null)
 		{
 			$model = $this->instantiate($document);
 			$model->setScenario('update');
@@ -1350,7 +1363,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 			$model->attachBehaviors($model->behaviors());
 
-			if($callAfterFind)
+			if ($callAfterFind)
 			{
 				$model->afterFind();
 			}
@@ -1376,11 +1389,11 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	public function populateRecords($cursor, $callAfterFind = true, $index = null)
 	{
 		$records = [];
-		foreach($cursor as $attributes)
+		foreach ($cursor as $attributes)
 		{
-			if(($record = $this->populateRecord($attributes, $callAfterFind)) !== null)
+			if (($record = $this->populateRecord($attributes, $callAfterFind)) !== null)
 			{
-				if($index === null)
+				if ($index === null)
 				{
 					$records[] = $record;
 				}
@@ -1400,32 +1413,32 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * regexp: /$attributeValue/i
 	 * used for Data provider search functionality
 	 * @param boolean $caseSensitive whatever do a case-sensitive search, default to false
-	 * @return EMongoDocument
+	 * @return Document
 	 * @since v1.2.2
 	 */
 	public function search($caseSensitive = false)
 	{
 		$criteria = $this->getDbCriteria();
 
-		foreach($this->getSafeAttributeNames() as $attribute)
+		foreach ($this->getSafeAttributeNames() as $attribute)
 		{
-			if($this->$attribute !== null && $this->$attribute !== '')
+			if ($this->$attribute !== null && $this->$attribute !== '')
 			{
-				if(is_array($this->$attribute) || is_object($this->$attribute))
+				if (is_array($this->$attribute) || is_object($this->$attribute))
 				{
 					$criteria->$attribute = $this->$attribute;
 				}
-				else if(preg_match('/^(?:\s*(<>|<=|>=|<|>|=|!=|==))?(.*)$/', $this->$attribute, $matches))
+				else if (preg_match('/^(?:\s*(<>|<=|>=|<|>|=|!=|==))?(.*)$/', $this->$attribute, $matches))
 				{
 					$op = $matches[1];
 					$value = $matches[2];
 
-					if($op === '=')
+					if ($op === '=')
 					{
 						$op = '==';
 					}
 
-					if($op !== '')
+					if ($op !== '')
 					{
 						call_user_func([$criteria, $attribute], $op, is_numeric($value) ? floatval($value) : $value);
 					}
@@ -1439,7 +1452,7 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 
 		$this->setDbCriteria($criteria);
 
-		return new EMongoDocumentDataProvider($this);
+		return new DataProvider($this);
 	}
 
 	/**
@@ -1447,12 +1460,12 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * The model returned is a static instance of the MMongoDocument class.
 	 * It is provided for invoking class-level methods (something similar to static class methods.)
 	 * @param string $lang
-	 * @return MMongoDocument EMongoDocument model instance.
+	 * @return MMongoDocument \Maslosoft\Mangan\Document model instance.
 	 */
 	public static function model($lang = null)
 	{
 		$className = get_called_class();
-		if(isset(self::$_models[$className]))
+		if (isset(self::$_models[$className]))
 		{
 			self::$_models[$className]->setLang($lang);
 			return self::$_models[$className];
@@ -1470,31 +1483,31 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 	 * @since v1.2.2
 	 * @param mixed $pk Primary key value
 	 * @param boolean $multiple Whether to find multiple records.
-	 * @return EMongoCriteria
-	 * @throws EMongoException
+	 * @return Criteria
+	 * @throws MongoException
 	 */
 	private function createPkCriteria($pk, $multiple = false)
 	{
 		$pkField = $this->primaryKey();
-		$criteria = new EMongoCriteria();
-		if(is_string($pkField))
+		$criteria = new Criteria();
+		if (is_string($pkField))
 		{
-			if('_id' === $pkField)
+			if ('_id' === $pkField)
 			{
-				if((strlen($pk) === 24) && !$pk instanceof MongoId)
+				if ((strlen($pk) === 24) && !$pk instanceof MongoId)
 				{
 					// Assumption: if dealing with _id field and it's a 24-digit string .. should be an Mongo ObjectID
-					Yii::trace($this->_class . ".createPkCriteria() .. converting key value ($pk) to MongoId", 'ext.MongoDb.EMongoDocument');
+					Yii::trace($this->_class . ".createPkCriteria() .. converting key value ($pk) to MongoId", 'Maslosoft.Mangan.Document');
 					$pk = new MongoId($pk);
 				}
-				elseif(is_numeric($pk))
+				elseif (is_numeric($pk))
 				{
 					// Assumption: need to bless as int, as string != int when looking up primary keys
-					Yii::trace($this->_class . ".createPkCriteria() .. casting ($pk) to int", 'ext.MongoDb.EMongoDocument');
-					$pk = (int)$pk;
+					Yii::trace($this->_class . ".createPkCriteria() .. casting ($pk) to int", 'Maslosoft.Mangan.Document');
+					$pk = (int) $pk;
 				}
 			}
-			if(!$multiple)
+			if (!$multiple)
 			{
 				$criteria->{$pkField} = $pk;
 			}
@@ -1503,13 +1516,13 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				$criteria->{$pkField}('in', $pk);
 			}
 		}
-		elseif(is_array($pkField))
+		elseif (is_array($pkField))
 		{
-			if(!$multiple)
-				for($i = 0; $i < count($pkField); $i++)
+			if (!$multiple)
+				for ($i = 0; $i < count($pkField); $i++)
 				{
 					$pkField = $pk[$i];
-					if('_id' === $pkField[$i] && !$pk[$i] instanceof MongoId)
+					if ('_id' === $pkField[$i] && !$pk[$i] instanceof MongoId)
 					{
 						$pk[$i] = new MongoId($pk[$i]);
 					}
@@ -1517,9 +1530,10 @@ abstract class EMongoDocument extends EMongoEmbeddedDocument
 				}
 			else
 			{
-				throw new EMongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
+				throw new MongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
 			}
 		}
 		return $criteria;
 	}
+
 }

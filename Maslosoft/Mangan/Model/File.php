@@ -9,12 +9,23 @@
  * @package maslosoft/yii-mangan
  */
 
+namespace Maslosoft\Mangan\Model;
+
+use CMap;
+use CUploadedFile;
+use Exception;
+use finfo;
+use Maslosoft\Mangan\EmbeddedDocument;
+use MongoGridFSFile;
+use MongoId;
+use Yii;
+
 /**
  * Class for storing embedded files
  * @since 2.0.1
  * @author Piotr
  */
-class EMongoFile extends EMongoEmbeddedDocument
+class File extends EmbeddedDocument
 {
 
 	/**
@@ -61,7 +72,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 		$this->_db = Yii::app()->mongodb->getDbInstance();
 	}
 
-	public function setOwner(EMongoEmbeddedDocument $owner)
+	public function setOwner(EmbeddedDocument $owner)
 	{
 		parent::setOwner($owner);
 		$root = $owner->getRoot();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Ianaré Sévi
  * @author Dariusz Górecki <darek.krk@gmail.com>
@@ -10,17 +11,28 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
+use CApplicationComponent;
+use MongoClient;
+use MongoConnectionException;
+use Yii;
+
+/**
+ * TODO Check if needed and remove these
+ */
 Yii::setPathOfAlias('yii-mangan', __DIR__);
 Yii::import('yii-mangan.models.*');
 
 /**
- * EMongoDB
+ * MongoDB
  *
  * This is merge work of tyohan, Alexander Makarov and mine
  * @since v1.0
  */
-class EMongoDB extends CApplicationComponent
+class MongoDB extends CApplicationComponent
 {
+
 	/**
 	 * @var string host:port
 	 *
@@ -50,7 +62,7 @@ class EMongoDB extends CApplicationComponent
 	/**
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
-	 * effective when the EMongoDB object is used as an application component.
+	 * effective when the MongoDB object is used as an application component.
 	 * @since v1.0
 	 */
 	public $autoConnect = true;
@@ -102,13 +114,13 @@ class EMongoDB extends CApplicationComponent
 	public $safeFlag = false;
 
 	/**
-	 * If set to TRUE findAll* methods of models, will return {@see EMongoCursor} instead of
+	 * If set to TRUE findAll* methods of models, will return {@see Cursor} instead of
 	 * raw array of models.
 	 *
 	 * Generally you should want to have this set to TRUE as cursor use lazy-loading/instantiating of
 	 * models, this is set to FALSE, by default to keep backwards compatibility.
 	 *
-	 * Note: {@see EMongoCursor} does not implement ArrayAccess interface and cannot be used like an array,
+	 * Note: {@see Cursor} does not implement ArrayAccess interface and cannot be used like an array,
 	 * because offset access to cursor is highly ineffective and pointless.
 	 *
 	 * @var boolean $useCursor state of Use Cursor flag (global scope)
@@ -128,36 +140,44 @@ class EMongoDB extends CApplicationComponent
 	 */
 	public function connect()
 	{
-		if(!$this->getConnection()->connected)
+		if (!$this->getConnection()->connected)
+		{
 			return $this->getConnection()->connect();
+		}
 	}
 
 	/**
 	 * Returns Mongo connection instance if not exists will create new
 	 *
 	 * @return MongoClient
-	 * @throws EMongoException
+	 * @throws MongoException
 	 * @since v1.0
 	 */
 	public function getConnection()
 	{
-		if($this->_mongoConnection === null)
+		if ($this->_mongoConnection === null)
 		{
 			try
 			{
-				Yii::trace('Opening MongoDB connection', 'ext.MongoDb.EMongoDB');
-				if(empty($this->connectionString))
-					throw new EMongoException(Yii::t('yii', 'EMongoDB.connectionString cannot be empty.'));
-
-				$options = [ 'connect'=>$this->autoConnect ];
-
-				if($this->persistentConnection !== false)
-					$options['persist'] = $this->persistentConnection;
-				if( !is_null( $this->replicaSet ) )
-					$options['replicaSet'] = $this->replicaSet;
-				if( !is_null( $this->timeout ) )
+				Yii::trace('Opening MongoDB connection', 'Maslosoft.Mangan.MongoDB');
+				if (empty($this->connectionString))
 				{
-					if(version_compare(MongoClient::VERSION, '1.3.4', '>=') === true)
+					throw new MongoException(Yii::t('yii', 'MongoDB.connectionString cannot be empty.'));
+				}
+
+				$options = [ 'connect' => $this->autoConnect];
+
+				if ($this->persistentConnection !== false)
+				{
+					$options['persist'] = $this->persistentConnection;
+				}
+				if (!is_null($this->replicaSet))
+				{
+					$options['replicaSet'] = $this->replicaSet;
+				}
+				if (!is_null($this->timeout))
+				{
+					if (version_compare(MongoClient::VERSION, '1.3.4', '>=') === true)
 					{
 						$options['connectTimeoutMS'] = $this->timeout;
 					}
@@ -172,17 +192,17 @@ class EMongoDB extends CApplicationComponent
 
 				return $this->_mongoConnection;
 			}
-			catch(MongoConnectionException $e)
+			catch (MongoConnectionException $e)
 			{
-				throw new EMongoException(Yii::t(
-					'yii',
-					'EMongoDB failed to open connection: {error}',
-					['{error}'=>$e->getMessage()]
+				throw new MongoException(Yii::t(
+						'yii', 'MongoDB failed to open connection: {error}', ['{error}' => $e->getMessage()]
 				), $e->getCode());
 			}
 		}
 		else
+		{
 			return $this->_mongoConnection;
+		}
 	}
 
 	/**
@@ -202,10 +222,14 @@ class EMongoDB extends CApplicationComponent
 	 */
 	public function getDbInstance()
 	{
-		if($this->_mongoDb === null)
+		if ($this->_mongoDb === null)
+		{
 			return $this->_mongoDb = $this->getConnection()->selectDB($this->dbName);
+		}
 		else
+		{
 			return $this->_mongoDb;
+		}
 	}
 
 	/**
@@ -224,11 +248,13 @@ class EMongoDB extends CApplicationComponent
 	 * It does nothing if the connection is already closed.
 	 * @since v1.0
 	 */
-	protected function close(){
-		if($this->_mongoConnection!==null){
+	protected function close()
+	{
+		if ($this->_mongoConnection !== null)
+		{
 			$this->_mongoConnection->close();
-			$this->_mongoConnection=null;
-			Yii::trace('Closing MongoDB connection', 'ext.MongoDb.EMongoDB');
+			$this->_mongoConnection = null;
+			Yii::trace('Closing MongoDB connection', 'Maslosoft.Mangan.MongoDB');
 		}
 	}
 
@@ -236,8 +262,10 @@ class EMongoDB extends CApplicationComponent
 	 * If we have don't use persist connection, close it
 	 * @since v1.0
 	 */
-	public function __destruct(){
-		if(!$this->persistentConnection){
+	public function __destruct()
+	{
+		if (!$this->persistentConnection)
+		{
 			$this->close();
 		}
 	}
@@ -250,4 +278,5 @@ class EMongoDB extends CApplicationComponent
 	{
 		$this->_mongoDb->drop();
 	}
+
 }

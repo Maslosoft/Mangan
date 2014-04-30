@@ -19,7 +19,7 @@
  * @property-read array $unloadedFields
  * @since	v1.3.6
  */
-abstract class EMongoPartialDocument extends EMongoDocument
+abstract class EMongoPartialDocument extends \Maslosoft\Mangan\Document
 {
 	protected $_loadedFields = []; // Fields that have not been loaded from DB
 	protected $_partial = false; // Whatever the document has been partially loaded
@@ -36,7 +36,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 	/**
 	 * Returns list of fields that have been loaded from DB by
-	 * {@link EMongoDocument::instantiate} method.
+	 * {@link \Maslosoft\Mangan\Document::instantiate} method.
 	 * @return array
 	 */
 	public function getLoadedFields()
@@ -46,7 +46,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 	/**
 	 * Returns list of fields that have not been loaded from DB by
-	 * {@link EMongoDocument::instantiate} method.
+	 * {@link \Maslosoft\Mangan\Document::instantiate} method.
 	 * @return array
 	 */
 	public function getUnloadedFields()
@@ -74,7 +74,7 @@ abstract class EMongoPartialDocument extends EMongoDocument
 
 	/**
 	 * If user explicitly sets the unloaded embedded field, consider it as an loaded one, if model is partially loaded
-	 * @see EMongoEmbeddedDocument::__set()
+	 * @see \Maslosoft\Mangan\EmbeddedDocument::__set()
 	 */
 	public function __set($name, $value)
 	{
@@ -133,9 +133,9 @@ abstract class EMongoPartialDocument extends EMongoDocument
 	 * @param boolean modify if set true only selected attributes will be replaced, and not
 	 * the whole document
 	 * @return boolean whether the update is successful
-	 * @throws EMongoException if the record is new
-	 * @throws EMongoException on fail of update, when safe flag is set to true
-	 * @throws EMongoException on timeout of db operation , when safe flag is set to true
+	 * @throws \Maslosoft\Mangan\MongoException if the record is new
+	 * @throws \Maslosoft\Mangan\MongoException on fail of update, when safe flag is set to true
+	 * @throws \Maslosoft\Mangan\MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function update(array $attributes = null, $modify = false)

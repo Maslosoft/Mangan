@@ -50,7 +50,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 
 <?php echo "<?php"; ?> $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'<?php echo $this->class2id($this->modelClass); ?>-grid',
-	'dataProvider'=>new EMongoDocumentDataProvider($model->search(), array(
+	'dataProvider'=>new \Maslosoft\Mangan\DataProvider($model->search(), array(
 		'sort'=>array(
 			'attributes'=>array(
 <?php

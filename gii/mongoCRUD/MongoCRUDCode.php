@@ -64,9 +64,13 @@ class MongoCRUDCode extends CCodeModel
 			return;
 		$class=@Yii::import($this->model,true);
 		if(!is_string($class) || !$this->classExists($class))
+		{
 			$this->addError('model', "Class '{$this->model}' does not exist or has syntax error.");
-		else if(!is_subclass_of($class,'EMongoDocument'))
+		}
+		else if(!is_subclass_of($class, Maslosoft\Mangan\Document::class))
+		{
 			$this->addError('model', "'{$this->model}' must extend from EMongoDocument.");
+		}
 		else
 		{
 			$this->_modelClass = $class;
@@ -184,7 +188,7 @@ class MongoCRUDCode extends CCodeModel
 		return "CHtml::activeTextField(\$model,'{$name}')";
 	}
 
-	public function guessNameColumn(EMongoDocument $model)
+	public function guessNameColumn(\Maslosoft\Mangan\Document $model)
 	{
 		foreach($model->attributeNames() as $name)
 		{

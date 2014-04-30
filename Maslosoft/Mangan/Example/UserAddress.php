@@ -1,6 +1,10 @@
 <?php
-class UserAddress extends EMongoEmbeddedDocuemnt
+
+namespace Maslosoft\Mangan\Example;
+
+class UserAddress extends EmbeddedDocuemnt
 {
+
 	public $city;
 	public $street;
 	public $apartment;
@@ -9,8 +13,8 @@ class UserAddress extends EMongoEmbeddedDocuemnt
 	public function rules()
 	{
 		return [
-			['city, street, house', 'length', 'max'=>255],
-			['house, apartment, zip', 'length', 'max'=>10],
+			['city, street, house', 'length', 'max' => 255],
+			['house, apartment, zip', 'length', 'max' => 10],
 		];
 	}
 
@@ -25,4 +29,5 @@ class UserAddress extends EMongoEmbeddedDocuemnt
 			'zip' => 'Postal Code',
 		];
 	}
+
 }

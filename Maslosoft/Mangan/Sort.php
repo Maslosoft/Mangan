@@ -11,19 +11,22 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
 /**
- * EMongoSort
+ * Sort
  * @since v1.3.4
  *
- * Represents information relevant to sorting EMongoDocument dataProviders.
+ * Represents information relevant to sorting Document dataProviders.
  */
-class EMongoSort extends CSort
+class Sort extends CSort
 {
+
 	private $_directions;
 
 	/**
 	 *
-	 * @var EMongoDocument
+	 * @var \Maslosoft\Mangan\Document
 	 */
 	public $model = null;
 
@@ -37,16 +40,17 @@ class EMongoSort extends CSort
 	public function applyOrder($criteria)
 	{
 		$order = $this->getOrderBy();
-		if (!empty($order)) {
+		if (!empty($order))
+		{
 			// i18n patch
-			if(isset($this->model) && isset($this->model->meta))
+			if (isset($this->model) && isset($this->model->meta))
 			{
 				$directions = [];
-				foreach($order as $name => $direction)
+				foreach ($order as $name => $direction)
 				{
 					// TODO Add support for DEFAULT (i18nAllowDefault)and ANY (i18nAllowAny) attribute,
 					// by adding them to sort list instead of current language
-					if($this->model->meta->$name->i18n)
+					if ($this->model->meta->$name->i18n)
 					{
 						$attribute = sprintf('%s.%s', $name, Yii::app()->language);
 					}
@@ -56,27 +60,27 @@ class EMongoSort extends CSort
 					}
 					$directions[$attribute] = $direction;
 					/*
-					TODO If sorting on subfields that are empty, null, or non existent,
-					they are always first (in ASC order) so below code has no effect
-					if($this->model->meta->$name->i18nAllowDefault)
-					{
-						var_dump('blasf');
-						$attribute = sprintf('%s.%s', $name, Yii::app()->defaultLanguage);
-						$directions[$attribute] = $direction;
-					}
-					if($this->model->meta->$name->i18nAllowAny)
-					{
-						foreach(Yii::app()->languages as $lang => $langName)
-						{
-							if($lang == Yii::app()->language)
-							{
-								continue;
-							}
-							$attribute = sprintf('%s.%s', $name, $lang);
-							$directions[$attribute] = $direction;
-						}
-					}
-					*/
+					  TODO If sorting on subfields that are empty, null, or non existent,
+					  they are always first (in ASC order) so below code has no effect
+					  if($this->model->meta->$name->i18nAllowDefault)
+					  {
+					  var_dump('blasf');
+					  $attribute = sprintf('%s.%s', $name, Yii::app()->defaultLanguage);
+					  $directions[$attribute] = $direction;
+					  }
+					  if($this->model->meta->$name->i18nAllowAny)
+					  {
+					  foreach(Yii::app()->languages as $lang => $langName)
+					  {
+					  if($lang == Yii::app()->language)
+					  {
+					  continue;
+					  }
+					  $attribute = sprintf('%s.%s', $name, $lang);
+					  $directions[$attribute] = $direction;
+					  }
+					  }
+					 */
 				}
 				//var_dump($directions);
 				$order = $directions;
@@ -99,11 +103,16 @@ class EMongoSort extends CSort
 	{
 		$directions = $this->getDirections();
 		if (empty($directions))
+		{
 			return is_array($this->defaultOrder) ? $this->defaultOrder : []; // use the defaultOrder
-		else {
+		}
+		else
+		{
 			$orders = [];
 			foreach ($directions as $attribute => $direction)
+			{
 				$orders[$attribute] = $direction;
+			}
 
 			return $orders;
 		}
@@ -121,28 +130,45 @@ class EMongoSort extends CSort
 	{
 		// todo make sure this works with relations?
 		if ($label === null)
+		{
 			$label = $this->resolveLabel($attribute);
+		}
 		if (($definition = $this->resolveAttribute($attribute)) === false)
+		{
 			return $label;
+		}
 		$directions = $this->getDirections();
-		if (isset($directions[$attribute])) {
-			$class = ($directions[$attribute] == EMongoCriteria::SORT_DESC) ? 'desc' : 'asc';
+		if (isset($directions[$attribute]))
+		{
+			$class = ($directions[$attribute] == \Maslosoft\Mangan\Criteria::SORT_DESC) ? 'desc' : 'asc';
 			if (isset($htmlOptions['class']))
+			{
 				$htmlOptions['class'].=' ' . $class;
+			}
 			else
+			{
 				$htmlOptions['class'] = $class;
+			}
 			$direction = $directions[$attribute];
 			unset($directions[$attribute]);
 		}
-		else if (is_array($definition) && isset($definition['default']))
+		elseif (is_array($definition) && isset($definition['default']))
+		{
 			$direction = $definition['default'];
+		}
 		else
-			$direction = EMongoCriteria::SORT_ASC;
+		{
+			$direction = \Maslosoft\Mangan\Criteria::SORT_ASC;
+		}
 
 		if ($this->multiSort)
+		{
 			$directions = array_merge([$attribute => $direction], $directions);
+		}
 		else
+		{
 			$directions = [$attribute => $direction];
+		}
 
 		$url = $this->createUrl(Yii::app()->getController(), $directions);
 
@@ -160,7 +186,7 @@ class EMongoSort extends CSort
 	public function resolveLabel($attribute)
 	{
 		// support for getAttributeLabel()
-		if($this->model)
+		if ($this->model)
 		{
 			return $this->model->getAttributeLabel($attribute);
 		}
@@ -175,36 +201,46 @@ class EMongoSort extends CSort
 	 */
 	public function getDirections()
 	{
-		if ($this->_directions === null) {
+		if ($this->_directions === null)
+		{
 			$this->_directions = [];
-			if (isset($_GET[$this->sortVar])) {
+			if (isset($_GET[$this->sortVar]))
+			{
 				$attributes = explode($this->separators[0], $_GET[$this->sortVar]);
 				foreach ($attributes as $attribute)
 				{
 					if (($pos = strrpos($attribute, $this->separators[1])) !== false)
 					{
 						$descending = substr($attribute, $pos + 1) === $this->descTag;
-						if ($descending) {
+						if ($descending)
+						{
 							$attribute = substr($attribute, 0, $pos);
-							$direction = EMongoCriteria::SORT_DESC;
+							$direction = \Maslosoft\Mangan\Criteria::SORT_DESC;
 						}
 						else
-							$direction = EMongoCriteria::SORT_ASC;
+						{
+							$direction = \Maslosoft\Mangan\Criteria::SORT_ASC;
+						}
 					}
 					else
-						$direction = EMongoCriteria::SORT_ASC;
+					{
+						$direction = \Maslosoft\Mangan\Criteria::SORT_ASC;
+					}
 
 					if (($this->resolveAttribute($attribute)) !== false)
 					{
 						$this->_directions[$attribute] = $direction;
-						if (!$this->multiSort){
+						if (!$this->multiSort)
+						{
 							break;
 						}
 					}
 				}
 			}
 			if ($this->_directions === [] && is_array($this->defaultOrder))
+			{
 				$this->_directions = $this->defaultOrder;
+			}
 		}
 
 		return $this->_directions;
@@ -235,10 +271,14 @@ class EMongoSort extends CSort
 		$sorts = [];
 		foreach ($directions as $attribute => $direction)
 		{
-			if ($direction == EMongoCriteria::SORT_DESC)
+			if ($direction == \Maslosoft\Mangan\Criteria::SORT_DESC)
+			{
 				$sorts[] = $attribute;
+			}
 			else
+			{
 				$sorts[] = $attribute . $this->separators[1] . $this->descTag;
+			}
 		}
 		$params = $this->params === null ? $_GET : $this->params;
 		$params[$this->sortVar] = implode($this->separators[0], $sorts);

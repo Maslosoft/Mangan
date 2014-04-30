@@ -9,12 +9,21 @@
  * @package maslosoft/yii-mangan
  */
 
+namespace Maslosoft\Mangan\Model;
+
+use CFileHelper;
+use \Maslosoft\Mangan\Model\File;
+use \Maslosoft\Mangan\Model\ImageParams;
+use Exception;
+use MongoGridFSFile;
+use PhpThumbFactory;
+
 /**
  * Class for storing embedded images
  * @since 2.0.1
  * @author Piotr
  */
-class EMongoImage extends EMongoFile
+class Image extends \Maslosoft\Mangan\Model\File
 {
 
 	/**
@@ -36,7 +45,7 @@ class EMongoImage extends EMongoFile
 	 * @param bool $adaptive If true adaptive (with crop) resize will be used, if false best match scalling will be used
 	 * @return MongoGridFSFile
 	 */
-	public function get(EMongoImageParams $params = null)
+	public function get(\Maslosoft\Mangan\Model\ImageParams $params = null)
 	{
 		// Get original image or file if it is not image
 		if (!$params || !$this->isImage($this->filename))
@@ -103,7 +112,7 @@ class EMongoImage extends EMongoFile
 	/**
 	 * Send file to browser
 	 */
-	public function send(EMongoImageParams $params = null)
+	public function send(\Maslosoft\Mangan\Model\ImageParams $params = null)
 	{
 		$this->_send($this->get($params));
 	}
@@ -111,7 +120,7 @@ class EMongoImage extends EMongoFile
 	/**
 	 * Stream file to browser
 	 */
-	public function stream(EMongoImageParams $params = null)
+	public function stream(\Maslosoft\Mangan\Model\ImageParams $params = null)
 	{
 		$this->_stream($this->get($params));
 	}

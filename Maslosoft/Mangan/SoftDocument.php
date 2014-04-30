@@ -11,13 +11,16 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
 /**
- * EmongoSoftDocument
+ * SoftDocument
  *
  * @since v1.3.4
  */
-class EMongoSoftDocument extends EMongoDocument
+class SoftDocument extends \Maslosoft\Mangan\Document
 {
+
 	/**
 	 * Array that holds initialized soft attributes
 	 * @var array $softAttributes
@@ -27,26 +30,31 @@ class EMongoSoftDocument extends EMongoDocument
 
 	/**
 	 * Adds soft attributes support to magic __get method
-	 * @see EMongoEmbeddedDocument::__get()
+	 * @see \Maslosoft\Mangan\EmbeddedDocument::__get()
 	 * @since v1.3.4
 	 */
 	public function __get($name)
 	{
-		if (array_key_exists($name, $this->softAttributes)) { // Use of array_key_exists is mandatory !!!
+		// Use of array_key_exists is mandatory !!!
+		if (array_key_exists($name, $this->softAttributes))
+		{
 			return $this->softAttributes[$name];
 		}
 		else
+		{
 			return parent::__get($name);
+		}
 	}
 
 	/**
 	 * Adds soft attributes support to magic __set method
-	 * @see EMongoEmbeddedDocument::__set()
+	 * @see \Maslosoft\Mangan\EmbeddedDocument::__set()
 	 * @since v1.3.4
 	 */
 	public function __set($name, $value)
 	{
-		if (array_key_exists($name, $this->softAttributes)) { // Use of array_key_exists is mandatory !!!
+		if (array_key_exists($name, $this->softAttributes))
+		{ // Use of array_key_exists is mandatory !!!
 			$this->softAttributes[$name] = $value;
 		}
 		else
@@ -55,15 +63,19 @@ class EMongoSoftDocument extends EMongoDocument
 
 	/**
 	 * Adds soft attributes support to magic __isset method
-	 * @see EMongoEmbeddedDocument::__isset()
+	 * @see \Maslosoft\Mangan\EmbeddedDocument::__isset()
 	 * @since v1.3.4
 	 */
 	public function __isset($name)
 	{
 		if (array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
+		{
 			return true;
+		}
 		else
+		{
 			return parent::__isset($name);
+		}
 	}
 
 	/**
@@ -74,9 +86,13 @@ class EMongoSoftDocument extends EMongoDocument
 	public function __unset($name)
 	{
 		if (array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
+		{
 			unset($this->softAttributes[$name]);
+		}
 		else
+		{
 			parent::__unset($name);
+		}
 	}
 
 	/**
@@ -87,7 +103,9 @@ class EMongoSoftDocument extends EMongoDocument
 	public function initSoftAttribute($name)
 	{
 		if (!array_key_exists($name, $this->softAttributes))
+		{
 			$this->softAttributes[$name] = null;
+		}
 	}
 
 	/**
@@ -98,12 +116,14 @@ class EMongoSoftDocument extends EMongoDocument
 	public function initSoftAttributes($attributes)
 	{
 		foreach ($attributes as $name)
+		{
 			$this->initSoftAttribute($name);
+		}
 	}
 
 	/**
 	 * Return the list of attribute names of this model, with respect of initialized soft attributes
-	 * @see EMongoEmbeddedDocument::attributeNames()
+	 * @see \Maslosoft\Mangan\EmbeddedDocument::attributeNames()
 	 * @since v1.3.4
 	 */
 	public function attributeNames()
@@ -113,7 +133,7 @@ class EMongoSoftDocument extends EMongoDocument
 
 	/**
 	 * Instantiate the model object from given document, with respect of soft attributes
-	 * @see EMongoDocument::instantiate()
+	 * @see \Maslosoft\Mangan\Document::instantiate()
 	 * @since v1.3.4
 	 */
 	protected function instantiate($attributes)
@@ -142,7 +162,9 @@ class EMongoSoftDocument extends EMongoDocument
 	{
 		$arr = parent::_toArray();
 		foreach ($this->softAttributes as $key => $value)
+		{
 			$arr[$key] = $value;
+		}
 		return $arr;
 	}
 

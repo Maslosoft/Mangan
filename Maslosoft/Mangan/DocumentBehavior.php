@@ -11,22 +11,26 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
+use CActiveRecordBehavior;
+
 /**
- * EMongoDocumentBehavior
+ * DocumentBehavior
  *
  * @since v1.0
  */
-class EMongoDocumentBehavior extends CActiveRecordBehavior
+class DocumentBehavior extends CActiveRecordBehavior
 {
 
 	public function events()
 	{
 		return array_merge(parent::events(), [
-					'onBeforeEmbeddedDocsInit' => 'beforeEmbeddedDocsInit',
-					'onAfterEmbeddedDocsInit' => 'afterEmbeddedDocsInit',
-					'onBeforeToArray' => 'beforeToArray',
-					'onAfterToArray' => 'afterToArray'
-				]);
+			'onBeforeEmbeddedDocsInit' => 'beforeEmbeddedDocsInit',
+			'onAfterEmbeddedDocsInit' => 'afterEmbeddedDocsInit',
+			'onBeforeToArray' => 'beforeToArray',
+			'onAfterToArray' => 'afterToArray'
+		]);
 	}
 
 	public function beforeEmbeddedDocsInit($event)

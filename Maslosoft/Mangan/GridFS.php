@@ -10,23 +10,35 @@
  * @category ext
  * @package ext.YiiMongoDbSuite
  */
+namespace Maslosoft\Mangan;
+
+use Maslosoft\Mangan\Document;
+use Maslosoft\Mangan\MongoException;
+use Maslosoft\Mangan\Sanitizers\String;
+use MongoGridFS;
+use MongoGridFSFile;
+use MongoId;
+use Yii;
 
 /**
- * EMongoGridFS
+ * Grid file system class
  */
-abstract class EMongoGridFS extends EMongoDocument
+abstract class GridFS extends Document
 {
+
 	/**
-	 * Every EMongoGridFS object has to have one
+	 * Every GridFS object has to have one
 	 * @var String $filename
 	 * @since v1.3
 	 */
 	public $filename = null;
+
 	/**
 	 * MongoGridFSFile will be stored here
 	 * @var MongoGridFSFile
 	 */
 	private $_gridFSFile;
+
 	/**
 	 * @var string Raw binary data. If set, will use this instead of file contents as specified by 'filename'.
 	 */
@@ -55,18 +67,20 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws EMongoException if the record is not new
-	 * @throws EMongoException
+	 * @throws MongoException if the record is not new
+	 * @throws MongoException
 	 * @since v1.3
 	 */
 	public function insert(array $attributes = null)
 	{
 		if (!$this->getIsNewRecord())
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to the database because it is not new.'));
+		{
+			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to the database because it is not new.'));
+		}
 
 		if ($this->beforeSave())
 		{
-			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 			$rawData = $this->toArray();
 			// free the '_id' container if empty, mongo will not populate it if exists
 			if (empty($rawData['_id']))
@@ -81,19 +95,21 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * Insertion by Primary Key inserts a MongoGridFSFile forcing the MongoID
 	 * @param MongoId $pk
 	 * @param array $attributes
-	 * @throws EMongoException
-	 * @throws EMongoException
+	 * @throws MongoException
+	 * @throws MongoException
 	 * @return boolean whether the insert success
 	 * @since v1.3
 	 */
 	public function insertWithPk($pk, array $attributes = null)
 	{
 		if (!($pk instanceof MongoId))
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be inserted to the database beacuse its primary key is not defined.'));
+		{
+			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to the database beacuse its primary key is not defined.'));
+		}
 
 		if ($this->beforeSave())
 		{
-			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+			Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 			$rawData = $this->toArray();
 			$rawData['_id'] = $pk;
 
@@ -107,7 +123,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param array $rawData
 	 * @param array $attributes
 	 * @return boolean True on success
-	 * @throws EMongoException
+	 * @throws MongoException
 	 */
 	protected function store($rawData, $attributes)
 	{
@@ -122,7 +138,7 @@ abstract class EMongoGridFS extends EMongoDocument
 		}
 
 		if (!isset($rawData['filename']))
-			throw new EMongoException(Yii::t('yii', 'A filename is required to save a GridFS document.'));
+			throw new MongoException(Yii::t('yii', 'A filename is required to save a GridFS document.'));
 
 		// store bytes directly or store file
 		if (isset($this->_bytes))
@@ -134,7 +150,7 @@ abstract class EMongoGridFS extends EMongoDocument
 			$result = $this->getCollection()->storeFile($filename, $rawData);
 		}
 
-		 // strict compare because driver may return empty array
+		// strict compare because driver may return empty array
 		if ($result !== false)
 		{
 			$this->_id = $result;
@@ -145,7 +161,7 @@ abstract class EMongoGridFS extends EMongoDocument
 			$this->afterSave();
 			return true;
 		}
-		throw new EMongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+		throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 	}
 
 	/**
@@ -155,42 +171,46 @@ abstract class EMongoGridFS extends EMongoDocument
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
-	 * @throws EMongoException if the record is new
+	 * @throws MongoException if the record is new
 	 * @since v1.3
 	 */
 	public function update(array $attributes = null)
 	{
-		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if ($this->getIsNewRecord())
-			throw new EMongoException(Yii::t('yii', 'The EMongoDocument cannot be updated because it is new.'));
+		{
+			throw new MongoException(Yii::t('yii', 'The Document cannot be updated because it is new.'));
+		}
 
 		if (is_file($this->filename) === true)
 		{
-			if ($this->deleteByPk($this->_id) !== false) {
+			if ($this->deleteByPk($this->_id) !== false)
+			{
 				$result = $this->insertWithPk($this->_id, $attributes);
 				if ($result === true)
 					return true;
 				else
 					return false;
 			}
-		} else
+		}
+		else
 			return parent::update($attributes, true);
 	}
 
 	/**
-	 * Creates an EMongoGridFS with the given attributes.
+	 * Creates an GridFS with the given attributes.
 	 * This method is internally used by the find methods.
 	 * @param MongoGridFSFile $document mongo gridFSFile
 	 * @param array $attributes attribute values (column name=>column value)
 	 * @param boolean $callAfterFind whether to call {@link afterFind} after the record is populated.
 	 * This parameter is added in version 1.0.3.
-	 * @return EMongoDocument the newly created document. The class of the object is the same as the model class.
+	 * @return Document the newly created document. The class of the object is the same as the model class.
 	 * Null is returned if the input data is false.
 	 * @since v1.3
 	 */
 	public function populateRecord($document, $callAfterFind = true)
 	{
-		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if ($document instanceof MongoGridFSFile)
 		{
 			$model = parent::populateRecord($document->file, $callAfterFind);
@@ -218,7 +238,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function getSize()
 	{
-		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'getSize') === true)
 			return $this->_gridFSFile->getSize();
 		else
@@ -233,7 +253,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function getFilename()
 	{
-		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'getFilename') === true)
 			return $this->_gridFSFile->getFilename();
 		else
@@ -247,7 +267,7 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function getBytes()
 	{
-		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'getBytes') === true)
 			return $this->_gridFSFile->getBytes();
 		else if (isset($this->_bytes))
@@ -265,10 +285,11 @@ abstract class EMongoGridFS extends EMongoDocument
 	 */
 	public function write($filename = null)
 	{
-		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'ext.MongoDb.EMongoGridFS');
+		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'write') === true)
 			return $this->_gridFSFile->write($filename);
 		else
 			return false;
 	}
+
 }

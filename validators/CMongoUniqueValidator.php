@@ -74,13 +74,13 @@ class CMongoUniqueValidator extends CValidator
 
 		$className=$this->className===null?get_class($object):Yii::import($this->className);
 		$attributeName=$this->attributeName===null?$attribute:$this->attributeName;
-		$finder=EMongoDocument::model($className);
-		$criteria=new EMongoCriteria;
+		$finder=\Maslosoft\Mangan\Document::model($className);
+		$criteria=new \Maslosoft\Mangan\Criteria;
 		$criteria->{$attribute}=$value;
 		if($this->criteria!==[])
 			$criteria->mergeWith($this->criteria);
 
-		if(!$object instanceof EMongoDocument || $object->isNewRecord)
+		if(!$object instanceof \Maslosoft\Mangan\Document || $object->isNewRecord)
 			$exists=$finder->exists($criteria);
 		else
 		{

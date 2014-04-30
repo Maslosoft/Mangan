@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Ianaré Sévi
  * @author Dariusz Górecki <darek.krk@gmail.com>
@@ -10,16 +11,22 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
+use Countable;
+use Iterator;
+use MongoCursor;
+
 /**
- * EMongoCursor
+ * Cursor
  *
  * Cursor object, that behaves much like the MongoCursor,
  * but this one returns instantiated objects
  * @since v1.3.4
  */
-class EMongoCursor
-implements Iterator, Countable
+class Cursor implements Iterator, Countable
 {
+
 	/**
 	 * @var MongoCursor $_cursor the MongoCursor returned by the query
 	 * @since v1.3.4
@@ -27,22 +34,22 @@ implements Iterator, Countable
 	protected $_cursor;
 
 	/**
-	 * @var EMongoDocument $_model the model used for instantiating objects
+	 * @var Document $_model the model used for instantiating objects
 	 * @since v1.3.4
 	 */
 	protected $_model;
 
 	/**
-	 * Construct a new EMongoCursor
+	 * Construct a new Cursor
 	 *
 	 * @param MongoCursor $cursor the cursor returned by the query
-	 * @param EMongoDocument $model the model for instantiating objects
+	 * @param Document $model the model for instantiating objects
 	 * @since v1.3.4
 	 */
-	public function __construct(MongoCursor $cursor, EMongoDocument $model)
+	public function __construct(MongoCursor $cursor, Document $model)
 	{
-		$this->_cursor	= $cursor;
-		$this->_model	= $model;
+		$this->_cursor = $cursor;
+		$this->_model = $model;
 	}
 
 	/**
@@ -58,13 +65,13 @@ implements Iterator, Countable
 
 	/**
 	 * Return the current element
-	 * @return EMongoDocument
+	 * @return Document
 	 * @since v1.3.4
 	 */
 	public function current()
 	{
 		$document = $this->_cursor->current();
-		if(empty($document))
+		if (empty($document))
 			return $document;
 
 		return $this->_model->populateRecord($document);
@@ -154,4 +161,5 @@ implements Iterator, Countable
 	{
 		$this->_cursor->sort($fields);
 	}
+
 }

@@ -9,13 +9,13 @@
  * @category ext
  * @package ext.YiiMongoDbSuite
  */
-
+namespace Maslosoft\Mangan\Example;
 /**
- * EMongoGridFS
+ * GridFS
  *
  * Authorization management, dispatches actions and views on the system.
  */
-class MongoImage extends EMongoGridFS
+class MongoImage extends \Maslosoft\Mangan\GridFS
 {
 	public $metadata;
 

@@ -1,7 +1,10 @@
 <?php
 
-class User extends EMongoDocument
+namespace Maslosoft\Mangan\Example;
+
+class User extends \Maslosoft\Mangan\Document
 {
+
 	/**
 	 * A public variable should be defined for each key=>value you want in the
 	 * model. Just like if it were a column in a SQL database

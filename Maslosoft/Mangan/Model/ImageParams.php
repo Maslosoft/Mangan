@@ -9,6 +9,10 @@
  * @package maslosoft/yii-mangan
  */
 
+namespace Maslosoft\Mangan\Model;
+
+use CComponent;
+
 /**
  * Description of EMongoImageParams
  * @since 2.0.2
@@ -18,7 +22,7 @@
  * @property bool $isTemp This is to indicate that image is temporary, will be automatically set to true
  * @author Piotr
  */
-class EMongoImageParams extends CComponent
+class ImageParams extends CComponent
 {
 
 	/**

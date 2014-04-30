@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author Ianaré Sévi (merge into EMongoDB)
+ * @author Ianaré Sévi (merge into MongoDB)
  * @author aoyagikouhei (original author)
  * @license New BSD license
  * @version 1.3
@@ -9,8 +9,10 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan\Components;
+
 /**
- * EMongoHttpSession
+ * HttpSession
  *
  * Example, in config/main.php:
  * 	'session' => array(
@@ -32,44 +34,54 @@
  * timeout				: timeout miliseconds			: default null
  *
  */
-class EMongoHttpSession extends CHttpSession
+class HttpSession extends CHttpSession
 {
+
 	/**
 	 * @var string Mongo DB component.
 	 */
 	public $connectionID = 'mongodb';
+
 	/**
 	 * @var string Collection name
 	 */
 	public $collectionName = 'yiisession';
+
 	/**
 	 * @var string id column name
 	 */
 	public $idColumn = 'id';
+
 	/**
 	 * @var string level data name
 	 */
 	public $dataColumn = 'data';
+
 	/**
 	 * @var string expire column name
 	 */
 	public $expireColumn = 'expire';
+
 	/**
 	 * @var boolean forces the update to be synced to disk before returning success.
 	 */
 	public $fsync = false;
+
 	/**
 	 * @var boolean the program will wait for the database response.
 	 */
 	public $safe = false;
+
 	/**
 	 * @var boolean if "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
 	 */
 	public $timeout = null;
+
 	/**
 	 * @var array insert options
 	 */
 	private $_options;
+
 	/**
 	 * @var MongoCollection mongo Db collection
 	 */
@@ -84,8 +96,8 @@ class EMongoHttpSession extends CHttpSession
 		if (!isset($this->_collection))
 		{
 			$db = Yii::app()->getComponent($this->connectionID);
-			if (!($db instanceof EMongoDB))
-				throw new EMongoException('EMongoHttpSession.connectionID is invalid');
+			if (!($db instanceof \Maslosoft\Mangan\MongoDB))
+				throw new \Maslosoft\Mangan\MongoException('HttpSession.connectionID is invalid');
 
 			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);
 		}
@@ -164,13 +176,11 @@ class EMongoHttpSession extends CHttpSession
 		$options = $this->_options;
 		$options['upsert'] = true;
 		return $this->_collection->update(
-				[$this->idColumn => $id],
-				[
+						[$this->idColumn => $id], [
 					$this->dataColumn => $data,
 					$this->expireColumn => $this->getExipireTime(),
 					$this->idColumn => $id
-				],
-				$options
+						], $options
 		);
 	}
 
@@ -210,20 +220,23 @@ class EMongoHttpSession extends CHttpSession
 		parent::regenerateID(false);
 		$newId = session_id();
 		$row = $this->getData($oldId);
-		if (is_null($row)) {
+		if (is_null($row))
+		{
 			$this->_collection->insert([
 				$this->idColumn => $newId
 				, $this->expireColumn => $this->getExipireTime()
 					], $this->_options);
 		}
-		else if ($deleteOldSession) {
+		else if ($deleteOldSession)
+		{
 			$this->_collection->update(
 					[$this->idColumn => $oldId]
 					, [$this->idColumn => $newId]
 					, $this->_options
 			);
 		}
-		else {
+		else
+		{
 			$row[$this->idColumn] = $newId;
 			unset($row['_id']);
 			$this->_collection->insert($row, $this->_options);
