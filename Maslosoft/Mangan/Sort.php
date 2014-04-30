@@ -13,6 +13,10 @@
 
 namespace Maslosoft\Mangan;
 
+use CController;
+use CSort;
+use Yii;
+
 /**
  * Sort
  * @since v1.3.4
@@ -26,7 +30,7 @@ class Sort extends CSort
 
 	/**
 	 *
-	 * @var \Maslosoft\Mangan\Document
+	 * @var Document
 	 */
 	public $model = null;
 
@@ -140,7 +144,7 @@ class Sort extends CSort
 		$directions = $this->getDirections();
 		if (isset($directions[$attribute]))
 		{
-			$class = ($directions[$attribute] == \Maslosoft\Mangan\Criteria::SORT_DESC) ? 'desc' : 'asc';
+			$class = ($directions[$attribute] == Criteria::SORT_DESC) ? 'desc' : 'asc';
 			if (isset($htmlOptions['class']))
 			{
 				$htmlOptions['class'].=' ' . $class;
@@ -158,7 +162,7 @@ class Sort extends CSort
 		}
 		else
 		{
-			$direction = \Maslosoft\Mangan\Criteria::SORT_ASC;
+			$direction = Criteria::SORT_ASC;
 		}
 
 		if ($this->multiSort)
@@ -215,16 +219,16 @@ class Sort extends CSort
 						if ($descending)
 						{
 							$attribute = substr($attribute, 0, $pos);
-							$direction = \Maslosoft\Mangan\Criteria::SORT_DESC;
+							$direction = Criteria::SORT_DESC;
 						}
 						else
 						{
-							$direction = \Maslosoft\Mangan\Criteria::SORT_ASC;
+							$direction = Criteria::SORT_ASC;
 						}
 					}
 					else
 					{
-						$direction = \Maslosoft\Mangan\Criteria::SORT_ASC;
+						$direction = Criteria::SORT_ASC;
 					}
 
 					if (($this->resolveAttribute($attribute)) !== false)
@@ -271,7 +275,7 @@ class Sort extends CSort
 		$sorts = [];
 		foreach ($directions as $attribute => $direction)
 		{
-			if ($direction == \Maslosoft\Mangan\Criteria::SORT_DESC)
+			if ($direction == Criteria::SORT_DESC)
 			{
 				$sorts[] = $attribute;
 			}
