@@ -158,7 +158,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 	 */
 	protected function _send(MongoGridFSFile $file = null)
 	{
-		if(null === $file)
+		if (null === $file)
 		{
 			throw new Exception('File not found');
 		}
@@ -180,7 +180,7 @@ class EMongoFile extends EMongoEmbeddedDocument
 	protected function _stream(MongoGridFSFile $file)
 	{
 		$meta = (object) $file->file;
-		if(ob_get_length())
+		if (ob_get_length())
 		{
 			ob_end_clean();
 		}
@@ -189,20 +189,24 @@ class EMongoFile extends EMongoEmbeddedDocument
 		header(sprintf('ETag: %s', $meta->md5));
 		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->sec)));
 		header(sprintf('Content-Disposition: filename="%s"', basename($meta->filename)));
-
 		// Cache it
 		header('Pragma: public');
 		header('Cache-Control: max-age=86400');
 		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
 		$stream = $file->getResource();
 
-		while (!feof($stream)) {
-			 echo fread($stream, 8192);
-			ob_flush();
+		while (!feof($stream))
+		{
+			echo fread($stream, 8192);
+			if (ob_get_length())
+			{
+				ob_flush();
+			}
 			flush();
 		}
 		Yii::app()->end();
 	}
+
 	/**
 	 * Set file with optional criteria params
 	 * @param string $tempName
@@ -234,17 +238,16 @@ class EMongoFile extends EMongoEmbeddedDocument
 		$params = CMap::mergeArray($data, $params);
 
 		// Replace existing file, remove previous
-		if(!$params['isTemp'])
+		if (!$params['isTemp'])
 		{
 			$oldFiles = [
 				'parentId' => $this->getId()
 			];
 			$this->_db->getGridFS()->remove($oldFiles);
 		}
-		
+
 		// Store new file
 		$this->_db->getGridFS()->put($tempName, $params);
-		
 	}
 
 	/**

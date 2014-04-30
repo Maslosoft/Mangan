@@ -16,6 +16,7 @@
  */
 class EMongoImage extends EMongoFile
 {
+
 	/**
 	 * Image width
 	 * @var int
@@ -27,6 +28,7 @@ class EMongoImage extends EMongoFile
 	 * @var int
 	 */
 	public $height = 0;
+
 	/**
 	 * Get resized image
 	 * @param int $width
@@ -50,7 +52,7 @@ class EMongoImage extends EMongoFile
 		if (!$result)
 		{
 			$result = $this->_get();
-			if(!$result)
+			if (!$result)
 			{
 				throw new Exception('File not found');
 			}
@@ -72,10 +74,8 @@ class EMongoImage extends EMongoFile
 
 			$this->_set($fileName, $originalFilename, $params->toArray());
 			unlink($fileName);
-			$result = $this->_get($params->toArray());
+			return $this->_get($params->toArray());
 		}
-//		var_dump($result);
-//		exit;
 		return $result;
 	}
 
@@ -90,10 +90,10 @@ class EMongoImage extends EMongoFile
 
 	protected function _set($tempName, $fileName, $params = [])
 	{
-		if($this->isImage($fileName))
+		if ($this->isImage($fileName))
 		{
 			$thumb = PhpThumbFactory::create($tempName);
-			$dimensions = (object)$thumb->getCurrentDimensions();
+			$dimensions = (object) $thumb->getCurrentDimensions();
 			$this->width = $dimensions->width;
 			$this->height = $dimensions->height;
 		}
@@ -115,4 +115,5 @@ class EMongoImage extends EMongoFile
 	{
 		$this->_stream($this->get($params));
 	}
+
 }

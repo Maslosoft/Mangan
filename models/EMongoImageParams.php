@@ -47,12 +47,23 @@ class EMongoImageParams extends CComponent
 
 	public function toArray()
 	{
-		return [
-			'width' => $this->getWidth(),
-			'height' => $this->getHeight(),
-			'adaptive' => $this->getAdaptive(),
-			'isTemp' => $this->getIsTemp()
-		];
+		if ($this->_width || $this->_height)
+		{
+			// Get resized
+			return [
+				'width' => $this->getWidth(),
+				'height' => $this->getHeight(),
+				'adaptive' => $this->getAdaptive(),
+				'isTemp' => $this->getIsTemp()
+			];
+		}
+		else
+		{
+			// Get original image
+			return [
+				'isTemp' => false
+			];
+		}
 	}
 
 	public function getWidth()
