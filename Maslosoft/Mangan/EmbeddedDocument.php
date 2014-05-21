@@ -528,7 +528,8 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 				{
 					if ($meta->embeddedArray)
 					{
-						$value = [];
+						// Let document designer set default value, do NOT enforce empty array
+						// $value = [];
 					}
 					else
 					{
