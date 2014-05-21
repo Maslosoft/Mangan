@@ -13,12 +13,14 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Core\Exception;
+
 /**
  * \Maslosoft\Mangan\MongoException
  *
  * @since v1.0
  */
-class MongoException extends CException
+class MongoException extends Exception
 {
 
 }

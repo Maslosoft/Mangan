@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use CComponent;
+use Maslosoft\Mangan\Core\Component;
 
 /**
  * Criteria
@@ -32,7 +32,7 @@ use CComponent;
  * @author		Dariusz Górecki <darek.krk@gmail.com>
  * @since		v1.0
  */
-class Criteria extends CComponent
+class Criteria extends Component
 {
 
 	/**
@@ -201,7 +201,7 @@ class Criteria extends CComponent
 
 	/**
 	 * If we have operator add it otherwise call parent implementation
-	 * @see CComponent::__call()
+	 * @see Component::__call()
 	 * @since v1.0
 	 */
 	public function __call($fieldName, $parameters)

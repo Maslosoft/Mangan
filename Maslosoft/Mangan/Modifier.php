@@ -12,7 +12,7 @@
 
 namespace Maslosoft\Mangan;
 
-use CComponent;
+use Maslosoft\Mangan\Core\Component;
 
 /**
  * \Maslosoft\Mangan\Modifier
@@ -27,7 +27,7 @@ use CComponent;
  * @author		Philippe Gaultier <pgaultier@ibitux.com>
  * @since		v1.3.6
  */
-class Modifier extends CComponent
+class Modifier extends Component
 {
 
 	/**

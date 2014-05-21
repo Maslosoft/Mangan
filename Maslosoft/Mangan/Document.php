@@ -13,10 +13,9 @@
 
 namespace Maslosoft\Mangan;
 
-use CComponent;
-use CEvent;
-use CModelEvent;
 use Exception;
+use Maslosoft\Mangan\Core\Component;
+use Maslosoft\Mangan\Events\ModelEvent;
 use MMongoDocument;
 use MongoCollection;
 use MongoCursor;
@@ -79,7 +78,7 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * Add scopes functionality.
-	 * @see CComponent::__call()
+	 * @see Component::__call()
 	 * @since v1.0
 	 */
 	public function __call($name, $parameters)
@@ -423,7 +422,7 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This function check indexes and applies them to the collection if needed
-	 * see CModel::init()
+	 * see Model::init()
 	 *
 	 * @see EMongoEmbeddedDocument::init()
 	 * @since v1.1
@@ -768,7 +767,7 @@ abstract class Document extends EmbeddedDocument
 	 * Atomic, in-place update method.
 	 *
 	 * @since v1.3.6
-	 * @param \Maslosoft\Mangan\Modifier $modifier updating rules to apply
+	 * @param Modifier $modifier updating rules to apply
 	 * @param Criteria $criteria condition to limit updating rules
 	 * @return boolean
 	 */
@@ -1108,8 +1107,8 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This event is raised before the record is saved.
-	 * By setting {@link CModelEvent::isValid} to be false, the normal {@link save()} process will be stopped.
-	 * @param CModelEvent $event the event parameter
+	 * By setting {@link ModelEvent::isValid} to be false, the normal {@link save()} process will be stopped.
+	 * @param ModelEvent $event the event parameter
 	 * @since v1.0
 	 */
 	public function onBeforeSave($event)
@@ -1119,7 +1118,7 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This event is raised after the record is saved.
-	 * @param CEvent $event the event parameter
+	 * @param ModelEvent $event the event parameter
 	 * @since v1.0
 	 */
 	public function onAfterSave($event)
@@ -1129,8 +1128,8 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This event is raised before the record is deleted.
-	 * By setting {@link CModelEvent::isValid} to be false, the normal {@link delete()} process will be stopped.
-	 * @param CModelEvent $event the event parameter
+	 * By setting {@link ModelEvent::isValid} to be false, the normal {@link delete()} process will be stopped.
+	 * @param ModelEvent $event the event parameter
 	 * @since v1.0
 	 */
 	public function onBeforeDelete($event)
@@ -1140,7 +1139,7 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This event is raised after the record is deleted.
-	 * @param CEvent $event the event parameter
+	 * @param ModelEvent $event the event parameter
 	 * @since v1.0
 	 */
 	public function onAfterDelete($event)
@@ -1150,11 +1149,11 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This event is raised before finder performs a find call.
-	 * In this event, the {@link CModelEvent::criteria} property contains the query criteria
+	 * In this event, the {@link ModelEvent::criteria} property contains the query criteria
 	 * passed as parameters to those find methods. If you want to access
 	 * the query criteria specified in scopes, please use {@link getDbCriteria()}.
 	 * You can modify either criteria to customize them based on needs.
-	 * @param CModelEvent $event the event parameter
+	 * @param ModelEvent $event the event parameter
 	 * @see beforeFind
 	 * @since v1.0
 	 */
@@ -1165,7 +1164,7 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * This event is raised after the record is instantiated by a find method.
-	 * @param CEvent $event the event parameter
+	 * @param ModelEvent $event the event parameter
 	 * @since v1.0
 	 */
 	public function onAfterFind($event)
@@ -1187,7 +1186,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->hasEventHandler('onBeforeSave'))
 		{
-			$event = new CModelEvent($this);
+			$event = new ModelEvent($this);
 			$this->onBeforeSave($event);
 			return $event->isValid;
 		}
@@ -1208,7 +1207,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->hasEventHandler('onAfterSave'))
 		{
-			$this->onAfterSave(new CEvent($this));
+			$this->onAfterSave(new ModelEvent($this));
 		}
 	}
 
@@ -1224,7 +1223,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->hasEventHandler('onBeforeDelete'))
 		{
-			$event = new CModelEvent($this);
+			$event = new ModelEvent($this);
 			$this->onBeforeDelete($event);
 			return $event->isValid;
 		}
@@ -1245,7 +1244,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->hasEventHandler('onAfterDelete'))
 		{
-			$this->onAfterDelete(new CEvent($this));
+			$this->onAfterDelete(new ModelEvent($this));
 		}
 	}
 
@@ -1265,7 +1264,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->hasEventHandler('onBeforeFind'))
 		{
-			$event = new CModelEvent($this);
+			$event = new ModelEvent($this);
 			$this->onBeforeFind($event);
 			return $event->isValid;
 		}
@@ -1286,7 +1285,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->hasEventHandler('onAfterFind'))
 		{
-			$this->onAfterFind(new CEvent($this));
+			$this->onAfterFind(new ModelEvent($this));
 		}
 	}
 

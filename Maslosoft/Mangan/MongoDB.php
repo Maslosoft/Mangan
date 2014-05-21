@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use CApplicationComponent;
+use Maslosoft\Mangan\Core\ApplicationComponent;
 use MongoClient;
 use MongoConnectionException;
 use Yii;
@@ -30,7 +30,7 @@ Yii::import('yii-mangan.models.*');
  * This is merge work of tyohan, Alexander Makarov and mine
  * @since v1.0
  */
-class MongoDB extends CApplicationComponent
+class MongoDB extends ApplicationComponent
 {
 
 	/**

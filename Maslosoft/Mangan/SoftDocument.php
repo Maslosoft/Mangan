@@ -13,12 +13,14 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Core\Component;
+
 /**
  * SoftDocument
  *
  * @since v1.3.4
  */
-class SoftDocument extends \Maslosoft\Mangan\Document
+class SoftDocument extends Document
 {
 
 	/**
@@ -30,7 +32,7 @@ class SoftDocument extends \Maslosoft\Mangan\Document
 
 	/**
 	 * Adds soft attributes support to magic __get method
-	 * @see \Maslosoft\Mangan\EmbeddedDocument::__get()
+	 * @see EmbeddedDocument::__get()
 	 * @since v1.3.4
 	 */
 	public function __get($name)
@@ -48,7 +50,7 @@ class SoftDocument extends \Maslosoft\Mangan\Document
 
 	/**
 	 * Adds soft attributes support to magic __set method
-	 * @see \Maslosoft\Mangan\EmbeddedDocument::__set()
+	 * @see EmbeddedDocument::__set()
 	 * @since v1.3.4
 	 */
 	public function __set($name, $value)
@@ -63,7 +65,7 @@ class SoftDocument extends \Maslosoft\Mangan\Document
 
 	/**
 	 * Adds soft attributes support to magic __isset method
-	 * @see \Maslosoft\Mangan\EmbeddedDocument::__isset()
+	 * @see EmbeddedDocument::__isset()
 	 * @since v1.3.4
 	 */
 	public function __isset($name)
@@ -80,7 +82,7 @@ class SoftDocument extends \Maslosoft\Mangan\Document
 
 	/**
 	 * Adds soft attributes support to magic __unset method
-	 * @see CComponent::__unset()
+	 * @see Component::__unset()
 	 * @since v1.3.4
 	 */
 	public function __unset($name)
@@ -123,7 +125,7 @@ class SoftDocument extends \Maslosoft\Mangan\Document
 
 	/**
 	 * Return the list of attribute names of this model, with respect of initialized soft attributes
-	 * @see \Maslosoft\Mangan\EmbeddedDocument::attributeNames()
+	 * @see EmbeddedDocument::attributeNames()
 	 * @since v1.3.4
 	 */
 	public function attributeNames()
@@ -133,7 +135,7 @@ class SoftDocument extends \Maslosoft\Mangan\Document
 
 	/**
 	 * Instantiate the model object from given document, with respect of soft attributes
-	 * @see \Maslosoft\Mangan\Document::instantiate()
+	 * @see Document::instantiate()
 	 * @since v1.3.4
 	 */
 	protected function instantiate($attributes)

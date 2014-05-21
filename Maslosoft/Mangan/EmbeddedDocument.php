@@ -15,12 +15,14 @@
 
 namespace Maslosoft\Mangan;
 
-use CComponent;
-use CModel;
-use CModelEvent;
 use EComponentMeta;
 use IAnnotated;
+use Maslosoft\Mangan\Core\Component;
+use Maslosoft\Mangan\Events\ClassNotFound;
+use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Model\Model;
 use MongoId;
+use RuntimeException;
 use stdClass;
 use UnexpectedValueException;
 use Yii;
@@ -31,7 +33,7 @@ use Yii;
  * @since v1.0.8
  * @property EComponentMeta $meta Model metadata
  */
-abstract class EmbeddedDocument extends CModel implements IAnnotated
+abstract class EmbeddedDocument extends Model implements IAnnotated
 {
 
 	/**
@@ -92,7 +94,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 	/**
 	 * Constructor.
 	 * @param string $scenario name of the scenario that this model is used in.
-	 * See {@link CModel::scenario} on how scenario is used by models.
+	 * See {@link Model::scenario} on how scenario is used by models.
 	 * @see getScenario
 	 * @since v1.0.8
 	 */
@@ -121,19 +123,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 
 	}
 
-	/**
-	 * @since v1.0.8
-	 */
-	protected function initEmbeddedDocuments()
-	{
-		if (!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
-		{
-			return false;
-		}
-
-		$this->afterEmbeddedDocsInit();
-	}
-
+// <editor-fold defaultstate="collapsed" desc="Events">
 	/**
 	 * @since v1.0.8
 	 */
@@ -166,12 +156,17 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		$this->raiseEvent('onAfterToArray', $event);
 	}
 
+	public function onClassNotFound($event)
+	{
+		$this->raiseEvent(__FUNCTION__, $event);
+	}
+
 	/**
 	 * @since v1.0.8
 	 */
 	protected function beforeToArray()
 	{
-		$event = new CModelEvent($this);
+		$event = new ModelEvent($this);
 		$this->onBeforeToArray($event);
 		return $event->isValid;
 	}
@@ -181,7 +176,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 	 */
 	protected function afterToArray()
 	{
-		$this->onAfterToArray(new CModelEvent($this));
+		$this->onAfterToArray(new ModelEvent($this));
 	}
 
 	/**
@@ -189,7 +184,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 	 */
 	protected function beforeEmbeddedDocsInit()
 	{
-		$event = new CModelEvent($this);
+		$event = new ModelEvent($this);
 		$this->onBeforeEmbeddedDocsInit($event);
 		return $event->isValid;
 	}
@@ -199,9 +194,61 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 	 */
 	protected function afterEmbeddedDocsInit()
 	{
-		$this->onAfterEmbeddedDocsInit(new CModelEvent());
+		$this->onAfterEmbeddedDocsInit(new ModelEvent());
 	}
 
+	/**
+	 * Embedded class not found event handling
+	 * @param string $className
+	 * @return string
+	 */
+	protected function classNotfound($className)
+	{
+		$event = new ClassNotFound();
+		$event->notFound = $className;
+		$this->onClassNotFound($event);
+		return $event->replacement;
+	}
+
+	/**
+	 * This ensures that embedded documents are also validated
+	 * @since v1.0.8
+	 */
+	public function afterValidate()
+	{
+		if ($this->hasEmbeddedDocuments())
+		{
+			foreach ($this->meta->properties('embedded') as $field => $className)
+			{
+				if ($this->meta->$field->embeddedArray)
+				{
+					foreach ((array) $this->$field as $doc)
+					{
+						if ($doc instanceof EmbeddedDocument)
+						{
+							if (!$doc->validate())
+							{
+								$this->addErrors($doc->getErrors());
+							}
+						}
+					}
+				}
+				else
+				{
+					if ($this->$field instanceof EmbeddedDocument)
+					{
+						if (!$this->$field->validate())
+						{
+							$this->addErrors($this->$field->getErrors());
+						}
+					}
+				}
+			}
+		}
+	}
+
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Magic methods">
 	/**
 	 * Support for get accessors for fields
 	 * Also dot notation is supported for embedded documents, which can be used
@@ -268,7 +315,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 
 	/**
 	 * @since v1.3.2
-	 * @see CComponent::__isset()
+	 * @see Component::__isset()
 	 */
 	public function __isset($name)
 	{
@@ -282,42 +329,8 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		}
 	}
 
-	/**
-	 * @since v1.0.8
-	 */
-	public function afterValidate()
-	{
-		if ($this->hasEmbeddedDocuments())
-		{
-			foreach ($this->meta->properties('embedded') as $field => $className)
-			{
-				if ($this->meta->$field->embeddedArray)
-				{
-					foreach ((array) $this->$field as $doc)
-					{
-						if ($doc instanceof EmbeddedDocument)
-						{
-							if (!$doc->validate())
-							{
-								$this->addErrors($doc->getErrors());
-							}
-						}
-					}
-				}
-				else
-				{
-					if ($this->$field instanceof EmbeddedDocument)
-					{
-						if (!$this->$field->validate())
-						{
-							$this->addErrors($this->$field->getErrors());
-						}
-					}
-				}
-			}
-		}
-	}
-
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Default model implementation">
 	/**
 	 * Validation rules based on validator annotations
 	 * @return mixed[][]
@@ -346,21 +359,6 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		return $result;
 	}
 
-	/**
-	 * @since v1.0.8
-	 */
-	public function embeddedDocuments()
-	{
-		return $this->meta->properties('embedded');
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	public function hasEmbeddedDocuments()
-	{
-		return count($this->embeddedDocuments()) > 0;
-	}
 
 	/**
 	 * Returns the list of attribute names.
@@ -391,6 +389,8 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		return $labels;
 	}
 
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Array convertion">
 	/**
 	 * Returns the given object as an associative array
 	 * Fires beforeToArray and afterToArray events
@@ -451,7 +451,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 				$value = [];
 				foreach ((array) $this->getAttribute($name, $lang) as $key => $docValue)
 				{
-					if (!$docValue instanceof CModel)
+					if (!$docValue instanceof Model)
 					{
 						continue;
 					}
@@ -477,7 +477,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 			else
 			{
 				$value = $this->getAttribute($name, $lang);
-				if ($value instanceof CModel)
+				if ($value instanceof Model)
 				{
 					if (method_exists($value, 'toArray'))
 					{
@@ -500,6 +500,9 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		}
 		return $value;
 	}
+
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Attributes handling">
 
 	/**
 	 * Get raw attribute, as is stored in db
@@ -640,6 +643,9 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		}
 	}
 
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Getters and setters">
+
 	/**
 	 * Get current language code, defaults to Yii::app()->language
 	 * @return string
@@ -748,7 +754,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 
 	/**
 	 * Override default setScenario method for populating to embedded records
-	 * @see CModel::setScenario()
+	 * @see Model::setScenario()
 	 * @todo Set scenario for embedded documents
 	 * @since v1.0.8
 	 */
@@ -772,6 +778,39 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		}
 		return parent::getScenario();
 	}
+
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Embedded documents handling">
+
+	/**
+	 * @since v1.0.8
+	 */
+	protected function initEmbeddedDocuments()
+	{
+		if (!$this->hasEmbeddedDocuments() || !$this->beforeEmbeddedDocsInit())
+		{
+			return false;
+		}
+
+		$this->afterEmbeddedDocsInit();
+	}
+
+	/**
+	 * @since v1.0.8
+	 */
+	public function embeddedDocuments()
+	{
+		return $this->meta->properties('embedded');
+	}
+
+	/**
+	 * @since v1.0.8
+	 */
+	public function hasEmbeddedDocuments()
+	{
+		return count($this->embeddedDocuments()) > 0;
+	}
+
 
 	/**
 	 * Create instance of embedded document, based on defined type or
@@ -840,6 +879,15 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		// Create a new instance if need
 		if (!$model instanceof EmbeddedDocument)
 		{
+			if (!class_exists($docClassName))
+			{
+				$notFound = $docClassName;
+				$docClassName = $this->classNotfound($docClassName);
+				if(!$docClassName)
+				{
+					throw new RuntimeException(sprintf('Trying to instantiate embedded document with class `%s`, but class or fallback not found', $notFound));
+				}
+			}
 			$model = new $docClassName($this->getScenario(), $this->getLang());
 		}
 //		$model->_key = $key;
@@ -880,5 +928,7 @@ abstract class EmbeddedDocument extends CModel implements IAnnotated
 		}
 		return $model;
 	}
+
+// </editor-fold>
 
 }
