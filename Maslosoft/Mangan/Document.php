@@ -16,7 +16,6 @@ namespace Maslosoft\Mangan;
 use Exception;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ModelEvent;
-use MMongoDocument;
 use MongoCollection;
 use MongoCursor;
 use MongoId;
@@ -33,17 +32,20 @@ abstract class Document extends EmbeddedDocument
 {
 
 	/**
-	 * Alias to _id
+	 * Mongo id field
 	 * @KoBindable(false)
-	 * @see MMongoDocument::setId()
-	 * @see MMongoDocument::getId()
+	 * @see setId()
+	 * @see getId()
 	 * @var mixed
 	 */
 	public $_id;
 
 	/**
+	 * Alias to _id
 	 * @Label('Database ID')
 	 * @Persistent(false)
+	 * @see setId()
+	 * @see getId()
 	 * @var string
 	 */
 	public $id;
@@ -1343,7 +1345,7 @@ abstract class Document extends EmbeddedDocument
 	}
 
 	/**
-	 * Creates an EMongoDocument with the given attributes.
+	 * Creates an Document with the given attributes.
 	 * This method is internally used by the find methods.
 	 * @param array $document attribute values (column name=>column value)
 	 * @param boolean $callAfterFind whether to call {@link afterFind} after the record is populated.
@@ -1408,7 +1410,7 @@ abstract class Document extends EmbeddedDocument
 	/**
 	 * Magic search method, provides basic search functionality.
 	 *
-	 * Returns EMongoDocument object ($this) with criteria set to
+	 * Returns Document object ($this) with criteria set to
 	 * regexp: /$attributeValue/i
 	 * used for Data provider search functionality
 	 * @param boolean $caseSensitive whatever do a case-sensitive search, default to false
@@ -1455,11 +1457,11 @@ abstract class Document extends EmbeddedDocument
 	}
 
 	/**
-	 * Returns the static model of the specified MMongoDocument class.
-	 * The model returned is a static instance of the MMongoDocument class.
+	 * Returns the static model of the specified Document class.
+	 * The model returned is a static instance of the Document class.
 	 * It is provided for invoking class-level methods (something similar to static class methods.)
 	 * @param string $lang
-	 * @return MMongoDocument \Maslosoft\Mangan\Document model instance.
+	 * @return Document model instance.
 	 */
 	public static function model($lang = null)
 	{
