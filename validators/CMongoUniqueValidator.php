@@ -47,7 +47,7 @@ class CMongoUniqueValidator extends CValidator
 	 * This array will be used to instantiate a {@link CDbCriteria} object.
 	 * @since 1.0.8
 	 */
-	public $criteria=array();
+	public $criteria=[];
 	/**
 	 * @var string the user-defined error message. The placeholders "{attribute}" and "{value}"
 	 * are recognized, which will be replaced with the actual attribute name and value, respectively.
@@ -74,13 +74,13 @@ class CMongoUniqueValidator extends CValidator
 
 		$className=$this->className===null?get_class($object):Yii::import($this->className);
 		$attributeName=$this->attributeName===null?$attribute:$this->attributeName;
-		$finder=EMongoDocument::model($className);
-		$criteria=new EMongoCriteria;
+		$finder=\Maslosoft\Mangan\Document::model($className);
+		$criteria=new \Maslosoft\Mangan\Criteria;
 		$criteria->{$attribute}=$value;
-		if($this->criteria!==array())
+		if($this->criteria!==[])
 			$criteria->mergeWith($this->criteria);
 
-		if(!$object instanceof EMongoDocument || $object->isNewRecord)
+		if(!$object instanceof \Maslosoft\Mangan\Document || $object->isNewRecord)
 			$exists=$finder->exists($criteria);
 		else
 		{
@@ -101,7 +101,7 @@ class CMongoUniqueValidator extends CValidator
 		if($exists)
 		{
 			$message=$this->message!==null?$this->message:Yii::t('yii','{attribute} "{value}" has already been taken.');
-			$this->addError($object,$attribute,$message,array('{value}'=>$value));
+			$this->addError($object,$attribute,$message,['{value}'=>$value]);
 		}
 	}
 }

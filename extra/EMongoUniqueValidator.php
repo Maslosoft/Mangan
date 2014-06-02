@@ -24,7 +24,7 @@ class EMongoUniqueValidator extends CValidator
 		if($this->allowEmpty && ($value === null || $value === ''))
 			return;
 
-		$criteria = new EMongoCriteria;
+		$criteria = new \Maslosoft\Mangan\Criteria;
 		if(!$object->getIsNewRecord())
 			$criteria->addCond('_id', '!=', $object->getPrimaryKey());
 		$criteria->addCond($attribute, '==', $value);

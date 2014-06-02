@@ -10,7 +10,7 @@ class MongoModelCode extends CCodeModel
 	public $modelClass;
 	public $mongoCollectionName;
 	public $modelPath='application.models';
-	public $baseClass='EMongoDocument';
+	public $baseClass=\Maslosoft\Mangan\Document::class;
 
 	/**
 	 * @var array list of candidate relation code. The array are indexed by AR class names and relation names.
@@ -20,35 +20,35 @@ class MongoModelCode extends CCodeModel
 
 	public function rules()
 	{
-		return array_merge(parent::rules(), array(
-			array('tablePrefix, baseClass, tableName, modelClass, modelPath', 'filter', 'filter'=>'trim'),
-			array('tableName, modelPath, baseClass, mongoCollectionName', 'required'),
-			array('tablePrefix, tableName, modelPath, mongoCollectionName', 'match', 'pattern'=>'/^(\w+[\w\.]*|\*?|\w+\.\*)$/', 'message'=>'{attribute} should only contain word characters, dots, and an optional ending asterisk.'),
-			array('tableName', 'validateTableName', 'skipOnError'=>true),
-			array('tablePrefix, modelClass, baseClass, mongoCollectionName', 'match', 'pattern'=>'/^[a-zA-Z_]\w*$/', 'message'=>'{attribute} should only contain word characters.'),
-			array('modelPath', 'validateModelPath', 'skipOnError'=>true),
-			array('baseClass, modelClass, mongoCollectionName', 'validateReservedWord', 'skipOnError'=>true),
-			array('baseClass', 'validateBaseClass', 'skipOnError'=>true),
-			array('tablePrefix, modelPath, baseClass', 'sticky'),
-		));
+		return array_merge(parent::rules(), [
+			['tablePrefix, baseClass, tableName, modelClass, modelPath', 'filter', 'filter'=>'trim'],
+			['tableName, modelPath, baseClass, mongoCollectionName', 'required'],
+			['tablePrefix, tableName, modelPath, mongoCollectionName', 'match', 'pattern'=>'/^(\w+[\w\.]*|\*?|\w+\.\*)$/', 'message'=>'{attribute} should only contain word characters, dots, and an optional ending asterisk.'],
+			['tableName', 'validateTableName', 'skipOnError'=>true],
+			['tablePrefix, modelClass, baseClass, mongoCollectionName', 'match', 'pattern'=>'/^[a-zA-Z_]\w*$/', 'message'=>'{attribute} should only contain word characters.'],
+			['modelPath', 'validateModelPath', 'skipOnError'=>true],
+			['baseClass, modelClass, mongoCollectionName', 'validateReservedWord', 'skipOnError'=>true],
+			['baseClass', 'validateBaseClass', 'skipOnError'=>true],
+			['tablePrefix, modelPath, baseClass', 'sticky'],
+		]);
 	}
 
 	public function attributeLabels()
 	{
-		return array_merge(parent::attributeLabels(), array(
+		return array_merge(parent::attributeLabels(), [
 			'tablePrefix'=>'Table Prefix',
 			'tableName'=>'Table Name',
 			'modelPath'=>'Model Path',
 			'modelClass'=>'Model Class',
 			'baseClass'=>'Base Class',
-		));
+		]);
 	}
 
 	public function requiredTemplates()
 	{
-		return array(
+		return [
 			'model.php',
-		);
+		];
 	}
 
 	public function init()
@@ -61,7 +61,7 @@ class MongoModelCode extends CCodeModel
 
 	public function prepare()
 	{
-		$this->files=array();
+		$this->files=[];
 		$templatePath=$this->templatePath;
 
 		if(($pos=strrpos($this->tableName,'.'))!==false)
@@ -87,7 +87,7 @@ class MongoModelCode extends CCodeModel
 			}
 		}
 		else
-			$tables=array($this->getTableSchema($this->tableName));
+			$tables=[$this->getTableSchema($this->tableName)];
 
 		$this->relations=$this->generateRelations();
 
@@ -95,16 +95,16 @@ class MongoModelCode extends CCodeModel
 		{
 			$tableName=$this->removePrefix($table->name);
 			$className=$this->generateClassName($table->name);
-			$params=array(
+			$params=[
 				'tableName'=>$schema==='' ? $tableName : $schema.'.'.$tableName,
 				'modelClass'=>$className,
 				'collectionName'=>$this->mongoCollectionName,
 				'columns'=>$table->columns,
 				'labels'=>$this->generateLabels($table),
 				'rules'=>$this->generateRules($table),
-				'relations'=>isset($this->relations[$className]) ? $this->relations[$className] : array(),
+				'relations'=>isset($this->relations[$className]) ? $this->relations[$className] : [],
 				'primaryKey'=>$table->primaryKey,
-			);
+			];
 			$this->files[]=new CCodeFile(
 				Yii::getPathOfAlias($this->modelPath).'/'.$className.'.php',
 				$this->render($templatePath.'/model.php', $params)
@@ -135,9 +135,13 @@ class MongoModelCode extends CCodeModel
 	{
 		$class=@Yii::import($this->baseClass,true);
 		if(!is_string($class) || !$this->classExists($class))
+		{
 			$this->addError('baseClass', "Class '{$this->baseClass}' does not exist or has syntax error.");
-		else if($class!=='EMongoDocument' && !is_subclass_of($class,'EMongoDocument'))
-			$this->addError('baseClass', "'{$this->model}' must extend from EMongoDocument.");
+		}
+		else if($class!==Maslosoft\Mangan\Document::class && !is_subclass_of($class,  Maslosoft\Mangan\Document::class))
+		{
+			$this->addError('baseClass', "'{$this->model}' must extend from " . Maslosoft\Mangan\Document::class . ".");
+		}
 	}
 
 	public function getTableSchema($tableName)
@@ -147,10 +151,10 @@ class MongoModelCode extends CCodeModel
 
 	public function generateLabels($table)
 	{
-		$labels=array();
+		$labels=[];
 		foreach($table->columns as $column)
 		{
-			$label=ucwords(trim(strtolower(str_replace(array('-','_'),' ',preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $column->name)))));
+			$label=ucwords(trim(strtolower(str_replace(['-','_'],' ',preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $column->name)))));
 			$label=preg_replace('/\s+/',' ',$label);
 			if(strcasecmp(substr($label,-3),' id')===0)
 				$label=substr($label,0,-3);
@@ -163,12 +167,12 @@ class MongoModelCode extends CCodeModel
 
 	public function generateRules($table)
 	{
-		$rules=array();
-		$required=array();
-		$integers=array();
-		$numerical=array();
-		$length=array();
-		$safe=array();
+		$rules=[];
+		$required=[];
+		$integers=[];
+		$numerical=[];
+		$length=[];
+		$safe=[];
 		foreach($table->columns as $column)
 		{
 			if($column->isPrimaryKey && $table->sequenceName!==null)
@@ -185,18 +189,18 @@ class MongoModelCode extends CCodeModel
 			else if(!$column->isPrimaryKey && !$r)
 				$safe[]=$column->name;
 		}
-		if($required!==array())
+		if($required!==[])
 			$rules[]="array('".implode(', ',$required)."', 'required')";
-		if($integers!==array())
+		if($integers!==[])
 			$rules[]="array('".implode(', ',$integers)."', 'numerical', 'integerOnly'=>true)";
-		if($numerical!==array())
+		if($numerical!==[])
 			$rules[]="array('".implode(', ',$numerical)."', 'numerical')";
-		if($length!==array())
+		if($length!==[])
 		{
 			foreach($length as $len=>$cols)
 				$rules[]="array('".implode(', ',$cols)."', 'length', 'max'=>$len)";
 		}
-		if($safe!==array())
+		if($safe!==[])
 			$rules[]="array('".implode(', ',$safe)."', 'safe')";
 
 		return $rules;
@@ -204,7 +208,7 @@ class MongoModelCode extends CCodeModel
 
 	public function getRelations($className)
 	{
-		return isset($this->relations[$className]) ? $this->relations[$className] : array();
+		return isset($this->relations[$className]) ? $this->relations[$className] : [];
 	}
 
 	protected function removePrefix($tableName,$addBrackets=true)
@@ -237,7 +241,7 @@ class MongoModelCode extends CCodeModel
 
 	protected function generateRelations()
 	{
-		$relations=array();
+		$relations=[];
 		foreach(Yii::app()->db->schema->getTables() as $table)
 		{
 			if($this->tablePrefix!='' && strpos($table->name,$this->tablePrefix)!==0)

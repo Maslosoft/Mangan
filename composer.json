@@ -1,6 +1,5 @@
 {
 	"name": "maslosoft/mangan",
-	"type": "yii-extension",
 	"license": "GNU LESSER GENERAL PUBLIC LICENSE",
 	"authors": [
 		{
@@ -12,5 +11,10 @@
 	],
 	"require": {
 		"maslosoft/addendum": "*"
+	},
+	"autoload": {
+		"psr-0": {
+			"Maslosoft\\Mangan": "./"
+		}
 	}
 }

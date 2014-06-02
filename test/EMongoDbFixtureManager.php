@@ -89,8 +89,8 @@ class EMongoDbFixtureManager extends CApplicationComponent
 		{
 			$this->_mongoDb=Yii::app()->getComponent($this->connectionID)->getDbInstance();
 			if(!$this->_mongoDb instanceof MongoDB)
-				throw new EMongoException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
-					array('{id}'=>$this->connectionID)));
+				throw new \Maslosoft\Mangan\MongoException(Yii::t('yii','EMongoDbFixtureManager.connectionID "{id}" is invalid. Please make sure it refers to the ID of a CDbConnection application component.',
+					['{id}'=>$this->connectionID]));
 		}
 		return $this->_mongoDb;
 	}
@@ -152,7 +152,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 			return false;
 		}
 
-		$rows=array();
+		$rows=[];
 		foreach(require($fileName) as $alias=>$row)
 		{
 			$this->getDbConnection()->{$collectionName}->save($row);
@@ -170,7 +170,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	{
 		if ($this->_collectionList === null)
 		{
-			$this->_collectionList = array();
+			$this->_collectionList = [];
 			foreach($this->getDbConnection()->listCollections() as $collection)
 				$this->_collectionList[] = $collection->getName();
 		}
@@ -186,7 +186,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	{
 		if($this->_fixtures===null)
 		{
-			$this->_fixtures=array();
+			$this->_fixtures=[];
 			$folder=opendir($this->basePath);
 			$suffixLen=strlen($this->initScriptSuffix);
 			while($file=readdir($folder))
@@ -212,7 +212,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 */
 	public function truncateCollection($collectionName)
 	{
-		$this->getDbConnection()->{$collectionName}->remove(array());
+		$this->getDbConnection()->{$collectionName}->remove([]);
 	}
 
 	/**
@@ -234,14 +234,14 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	 * Note, if a collection does not have fixture data, {@link resetCollection} will still
 	 * be called to reset the table.
 	 * @param array $fixtures fixtures to be loaded. The array keys are fixture names,
-	 * and the array values are either EMongoDocument class names or collection names.
+	 * and the array values are either \Maslosoft\Mangan\Document class names or collection names.
 	 * If collection names, they must begin with a colon character (e.g. 'Post'
-	 * means an EMongoDocument class, while ':Post' means a collection name).
+	 * means an \Maslosoft\Mangan\Document class, while ':Post' means a collection name).
 	 */
 	public function load($fixtures)
 	{
-		$this->_rows=array();
-		$this->_records=array();
+		$this->_rows=[];
+		$this->_records=[];
 		foreach($fixtures as $fixtureName=>$collectionName)
 		{
 			if($collectionName[0]===':')
@@ -252,7 +252,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 			else
 			{
 				$modelClass=Yii::import($collectionName,true);
-				$collectionName=EMongoDocument::model($modelClass)->getCollectionName();
+				$collectionName=\Maslosoft\Mangan\Document::model($modelClass)->getCollectionName();
 			}
 			$this->resetCollection($collectionName);
 			$rows=$this->loadFixture($collectionName);
@@ -283,10 +283,10 @@ class EMongoDbFixtureManager extends CApplicationComponent
 	}
 
 	/**
-	 * Returns the specified EMongoDocument instance in the fixture data.
+	 * Returns the specified \Maslosoft\Mangan\Document instance in the fixture data.
 	 * @param string $name the fixture name
 	 * @param string $alias the alias for the fixture data document
-	 * @return EMongoDocument the MongoDocument instance. False is returned
+	 * @return \Maslosoft\Mangan\Document the MongoDocument instance. False is returned
 	 * if there is no such fixture document.
 	 */
 	public function getRecord($name,$alias)
@@ -296,7 +296,7 @@ class EMongoDbFixtureManager extends CApplicationComponent
 			if(is_string($this->_records[$name][$alias]))
 			{
 				$row=$this->_rows[$name][$alias];
-				$model=EMongoDocument::model($this->_records[$name][$alias]);
+				$model=\Maslosoft\Mangan\Document::model($this->_records[$name][$alias]);
 				$pk = $row['_id'];
 				$this->_records[$name][$alias]=$model->findByPk($pk);
 			}

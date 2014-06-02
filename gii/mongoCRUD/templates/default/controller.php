@@ -134,7 +134,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new EMongoDocumentDataProvider('<?php echo $this->modelClass; ?>');
+		$dataProvider=new \Maslosoft\Mangan\DataProvider('<?php echo $this->modelClass; ?>');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));

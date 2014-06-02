@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Ianaré Sévi
  * @author Dariusz Górecki <darek.krk@gmail.com>
@@ -10,20 +11,16 @@
  * @package ext.YiiMongoDbSuite
  */
 
+namespace Maslosoft\Mangan;
+
+use Maslosoft\Mangan\Core\Exception;
+
 /**
- * MongocrudGenerator.php
+ * \Maslosoft\Mangan\MongoException
  *
- * @since		v1.2.2
+ * @since v1.0
  */
-
-Yii::setPathOfAlias('mongoExtRoot', realpath(implode(DIRECTORY_SEPARATOR, [
-	dirname(__FILE__), '..', '..',
-])));
-
-/**
- * @since v1.2.2
- */
-class MongoCRUDGenerator extends CCodeGenerator
+class MongoException extends Exception
 {
-	public $codeModel = 'mongoExtRoot.gii.mongoCRUD.MongoCRUDCode';
+
 }
