@@ -394,6 +394,338 @@ pre code, pre tt {
     </style>
 </head>
 <body>
-    
+    <a name="yii_mangan"></a><h1>Yii Mangan<a class="anchorlink" href="#yii_mangan"></a></h1>
+<h6>Advanced MongoDB document mapper for Yii</h6>
+<p>This extension originally started as a fork of <a href="canni.github.com/YiiMongoDbSuite" title="YiiMongoDbSuite">YiiMongoDbSuite</a>,
+written by <a href="https://github.com/canni" title="canni">canni</a> and further improved by several developers (<a href="https://github.com/mintao" title="mintao">mintao</a>, et al).
+YiiMongoDbSuite originally started as a fork of <a href="www.yiiframework.com/extension/mongorecord" title="MongoRecord">MongoRecord</a>
+extension written by <a href="http://www.yiiframework.com/user/31/" title="tyohan">tyohan</a>,
+to fix some major bugs, and add full featured suite for <a href="http://www.mongodb.org" title="MongoDB">MongoDB</a> developers.</p>
+<p>The current version is 3.0.0-beta.1</p>
+<a name="the_key_feature_list_"></a><h2>The Key Feature List:<a class="anchorlink" href="#the_key_feature_list_"></a></h2>
+<a name="features_covered_from_standard_yii_implementations"></a><h3>Features Covered From Standard Yii Implementations<a class="anchorlink" href="#features_covered_from_standard_yii_implementations"></a></h3>
+<ul class="list">
+<li>Support of using Class::model()-&gt;find / findAll / count / countByAttributes and other Yii ActiveRecord syntax.</li>
+<li>Named scopes, along with default scope and parameterized scopes, just like in AR.</li>
+<li>Ready to go out-of-box <em>EFFICIENT</em> DataProvider, witch use native php db driver sort, limit and offset features for returning results!</li>
+<li>Model classes and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)</li>
+<li>Relations support <em>idea/concept/example</em>.</li>
+<li><strong>Support for generating CRUD for Document models, with Gii!</strong>.</li>
+<li><strong>Support for generating mongo document models from existing SQL tables!</strong>.</li>
+<li>Use MongoDB for LogRoute and HttpSession.</li>
+<li>Easy to use criteria object, you don&#39;t have to create complex MongoDB query arrays.</li>
+<li><strong>Fixtures manager, that can replace the Yii default one, and work with Mongo model.</strong></li>
+</ul>
+<a name="mongodb_related_feature_list"></a><h3>MongoDB Related Feature List<a class="anchorlink" href="#mongodb_related_feature_list"></a></h3>
+<ul class="list">
+<li>Support of schema-less documents with Yii standard rules and validation features</li>
+<li>Embedded document and arrays of embedded documents support</li>
+<li>Ability to set FSync and/or Safe flag of DB write operations on different scopes, globally, on model level, and on single model object</li>
+<li><strong>Ability to use efficient MongoDB Cursors instead of raw arrays of results, returned by the findAll* methods</strong></li>
+<li>MongoDB GridFS feature support, thanks to work of Jose Martinez and Philippe Gaultier</li>
+<li>Support for using any other than _id field as a Primary Key, for a collection</li>
+<li>Automated efficient index definition for collections, per model</li>
+<li>Support &quot;Soft&quot; documents, documents that do not have fixed list of attributes</li>
+<li><strong>Ability to do <em>Extreme Efficent</em> document partial updates, that make use of MongoDB <code>$set</code> operator/feature</strong></li>
+</ul>
+<a name="yii_addendum_related_feature_list"></a><h3>Yii Addendum Related Feature List<a class="anchorlink" href="#yii_addendum_related_feature_list"></a></h3>
+<ul class="list">
+<li>Easy model definition</li>
+<li>Clean view of any model field options/properties</li>
+<li>Lightweight and extensible model metadata</li>
+</ul>
+<a name="limitations"></a><h2>Limitations<a class="anchorlink" href="#limitations"></a></h2>
+<ul class="list">
+<li>The main limitations are only those present in MongoDB itself, like the 16mb data transfer limit.</li>
+<li>In it&#39;s current incarnation, This extension does NOT work with the &quot;$or&quot; criteria operator. When we get it working we will remove this line and add an example.</li>
+</ul>
+<a name="requirements"></a><h2>Requirements<a class="anchorlink" href="#requirements"></a></h2>
+<ul class="list">
+<li>Yii 1.1.14+ is recommended.</li>
+<li>MongoDB 2.4.0+ is recommended. Untested with older versions.</li>
+<li>Mongo PHP Driver 1.4.5+</li>
+<li>PHP 5.5+</li>
+<li>composer</li>
+</ul>
+<a name="setup"></a><h2>Setup<a class="anchorlink" href="#setup"></a></h2>
+<p>Use composer to install extension:</p>
+<pre class="prettyprint">composer require maslosoft/mangan &lt;version&gt;</pre>
+<p>In your protected/config/main.php config file. Add <code>mongoDB</code> array
+for your database in the components section, and add the following to the file:</p>
+<pre class="prettyprint">&#39;mongodb&#39; =&gt; [
+    &#39;connectionString&#39; =&gt; &#39;mongodb://user:password@mongo-db-host.example.com&#39;,
+    &#39;dbName&#39; =&gt; &#39;db_name&#39;,
+    &#39;class&#39; =&gt; &#39;Maslosoft\Mangan\MongoDB&#39;
+],</pre>
+<ul class="list">
+<li>ConnectionString: &#39;localhost&#39; should be changed to the ip or hostname of your host being connected to. For example
+if connecting to a server it might be <code>&#39;connectionString&#39; =&gt; &#39;mongodb://username@xxx.xx.xx.xx&#39;</code> where xx.xx.xx.xx is
+the ip (or hostname) of your webserver or host.</li>
+<li>dbName: The database name, where your collections will be be stored in.</li>
+<li>fsyncFlag If set to true, this makes mongodb make sure all writes to the database are safely stored to disk (true by default).</li>
+<li>safeFlag If set to true, mongodb will wait to retrieve status of all write operations, and check if everything went OK (true by default).</li>
+<li>useCursors If set to true, extension will return <code>Cursor</code> instead of raw pre-populated arrays, from findAll* methods (defaults to false for backwards compatibility).</li>
+</ul>
+<p>That&#39;s all you have to do for setup. You can use it very much like the active record.
+For example:</p>
+<pre class="prettyprint">&lt;?php
+$client = new Client();
+$client-&gt;first_name=&#39;something&#39;;
+$client-&gt;save();
+$clients = Client::model()-&gt;findAll();</pre>
+<a name="basic_usage"></a><h2>Basic Usage<a class="anchorlink" href="#basic_usage"></a></h2>
+<p>Just define following model:</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Document;
+
+class User extends Document
+{
+  /**
+   * @Label(&#39;User login&#39;)
+   * @RequiredValidator
+   */
+  public $login;
+
+  /**
+   * @Label(&#39;Full name&#39;)
+   * @LengthValidator(max =&gt; 255)
+   */
+  public $name;
+
+  /**
+   * @Label(&#39;Password&#39;)
+   * @RequiredValidator
+   * @LengthValidator(min =&gt; 6, max =&gt; 20)
+   */
+  public $password;
+}</pre>
+<p>And that&#39;s it! Now start using this User model class like standard Yii AR model.</p>
+<a name="embedded_documents"></a><h2>Embedded Documents<a class="anchorlink" href="#embedded_documents"></a></h2>
+<p><em>NOTE: For performance reasons embedded documents should extend from <code>EmbeddedDocument</code> instead of <code>Document</code>.</em></p>
+<p><code>EmbeddedDocument</code> is almost identical as <code>Document</code>, in fact <code>Document</code> extends from <code>EmbeddedDocument</code>
+and adds to it the DB connection and related functions.</p>
+<p>So if you have a User.php model, and an UserAddress.php model which is the embedded document.
+Lest assume we have following embedded document:</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\EmbeddedDocument;
+
+class UserAddress extends EmbeddedDocument
+{
+  /**
+   * @Label(&#39;City&#39;)
+   * @LengthValidator(max =&gt; 255)
+   */
+  public $city;
+
+  /**
+   * @Label(&#39;Street&#39;)
+   * @LengthValidator(max =&gt; 255)
+   */
+  public $street;
+
+  /**
+   * @Label(&#39;Home number&#39;)
+   * @LengthValidator(max =&gt; 255)
+   */
+  public $house;
+
+  /**
+   * @Label(&#39;Apartment number&#39;)
+   * @LengthValidator(max =&gt; 10)
+   */
+  public $apartment;
+
+  /**
+   * @Label(&#39;Postal code&#39;)
+   * @LengthValidator(max =&gt; 6)
+   */
+  public $zip;
+}</pre>
+<p>Now we can add this document to our User model from previous section:</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Document;
+
+class User extends Document {
+  ...
+
+  /**
+   * @Embedded(&#39;UserAddress&#39;)
+   */
+  public $address = null;
+
+  ...
+}</pre>
+<p>And using it is as easy as π!</p>
+<pre class="prettyprint">&lt;?php
+$client = new Client;
+$client-&gt;address-&gt;city=&#39;New York&#39;;
+$client-&gt;save();</pre>
+<p>This will automatically call validation for the model and all its embedded documents.
+You can even nest embedded documents in embedded documents and array of embbedded document, also mix any embedded document types!
+<em>IMPORTANT</em>: This mechanism uses recurrency, and <strong>will not handle circular nesting</strong>, so use this feature with care.</p>
+<a name="arrays"></a><h2>Arrays<a class="anchorlink" href="#arrays"></a></h2>
+<p><strong>Simple arrays</strong></p>
+<ul class="list">
+<li>Just define a property for an array, and store an array in it.</li>
+</ul>
+<p><strong>Arrays of embedded documents</strong></p>
+<ul class="list">
+<li>Just need to add @EmbeddedArray annotation</li>
+</ul>
+<pre class="prettyprint">&lt;?php
+...
+/**
+ * @EmbeddedArray(&#39;UserAddress&#39;)
+ */
+public $addresses = array();</pre>
+<p>So for the user, if you want them to be able to save multiple addresses, you can do this:</p>
+<pre class="prettyprint">&lt;?php
+$c = new Client;
+$c-&gt;addresses[0] = new ClientAddress;
+$c-&gt;addresses[0]-&gt;city=&#39;NY&#39;;
+$c-&gt;save(); // will handle validation of array too</pre>
+<p>Then you can loop addresses:</p>
+<pre class="prettyprint">&lt;?php
+$c = Client::model()-&gt;find();
+foreach($c-&gt;addresses as $addr)
+{
+    echo $addr-&gt;city;
+}</pre>
+<a name="querying"></a><h2>Querying<a class="anchorlink" href="#querying"></a></h2>
+<p>This is one of the things that makes this extension great. It&#39;s very easy to query for the objects you want.</p>
+<pre class="prettyprint">&lt;?php
+// simple find first. just like normal AR.
+$object = ModelClass::model()-&gt;find()</pre>
+<p>Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Criteria;
+
+$c = new Criteria;
+$c-&gt;status(&#39;==&#39;, 1);
+$users = ModelClass::model-&gt;findAll($c);</pre>
+<p>and now $users will be an array of all users with the status key in their document set to 1. This is a good way to list only active users.
+What&#39;s that? You only want to show the 10 most recent activated users? Thats easy too.</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Criteria;
+
+$c = new Criteria;
+$c-&gt;active(&#39;==&#39;, 1)-&gt;limit(10);
+
+$users = ModelClass::model-&gt;findAll($c);</pre>
+<p>It&#39;s that easy. In place of the &#39;equals&#39; key, you can use any of the following operators:</p>
+<pre class="prettyprint">- &#39;greater&#39;   | &gt;
+- &#39;greaterEq&#39; | &gt;=
+- &#39;less&#39;      | &lt;
+- &#39;lessEq&#39;    | &lt;=
+- &#39;notEq&#39;     | !=, &lt;&gt;
+- &#39;in&#39;        |
+- &#39;notIn&#39;     |
+- &#39;all&#39;       |
+- &#39;size&#39;      |
+- &#39;exists&#39;    |
+- &#39;type&#39;      | // BSON type see mongodb docs for this
+- &#39;notExists&#39; |
+- &#39;mod&#39;       | %
+- &#39;equals&#39;    | ==
+- &#39;where&#39;     | // JavaScript operator</pre>
+<p>*NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed. Newer versions of MongoDB will work, just not the $or operator.
+For examples and use for how to use these operators effectively, use the <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">MongoDB Operators Documentation here</a>.</p>
+<p>Here are a few more examples for using criteria:</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Criteria;
+
+$criteria = new Criteria;
+
+// find the single user with the personal_number == 12345
+$criteria-&gt;personal_number(&#39;==&#39;, 12345);
+
+// OR like this:
+$criteria-&gt;personal_number = 12345;
+
+$user = User::model-&gt;find($criteria);
+
+// find all users in New York. This will search in the embedded document of UserAddress
+$criteria-&gt;address-&gt;city(&#39;==&#39;, &#39;New York&#39;);
+// Or
+$criteria-&gt;address-&gt;city = &#39;New York&#39;;
+$users = User::model()-&gt;findAll($criteria);
+
+// Ok now try this. Only active users, only show at most 10 users, and sort by first name, descending, and offset by 20 (pagination):
+// note the sort syntax. it must have an array value and use the =&gt; syntax.
+$criteria-&gt;status(&#39;==&#39;, 1)-&gt;limit(10)-&gt;sort(array(&#39;firstName&#39; =&gt; Criteria::SORT_DESC))-&gt;offset(20);
+$users = User::model()-&gt;findAll($criteria);
+
+// A more advanced case. All users with a personal_number evenly divisible by 10, sorted by first name ascending, limit 10 users, offset by 25 users (pagination), and remove any address fields from the returned result.
+$criteria-&gt;personal_number(&#39;%&#39;, array(10, 0)) // modulo =&gt; personal_number % 10 == 0
+         -&gt;sort(array(&#39;firstName&#39; =&gt; Criteria::SORT_ASC))
+         -&gt;limit(10)
+         -&gt;offset(25);
+$users = User::model()-&gt;findAll($criteria);
+
+// You can even use the where operator with javascript like so:
+$criteria-&gt;fieldName(&#39;where&#39;, &#39; expression in javascript ie: this.field &gt; this.field2&#39;);
+// but remember that this kind of query is a bit slower than normal finds.</pre>
+<a name="regexp___sql_like_replacemt"></a><h3>Regexp / SQL LIKE Replacemt<a class="anchorlink" href="#regexp___sql_like_replacemt"></a></h3>
+<p>You can use native PHP Mongo driver class MongoRegex, to query:</p>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Criteria;
+
+$criteria = new Criteria;
+
+// Find all records witch have first name starring on a, b and c, case insensitive search
+$criteria-&gt;first_name = new MongoRegex(&#39;/[abc].*/i&#39;);
+$clients = Client::model()-&gt;findAll($criteria);
+// see phpdoc for MongoRegex class for more examples</pre>
+<p>for reference on how to use query array see: <a href="http://www.php.net/manual/en/mongocollection.find.php">http://www.php.net/manual/en/mongocollection.find.php</a></p>
+<a name="creating_criteria_objects_from_arrays"></a><h3>Creating Criteria Objects From Arrays<a class="anchorlink" href="#creating_criteria_objects_from_arrays"></a></h3>
+<pre class="prettyprint">&lt;?php
+use Maslosoft\Mangan\Criteria;
+
+// Example criteria
+$array = array(
+    &#39;conditions&#39;=&gt;array(
+        // field name =&gt; operator definition
+        &#39;FieldName1&#39;=&gt;array(&#39;greaterEq&#39; =&gt; 10), // Or &#39;FieldName1&#39;=&gt;array(&#39;&gt;=&#39;, 10)
+        &#39;FieldName2&#39;=&gt;array(&#39;in&#39; =&gt; array(1, 2, 3)),
+        &#39;FieldName3&#39;=&gt;array(&#39;exists&#39;),
+    ),
+    &#39;limit&#39;=&gt;10,
+    &#39;offset&#39;=&gt;25,
+    &#39;sort&#39;=&gt;array(&#39;fieldName1&#39; =&gt; Criteria::SORT_ASC, &#39;fieldName4&#39; =&gt; Criteria::SORT_DESC),
+);
+$criteria = new Criteria($array);
+// or
+$clients = ClientModel::model()-&gt;findAll($array);</pre>
+<a name="known_bugs"></a><h2>Known bugs<a class="anchorlink" href="#known_bugs"></a></h2>
+<ul class="list">
+<li>Remember, this is not complete yet. So at this stage, it can have some</li>
+<li>If you find any <a href="https://github.com/Maslosoft/YiiMangan/issues">please let me know</a>.</li>
+<li>As said before, it does not work with the OR operators.</li>
+</ul>
+<a name="resources"></a><h2>Resources<a class="anchorlink" href="#resources"></a></h2>
+<ul class="list">
+<li><a href="http://maslosoft.com/en/open-source/yii-mangan/">Project website</a></li>
+<li><a href="https://github.com/Maslosoft/YiiMangan">Project Page on GitHub</a></li>
+<li><a href="https://github.com/Maslosoft/YiiMangan/issues">Report a Bug</a></li>
+<li><a href="http://www.mongodb.org/display/DOCS/Home">MongoDB Documentation</a></li>
+<li><a href="http://www.php.net/manual/en/book.mongo.php">PHP MongoDB Driver docs</a></li>
+<li><a href="http://www.yiiframework.com/doc/guide/1.1/en/database.ar">Standard Yii ActiveRecord Documentation</a></li>
+<li><a href="http://maslosoft.com/en/open-source/yii-addendum/">Yii Addendum</a></li>
+<li><a href="http://code.google.com/p/addendum/">PHP Addendum library</a></li>
+</ul>
+<a name="contribution_needed_"></a><h2>Contribution needed!<a class="anchorlink" href="#contribution_needed_"></a></h2>
+<ul class="list">
+<li>Any help would be great :)</li>
+</ul>
+<a name="acknowledgments"></a><h2>Acknowledgments<a class="anchorlink" href="#acknowledgments"></a></h2>
+<p>We stand upon the shoulders of giants:</p>
+<ul class="list">
+<li>canni, for leading continued development, bug testing, and merging contributions.</li>
+<li>tyohan, for first inspirations and the extension&#39;s concept.</li>
+<li>luckysmack, for big help with testing and documentation.</li>
+<li>Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support.</li>
+<li>Nagy Attila Gábor, for big help with new functionality and testing.</li>
+</ul>
+
 </body>
 </html>

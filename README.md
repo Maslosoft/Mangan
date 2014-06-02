@@ -18,7 +18,7 @@ The current version is 3.0.0-beta.1
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
 - Model classes and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
 - Relations support *idea/concept/example*.
-- **Support for generating CRUD for EMongoDocument models, with Gii!**.
+- **Support for generating CRUD for Document models, with Gii!**.
 - **Support for generating mongo document models from existing SQL tables!**.
 - Use MongoDB for LogRoute and HttpSession.
 - Easy to use criteria object, you don't have to create complex MongoDB query arrays.
@@ -75,7 +75,7 @@ for your database in the components section, and add the following to the file:
 - dbName: The database name, where your collections will be be stored in.
 - fsyncFlag If set to true, this makes mongodb make sure all writes to the database are safely stored to disk (true by default).
 - safeFlag If set to true, mongodb will wait to retrieve status of all write operations, and check if everything went OK (true by default).
-- useCursors If set to true, extension will return EMongoCursor instead of raw pre-populated arrays, from findAll* methods (defaults to false for backwards compatibility).
+- useCursors If set to true, extension will return `Cursor` instead of raw pre-populated arrays, from findAll* methods (defaults to false for backwards compatibility).
 
 That's all you have to do for setup. You can use it very much like the active record.
 For example:
@@ -90,8 +90,10 @@ For example:
 
 Just define following model:
 
-~~~php
-    class User extends EMongoDocument
+	<?php
+	use Maslosoft\Mangan\Document;
+	
+    class User extends Document
     {
       /**
        * @Label('User login')
@@ -110,24 +112,26 @@ Just define following model:
        * @RequiredValidator
        * @LengthValidator(min => 6, max => 20)
        */
-      public $pass;
+      public $password;
     }
-~~~
+
 
 And that's it! Now start using this User model class like standard Yii AR model.
 
 ## Embedded Documents
 
-*NOTE: For performance reasons embedded documents should extend from EMongoEmbeddedDocument instead of EMongoDocument.*
+*NOTE: For performance reasons embedded documents should extend from `EmbeddedDocument` instead of `Document`.*
 
-EMongoEmbeddedDocument is almost identical as EMongoDocument, in fact EMongoDocument extends from EMongoEmbeddedDocument
+`EmbeddedDocument` is almost identical as `Document`, in fact `Document` extends from `EmbeddedDocument`
 and adds to it the DB connection and related functions.
 
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
 Lest assume we have following embedded document:
 
 	<?php
-    class UserAddress extends EMongoEmbeddedDocument
+	use Maslosoft\Mangan\EmbeddedDocument;
+	
+    class UserAddress extends EmbeddedDocument
     {
       /**
        * @Label('City')
@@ -163,7 +167,9 @@ Lest assume we have following embedded document:
 Now we can add this document to our User model from previous section:
 
 	<?php
-    class User extends EMongoDocument {
+	use Maslosoft\Mangan\Document;
+	
+    class User extends Document {
       ...
 
       /**
@@ -187,18 +193,17 @@ You can even nest embedded documents in embedded documents and array of embbedde
 
 ## Arrays
 
-You easily can store arrays in DB!
-
 **Simple arrays**
 
 - Just define a property for an array, and store an array in it.
 
 **Arrays of embedded documents**
 
-- Just need to add @EmbeddedArray annotation:
+- Just need to add @EmbeddedArray annotation
 
 
 	<?php
+	...
     /**
      * @EmbeddedArray('UserAddress')
      */
@@ -222,3 +227,168 @@ Then you can loop addresses:
     {
         echo $addr->city;
     }
+
+## Querying
+
+This is one of the things that makes this extension great. It's very easy to query for the objects you want.
+
+	<?php
+    // simple find first. just like normal AR.
+    $object = ModelClass::model()->find()
+
+
+Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.
+
+	<?php
+	use Maslosoft\Mangan\Criteria;
+	
+    $c = new Criteria;
+    $c->status('==', 1);
+    $users = ModelClass::model->findAll($c);
+
+
+and now $users will be an array of all users with the status key in their document set to 1. This is a good way to list only active users.
+What's that? You only want to show the 10 most recent activated users? Thats easy too.
+
+	<?php
+    use Maslosoft\Mangan\Criteria;
+	
+    $c = new Criteria;
+    $c->active('==', 1)->limit(10);
+
+    $users = ModelClass::model->findAll($c);
+
+
+It's that easy. In place of the 'equals' key, you can use any of the following operators:
+
+
+    - 'greater'   | >
+    - 'greaterEq' | >=
+    - 'less'      | <
+    - 'lessEq'    | <=
+    - 'notEq'     | !=, <>
+    - 'in'        |
+    - 'notIn'     |
+    - 'all'       |
+    - 'size'      |
+    - 'exists'    |
+    - 'type'      | // BSON type see mongodb docs for this
+    - 'notExists' |
+    - 'mod'       | %
+    - 'equals'    | ==
+    - 'where'     | // JavaScript operator
+
+*NOTICE: the $or operator in newer versions of mongodb does NOT work with this extension yet. We will add it to the list above when it is fixed. Newer versions of MongoDB will work, just not the $or operator.
+For examples and use for how to use these operators effectively, use the [MongoDB Operators Documentation here](http://www.mongodb.org/display/DOCS/Advanced+Queries).
+
+Here are a few more examples for using criteria:
+
+	<?php
+	use Maslosoft\Mangan\Criteria;
+	
+    $criteria = new Criteria;
+
+    // find the single user with the personal_number == 12345
+    $criteria->personal_number('==', 12345);
+	
+    // OR like this:
+    $criteria->personal_number = 12345;
+
+    $user = User::model->find($criteria);
+
+    // find all users in New York. This will search in the embedded document of UserAddress
+    $criteria->address->city('==', 'New York');
+    // Or
+    $criteria->address->city = 'New York';
+    $users = User::model()->findAll($criteria);
+
+    // Ok now try this. Only active users, only show at most 10 users, and sort by first name, descending, and offset by 20 (pagination):
+    // note the sort syntax. it must have an array value and use the => syntax.
+    $criteria->status('==', 1)->limit(10)->sort(array('firstName' => Criteria::SORT_DESC))->offset(20);
+    $users = User::model()->findAll($criteria);
+
+    // A more advanced case. All users with a personal_number evenly divisible by 10, sorted by first name ascending, limit 10 users, offset by 25 users (pagination), and remove any address fields from the returned result.
+    $criteria->personal_number('%', array(10, 0)) // modulo => personal_number % 10 == 0
+             ->sort(array('firstName' => Criteria::SORT_ASC))
+             ->limit(10)
+             ->offset(25);
+    $users = User::model()->findAll($criteria);
+
+    // You can even use the where operator with javascript like so:
+    $criteria->fieldName('where', ' expression in javascript ie: this.field > this.field2');
+    // but remember that this kind of query is a bit slower than normal finds.
+
+
+
+### Regexp / SQL LIKE Replacemt
+
+You can use native PHP Mongo driver class MongoRegex, to query:
+
+	<?php
+	use Maslosoft\Mangan\Criteria;
+    
+    $criteria = new Criteria;
+	
+    // Find all records witch have first name starring on a, b and c, case insensitive search
+    $criteria->first_name = new MongoRegex('/[abc].*/i');
+    $clients = Client::model()->findAll($criteria);
+    // see phpdoc for MongoRegex class for more examples
+
+
+for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
+
+### Creating Criteria Objects From Arrays
+
+	<?php
+	use Maslosoft\Mangan\Criteria;
+	
+    // Example criteria
+    $array = array(
+        'conditions'=>array(
+        	// field name => operator definition
+        	'FieldName1'=>array('greaterEq' => 10), // Or 'FieldName1'=>array('>=', 10)
+        	'FieldName2'=>array('in' => array(1, 2, 3)),
+        	'FieldName3'=>array('exists'),
+        ),
+        'limit'=>10,
+        'offset'=>25,
+        'sort'=>array('fieldName1' => Criteria::SORT_ASC, 'fieldName4' => Criteria::SORT_DESC),
+    );
+    $criteria = new Criteria($array);
+    // or
+    $clients = ClientModel::model()->findAll($array);
+
+
+## Known bugs
+
+- Remember, this is not complete yet. So at this stage, it can have some
+- If you find any [please let me know](https://github.com/Maslosoft/YiiMangan/issues).
+- As said before, it does not work with the OR operators.
+
+
+## Resources
+
+ * [Project website](http://maslosoft.com/en/open-source/yii-mangan/)
+ * [Project Page on GitHub](https://github.com/Maslosoft/YiiMangan)
+ * [Report a Bug](https://github.com/Maslosoft/YiiMangan/issues)
+ * [MongoDB Documentation](http://www.mongodb.org/display/DOCS/Home)
+ * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
+ * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
+ * [Yii Addendum](http://maslosoft.com/en/open-source/yii-addendum/)
+ * [PHP Addendum library](http://code.google.com/p/addendum/)
+
+
+## Contribution needed!
+
+- Any help would be great :)
+
+
+## Acknowledgments
+
+We stand upon the shoulders of giants:
+
+- canni, for leading continued development, bug testing, and merging contributions.
+- tyohan, for first inspirations and the extension's concept.
+- luckysmack, for big help with testing and documentation.
+- Jose Martinez and Philippe Gaultier, for implementing and sharing GridFS support.
+- Nagy Attila Gábor, for big help with new functionality and testing.
