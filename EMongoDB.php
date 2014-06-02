@@ -123,7 +123,14 @@ class EMongoDB extends CApplicationComponent
 	public $gridFStemporaryFolder = null;
 
 	/**
-	 * Connect to DB if connection is already connected this method does nothing
+	 * @var boolean whether to enable profiling the mongo queries being executed.
+	 * Defaults to false. This should be mainly enabled and used during development
+	 * to find out the bottleneck of mongo queries.
+	 */
+	public $enableProfiling = false;
+
+	/**
+	 * Connect to DB if connection is already connected this method doeas nothing
 	 * @since v1.0
 	 */
 	public function connect()
