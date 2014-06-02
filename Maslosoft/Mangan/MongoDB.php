@@ -135,6 +135,14 @@ class MongoDB extends ApplicationComponent
 	public $gridFStemporaryFolder = null;
 
 	/**
+	 * Queries profiling.
+	 * Defaults to false. This should be mainly enabled and used during development
+	 * to find out the bottleneck of mongo queries.
+	 * @var boolean whether to enable profiling the mongo queries being executed.
+	 */
+	public $enableProfiling = false;
+
+	/**
 	 * Connect to DB if connection is already connected this method does nothing
 	 * @since v1.0
 	 */

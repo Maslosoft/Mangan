@@ -426,7 +426,7 @@ abstract class Document extends EmbeddedDocument
 	 * This function check indexes and applies them to the collection if needed
 	 * see Model::init()
 	 *
-	 * @see EMongoEmbeddedDocument::init()
+	 * @see EmbeddedDocument::init()
 	 * @since v1.1
 	 */
 	public function init()
@@ -900,7 +900,7 @@ abstract class Document extends EmbeddedDocument
 	/**
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $condition query criteria.
+	 * @param array|Criteria $criteria query criteria.
 	 * @return array list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
@@ -929,6 +929,10 @@ abstract class Document extends EmbeddedDocument
 			{
 				$cursor->fields($criteria->getSelect(true));
 			}
+			if ($this->getMongoDBComponent()->enableProfiling)
+			{
+				Yii::log($this->_class . '.findAll()' . PHP_EOL . var_export($cursor->explain(), true), \CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
+			}
 			if ($this->getUseCursor())
 			{
 				return new Cursor($cursor, $this->model());
@@ -947,7 +951,7 @@ abstract class Document extends EmbeddedDocument
 	 * field is in use as PK!
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
+	 * @param array|Criteria $criteria query criteria.
 	 * @return the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
@@ -966,8 +970,8 @@ abstract class Document extends EmbeddedDocument
 	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
-	 * @return the document found. An null is returned if none is found.
+	 * @param array|Criteria $criteria query criteria.
+	 * @return Document[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
 	public function findAllByPk($pk, $criteria = null)
@@ -983,9 +987,8 @@ abstract class Document extends EmbeddedDocument
 	 * Finds document with the specified attributes.
 	 *
 	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
-	 * @return the document found. An null is returned if none is found.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return Document - the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findByAttributes(array $attributes)
@@ -1001,10 +1004,8 @@ abstract class Document extends EmbeddedDocument
 	/**
 	 * Finds all documents with the specified attributes.
 	 *
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
-	 * @return the document found. An null is returned if none is found.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return Document[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
 	public function findAllByAttributes(array $attributes)
@@ -1037,7 +1038,7 @@ abstract class Document extends EmbeddedDocument
 	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array $attributes query criteria.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.2.2
 	 */
