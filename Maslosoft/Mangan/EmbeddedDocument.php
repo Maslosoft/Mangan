@@ -880,7 +880,7 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 		// Create a new instance if need
 		if (!$model instanceof EmbeddedDocument)
 		{
-			if (!class_exists($docClassName))
+			if (!@class_exists($docClassName))
 			{
 				$notFound = $docClassName;
 				$docClassName = $this->classNotfound($docClassName);
