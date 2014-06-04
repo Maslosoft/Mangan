@@ -44,7 +44,7 @@ class NotFoundResolver
 	 */
 	protected $document = null;
 
-	public function __construct(EmbeddedDocument $document)
+	public function __construct(EmbeddedDocument $document, $classMap = [])
 	{
 		if ($document->hasEvent('onClassNotfound'))
 		{
@@ -55,6 +55,7 @@ class NotFoundResolver
 			$onClassNotFound->bindTo($this);
 			$document->onClassNotFound = $onClassNotFound;
 		}
+		$this->classMap = $classMap;
 	}
 
 	private function _onClassNotFound(ClassNotFound $event)
