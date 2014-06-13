@@ -12,8 +12,6 @@
 namespace Maslosoft\Mangan\Model;
 
 use CFileHelper;
-use \Maslosoft\Mangan\Model\File;
-use \Maslosoft\Mangan\Model\ImageParams;
 use Exception;
 use MongoGridFSFile;
 use PhpThumbFactory;
@@ -23,7 +21,7 @@ use PhpThumbFactory;
  * @since 2.0.1
  * @author Piotr
  */
-class Image extends \Maslosoft\Mangan\Model\File
+class Image extends File
 {
 
 	/**
@@ -45,7 +43,7 @@ class Image extends \Maslosoft\Mangan\Model\File
 	 * @param bool $adaptive If true adaptive (with crop) resize will be used, if false best match scalling will be used
 	 * @return MongoGridFSFile
 	 */
-	public function get(\Maslosoft\Mangan\Model\ImageParams $params = null)
+	public function get(ImageParams $params = null)
 	{
 		// Get original image or file if it is not image
 		if (!$params || !$this->isImage($this->filename))
@@ -112,7 +110,7 @@ class Image extends \Maslosoft\Mangan\Model\File
 	/**
 	 * Send file to browser
 	 */
-	public function send(\Maslosoft\Mangan\Model\ImageParams $params = null)
+	public function send(ImageParams $params = null)
 	{
 		$this->_send($this->get($params));
 	}
@@ -120,7 +118,7 @@ class Image extends \Maslosoft\Mangan\Model\File
 	/**
 	 * Stream file to browser
 	 */
-	public function stream(\Maslosoft\Mangan\Model\ImageParams $params = null)
+	public function stream(ImageParams $params = null)
 	{
 		$this->_stream($this->get($params));
 	}
