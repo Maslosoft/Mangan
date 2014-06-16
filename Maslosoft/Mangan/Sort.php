@@ -54,7 +54,7 @@ class Sort extends CSort
 				{
 					// TODO Add support for DEFAULT (i18nAllowDefault)and ANY (i18nAllowAny) attribute,
 					// by adding them to sort list instead of current language
-					if ($this->model->meta->$name->i18n)
+					if ($this->model->meta->$name && $this->model->meta->$name->i18n)
 					{
 						$attribute = sprintf('%s.%s', $name, Yii::app()->language);
 					}
