@@ -84,8 +84,10 @@ class DataProvider extends CDataProvider
 			$this->model = $modelClass;
 		}
 		else
+		{
 			throw new MongoException('Invalid model type for ' . __CLASS__);
-
+		}
+		
 		$this->_criteria = $this->model->getDbCriteria();
 		if (isset($config['criteria']))
 		{
@@ -100,17 +102,23 @@ class DataProvider extends CDataProvider
 			$this->_criteria->setSelect($fields);
 		}
 
-		$this->setId($this->modelClass);
+		$this->setId(base_convert(crc32($this->modelClass), 10, 36));
 		foreach ($config as $key => $value)
+		{
 			$this->$key = $value;
-
+		}
+		
 		if ($this->keyField !== null)
 		{
 			if (is_array($this->keyField))
+			{
 				throw new MongoException('This DataProvider cannot handle multi-field primary key.');
+			}
 		}
 		else
+		{
 			$this->keyField = '_id';
+		}
 	}
 
 	/**
@@ -147,7 +155,9 @@ class DataProvider extends CDataProvider
 			$this->_sort = new Sort;
 			$this->_sort->model = $this->model;
 			if (($id = $this->getId()) != '')
+			{
 				$this->_sort->sortVar = $id . '_sort';
+			}
 		}
 		return $this->_sort;
 	}
