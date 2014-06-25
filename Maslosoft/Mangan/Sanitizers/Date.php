@@ -16,5 +16,14 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class Date implements ISanitizer
 {
+	public function get($value)
+	{
+		
+	}
+
+	public function set($value)
+	{
+
+	}
 
 }

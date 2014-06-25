@@ -2,7 +2,9 @@
 
 namespace Maslosoft\Mangan\Example;
 
-class ExampleAddress extends EmbeddedDocuemnt
+use Maslosoft\Mangan\EmbeddedDocument;
+
+class ExampleAddress extends EmbeddedDocument
 {
 
 	/**

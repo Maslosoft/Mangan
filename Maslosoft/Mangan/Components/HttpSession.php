@@ -11,6 +11,12 @@
 
 namespace Maslosoft\Mangan\Components;
 
+use CHttpSession;
+use Maslosoft\Mangan\MongoDB;
+use Maslosoft\Mangan\MongoException;
+use MongoCollection;
+use Yii;
+
 /**
  * HttpSession
  *
@@ -96,8 +102,10 @@ class HttpSession extends CHttpSession
 		if (!isset($this->_collection))
 		{
 			$db = Yii::app()->getComponent($this->connectionID);
-			if (!($db instanceof \Maslosoft\Mangan\MongoDB))
-				throw new \Maslosoft\Mangan\MongoException('HttpSession.connectionID is invalid');
+			if (!($db instanceof MongoDB))
+			{
+				throw new MongoException('HttpSession.connectionID is invalid');
+			}
 
 			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);
 		}
@@ -116,7 +124,9 @@ class HttpSession extends CHttpSession
 			'safe' => $this->safe
 		];
 		if (!is_null($this->timeout))
+		{
 			$this->_options['timeout'] = $this->timeout;
+		}
 		parent::init();
 	}
 
@@ -216,7 +226,7 @@ class HttpSession extends CHttpSession
 	public function regenerateID($deleteOldSession = false)
 	{
 		$oldId = session_id();
-		;
+		
 		parent::regenerateID(false);
 		$newId = session_id();
 		$row = $this->getData($oldId);

@@ -52,7 +52,9 @@ abstract class GridFS extends Document
 	public function getCollection()
 	{
 		if (!isset(self::$_collections[$this->getCollectionName()]))
+		{
 			self::$_collections[$this->getCollectionName()] = $this->getDb()->getGridFS($this->getCollectionName());
+		}
 
 		return self::$_collections[$this->getCollectionName()];
 	}
@@ -84,7 +86,9 @@ abstract class GridFS extends Document
 			$rawData = $this->toArray();
 			// free the '_id' container if empty, mongo will not populate it if exists
 			if (empty($rawData['_id']))
+			{
 				unset($rawData['_id']);
+			}
 
 			return $this->store($rawData, $attributes);
 		}
@@ -138,11 +142,15 @@ abstract class GridFS extends Document
 		}
 
 		if (!isset($rawData['filename']))
+		{
 			throw new MongoException(Yii::t('yii', 'A filename is required to save a GridFS document.'));
+		}
 
 		// store bytes directly or store file
 		if (isset($this->_bytes))
+		{
 			$result = $this->getCollection()->storeBytes($this->_bytes, $rawData);
+		}
 		else
 		{
 			$filename = $rawData['filename'];
@@ -174,7 +182,7 @@ abstract class GridFS extends Document
 	 * @throws MongoException if the record is new
 	 * @since v1.3
 	 */
-	public function update(array $attributes = null)
+	public function update(array $attributes = null, $modify = false)
 	{
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if ($this->getIsNewRecord())
@@ -188,13 +196,19 @@ abstract class GridFS extends Document
 			{
 				$result = $this->insertWithPk($this->_id, $attributes);
 				if ($result === true)
+				{
 					return true;
+				}
 				else
+				{
 					return false;
+				}
 			}
 		}
 		else
+		{
 			return parent::update($attributes, true);
+		}
 	}
 
 	/**
@@ -218,7 +232,9 @@ abstract class GridFS extends Document
 			return $model;
 		}
 		else
+		{
 			return parent::populateRecord($document, $callAfterFind);
+		}
 	}
 
 	/**
@@ -240,9 +256,13 @@ abstract class GridFS extends Document
 	{
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'getSize') === true)
+		{
 			return $this->_gridFSFile->getSize();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	/**
@@ -255,9 +275,13 @@ abstract class GridFS extends Document
 	{
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'getFilename') === true)
+		{
 			return $this->_gridFSFile->getFilename();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	/**
@@ -269,11 +293,14 @@ abstract class GridFS extends Document
 	{
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'getBytes') === true)
+		{
 			return $this->_gridFSFile->getBytes();
-		else if (isset($this->_bytes))
+		}
+		elseif (isset($this->_bytes))
+		{
 			return $this->_bytes;
-		else
-			return false;
+		}
+		return false;
 	}
 
 	/**
@@ -287,9 +314,10 @@ abstract class GridFS extends Document
 	{
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if (method_exists($this->_gridFSFile, 'write') === true)
+		{
 			return $this->_gridFSFile->write($filename);
-		else
-			return false;
+		}
+		return false;
 	}
 
 }

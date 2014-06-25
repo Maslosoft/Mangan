@@ -160,9 +160,9 @@ class SoftDocument extends Document
 	 * @return array an associative array of the contents of this object
 	 * @since v1.3.4
 	 */
-	protected function _toArray()
+	protected function _toArray($associative = true)
 	{
-		$arr = parent::_toArray();
+		$arr = parent::_toArray($associative);
 		foreach ($this->softAttributes as $key => $value)
 		{
 			$arr[$key] = $value;

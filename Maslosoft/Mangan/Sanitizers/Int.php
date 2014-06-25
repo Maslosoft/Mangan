@@ -16,5 +16,14 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class Int implements ISanitizer
 {
+	public function get($value)
+	{
+		
+	}
+
+	public function set($value)
+	{
+
+	}
 
 }

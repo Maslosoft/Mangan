@@ -11,6 +11,13 @@
 
 namespace Maslosoft\Mangan\Components;
 
+use CLogRoute;
+use Maslosoft\Mangan\MongoDB;
+use Maslosoft\Mangan\MongoException;
+use MongoCollection;
+use MongoDate;
+use Yii;
+
 /**
  * LogRoute
  *
@@ -131,9 +138,9 @@ class LogRoute extends CLogRoute
 		if (!isset($this->_collection))
 		{
 			$db = Yii::app()->getComponent($this->connectionID);
-			if (!($db instanceof \Maslosoft\Mangan\MongoDB))
+			if (!($db instanceof MongoDB))
 			{
-				throw new \Maslosoft\Mangan\MongoException('HttpSession.connectionID is invalid');
+				throw new MongoException('HttpSession.connectionID is invalid');
 			}
 
 			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);

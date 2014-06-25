@@ -14,5 +14,14 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class Bool implements ISanitizer
 {
+	public function get($value)
+	{
+		
+	}
+
+	public function set($value)
+	{
+
+	}
 
 }
