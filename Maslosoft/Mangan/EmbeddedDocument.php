@@ -603,7 +603,7 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 						{
 							continue;
 						}
-						if (!$docValue['_key'])
+						if (empty($docValue['_key']))
 						{
 							$docValue['_key'] = (string) new MongoId();
 						}
