@@ -14,6 +14,7 @@ namespace Maslosoft\Mangan\Model;
 use CFileHelper;
 use Exception;
 use MongoGridFSFile;
+use PHPThumb\GD;
 use PhpThumbFactory;
 
 /**
@@ -69,7 +70,7 @@ class Image extends File
 			$result->write($fileName);
 
 
-			$image = PhpThumbFactory::create($fileName);
+			$image = new GD($fileName);
 			if ($params->adaptive)
 			{
 				$image->adaptiveResize($params->width, $params->height)->save($fileName);
@@ -99,7 +100,7 @@ class Image extends File
 	{
 		if ($this->isImage($fileName))
 		{
-			$thumb = PhpThumbFactory::create($tempName);
+			$thumb = new GD($tempName);
 			$dimensions = (object) $thumb->getCurrentDimensions();
 			$this->width = $dimensions->width;
 			$this->height = $dimensions->height;
