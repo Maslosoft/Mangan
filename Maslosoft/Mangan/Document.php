@@ -36,7 +36,7 @@ abstract class Document extends EmbeddedDocument
 	 * @KoBindable(false)
 	 * @see setId()
 	 * @see getId()
-	 * @var mixed
+	 * @var MongoId|mixed
 	 */
 	public $_id;
 
