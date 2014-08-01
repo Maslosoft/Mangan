@@ -1311,6 +1311,10 @@ abstract class Document extends EmbeddedDocument
 		{
 			$class = isset($attributes['_class']) ? $attributes['_class'] : $this->_class;
 		}
+
+		// This is to avoid ovverwriting _class property
+		unset($attributes['_class']);
+		
 		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
 		foreach ($model->meta->fields() as $field => $value)
