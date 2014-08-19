@@ -1,13 +1,15 @@
 <?php
 
-namespace Maslosoft\Mangan\Annotations;
-
 /**
  * @licence For licence @see LICENCE.html
- * 
+ *
  * @copyright Maslosoft
  * @link http://maslosoft.com/
  */
+
+namespace Maslosoft\Mangan\Annotations;
+
+use EComponentMetaAnnotation;
 
 /**
  * Sanitizer
