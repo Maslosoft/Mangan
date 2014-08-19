@@ -9,7 +9,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRef extends Maslosoft\Addendum\Collections\MetaAnnotation
+class DbRef extends MetaAnnotation
 {
 
 	public $value;
