@@ -6,7 +6,9 @@
  * @copyright Maslosoft
  * @link http://maslosoft.com/
  */
+
 namespace Maslosoft\Mangan\Sanitizers;
+
 /**
  * Bool
  *
@@ -14,14 +16,15 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class Bool implements ISanitizer
 {
+
 	public function get($value)
 	{
-		
+		return (bool) $value;
 	}
 
 	public function set($value)
 	{
-
+		return (bool) $value;
 	}
 
 }

@@ -16,14 +16,15 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class Float implements ISanitizer
 {
+
 	public function get($value)
 	{
-		
+		return (float) $value;
 	}
 
 	public function set($value)
 	{
-
+		return (float) $value;
 	}
 
 }

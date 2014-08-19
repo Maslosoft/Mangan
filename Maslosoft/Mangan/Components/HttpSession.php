@@ -6,7 +6,7 @@
  * @license New BSD license
  * @version 1.3
  * @category ext
- * @package ext.YiiMongoDbSuite
+ * @package Mangan
  */
 
 namespace Maslosoft\Mangan\Components;
@@ -21,23 +21,23 @@ use Yii;
  * HttpSession
  *
  * Example, in config/main.php:
- * 	'session' => array(
- * 		'class' => 'ext.EMongoDbHttpSession',
- * 		'collectionName' => 'yiisession',
+ * 	'session' => [
+ * 		'class' => 'Maslosoft\Mangan\Components\HttpSession',
+ * 		'collectionName' => 'Mangan.Session',
  * 		'idColumn' => 'id',
  * 		'dataColumn' => 'data',
  * 		'expireColumn' => 'expire',
- * 	),
+ * 	],
  *
  * Options:
- * connectionID			: mongo component name			: default mongodb
- * collectionName		: collaction name				: default yiisession
- * idColumn				: id column name				: default id
- * dataColumn			: data column name				: default dada
+ * connectionID			: mongo component name		: default mongodb
+ * collectionName			: collaction name				: default yiisession
+ * idColumn					: id column name				: default id
+ * dataColumn				: data column name			: default dada
  * expireColumn			: expire column name			: default expire
- * fsync				: fsync flag					: default false
- * safe					: safe flag						: default false
- * timeout				: timeout miliseconds			: default null
+ * fsync						: fsync flag					: default false
+ * safe						: safe flag						: default false
+ * timeout					: timeout miliseconds		: default null
  *
  */
 class HttpSession extends CHttpSession
@@ -51,7 +51,7 @@ class HttpSession extends CHttpSession
 	/**
 	 * @var string Collection name
 	 */
-	public $collectionName = 'yiisession';
+	public $collectionName = 'Mangan.Session';
 
 	/**
 	 * @var string id column name

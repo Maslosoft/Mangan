@@ -1,5 +1,7 @@
 <?php
 
+namespace Maslosoft\Mangan\Annotations;
+
 /**
  * @licence For licence @see LICENCE.html
  * 

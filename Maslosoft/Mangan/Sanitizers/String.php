@@ -14,7 +14,17 @@ namespace Maslosoft\Mangan\Sanitizers;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class String
+class String implements ISanitizer
 {
+
+	public function get($value)
+	{
+		
+	}
+
+	public function set($value)
+	{
+
+	}
 
 }
