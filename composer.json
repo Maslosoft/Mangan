@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"maslosoft/addendum": "*",
+		"maslosoft/addendum": "2.*.*",
 		"masterexploder/phpthumb": "2.0"
 	},
 	"autoload": {

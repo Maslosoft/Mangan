@@ -15,8 +15,8 @@
 
 namespace Maslosoft\Mangan;
 
-use EComponentMeta;
-use IAnnotated;
+use Maslosoft\Addendum\Collections\Meta;
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\ModelEvent;
@@ -31,7 +31,7 @@ use Yii;
  * EmbeddedDocument
  *
  * @since v1.0.8
- * @property EComponentMeta $meta Model metadata
+ * @property Meta $meta Model metadata
  */
 abstract class EmbeddedDocument extends Model implements IAnnotated
 {
@@ -67,7 +67,7 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	/**
 	 * Model metadata
 	 * @Persistent(false)
-	 * @var EComponentMeta
+	 * @var Meta
 	 */
 	private static $_meta = [];
 

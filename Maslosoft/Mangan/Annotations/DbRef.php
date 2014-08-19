@@ -2,14 +2,14 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use EComponentMetaAnnotation;
-var_dump(__NAMESPACE__);
+use Maslosoft\Addendum\Collections\MetaAnnotation;
+
 /**
  * ReferenceAnnotation
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRef extends EComponentMetaAnnotation
+class DbRef extends Maslosoft\Addendum\Collections\MetaAnnotation
 {
 
 	public $value;

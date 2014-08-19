@@ -9,7 +9,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use EComponentMetaAnnotation;
+use Maslosoft\Addendum\Collections\MetaAnnotation;
 
 /**
  * Sanitizer
@@ -17,7 +17,7 @@ use EComponentMetaAnnotation;
  * @template Sanitizer('${SanitizerClass}')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Sanitizer extends EComponentMetaAnnotation
+class Sanitizer extends Maslosoft\Addendum\Collections\MetaAnnotation
 {
 
 	public $value = null;
