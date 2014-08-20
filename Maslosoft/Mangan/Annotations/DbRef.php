@@ -3,6 +3,7 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Meta\DbRefMeta;
 
 /**
  * ReferenceAnnotation
@@ -11,48 +12,26 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  */
 class DbRef extends MetaAnnotation
 {
-
+	public $class = '';
 	public $value;
 
 	public function init()
 	{
-		// Target class
-		$class = '';
-		if(isset($this->value[0]))
+		$data = [];
+		foreach(['class', 'field', 'updatable'] as $key => $name)
 		{
-			$class = $this->value[0];
-		}
-		if(isset($this->value['class']))
-		{
-			$class = $this->value['class'];
-		}
-
-		// Target field
-		$field = '';
-		if(isset($this->value[1]))
-		{
-			$field = $this->value[1];
-		}
-		if(isset($this->value['field']))
-		{
-			$field = $this->value['field'];
+			if(isset($this->value[$key]))
+			{
+				$data[$name] = $this->value[$key];
+				unset($this->value[$key]);
+			}
+			if(isset($this->value[$name]))
+			{
+				$data[$name] = $this->value[$name];
+			}
 		}
 
-		// Updatable
-		$updatable = '';
-		if(isset($this->value[2]))
-		{
-			$updatable = $this->value[2];
-		}
-		if(isset($this->value['updatable']))
-		{
-			$updatable = $this->value['updatable'];
-		}
-
-		$this->_entity->dbRefClass = '';
-
-		var_dump($class, $field, $updatable);
-		var_dump($this->value);
+		$this->_entity->dbRef = new DbRefMeta($data);
 	}
 
 }
