@@ -15,6 +15,8 @@ use CHttpSession;
 use Maslosoft\Mangan\MongoDB;
 use Maslosoft\Mangan\MongoException;
 use MongoCollection;
+use MongoDate;
+use MongoId;
 use Yii;
 
 /**
@@ -67,6 +69,30 @@ class HttpSession extends CHttpSession
 	 * @var string expire column name
 	 */
 	public $expireColumn = 'expire';
+
+	/**
+	 * Set to false to disable
+	 * @var string ip column name
+	 */
+	public $ipColumn = 'ip';
+
+	/**
+	 * Set to false to disable
+	 * @var string browser column name
+	 */
+	public $browserColumn = 'browser';
+
+	/**
+	 * Set to false to disable
+	 * @var string session datetime column name
+	 */
+	public $dateTimeColumn = 'dateTime';
+
+	/**
+	 * Set to false to disable
+	 * @var string user id column name
+	 */
+	public $userIdColumn = 'userId';
 
 	/**
 	 * @var boolean forces the update to be synced to disk before returning success.
@@ -185,13 +211,29 @@ class HttpSession extends CHttpSession
 	{
 		$options = $this->_options;
 		$options['upsert'] = true;
-		return $this->_collection->update(
-						[$this->idColumn => $id], [
-					$this->dataColumn => $data,
-					$this->expireColumn => $this->getExipireTime(),
-					$this->idColumn => $id
-						], $options
-		);
+		$data = [
+			$this->dataColumn => $data,
+			$this->expireColumn => $this->getExipireTime(),
+			$this->idColumn => $id
+		];
+		if($this->ipColumn)
+		{
+			$data[$this->ipColumn] = $_SERVER['REMOTE_ADDR'];
+		}
+		if($this->browserColumn)
+		{
+			$data[$this->browserColumn] = $_SERVER['HTTP_USER_AGENT'];
+		}
+		if($this->dateTimeColumn)
+		{
+			$data[$this->dateTimeColumn] = new MongoDate();
+		}
+		if($this->userIdColumn)
+		{
+			$data[$this->userIdColumn] = new MongoId(Yii::app()->user->id);
+		}
+		
+		return $this->_collection->update([$this->idColumn => $id], $data, $options);
 	}
 
 	/**
@@ -202,8 +244,7 @@ class HttpSession extends CHttpSession
 	 */
 	public function destroySession($id)
 	{
-		return $this->_collection->remove(
-						[$this->idColumn => $id], $this->_options);
+		return $this->_collection->remove([$this->idColumn => $id], $this->_options);
 	}
 
 	/**
@@ -226,7 +267,7 @@ class HttpSession extends CHttpSession
 	public function regenerateID($deleteOldSession = false)
 	{
 		$oldId = session_id();
-		
+
 		parent::regenerateID(false);
 		$newId = session_id();
 		$row = $this->getData($oldId);
