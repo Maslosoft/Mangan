@@ -1,4 +1,13 @@
 <?php
+
+namespace Maslosoft\Mangan\Validators;
+
+use CModel;
+use CValidator;
+use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\Document;
+use Yii;
+
 /**
  * CUniqueValidator class file.
  *
@@ -17,13 +26,15 @@
  * @package system.validators
  * @since 1.0
  */
-class CMongoUniqueValidator extends CValidator
+class MongoUniqueValidator extends CValidator
 {
+
 	/**
 	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
 	 * meaning that if the attribute is empty, it is considered valid.
 	 */
-	public $allowEmpty=true;
+	public $allowEmpty = true;
+
 	/**
 	 * @var string the ActiveRecord class name that should be used to
 	 * look for the attribute value being validated. Defaults to null, meaning using
@@ -33,6 +44,7 @@ class CMongoUniqueValidator extends CValidator
 	 * @since 1.0.8
 	 */
 	public $className;
+
 	/**
 	 * @var string the ActiveRecord class attribute name that should be
 	 * used to look for the attribute value being validated. Defaults to null,
@@ -41,24 +53,27 @@ class CMongoUniqueValidator extends CValidator
 	 * @since 1.0.8
 	 */
 	public $attributeName;
+
 	/**
 	 * @var array additional query criteria. This will be combined with the condition
 	 * that checks if the attribute value exists in the corresponding table column.
 	 * This array will be used to instantiate a {@link CDbCriteria} object.
 	 * @since 1.0.8
 	 */
-	public $criteria=[];
+	public $criteria = [];
+
 	/**
 	 * @var string the user-defined error message. The placeholders "{attribute}" and "{value}"
 	 * are recognized, which will be replaced with the actual attribute name and value, respectively.
 	 */
 	public $message;
+
 	/**
 	 * @var boolean whether this validation rule should be skipped if when there is already a validation
 	 * error for the current attribute. Defaults to true.
 	 * @since 1.1.1
 	 */
-	public $skipOnError=true;
+	public $skipOnError = true;
 
 	/**
 	 * Validates the attribute of the object.
@@ -66,42 +81,62 @@ class CMongoUniqueValidator extends CValidator
 	 * @param CModel $object the object being validated
 	 * @param string $attribute the attribute being validated
 	 */
-	protected function validateAttribute($object,$attribute)
+	protected function validateAttribute($object, $attribute)
 	{
-		$value=$object->$attribute;
-		if($this->allowEmpty && $this->isEmpty($value))
+		$value = $object->$attribute;
+		if ($this->allowEmpty && $this->isEmpty($value))
+		{
 			return;
+		}
 
-		$className=$this->className===null?get_class($object):Yii::import($this->className);
-		$attributeName=$this->attributeName===null?$attribute:$this->attributeName;
-		$finder=\Maslosoft\Mangan\Document::model($className);
-		$criteria=new \Maslosoft\Mangan\Criteria;
-		$criteria->{$attribute}=$value;
-		if($this->criteria!==[])
-			$criteria->mergeWith($this->criteria);
+		$className = $this->className === null ? get_class($object) : Yii::import($this->className);
 
-		if(!$object instanceof \Maslosoft\Mangan\Document || $object->isNewRecord)
-			$exists=$finder->exists($criteria);
+		$model = Document::model($className);
+		$criteria = new Criteria;
+		if($model->meta->{$attribute}->i18n)
+		{
+			$criteria->addCond(sprintf('%s.%s', $model->getLang(), $attribute), '==', $value);
+		}
 		else
 		{
-			$criteria->limit=2;
-			$objects=$finder->findAll($criteria);
-			$n=count($objects);
-			if($n===1)
-			{
-				if($column->isPrimaryKey)  // primary key is modified and not unique
-					$exists=$object->getOldPrimaryKey()!=$object->getPrimaryKey();
-				else // non-primary key, need to exclude the current record based on PK
-					$exists=$objects[0]->getPrimaryKey()!=$object->getOldPrimaryKey();
-			}
-			else
-				$exists=$n>1;
+			$criteria->addCond($attribute, '==', $value);
+		}
+		if ($this->criteria !== [])
+		{
+			$criteria->mergeWith($this->criteria);
 		}
 
-		if($exists)
+		if (!$object instanceof Document || $object->isNewRecord)
 		{
-			$message=$this->message!==null?$this->message:Yii::t('yii','{attribute} "{value}" has already been taken.');
-			$this->addError($object,$attribute,$message,['{value}'=>$value]);
+			$exists = $model->exists($criteria);
+		}
+		else
+		{
+			$criteria->limit = 2;
+			$objects = $model->findAll($criteria);
+			$n = count($objects);
+			if ($n === 1)
+			{
+				if ($column->isPrimaryKey)  // primary key is modified and not unique
+				{
+					$exists = $object->getOldPrimaryKey() != $object->getPrimaryKey();
+				}
+				else // non-primary key, need to exclude the current record based on PK
+				{
+					$exists = $objects[0]->getPrimaryKey() != $object->getOldPrimaryKey();
+				}
+			}
+			else
+			{
+				$exists = $n > 1;
+			}
+		}
+
+		if ($exists)
+		{
+			$message = $this->message !== null ? $this->message : Yii::t('yii', '{attribute} "{value}" has already been taken.');
+			$this->addError($object, $attribute, $message, ['{value}' => $value]);
 		}
 	}
+
 }

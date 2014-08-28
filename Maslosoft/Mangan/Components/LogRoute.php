@@ -182,10 +182,6 @@ class LogRoute extends CLogRoute
 		{
 			$timestamp = date('Y-m-d H:i:s', $timestamp);
 		}
-		else
-		{
-			$timestamp = $timestamp;
-		}
 		return $timestamp;
 	}
 
