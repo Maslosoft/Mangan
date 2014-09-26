@@ -14,7 +14,7 @@ namespace Maslosoft\Mangan\Sanitizers;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Float implements ISanitizer
+class Double implements ISanitizer
 {
 
 	public function get($value)

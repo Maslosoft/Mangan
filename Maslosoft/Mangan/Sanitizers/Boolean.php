@@ -10,20 +10,21 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 /**
- * Int
+ * Bool
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Int implements ISanitizer
+class Boolean implements ISanitizer
 {
+
 	public function get($value)
 	{
-		
+		return (bool) $value;
 	}
 
 	public function set($value)
 	{
-
+		return (bool) $value;
 	}
 
 }

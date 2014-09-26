@@ -12,18 +12,18 @@ namespace Maslosoft\Mangan\Annotations;
 use Maslosoft\Addendum\Collections\MetaAnnotation;
 
 /**
- * Sanitizer. There cen be only one sanitizer
- * @template Sanitizer(${SanitizerClass})
+ * Decorator. There might be many decorators
+ * @template Decorator(${DecoratorClass})
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Sanitizer extends MetaAnnotation
+class Decorator extends MetaAnnotation
 {
 
 	public $value = null;
 
 	public function init()
 	{
-		$this->_entity->sanitizer = $this->value;
+		$this->_entity->decorators[] = $this->value;
 	}
 
 }

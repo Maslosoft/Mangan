@@ -11,21 +11,21 @@ namespace Maslosoft\Mangan\Decorators;
 use Maslosoft\Mangan\EmbeddedDocument;
 
 /**
- * This creates i18n fields
+ * Void
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class I18N implements IDecorator
+class Void implements IDecorator
 {
 
 	public function get(EmbeddedDocument $document, $name, $value)
 	{
-		return $value[$document->getLang()];
+		
 	}
 
 	public function set(EmbeddedDocument $document, $name, $value)
 	{
-		return $value[$document->getLang()];
+
 	}
 
 }

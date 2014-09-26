@@ -20,6 +20,7 @@ use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Model\Model;
 use MongoId;
 use RuntimeException;
@@ -92,6 +93,13 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	private $_virtualValues = [];
 
 	/**
+	 * Sanitizer instance
+	 * @Persistent(false)
+	 * @var Sanitizer
+	 */
+	private $_sanitizer = null;
+
+	/**
 	 * Constructor.
 	 * @param string $scenario name of the scenario that this model is used in.
 	 * See {@link Model::scenario} on how scenario is used by models.
@@ -102,6 +110,9 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	{
 		$this->_class = get_class($this);
 		$this->meta->initModel($this);
+
+		$this->_sanitizer = new Sanitizer($this);
+		
 		$this->setLang($lang);
 		$this->setScenario($scenario);
 		$this->init();
@@ -514,6 +525,11 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	public function getAttribute($name, $lang = '')
 	{
 		$meta = $this->getMeta()->$name;
+		/**
+		 * FIXME For some reason _sanitizer is unset
+		 */
+		$this->_sanitizer = new Sanitizer($this);
+
 		if (!$meta->direct)
 		{
 			if (!$lang)
@@ -548,36 +564,17 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 			// Return value
 			if ($meta->i18n)
 			{
-				return $this->_getSanitized($meta, $this->_virtualValues[$name][$lang]);
+				return $this->_sanitizer->$name->get($this->_virtualValues[$name][$lang]);
 			}
 			else
 			{
-				return $this->_getSanitized($meta, $this->_virtualValues[$name]);
+				return $this->_sanitizer->$name->get($this->_virtualValues[$name]);
 			}
 		}
 		else
 		{
-			return $this->_getSanitized($meta, $this->$name);
+			return $this->_sanitizer->$name->get($this->$name);
 		}
-	}
-
-	private function _getSanitized($meta, $value)
-	{
-		$sanitizer = null;
-		if ($meta->sanitizer)
-		{
-//			$sanitizer = new $meta->sanitizer;
-			var_dump($meta->sanitizer);
-		}
-		else
-		{
-			$type = gettype($meta->default);
-			if ($type === 'NULL')
-			{
-				return $value;
-			}
-		}
-		return $value;
 	}
 
 	/**
@@ -590,6 +587,10 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	public function setAttribute($name, $value, $lang = '')
 	{
 		$meta = $this->getMeta()->$name;
+		/**
+		 * FIXME For some reason _sanitizer is unset
+		 */
+		$this->_sanitizer = new Sanitizer($this);
 		if (!$meta->direct)
 		{
 			if ($meta->embedded)
@@ -626,21 +627,21 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 				}
 				if ($lang == '_all')
 				{
-					$this->_virtualValues[$name] = $value;
+					$this->_virtualValues[$name] = $this->_sanitizer->$name->set($value);
 				}
 				else
 				{
-					$this->_virtualValues[$name][$lang] = $value;
+					$this->_virtualValues[$name][$lang] = $this->_sanitizer->$name->set($value);
 				}
 			}
 			else
 			{
-				$this->_virtualValues[$name] = $value;
+				$this->_virtualValues[$name] = $this->_sanitizer->$name->set($value);
 			}
 		}
 		else
 		{
-			$this->$name = $value;
+			$this->$name = $this->_sanitizer->$name->set($value);
 		}
 	}
 

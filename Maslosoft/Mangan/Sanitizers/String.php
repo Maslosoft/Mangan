@@ -19,12 +19,12 @@ class String implements ISanitizer
 
 	public function get($value)
 	{
-		
+		return (string) $value;
 	}
 
 	public function set($value)
 	{
-
+		return (string) $value;
 	}
 
 }

@@ -9,6 +9,8 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use MongoDate;
+
 /**
  * Date
  *
@@ -16,14 +18,23 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class Date implements ISanitizer
 {
+
 	public function get($value)
 	{
-		
+		if ($value instanceof MongoDate)
+		{
+			return $value;
+		}
+		return new MongoDate((int) $value);
 	}
 
 	public function set($value)
 	{
-
+		if ($value instanceof MongoDate)
+		{
+			return $value;
+		}
+		return new MongoDate((int) $value);
 	}
 
 }
