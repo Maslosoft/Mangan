@@ -115,7 +115,7 @@ class LogRoute extends CLogRoute
 	public $safe = false;
 
 	/**
-	 * @var boolean If "safe" is set, this sets how long (in milliseconds) for the client to wait for a database response.
+	 * @var boolean If "w" is set, this sets how long (in milliseconds) for the client to wait for a database response.
 	 */
 	public $timeout = null;
 
@@ -159,7 +159,7 @@ class LogRoute extends CLogRoute
 		$this->setCollection($this->collectionName);
 		$this->_options = [
 			'fsync' => $this->fsync
-			, 'safe' => $this->safe
+			, 'w' => $this->safe
 		];
 		if (!is_null($this->timeout))
 		{

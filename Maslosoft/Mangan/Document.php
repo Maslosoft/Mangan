@@ -673,7 +673,7 @@ abstract class Document extends EmbeddedDocument
 			{
 				$result = $this->getCollection()->insert($rawData, [
 					'fsync' => $this->getFsyncFlag(),
-					'safe' => $this->getSafeFlag()
+					'w' => $this->getSafeFlag()
 				]);
 			}
 			catch (Exception $e)
@@ -744,7 +744,7 @@ abstract class Document extends EmbeddedDocument
 				$result = $this->getCollection()->update(
 						['_id' => $this->_id], ['$set' => $rawData], [
 					'fsync' => $this->getFsyncFlag(),
-					'safe' => $this->getSafeFlag(),
+					'w' => $this->getSafeFlag(),
 					'multiple' => false
 						]
 				);
@@ -753,7 +753,7 @@ abstract class Document extends EmbeddedDocument
 			{
 				$result = $this->getCollection()->save($rawData, [
 					'fsync' => $this->getFsyncFlag(),
-					'safe' => $this->getSafeFlag()
+					'w' => $this->getSafeFlag()
 				]);
 			}
 			if ($result !== false)
@@ -781,7 +781,7 @@ abstract class Document extends EmbeddedDocument
 			$this->applyScopes($criteria);
 			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), [
 				'fsync' => $this->getFsyncFlag(),
-				'safe' => $this->getSafeFlag(),
+				'w' => $this->getSafeFlag(),
 				'upsert' => false,
 				'multiple' => true
 			]);
@@ -848,7 +848,7 @@ abstract class Document extends EmbeddedDocument
 			$result = $this->getCollection()->remove($criteria->getConditions(), [
 				'justOne' => true,
 				'fsync' => $this->getFsyncFlag(),
-				'safe' => $this->getSafeFlag()
+				'w' => $this->getSafeFlag()
 			]);
 
 			return $result;
@@ -1085,7 +1085,7 @@ abstract class Document extends EmbeddedDocument
 		return $this->getCollection()->remove($criteria->getConditions(), [
 					'justOne' => false,
 					'fsync' => $this->getFsyncFlag(),
-					'safe' => $this->getSafeFlag()
+					'w' => $this->getSafeFlag()
 		]);
 	}
 
@@ -1104,7 +1104,7 @@ abstract class Document extends EmbeddedDocument
 		return $this->getCollection()->remove($criteria->getConditions(), [
 					'justOne' => true,
 					'fsync' => $this->getFsyncFlag(),
-					'safe' => $this->getSafeFlag()
+					'w' => $this->getSafeFlag()
 		]);
 	}
 
