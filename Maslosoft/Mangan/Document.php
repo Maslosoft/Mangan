@@ -216,7 +216,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function getCollectionName()
 	{
-		return str_replace('\\', '.', preg_replace($this->_class));
+		return str_replace('\\', '.', $this->_class);
 	}
 
 	/**
