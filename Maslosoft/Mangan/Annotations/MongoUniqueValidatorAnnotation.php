@@ -10,8 +10,6 @@ namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Base\ValidatorAnnotation;
 
-exit(__FILE__);
-
 /**
  * UniqueValidator
  * 
@@ -19,6 +17,7 @@ exit(__FILE__);
  */
 class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 {
+
 	/**
 	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
 	 * meaning that if the attribute is empty, it is considered valid.
@@ -65,9 +64,4 @@ class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $skipOnError = true;
 
-	public function init()
-	{
-		parent::init();
-		var_dump('here');
-	}
 }

@@ -30,4 +30,15 @@ class Container implements IDecorator
 	{
 		$this->_decorators = $decorators;
 	}
+
+	public function get(\Maslosoft\Mangan\EmbeddedDocument $document, $name, $value)
+	{
+		
+	}
+
+	public function set(\Maslosoft\Mangan\EmbeddedDocument $document, $name, $value)
+	{
+
+	}
+
 }
