@@ -9,10 +9,12 @@
 namespace Maslosoft\Mangan\Traits\Access;
 
 use ArrayAccess;
+use Maslosoft\Addendum\Collections\Meta;
 
 /**
  * This trait is intented to stub interface ArrayAccess
  * @see ArrayAccess
+ * @property Meta $meta Metadata of document
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait AsArray
