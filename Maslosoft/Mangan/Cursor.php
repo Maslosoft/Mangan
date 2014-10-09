@@ -65,14 +65,16 @@ class Cursor implements Iterator, Countable
 
 	/**
 	 * Return the current element
-	 * @return Document
+	 * @return Document|null
 	 * @since v1.3.4
 	 */
 	public function current()
 	{
 		$document = $this->_cursor->current();
 		if (empty($document))
-			return $document;
+		{
+			return null;
+		}
 
 		return $this->_model->populateRecord($document);
 	}
