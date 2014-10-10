@@ -1,9 +1,9 @@
 #Yii Mangan
 ######Advanced MongoDB document mapper for Yii
 
-This extension originally started as a fork of [YiiMongoDbSuite](http://canni.github.com/YiiMongoDbSuite "YiiMongoDbSuite"),
+This extension originally started as a fork of [YiiMongoDbSuite](canni.github.com/YiiMongoDbSuite "YiiMongoDbSuite"),
 written by [canni](https://github.com/canni "canni") and further improved by several developers ([mintao](https://github.com/mintao "mintao"), et al).
-YiiMongoDbSuite originally started as a fork of [MongoRecord](http://www.yiiframework.com/extension/mongorecord "MongoRecord")
+YiiMongoDbSuite originally started as a fork of [MongoRecord](www.yiiframework.com/extension/mongorecord "MongoRecord")
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
@@ -378,8 +378,8 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
 ## Resources
 
  * [Project website](http://maslosoft.com/en/open-source/yii-mangan/)
- * [Project Page on GitHub](https://github.com/Maslosoft/YiiMangan)
- * [Report a Bug](https://github.com/Maslosoft/YiiMangan/issues)
+ * [Project Page on GitHub](https://github.com/Maslosoft/Mangan)
+ * [Report a Bug](https://github.com/Maslosoft/Mangan/issues)
  * [MongoDB Documentation](http://www.mongodb.org/display/DOCS/Home)
  * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
  * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
