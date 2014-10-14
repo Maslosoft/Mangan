@@ -13,11 +13,17 @@
 
 namespace Maslosoft\Mangan;
 
+use CLogger;
 use Exception;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Signals\AfterDelete;
+use Maslosoft\Mangan\Signals\AfterSave;
+use Maslosoft\Signals\Signal;
 use MongoCollection;
 use MongoCursor;
+use MongoDB;
+use MongoException;
 use MongoId;
 use MongoRegex;
 use Yii;
@@ -687,6 +693,7 @@ abstract class Document extends EmbeddedDocument
 				$this->afterSave();
 				$this->setIsNewRecord(false);
 				$this->setScenario('update');
+				(new Signal)->emit(new AfterSave($this));
 				return true;
 			}
 			throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
@@ -759,6 +766,7 @@ abstract class Document extends EmbeddedDocument
 			if ($result !== false)
 			{ // strict comparison needed
 				$this->afterSave();
+				(new Signal)->emit(new AfterSave($this));
 				return true;
 			}
 			throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
@@ -812,6 +820,7 @@ abstract class Document extends EmbeddedDocument
 				{
 					$this->afterDelete();
 					$this->setIsNewRecord(true);
+					(new Signal)->emit(new AfterDelete($this));
 					return true;
 				}
 				else
@@ -931,7 +940,7 @@ abstract class Document extends EmbeddedDocument
 			}
 			if ($this->getMongoDBComponent()->enableProfiling)
 			{
-				Yii::log($this->_class . '.findAll()' . PHP_EOL . var_export($cursor->explain(), true), \CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
+				Yii::log($this->_class . '.findAll()' . PHP_EOL . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
 			}
 			if ($this->getUseCursor())
 			{
