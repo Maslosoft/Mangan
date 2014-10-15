@@ -70,7 +70,7 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	 * @Persistent(false)
 	 * @var Meta
 	 */
-	private static $_meta = [];
+	public $meta = null;
 
 	/**
 	 * Current document language
@@ -109,6 +109,8 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		$this->_class = get_class($this);
+
+		$this->meta = Meta::create($this);
 		$this->meta->initModel($this);
 
 		$this->_sanitizer = new Sanitizer($this);
@@ -274,10 +276,6 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 		{
 			$parts = explode('.', $name, 2);
 			return $this->{$parts[0]}->{$parts[1]};
-		}
-		if ($name == 'meta')
-		{
-			return $this->getMeta();
 		}
 		$meta = $this->meta->$name;
 		if ($meta)
@@ -524,7 +522,7 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	 */
 	public function getAttribute($name, $lang = '')
 	{
-		$meta = $this->getMeta()->$name;
+		$meta = $this->meta->$name;
 		/**
 		 * FIXME For some reason _sanitizer is unset
 		 */
@@ -586,7 +584,7 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	 */
 	public function setAttribute($name, $value, $lang = '')
 	{
-		$meta = $this->getMeta()->$name;
+		$meta = $this->meta->$name;
 		/**
 		 * FIXME For some reason _sanitizer is unset
 		 */
@@ -743,15 +741,6 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 	public function setOwner(EmbeddedDocument $owner)
 	{
 		$this->_owner = $owner;
-	}
-
-	public function getMeta()
-	{
-		if (!isset(self::$_meta[$this->_class]))
-		{
-			self::$_meta[$this->_class] = Yii::app()->addendum->meta($this);
-		}
-		return self::$_meta[$this->_class];
 	}
 
 	/**

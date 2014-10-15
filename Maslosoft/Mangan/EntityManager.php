@@ -8,6 +8,8 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Options\EntityOptions;
+
 /**
  * EntityManager
  *
@@ -21,10 +23,17 @@ class EntityManager
 	 * @var Document
 	 */
 	public $model = null;
+	
+	/**
+	 *
+	 * @var EntityOptions
+	 */
+	public $options = null;
 
 	public function __construct(Document $model)
 	{
 		$this->model = $model;
+		$this->options = new EntityOptions($model);
 	}
 
 	public function save()

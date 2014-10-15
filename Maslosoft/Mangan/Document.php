@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan;
 
 use CLogger;
 use Exception;
+use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Signals\AfterDelete;
@@ -55,6 +56,19 @@ abstract class Document extends EmbeddedDocument
 	 * @var string
 	 */
 	public $id;
+
+	/**
+	 * Entity manager
+	 * @var EntityManager
+	 */
+	public $em = null;
+
+	/**
+	 * Finder
+	 * @var Finder
+	 */
+	public $find = null;
+
 	private $_new = false;  // whether this instance is new or not
 	private $_criteria = null; // query criteria (used by finder only)
 
@@ -109,7 +123,10 @@ abstract class Document extends EmbeddedDocument
 	{
 		$this->_key = (string) new MongoId();
 		$this->_class = get_class($this);
+		$this->meta = Meta::create($this);
 		$this->meta->initModel($this);
+		$this->em = new EntityManager($this);
+		$this->find = new Finder($this);
 		$this->setLang($lang);
 
 		// internally used by populateRecord() and model()
@@ -425,7 +442,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function setUseCursor($useCursor)
 	{
-		$this->useCursor = ($useCursor == true);
+		$this->useCursor = (bool)$useCursor;
 	}
 
 	/**
