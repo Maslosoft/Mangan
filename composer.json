@@ -11,7 +11,7 @@
 	],
 	"require": {
 		"maslosoft/addendum": "2.*",
-		"maslosft/signals": "1.*",
+		"maslosoft/signals": "1.*",
 		"masterexploder/phpthumb": "2.0"
 	},
 	"autoload": {
