@@ -157,7 +157,7 @@ class MongoDB extends ApplicationComponent
 	 * Returns Mongo connection instance if not exists will create new
 	 *
 	 * @return MongoClient
-	 * @throws MongoException
+	 * @throws ManganException
 	 * @since v1.0
 	 */
 	public function getConnection()
@@ -169,7 +169,7 @@ class MongoDB extends ApplicationComponent
 				Yii::trace('Opening MongoDB connection', 'Maslosoft.Mangan.MongoDB');
 				if (empty($this->connectionString))
 				{
-					throw new MongoException(Yii::t('yii', 'MongoDB.connectionString cannot be empty.'));
+					throw new ManganException(Yii::t('yii', 'MongoDB.connectionString cannot be empty.'));
 				}
 
 				$options = [ 'connect' => $this->autoConnect];
@@ -201,7 +201,7 @@ class MongoDB extends ApplicationComponent
 			}
 			catch (MongoConnectionException $e)
 			{
-				throw new MongoException(Yii::t(
+				throw new ManganException(Yii::t(
 						'yii', 'MongoDB failed to open connection: {error}', ['{error}' => $e->getMessage()]
 				), $e->getCode());
 			}

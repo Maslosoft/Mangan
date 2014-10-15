@@ -13,7 +13,7 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Mangan\Document;
-use Maslosoft\Mangan\MongoException;
+use Maslosoft\Mangan\ManganException;
 use Maslosoft\Mangan\Sanitizers\String;
 use MongoGridFS;
 use MongoGridFSFile;
@@ -69,15 +69,15 @@ abstract class GridFS extends Document
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws MongoException if the record is not new
-	 * @throws MongoException
+	 * @throws ManganException if the record is not new
+	 * @throws ManganException
 	 * @since v1.3
 	 */
 	public function insert(array $attributes = null)
 	{
 		if (!$this->getIsNewRecord())
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to the database because it is not new.'));
+			throw new ManganException(Yii::t('yii', 'The Document cannot be inserted to the database because it is not new.'));
 		}
 
 		if ($this->beforeSave())
@@ -99,8 +99,8 @@ abstract class GridFS extends Document
 	 * Insertion by Primary Key inserts a MongoGridFSFile forcing the MongoID
 	 * @param MongoId $pk
 	 * @param array $attributes
-	 * @throws MongoException
-	 * @throws MongoException
+	 * @throws ManganException
+	 * @throws ManganException
 	 * @return boolean whether the insert success
 	 * @since v1.3
 	 */
@@ -108,7 +108,7 @@ abstract class GridFS extends Document
 	{
 		if (!($pk instanceof MongoId))
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to the database beacuse its primary key is not defined.'));
+			throw new ManganException(Yii::t('yii', 'The Document cannot be inserted to the database beacuse its primary key is not defined.'));
 		}
 
 		if ($this->beforeSave())
@@ -127,7 +127,7 @@ abstract class GridFS extends Document
 	 * @param array $rawData
 	 * @param array $attributes
 	 * @return boolean True on success
-	 * @throws MongoException
+	 * @throws ManganException
 	 */
 	protected function store($rawData, $attributes)
 	{
@@ -143,7 +143,7 @@ abstract class GridFS extends Document
 
 		if (!isset($rawData['filename']))
 		{
-			throw new MongoException(Yii::t('yii', 'A filename is required to save a GridFS document.'));
+			throw new ManganException(Yii::t('yii', 'A filename is required to save a GridFS document.'));
 		}
 
 		// store bytes directly or store file
@@ -169,7 +169,7 @@ abstract class GridFS extends Document
 			$this->afterSave();
 			return true;
 		}
-		throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+		throw new ManganException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
 	}
 
 	/**
@@ -179,7 +179,7 @@ abstract class GridFS extends Document
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
-	 * @throws MongoException if the record is new
+	 * @throws ManganException if the record is new
 	 * @since v1.3
 	 */
 	public function update(array $attributes = null, $modify = false)
@@ -187,7 +187,7 @@ abstract class GridFS extends Document
 		Yii::trace('Trace: ' . __CLASS__ . '::' . __FUNCTION__ . '()', 'Maslosoft.Mangan.GridFs');
 		if ($this->getIsNewRecord())
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be updated because it is new.'));
+			throw new ManganException(Yii::t('yii', 'The Document cannot be updated because it is new.'));
 		}
 
 		if (is_file($this->filename) === true)

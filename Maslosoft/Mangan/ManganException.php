@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Core\Exception;
  *
  * @since v1.0
  */
-class MongoException extends Exception
+class ManganException extends Exception
 {
 
 }

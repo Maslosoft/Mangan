@@ -13,7 +13,7 @@ namespace Maslosoft\Mangan\Components;
 
 use CHttpSession;
 use Maslosoft\Mangan\MongoDB;
-use Maslosoft\Mangan\MongoException;
+use Maslosoft\Mangan\ManganException;
 use MongoCollection;
 use MongoDate;
 use MongoId;
@@ -130,7 +130,7 @@ class HttpSession extends CHttpSession
 			$db = Yii::app()->getComponent($this->connectionID);
 			if (!($db instanceof MongoDB))
 			{
-				throw new MongoException('HttpSession.connectionID is invalid');
+				throw new ManganException('HttpSession.connectionID is invalid');
 			}
 
 			$this->_collection = $db->getDbInstance()->selectCollection($collectionName);

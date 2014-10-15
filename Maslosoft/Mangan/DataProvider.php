@@ -85,7 +85,7 @@ class DataProvider extends CDataProvider
 		}
 		else
 		{
-			throw new MongoException('Invalid model type for ' . __CLASS__);
+			throw new ManganException('Invalid model type for ' . __CLASS__);
 		}
 		
 		$this->_criteria = $this->model->getDbCriteria();
@@ -112,7 +112,7 @@ class DataProvider extends CDataProvider
 		{
 			if (is_array($this->keyField))
 			{
-				throw new MongoException('This DataProvider cannot handle multi-field primary key.');
+				throw new ManganException('This DataProvider cannot handle multi-field primary key.');
 			}
 		}
 		else
