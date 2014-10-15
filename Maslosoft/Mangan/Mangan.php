@@ -29,7 +29,7 @@ Yii::setPathOfAlias('yii-mangan', __DIR__);
  * This is merge work of tyohan, Alexander Makarov and mine
  * @since v1.0
  */
-class MongoDB extends ApplicationComponent
+class Mangan extends ApplicationComponent
 {
 
 	/**
@@ -79,7 +79,7 @@ class MongoDB extends ApplicationComponent
 	public $dbName = null;
 
 	/**
-	 * @var MongoDB $_mongoDb instance of MongoDB driver
+	 * @var Mangan $_mongoDb instance of MongoDB driver
 	 */
 	private $_mongoDb;
 

@@ -212,7 +212,7 @@ abstract class Document extends EmbeddedDocument
 	 * @param MongoDB $component
 	 * @since v1.0
 	 */
-	public function setMongoDBComponent(MongoDB $component)
+	public function setMongoDBComponent(Mangan $component)
 	{
 		self::$_emongoDb = $component;
 	}
