@@ -1,14 +1,51 @@
 {
 	"name": "maslosoft/mangan",
-	"license": "GNU LESSER GENERAL PUBLIC LICENSE",
+	"license": "New BSD",
 	"authors": [
 		{
 			"name": "Peter Maselkowski",
 			"email": "pmaselkowski@gmail.com",
 			"homepage": "http://maslosoft.com",
 			"role": "Developer"
+		},
+		{
+			"name": "Ianaré Sévi",
+			"role": "Developer"
+		},
+		{
+			"name": "Dariusz Górecki",
+			"email": "darek.krk@gmail.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Invenzzia Group",
+			"homepage": "http://www.invenzzia.org",
+			"role": "Developer"
+		},
+		{
+			"name": "Philippe Gaultier",
+			"email": "pgaultier@ibitux.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Ibitux",
+			"website": "http://www.ibitux.com",
+			"role": "Developer"
+		},
+		{
+			"name": "CleverIT",
+			"website": "http://www.cleverit.com.pl",
+			"role": "Developrt"
+		},
+		{
+			"name": "Florian Fackler",
+			"email": "florian.fackler@mintao.com",
+			"website": "http://mintao.com"
 		}
 	],
+	"support": {
+		"issues": "https://github.com/Maslosoft/Mangan/issues"
+	},
 	"require": {
 		"maslosoft/addendum": "2.*",
 		"maslosoft/signals": "1.*",

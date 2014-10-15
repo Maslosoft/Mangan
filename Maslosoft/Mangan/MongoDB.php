@@ -22,7 +22,6 @@ use Yii;
  * TODO Check if needed and remove these
  */
 Yii::setPathOfAlias('yii-mangan', __DIR__);
-Yii::import('yii-mangan.models.*');
 
 /**
  * MongoDB
