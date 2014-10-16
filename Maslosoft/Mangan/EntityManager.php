@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterSave;
 use Maslosoft\Mangan\Transformers\ToRawArray;
@@ -44,9 +45,16 @@ class EntityManager
 	 */
 	public $collection = null;
 
+	/**
+	 * Model class name
+	 * @var string
+	 */
+	private $_class = '';
+
 	public function __construct(Document $model)
 	{
 		$this->model = $model;
+		$this->_class = get_class($model);
 		$this->options = new EntityOptions($model);
 	}
 
@@ -61,14 +69,14 @@ class EntityManager
 		{
 			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to database because it is not new.'));
 		}
-		if ($this->model->beforeSave())
+		if ($this->_beforeSave())
 		{
 			Yii::trace($this->_class . '.insert()', 'Maslosoft.Mangan.EntityManager');
 
 			// Ensure that id is set
-			if (!$this->getId())
+			if (!$this->model->getId())
 			{
-				$this->setId(new MongoId);
+				$this->model->setId(new MongoId);
 			}
 			$rawData = (array)new ToRawArray($this->model);
 
@@ -104,7 +112,7 @@ class EntityManager
 			if ($result !== false)
 			{ // strict comparison needed
 				$this->_id = $rawData['_id'];
-				$this->afterSave();
+				$this->_afterSave();
 				$this->setIsNewRecord(false);
 				$this->setScenario('update');
 				(new Signal)->emit(new AfterSave($this));
@@ -120,4 +128,25 @@ class EntityManager
 		
 	}
 
+	private function _beforeSave()
+	{
+		if ($this->model->hasEventHandler('onBeforeSave'))
+		{
+			$event = new ModelEvent($this);
+			$this->model->onBeforeSave($event);
+			return $event->isValid;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	private function _afterSave()
+	{
+		if ($this->model->hasEventHandler('onAfterSave'))
+		{
+			$this->model->onAfterSave(new ModelEvent($this));
+		}
+	}
 }
