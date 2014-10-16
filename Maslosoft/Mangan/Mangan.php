@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Mangan\Core\ApplicationComponent;
 use MongoClient;
 use MongoConnectionException;
+use MongoDB;
 use Yii;
 
 /**
@@ -31,7 +32,8 @@ Yii::setPathOfAlias('yii-mangan', __DIR__);
  */
 class Mangan extends ApplicationComponent
 {
-
+	use Traits\Defaults\MongoClientOptions;
+	
 	/**
 	 * @var string host:port
 	 *
@@ -79,7 +81,7 @@ class Mangan extends ApplicationComponent
 	public $dbName = null;
 
 	/**
-	 * @var Mangan $_mongoDb instance of MongoDB driver
+	 * @var MongoDB $_mongoDb instance of MongoDB driver
 	 */
 	private $_mongoDb;
 
@@ -140,6 +142,24 @@ class Mangan extends ApplicationComponent
 	 * @var boolean whether to enable profiling the mongo queries being executed.
 	 */
 	public $enableProfiling = false;
+	
+	private static $_instances = [];
+
+	/**
+	 * Get instance of Mangan component
+	 * @new
+	 * @param string $connectionId
+	 * @param mixed[] $config
+	 * @return Mangan
+	 */
+	public static function instance($connectionId = 'mongodb', $config = [])
+	{
+		if (!array_key_exists($connectionId, self::$_instances))
+		{
+			self::$_instances[$connectionId] = new self($config);
+		}
+		return self::$_instances[$connectionId];
+	}
 
 	/**
 	 * Connect to DB if connection is already connected this method does nothing
@@ -169,7 +189,7 @@ class Mangan extends ApplicationComponent
 				Yii::trace('Opening MongoDB connection', 'Maslosoft.Mangan.MongoDB');
 				if (empty($this->connectionString))
 				{
-					throw new ManganException(Yii::t('yii', 'MongoDB.connectionString cannot be empty.'));
+					throw new ManganException('MongoDB.connectionString cannot be empty.');
 				}
 
 				$options = [ 'connect' => $this->autoConnect];
@@ -201,9 +221,7 @@ class Mangan extends ApplicationComponent
 			}
 			catch (MongoConnectionException $e)
 			{
-				throw new ManganException(Yii::t(
-						'yii', 'MongoDB failed to open connection: {error}', ['{error}' => $e->getMessage()]
-				), $e->getCode());
+				throw new ManganException(sprintf('MongoDB failed to open connection: %s', $e->getMessage()), $e->getCode());
 			}
 		}
 		else

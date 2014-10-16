@@ -195,14 +195,14 @@ abstract class Document extends EmbeddedDocument
 
 	/**
 	 * Get MongoDB the component instance,  defaults to 'mongodb' application component.
-	 * @return MongoDB
+	 * @return Mangan
 	 * @since v1.0
 	 */
 	public function getMongoDBComponent()
 	{
 		if (self::$_emongoDb === null)
 		{
-			self::$_emongoDb = Yii::app()->getComponent('mongodb');
+			self::$_emongoDb = Mangan::instance('mongodb');
 		}
 		return self::$_emongoDb;
 	}

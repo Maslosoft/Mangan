@@ -52,7 +52,7 @@ trait MongoClientOptions
 	 * See Write Concerns. The default value for MongoClient is 1.
 	 * @var mixed
 	 */
-	public $w = 0;
+	public $w = 1;
 
 	/**
 	 * This option specifies the time limit, in milliseconds, for write concern acknowledgement.
@@ -67,4 +67,5 @@ trait MongoClientOptions
 	{
 		return ['fsync', 'j', 'socketTimeoutMS', 'w', 'wTimeoutMS'];
 	}
+
 }

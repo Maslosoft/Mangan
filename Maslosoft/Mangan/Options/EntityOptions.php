@@ -11,6 +11,7 @@ namespace Maslosoft\Mangan\Options;
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
+use Maslosoft\Mangan\Mangan;
 
 /**
  * EntityOptions
@@ -41,6 +42,12 @@ class EntityOptions
 	private $_values = [];
 	private $_defaults = [];
 
+	/**
+	 *
+	 * @var string
+	 */
+	public $connectionId = 'mongodb';
+
 	public function __construct(Document $model)
 	{
 		// This is to use get/set
@@ -62,10 +69,7 @@ class EntityOptions
 		{
 			return $this->_meta->type()->$name;
 		}
-		/**
-		 * TODO Below does not work
-		 */
-		return $this->getMongoDBComponent()->$name;
+		return Mangan::instance($this->connectionId)->$name;
 	}
 
 	public function __set($name, $value)
@@ -78,4 +82,13 @@ class EntityOptions
 		unset($this->_values[$name]);
 	}
 
+	public function getSaveOptions()
+	{
+		$result = [];
+		foreach($this->_getOptionNames() as $name)
+		{
+			$result[$name] = $this->$name;
+		}
+		return $result;
+	}
 }
