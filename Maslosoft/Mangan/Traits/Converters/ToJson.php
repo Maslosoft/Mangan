@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Traits\Access;
+namespace Maslosoft\Mangan\Traits\Converters;
 
 /**
  * AsJSON
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-trait AsJSON
+trait ToJson
 {
 
 	public function toJsonArray()
