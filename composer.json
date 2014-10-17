@@ -51,6 +51,9 @@
 		"maslosoft/signals": "1.*",
 		"masterexploder/phpthumb": "2.0"
 	},
+	"require-dev": {
+		"maslosoft/mangantest": "@dev"
+	},
 	"autoload": {
 		"psr-0": {
 			"Maslosoft\\Mangan": "./"
