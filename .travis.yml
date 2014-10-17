@@ -14,4 +14,4 @@ before_script:
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-script: phpunit --coverage-clover=coverage.clover
+script: phpunit --coverage-clover=coverage.clover --bootstrap vendor/maslosoft/mangantest/bootstrap.php vendor/maslosoft/mangantest/tests
