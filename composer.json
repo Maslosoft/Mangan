@@ -49,7 +49,7 @@
 	"require": {
 		"maslosoft/addendum": "2.*",
 		"maslosoft/signals": "1.*",
-		"masterexploder/phpthumb": "2.0",
+		"masterexploder/phpthumb": "2.0"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master"
