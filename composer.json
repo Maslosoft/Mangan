@@ -52,7 +52,7 @@
 		"masterexploder/phpthumb": "2.0"
 	},
 	"require-dev": {
-		"maslosoft/mangantest": "@dev"
+		"maslosoft/mangantest": "dev-master"
 	},
 	"autoload": {
 		"psr-0": {

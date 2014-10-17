@@ -63,3 +63,4 @@ Desktop.ini
 .*.sw[a-z]
 *.un~
 Session.vim
+/vendor

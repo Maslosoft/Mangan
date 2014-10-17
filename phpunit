@@ -4,4 +4,4 @@ cd "`dirname "$0"`"
 cd "vendor/phpunit/phpunit"
 BIN_TARGET="`pwd`/phpunit"
 cd "$SRC_DIR"
-"$BIN_TARGET" --colors vendor/maslosoft/mangantest/tests
+"$BIN_TARGET" --colors --bootstrap vendor/maslosoft/mangantest/bootstrap.php vendor/maslosoft/mangantest/tests
