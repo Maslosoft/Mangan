@@ -29,18 +29,18 @@
 		},
 		{
 			"name": "Ibitux",
-			"website": "http://www.ibitux.com",
+			"homepage": "http://www.ibitux.com",
 			"role": "Developer"
 		},
 		{
 			"name": "CleverIT",
-			"website": "http://www.cleverit.com.pl",
+			"homepage": "http://www.cleverit.com.pl",
 			"role": "Developrt"
 		},
 		{
 			"name": "Florian Fackler",
 			"email": "florian.fackler@mintao.com",
-			"website": "http://mintao.com"
+			"homepage": "http://mintao.com"
 		}
 	],
 	"support": {
