@@ -2,8 +2,8 @@ actor: Tester
 paths:
     tests: vendor/maslosoft/mangantest/tests
     log: tests/_output
-    data: tests/_data
-    helpers: tests/_support
+    data: vendor/maslosoft/mangantest/tests/_data
+    helpers: vendor/maslosoft/mangantest/tests/_support
 settings:
     bootstrap: _bootstrap.php
     colors: false
