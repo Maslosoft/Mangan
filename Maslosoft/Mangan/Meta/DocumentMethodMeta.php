@@ -8,20 +8,14 @@
 
 namespace Maslosoft\Mangan\Meta;
 
+use Maslosoft\Addendum\Collections\MetaMethod;
+
 /**
- * Model meta container
+ * DocumentMethodMeta
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ModeTypeMeta
+class DocumentMethodMeta extends MetaMethod
 {
-
-	use \Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
-
-	/**
-	 * Whenever to use cursors
-	 * @var bool
-	 */
-	public $useCursor = false;
 
 }

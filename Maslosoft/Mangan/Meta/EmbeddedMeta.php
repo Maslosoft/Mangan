@@ -9,41 +9,35 @@
 namespace Maslosoft\Mangan\Meta;
 
 /**
- * DbRef metadata holder
+ * Embedded document metadata
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefMeta extends BaseMeta
+class EmbeddedMeta
 {
 
 	/**
-	 * Whenever treat field as single referenced document
+	 * Whenever treat field as single embedded document
 	 * @var bool
 	 */
 	public $single = false;
 
 	/**
-	 * Whenever field should contain array of referenced documents.
+	 * Whenever field should contain array of embedded documents.
 	 * @var bool
 	 */
 	public $isArray = false;
 
 	/**
-	 * Default class for referenced document
+	 * Default class for embedded document
 	 * @var string
 	 */
 	public $class = '';
 
 	/**
-	 * Target document field name
-	 * @var string
+	 * Addidtional embedded params
+	 * @var mixed
 	 */
-	public $field = '_id';
-
-	/**
-	 * Whenever referenced objects should be updated on save of main document
-	 * @var bool
-	 */
-	public $updatable = false;
+	public $params = null;
 
 }

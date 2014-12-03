@@ -35,6 +35,12 @@ class EntityManager
 	public $model = null;
 
 	/**
+	 *
+	 * @var 
+	 */
+	public $meta = null;
+
+	/**
 	 * Options
 	 * @var EntityOptions
 	 */
@@ -75,7 +81,7 @@ class EntityManager
 	{
 		if (!$this->getIsNewRecord())
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to database because it is not new.'));
+			throw new MongoException('The Document cannot be inserted to database because it is not new.');
 		}
 		if ($this->_beforeSave())
 		{

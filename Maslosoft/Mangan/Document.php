@@ -15,9 +15,9 @@ namespace Maslosoft\Mangan;
 
 use CLogger;
 use Exception;
-use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Signals\AfterDelete;
 use Maslosoft\Mangan\Signals\AfterSave;
 use Maslosoft\Signals\Signal;
@@ -123,7 +123,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		$this->_key = (string) new MongoId();
 		$this->_class = get_class($this);
-		$this->meta = Meta::create($this);
+		$this->meta = ManganMeta::create($this);
 		$this->meta->initModel($this);
 		$this->em = new EntityManager($this);
 		$this->find = new Finder($this);
@@ -657,7 +657,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if (!$this->getIsNewRecord())
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be inserted to database because it is not new.'));
+			throw new MongoException('The Document cannot be inserted to database because it is not new.');
 		}
 		if ($this->beforeSave())
 		{
@@ -687,9 +687,7 @@ abstract class Document extends EmbeddedDocument
 			$pk = $this->primaryKey();
 			if ('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
 			{
-				throw new MongoException(
-				Yii::t('yii', 'The Document cannot be inserted because the primary key already exists.')
-				);
+				throw new MongoException('The Document cannot be inserted because the primary key already exists.');
 			}
 
 			try
@@ -713,7 +711,7 @@ abstract class Document extends EmbeddedDocument
 				(new Signal)->emit(new AfterSave($this));
 				return true;
 			}
-			throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
 		return false;
 	}
@@ -736,7 +734,7 @@ abstract class Document extends EmbeddedDocument
 	{
 		if ($this->getIsNewRecord())
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be updated because it is new.'));
+			throw new MongoException('The Document cannot be updated because it is new.');
 		}
 		if ($this->beforeSave())
 		{
@@ -786,7 +784,7 @@ abstract class Document extends EmbeddedDocument
 				(new Signal)->emit(new AfterSave($this));
 				return true;
 			}
-			throw new MongoException(Yii::t('yii', 'Can\t save the document to disk, or attempting to save an empty document.'));
+			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
 	}
 
@@ -852,7 +850,7 @@ abstract class Document extends EmbeddedDocument
 		}
 		else
 		{
-			throw new MongoException(Yii::t('yii', 'The Document cannot be deleted because it is new.'));
+			throw new MongoException('The Document cannot be deleted because it is new.');
 		}
 	}
 
@@ -1562,7 +1560,7 @@ abstract class Document extends EmbeddedDocument
 				}
 			else
 			{
-				throw new MongoException(Yii::t('yii', 'Cannot create PK criteria for multiple composite key\'s (not implemented yet)'));
+				throw new MongoException('Cannot create PK criteria for multiple composite key\'s (not implemented yet)');
 			}
 		}
 		return $criteria;
