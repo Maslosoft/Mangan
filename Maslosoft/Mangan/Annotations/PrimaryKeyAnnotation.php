@@ -12,7 +12,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
 
 /**
  * PrimaryKey
- * TODO
+ * TODO Make it possible to configure compound primary key. This should be made by using annotation on multiple fields
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class PrimaryKey extends MetaAnnotation

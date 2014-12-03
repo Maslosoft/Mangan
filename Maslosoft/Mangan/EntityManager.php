@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterSave;
@@ -40,6 +41,12 @@ class EntityManager
 	public $options = null;
 
 	/**
+	 * Current collection name
+	 * @var string
+	 */
+	public $collectionName = '';
+	
+	/**
 	 * Current collection
 	 * @var MongoCollection
 	 */
@@ -56,6 +63,7 @@ class EntityManager
 		$this->model = $model;
 		$this->_class = get_class($model);
 		$this->options = new EntityOptions($model);
+		$this->collectionName = CollectionNamer::nameCollection($model);
 	}
 
 	public function save()
