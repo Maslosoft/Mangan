@@ -37,6 +37,12 @@ class EntityManager
 
 	/**
 	 *
+	 * @var Events\EventDispatcher
+	 */
+	public $ed = null;
+
+	/**
+	 *
 	 * @var 
 	 */
 	public $meta = null;
@@ -170,4 +176,10 @@ class EntityManager
 			$this->model->onAfterSave(new ModelEvent($this));
 		}
 	}
+
+	public function populateRecord($doc)
+	{
+
+	}
+
 }

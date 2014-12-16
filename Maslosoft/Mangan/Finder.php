@@ -8,8 +8,11 @@
 
 namespace Maslosoft\Mangan;
 
+use CLogger;
+use Maslosoft\Mangan\Events\EventDispatcher;
 use MongoException;
 use Yii;
+use const PHP_EOL;
 
 /**
  * Finder
@@ -18,11 +21,26 @@ use Yii;
  */
 class Finder
 {
+
+	const beforeFind = "beforeFind";
+
 	/**
 	 * Model
 	 * @var Document
 	 */
 	public $model = null;
+
+	/**
+	 *
+	 * @var EntityManager
+	 */
+	public $em = null;
+
+	/**
+	 *
+	 * @var EventDispatcher
+	 */
+	public $ed = null;
 
 	/**
 	 * Finder criteria
@@ -40,10 +58,11 @@ class Finder
 	 * Constructor
 	 * @param Document $model
 	 */
-	public function __construct(Document $model)
+	public function __construct(EntityManager $em)
 	{
-		$this->model = $model;
-		$this->_class = get_class($model);
+		$this->model = $em->model;
+		$this->em = $em;
+		$this->_class = get_class($this->model);
 	}
 	/**
 	 * Finds a single Document with the specified condition.
@@ -61,11 +80,58 @@ class Finder
 
 		if ($this->model->beforeFind())
 		{
+			$this->ed->trigger(self::beforeFind, $model);
 			$this->applyScopes($criteria);
 			$doc = $this->model->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
-			return $this->populateRecord($doc);
+			return $this->em->populateRecord($doc);
 		}
 		return null;
+	}
+
+	/**
+	 * Finds all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|Criteria $criteria query criteria.
+	 * @return array list of documents satisfying the specified condition. An empty array is returned if none is found.
+	 * @since v1.0
+	 */
+	public function findAll($criteria = null)
+	{
+		if ($this->beforeFind())
+		{
+			$this->applyScopes($criteria);
+			$cursor = $this->getCollection()->find($criteria->getConditions());
+
+			if ($criteria->getSort() !== null)
+			{
+				$cursor->sort($criteria->getSort());
+			}
+			if ($criteria->getLimit() !== null)
+			{
+				$cursor->limit($criteria->getLimit());
+			}
+			if ($criteria->getOffset() !== null)
+			{
+				$cursor->skip($criteria->getOffset());
+			}
+			if ($criteria->getSelect())
+			{
+				$cursor->fields($criteria->getSelect(true));
+			}
+			if ($this->getMongoDBComponent()->enableProfiling)
+			{
+				Yii::log($this->_class . '.findAll()' . PHP_EOL . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
+			}
+			if ($this->getUseCursor())
+			{
+				return new Cursor($cursor, $this->model());
+			}
+			else
+			{
+				return $this->populateRecords($cursor);
+			}
+		}
+		return [];
 	}
 
 	/**

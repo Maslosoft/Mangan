@@ -143,7 +143,7 @@ class EventDispatcher
 	 * @param string $name the event name
 	 * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
 	 */
-	public function trigger($name, Event $event = null)
+	public function trigger($name, $model, Event $event = null)
 	{
 		if (!empty($this->_events[$name]))
 		{
@@ -153,7 +153,7 @@ class EventDispatcher
 			}
 			if ($event->sender === null)
 			{
-				$event->sender = $this;
+				$event->sender = $model;
 			}
 			$event->handled = false;
 			$event->name = $name;
@@ -169,7 +169,7 @@ class EventDispatcher
 			}
 		}
 		// invoke class-level attached handlers
-		Event::trigger($this, $name, $event);
+		Event::trigger($model, $name, $event);
 	}
 
 	/**

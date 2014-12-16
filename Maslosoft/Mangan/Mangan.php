@@ -42,7 +42,7 @@ class Mangan extends ApplicationComponent
 	 * @example mongodb://localhost:27017
 	 * @since v1.0
 	 */
-	public $connectionString;
+	public $connectionString = 'mongodb://localhost:27017';
 
 	/**
 	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will
@@ -63,7 +63,7 @@ class Mangan extends ApplicationComponent
 	/**
 	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
 	 * the component is being initialized. Defaults to true. Note, this property is only
-	 * effective when the MongoDB object is used as an application component.
+	 * effective when the Mangan object is used as an application component.
 	 * @since v1.0
 	 */
 	public $autoConnect = true;
@@ -189,7 +189,7 @@ class Mangan extends ApplicationComponent
 				Yii::trace('Opening MongoDB connection', 'Maslosoft.Mangan.MongoDB');
 				if (empty($this->connectionString))
 				{
-					throw new ManganException('MongoDB.connectionString cannot be empty.');
+					throw new ManganException('Mangan.connectionString cannot be empty.');
 				}
 
 				$options = [ 'connect' => $this->autoConnect];
