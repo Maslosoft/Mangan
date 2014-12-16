@@ -8,8 +8,9 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\CollectionNamer;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterSave;
 use Maslosoft\Mangan\Transformers\ToRawArray;
@@ -70,6 +71,12 @@ class EntityManager
 		$this->_class = get_class($model);
 		$this->options = new EntityOptions($model);
 		$this->collectionName = CollectionNamer::nameCollection($model);
+		$this->meta = ManganMeta::create($model);
+	}
+
+	public function __set($name, $value)
+	{
+		;
 	}
 
 	public function save()

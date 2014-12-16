@@ -9,13 +9,12 @@ matrix:
 services:
   - mongodb
 install:
-  - composer install
+  - composer install --dev --prefer-source
 before_script:
 # Wait for mongodb
   - sleep 15
   - phpenv config-add travis.ini
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover tests/_output/coverage.clover
-script: vendor/codeception/codeception/codecept --colors --coverage-xml=coverage.clover --coverage-html=. run
-#script: phpunit --coverage-clover=coverage.clover --bootstrap vendor/maslosoft/mangantest/bootstrap.php vendor/maslosoft/mangantest/tests
+  - php ocular.phar code-coverage:upload --repository=g/Maslosoft/Mangan --revision=`git rev-parse HEAD` --format=php-clover ./tests/_output/coverage.clover
+script: vendor/bin/codecept run unit --coverage --html --coverage-html=. --coverage-xml=./coverage.clover
