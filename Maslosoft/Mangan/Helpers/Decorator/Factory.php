@@ -8,6 +8,9 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
+use Maslosoft\Mangan\Decorators\Undecorated;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+
 /**
  * Factory
  *
@@ -16,13 +19,18 @@ namespace Maslosoft\Mangan\Helpers\Decorator;
 class Factory
 {
 
-	public static function create(MetaProperty $meta)
+	public static function create(DocumentPropertyMeta $meta)
 	{
 		if ($meta->decorators)
 		{
-			return new Container($meta->decorators);
+			$decorators = [];
+			foreach($meta->decorators as $decoratorName)
+			{
+				$decorators[] = new $decoratorName;
+			}
+			return new Container($decorators);
 		}
-		return new \Maslosoft\Mangan\Decorators\Void();
+		return new Undecorated();
 	}
 
 }

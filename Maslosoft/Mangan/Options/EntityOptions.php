@@ -48,7 +48,7 @@ class EntityOptions
 	 */
 	public $connectionId = 'mongodb';
 
-	public function __construct(Document $model)
+	public function __construct($model)
 	{
 		// This is to use get/set
 		foreach ($this->_getOptionNames() as $name)

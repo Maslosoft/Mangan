@@ -10,8 +10,8 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Exception;
 use Maslosoft\Addendum\Collections\Meta;
-use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\EmbeddedDocument;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Sanitizers\ISanitizer;
 
 /**
@@ -53,5 +53,5 @@ abstract class Transformator
 		throw new Exception(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
 	}
 
-	abstract protected function _getTransformer(MetaProperty $meta);
+	abstract protected function _getTransformer(DocumentPropertyMeta $meta);
 }

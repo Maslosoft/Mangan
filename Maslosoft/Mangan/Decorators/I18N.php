@@ -34,7 +34,7 @@ class I18NDecorator implements IDecorator
 		{
 			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
 		}
-		return $value[$model->getLang()];
+		return [$model->getLang() => $value];
 	}
 
 }

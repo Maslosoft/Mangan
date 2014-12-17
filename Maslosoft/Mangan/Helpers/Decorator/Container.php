@@ -17,11 +17,13 @@ use Maslosoft\Mangan\Decorators\IDecorator;
  */
 class Container implements IDecorator
 {
+
 	/**
 	 * Decorators
 	 * @var IDecorator[]
 	 */
 	private $_decorators = [];
+
 	/**
 	 *
 	 * @param IDecorator[] $decorators
@@ -31,14 +33,22 @@ class Container implements IDecorator
 		$this->_decorators = $decorators;
 	}
 
-	public function get(\Maslosoft\Mangan\EmbeddedDocument $document, $name, $value)
+	public function read($model, $name, $value)
 	{
-		
+		foreach ($this->_decorators as $decorator)
+		{
+			$value = $decorator->read($model, $name, $value);
+		}
+		return $value;
 	}
 
-	public function set(\Maslosoft\Mangan\EmbeddedDocument $document, $name, $value)
+	public function write($model, $name, $value)
 	{
-
+		foreach ($this->_decorators as $decorator)
+		{
+			$value = $decorator->write($model, $name, $value);
+		}
+		return $value;
 	}
 
 }

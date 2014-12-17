@@ -8,8 +8,8 @@
 
 namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
-use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\Helpers\Transformator;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
  * Sanitizer
@@ -19,7 +19,7 @@ use Maslosoft\Mangan\Helpers\Transformator;
 class Sanitizer extends Transformator
 {
 
-	protected function _getTransformer(MetaProperty $meta)
+	protected function _getTransformer(DocumentPropertyMeta $meta)
 	{
 		return Factory::create($meta);
 	}

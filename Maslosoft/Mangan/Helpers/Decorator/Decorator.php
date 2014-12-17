@@ -9,6 +9,7 @@
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
 use Maslosoft\Mangan\Helpers\Transformator;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
  * Decorator
@@ -17,9 +18,10 @@ use Maslosoft\Mangan\Helpers\Transformator;
  */
 class Decorator extends Transformator
 {
-	protected function _getTransformer(\Maslosoft\Addendum\Collections\MetaProperty $meta)
-	{
 
+	protected function _getTransformer(DocumentPropertyMeta $meta)
+	{
+		return Factory::create($meta);
 	}
 
 }
