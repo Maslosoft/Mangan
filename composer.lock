@@ -573,12 +573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "7eead4b3dc766e1f48715628b1a20adb8aca4e69"
+                "reference": "2c30a17024b5dba62c7ed8ec52925ff2aa7c7e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/7eead4b3dc766e1f48715628b1a20adb8aca4e69",
-                "reference": "7eead4b3dc766e1f48715628b1a20adb8aca4e69",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/2c30a17024b5dba62c7ed8ec52925ff2aa7c7e99",
+                "reference": "2c30a17024b5dba62c7ed8ec52925ff2aa7c7e99",
                 "shasum": ""
             },
             "require": {
@@ -604,7 +604,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2014-12-03 15:02:37"
+            "time": "2014-12-17 12:30:13"
         },
         {
             "name": "phpunit/php-code-coverage",

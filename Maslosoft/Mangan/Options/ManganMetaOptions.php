@@ -20,11 +20,13 @@ use Maslosoft\Mangan\Meta\DocumentTypeMeta;
  */
 class ManganMetaOptions extends MetaOptions
 {
+
 	/**
 	 * Meta container class name for type (class)
 	 * @var string
 	 */
 	public $typeClass = DocumentTypeMeta::class;
+
 	/**
 	 * Meta container class name for method
 	 * @var string
@@ -36,4 +38,11 @@ class ManganMetaOptions extends MetaOptions
 	 * @var string
 	 */
 	public $propertyClass = DocumentPropertyMeta::class;
+
+	/**
+	 * Default namespace for annotations
+	 * @var string
+	 */
+	public $annotationsNamespace = '';
+
 }

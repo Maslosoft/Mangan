@@ -22,7 +22,7 @@ class I18N extends MetaAnnotation
 		{
 			throw new InvalidArgumentException(sprintf('Arguments "allowDefault" and "allowAny" for element "%s" in class "%s" cannot be both set true', $this->name, $this->_meta->type()->name));
 		}
-		$i18n = new I18NMeta();
+		$i18n = new I18NMeta($this->_entity);
 		$i18n->enabled = $this->value;
 		$i18n->allowDefault = $this->allowDefault;
 		$i18n->allowAny = $this->allowAny;
