@@ -9,20 +9,20 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 /**
+ * Void
  * Empty sanitizer, does not change anything
- *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Void implements ISanitizer
 {
-	public function get($value)
+	public function read($dbValue)
 	{
-		return $value;
+		return $dbValue;
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		return $value;
+		return $phpValue;
 	}
 
 }

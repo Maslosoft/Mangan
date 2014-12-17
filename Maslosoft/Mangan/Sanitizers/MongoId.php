@@ -10,24 +10,28 @@ namespace Maslosoft\Mangan\Sanitizers;
 
 /**
  * MongoId
- *
+ * This sanitizer forces MongoId type for both client and mongo
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class MongoId implements ISanitizer
 {
 
-	public function get($value)
+	public function read($dbValue)
 	{
-		return (string) $value;
+		if (!$dbValue instanceof MongoId)
+		{
+			$dbValue = new MongoId($dbValue);
+		}
+		return $dbValue;
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		if (!$value instanceof MongoId)
+		if (!$phpValue instanceof MongoId)
 		{
-			$value = new MongoId($value);
+			$phpValue = new MongoId($phpValue);
 		}
-		return $value;
+		return $phpValue;
 	}
 
 }

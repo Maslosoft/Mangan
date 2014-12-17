@@ -17,14 +17,14 @@ namespace Maslosoft\Mangan\Sanitizers;
 class Double implements ISanitizer
 {
 
-	public function get($value)
+	public function read($dbValue)
 	{
-		return (float) $value;
+		return (float) $dbValue;
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		return (float) $value;
+		return (float) $phpValue;
 	}
 
 }

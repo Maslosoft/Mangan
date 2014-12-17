@@ -13,7 +13,17 @@ namespace Maslosoft\Mangan\Sanitizers;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefArray
+class DbRefArray implements ISanitizer
 {
+
+	public function read($dbValue)
+	{
+		
+	}
+
+	public function write($phpValue)
+	{
+
+	}
 
 }

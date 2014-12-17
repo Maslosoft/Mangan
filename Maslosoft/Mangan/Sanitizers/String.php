@@ -11,20 +11,20 @@ namespace Maslosoft\Mangan\Sanitizers;
 
 /**
  * String
- *
+ * This sanitizer forces values to be string
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class String implements ISanitizer
 {
 
-	public function get($value)
+	public function read($dbValue)
 	{
-		return (string) $value;
+		return (string) $dbValue;
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		return (string) $value;
+		return (string) $phpValue;
 	}
 
 }

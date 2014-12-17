@@ -19,22 +19,22 @@ use MongoDate;
 class Date implements ISanitizer
 {
 
-	public function get($value)
+	public function read($dbValue)
 	{
-		if ($value instanceof MongoDate)
+		if ($dbValue instanceof MongoDate)
 		{
-			return $value;
+			return $dbValue;
 		}
-		return new MongoDate((int) $value);
+		return new MongoDate((int) $dbValue);
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		if ($value instanceof MongoDate)
+		if ($phpValue instanceof MongoDate)
 		{
-			return $value;
+			return $phpValue;
 		}
-		return new MongoDate((int) $value);
+		return new MongoDate((int) $phpValue);
 	}
 
 }

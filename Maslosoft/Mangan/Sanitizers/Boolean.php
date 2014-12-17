@@ -17,14 +17,14 @@ namespace Maslosoft\Mangan\Sanitizers;
 class Boolean implements ISanitizer
 {
 
-	public function get($value)
+	public function read($dbValue)
 	{
-		return (bool) $value;
+		return (bool) $dbValue;
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		return (bool) $value;
+		return (bool) $phpValue;
 	}
 
 }

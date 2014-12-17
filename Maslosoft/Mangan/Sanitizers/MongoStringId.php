@@ -9,27 +9,20 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 /**
- * DbRef
- *
+ * MongoStringId
+ * This sanitizer provide mongo id as string, while saving to db as `ObjectId`
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRef implements ISanitizer
+class MongoStringId extends MongoId
 {
 
 	public function read($dbValue)
 	{
-		/**
-		 * TODO Find referenced document and instantiate it
-		 */
-		return $dbValue;
-	}
-
-	public function write($phpValue)
-	{
-		/**
-		 * TODO Retrieve `id` or other fields referencing document and document type
-		 */
-		return $phpValue;
+		if (!$dbValue instanceof MongoId)
+		{
+			$dbValue = new MongoId($dbValue);
+		}
+		return (string) $dbValue;
 	}
 
 }

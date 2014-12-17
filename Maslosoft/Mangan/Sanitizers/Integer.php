@@ -10,21 +10,21 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 /**
- * Int
- *
+ * Integer
+ * This sanitizer forces type to be integer
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Integer implements ISanitizer
 {
 
-	public function get($value)
+	public function read($dbValue)
 	{
-		return (int) $value;
+		return (int) $dbValue;
 	}
 
-	public function set($value)
+	public function write($phpValue)
 	{
-		return (int) $value;
+		return (int) $phpValue;
 	}
 
 }
