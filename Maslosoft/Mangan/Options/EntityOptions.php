@@ -8,10 +8,11 @@
 
 namespace Maslosoft\Mangan\Options;
 
-use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
+use Maslosoft\Mangan\Meta\DocumentTypeMeta;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * EntityOptions
@@ -31,7 +32,7 @@ class EntityOptions
 
 	/**
 	 *
-	 * @var Meta
+	 * @var DocumentTypeMeta
 	 */
 	private $_meta = null;
 
@@ -56,18 +57,18 @@ class EntityOptions
 			PropertyMaker::defineProperty($this, $name, $this->_defaults);
 		}
 
-		$this->_meta = Meta::create($model);
+		$this->_meta = ManganMeta::create($model)->type();
 	}
 
 	public function __get($name)
 	{
+		if (isset($this->_meta->$name))
+		{
+			return $this->_meta->$name;
+		}
 		if (array_key_exists($name, $this->_values))
 		{
 			return $this->_values[$name]; // We have flag set, return it
-		}
-		if (isset($this->_meta->type()->$name))
-		{
-			return $this->_meta->type()->$name;
 		}
 		return Mangan::instance($this->connectionId)->$name;
 	}

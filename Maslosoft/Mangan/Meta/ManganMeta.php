@@ -20,6 +20,12 @@ use Maslosoft\Addendum\Options\MetaOptions;
 class ManganMeta extends Meta
 {
 
+	/**
+	 * Create instance of Metadata specifically designed for Mangan
+	 * @param IAnnotated $component
+	 * @param MetaOptions $options
+	 * @return ManganMeta
+	 */
 	public static function create(IAnnotated $component, MetaOptions $options = null)
 	{
 		if (null === $options)
@@ -27,6 +33,15 @@ class ManganMeta extends Meta
 			$options = new ManganMetaOptions();
 		}
 		return parent::create($component, $options);
+	}
+
+	/**
+	 * Get document type meta
+	 * @return DocumentTypeMeta
+	 */
+	public function type()
+	{
+		return parent::type();
 	}
 
 }

@@ -45,6 +45,12 @@ class Mangan extends ApplicationComponent
 	public $connectionString = 'mongodb://localhost:27017';
 
 	/**
+	 * Connection ID
+	 * @var string
+	 */
+	public $connectionId = 'mongodb';
+
+	/**
 	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will
 	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting
 	 * to a server that was not even listed.
@@ -157,6 +163,7 @@ class Mangan extends ApplicationComponent
 		if (!array_key_exists($connectionId, self::$_instances))
 		{
 			self::$_instances[$connectionId] = new self($config);
+			self::$_instances[$connectionId]->connectionId = $connectionId;
 		}
 		return self::$_instances[$connectionId];
 	}

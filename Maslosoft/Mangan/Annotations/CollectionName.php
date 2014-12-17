@@ -8,13 +8,16 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Collections\MetaAnnotation;
+
 /**
  * CollectionName
  * Use this annotation to set custom collection name
+ * @Target('class')
  * @template CollectionName('${name}')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class CollectionNameAnnotation
+class CollectionNameAnnotation extends MetaAnnotation
 {
 	public $value;
 

@@ -8,6 +8,9 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Mangan\Interfaces\IWithCollectionName;
+use Maslosoft\Mangan\Meta\ManganMeta;
+
 /**
  * CollectionNamer
  * Name collection from model instance. Order of name resolving:
@@ -23,15 +26,11 @@ class CollectionNamer
 
 	public static function nameCollection($model)
 	{
-		if ($model->meta->collectionName)
-		{
-			return $model->meta->collectionName;
-		}
-		if (is_callable([$model, 'getCollectionName']))
+		if ($model instanceof IWithCollectionName)
 		{
 			return $model->getCollectionName();
 		}
-		return str_replace('\\', '.', get_class($model));
+		return ManganMeta::create($model)->type()->collectionName;
 	}
 
 }
