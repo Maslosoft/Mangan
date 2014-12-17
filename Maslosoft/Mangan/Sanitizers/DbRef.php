@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan\Sanitizers;
 class DbRef implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		/**
 		 * TODO Find referenced document and instantiate it
@@ -24,7 +24,7 @@ class DbRef implements ISanitizer
 		return $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		/**
 		 * TODO Retrieve `id` or other fields referencing document and document type

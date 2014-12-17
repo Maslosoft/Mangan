@@ -21,12 +21,12 @@ interface ISanitizer
 	 * This should return end user value.
 	 * @param mixed $dbValue
 	 */
-	public function read($dbValue);
+	public function read($model, $dbValue);
 
 	/**
 	 * This will be called when data is written back to database.
 	 * This should return mongo acceptable value.
 	 * @param mixed $phpValue
 	 */
-	public function write($phpValue);
+	public function write($model, $phpValue);
 }

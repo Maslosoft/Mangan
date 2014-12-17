@@ -126,7 +126,7 @@ abstract class Document extends EmbeddedDocument
 		$this->meta = ManganMeta::create($this);
 		$this->meta->initModel($this);
 		$this->em = new EntityManager($this);
-		$this->find = new Finder($this);
+		$this->find = new Finder($this->em);
 		$this->setLang($lang);
 
 		// internally used by populateRecord() and model()

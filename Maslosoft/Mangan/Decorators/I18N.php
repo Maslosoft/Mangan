@@ -8,24 +8,33 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Mangan\EmbeddedDocument;
+use Maslosoft\Mangan\Interfaces\I18NAble;
+use Maslosoft\Mangan\ManganException;
 
 /**
  * This creates i18n fields
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class I18N implements IDecorator
+class I18NDecorator implements IDecorator
 {
 
-	public function get(EmbeddedDocument $document, $name, $value)
+	public function read($model, $name, $value)
 	{
-		return $value[$document->getLang()];
+		if (!$model instanceof I18NAble)
+		{
+			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
+		}
+		return $value[$model->getLang()];
 	}
 
-	public function set(EmbeddedDocument $document, $name, $value)
+	public function write($model, $name, $value)
 	{
-		return $value[$document->getLang()];
+		if (!$model instanceof I18NAble)
+		{
+			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
+		}
+		return $value[$model->getLang()];
 	}
 
 }

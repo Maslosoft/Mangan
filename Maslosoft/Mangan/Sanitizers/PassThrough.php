@@ -9,18 +9,18 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 /**
- * Void
+ * PassThrough
  * Empty sanitizer, does not change anything
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Void implements ISanitizer
+class PassThrough implements ISanitizer
 {
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		return $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		return $phpValue;
 	}

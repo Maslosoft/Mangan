@@ -17,12 +17,12 @@ namespace Maslosoft\Mangan\Sanitizers;
 class Integer implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		return (int) $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		return (int) $phpValue;
 	}

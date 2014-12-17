@@ -17,12 +17,12 @@ namespace Maslosoft\Mangan\Sanitizers;
 class String implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		return (string) $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		return (string) $phpValue;
 	}

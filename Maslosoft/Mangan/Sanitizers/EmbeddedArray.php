@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan\Sanitizers;
 class EmbeddedArray implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		/**
 		 * TODO Instantiate embedded array
@@ -24,7 +24,7 @@ class EmbeddedArray implements ISanitizer
 		return $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		/**
 		 * TODO Convert embedded array into plain php array

@@ -11,7 +11,7 @@ namespace Maslosoft\Mangan\Transformers;
 use ArrayAccess;
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Document;
-use Maslosoft\Mangan\Model\Model;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use MongoId;
 use Yii;
 
@@ -45,7 +45,7 @@ class ToRawArray implements ArrayAccess
 	public function __construct($model)
 	{
 		$this->model = $model;
-		$this->meta = Meta::create($model);
+		$this->meta = ManganMeta::create($model);
 		$this->_class = get_class($model);
 	}
 
@@ -79,6 +79,9 @@ class ToRawArray implements ArrayAccess
 		foreach ($this->meta->fields() as $name => $field)
 		{
 			// Type check is required here, so by default attribute is persistent
+			/**
+			 * TODO This should be implemented as decorators
+			 */
 			if ($field->persistent !== false)
 			{
 				if ($field->i18n)

@@ -38,4 +38,12 @@ class DocumentTypeMeta extends MetaType
 	 */
 	public $useCursor = false;
 
+	public function __construct(\ReflectionClass $info = null)
+	{
+		// Client Options must be unset to allow cascading int EntityOptions
+		foreach($this->_getOptionNames() as $name)
+		{
+			unset($this->$name);
+		}
+	}
 }

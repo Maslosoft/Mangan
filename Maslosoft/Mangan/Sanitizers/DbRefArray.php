@@ -16,12 +16,12 @@ namespace Maslosoft\Mangan\Sanitizers;
 class DbRefArray implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 
 	}

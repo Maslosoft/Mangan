@@ -562,16 +562,16 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 			// Return value
 			if ($meta->i18n)
 			{
-				return $this->_sanitizer->$name->get($this->_virtualValues[$name][$lang]);
+				return $this->_virtualValues[$name][$lang];
 			}
 			else
 			{
-				return $this->_sanitizer->$name->get($this->_virtualValues[$name]);
+				return $this->_virtualValues[$name];
 			}
 		}
 		else
 		{
-			return $this->_sanitizer->$name->get($this->$name);
+			return $this->$name;
 		}
 	}
 
@@ -625,21 +625,21 @@ abstract class EmbeddedDocument extends Model implements IAnnotated
 				}
 				if ($lang == '_all')
 				{
-					$this->_virtualValues[$name] = $this->_sanitizer->$name->set($value);
+					$this->_virtualValues[$name] = $value;
 				}
 				else
 				{
-					$this->_virtualValues[$name][$lang] = $this->_sanitizer->$name->set($value);
+					$this->_virtualValues[$name][$lang] = $value;
 				}
 			}
 			else
 			{
-				$this->_virtualValues[$name] = $this->_sanitizer->$name->set($value);
+				$this->_virtualValues[$name] = $value;
 			}
 		}
 		else
 		{
-			$this->$name = $this->_sanitizer->$name->set($value);
+			$this->$name = $value;
 		}
 	}
 

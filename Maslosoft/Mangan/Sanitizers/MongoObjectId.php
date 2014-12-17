@@ -8,15 +8,17 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use MongoId;
+
 /**
- * MongoId
+ * MongoObjectId
  * This sanitizer forces MongoId type for both client and mongo
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MongoId implements ISanitizer
+class MongoObjectId implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		if (!$dbValue instanceof MongoId)
 		{
@@ -25,7 +27,7 @@ class MongoId implements ISanitizer
 		return $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		if (!$phpValue instanceof MongoId)
 		{

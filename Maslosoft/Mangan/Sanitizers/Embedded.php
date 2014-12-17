@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan\Sanitizers;
 class Embedded implements ISanitizer
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		/**
 		 * TODO Instantiate embedded
@@ -24,7 +24,7 @@ class Embedded implements ISanitizer
 		return $dbValue;
 	}
 
-	public function write($phpValue)
+	public function write($model, $phpValue)
 	{
 		/**
 		 * TODO Convert embedded to array

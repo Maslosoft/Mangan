@@ -8,15 +8,17 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use MongoId;
+
 /**
  * MongoStringId
  * This sanitizer provide mongo id as string, while saving to db as `ObjectId`
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MongoStringId extends MongoId
+class MongoStringId extends MongoObjectId
 {
 
-	public function read($dbValue)
+	public function read($model, $dbValue)
 	{
 		if (!$dbValue instanceof MongoId)
 		{

@@ -12,7 +12,6 @@ use CLogger;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use MongoException;
 use Yii;
-use const PHP_EOL;
 
 /**
  * Finder
@@ -120,7 +119,7 @@ class Finder
 			}
 			if ($this->getMongoDBComponent()->enableProfiling)
 			{
-				Yii::log($this->_class . '.findAll()' . PHP_EOL . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
+//				Yii::log($this->_class . '.findAll()' . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
 			}
 			if ($this->getUseCursor())
 			{
