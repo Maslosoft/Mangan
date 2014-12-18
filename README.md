@@ -1,4 +1,9 @@
 #Yii Mangan
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
+<img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master" style="height:18px"/>
+
 ######Advanced MongoDB document mapper for Yii
 
 This extension originally started as a fork of [YiiMongoDbSuite](canni.github.com/YiiMongoDbSuite "YiiMongoDbSuite"),
