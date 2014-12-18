@@ -9,6 +9,7 @@
 namespace Maslosoft\Mangan\Options;
 
 use Maslosoft\Addendum\Options\MetaOptions;
+use Maslosoft\Mangan\Annotations\MetaOptionsHelper;
 use Maslosoft\Mangan\Meta\DocumentMethodMeta;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -40,9 +41,11 @@ class ManganMetaOptions extends MetaOptions
 	public $propertyClass = DocumentPropertyMeta::class;
 
 	/**
-	 * Default namespace for annotations
+	 * Namespaces for annotations
 	 * @var string
 	 */
-	public $annotationsNamespace = '';
+	public $namespaces = [
+		MetaOptionsHelper::Ns
+	];
 
 }
