@@ -55,6 +55,10 @@
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master"
 	},
+	"suggest":{
+		"monolog/monolog" : "Sends your logs to files, sockets, inboxes, databases and various web services",
+		"mongofill/mongofill": "Polyfill of PECL Mongo extension"
+	},
 	"autoload": {
 		"psr-0": {
 			"Maslosoft\\Mangan": "./"
