@@ -4,31 +4,42 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4f65cd1e515d0371667c814c4d6980db",
+    "hash": "bb99f573b97e3215c0f2f42ae46f8ca6",
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "2.1.0",
+            "version": "3.0.0-alpha.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "32c2476df7cf6b421c48e85d1a69eb6a304ff0f1"
+                "reference": "c2a5c1c5b888a07478549445e6b6cffba2b07b23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/32c2476df7cf6b421c48e85d1a69eb6a304ff0f1",
-                "reference": "32c2476df7cf6b421c48e85d1a69eb6a304ff0f1",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/c2a5c1c5b888a07478549445e6b6cffba2b07b23",
+                "reference": "c2a5c1c5b888a07478549445e6b6cffba2b07b23",
                 "shasum": ""
+            },
+            "require": {
+                "maslosoft/miniview": "~1.0",
+                "php": ">=5.5.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "maslosoft/addendumtest": "dev-master"
+            },
+            "suggest": {
+                "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services"
             },
             "type": "yii-extension",
             "autoload": {
                 "psr-0": {
-                    "Maslosoft\\Addendum": "./"
+                    "Maslosoft\\Addendum\\": "./"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GNU LESSER GENERAL PUBLIC LICENSE"
+                "New BSD"
             ],
             "authors": [
                 {
@@ -46,7 +57,7 @@
                 "metadata",
                 "yii"
             ],
-            "time": "2014-12-03 15:24:05"
+            "time": "2014-12-19 13:05:24"
         },
         {
             "name": "maslosoft/embedi",
@@ -86,21 +97,54 @@
             "time": "2014-12-11 16:13:00"
         },
         {
-            "name": "maslosoft/signals",
+            "name": "maslosoft/miniview",
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "4b9d4faded3145ec7a63290b75e61fd094f41902"
+                "url": "https://github.com/Maslosoft/MiniView.git",
+                "reference": "6fe0bdc8b8aff81a8c8e01076e8f14973d1d770f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/4b9d4faded3145ec7a63290b75e61fd094f41902",
-                "reference": "4b9d4faded3145ec7a63290b75e61fd094f41902",
+                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/6fe0bdc8b8aff81a8c8e01076e8f14973d1d770f",
+                "reference": "6fe0bdc8b8aff81a8c8e01076e8f14973d1d770f",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Maslosoft\\MiniView": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "New BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Maselkowski",
+                    "email": "pmaselkowski@gmail.com"
+                }
+            ],
+            "description": "Mini view is minimal template rendering library based on Yii controller renderer",
+            "time": "2014-12-18 11:47:13"
+        },
+        {
+            "name": "maslosoft/signals",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maslosoft/Signals.git",
+                "reference": "fb7e983ef728b5377041797ee4b36fffebbbef85"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/fb7e983ef728b5377041797ee4b36fffebbbef85",
+                "reference": "fb7e983ef728b5377041797ee4b36fffebbbef85",
                 "shasum": ""
             },
             "require": {
-                "maslosoft/addendum": "2.*"
+                "maslosoft/addendum": "~3@alpha"
             },
             "type": "yii-extension",
             "autoload": {
@@ -130,7 +174,7 @@
                 "slots",
                 "yii"
             ],
-            "time": "2014-10-15 09:39:49"
+            "time": "2014-12-19 13:35:30"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -181,6 +225,44 @@
                 "rotate"
             ],
             "time": "2013-07-12 17:57:58"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
         },
         {
             "name": "symfony/filesystem",
@@ -469,16 +551,16 @@
         },
         {
             "name": "guzzlehttp/ringphp",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/RingPHP.git",
-                "reference": "9187999f80720b9494692d2167d75144acb2ad05"
+                "reference": "a903f51b692427318bc813217c0e6505287e79a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/9187999f80720b9494692d2167d75144acb2ad05",
-                "reference": "9187999f80720b9494692d2167d75144acb2ad05",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/a903f51b692427318bc813217c0e6505287e79a4",
+                "reference": "a903f51b692427318bc813217c0e6505287e79a4",
                 "shasum": ""
             },
             "require": {
@@ -515,7 +597,7 @@
                     "homepage": "https://github.com/mtdowling"
                 }
             ],
-            "time": "2014-12-02 05:01:22"
+            "time": "2014-12-11 05:50:32"
         },
         {
             "name": "guzzlehttp/streams",
@@ -1796,6 +1878,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "maslosoft/addendum": 15,
         "maslosoft/mangantest": 20
     },
     "prefer-stable": false,
