@@ -9,7 +9,6 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Collections\MetaAnnotation;
-use Maslosoft\Mangan\Helpers\PropertyMaker;
 
 /**
  * ClientFlag

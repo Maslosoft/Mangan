@@ -12,20 +12,21 @@ use Maslosoft\Mangan\Meta\DbRefMeta;
  */
 class DbRefAnnotation extends MetaAnnotation
 {
+
 	public $class = '';
 	public $value;
 
 	public function init()
 	{
 		$data = [];
-		foreach(['class', 'field', 'updatable'] as $key => $name)
+		foreach (['class', 'field', 'updatable'] as $key => $name)
 		{
-			if(isset($this->value[$key]))
+			if (isset($this->value[$key]))
 			{
 				$data[$name] = $this->value[$key];
 				unset($this->value[$key]);
 			}
-			if(isset($this->value[$name]))
+			if (isset($this->value[$name]))
 			{
 				$data[$name] = $this->value[$name];
 			}

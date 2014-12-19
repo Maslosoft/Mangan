@@ -19,10 +19,12 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  */
 class CollectionNameAnnotation extends MetaAnnotation
 {
+
 	public $value;
 
 	public function init()
 	{
 		$this->_entity->collectionName = $this->value;
 	}
+
 }

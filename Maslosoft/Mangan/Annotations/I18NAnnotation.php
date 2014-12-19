@@ -1,5 +1,8 @@
 <?php
 
+namespace Maslosoft\Mangan\Annotations;
+
+use InvalidArgumentException;
 use Maslosoft\Addendum\Collections\MetaAnnotation;
 use Maslosoft\Mangan\Meta\I18NMeta;
 
