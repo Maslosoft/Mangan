@@ -13,7 +13,7 @@ namespace Maslosoft\Mangan\Annotations;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefArray extends DbRef
+class DbRefArrayAnnotation extends DbRefAnnotation
 {
 
 }

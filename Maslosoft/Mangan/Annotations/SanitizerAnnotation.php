@@ -16,7 +16,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  * @template Sanitizer(${SanitizerClass})
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Sanitizer extends MetaAnnotation
+class SanitizerAnnotation extends MetaAnnotation
 {
 
 	public $value = null;

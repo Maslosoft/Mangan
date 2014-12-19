@@ -16,7 +16,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  * FIXME This currently set *field* meta, while it should set *type* meta
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class PrimaryKey extends MetaAnnotation
+class PrimaryKeyAnnotation extends MetaAnnotation
 {
 
 	public function init()

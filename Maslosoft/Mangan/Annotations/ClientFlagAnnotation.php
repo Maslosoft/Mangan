@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Helpers\PropertyMaker;
  * @Target('class')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ClientFlag extends MetaAnnotation
+class ClientFlagAnnotation extends MetaAnnotation
 {
 
 	use \Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;

@@ -10,7 +10,7 @@ use Maslosoft\Mangan\Meta\DbRefMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRef extends MetaAnnotation
+class DbRefAnnotation extends MetaAnnotation
 {
 	public $class = '';
 	public $value;

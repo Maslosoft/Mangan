@@ -9,7 +9,7 @@ use Maslosoft\Mangan\Meta\I18NMeta;
  * @Target('property')
  * @author Piotr
  */
-class I18N extends MetaAnnotation
+class I18NAnnotation extends MetaAnnotation
 {
 
 	public $value = true;

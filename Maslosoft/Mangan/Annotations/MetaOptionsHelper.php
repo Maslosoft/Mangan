@@ -10,7 +10,7 @@ namespace Maslosoft\Mangan\Annotations;
 
 /**
  * MetaOptionsHelper
- *
+ * NOTE: This is only to get reference to current namespace, do not use it
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class MetaOptionsHelper
