@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Annotations;
+namespace Maslosoft\Mangan\Bridge\Yii\Annotations;
 
 use Maslosoft\Addendum\Base\ValidatorAnnotation;
 
