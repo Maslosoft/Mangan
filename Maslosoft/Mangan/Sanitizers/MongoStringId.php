@@ -15,7 +15,7 @@ use MongoId;
  * This sanitizer provide mongo id as string, while saving to db as `ObjectId`
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MongoStringId extends MongoObjectId
+class MongoStringId implements ISanitizer
 {
 
 	public function read($model, $dbValue)
@@ -25,6 +25,15 @@ class MongoStringId extends MongoObjectId
 			$dbValue = new MongoId($dbValue);
 		}
 		return (string) $dbValue;
+	}
+
+	public function write($model, $phpValue)
+	{
+		if (!$phpValue instanceof MongoId)
+		{
+			$phpValue = new MongoId($phpValue);
+		}
+		return $phpValue;
 	}
 
 }

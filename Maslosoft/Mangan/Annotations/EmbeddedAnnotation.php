@@ -12,12 +12,12 @@ use stdClass;
  * but any type of embedded document can be stored within this field
  * Examples:
  * <ul>
- * 		<li><b>Embedded('EmbeddedClassName')</b>: Embed with whatever set</li>
- * 		<li><b>Embedded('EmbeddedClassName')</b>: Embed with default class</li>
+ * 		<li><b>Embedded(Company\Product\EmbeddedClassName)</b>: Embed with namespaced class literal</li>
+ * 		<li><b>Embedded(EmbeddedClassName)</b>: Embed with default class</li>
  * 		<li><b>Embedded({'EmbeddedClassName', params...})</b>: Embed with default class and optional params (currently none)</li>
  * </ul>
  * @Target('property')
- * @template Embedded('${defaultClassName}')
+ * @template Embedded(${defaultClassName})
  * @author Piotr
  */
 class EmbeddedAnnotation extends MetaAnnotation
@@ -38,7 +38,7 @@ class EmbeddedAnnotation extends MetaAnnotation
 			$className = $this->value;
 		}
 		$this->_entity->embedded = $className;
-		$this->_entity->embeddedParams = $this->value;
+		$this->_entity->embeddedParams = $params;
 		$this->_entity->direct = false;
 		$this->_entity->sanitizer = Embedded::class;
 	}
