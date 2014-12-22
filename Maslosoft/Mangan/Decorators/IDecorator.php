@@ -22,16 +22,18 @@ interface IDecorator
 	 * This should return end user value.
 	 * @param EmbeddedDocument $model Document model which will be decorated
 	 * @param string $name Field name
-	 * @param mixed $value
+	 * @param mixed $dbValue
+	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, $name, $value);
+	public function read($model, $name, &$dbValue);
 
 	/**
 	 * This will be called when setting value.
 	 * This should return db acceptable value
 	 * @param EmbeddedDocument $model Document model which will be decorated
 	 * @param string $name Field name
-	 * @param mixed $value
+	 * @param mixed $dbValue
+	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, $value);
+	public function write($model, $name, &$dbValue);
 }

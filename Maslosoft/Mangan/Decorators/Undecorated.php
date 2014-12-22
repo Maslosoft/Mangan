@@ -16,14 +16,30 @@ namespace Maslosoft\Mangan\Decorators;
 class Undecorated implements IDecorator
 {
 
-	public function read($model, $name, $value)
+	/**
+	 * This will be called when getting value.
+	 * This should return end user value.
+	 * @param EmbeddedDocument $model Document model which will be decorated
+	 * @param string $name Field name
+	 * @param mixed $dbValue
+	 * @return bool Return true if value should be assigned to model
+	 */
+	public function read($model, $name, &$dbValue)
 	{
-		return $value;
+		return true;
 	}
 
-	public function write($model, $name, $value)
+	/**
+	 * This will be called when setting value.
+	 * This should return db acceptable value
+	 * @param EmbeddedDocument $model Document model which will be decorated
+	 * @param string $name Field name
+	 * @param mixed $dbValue
+	 * @return bool Return true to store value to database
+	 */
+	public function write($model, $name, &$dbValue)
 	{
-		return $value;
+		return true;
 	}
 
 }

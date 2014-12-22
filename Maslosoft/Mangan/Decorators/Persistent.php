@@ -8,15 +8,14 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Mangan\Interfaces\I18NAble;
-use Maslosoft\Mangan\ManganException;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
- * This creates i18n fields
+ * Persistent
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class I18NDecorator implements IDecorator
+class Persistent implements IDecorator
 {
 
 	/**
@@ -29,12 +28,7 @@ class I18NDecorator implements IDecorator
 	 */
 	public function read($model, $name, &$dbValue)
 	{
-		if (!$model instanceof I18NAble)
-		{
-			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
-		}
-		$model->$name = $dbValue[$model->getLang()];
-		return true;
+		return ManganMeta::create($model)->$name->persistent;
 	}
 
 	/**
@@ -47,12 +41,7 @@ class I18NDecorator implements IDecorator
 	 */
 	public function write($model, $name, &$dbValue)
 	{
-		if (!$model instanceof I18NAble)
-		{
-			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
-		}
-		$dbValue[$model->getLang()] = $model->$name;
-		return true;
+		return ManganMeta::create($model)->$name->persistent;
 	}
 
 }

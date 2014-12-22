@@ -21,6 +21,6 @@ modules:
    enabled: [MongoDb]
    config:
       MongoDb:
-         dsn: 'mongodb://localhost:27017'
+         dsn: 'mongodb://localhost:27017/ManganTest'
          user: ''
          password: ''
