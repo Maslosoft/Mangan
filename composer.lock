@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "782c4c160adcb270ee5bd4c9e8b48e49",
+    "hash": "d5a0226baa670912ae87a221ed9c1b9b",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -61,16 +61,16 @@
         },
         {
             "name": "maslosoft/embedi",
-            "version": "0.0.2",
+            "version": "0.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/EmbeDi.git",
-                "reference": "8669f2c00fd5934f8236ef51b24dcbebe0650d6d"
+                "reference": "8866dbf6ae9d95d9d676793afe318d9285550a3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/EmbeDi/zipball/8669f2c00fd5934f8236ef51b24dcbebe0650d6d",
-                "reference": "8669f2c00fd5934f8236ef51b24dcbebe0650d6d",
+                "url": "https://api.github.com/repos/Maslosoft/EmbeDi/zipball/8866dbf6ae9d95d9d676793afe318d9285550a3c",
+                "reference": "8866dbf6ae9d95d9d676793afe318d9285550a3c",
                 "shasum": ""
             },
             "require-dev": {
@@ -78,8 +78,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Maslosoft\\EmbeDi": "./"
+                "psr-4": {
+                    "Maslosoft\\EmbeDi\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -94,7 +94,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2014-12-11 16:13:00"
+            "time": "2014-12-29 16:49:35"
         },
         {
             "name": "maslosoft/miniview",
