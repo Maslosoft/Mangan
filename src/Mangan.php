@@ -13,16 +13,12 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Core\ApplicationComponent;
+use Maslosoft\EmbeDi\EmbeDi;
+use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use MongoClient;
 use MongoConnectionException;
 use MongoDB;
 use Yii;
-
-/**
- * TODO Check if needed and remove these
- */
-Yii::setPathOfAlias('yii-mangan', __DIR__);
 
 /**
  * MongoDB
@@ -30,10 +26,13 @@ Yii::setPathOfAlias('yii-mangan', __DIR__);
  * This is merge work of tyohan, Alexander Makarov and mine
  * @since v1.0
  */
-class Mangan extends ApplicationComponent
+class Mangan
 {
+
+	const DefaultConnectionId = 'mongodb';
+
 	use Traits\Defaults\MongoClientOptions;
-	
+
 	/**
 	 * @var string host:port
 	 *
@@ -51,61 +50,10 @@ class Mangan extends ApplicationComponent
 	public $connectionId = 'mongodb';
 
 	/**
-	 * @var string replicaSet The name of the replica set to connect to. If this is given, the master will
-	 * be determined by using the ismaster database command on the seeds, so the driver may end up connecting
-	 * to a server that was not even listed.
-	 * @example myReplicaSet
-	 * @since v1.3.7
-	 */
-	public $replicaSet = null;
-
-	/**
-	 * @var int timeout For how long the driver should try to connect to the database (in milliseconds).
-	 * @example 2000
-	 * @since v1.3.7
-	 */
-	public $timeout = 2000;
-
-	/**
-	 * @var boolean $autoConnect whether the Mongo connection should be automatically established when
-	 * the component is being initialized. Defaults to true. Note, this property is only
-	 * effective when the Mangan object is used as an application component.
-	 * @since v1.0
-	 */
-	public $autoConnect = true;
-
-	/**
-	 * @var false|string $persistentConnection false for non-persistent connection, string for persistent connection id to use
-	 * @since v1.0
-	 */
-	public $persistentConnection = false;
-
-	/**
 	 * @var string $dbName name of the Mongo database to use
 	 * @since v1.0
 	 */
 	public $dbName = null;
-
-	/**
-	 * @var MongoDB $_mongoDb instance of MongoDB driver
-	 */
-	private $_mongoDb;
-
-	/**
-	 * @var MongoClient $_mongoConnection instance of MongoDB driver
-	 */
-	private $_mongoConnection;
-
-	/**
-	 * If set to TRUE all internal DB operations will use FSYNC flag with data modification requests,
-	 * in other words, all write operations will have to wait for a disc sync!
-	 *
-	 * MongoDB default value for this flag is: FALSE.
-	 *
-	 * @var boolean $fsyncFlag state of FSYNC flag to use with internal connections (global scope)
-	 * @since v1.0
-	 */
-	public $fsyncFlag = false;
 
 	/**
 	 * If set to TRUE all internal DB operations will use SAFE flag with data modification requests.
@@ -135,21 +83,26 @@ class Mangan extends ApplicationComponent
 	public $useCursor = false;
 
 	/**
-	 * Storage location for temporary files used by the GridFS Feature.
-	 * If set to null, component will not use temporary storage
-	 * @var string $gridFStemporaryFolder
-	 */
-	public $gridFStemporaryFolder = null;
-
-	/**
 	 * Queries profiling.
 	 * Defaults to false. This should be mainly enabled and used during development
 	 * to find out the bottleneck of mongo queries.
 	 * @var boolean whether to enable profiling the mongo queries being executed.
 	 */
 	public $enableProfiling = false;
-	
-	private static $_instances = [];
+
+	/**
+	 * Connection storage
+	 * @var ConnectionStorage
+	 */
+	private $_cs = null;
+
+	public function __construct($connectionId = self::DefaultConnectionId)
+	{
+		$di = new EmbeDi($connectionId);
+		$this->connectionId = $connectionId;
+		$di->configure($this);
+		$this->_cs = new ConnectionStorage($this, $connectionId);
+	}
 
 	/**
 	 * Get instance of Mangan component
@@ -158,14 +111,15 @@ class Mangan extends ApplicationComponent
 	 * @param mixed[] $config
 	 * @return Mangan
 	 */
-	public static function instance($connectionId = 'mongodb', $config = [])
+	public static function instance($connectionId = self::DefaultConnectionId, $config = [])
 	{
-		if (!array_key_exists($connectionId, self::$_instances))
-		{
-			self::$_instances[$connectionId] = new self($config);
-			self::$_instances[$connectionId]->connectionId = $connectionId;
-		}
-		return self::$_instances[$connectionId];
+		return new self($connectionId, $config);
+	}
+
+	public function init()
+	{
+		$di = new EmbeDi($this->connectionId);
+		$di->store($this);
 	}
 
 	/**
@@ -189,42 +143,23 @@ class Mangan extends ApplicationComponent
 	 */
 	public function getConnection()
 	{
-		if ($this->_mongoConnection === null)
+		if ($this->_cs->mongoClient === null)
 		{
 			try
 			{
-				Yii::trace('Opening MongoDB connection', 'Maslosoft.Mangan.MongoDB');
 				if (empty($this->connectionString))
 				{
 					throw new ManganException('Mangan.connectionString cannot be empty.');
 				}
 
-				$options = [ 'connect' => $this->autoConnect];
-
-				if ($this->persistentConnection !== false)
+				$options = [];
+				foreach ($this->_getOptionNames() as $name)
 				{
-					$options['persist'] = $this->persistentConnection;
+					$options[$name] = $this->$name;
 				}
-				if (!is_null($this->replicaSet))
-				{
-					$options['replicaSet'] = $this->replicaSet;
-				}
-				if (!is_null($this->timeout))
-				{
-					if (version_compare(MongoClient::VERSION, '1.3.4', '>=') === true)
-					{
-						$options['connectTimeoutMS'] = $this->timeout;
-					}
-					else
-					{
-						$options['timeout'] = $this->timeout;
-					}
-				}
+				$this->_cs->mongoClient = new MongoClient($this->connectionString, $options);
 
-
-				$this->_mongoConnection = new MongoClient($this->connectionString, $options);
-
-				return $this->_mongoConnection;
+				return $this->_cs->mongoClient;
 			}
 			catch (MongoConnectionException $e)
 			{
@@ -233,7 +168,7 @@ class Mangan extends ApplicationComponent
 		}
 		else
 		{
-			return $this->_mongoConnection;
+			return $this->_cs->mongoClient;
 		}
 	}
 
@@ -245,7 +180,7 @@ class Mangan extends ApplicationComponent
 	 */
 	public function setConnection(MongoClient $connection)
 	{
-		$this->_mongoConnection = $connection;
+		$this->_cs->mongoClient = $connection;
 	}
 
 	/**
@@ -254,13 +189,17 @@ class Mangan extends ApplicationComponent
 	 */
 	public function getDbInstance()
 	{
-		if ($this->_mongoDb === null)
+		if ($this->_cs->mongoDB === null)
 		{
-			return $this->_mongoDb = $this->getConnection()->selectDB($this->dbName);
+			if (!$this->dbName)
+			{
+				throw new ManganException("Database name is required");
+			}
+			return $this->_cs->mongoDB = new \MongoDB($this->getConnection(), $this->dbName);
 		}
 		else
 		{
-			return $this->_mongoDb;
+			return $this->_cs->mongoDB;
 		}
 	}
 
@@ -272,7 +211,7 @@ class Mangan extends ApplicationComponent
 	 */
 	public function setDbInstance($name)
 	{
-		$this->_mongoDb = $this->getConnection()->selectDb($name);
+		$this->_cs->mongoDB = $this->getConnection()->selectDb($name);
 	}
 
 	/**
@@ -282,33 +221,22 @@ class Mangan extends ApplicationComponent
 	 */
 	protected function close()
 	{
-		if ($this->_mongoConnection !== null)
+		if ($this->_cs->mongoClient !== null)
 		{
-			$this->_mongoConnection->close();
-			$this->_mongoConnection = null;
-			Yii::trace('Closing MongoDB connection', 'Maslosoft.Mangan.MongoDB');
-		}
-	}
-
-	/**
-	 * If we have don't use persist connection, close it
-	 * @since v1.0
-	 */
-	public function __destruct()
-	{
-		if (!$this->persistentConnection)
-		{
-			$this->close();
+			$this->_cs->mongoClient->close();
+			$this->_cs->mongoClient = null;
+			$this->_cs->mongoDB = null;
 		}
 	}
 
 	/**
 	 * Drop the current DB
+	 * TODO Move to entity manager
 	 * @since v1.0
 	 */
 	public function dropDb()
 	{
-		$this->_mongoDb->drop();
+		$this->getDbInstance()->drop();
 	}
 
 }

@@ -95,13 +95,13 @@ trait MongoClientOptions
 	public $password;
 
 	/**
-	 * Boolean, defaults to FALSE. Forces the write operation to block until it is synced to the journal on disk.
-	 * If TRUE, an acknowledged write is implied and this option will override setting "w" to 0.
+	 * Specifies the read preference type. Read preferences provide you with control from which secondaries data can be read from.
 	 *
-	 * Note: If this option is used and journaling is disabled, MongoDB 2.6+ will raise an error and the write will fail; older server versions will simply ignore the option.
+	 * Allowed values are: MongoClient::RP_PRIMARY, MongoClient::RP_PRIMARY_PREFERRED, MongoClient::RP_SECONDARY, MongoClient::RP_SECONDARY_PREFERRED and MongoClient::RP_NEAREST.
+	 *
+	 * See the documentation on read preferences for more information.
 	 * @var int
 	 */
-	public $socketTimeoutMS = 30000;
 	public $readPreference = MongoClient::RP_PRIMARY;
 
 	/**
@@ -172,9 +172,9 @@ trait MongoClientOptions
 	protected function _getOptionNames()
 	{
 		$properties = [];
-		foreach((new \ReflectionClass(__CLASS__))->getProperties(\ReflectionProperty::IS_PUBLIC) as $property)
+		foreach ((new \ReflectionClass(__CLASS__))->getProperties(\ReflectionProperty::IS_PUBLIC) as $property)
 		{
-			if(!$property->isStatic())
+			if (!$property->isStatic())
 			{
 				$properties[] = $property->name;
 			}

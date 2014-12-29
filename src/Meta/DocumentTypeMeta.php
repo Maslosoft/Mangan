@@ -10,6 +10,7 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaType;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
+use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\ManganException;
 use ReflectionClass;
 
@@ -110,7 +111,11 @@ class DocumentTypeMeta extends MetaType
 
 	public function getConnectionId()
 	{
-		return $this->_values['connectionId'] or null;
+		if(!isset($this->_values['connectionId']))
+		{
+			$this->_values['connectionId'] = Mangan::DefaultConnectionId;
+		}
+		return $this->_values['connectionId'];
 	}
 
 	public function setConnectionId($connectionId)
