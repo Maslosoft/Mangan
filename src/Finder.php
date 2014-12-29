@@ -25,7 +25,7 @@ use Yii;
 class Finder
 {
 
-	const beforeFind = "beforeFind";
+	const EventBeforeFind = "beforeFind";
 
 	/**
 	 * Model
@@ -80,10 +80,10 @@ class Finder
 	 */
 	public function find($criteria = null)
 	{
-		if (Event::hasHandler($this->model, self::beforeFind))
+		if (Event::hasHandler($this->model, self::EventBeforeFind))
 		{
 			$event = new ModelEvent($this, $this->model);
-			Event::trigger($this->model, self::beforeFind);
+			Event::trigger($this->model, self::EventBeforeFind);
 			if (!$event->handled)
 			{
 				return null;
