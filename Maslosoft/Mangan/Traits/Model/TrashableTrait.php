@@ -66,7 +66,7 @@ trait TrashableTrait
 		if (!$this instanceof Trash)
 		{
 			// When trying to restore normal document instead of trash item
-			throw new Exception(tx('Restore can be performed only on Trash instance'));
+			throw new Exception('Restore can be performed only on Trash instance');
 		}
 		$this->data->init();
 		$this->data->onBeforeRestore(new CModelEvent($this));
