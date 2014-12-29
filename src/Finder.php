@@ -75,8 +75,6 @@ class Finder
 	 */
 	public function find($criteria = null)
 	{
-		Yii::trace($this->_class . '.find()', 'Maslosoft.Mangan.Document');
-
 		if ($this->model->beforeFind())
 		{
 			$this->ed->trigger(self::beforeFind, $model);

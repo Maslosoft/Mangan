@@ -28,7 +28,10 @@ class Persistent implements IDecorator
 	 */
 	public function read($model, $name, &$dbValue)
 	{
-		return ManganMeta::create($model)->$name->persistent;
+		if(ManganMeta::create($model)->$name->persistent)
+		{
+			$model->$name = $dbValue;
+		}
 	}
 
 	/**
@@ -41,7 +44,10 @@ class Persistent implements IDecorator
 	 */
 	public function write($model, $name, &$dbValue)
 	{
-		return ManganMeta::create($model)->$name->persistent;
+		if(ManganMeta::create($model)->$name->persistent)
+		{
+			$dbValue = $model->$name;
+		}
 	}
 
 }

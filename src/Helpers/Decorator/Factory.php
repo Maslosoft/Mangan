@@ -28,7 +28,7 @@ class Factory
 			{
 				$decorators[] = new $decoratorName;
 			}
-			return new Container($decorators);
+			return new CompoundDecorator($decorators);
 		}
 		return new Undecorated();
 	}

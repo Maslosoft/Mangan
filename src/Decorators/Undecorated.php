@@ -26,7 +26,7 @@ class Undecorated implements IDecorator
 	 */
 	public function read($model, $name, &$dbValue)
 	{
-		return true;
+		$model->$name = $dbValue;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Undecorated implements IDecorator
 	 */
 	public function write($model, $name, &$dbValue)
 	{
-		return true;
+		$dbValue = $model->$name;
 	}
 
 }

@@ -15,7 +15,7 @@ use Maslosoft\Mangan\Decorators\IDecorator;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Container implements IDecorator
+class CompoundDecorator implements IDecorator
 {
 
 	/**
@@ -33,7 +33,7 @@ class Container implements IDecorator
 		$this->_decorators = $decorators;
 	}
 
-	public function read($model, $name, $value)
+	public function read($model, $name, &$dbValue)
 	{
 		foreach ($this->_decorators as $decorator)
 		{
@@ -42,7 +42,7 @@ class Container implements IDecorator
 		return $value;
 	}
 
-	public function write($model, $name, $value)
+	public function write($model, $name, &$dbValue)
 	{
 		foreach ($this->_decorators as $decorator)
 		{

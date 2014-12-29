@@ -8,10 +8,10 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Exception;
 use Maslosoft\Addendum\Collections\Meta;
-use Maslosoft\Mangan\EmbeddedDocument;
+use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Sanitizers\ISanitizer;
 
 /**
@@ -32,25 +32,47 @@ abstract class Transformator
 	 * Hash map of sanitizers
 	 * @var ISanitizer[]
 	 */
-	private $_sanitizers = [];
+	private $_transformators = [];
 
-	public function __construct(EmbeddedDocument $document)
+	/**
+	 * Model
+	 * @var object
+	 */
+	private $_model = null;
+
+	public function __construct($document)
 	{
-		$this->_meta = $document->meta;
+		$this->_meta = ManganMeta::create($document);
+		$this->_model = $document;
+	}
+
+	public function getModel()
+	{
+		return $this->_model;
+	}
+
+	/**
+	 *
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function getFor($name)
+	{
+		if (!array_key_exists($name, $this->_transformators))
+		{
+			$this->_transformators[$name] = $this->_getTransformer($this->_meta->$name);
+		}
+		return $this->_transformators[$name];
 	}
 
 	public function __get($name)
 	{
-		if (!array_key_exists($name, $this->_sanitizers))
-		{
-			$this->_sanitizers[$name] = $this->_getTransformer($this->_meta->$name);
-		}
-		return $this->_sanitizers[$name];
+		return $this->getList($name);
 	}
 
 	public function __set($name, $value)
 	{
-		throw new Exception(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
+		throw new TransformatorException(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
 	}
 
 	abstract protected function _getTransformer(DocumentPropertyMeta $meta);

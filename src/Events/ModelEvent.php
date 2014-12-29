@@ -9,14 +9,23 @@
 
 namespace Maslosoft\Mangan\Events;
 
-use CModelEvent;
-
 /**
  * ModelEvent
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ModelEvent extends CModelEvent
+class ModelEvent
 {
+
+	public $isValid = false;
+	public $sender;
+	public $handled = false;
+	public $params;
+
+	public function __construct($sender = null, $params = null)
+	{
+		$this->sender = $sender;
+		$this->params = $params;
+	}
 
 }

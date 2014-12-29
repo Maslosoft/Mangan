@@ -17,6 +17,11 @@ namespace Maslosoft\Mangan\Traits\Model;
 use CModelEvent;
 use Exception;
 use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Interfaces\ITrash;
 use Maslosoft\Models\Trash;
 use MongoId;
 
@@ -30,32 +35,33 @@ trait TrashableTrait
 
 	public function trash()
 	{
-		if ($this->hasEventHandler('onBeforeTrash'))
+		if (Event::hasHandler($this, ITrash::EventBeforeTrash))
 		{
-			$event = new CModelEvent($this);
-			$this->onBeforeTrash($event);
+			$event = new ModelEvent($this);
+			Event::trigger($this, ITrash::EventBeforeTrash, $event);
 			if (!$event->handled)
 			{
 				return false;
 			}
 		}
 
+
 		$trash = new Trash();
 		$trash->name = (string) $this;
 		$trash->data = $this;
 		$trash->type = isset($this->meta->type()->label) ? $this->meta->type()->label : get_class($this);
 		$trash->save();
-		if ($this->hasEventHandler('onAfterTrash'))
-		{
-			$this->onAfterTrash(new CModelEvent($this));
-		}
 
-// Use deleteOne, to avoid beforeDelete event,
-// which should be raised only when really removing document:
-// when emtying trash
+		Event::trigger($this, ITrash::EventAfterTrash);
+
+		// Use deleteOne, to avoid beforeDelete event,
+		// which should be raised only when really removing document:
+		// when emtying trash
 		$criteria = new Criteria();
 		$criteria->addCond('_id', '==', new MongoId($this->id));
-		$this->deleteOne($criteria);
+
+		$em = new EntityManager($this);
+		$em->deleteOne($criteria);
 	}
 
 	/**
@@ -68,41 +74,26 @@ trait TrashableTrait
 			// When trying to restore normal document instead of trash item
 			throw new Exception('Restore can be performed only on Trash instance');
 		}
-		$this->data->init();
-		$this->data->onBeforeRestore(new CModelEvent($this));
-		$this->data->save();
-		$model = $this->data->findByPk(new MongoId($this->data->id));
-		$model->onAfterRestore(new CModelEvent($this));
+		$em = new EntityManager($this->data);
+		//$this->data->init();
+		Event::trigger($this->data, ITrash::EventBeforeRestore);
 
-// $this->delete();
-// Use deleteOne, to avoid beforeDelete event,
-// which should be raised only when really removing document:
-// when emtying trash
+		$em->save();
+		$finder = new Finder($em);
+		$model = $finder->findByPk(new MongoId($this->data->id));
+		Event::trigger($model, ITrash::EventAfterRestore);
+
+		$trashEm = new EntityManager($this);
+		// $this->delete();
+		// Use deleteOne, to avoid beforeDelete event,
+		// which should be raised only when really removing document:
+		// when emtying trash
 		$this->data = null;
 
-		$this->deleteOne([
-			'_id' => $this->id
-		]);
-	}
+		$criteria = new Criteria();
+		$criteria->addCond('_id', '==', new MongoId($this->id));
 
-	public function onBeforeTrash($event)
-	{
-		$this->raiseEvent('onBeforeTrash', $event);
-	}
-
-	public function onAfterTrash($event)
-	{
-		$this->raiseEvent('onAfterTrash', $event);
-	}
-
-	public function onBeforeRestore($event)
-	{
-		$this->raiseEvent('onBeforeRestore', $event);
-	}
-
-	public function onAfterRestore($event)
-	{
-		$this->raiseEvent('onAfterRestore', $event);
+		$trashEm->deleteOne($criteria);
 	}
 
 }

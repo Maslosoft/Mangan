@@ -95,7 +95,7 @@ class Event implements IEvent
 	 */
 	public static function on($class, $name, $handler, $data = null, $append = true)
 	{
-		$class = ltrim($class, '\\');
+		$class = $this->_getName($class);
 		if ($append || empty(self::$_events[$name][$class]))
 		{
 			self::$_events[$name][$class][] = [$handler, $data];
@@ -120,7 +120,7 @@ class Event implements IEvent
 	 */
 	public static function off($class, $name, $handler = null)
 	{
-		$class = ltrim($class, '\\');
+		$class = $this->_getName($class);
 		if (empty(self::$_events[$name][$class]))
 		{
 			return false;
@@ -165,7 +165,7 @@ class Event implements IEvent
 		}
 		if ($event === null)
 		{
-			$event = new static;
+			$event = new ModelEvent();
 		}
 		$event->handled = false;
 		$event->name = $name;
@@ -175,12 +175,8 @@ class Event implements IEvent
 			{
 				$event->sender = $class;
 			}
-			$class = get_class($class);
 		}
-		else
-		{
-			$class = ltrim($class, '\\');
-		}
+		$class = $this->_getName($class);
 		do
 		{
 			if (!empty(self::$_events[$name][$class]))
@@ -197,6 +193,21 @@ class Event implements IEvent
 			}
 		}
 		while (($class = get_parent_class($class)) !== false);
+	}
+
+	public static function hasHandler($class, $name)
+	{
+		$class = $this->_getName($class);
+		return !empty(self::$_events[$name][$class]);
+	}
+
+	private function _getName($class)
+	{
+		if (is_object($class))
+		{
+			$class = get_class($class);
+		}
+		return ltrim($class, '\\');
 	}
 
 }
