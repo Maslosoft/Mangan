@@ -116,9 +116,9 @@ class Mangan
 	 * @param mixed[] $config
 	 * @return Mangan
 	 */
-	public static function instance($connectionId = self::DefaultConnectionId, $config = [])
+	public static function instance($connectionId = self::DefaultConnectionId)
 	{
-		return new self($connectionId, $config);
+		return new self($connectionId);
 	}
 
 	public function init()

@@ -155,7 +155,7 @@ class Event implements IEvent
 	 * for the specified class and all its parent classes.
 	 * @param string|object $class the object or the fully qualified class name specifying the class-level event.
 	 * @param string $name the event name.
-	 * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
+	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 */
 	public static function trigger($class, $name, $event = null)
 	{
