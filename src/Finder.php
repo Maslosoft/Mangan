@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
@@ -28,7 +29,7 @@ class Finder
 
 	/**
 	 * Model
-	 * @var Document
+	 * @var IAnnotated
 	 */
 	public $model = null;
 
