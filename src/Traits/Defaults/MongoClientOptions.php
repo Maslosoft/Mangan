@@ -8,7 +8,10 @@
 
 namespace Maslosoft\Mangan\Traits\Defaults;
 
+use Maslosoft\Mangan\Options\AuthMechanism;
 use MongoClient;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * MongoClientOptions
@@ -19,7 +22,7 @@ trait MongoClientOptions
 {
 
 	/**
-	 *  Available mechanisms are:
+	 * Available mechanisms are:
 	 * authMechanism 	Description 	Availability
 	 * MONGODB-CR 	Authenticate using Challenge Response mechanism. This is the default value. 	All MongoDB versions
 	 * X509 	Authenticates using X509 certificates 	MongoDB 2.6. Only available when OpenSSL is enabled
@@ -27,7 +30,7 @@ trait MongoClientOptions
 	 * GSSAPI 	Authenticates via kerberos systems 	MongoDB Enterprise 2.4. The Driver must be compiled against CyrusSASL2
 	 * @var string
 	 */
-	public $authMechanism;
+	public $authMechanism = AuthMechanism::MongoDBCR;
 
 	/**
 	 * Should be set to the database name where the user is defined it.
@@ -137,10 +140,11 @@ trait MongoClientOptions
 	public $socketTimeoutMS = 30000;
 
 	/**
-	 * A boolean to specify whether you want to enable SSL for the connections to MongoDB. Extra options such as certificates can be set with SSL context options. 
-	 * @var boolean
+	 * A boolean to specify whether you want to enable SSL for the connections to MongoDB.
+	 * Extra options such as certificates can be set with SSL context options.
+	 * @var string
 	 */
-	public $ssl = false;
+	public $ssl = 'false';
 
 	/**
 	 * The username can be specified here, instead of including it in the host list.
@@ -151,7 +155,7 @@ trait MongoClientOptions
 	public $username = '';
 
 	/**
-	 *  The w option specifies the Write Concern for the driver, which determines how long the driver blocks when writing. The default value is 1.
+	 * The w option specifies the Write Concern for the driver, which determines how long the driver blocks when writing. The default value is 1.
 	 *
 	 * This option is applicable when connecting to both single servers and replica sets. A positive value controls how many nodes must acknowledge the write instruction before the driver continues. A value of 1 would require the single server or primary (in a replica set) to acknowledge the write operation. A value of 3 would cause the driver to block until the write has been applied to the primary as well as two secondary servers (in a replica set).
 	 *
@@ -172,7 +176,7 @@ trait MongoClientOptions
 	protected function _getOptionNames()
 	{
 		$properties = [];
-		foreach ((new \ReflectionClass(__CLASS__))->getProperties(\ReflectionProperty::IS_PUBLIC) as $property)
+		foreach ((new ReflectionClass(MongoClientOptions::class))->getProperties(ReflectionProperty::IS_PUBLIC) as $property)
 		{
 			if (!$property->isStatic())
 			{
