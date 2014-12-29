@@ -16,7 +16,7 @@ coverage:
     xml: coverage.clover
     html: true
     include:
-        - Maslosoft/*
+        - src/*
 modules:
    enabled: [MongoDb]
    config:
