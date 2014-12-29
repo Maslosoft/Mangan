@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class FromDocument implements ArrayAccess
+class FromDocument
 {
 
 	/**
@@ -39,39 +39,4 @@ class FromDocument implements ArrayAccess
 		return $arr;
 	}
 
-// <editor-fold defaultstate="collapsed" desc="DEPRECATED ArrayAccess implementation">
-
-	private function _initArrayAccess()
-	{
-		if (null === $this->_values)
-		{
-			$this->_values = $this->toArray();
-		}
-	}
-
-	public function offsetExists($offset)
-	{
-		$this->_initArrayAccess();
-		return array_key_exists($offset, $this->_values);
-	}
-
-	public function offsetGet($offset)
-	{
-		$this->_initArrayAccess();
-		return $this->_values[$offset];
-	}
-
-	public function offsetSet($offset, $value)
-	{
-		$this->_initArrayAccess();
-		$this->_values[$offset] = $value;
-	}
-
-	public function offsetUnset($offset)
-	{
-		$this->_initArrayAccess();
-		unset($this->_values[$offset]);
-	}
-
-// </editor-fold>
 }

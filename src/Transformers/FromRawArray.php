@@ -26,6 +26,10 @@ class FromRawArray
 	 */
 	public static function toDocument($data, $className = null)
 	{
+		if(!$data)
+		{
+			return null;
+		}
 		if (!$className)
 		{
 			if (array_key_exists('_class', $data))
