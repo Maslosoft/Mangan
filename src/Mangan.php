@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use MongoClient;
+use MongoException;
 
 /**
  * MongoDB

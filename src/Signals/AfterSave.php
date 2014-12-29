@@ -9,7 +9,6 @@
 namespace Maslosoft\Mangan\Signals;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Document;
 use Maslosoft\Signals\ISignal;
 
 /**
@@ -22,7 +21,7 @@ class AfterSave implements ISignal
 
 	/**
 	 * Saved document
-	 * @var Document
+	 * @var IAnnotated
 	 */
 	public $model = null;
 

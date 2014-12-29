@@ -37,7 +37,7 @@ class EntityManager
 
 	/**
 	 * Model
-	 * @var Document
+	 * @var IAnnotated
 	 */
 	public $model = null;
 

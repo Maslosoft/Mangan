@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Inrefaces\IScenarios;
+use Maslosoft\Mangan\Interfaces\IScenarios;
 
 /**
  * ScenarioManager

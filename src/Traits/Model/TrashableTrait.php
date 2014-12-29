@@ -66,6 +66,8 @@ trait TrashableTrait
 
 	/**
 	 * Restore trashed item
+	 * @return boolean
+	 * @throws Exception
 	 */
 	public function restore()
 	{
@@ -81,6 +83,10 @@ trait TrashableTrait
 		$em->save();
 		$finder = new Finder($em);
 		$model = $finder->findByPk(new MongoId($this->data->id));
+		if(!$model)
+		{
+			return false;
+		}
 		Event::trigger($model, ITrash::EventAfterRestore);
 
 		$trashEm = new EntityManager($this);
@@ -94,6 +100,7 @@ trait TrashableTrait
 		$criteria->addCond('_id', '==', new MongoId($this->id));
 
 		$trashEm->deleteOne($criteria);
+		return true;
 	}
 
 }
