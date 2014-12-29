@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan\Signals;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Signals\ISignal;
 
@@ -27,9 +28,9 @@ class AfterSave implements ISignal
 
 	/**
 	 * Constructor
-	 * @param Document $model
+	 * @param IAnnotated $model
 	 */
-	public function __construct(Document $model)
+	public function __construct(IAnnotated $model)
 	{
 		$this->model = $model;
 	}

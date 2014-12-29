@@ -30,6 +30,10 @@ class FromRawArray
 		{
 			return null;
 		}
+		if(is_object($className))
+		{
+			$className = get_class($className);
+		}
 		if (!$className)
 		{
 			if (array_key_exists('_class', $data))

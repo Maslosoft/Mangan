@@ -3,6 +3,7 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Sanitizers\Embedded;
 use stdClass;
 
@@ -41,6 +42,7 @@ class EmbeddedAnnotation extends MetaAnnotation
 		$this->_entity->embeddedParams = $params;
 		$this->_entity->direct = false;
 		$this->_entity->sanitizer = Embedded::class;
+		$this->_entity->decorators[] = EmbeddedDecorator::class;
 	}
 
 }

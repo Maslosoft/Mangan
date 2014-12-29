@@ -13,17 +13,16 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
-use Maslosoft\Mangan\Inrefaces\IScenarios;
+use Maslosoft\Mangan\Interfaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterSave;
-use Maslosoft\Mangan\Transformers\ToRawArray;
+use Maslosoft\Mangan\Transformers\FromDocument;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
 use MongoException;
 use MongoId;
 use SebastianBergmann\GlobalState\Exception;
-use Yii;
 
 /**
  * EntityManager
@@ -114,7 +113,7 @@ class EntityManager
 			{
 				$this->model->_id = new MongoId;
 			}
-			$rawData = Transformers\FromDocument::toRawArray($this->model);
+			$rawData = FromDocument::toRawArray($this->model);
 
 			// filter attributes if set in param
 			if ($attributes !== null)
@@ -130,7 +129,7 @@ class EntityManager
 				}
 			}
 			// Check for individual pk
-			$pk = $this->primaryKey();
+			$pk = '_id';//$this->primaryKey();
 			if ('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
 			{
 				throw new MongoException('The Document cannot be inserted because the primary key already exists.');
@@ -138,7 +137,7 @@ class EntityManager
 
 			try
 			{
-				$result = $this->getCollection()->insert($rawData, $this->options->getSaveOptions());
+				$result = $this->collection->insert($rawData, $this->options->getSaveOptions());
 			}
 			catch (Exception $e)
 			{
@@ -150,7 +149,7 @@ class EntityManager
 				$this->_id = $rawData['_id'];
 				$this->_afterSave();
 				ScenarioManager::setScenario($this->model, IScenarios::Update);
-				(new Signal)->emit(new AfterSave($this));
+				(new Signal)->emit(new AfterSave($this->model));
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');

@@ -37,18 +37,16 @@ class CompoundDecorator implements IDecorator
 	{
 		foreach ($this->_decorators as $decorator)
 		{
-			$value = $decorator->read($model, $name, $value);
+			$decorator->read($model, $name, $dbValue);
 		}
-		return $value;
 	}
 
 	public function write($model, $name, &$dbValue)
 	{
 		foreach ($this->_decorators as $decorator)
 		{
-			$value = $decorator->write($model, $name, $value);
+			$decorator->write($model, $name, $dbValue);
 		}
-		return $value;
 	}
 
 }

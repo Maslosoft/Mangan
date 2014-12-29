@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Inrefaces;
+namespace Maslosoft\Mangan\Interfaces;
 
 /**
  * Use this to provide scenarios

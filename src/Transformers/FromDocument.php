@@ -8,7 +8,6 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
-use ArrayAccess;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -35,7 +34,7 @@ class FromDocument
 		{
 			$decorator->write($name, $arr[$name]);
 		}
-		$arr['_class'] = $meta->type()->name;
+		$arr['_class'] = get_class($document);
 		return $arr;
 	}
 
