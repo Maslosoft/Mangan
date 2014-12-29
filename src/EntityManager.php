@@ -13,6 +13,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
+use Maslosoft\Mangan\Inrefaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterSave;
@@ -85,7 +86,11 @@ class EntityManager
 		$this->options = new EntityOptions($model);
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
-		$mangan = Mangan::instance($this->meta->type()->connectionId);
+		$mangan = new Mangan($this->meta->type()->connectionId? : Mangan::DefaultConnectionId);
+		if(!$this->collectionName)
+		{
+			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
+		}
 		$this->collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
 	}
 
@@ -101,20 +106,15 @@ class EntityManager
 
 	public function insert(array $attributes = null)
 	{
-		if (!$this->getIsNewRecord())
-		{
-			throw new MongoException('The Document cannot be inserted to database because it is not new.');
-		}
 		if ($this->_beforeSave())
 		{
-			Yii::trace($this->_class . '.insert()', 'Maslosoft.Mangan.EntityManager');
 
 			// Ensure that id is set
-			if (!$this->model->getId())
+			if (!$this->model->_id)
 			{
-				$this->model->setId(new MongoId);
+				$this->model->_id = new MongoId;
 			}
-			$rawData = (array) new ToRawArray($this->model);
+			$rawData = Transformers\FromDocument::toRawArray($this->model);
 
 			// filter attributes if set in param
 			if ($attributes !== null)
@@ -149,8 +149,7 @@ class EntityManager
 			{ // strict comparison needed
 				$this->_id = $rawData['_id'];
 				$this->_afterSave();
-				$this->setIsNewRecord(false);
-				$this->setScenario('update');
+				ScenarioManager::setScenario($this->model, IScenarios::Update);
 				(new Signal)->emit(new AfterSave($this));
 				return true;
 			}

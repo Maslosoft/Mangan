@@ -35,7 +35,7 @@ class DocumentTypeMeta extends MetaType
 	 * Connection ID
 	 * @var string
 	 */
-	public $connectionId = '';
+	public $connectionId = Mangan::DefaultConnectionId;
 
 	/**
 	 * Primary key field or fields
@@ -62,10 +62,10 @@ class DocumentTypeMeta extends MetaType
 		{
 			PropertyMaker::defineProperty($this, $name);
 		}
-		foreach (['collectionName', 'connectionId'] as $name)
-		{
-			PropertyMaker::defineProperty($this, $name);
-		}
+//		foreach (['collectionName', 'connectionId'] as $name)
+//		{
+//			PropertyMaker::defineProperty($this, $name, $this->_values);
+//		}
 	}
 
 	public function __get($name)
@@ -95,33 +95,33 @@ class DocumentTypeMeta extends MetaType
 		return array_key_exists($name, $this->_values);
 	}
 
-	public function getCollectionName()
-	{
-		if ($this->_values['collectionName'])
-		{
-			return $this->_values['collectionName'];
-		}
-		return str_replace('\\', '.', $this->name);
-	}
-
-	public function setCollectionName($name)
-	{
-		$this->_values['collectionName'] = $name;
-	}
-
-	public function getConnectionId()
-	{
-		if(!isset($this->_values['connectionId']))
-		{
-			$this->_values['connectionId'] = Mangan::DefaultConnectionId;
-		}
-		return $this->_values['connectionId'];
-	}
-
-	public function setConnectionId($connectionId)
-	{
-		$this->_values['connectionId'] = $connectionId;
-	}
+//	public function getCollectionName()
+//	{
+//		if ($this->_values['collectionName'])
+//		{
+//			return $this->_values['collectionName'];
+//		}
+//		return str_replace('\\', '.', $this->name);
+//	}
+//
+//	public function setCollectionName($name)
+//	{
+//		$this->_values['collectionName'] = $name;
+//	}
+//
+//	public function getConnectionId()
+//	{
+//		if(!$this->_values['connectionId'])
+//		{
+//			$this->_values['connectionId'] = Mangan::DefaultConnectionId;
+//		}
+//		return $this->_values['connectionId'];
+//	}
+//
+//	public function setConnectionId($connectionId)
+//	{
+//		$this->_values['connectionId'] = $connectionId;
+//	}
 
 
 }

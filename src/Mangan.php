@@ -16,9 +16,6 @@ namespace Maslosoft\Mangan;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use MongoClient;
-use MongoConnectionException;
-use MongoDB;
-use Yii;
 
 /**
  * MongoDB
@@ -69,6 +66,7 @@ class Mangan
 	public $safeFlag = false;
 
 	/**
+	 * TODO Move to finder
 	 * If set to TRUE findAll* methods of models, will return {@see Cursor} instead of
 	 * raw array of models.
 	 *
@@ -96,11 +94,17 @@ class Mangan
 	 */
 	private $_cs = null;
 
+	/**
+	 * Embedi instance
+	 * @var EmbeDi
+	 */
+	private $_di = null;
+
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
-		$di = new EmbeDi($connectionId);
+		$this->_di = new EmbeDi($connectionId);
 		$this->connectionId = $connectionId;
-		$di->configure($this);
+		$this->_di->configure($this);
 		$this->_cs = new ConnectionStorage($this, $connectionId);
 	}
 
@@ -118,8 +122,7 @@ class Mangan
 
 	public function init()
 	{
-		$di = new EmbeDi($this->connectionId);
-		$di->store($this);
+		$this->_di->store($this);
 	}
 
 	/**
@@ -145,29 +148,22 @@ class Mangan
 	{
 		if ($this->_cs->mongoClient === null)
 		{
-			try
+			if (!$this->connectionString)
 			{
-				if (empty($this->connectionString))
-				{
-					throw new ManganException('Mangan.connectionString cannot be empty.');
-				}
-
-				$options = [];
-				foreach ($this->_getOptionNames() as $name)
-				{
-					if(isset($this->$name))
-					{
-						$options[$name] = $this->$name;
-					}
-				}
-				$this->_cs->mongoClient = new MongoClient($this->connectionString, $options);
-
-				return $this->_cs->mongoClient;
+				throw new ManganException('Mangan.connectionString cannot be empty.');
 			}
-			catch (MongoConnectionException $e)
+
+			$options = [];
+			foreach ($this->_getOptionNames() as $name)
 			{
-				throw new ManganException(sprintf('MongoDB failed to open connection: %s', $e->getMessage()), $e->getCode());
+				if (isset($this->$name))
+				{
+					$options[$name] = $this->$name;
+				}
 			}
+			$this->_cs->mongoClient = new MongoClient($this->connectionString, $options);
+
+			return $this->_cs->mongoClient;
 		}
 		else
 		{
@@ -196,9 +192,17 @@ class Mangan
 		{
 			if (!$this->dbName)
 			{
-				throw new ManganException("Database name is required");
+				throw new ManganException(sprintf("Database name is required for connectionId: `%s`", $this->connectionId));
 			}
-			return $this->_cs->mongoDB = new \MongoDB($this->getConnection(), $this->dbName);
+			try
+			{
+				$db = $this->getConnection()->selectDB($this->dbName);
+			}
+			catch (MongoException $e)
+			{
+				throw new ManganException(sprintf('Invalid database name: `%s`, for connectionId: `%s`', $this->dbName, $this->connectionId));
+			}
+			return $this->_cs->mongoDB = $db;
 		}
 		else
 		{

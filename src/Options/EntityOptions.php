@@ -47,7 +47,7 @@ class EntityOptions
 	 *
 	 * @var string
 	 */
-	public $connectionId = 'mongodb';
+	public $connectionId = Mangan::DefaultConnectionId;
 
 	public function __construct($model)
 	{
@@ -58,6 +58,7 @@ class EntityOptions
 		}
 
 		$this->_meta = ManganMeta::create($model)->type();
+		$this->connectionId = $this->_meta->connectionId;
 	}
 
 	public function __get($name)
@@ -81,6 +82,11 @@ class EntityOptions
 	public function __unset($name)
 	{
 		unset($this->_values[$name]);
+	}
+
+	public function __isset($name)
+	{
+		return isset($this->_values[$name]);
 	}
 
 	public function getSaveOptions()

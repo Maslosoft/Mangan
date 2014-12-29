@@ -30,7 +30,13 @@ class CollectionNamer
 		{
 			return $model->getCollectionName();
 		}
-		return ManganMeta::create($model)->type()->collectionName;
+		$meta = ManganMeta::create($model)->type();
+		$name = $meta->collectionName;
+		if($name)
+		{
+			return $name;
+		}
+		return ltrim('\\', str_replace('\\', '.', $meta->name));
 	}
 
 }
