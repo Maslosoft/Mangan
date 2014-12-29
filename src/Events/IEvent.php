@@ -21,10 +21,10 @@ interface IEvent
 	/**
 	 * Ensure implementing class has this fields
 	 */
-	const RequireFields = [
-		'name',
-		'sender',
-		'data'
-	];
+//	const RequireFields = [
+//		'name',
+//		'sender',
+//		'data'
+//	];
 
 }

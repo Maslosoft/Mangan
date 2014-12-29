@@ -14,5 +14,20 @@ namespace Maslosoft\Mangan\Inrefaces;
  */
 interface IScenarios
 {
+
+	const Insert = 'insert';
+	const Update = 'update';
+	const Delete = 'delete';
+
+	/**
+	 * Set Scenario
+	 * @param string $scenario
+	 */
 	public function setScenario($scenario);
+
+	/**
+	 * Get scenario
+	 * @return string Scenario, by default IScenarios::Insert
+	 */
+	public function getScenario();
 }

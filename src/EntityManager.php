@@ -8,6 +8,9 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -29,6 +32,9 @@ use Yii;
 class EntityManager
 {
 
+	const EventAfterSave = 'afterSave';
+	const EventBeforeSave = 'beforeSave';
+
 	/**
 	 * Model
 	 * @var Document
@@ -37,7 +43,7 @@ class EntityManager
 
 	/**
 	 *
-	 * @var Events\EventDispatcher
+	 * @var EventDispatcher
 	 */
 	public $ed = null;
 
@@ -58,7 +64,7 @@ class EntityManager
 	 * @var string
 	 */
 	public $collectionName = '';
-	
+
 	/**
 	 * Current collection
 	 * @var MongoCollection
@@ -70,14 +76,17 @@ class EntityManager
 	 * @var string
 	 */
 	private $_class = '';
+	private $_db = null;
 
-	public function __construct(Document $model)
+	public function __construct(IAnnotated $model)
 	{
 		$this->model = $model;
 		$this->_class = get_class($model);
 		$this->options = new EntityOptions($model);
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
+		$mangan = Mangan::instance($this->meta->type()->connectionId);
+		$this->collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
 	}
 
 	public function __set($name, $value)
@@ -105,7 +114,7 @@ class EntityManager
 			{
 				$this->model->setId(new MongoId);
 			}
-			$rawData = (array)new ToRawArray($this->model);
+			$rawData = (array) new ToRawArray($this->model);
 
 			// filter attributes if set in param
 			if ($attributes !== null)
@@ -157,10 +166,10 @@ class EntityManager
 
 	private function _beforeSave()
 	{
-		if ($this->model->hasEventHandler('onBeforeSave'))
+		if (Event::hasHandler($this->model, self::EventBeforeSave))
 		{
 			$event = new ModelEvent($this);
-			$this->model->onBeforeSave($event);
+			Event::trigger($this->model, self::EventBeforeSave, $event);
 			return $event->isValid;
 		}
 		else
@@ -171,15 +180,10 @@ class EntityManager
 
 	private function _afterSave()
 	{
-		if ($this->model->hasEventHandler('onAfterSave'))
+		if (Event::hasHandler($this->model, self::EventAfterSave))
 		{
-			$this->model->onAfterSave(new ModelEvent($this));
+			Event::trigger($this->model, self::EventAfterSave);
 		}
-	}
-
-	public function populateRecord($doc)
-	{
-
 	}
 
 }

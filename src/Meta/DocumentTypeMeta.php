@@ -10,6 +10,7 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaType;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
+use Maslosoft\Mangan\ManganException;
 use ReflectionClass;
 
 /**
@@ -74,7 +75,7 @@ class DocumentTypeMeta extends MetaType
 		}
 		if(!array_key_exists($name, $this->_values))
 		{
-			throw new \Maslosoft\Mangan\ManganException(sprintf('Trying to read unitialized property `%s`', $name));
+			throw new ManganException(sprintf('Trying to read unitialized property `%s`', $name));
 		}
 		return $this->_values[$name];
 	}
@@ -106,5 +107,16 @@ class DocumentTypeMeta extends MetaType
 	{
 		$this->_values['collectionName'] = $name;
 	}
+
+	public function getConnectionId()
+	{
+		return $this->_values['connectionId'] or null;
+	}
+
+	public function setConnectionId($connectionId)
+	{
+		$this->_values['connectionId'] = $connectionId;
+	}
+
 
 }

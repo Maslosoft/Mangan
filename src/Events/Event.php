@@ -95,7 +95,7 @@ class Event implements IEvent
 	 */
 	public static function on($class, $name, $handler, $data = null, $append = true)
 	{
-		$class = $this->_getName($class);
+		$class = self::_getName($class);
 		if ($append || empty(self::$_events[$name][$class]))
 		{
 			self::$_events[$name][$class][] = [$handler, $data];
@@ -120,7 +120,7 @@ class Event implements IEvent
 	 */
 	public static function off($class, $name, $handler = null)
 	{
-		$class = $this->_getName($class);
+		$class = self::_getName($class);
 		if (empty(self::$_events[$name][$class]))
 		{
 			return false;
@@ -176,7 +176,7 @@ class Event implements IEvent
 				$event->sender = $class;
 			}
 		}
-		$class = $this->_getName($class);
+		$class = self::_getName($class);
 		do
 		{
 			if (!empty(self::$_events[$name][$class]))
@@ -197,11 +197,11 @@ class Event implements IEvent
 
 	public static function hasHandler($class, $name)
 	{
-		$class = $this->_getName($class);
+		$class = self::_getName($class);
 		return !empty(self::$_events[$name][$class]);
 	}
 
-	private function _getName($class)
+	private static function _getName($class)
 	{
 		if (is_object($class))
 		{
