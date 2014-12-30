@@ -644,8 +644,6 @@ abstract class Document extends EmbeddedDocument
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
 	 * and its {@link scenario} property will be set to be 'update'.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws MongoException if the record is not new
 	 * @throws MongoException on fail of insert or insert of empty document
@@ -653,67 +651,9 @@ abstract class Document extends EmbeddedDocument
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function insert(array $attributes = null)
+	public function insert()
 	{
-		if (!$this->getIsNewRecord())
-		{
-			throw new MongoException('The Document cannot be inserted to database because it is not new.');
-		}
-		if ($this->beforeSave())
-		{
-			Yii::trace($this->_class . '.insert()', 'Maslosoft.Mangan.Document');
-
-			// Ensure that id is set
-			if (!$this->getId())
-			{
-				$this->setId(new MongoId);
-			}
-			$rawData = $this->toArray();
-
-			// filter attributes if set in param
-			if ($attributes !== null)
-			{
-				// Ensure id
-				$attributes['_id'] = true;
-				foreach ($rawData as $key => $value)
-				{
-					if (!in_array($key, $attributes))
-					{
-						unset($rawData[$key]);
-					}
-				}
-			}
-			// Check for individual pk
-			$pk = $this->primaryKey();
-			if ('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
-			{
-				throw new MongoException('The Document cannot be inserted because the primary key already exists.');
-			}
-
-			try
-			{
-				$result = $this->getCollection()->insert($rawData, [
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag()
-				]);
-			}
-			catch (Exception $e)
-			{
-				throw $e;
-			}
-
-			if ($result !== false)
-			{ // strict comparison needed
-				$this->_id = $rawData['_id'];
-				$this->afterSave();
-				$this->setIsNewRecord(false);
-				$this->setScenario('update');
-				(new Signal)->emit(new AfterSave($this));
-				return true;
-			}
-			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
-		}
-		return false;
+		return $this->em->insert();
 	}
 
 	/**
