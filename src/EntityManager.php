@@ -21,8 +21,6 @@ use Maslosoft\Mangan\Transformers\FromDocument;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
 use MongoException;
-use MongoId;
-use SebastianBergmann\GlobalState\Exception;
 
 /**
  * EntityManager
@@ -93,6 +91,13 @@ class EntityManager
 		$this->_collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
 	}
 
+	public function setAttributes($atributes)
+	{
+		/**
+		 * TODO Set attributes from array
+		 */
+	}
+
 	public function __set($name, $value)
 	{
 		;
@@ -109,14 +114,8 @@ class EntityManager
 		{
 			$rawData = FromDocument::toRawArray($this->model);
 
-			try
-			{
-				$result = $this->_collection->insert($rawData, $this->options->getSaveOptions());
-			}
-			catch (\Exception $e)
-			{
-				throw $e;
-			}
+			$result = $this->_collection->insert($rawData, $this->options->getSaveOptions());
+
 			// strict comparison needed
 			if ($result !== false)
 			{
