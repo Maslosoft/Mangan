@@ -656,12 +656,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "93188755a534a05634ef4739fb4aff70975faefe"
+                "reference": "78bda0c01c06d5ec773d5bf5840c2aa0f61f2bc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/93188755a534a05634ef4739fb4aff70975faefe",
-                "reference": "93188755a534a05634ef4739fb4aff70975faefe",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/78bda0c01c06d5ec773d5bf5840c2aa0f61f2bc9",
+                "reference": "78bda0c01c06d5ec773d5bf5840c2aa0f61f2bc9",
                 "shasum": ""
             },
             "require": {
@@ -687,7 +687,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2014-12-30 13:27:01"
+            "time": "2014-12-30 18:07:15"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1064,16 +1064,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "937b04f1b0ee8f6d180e75a0830aac778ca4bcd6"
+                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/937b04f1b0ee8f6d180e75a0830aac778ca4bcd6",
-                "reference": "937b04f1b0ee8f6d180e75a0830aac778ca4bcd6",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
+                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
                 "shasum": ""
             },
             "require": {
@@ -1090,7 +1090,7 @@
                     "React\\Promise\\": "src/"
                 },
                 "files": [
-                    "src/functions.php"
+                    "src/functions_include.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1104,7 +1104,7 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2014-10-15 20:05:57"
+            "time": "2014-12-30 13:32:42"
         },
         {
             "name": "sebastian/comparator",
