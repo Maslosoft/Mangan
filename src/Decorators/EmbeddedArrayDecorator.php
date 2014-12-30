@@ -24,6 +24,7 @@ class EmbeddedArrayDecorator implements IDecorator
 		if (is_array($dbValue))
 		{
 			$docs = [];
+			$key = 0;
 			foreach ($dbValue as $data)
 			{
 				EmbeddedDecorator::ensureClass($model, $name, $data);
