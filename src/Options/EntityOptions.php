@@ -37,6 +37,12 @@ class EntityOptions
 	private $_meta = null;
 
 	/**
+	 *
+	 * @var Mangan
+	 */
+	private $_mangan = null;
+
+	/**
 	 * Values of this instance
 	 * @var mixed[]
 	 */
@@ -47,7 +53,7 @@ class EntityOptions
 	 *
 	 * @var string
 	 */
-	public $connectionId = Mangan::DefaultConnectionId;
+	private $_connectionId = Mangan::DefaultConnectionId;
 
 	public function __construct($model)
 	{
@@ -58,7 +64,8 @@ class EntityOptions
 		}
 
 		$this->_meta = ManganMeta::create($model)->type();
-		$this->connectionId = $this->_meta->connectionId;
+		$this->_connectionId = $this->_meta->connectionId? : Mangan::DefaultConnectionId;
+		$this->_mangan = new Mangan($this->_connectionId);
 	}
 
 	public function __get($name)
@@ -71,7 +78,7 @@ class EntityOptions
 		{
 			return $this->_values[$name]; // We have flag set, return it
 		}
-		return Mangan::instance($this->connectionId)->$name;
+		return $this->_mangan->$name;
 	}
 
 	public function __set($name, $value)
@@ -92,10 +99,11 @@ class EntityOptions
 	public function getSaveOptions()
 	{
 		$result = [];
-		foreach($this->_getOptionNames() as $name)
+		foreach ($this->_getOptionNames() as $name)
 		{
 			$result[$name] = $this->$name;
 		}
 		return $result;
 	}
+
 }
