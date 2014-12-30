@@ -80,18 +80,13 @@ class Finder implements IFinder
 	 */
 	public function find($criteria = null)
 	{
-		if (Event::hasHandler($this->model, IFinder::EventBeforeFind))
+		if ($this->_beforeFind())
 		{
-			$event = new ModelEvent($this, $this->model);
-			Event::trigger($this->model, IFinder::EventBeforeFind);
-			if (!$event->handled)
-			{
-				return null;
-			}
+			$this->applyScopes($criteria);
+			$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
+			return FromRawArray::toDocument($data);
 		}
-		$this->applyScopes($criteria);
-		$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
-		return FromRawArray::toDocument($data);
+		return null;
 	}
 
 	/**
@@ -124,7 +119,7 @@ class Finder implements IFinder
 	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$criteria = new Criteria($criteria);
-		foreach($pkValues as $pkValue)
+		foreach ($pkValues as $pkValue)
 		{
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 		}
@@ -141,7 +136,7 @@ class Finder implements IFinder
 	 */
 	public function findAll($criteria = null)
 	{
-		if ($this->beforeFind())
+		if ($this->_beforeFind())
 		{
 			$this->applyScopes($criteria);
 			$cursor = $this->em->getCollection()->find($criteria->getConditions());
@@ -255,47 +250,9 @@ class Finder implements IFinder
 //		}
 	}
 
-	/**
-	 * TODO Use PkManager
-	 * Create primary key criteria.
-	 * @since v1.2.2
-	 * @param mixed $pkValue Primary key value
-	 * @return Criteria
-	 * @throws MongoException
-	 */
-	private function createPkCriteria($pkValue)
+	private function _beforeFind()
 	{
-		$pkField = $this->em->meta->type()->primaryKey? : '_id';
-		$criteria = new Criteria();
-
-		if (is_array($pkField))
-		{
-			foreach ($pkField as $name)
-			{
-				if (!array_key_exists($name, $pkValue))
-				{
-					throw new CriteriaException(sprintf('Composite primary key field `%s` not specied for model `%s`, required fields: `%s`', $name, get_class($this->model), implode('`, `', $pkField)));
-				}
-				$this->_preparePk($name, $pkValue[$name], $criteria);
-			}
-		}
-		else
-		{
-			$this->_preparePk($pkField, $pkValue, $criteria);
-		}
-		return $criteria;
-	}
-
-	/**
-	 * Create pk criteria for single field
-	 * @param string $name
-	 * @param mixed $value
-	 * @param Criteria $criteria
-	 */
-	private function _preparePk($name, $value, Criteria &$criteria)
-	{
-		$sanitizer = new Sanitizer($this->model);
-		$criteria->$name = $sanitizer->write($name, $value);
+		return Event::handled($this->model, IFinder::EventBeforeFind);
 	}
 
 }

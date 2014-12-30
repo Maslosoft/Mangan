@@ -415,16 +415,7 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeSave()
 	{
-		if (Event::hasHandler($this->model, IEntityManager::EventBeforeSave))
-		{
-			$event = new ModelEvent($this);
-			Event::trigger($this->model, IEntityManager::EventBeforeSave, $event);
-			return $event->isValid;
-		}
-		else
-		{
-			return true;
-		}
+		return Event::Valid($this->model, IEntityManager::EventBeforeSave);
 	}
 
 	/**
@@ -434,10 +425,7 @@ class EntityManager implements IEntityManager
 	 */
 	private function _afterSave()
 	{
-		if (Event::hasHandler($this->model, IEntityManager::EventAfterSave))
-		{
-			Event::trigger($this->model, IEntityManager::EventAfterSave);
-		}
+		Event::trigger($this->model, IEntityManager::EventAfterSave);
 	}
 
 	/**
@@ -450,16 +438,7 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeDelete()
 	{
-		if (Event::hasHandler($this->model, IEntityManager::EventBeforeDelete))
-		{
-			$event = new ModelEvent($this->model);
-			Event::trigger($this->model, IEntityManager::EventBeforeDelete, $event);
-			return $event->isValid;
-		}
-		else
-		{
-			return true;
-		}
+		return Event::valid($this->model, IEntityManager::EventBeforeDelete);
 	}
 
 	/**
@@ -471,10 +450,7 @@ class EntityManager implements IEntityManager
 	 */
 	private function _afterDelete()
 	{
-		if (Event::hasHandler($this->model, IEntityManager::EventAfterDelete))
-		{
-			Event::trigger($this->model, IEntityManager::EventAfterDelete, new ModelEvent($this->model));
-		}
+		Event::trigger($this->model, IEntityManager::EventAfterDelete, new ModelEvent($this->model));
 	}
 
 // </editor-fold>

@@ -195,6 +195,47 @@ class Event implements IEvent
 		while (($class = get_parent_class($class)) !== false);
 	}
 
+	/**
+	 * Triggers a class-level event and checks if it's valid.
+	 * If don't have event handler returns true. If event handler is set, return true if `Event::isValid`.
+	 * This method will cause invocation of event handlers that are attached to the named event
+	 * for the specified class and all its parent classes.
+	 * @param string|object $class the object or the fully qualified class name specifying the class-level event.
+	 * @param string $name the event name.
+	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
+	 */
+	public static function valid($class, $name, $event = null)
+	{
+		if (self::hasHandler($class, $name))
+		{
+			self::trigger($class, $name, $event);
+			return $event->isValid;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+		/**
+	 * Triggers a class-level event and checks if it's handled.
+	 * If don't have event handler returns true. If event handler is set, return true if `Event::handled`.
+	 * This method will cause invocation of event handlers that are attached to the named event
+	 * for the specified class and all its parent classes.
+	 * @param string|object $class the object or the fully qualified class name specifying the class-level event.
+	 * @param string $name the event name.
+	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
+	 */
+	public static function handled($class, $name, $event = null)
+	{
+		if (self::hasHandler($class, $name))
+		{
+			Event::trigger($class, $name, $event);
+			return $event->handled;
+		}
+		return true;
+	}
+
 	public static function hasHandler($class, $name)
 	{
 		$class = self::_getName($class);
