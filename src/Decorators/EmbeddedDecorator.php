@@ -23,12 +23,7 @@ class EmbeddedDecorator implements IDecorator
 
 	public function read($model, $name, &$dbValue)
 	{
-		if (!array_key_exists('_class', $dbValue))
-		{
-			$meta = ManganMeta::create($model)->$name;
-			/* @var $meta DocumentPropertyMeta */
-			$dbValue['_class'] = $meta->embedded->class;
-		}
+		self::ensureClass($model, $name, $dbValue);
 		$model->$name = FromRawArray::toDocument($dbValue);
 	}
 
@@ -37,4 +32,13 @@ class EmbeddedDecorator implements IDecorator
 		$dbValue = FromDocument::toRawArray($model->$name);
 	}
 
+	public static function ensureClass($model, $name, &$dbValue)
+	{
+		if (!array_key_exists('_class', $dbValue))
+		{
+			$meta = ManganMeta::create($model)->$name;
+			/* @var $meta DocumentPropertyMeta */
+			$dbValue['_class'] = $meta->embedded->class;
+		}
+	}
 }

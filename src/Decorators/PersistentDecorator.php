@@ -15,7 +15,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Persistent implements IDecorator
+class PersistentDecorator implements IDecorator
 {
 
 	/**

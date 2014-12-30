@@ -98,22 +98,22 @@
         },
         {
             "name": "maslosoft/miniview",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/MiniView.git",
-                "reference": "6fe0bdc8b8aff81a8c8e01076e8f14973d1d770f"
+                "reference": "4013438b3db4359484ccb69ca9682ee9d457f89d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/6fe0bdc8b8aff81a8c8e01076e8f14973d1d770f",
-                "reference": "6fe0bdc8b8aff81a8c8e01076e8f14973d1d770f",
+                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/4013438b3db4359484ccb69ca9682ee9d457f89d",
+                "reference": "4013438b3db4359484ccb69ca9682ee9d457f89d",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Maslosoft\\MiniView": "./"
+                "psr-4": {
+                    "Maslosoft\\MiniView\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -127,29 +127,29 @@
                 }
             ],
             "description": "Mini view is minimal template rendering library based on Yii controller renderer",
-            "time": "2014-12-18 11:47:13"
+            "time": "2014-12-29 09:25:25"
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "fb7e983ef728b5377041797ee4b36fffebbbef85"
+                "reference": "00f9871106218e6ffd9b487d65a5d57296e5eac0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/fb7e983ef728b5377041797ee4b36fffebbbef85",
-                "reference": "fb7e983ef728b5377041797ee4b36fffebbbef85",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/00f9871106218e6ffd9b487d65a5d57296e5eac0",
+                "reference": "00f9871106218e6ffd9b487d65a5d57296e5eac0",
                 "shasum": ""
             },
             "require": {
-                "maslosoft/addendum": "~3@alpha"
+                "maslosoft/addendum": "~3alpha"
             },
             "type": "yii-extension",
             "autoload": {
-                "psr-0": {
-                    "Maslosoft\\Signals": "./"
+                "psr-4": {
+                    "Maslosoft\\Signals\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -174,7 +174,7 @@
                 "slots",
                 "yii"
             ],
-            "time": "2014-12-19 13:35:30"
+            "time": "2014-12-29 09:07:45"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -656,12 +656,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "249298b2f26d53119a182bd255805adf105174dc"
+                "reference": "93188755a534a05634ef4739fb4aff70975faefe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/249298b2f26d53119a182bd255805adf105174dc",
-                "reference": "249298b2f26d53119a182bd255805adf105174dc",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/93188755a534a05634ef4739fb4aff70975faefe",
+                "reference": "93188755a534a05634ef4739fb4aff70975faefe",
                 "shasum": ""
             },
             "require": {
@@ -687,20 +687,20 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2014-12-22 10:31:25"
+            "time": "2014-12-30 13:27:01"
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.0.13",
+            "version": "2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "0e7d2eec5554f869fa7a4ec2d21e4b37af943ea5"
+                "reference": "ca158276c1200cc27f5409a5e338486bc0b4fc94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0e7d2eec5554f869fa7a4ec2d21e4b37af943ea5",
-                "reference": "0e7d2eec5554f869fa7a4ec2d21e4b37af943ea5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ca158276c1200cc27f5409a5e338486bc0b4fc94",
+                "reference": "ca158276c1200cc27f5409a5e338486bc0b4fc94",
                 "shasum": ""
             },
             "require": {
@@ -752,7 +752,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-12-03 06:41:44"
+            "time": "2014-12-26 13:28:33"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -938,16 +938,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.4.0",
+            "version": "4.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "bbe7bcb83b6ec1a9eaabbe1b70d4795027c53ee0"
+                "reference": "6a5e49a86ce5e33b8d0657abe145057fc513543a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bbe7bcb83b6ec1a9eaabbe1b70d4795027c53ee0",
-                "reference": "bbe7bcb83b6ec1a9eaabbe1b70d4795027c53ee0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6a5e49a86ce5e33b8d0657abe145057fc513543a",
+                "reference": "6a5e49a86ce5e33b8d0657abe145057fc513543a",
                 "shasum": ""
             },
             "require": {
@@ -1005,7 +1005,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-12-05 06:49:03"
+            "time": "2014-12-28 07:57:05"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
