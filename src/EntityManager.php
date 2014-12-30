@@ -214,7 +214,7 @@ class EntityManager implements IEntityManager
 			if ($result !== false)
 			{ // strict comparison needed
 				$this->_afterSave();
-				(new Signal)->emit(new AfterSave($this));
+				(new Signal)->emit(new AfterSave($this->model));
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
