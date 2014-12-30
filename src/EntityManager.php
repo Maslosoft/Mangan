@@ -20,6 +20,8 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterDelete;
 use Maslosoft\Mangan\Signals\AfterSave;
+use Maslosoft\Mangan\Signals\BeforeDelete;
+use Maslosoft\Mangan\Signals\BeforeSave;
 use Maslosoft\Mangan\Transformers\FromDocument;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
@@ -158,8 +160,6 @@ class EntityManager implements IEntityManager
 			if ($result !== false)
 			{
 				$this->_afterSave();
-				ScenarioManager::setScenario($this->model, IScenarios::Update);
-				(new Signal)->emit(new AfterSave($this->model));
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -214,7 +214,6 @@ class EntityManager implements IEntityManager
 			if ($result !== false)
 			{ // strict comparison needed
 				$this->_afterSave();
-				(new Signal)->emit(new AfterSave($this->model));
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -319,7 +318,6 @@ class EntityManager implements IEntityManager
 				{
 					$this->_afterDelete();
 					$this->setIsNewRecord(true);
-					(new Signal)->emit(new AfterDelete($this));
 					return true;
 				}
 				else
@@ -369,7 +367,7 @@ class EntityManager implements IEntityManager
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 			return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-						'justOne' => true
+								'justOne' => true
 			]));
 		}
 		return false;
@@ -415,7 +413,12 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeSave()
 	{
-		return Event::Valid($this->model, IEntityManager::EventBeforeSave);
+		$result = Event::Valid($this->model, IEntityManager::EventBeforeSave);
+		if ($result)
+		{
+			(new Signal)->emit(new BeforeSave($this->model));
+		}
+		return $result;
 	}
 
 	/**
@@ -426,6 +429,8 @@ class EntityManager implements IEntityManager
 	private function _afterSave()
 	{
 		Event::trigger($this->model, IEntityManager::EventAfterSave);
+		(new Signal)->emit(new AfterSave($this->model));
+		ScenarioManager::setScenario($this->model, IScenarios::Update);
 	}
 
 	/**
@@ -438,7 +443,13 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeDelete()
 	{
-		return Event::valid($this->model, IEntityManager::EventBeforeDelete);
+		$result = Event::valid($this->model, IEntityManager::EventBeforeDelete);
+		if ($result)
+		{
+			(new Signal)->emit(new BeforeDelete($this->model));
+			ScenarioManager::setScenario($this->model, IScenarios::Insert);
+		}
+		return $result;
 	}
 
 	/**
@@ -451,6 +462,7 @@ class EntityManager implements IEntityManager
 	private function _afterDelete()
 	{
 		Event::trigger($this->model, IEntityManager::EventAfterDelete, new ModelEvent($this->model));
+		(new Signal)->emit(new AfterDelete($this->model));
 	}
 
 // </editor-fold>
