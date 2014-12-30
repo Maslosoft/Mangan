@@ -14,7 +14,8 @@ namespace Maslosoft\Mangan\Interfaces;
  */
 interface IFinder
 {
-
+	const EventBeforeFind = 'beforeFind';
+	const EventAfterFind = 'afterFind';
 	/**
 	 * Finds a single Document with the specified condition.
 	 * @param array|Criteria $criteria query criteria.

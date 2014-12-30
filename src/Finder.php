@@ -27,8 +27,6 @@ use MongoException;
 class Finder implements IFinder
 {
 
-	const EventBeforeFind = "beforeFind";
-
 	/**
 	 * Model
 	 * @var IAnnotated
@@ -82,10 +80,10 @@ class Finder implements IFinder
 	 */
 	public function find($criteria = null)
 	{
-		if (Event::hasHandler($this->model, self::EventBeforeFind))
+		if (Event::hasHandler($this->model, IFinder::EventBeforeFind))
 		{
 			$event = new ModelEvent($this, $this->model);
-			Event::trigger($this->model, self::EventBeforeFind);
+			Event::trigger($this->model, IFinder::EventBeforeFind);
 			if (!$event->handled)
 			{
 				return null;
