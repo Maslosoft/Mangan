@@ -656,12 +656,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "78bda0c01c06d5ec773d5bf5840c2aa0f61f2bc9"
+                "reference": "f2add177f7d0fb470e1419797617be01e11b1848"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/78bda0c01c06d5ec773d5bf5840c2aa0f61f2bc9",
-                "reference": "78bda0c01c06d5ec773d5bf5840c2aa0f61f2bc9",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/f2add177f7d0fb470e1419797617be01e11b1848",
+                "reference": "f2add177f7d0fb470e1419797617be01e11b1848",
                 "shasum": ""
             },
             "require": {
@@ -671,8 +671,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Maslosoft\\ManganTest\\Models\\": "./models",
-                    "Maslosoft\\ManganTest\\Extensions\\": "./extensions"
+                    "Maslosoft\\ManganTest\\Models\\": "models/",
+                    "Maslosoft\\ManganTest\\Extensions\\": "extensions/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -687,7 +687,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2014-12-30 18:07:15"
+            "time": "2014-12-30 19:58:39"
         },
         {
             "name": "phpunit/php-code-coverage",
