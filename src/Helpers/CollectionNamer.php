@@ -36,7 +36,8 @@ class CollectionNamer
 		{
 			return $name;
 		}
-		return ltrim('\\', str_replace('\\', '.', $meta->name));
+		$name = get_class($model);
+		return ltrim(str_replace('\\', '.', $name), '\\');
 	}
 
 }

@@ -60,6 +60,10 @@ abstract class Transformator
 	{
 		if (!array_key_exists($name, $this->_transformators))
 		{
+			if(!$this->_meta->$name)
+			{
+				throw new TransformatorException(sprintf('There is not metadata for field `%s` of model `%s`, have you declared this field?', $name, get_class($this->getModel())));
+			}
 			$this->_transformators[$name] = $this->_getTransformer($this->_meta->$name);
 		}
 		return $this->_transformators[$name];

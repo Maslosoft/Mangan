@@ -8,6 +8,8 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+
 /**
  * PassThrough
  * Empty sanitizer, does not change anything
@@ -15,6 +17,13 @@ namespace Maslosoft\Mangan\Sanitizers;
  */
 class PassThrough implements ISanitizer
 {
+
+	/**
+	 * For internal use, to provide namespace to Sanitizer
+	 * @see Sanitizer
+	 */
+	const Ns = __NAMESPACE__;
+
 	public function read($model, $dbValue)
 	{
 		return $dbValue;

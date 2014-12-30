@@ -69,7 +69,7 @@ class EntityManager
 	 * Current collection
 	 * @var MongoCollection
 	 */
-	public $collection = null;
+	private $_collection = null;
 
 	/**
 	 * Model class name
@@ -86,11 +86,11 @@ class EntityManager
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
 		$mangan = new Mangan($this->meta->type()->connectionId? : Mangan::DefaultConnectionId);
-		if(!$this->collectionName)
+		if (!$this->collectionName)
 		{
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
 		}
-		$this->collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
+		$this->_collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
 	}
 
 	public function __set($name, $value)
@@ -100,53 +100,26 @@ class EntityManager
 
 	public function save()
 	{
-
+		
 	}
 
-	public function insert(array $attributes = null)
+	public function insert()
 	{
 		if ($this->_beforeSave())
 		{
-
-			// Ensure that id is set
-			if (!$this->model->_id)
-			{
-				$this->model->_id = new MongoId;
-			}
 			$rawData = FromDocument::toRawArray($this->model);
-
-			// filter attributes if set in param
-			if ($attributes !== null)
-			{
-				// Ensure id
-				$attributes['_id'] = true;
-				foreach ($rawData as $key => $value)
-				{
-					if (!in_array($key, $attributes))
-					{
-						unset($rawData[$key]);
-					}
-				}
-			}
-			// Check for individual pk
-			$pk = '_id';//$this->primaryKey();
-			if ('_id' !== $pk && 0 !== $this->countByAttributes([$pk => $this->{$pk}]))
-			{
-				throw new MongoException('The Document cannot be inserted because the primary key already exists.');
-			}
 
 			try
 			{
-				$result = $this->collection->insert($rawData, $this->options->getSaveOptions());
+				$result = $this->_collection->insert($rawData, $this->options->getSaveOptions());
 			}
-			catch (Exception $e)
+			catch (\Exception $e)
 			{
 				throw $e;
 			}
-
+			// strict comparison needed
 			if ($result !== false)
-			{ // strict comparison needed
-				$this->_id = $rawData['_id'];
+			{
 				$this->_afterSave();
 				ScenarioManager::setScenario($this->model, IScenarios::Update);
 				(new Signal)->emit(new AfterSave($this->model));
@@ -184,4 +157,8 @@ class EntityManager
 		}
 	}
 
+	public function getCollection()
+	{
+		return $this->_collection;
+	}
 }

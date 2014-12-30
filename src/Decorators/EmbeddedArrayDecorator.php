@@ -23,12 +23,14 @@ class EmbeddedArrayDecorator implements IDecorator
 	{
 		if (is_array($dbValue))
 		{
-			$model->$name = [];
+			$docs = [];
 			foreach ($dbValue as $data)
 			{
 				EmbeddedDecorator::ensureClass($model, $name, $data);
-				$model->$name[] = FromRawArray::toDocument($data);
+				$key = isset($data['_key']) ? $data['_key'] : $key++;
+				$docs[$key] = FromRawArray::toDocument($data);
 			}
+			$model->$name = $docs;
 		}
 		else
 		{
@@ -41,9 +43,12 @@ class EmbeddedArrayDecorator implements IDecorator
 		if (is_array($model->$name))
 		{
 			$dbValue = [];
+			$key = 0;
 			foreach ($model->$name as $document)
 			{
-				$dbValue[] = FromDocument::toRawArray($document);
+				$data = FromDocument::toRawArray($document);
+				$data['_key'] = $key++;
+				$dbValue[] = $data;
 			}
 		}
 		else

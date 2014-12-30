@@ -12,6 +12,7 @@ use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoException;
 use MongoId;
@@ -90,7 +91,7 @@ class Finder
 			}
 		}
 		$this->applyScopes($criteria);
-		$data = $this->em->collection->findOne($criteria->getConditions(), $criteria->getSelect());
+		$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
 		return FromRawArray::toDocument($data);
 	}
 
@@ -123,7 +124,7 @@ class Finder
 		if ($this->beforeFind())
 		{
 			$this->applyScopes($criteria);
-			$cursor = $this->em->collection->find($criteria->getConditions());
+			$cursor = $this->em->getCollection()->find($criteria->getConditions());
 
 			if ($criteria->getSort() !== null)
 			{
@@ -202,59 +203,43 @@ class Finder
 	 * Create primary key criteria.
 	 * TODO Refactor
 	 * @since v1.2.2
-	 * @param mixed $pk Primary key value
-	 * @param boolean $multiple Whether to find multiple records.
+	 * @param mixed $pkValue Primary key value
 	 * @return Criteria
 	 * @throws MongoException
 	 */
-	private function createPkCriteria($pk, $multiple = false)
+	private function createPkCriteria($pkValue)
 	{
-		$pkField = $this->em->meta->type()->primaryKey;
+		$pkField = $this->em->meta->type()->primaryKey? : '_id';
 		$criteria = new Criteria();
-		if (is_string($pkField))
+
+		if (is_array($pkField))
 		{
-			if ('_id' === $pkField)
+			foreach ($pkField as $name)
 			{
-				if ((strlen($pk) === 24) && !$pk instanceof MongoId)
+				if (!array_key_exists($name, $pkValue))
 				{
-					// Assumption: if dealing with _id field and it's a 24-digit string .. should be an Mongo ObjectID
-					Yii::trace($this->_class . ".createPkCriteria() .. converting key value ($pk) to MongoId", 'Maslosoft.Mangan.Document');
-					$pk = new MongoId($pk);
+					throw new CriteriaException(sprintf('Composite primary key field `%s` not specied for model `%s`, required fields: `%s`', $name, get_class($this->model), implode('`, `', $pkField)));
 				}
-				elseif (is_numeric($pk))
-				{
-					// Assumption: need to bless as int, as string != int when looking up primary keys
-					Yii::trace($this->_class . ".createPkCriteria() .. casting ($pk) to int", 'Maslosoft.Mangan.Document');
-					$pk = (int) $pk;
-				}
-			}
-			if (!$multiple)
-			{
-				$criteria->{$pkField} = $pk;
-			}
-			else
-			{
-				$criteria->{$pkField}('in', $pk);
+				$this->_preparePk($name, $pkValue[$name], $criteria);
 			}
 		}
-		elseif (is_array($pkField))
+		else
 		{
-			if (!$multiple)
-				for ($i = 0; $i < count($pkField); $i++)
-				{
-					$pkField = $pk[$i];
-					if ('_id' === $pkField[$i] && !$pk[$i] instanceof MongoId)
-					{
-						$pk[$i] = new MongoId($pk[$i]);
-					}
-					$criteria->{$pkField[$i]} = $pk[$i];
-				}
-			else
-			{
-				throw new MongoException('Cannot create PK criteria for multiple composite key\'s (not implemented yet)');
-			}
+			$this->_preparePk($pkField, $pkValue, $criteria);
 		}
 		return $criteria;
+	}
+
+	/**
+	 * Create pk criteria for single field
+	 * @param string $name
+	 * @param mixed $value
+	 * @param Criteria $criteria
+	 */
+	private function _preparePk($name, $value, Criteria &$criteria)
+	{
+		$sanitizer = new Sanitizer($this->model);
+		$criteria->$name = $sanitizer->write($name, $value);
 	}
 
 }

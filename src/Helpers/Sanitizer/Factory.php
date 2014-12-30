@@ -12,8 +12,8 @@ use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\Sanitizers\Boolean;
 use Maslosoft\Mangan\Sanitizers\Double;
 use Maslosoft\Mangan\Sanitizers\Integer;
+use Maslosoft\Mangan\Sanitizers\PassThrough;
 use Maslosoft\Mangan\Sanitizers\String;
-use Maslosoft\Mangan\Sanitizers\Void;
 
 /**
  * Factory
@@ -29,7 +29,7 @@ class Factory
 		{
 			if (strstr($meta->sanitizer, '\\') === false)
 			{
-				$className = sprintf('Maslosoft\Mangan\Sanitizers\%s', $meta->sanitizer);
+				$className = sprintf('%s\%s', PassThrough::Ns, $meta->sanitizer);
 			}
 			else
 			{
@@ -49,7 +49,7 @@ class Factory
 			case 'string':
 				return new String;
 		}
-		return new Void();
+		return new PassThrough();
 	}
 
 }

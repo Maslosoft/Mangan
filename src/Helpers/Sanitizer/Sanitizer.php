@@ -19,6 +19,16 @@ use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 class Sanitizer extends Transformator
 {
 
+	public function read($name, $dbValue)
+	{
+		return $this->getFor($name)->read($this->getModel(), $dbValue);
+	}
+
+	public function write($name, $phpValue)
+	{
+		return $this->getFor($name)->write($this->getModel(), $phpValue);
+	}
+
 	protected function _getTransformer(DocumentPropertyMeta $meta)
 	{
 		return Factory::create($meta);
