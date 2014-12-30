@@ -3,6 +3,7 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Sanitizers\EmbeddedArray;
 
 /**
@@ -24,6 +25,7 @@ class EmbeddedArrayAnnotation extends MetaAnnotation
 		$this->_entity->embeddedArray = true;
 		$this->_entity->direct = false;
 		$this->_entity->sanitizer = EmbeddedArray::class;
+		$this->_entity->decorators[] = EmbeddedArrayDecorator::class;
 	}
 
 }
