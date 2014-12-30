@@ -13,15 +13,11 @@
 
 namespace Maslosoft\Mangan;
 
-use CLogger;
-use Exception;
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\CollectionNamer;
+use Maslosoft\Mangan\Interfaces\IActiveRecord;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Signals\AfterDelete;
-use Maslosoft\Mangan\Signals\AfterSave;
-use Maslosoft\Signals\Signal;
-use MongoCollection;
 use MongoCursor;
 use MongoDB;
 use MongoException;
@@ -35,7 +31,7 @@ use Yii;
  * @property-read MongoDB $db
  * @since v1.0
  */
-abstract class Document extends EmbeddedDocument
+abstract class Document extends EmbeddedDocument implements IActiveRecord
 {
 
 	/**
@@ -171,7 +167,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function getCollectionName()
 	{
-		return str_replace('\\', '.', $this->_class);
+		return CollectionNamer::nameCollection($this);
 	}
 
 	/**

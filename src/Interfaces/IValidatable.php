@@ -12,7 +12,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IValidated
+interface IValidatable
 {
 
 	public function validate();
