@@ -12,18 +12,18 @@ use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Exceptions\CriteriaException;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Interfaces\IFinder;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoException;
-use MongoId;
-use Yii;
 
 /**
  * Finder
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Finder
+class Finder implements IFinder
 {
 
 	const EventBeforeFind = "beforeFind";
@@ -113,6 +113,24 @@ class Finder
 	}
 
 	/**
+	 * Finds all documents with the specified primary keys.
+	 * In MongoDB world every document has '_id' unique field, so with this method that
+	 * field is in use as PK by default.
+	 * See {@link find()} for detailed explanation about $condition.
+	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|Criteria $criteria query criteria.
+	 * @return Document[]|Cursor - Array or cursor of Documents
+	 * @since v1.0
+	 */
+	public function findAllByPk($pk, $criteria = null)
+	{
+		$criteria = new Criteria($criteria);
+		$criteria->mergeWith($this->createPkCriteria($pk, true));
+
+		return $this->findAll($criteria);
+	}
+
+	/**
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
@@ -159,6 +177,42 @@ class Finder
 	}
 
 	/**
+	 * Finds document with the specified attributes.
+	 *
+	 * See {@link find()} for detailed explanation about $condition.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return Document - the document found. An null is returned if none is found.
+	 * @since v1.0
+	 */
+	public function findByAttributes(array $attributes)
+	{
+		$criteria = new Criteria();
+		foreach ($attributes as $name => $value)
+		{
+			$criteria->$name('==', $value);
+		}
+		return $this->find($criteria);
+	}
+
+	/**
+	 * Finds all documents with the specified attributes.
+	 *
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return Document[]|Cursor - Array or cursor of Documents
+	 * @since v1.0
+	 */
+	public function findAllByAttributes(array $attributes)
+	{
+		$criteria = new Criteria();
+		foreach ($attributes as $name => $value)
+		{
+			$criteria->$name('==', $value);
+		}
+
+		return $this->findAll($criteria);
+	}
+
+	/**
 	 * Resets all scopes and criteria applied including default scope.
 	 *
 	 * @return Document
@@ -201,7 +255,6 @@ class Finder
 
 	/**
 	 * Create primary key criteria.
-	 * TODO Refactor
 	 * @since v1.2.2
 	 * @param mixed $pkValue Primary key value
 	 * @return Criteria

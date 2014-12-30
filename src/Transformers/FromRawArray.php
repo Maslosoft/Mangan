@@ -22,6 +22,7 @@ class FromRawArray
 
 	/**
 	 * Create document from array
+	 * TODO Enforce $className if collection is homogenous
 	 * @return object
 	 */
 	public static function toDocument($data, $className = null)

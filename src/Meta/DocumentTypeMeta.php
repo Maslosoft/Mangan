@@ -50,6 +50,12 @@ class DocumentTypeMeta extends MetaType
 	public $useCursor = false;
 
 	/**
+	 * Whenever colleciton is homogenous
+	 * @var bool
+	 */
+	public $homogenous = true;
+
+	/**
 	 * Values of properties
 	 * @var mixed
 	 */
@@ -74,7 +80,7 @@ class DocumentTypeMeta extends MetaType
 		{
 			return parent::__get($name);
 		}
-		if(!array_key_exists($name, $this->_values))
+		if (!array_key_exists($name, $this->_values))
 		{
 			throw new ManganException(sprintf('Trying to read unitialized property `%s`', $name));
 		}
@@ -122,6 +128,4 @@ class DocumentTypeMeta extends MetaType
 //	{
 //		$this->_values['connectionId'] = $connectionId;
 //	}
-
-
 }

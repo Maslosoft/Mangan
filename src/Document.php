@@ -67,8 +67,7 @@ abstract class Document extends EmbeddedDocument
 	 * Finder
 	 * @var Finder
 	 */
-	public $find = null;
-
+	private $finder = null;
 	private $_new = false;  // whether this instance is new or not
 	private $_criteria = null; // query criteria (used by finder only)
 
@@ -126,7 +125,7 @@ abstract class Document extends EmbeddedDocument
 		$this->meta = ManganMeta::create($this);
 		$this->meta->initModel($this);
 		$this->em = new EntityManager($this);
-		$this->find = new Finder($this->em);
+		$this->finder = new Finder($this->em);
 		$this->setLang($lang);
 
 		// internally used by populateRecord() and model()
@@ -161,73 +160,6 @@ abstract class Document extends EmbeddedDocument
 	}
 
 	/**
-	 * Return the primary key field for this collection, defaults to '_id'.
-	 * @return string|array field name, or array of fields for composite primary key.
-	 * @since v1.2.2
-	 */
-	public function primaryKey()
-	{
-		return '_id';
-	}
-
-	/**
-	 * Get the primary key value.
-	 * @return mixed string for single key, array for compound keys.
-	 * @since v1.2.2
-	 */
-	public function getPrimaryKey()
-	{
-		$pk = $this->primaryKey();
-		if (is_string($pk))
-		{
-			return $this->{$pk};
-		}
-		else
-		{
-			$return = [];
-			foreach ($pk as $pkFiled)
-			{
-				$return[] = $this->{$pkFiled};
-			}
-			return $return;
-		}
-	}
-
-	/**
-	 * Get MongoDB the component instance,  defaults to 'mongodb' application component.
-	 * @return Mangan
-	 * @since v1.0
-	 */
-	public function getMongoDBComponent()
-	{
-		if (self::$_emongoDb === null)
-		{
-			self::$_emongoDb = Mangan::instance('mongodb');
-		}
-		return self::$_emongoDb;
-	}
-
-	/**
-	 * Set MongoDB component instance.
-	 * @param MongoDB $component
-	 * @since v1.0
-	 */
-	public function setMongoDBComponent(Mangan $component)
-	{
-		self::$_emongoDb = $component;
-	}
-
-	/**
-	 * Get raw MongoDB instance.
-	 * @return MongoDB
-	 * @since v1.0
-	 */
-	public function getDb()
-	{
-		return $this->getMongoDBComponent()->getDbInstance();
-	}
-
-	/**
 	 * This method must return collection name for use with this model
 	 * this must be implemented in child classes
 	 *
@@ -250,55 +182,6 @@ abstract class Document extends EmbeddedDocument
 	public function isCollectionHomogenous()
 	{
 		return true;
-	}
-
-	/**
-	 * Returns current MongoCollection object.
-	 * By default this method use {@see getCollectionName()}
-	 * @return MongoCollection
-	 * @since v1.0
-	 */
-	public function getCollection()
-	{
-		if (!isset(self::$_collections[$this->getCollectionName()]))
-		{
-			self::$_collections[$this->getCollectionName()] = $this->getDb()->selectCollection($this->getCollectionName());
-		}
-		return self::$_collections[$this->getCollectionName()];
-	}
-
-	/**
-	 * Set current MongoCollection object
-	 * @param MongoCollection $collection
-	 * @since v1.0
-	 */
-	public function setCollection(MongoCollection $collection)
-	{
-		self::$_collections[$this->getCollectionName()] = $collection;
-	}
-
-	/**
-	 * Returns if the current record is new.
-	 * @return boolean whether the record is new and should be inserted when calling {@link save}.
-	 * This property is automatically set in constructor and {@link populateRecord}.
-	 * Defaults to false, but it will be set to true if the instance is created using
-	 * the new operator.
-	 * @since v1.0
-	 */
-	public function getIsNewRecord()
-	{
-		return $this->_new;
-	}
-
-	/**
-	 * Sets if the record is new.
-	 * @param boolean $value whether the record is new and should be inserted when calling {@link save}.
-	 * @see getIsNewRecord
-	 * @since v1.0
-	 */
-	public function setIsNewRecord($value)
-	{
-		$this->_new = $value;
 	}
 
 	/**
@@ -340,171 +223,6 @@ abstract class Document extends EmbeddedDocument
 		else
 		{
 			$this->_criteria = new Criteria();
-		}
-	}
-
-	/**
-	 * Get FSync flag
-	 *
-	 * It will return the nearest not null value in order:
-	 * - Object level
-	 * - Model level
-	 * - Global level (always set)
-	 * @return boolean
-	 */
-	public function getFsyncFlag()
-	{
-		if ($this->_fsyncFlag !== null)
-		{
-			return $this->_fsyncFlag; // We have flag set, return it
-		}
-		if ((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_fsyncFlag !== null))
-		{
-			return self::$_models[$this->_class]->_fsyncFlag; // Model have flag set, return it
-		}
-		return $this->getMongoDBComponent()->fsyncFlag;
-	}
-
-	/**
-	 * Set object level FSync flag
-	 * @param boolean $flag true|false value for FSync flag
-	 */
-	public function setFsyncFlag($flag)
-	{
-		$this->_fsyncFlag = ($flag == true);
-		if ($this->_fsyncFlag)
-		{
-			$this->setSafeFlag(true); // Setting FSync flag to true will implicit set safe to true
-		}
-	}
-
-	/**
-	 * Get Safe flag
-	 *
-	 * It will return the nearest not null value in order:
-	 * - Object level
-	 * - Model level
-	 * - Global level (always set)
-	 * @return boolean
-	 */
-	public function getSafeFlag()
-	{
-		if ($this->_safeFlag !== null)
-		{
-			return $this->_safeFlag; // We have flag set, return it
-		}
-		if ((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->_safeFlag !== null))
-		{
-			return self::$_models[$this->_class]->_safeFlag; // Model have flag set, return it
-		}
-		return $this->getMongoDBComponent()->safeFlag;
-	}
-
-	/**
-	 * Set object level Safe flag
-	 * @param boolean $flag true|false value for Safe flag
-	 */
-	public function setSafeFlag($flag)
-	{
-		$this->_safeFlag = ($flag == true);
-	}
-
-	/**
-	 * Get value of use cursor flag
-	 *
-	 * It will return the nearest not null value in order:
-	 * - Criteria level
-	 * - Object level
-	 * - Model level
-	 * - Global level (always set)
-	 * @return boolean
-	 */
-	public function getUseCursor($criteria = null)
-	{
-		if ($criteria !== null && $criteria->getUseCursor() !== null)
-		{
-			return $criteria->getUseCursor();
-		}
-		if ($this->useCursor !== null)
-		{
-			return $this->useCursor; // We have flag set, return it
-		}
-		if ((isset(self::$_models[$this->_class]) === true) && (self::$_models[$this->_class]->useCursor !== null))
-		{
-			return self::$_models[$this->_class]->useCursor; // Model have flag set, return it
-		}
-		return $this->getMongoDBComponent()->useCursor;
-	}
-
-	/**
-	 * Set object level value of use cursor flag
-	 * @param boolean $useCursor true|false value for use cursor flag
-	 */
-	public function setUseCursor($useCursor)
-	{
-		$this->useCursor = (bool)$useCursor;
-	}
-
-	/**
-	 * This function check indexes and applies them to the collection if needed
-	 * see Model::init()
-	 *
-	 * @see EmbeddedDocument::init()
-	 * @since v1.1
-	 */
-	public function init()
-	{
-		parent::init();
-
-		if ($this->ensureIndexes && !isset(self::$_indexes[$this->getCollectionName()]))
-		{
-			$indexInfo = $this->getCollection()->getIndexInfo();
-			array_shift($indexInfo); // strip out default _id index
-
-			$indexes = [];
-			foreach ($indexInfo as $index)
-			{
-				$indexes[$index['name']] = [
-					'key' => $index['key'],
-					'unique' => isset($index['unique']) ? $index['unique'] : false,
-				];
-			}
-			self::$_indexes[$this->getCollectionName()] = $indexes;
-
-			$this->ensureIndexes();
-		}
-	}
-
-	/**
-	 * This function may return array of indexes for this collection
-	 * array syntax is:
-	 * return array(
-	 * 	'index_name'=>array('key'=>array('fieldName1'=>Criteria::SORT_ASC, 'fieldName2'=>Criteria::SORT_DESC),
-	 * 	'index2_name'=>array('key'=>array('fieldName3'=>Criteria::SORT_ASC, 'unique'=>true),
-	 * );
-	 * @return array list of indexes for this collection
-	 * @since v1.1
-	 */
-	public function indexes()
-	{
-		return [];
-	}
-
-	/**
-	 * @since v1.1
-	 */
-	private function ensureIndexes()
-	{
-		$indexNames = array_keys(self::$_indexes[$this->getCollectionName()]);
-		foreach ($this->indexes() as $name => $index)
-		{
-			if (!in_array($name, $indexNames))
-			{
-				$this->getCollection()->ensureIndex(
-						$index['key'], ['unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name]
-				);
-				self::$_indexes[$this->getCollectionName()][$name] = $index;
-			}
 		}
 	}
 
@@ -627,14 +345,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function save($runValidation = true, $attributes = null)
 	{
-		if (!$runValidation || $this->validate($attributes))
-		{
-			return $this->getIsNewRecord() ? $this->insert($attributes) : $this->update($attributes);
-		}
-		else
-		{
-			return false;
-		}
+		return $this->em->save($runValidation, $attributes);
 	}
 
 	/**
@@ -672,60 +383,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function update(array $attributes = null, $modify = false)
 	{
-		if ($this->getIsNewRecord())
-		{
-			throw new MongoException('The Document cannot be updated because it is new.');
-		}
-		if ($this->beforeSave())
-		{
-			Yii::trace($this->_class . '.update()', 'Maslosoft.Mangan.Document');
-			$rawData = $this->toArray(false);
-
-			// filter attributes if set in param
-			if ($attributes !== null)
-			{
-				if (!in_array('_id', $attributes) && !$modify)
-				{
-					$attributes[] = '_id'; // This is very easy to forget
-				}
-
-				foreach ($rawData as $key => $value)
-				{
-					if (!in_array($key, $attributes))
-					{
-						unset($rawData[$key]);
-					}
-				}
-			}
-			if ($modify)
-			{
-				if (isset($rawData['_id']) === true)
-				{
-					unset($rawData['_id']);
-				}
-				$result = $this->getCollection()->update(
-						['_id' => $this->_id], ['$set' => $rawData], [
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag(),
-					'multiple' => false
-						]
-				);
-			}
-			else
-			{
-				$result = $this->getCollection()->save($rawData, [
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag()
-				]);
-			}
-			if ($result !== false)
-			{ // strict comparison needed
-				$this->afterSave();
-				(new Signal)->emit(new AfterSave($this));
-				return true;
-			}
-			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
-		}
+		return $this->em->update($attributes, $modify);
 	}
 
 	/**
@@ -736,24 +394,9 @@ abstract class Document extends EmbeddedDocument
 	 * @param Criteria $criteria condition to limit updating rules
 	 * @return boolean
 	 */
-	public function updateAll($modifier, $criteria = null)
+	public function updateAll(Modifier $modifier, Criteria $criteria = null)
 	{
-		Yii::trace($this->_class . '.updateAll()', 'Maslosoft.Mangan.Document');
-		if ($modifier->canApply === true)
-		{
-			$this->applyScopes($criteria);
-			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), [
-				'fsync' => $this->getFsyncFlag(),
-				'w' => $this->getSafeFlag(),
-				'upsert' => false,
-				'multiple' => true
-			]);
-			return $result;
-		}
-		else
-		{
-			return false;
-		}
+		return $this->em->updateAll($modifier, $criteria);
 	}
 
 	/**
@@ -764,59 +407,19 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function delete()
 	{
-		if (!$this->getIsNewRecord())
-		{
-			Yii::trace($this->_class . '.delete()', 'Maslosoft.Mangan.Document');
-			if ($this->beforeDelete())
-			{
-				$result = $this->deleteByPk($this->getPrimaryKey());
-
-				if ($result !== false)
-				{
-					$this->afterDelete();
-					$this->setIsNewRecord(true);
-					(new Signal)->emit(new AfterDelete($this));
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			throw new MongoException('The Document cannot be deleted because it is new.');
-		}
+		return $this->em->delete();
 	}
 
 	/**
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
+	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteByPk($pk, $criteria = null)
 	{
-		Yii::trace($this->_class . '.deleteByPk()', 'Maslosoft.Mangan.Document');
-		if ($this->beforeDelete())
-		{
-			$this->applyScopes($criteria);
-			$criteria->mergeWith($this->createPkCriteria($pk));
-
-			$result = $this->getCollection()->remove($criteria->getConditions(), [
-				'justOne' => true,
-				'fsync' => $this->getFsyncFlag(),
-				'w' => $this->getSafeFlag()
-			]);
-
-			return $result;
-		}
+		$this->em->deleteByPk($pk, $criteria);
 	}
 
 	/**
@@ -826,16 +429,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function refresh()
 	{
-		Yii::trace($this->_class . '.refresh()', 'Maslosoft.Mangan.Document');
-		if (!$this->getIsNewRecord() && $this->getCollection()->count(['_id' => $this->_id]) == 1)
-		{
-			$this->setAttributes($this->getCollection()->find(['_id' => $this->_id]), false);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		$this->em->refresh();
 	}
 
 	/**
@@ -850,15 +444,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function find($criteria = null)
 	{
-		Yii::trace($this->_class . '.find()', 'Maslosoft.Mangan.Document');
-
-		if ($this->beforeFind())
-		{
-			$this->applyScopes($criteria);
-			$doc = $this->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
-			return $this->populateRecord($doc);
-		}
-		return null;
+		$this->finder->find($criteria);
 	}
 
 	/**
@@ -870,43 +456,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function findAll($criteria = null)
 	{
-		Yii::trace($this->_class . '.findAll()', 'Maslosoft.Mangan.Document');
-
-		if ($this->beforeFind())
-		{
-			$this->applyScopes($criteria);
-			$cursor = $this->getCollection()->find($criteria->getConditions());
-
-			if ($criteria->getSort() !== null)
-			{
-				$cursor->sort($criteria->getSort());
-			}
-			if ($criteria->getLimit() !== null)
-			{
-				$cursor->limit($criteria->getLimit());
-			}
-			if ($criteria->getOffset() !== null)
-			{
-				$cursor->skip($criteria->getOffset());
-			}
-			if ($criteria->getSelect())
-			{
-				$cursor->fields($criteria->getSelect(true));
-			}
-			if ($this->getMongoDBComponent()->enableProfiling)
-			{
-				Yii::log($this->_class . '.findAll()' . PHP_EOL . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
-			}
-			if ($this->getUseCursor())
-			{
-				return new Cursor($cursor, $this->model());
-			}
-			else
-			{
-				return $this->populateRecords($cursor);
-			}
-		}
-		return [];
+		return $this->finder->findAll($criteria);
 	}
 
 	/**
@@ -921,11 +471,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function findByPk($pk, $criteria = null)
 	{
-		Yii::trace($this->_class . '.findByPk()', 'Maslosoft.Mangan.Document');
-		$criteria = new Criteria($criteria);
-		$criteria->mergeWith($this->createPkCriteria($pk));
-
-		return $this->find($criteria);
+		return $this->finder->findByPk($pk, $criteria);
 	}
 
 	/**
@@ -940,11 +486,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function findAllByPk($pk, $criteria = null)
 	{
-		Yii::trace($this->_class . '.findAllByPk()', 'Maslosoft.Mangan.Document');
-		$criteria = new Criteria($criteria);
-		$criteria->mergeWith($this->createPkCriteria($pk, true));
-
-		return $this->findAll($criteria);
+		return $this->finder->findAllByPk($pk, $criteria);
 	}
 
 	/**
@@ -957,12 +499,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function findByAttributes(array $attributes)
 	{
-		$criteria = new Criteria();
-		foreach ($attributes as $name => $value)
-		{
-			$criteria->$name('==', $value);
-		}
-		return $this->find($criteria);
+		return $this->finder->findByAttributes($attributes);
 	}
 
 	/**
@@ -974,13 +511,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function findAllByAttributes(array $attributes)
 	{
-		$criteria = new Criteria();
-		foreach ($attributes as $name => $value)
-		{
-			$criteria->$name('==', $value);
-		}
-
-		return $this->findAll($criteria);
+		return $this->finder->findAllByAttributes($attributes);
 	}
 
 	/**
@@ -1140,45 +671,6 @@ abstract class Document extends EmbeddedDocument
 	}
 
 	/**
-	 * This method is invoked before saving a record (after validation, if any).
-	 * The default implementation raises the {@link onBeforeSave} event.
-	 * You may override this method to do any preparation work for record saving.
-	 * Use {@link isNewRecord} to determine whether the saving is
-	 * for inserting or updating record.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @return boolean whether the saving should be executed. Defaults to true.
-	 * @since v1.0
-	 */
-	protected function beforeSave()
-	{
-		if ($this->hasEventHandler('onBeforeSave'))
-		{
-			$event = new ModelEvent($this);
-			$this->onBeforeSave($event);
-			return $event->isValid;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	/**
-	 * This method is invoked after saving a record successfully.
-	 * The default implementation raises the {@link onAfterSave} event.
-	 * You may override this method to do postprocessing after record saving.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @since v1.0
-	 */
-	protected function afterSave()
-	{
-		if ($this->hasEventHandler('onAfterSave'))
-		{
-			$this->onAfterSave(new ModelEvent($this));
-		}
-	}
-
-	/**
 	 * This method is invoked before deleting a record.
 	 * The default implementation raises the {@link onBeforeDelete} event.
 	 * You may override this method to do any preparation work for record deletion.
@@ -1278,7 +770,7 @@ abstract class Document extends EmbeddedDocument
 
 		// This is to avoid ovverwriting _class property
 		unset($attributes['_class']);
-		
+
 		$model = new $class(null, $this->getLang());
 		$model->initEmbeddedDocuments();
 		foreach ($model->meta->fields() as $field => $value)
