@@ -11,10 +11,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
-use Maslosoft\Mangan\Events\ModelEvent;
-use Maslosoft\Mangan\Exceptions\CriteriaException;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\IFinder;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoException;
@@ -131,7 +128,7 @@ class Finder implements IFinder
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
-	 * @return array list of documents satisfying the specified condition. An empty array is returned if none is found.
+	 * @return IAnnotated[]|Cursor|array list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAll($criteria = null)

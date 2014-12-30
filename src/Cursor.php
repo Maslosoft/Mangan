@@ -15,6 +15,8 @@ namespace Maslosoft\Mangan;
 
 use Countable;
 use Iterator;
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoCursor;
 
 /**
@@ -34,7 +36,7 @@ class Cursor implements Iterator, Countable
 	protected $_cursor;
 
 	/**
-	 * @var Document $_model the model used for instantiating objects
+	 * @var IAnnotated $_model the model used for instantiating objects
 	 * @since v1.3.4
 	 */
 	protected $_model;
@@ -43,10 +45,10 @@ class Cursor implements Iterator, Countable
 	 * Construct a new Cursor
 	 *
 	 * @param MongoCursor $cursor the cursor returned by the query
-	 * @param Document $model the model for instantiating objects
+	 * @param IAnnotated $model the model for instantiating objects
 	 * @since v1.3.4
 	 */
-	public function __construct(MongoCursor $cursor, Document $model)
+	public function __construct(MongoCursor $cursor, IAnnotated $model)
 	{
 		$this->_cursor = $cursor;
 		$this->_model = $model;
@@ -76,7 +78,7 @@ class Cursor implements Iterator, Countable
 			return null;
 		}
 
-		return $this->_model->populateRecord($document);
+		return FromRawArray::toDocument($document, $this->_model);
 	}
 
 	/**
@@ -145,7 +147,7 @@ class Cursor implements Iterator, Countable
 	/**
 	 * Skip a $offset records
 	 * {@see http://www.php.net/manual/en/mongocursor.skip.php}
-	 * @param integer $skip new skip
+	 * @param integer $offset new skip
 	 * @since v1.3.4
 	 */
 	public function offset($offset)
@@ -156,7 +158,7 @@ class Cursor implements Iterator, Countable
 	/**
 	 * Apply sorting directives
 	 * {@see http://www.php.net/manual/en/mongocursor.sort.php}
-	 * @param array $sort sorting directives
+	 * @param array $fields sorting directives
 	 * @since v1.3.4
 	 */
 	public function sort(array $fields)
