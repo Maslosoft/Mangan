@@ -13,6 +13,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Exceptions\CriteriaException;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\IFinder;
 use Maslosoft\Mangan\Transformers\FromRawArray;
@@ -98,16 +99,16 @@ class Finder implements IFinder
 	/**
 	 * Finds document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $criteria.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
 	 * @return the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
-	public function findByPk($pk, $criteria = null)
+	public function findByPk($pkValue, $criteria = null)
 	{
 
-		$criteria = new Criteria($criteria);
-		$criteria->mergeWith($this->createPkCriteria($pk));
+		$pkCriteria = new Criteria($criteria);
+		$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 		return $this->find($criteria);
 	}
@@ -117,15 +118,18 @@ class Finder implements IFinder
 	 * In MongoDB world every document has '_id' unique field, so with this method that
 	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param mixed $pkValues primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
 	 * @return Document[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
-	public function findAllByPk($pk, $criteria = null)
+	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$criteria = new Criteria($criteria);
-		$criteria->mergeWith($this->createPkCriteria($pk, true));
+		foreach($pkValues as $pkValue)
+		{
+			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
+		}
 
 		return $this->findAll($criteria);
 	}
@@ -254,6 +258,7 @@ class Finder implements IFinder
 	}
 
 	/**
+	 * TODO Use PkManager
 	 * Create primary key criteria.
 	 * @since v1.2.2
 	 * @param mixed $pkValue Primary key value

@@ -18,13 +18,18 @@ use Maslosoft\Mangan\Modifier;
 interface IEntityManager
 {
 
+	const EventAfterSave = 'afterSave';
+	const EventBeforeSave = 'beforeSave';
+	const EventBeforeDelete = 'beforeDelete';
+	const EventAfterDelete = 'afterDelete';
+
 	public function insert();
 
 	public function update(array $attributes = null, $modify = false);
 
 	public function updateAll(Modifier $modifier, Criteria $criteria = null);
 
-		/**
+	/**
 	 * Saves the current record.
 	 *
 	 * The record is inserted as a row into the database table if its {@link isNewRecord}
@@ -59,6 +64,15 @@ interface IEntityManager
 	public function delete();
 
 	/**
+	 * Deletes one document with the specified primary keys.
+	 * <b>Does not raise beforeDelete</b>
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|Criteria $criteria query criteria.
+	 * @since v1.0
+	 */
+	public function deleteOne($criteria = null);
+
+	/**
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
@@ -67,7 +81,16 @@ interface IEntityManager
 	 */
 	public function deleteByPk($pk, $criteria = null);
 
-		/**
+	/**
+	 * Deletes documents with the specified primary keys.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|Criteria $condition query criteria.
+	 * @since v1.0
+	 */
+	public function deleteAll($criteria = null);
+
+	/**
 	 * Repopulates this active record with the latest data.
 	 * @return boolean whether the row still exists in the database. If true, the latest data will be populated to this active record.
 	 * @since v1.0

@@ -96,12 +96,16 @@ class EntityOptions
 		return isset($this->_values[$name]);
 	}
 
-	public function getSaveOptions()
+	public function getSaveOptions($extraOptions = [])
 	{
 		$result = [];
 		foreach ($this->_getOptionNames() as $name)
 		{
 			$result[$name] = $this->$name;
+		}
+		foreach($extraOptions as $name => $value)
+		{
+			$result[$name] = $value;
 		}
 		return $result;
 	}

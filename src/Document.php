@@ -523,10 +523,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function count($criteria = null)
 	{
-		Yii::trace($this->_class . '.count()', 'Maslosoft.Mangan.Document');
-
 		$this->applyScopes($criteria);
-
 		return $this->getCollection()->count($criteria->getConditions());
 	}
 
@@ -539,8 +536,6 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function countByAttributes(array $attributes)
 	{
-		Yii::trace($this->_class . '.countByAttributes()', 'Maslosoft.Mangan.Document');
-
 		$criteria = new Criteria;
 		foreach ($attributes as $name => $value)
 		{
@@ -561,7 +556,6 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function exists(Criteria $criteria)
 	{
-		Yii::trace($this->_class . '.exists()', 'Maslosoft.Mangan.Document');
 		return $this->count($criteria) > 0;
 	}
 
@@ -574,14 +568,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function deleteAll($criteria = null)
 	{
-		Yii::trace($this->_class . '.deleteAll()', 'Maslosoft.Mangan.Document');
-		$this->applyScopes($criteria);
-
-		return $this->getCollection()->remove($criteria->getConditions(), [
-					'justOne' => false,
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag()
-		]);
+		$this->em->deleteAll($criteria);
 	}
 
 	/**
@@ -593,118 +580,7 @@ abstract class Document extends EmbeddedDocument
 	 */
 	public function deleteOne($criteria = null)
 	{
-		Yii::trace($this->_class . '.deleteOne()', 'Maslosoft.Mangan.Document');
-		$this->applyScopes($criteria);
-
-		return $this->getCollection()->remove($criteria->getConditions(), [
-					'justOne' => true,
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag()
-		]);
-	}
-
-	/**
-	 * This event is raised before the record is saved.
-	 * By setting {@link ModelEvent::isValid} to be false, the normal {@link save()} process will be stopped.
-	 * @param ModelEvent $event the event parameter
-	 * @since v1.0
-	 */
-	public function onBeforeSave($event)
-	{
-		$this->raiseEvent('onBeforeSave', $event);
-	}
-
-	/**
-	 * This event is raised after the record is saved.
-	 * @param ModelEvent $event the event parameter
-	 * @since v1.0
-	 */
-	public function onAfterSave($event)
-	{
-		$this->raiseEvent('onAfterSave', $event);
-	}
-
-	/**
-	 * This event is raised before the record is deleted.
-	 * By setting {@link ModelEvent::isValid} to be false, the normal {@link delete()} process will be stopped.
-	 * @param ModelEvent $event the event parameter
-	 * @since v1.0
-	 */
-	public function onBeforeDelete($event)
-	{
-		$this->raiseEvent('onBeforeDelete', $event);
-	}
-
-	/**
-	 * This event is raised after the record is deleted.
-	 * @param ModelEvent $event the event parameter
-	 * @since v1.0
-	 */
-	public function onAfterDelete($event)
-	{
-		$this->raiseEvent('onAfterDelete', $event);
-	}
-
-	/**
-	 * This event is raised before finder performs a find call.
-	 * In this event, the {@link ModelEvent::criteria} property contains the query criteria
-	 * passed as parameters to those find methods. If you want to access
-	 * the query criteria specified in scopes, please use {@link getDbCriteria()}.
-	 * You can modify either criteria to customize them based on needs.
-	 * @param ModelEvent $event the event parameter
-	 * @see beforeFind
-	 * @since v1.0
-	 */
-	public function onBeforeFind($event)
-	{
-		$this->raiseEvent('onBeforeFind', $event);
-	}
-
-	/**
-	 * This event is raised after the record is instantiated by a find method.
-	 * @param ModelEvent $event the event parameter
-	 * @since v1.0
-	 */
-	public function onAfterFind($event)
-	{
-		$this->raiseEvent('onAfterFind', $event);
-	}
-
-	/**
-	 * This method is invoked before deleting a record.
-	 * The default implementation raises the {@link onBeforeDelete} event.
-	 * You may override this method to do any preparation work for record deletion.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @return boolean whether the record should be deleted. Defaults to true.
-	 * @since v1.0
-	 */
-	protected function beforeDelete()
-	{
-		if ($this->hasEventHandler('onBeforeDelete'))
-		{
-			$event = new ModelEvent($this);
-			$this->onBeforeDelete($event);
-			return $event->isValid;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	/**
-	 * This method is invoked after deleting a record.
-	 * The default implementation raises the {@link onAfterDelete} event.
-	 * You may override this method to do postprocessing after the record is deleted.
-	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @since v1.0
-	 */
-	protected function afterDelete()
-	{
-		if ($this->hasEventHandler('onAfterDelete'))
-		{
-			$this->onAfterDelete(new ModelEvent($this));
-		}
+		$this->em->deleteOne($criteria);
 	}
 
 	/**
@@ -938,64 +814,6 @@ abstract class Document extends EmbeddedDocument
 			$model->attachBehaviors($model->behaviors());
 			return $model;
 		}
-	}
-
-	/**
-	 * Create primary key criteria.
-	 * @since v1.2.2
-	 * @param mixed $pk Primary key value
-	 * @param boolean $multiple Whether to find multiple records.
-	 * @return Criteria
-	 * @throws MongoException
-	 */
-	private function createPkCriteria($pk, $multiple = false)
-	{
-		$pkField = $this->primaryKey();
-		$criteria = new Criteria();
-		if (is_string($pkField))
-		{
-			if ('_id' === $pkField)
-			{
-				if ((strlen($pk) === 24) && !$pk instanceof MongoId)
-				{
-					// Assumption: if dealing with _id field and it's a 24-digit string .. should be an Mongo ObjectID
-					Yii::trace($this->_class . ".createPkCriteria() .. converting key value ($pk) to MongoId", 'Maslosoft.Mangan.Document');
-					$pk = new MongoId($pk);
-				}
-				elseif (is_numeric($pk))
-				{
-					// Assumption: need to bless as int, as string != int when looking up primary keys
-					Yii::trace($this->_class . ".createPkCriteria() .. casting ($pk) to int", 'Maslosoft.Mangan.Document');
-					$pk = (int) $pk;
-				}
-			}
-			if (!$multiple)
-			{
-				$criteria->{$pkField} = $pk;
-			}
-			else
-			{
-				$criteria->{$pkField}('in', $pk);
-			}
-		}
-		elseif (is_array($pkField))
-		{
-			if (!$multiple)
-				for ($i = 0; $i < count($pkField); $i++)
-				{
-					$pkField = $pk[$i];
-					if ('_id' === $pkField[$i] && !$pk[$i] instanceof MongoId)
-					{
-						$pk[$i] = new MongoId($pk[$i]);
-					}
-					$criteria->{$pkField[$i]} = $pk[$i];
-				}
-			else
-			{
-				throw new MongoException('Cannot create PK criteria for multiple composite key\'s (not implemented yet)');
-			}
-		}
-		return $criteria;
 	}
 
 }

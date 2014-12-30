@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan\Signals;
 
-use Maslosoft\Mangan\Document;
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Signals\ISignal;
 
 /**
@@ -21,15 +21,15 @@ class AfterDelete implements ISignal
 
 	/**
 	 * Deleted document
-	 * @var Document
+	 * @var IAnnotated
 	 */
 	public $model = null;
 
 	/**
 	 * Constructor
-	 * @param Document $model
+	 * @param IAnnotated $model
 	 */
-	public function __construct(Document $model)
+	public function __construct(IAnnotated $model)
 	{
 		$this->model = $model;
 	}

@@ -14,14 +14,15 @@
 
 namespace Maslosoft\Mangan\Traits\Model;
 
-use CModelEvent;
 use Exception;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\ITrash;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Models\Trash;
 use MongoId;
 
@@ -44,12 +45,12 @@ trait TrashableTrait
 				return false;
 			}
 		}
-
+		$meta = ManganMeta::create($this);
 
 		$trash = new Trash();
 		$trash->name = (string) $this;
 		$trash->data = $this;
-		$trash->type = isset($this->meta->type()->label) ? $this->meta->type()->label : get_class($this);
+		$trash->type = isset($meta->type()->label) ? $meta->type()->label : get_class($this);
 		$trash->save();
 
 		Event::trigger($this, ITrash::EventAfterTrash);
@@ -82,8 +83,8 @@ trait TrashableTrait
 
 		$em->save();
 		$finder = new Finder($em);
-		$model = $finder->findByPk(new MongoId($this->data->id));
-		if(!$model)
+		$model = $finder->find(PkManager::prepareFromModel($this->data));
+		if (!$model)
 		{
 			return false;
 		}
@@ -96,10 +97,7 @@ trait TrashableTrait
 		// when emtying trash
 		$this->data = null;
 
-		$criteria = new Criteria();
-		$criteria->addCond('_id', '==', new MongoId($this->id));
-
-		$trashEm->deleteOne($criteria);
+		$trashEm->deleteOne(PkManager::prepareFromModel($this));
 		return true;
 	}
 

@@ -13,6 +13,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
 use Maslosoft\Mangan\Interfaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -23,7 +24,6 @@ use Maslosoft\Mangan\Transformers\FromDocument;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
 use MongoException;
-use Yii;
 
 /**
  * EntityManager
@@ -32,9 +32,6 @@ use Yii;
  */
 class EntityManager implements IEntityManager
 {
-
-	const EventAfterSave = 'afterSave';
-	const EventBeforeSave = 'beforeSave';
 
 	/**
 	 * Model
@@ -190,19 +187,13 @@ class EntityManager implements IEntityManager
 		{
 			throw new MongoException('The Document cannot be updated because it is new.');
 		}
-		if ($this->beforeSave())
+		if ($this->_beforeSave())
 		{
-			Yii::trace($this->_class . '.update()', 'Maslosoft.Mangan.Document');
-			$rawData = $this->toArray(false);
+			$rawData = FromDocument::toRawArray($this->model);
 
 			// filter attributes if set in param
 			if ($attributes !== null)
 			{
-				if (!in_array('_id', $attributes) && !$modify)
-				{
-					$attributes[] = '_id'; // This is very easy to forget
-				}
-
 				foreach ($rawData as $key => $value)
 				{
 					if (!in_array($key, $attributes))
@@ -213,24 +204,12 @@ class EntityManager implements IEntityManager
 			}
 			if ($modify)
 			{
-				if (isset($rawData['_id']) === true)
-				{
-					unset($rawData['_id']);
-				}
-				$result = $this->getCollection()->update(
-						['_id' => $this->_id], ['$set' => $rawData], [
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag(),
-					'multiple' => false
-						]
-				);
+				$criteria = PkManager::prepareFromModel($this->model);
+				$result = $this->getCollection()->update($criteria->getConditions(), ['$set' => $rawData], $this->options->getSaveOptions(['multiple' => false]));
 			}
 			else
 			{
-				$result = $this->getCollection()->save($rawData, [
-					'fsync' => $this->getFsyncFlag(),
-					'w' => $this->getSafeFlag()
-				]);
+				$result = $this->getCollection()->save($rawData, $this->options->getSaveOptions());
 			}
 			if ($result !== false)
 			{ // strict comparison needed
@@ -252,16 +231,13 @@ class EntityManager implements IEntityManager
 	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null)
 	{
-		Yii::trace($this->_class . '.updateAll()', 'Maslosoft.Mangan.Document');
 		if ($modifier->canApply === true)
 		{
 			$this->applyScopes($criteria);
-			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), [
-				'fsync' => $this->getFsyncFlag(),
-				'w' => $this->getSafeFlag(),
-				'upsert' => false,
-				'multiple' => true
-			]);
+			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), $this->options->getSaveOptions([
+						'upsert' => false,
+						'multiple' => true
+			]));
 			return $result;
 		}
 		else
@@ -313,9 +289,10 @@ class EntityManager implements IEntityManager
 	 */
 	public function refresh()
 	{
-		if (!$this->getIsNewRecord() && $this->getCollection()->count(['_id' => $this->_id]) == 1)
+		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
+		if (!$this->getIsNewRecord() && $this->getCollection()->count($conditions) == 1)
 		{
-			$this->setAttributes($this->getCollection()->find(['_id' => $this->_id]), false);
+			$this->setAttributes($this->getCollection()->find($conditions), false);
 			return true;
 		}
 		else
@@ -334,13 +311,13 @@ class EntityManager implements IEntityManager
 	{
 		if (!$this->getIsNewRecord())
 		{
-			if ($this->beforeDelete())
+			if ($this->_beforeDelete())
 			{
-				$result = $this->deleteByPk($this->getPrimaryKey());
+				$result = $this->deleteOne(PkManager::prepareFromModel($this->model));
 
 				if ($result !== false)
 				{
-					$this->afterDelete();
+					$this->_afterDelete();
 					$this->setIsNewRecord(true);
 					(new Signal)->emit(new AfterDelete($this));
 					return true;
@@ -362,27 +339,56 @@ class EntityManager implements IEntityManager
 	}
 
 	/**
-	 * Deletes document with the specified primary key.
+	 * Deletes one document with the specified primary keys.
+	 * <b>Does not raise beforeDelete</b>
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
 	 */
-	public function deleteByPk($pk, $criteria = null)
+	public function deleteOne($criteria = null)
 	{
-		if ($this->beforeDelete())
+		$this->applyScopes($criteria);
+
+		return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+							'justOne' => true
+		]));
+	}
+
+	/**
+	 * Deletes document with the specified primary key.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|Criteria $criteria query criteria.
+	 * @since v1.0
+	 */
+	public function deleteByPk($pkValue, $criteria = null)
+	{
+		if ($this->_beforeDelete())
 		{
 			$this->applyScopes($criteria);
-			$criteria->mergeWith($this->createPkCriteria($pk));
+			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
-			$result = $this->getCollection()->remove($criteria->getConditions(), [
-				'justOne' => true,
-				'fsync' => $this->getFsyncFlag(),
-				'w' => $this->getSafeFlag()
-			]);
-
-			return $result;
+			return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+						'justOne' => true
+			]));
 		}
+		return false;
+	}
+
+	/**
+	 * Deletes documents with the specified primary keys.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|Criteria $condition query criteria.
+	 * @since v1.0
+	 */
+	public function deleteAll($criteria = null)
+	{
+		$this->applyScopes($criteria);
+
+		return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+							'justOne' => false
+		]));
 	}
 
 	public function getCollection()
@@ -395,7 +401,12 @@ class EntityManager implements IEntityManager
 		return true;
 	}
 
-// <editor-fold defaultstate="collapsed" desc="Private methods">
+	public function setIsNewRecord($new = true)
+	{
+
+	}
+
+// <editor-fold defaultstate="collapsed" desc="Event handling">
 
 	/**
 	 * Take care of EventBeforeSave
@@ -404,10 +415,10 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeSave()
 	{
-		if (Event::hasHandler($this->model, self::EventBeforeSave))
+		if (Event::hasHandler($this->model, IEntityManager::EventBeforeSave))
 		{
 			$event = new ModelEvent($this);
-			Event::trigger($this->model, self::EventBeforeSave, $event);
+			Event::trigger($this->model, IEntityManager::EventBeforeSave, $event);
 			return $event->isValid;
 		}
 		else
@@ -423,9 +434,46 @@ class EntityManager implements IEntityManager
 	 */
 	private function _afterSave()
 	{
-		if (Event::hasHandler($this->model, self::EventAfterSave))
+		if (Event::hasHandler($this->model, IEntityManager::EventAfterSave))
 		{
-			Event::trigger($this->model, self::EventAfterSave);
+			Event::trigger($this->model, IEntityManager::EventAfterSave);
+		}
+	}
+
+	/**
+	 * This method is invoked before deleting a record.
+	 * The default implementation raises the {@link onBeforeDelete} event.
+	 * You may override this method to do any preparation work for record deletion.
+	 * Make sure you call the parent implementation so that the event is raised properly.
+	 * @return boolean whether the record should be deleted. Defaults to true.
+	 * @since v1.0
+	 */
+	private function _beforeDelete()
+	{
+		if (Event::hasHandler($this->model, IEntityManager::EventBeforeDelete))
+		{
+			$event = new ModelEvent($this->model);
+			Event::trigger($this->model, IEntityManager::EventBeforeDelete, $event);
+			return $event->isValid;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * This method is invoked after deleting a record.
+	 * The default implementation raises the {@link onAfterDelete} event.
+	 * You may override this method to do postprocessing after the record is deleted.
+	 * Make sure you call the parent implementation so that the event is raised properly.
+	 * @since v1.0
+	 */
+	private function _afterDelete()
+	{
+		if (Event::hasHandler($this->model, IEntityManager::EventAfterDelete))
+		{
+			Event::trigger($this->model, IEntityManager::EventAfterDelete, new ModelEvent($this->model));
 		}
 	}
 
