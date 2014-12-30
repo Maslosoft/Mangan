@@ -39,7 +39,7 @@ class PkManager
 			{
 				if (!array_key_exists($name, $pkValue))
 				{
-					throw new CriteriaException(sprintf('Composite primary key field `%s` not specied for model `%s`, required fields: `%s`', $name, get_class($this->model), implode('`, `', $pkField)));
+					throw new CriteriaException(sprintf('Composite primary key field `%s` not specied for model `%s`, required fields: `%s`', $name, get_class($model), implode('`, `', $pkField)));
 				}
 				self::_prepareField($model, $name, $pkValue[$name], $criteria);
 			}
