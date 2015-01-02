@@ -21,6 +21,7 @@ class ManganMeta extends Meta
 {
 
 	/**
+	 * TODO Move this to class constructor
 	 * Create instance of Metadata specifically designed for Mangan
 	 * @param IAnnotated $component
 	 * @param MetaOptions $options

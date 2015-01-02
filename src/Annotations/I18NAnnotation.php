@@ -30,6 +30,11 @@ class I18NAnnotation extends MetaAnnotation
 		$i18n->allowDefault = $this->allowDefault;
 		$i18n->allowAny = $this->allowAny;
 		$this->_entity->i18n = $i18n;
+		if (count($this->_entity->decorators))
+		{
+			throw new ManganException('I18N Annotation must be very first annotation');
+		}
+		$this->_entity->decorators[] = I18NDecorator::class;
 	}
 
 }
