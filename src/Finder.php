@@ -91,7 +91,7 @@ class Finder implements IFinder
 	 * See {@link find()} for detailed explanation about $criteria.
 	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
-	 * @return the document found. An null is returned if none is found.
+	 * @return Document the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findByPk($pkValue, $criteria = null)
@@ -128,7 +128,7 @@ class Finder implements IFinder
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
-	 * @return IAnnotated[]|Cursor|array list of documents satisfying the specified condition. An empty array is returned if none is found.
+	 * @return Document[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAll($criteria = null)
