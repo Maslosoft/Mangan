@@ -56,7 +56,7 @@ class Finder implements IFinder
 
 	/**
 	 * Constructor
-	 * @param Document $model
+	 * @param EntityManage $em
 	 */
 	public function __construct(EntityManager $em)
 	{
