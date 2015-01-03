@@ -15,15 +15,12 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ModelEvent;
-use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Interfaces\IActiveRecord;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use MongoCursor;
 use MongoDB;
 use MongoException;
 use MongoId;
-use MongoRegex;
-use Yii;
 
 /**
  * Document
@@ -34,9 +31,14 @@ use Yii;
 abstract class Document extends EmbeddedDocument implements IActiveRecord
 {
 
+	use \Maslosoft\Mangan\Traits\EntityManagerTrait,
+	  \Maslosoft\Mangan\Traits\FinderTrait,
+	  \Maslosoft\Mangan\Traits\CollectionNameTrait;
+
 	/**
 	 * Mongo id field
 	 * @KoBindable(false)
+	 * @Sanitizer('MongoObjectId')
 	 * @see setId()
 	 * @see getId()
 	 * @var MongoId|mixed
@@ -52,46 +54,7 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * @var string
 	 */
 	public $id;
-
-	/**
-	 * Entity manager
-	 * @var EntityManager
-	 */
-	public $em = null;
-
-	/**
-	 * Finder
-	 * @var Finder
-	 */
-	private $finder = null;
-	private $_new = false;  // whether this instance is new or not
 	private $_criteria = null; // query criteria (used by finder only)
-
-	/**
-	 * Static array that holds mongo collection object instances,
-	 * protected access since v1.3
-	 * @var array $_collections static array of loaded collection objects
-	 * @since v1.3
-	 */
-	protected static $_collections = [];  // MongoCollection object
-	private static $_models = [];
-	private static $_indexes = [];  // Hold collection indexes array
-	private $_fsyncFlag = null; // Object level FSync flag
-	private $_safeFlag = null; // Object level Safe flag
-	protected $useCursor = null; // Whatever to return cursor instead on raw array
-
-	/**
-	 * @var boolean $ensureIndexes whatever to check and create non existing indexes of collection
-	 * @since v1.1
-	 */
-	protected $ensureIndexes = true; // Whatever to ensure indexes
-
-	/**
-	 * MongoDB component static instance.
-	 * @var MongoDB $_emongoDb;
-	 * @since v1.0
-	 */
-	protected static $_emongoDb;
 
 	/**
 	 * Add scopes functionality.
@@ -106,7 +69,7 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 			$this->getDbCriteria()->mergeWith($scopes[$name]);
 			return $this;
 		}
-		return parent::__call($name, $parameters);
+//		return parent::__call($name, $parameters);
 	}
 
 	/**
@@ -119,65 +82,21 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 		$this->_key = (string) new MongoId();
 		$this->_class = get_class($this);
 		$this->meta = ManganMeta::create($this);
-		$this->meta->initModel($this);
-		$this->em = new EntityManager($this);
-		$this->finder = new Finder($this->em);
 		$this->setLang($lang);
 
-		// internally used by populateRecord() and model()
+// internally used by populateRecord() and model()
 		if ($scenario == null)
 		{
 			return;
 		}
 
 		$this->setScenario($scenario);
-		$this->setIsNewRecord(true);
-
 		$this->init();
 
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
 
 		$this->initEmbeddedDocuments();
-	}
-
-	public function getId()
-	{
-		return (string) $this->_id;
-	}
-
-	public function setId($value)
-	{
-		if (!$value instanceof MongoId)
-		{
-			$value = new MongoId($value);
-		}
-		$this->_id = $value;
-	}
-
-	/**
-	 * This method must return collection name for use with this model
-	 * this must be implemented in child classes
-	 *
-	 * this is read-only defined only at class define
-	 * if you want to set different collection during run-time
-	 * use {@see setCollection()}.
-	 * @return string collection name
-	 * @since v1.0
-	 */
-	public function getCollectionName()
-	{
-		return CollectionNamer::nameCollection($this);
-	}
-
-	/**
-	 * This method determines if collection can store different types of documents.<br />
-	 * If it returns FALSE object type <em>might</em> depend on `_class` attribute value.<br />
-	 * It it returns TRUE object type will be set to current model instance type
-	 */
-	public function isCollectionHomogenous()
-	{
-		return true;
 	}
 
 	/**
@@ -316,201 +235,6 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	}
 
 	/**
-	 * Saves the current record.
-	 *
-	 * The record is inserted as a row into the database table if its {@link isNewRecord}
-	 * property is true (usually the case when the record is created using the 'new'
-	 * operator). Otherwise, it will be used to update the corresponding row in the table
-	 * (usually the case if the record is obtained using one of those 'find' methods.)
-	 *
-	 * Validation will be performed before saving the record. If the validation fails,
-	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
-	 * validation errors.
-	 *
-	 * If the record is saved via insertion, its {@link isNewRecord} property will be
-	 * set false, and its {@link scenario} property will be set to be 'update'.
-	 * And if its primary key is auto-incremental and is not set before insertion,
-	 * the primary key will be populated with the automatically generated key value.
-	 *
-	 * @param boolean $runValidation whether to perform validation before saving the record.
-	 * If the validation fails, the record will not be saved to database.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
-	 * @return boolean whether the saving succeeds
-	 * @since v1.0
-	 */
-	public function save($runValidation = true, $attributes = null)
-	{
-		return $this->em->save($runValidation, $attributes);
-	}
-
-	/**
-	 * Inserts a row into the table based on this active record attributes.
-	 * If the table's primary key is auto-incremental and is null before insertion,
-	 * it will be populated with the actual value after insertion.
-	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
-	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
-	 * and its {@link scenario} property will be set to be 'update'.
-	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws MongoException if the record is not new
-	 * @throws MongoException on fail of insert or insert of empty document
-	 * @throws MongoException on fail of insert, when safe flag is set to true
-	 * @throws MongoException on timeout of db operation , when safe flag is set to true
-	 * @since v1.0
-	 */
-	public function insert()
-	{
-		return $this->em->insert();
-	}
-
-	/**
-	 * Updates the row represented by this active record.
-	 * All loaded attributes will be saved to the database.
-	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
-	 * @param boolean modify if set true only selected attributes will be replaced, and not
-	 * the whole document
-	 * @return boolean whether the update is successful
-	 * @throws MongoException if the record is new
-	 * @throws MongoException on fail of update
-	 * @throws MongoException on timeout of db operation , when safe flag is set to true
-	 * @since v1.0
-	 */
-	public function update(array $attributes = null, $modify = false)
-	{
-		return $this->em->update($attributes, $modify);
-	}
-
-	/**
-	 * Atomic, in-place update method.
-	 *
-	 * @since v1.3.6
-	 * @param Modifier $modifier updating rules to apply
-	 * @param Criteria $criteria condition to limit updating rules
-	 * @return boolean
-	 */
-	public function updateAll(Modifier $modifier, Criteria $criteria = null)
-	{
-		return $this->em->updateAll($modifier, $criteria);
-	}
-
-	/**
-	 * Deletes the row corresponding to this Document.
-	 * @return boolean whether the deletion is successful.
-	 * @throws MongoException if the record is new
-	 * @since v1.0
-	 */
-	public function delete()
-	{
-		return $this->em->delete();
-	}
-
-	/**
-	 * Deletes document with the specified primary key.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
-	 * @since v1.0
-	 */
-	public function deleteByPk($pk, $criteria = null)
-	{
-		$this->em->deleteByPk($pk, $criteria);
-	}
-
-	/**
-	 * Repopulates this active record with the latest data.
-	 * @return boolean whether the row still exists in the database. If true, the latest data will be populated to this active record.
-	 * @since v1.0
-	 */
-	public function refresh()
-	{
-		$this->em->refresh();
-	}
-
-	/**
-	 * Finds a single Document with the specified condition.
-	 * @param array|Criteria $criteria query criteria.
-	 *
-	 * If an array, it is treated as the initial values for constructing a {@link Criteria} object;
-	 * Otherwise, it should be an instance of {@link Criteria}.
-	 *
-	 * @return Document the record found. Null if no record is found.
-	 * @since v1.0
-	 */
-	public function find($criteria = null)
-	{
-		$this->finder->find($criteria);
-	}
-
-	/**
-	 * Finds all documents satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
-	 * @return array list of documents satisfying the specified condition. An empty array is returned if none is found.
-	 * @since v1.0
-	 */
-	public function findAll($criteria = null)
-	{
-		return $this->finder->findAll($criteria);
-	}
-
-	/**
-	 * Finds document with the specified primary key.
-	 * In MongoDB world every document has '_id' unique field, so with this method that
-	 * field is in use as PK!
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
-	 * @return the document found. An null is returned if none is found.
-	 * @since v1.0
-	 */
-	public function findByPk($pk, $criteria = null)
-	{
-		return $this->finder->findByPk($pk, $criteria);
-	}
-
-	/**
-	 * Finds all documents with the specified primary keys.
-	 * In MongoDB world every document has '_id' unique field, so with this method that
-	 * field is in use as PK by default.
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
-	 * @return Document[]|Cursor - Array or cursor of Documents
-	 * @since v1.0
-	 */
-	public function findAllByPk($pk, $criteria = null)
-	{
-		return $this->finder->findAllByPk($pk, $criteria);
-	}
-
-	/**
-	 * Finds document with the specified attributes.
-	 *
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return Document - the document found. An null is returned if none is found.
-	 * @since v1.0
-	 */
-	public function findByAttributes(array $attributes)
-	{
-		return $this->finder->findByAttributes($attributes);
-	}
-
-	/**
-	 * Finds all documents with the specified attributes.
-	 *
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return Document[]|Cursor - Array or cursor of Documents
-	 * @since v1.0
-	 */
-	public function findAllByAttributes(array $attributes)
-	{
-		return $this->finder->findAllByAttributes($attributes);
-	}
-
-	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
@@ -556,30 +280,6 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	}
 
 	/**
-	 * Deletes documents with the specified primary keys.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
-	 * @since v1.0
-	 */
-	public function deleteAll($criteria = null)
-	{
-		$this->em->deleteAll($criteria);
-	}
-
-	/**
-	 * Deletes one document with the specified primary keys.
-	 * <b>Does not raise beforeDelete</b>
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
-	 * @since v1.0
-	 */
-	public function deleteOne($criteria = null)
-	{
-		$this->em->deleteOne($criteria);
-	}
-
-	/**
 	 * This method is invoked before an AR finder executes a find call.
 	 * The find calls include {@link find}, {@link findAll}, {@link findByPk},
 	 * {@link findAllByPk}, {@link findByAttributes} and {@link findAllByAttributes}.
@@ -621,63 +321,6 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	}
 
 	/**
-	 * Creates an document instance.
-	 * This method is called by {@link populateRecord} and {@link populateRecords}.
-	 * You may override this method if the instance being created
-	 * depends the attributes that are to be populated to the record.
-	 * @param array $attributes list of attribute values for the active records.
-	 * @return Document the document
-	 * @since v1.0
-	 */
-	protected function instantiate($attributes)
-	{
-		if ($this->isCollectionHomogenous())
-		{
-			$class = $this->_class;
-		}
-		else
-		{
-			$class = isset($attributes['_class']) ? $attributes['_class'] : $this->_class;
-		}
-
-		// This is to avoid ovverwriting _class property
-		unset($attributes['_class']);
-
-		$model = new $class(null, $this->getLang());
-		$model->initEmbeddedDocuments();
-		foreach ($model->meta->fields() as $field => $value)
-		{
-			if (isset($attributes[$field]))
-			{
-				if ($model->meta->$field->i18n)
-				{
-					if (!is_array($attributes[$field]))
-					{
-						$attributes[$field] = [];
-					}
-
-					foreach (Yii::app()->languages as $lang => $langName)
-					{
-						if (isset($attributes[$field][$lang]))
-						{
-							$model->setAttribute($field, $attributes[$field][$lang], $lang);
-						}
-						else
-						{
-							$model->setAttribute($field, $model->meta->$field->default, $lang);
-						}
-					}
-				}
-				else
-				{
-					$model->setAttribute($field, $attributes[$field]);
-				}
-			}
-		}
-		return $model;
-	}
-
-	/**
 	 * Creates an Document with the given attributes.
 	 * This method is internally used by the find methods.
 	 * @param array $document attribute values (column name=>column value)
@@ -687,27 +330,27 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * Null is returned if the input data is false.
 	 * @since v1.0
 	 */
-	public function populateRecord($document, $callAfterFind = true)
-	{
-		if ($document !== null)
-		{
-			$model = $this->instantiate($document);
-			$model->setScenario('update');
-			$model->init();
-
-			$model->attachBehaviors($model->behaviors());
-
-			if ($callAfterFind)
-			{
-				$model->afterFind();
-			}
-			return $model;
-		}
-		else
-		{
-			return null;
-		}
-	}
+//	public function populateRecord($document, $callAfterFind = true)
+//	{
+//		if ($document !== null)
+//		{
+//			$model = $this->instantiate($document);
+//			$model->setScenario('update');
+//			$model->init();
+//
+//			$model->attachBehaviors($model->behaviors());
+//
+//			if ($callAfterFind)
+//			{
+//				$model->afterFind();
+//			}
+//			return $model;
+//		}
+//		else
+//		{
+//			return null;
+//		}
+//	}
 
 	/**
 	 * Creates a list of documents based on the input data.
@@ -720,25 +363,25 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * @return array list of active records.
 	 * @since v1.0
 	 */
-	public function populateRecords($cursor, $callAfterFind = true, $index = null)
-	{
-		$records = [];
-		foreach ($cursor as $attributes)
-		{
-			if (($record = $this->populateRecord($attributes, $callAfterFind)) !== null)
-			{
-				if ($index === null)
-				{
-					$records[] = $record;
-				}
-				else
-				{
-					$records[$record->$index] = $record;
-				}
-			}
-		}
-		return $records;
-	}
+//	public function populateRecords($cursor, $callAfterFind = true, $index = null)
+//	{
+//		$records = [];
+//		foreach ($cursor as $attributes)
+//		{
+//			if (($record = $this->populateRecord($attributes, $callAfterFind)) !== null)
+//			{
+//				if ($index === null)
+//				{
+//					$records[] = $record;
+//				}
+//				else
+//				{
+//					$records[$record->$index] = $record;
+//				}
+//			}
+//		}
+//		return $records;
+//	}
 
 	/**
 	 * Magic search method, provides basic search functionality.
@@ -750,44 +393,44 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * @return Document
 	 * @since v1.2.2
 	 */
-	public function search($caseSensitive = false)
-	{
-		$criteria = $this->getDbCriteria();
-
-		foreach ($this->getSafeAttributeNames() as $attribute)
-		{
-			if ($this->$attribute !== null && $this->$attribute !== '')
-			{
-				if (is_array($this->$attribute) || is_object($this->$attribute))
-				{
-					$criteria->$attribute = $this->$attribute;
-				}
-				else if (preg_match('/^(?:\s*(<>|<=|>=|<|>|=|!=|==))?(.*)$/', $this->$attribute, $matches))
-				{
-					$op = $matches[1];
-					$value = $matches[2];
-
-					if ($op === '=')
-					{
-						$op = '==';
-					}
-
-					if ($op !== '')
-					{
-						call_user_func([$criteria, $attribute], $op, is_numeric($value) ? floatval($value) : $value);
-					}
-					else
-					{
-						$criteria->$attribute = new MongoRegex($caseSensitive ? '/' . $this->$attribute . '/' : '/' . $this->$attribute . '/i');
-					}
-				}
-			}
-		}
-
-		$this->setDbCriteria($criteria);
-
-		return new DataProvider($this);
-	}
+//	public function search($caseSensitive = false)
+//	{
+//		$criteria = $this->getDbCriteria();
+//
+//		foreach ($this->getSafeAttributeNames() as $attribute)
+//		{
+//			if ($this->$attribute !== null && $this->$attribute !== '')
+//			{
+//				if (is_array($this->$attribute) || is_object($this->$attribute))
+//				{
+//					$criteria->$attribute = $this->$attribute;
+//				}
+//				else if (preg_match('/^(?:\s*(<>|<=|>=|<|>|=|!=|==))?(.*)$/', $this->$attribute, $matches))
+//				{
+//					$op = $matches[1];
+//					$value = $matches[2];
+//
+//					if ($op === '=')
+//					{
+//						$op = '==';
+//					}
+//
+//					if ($op !== '')
+//					{
+//						call_user_func([$criteria, $attribute], $op, is_numeric($value) ? floatval($value) : $value);
+//					}
+//					else
+//					{
+//						$criteria->$attribute = new MongoRegex($caseSensitive ? '/' . $this->$attribute . '/' : '/' . $this->$attribute . '/i');
+//					}
+//				}
+//			}
+//		}
+//
+//		$this->setDbCriteria($criteria);
+//
+//		return new DataProvider($this);
+//	}
 
 	/**
 	 * Returns the static model of the specified Document class.

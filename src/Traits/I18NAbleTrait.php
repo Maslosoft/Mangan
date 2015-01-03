@@ -8,9 +8,11 @@
 
 namespace Maslosoft\Mangan\Traits;
 
+use Maslosoft\Mangan\Interfaces\I18NAble;
+
 /**
  * I18NableTrait
- *
+ * @see I18NAble
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait I18NAbleTrait
