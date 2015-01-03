@@ -55,6 +55,12 @@ class DataProvider extends CDataProvider
 	public $model;
 
 	/**
+	 * Finder instance
+	 * @var Finder
+	 */
+	private $_finder = null;
+
+	/**
 	 * @var Criteria
 	 */
 	private $_criteria;
@@ -76,7 +82,7 @@ class DataProvider extends CDataProvider
 		if (is_string($modelClass))
 		{
 			$this->modelClass = $modelClass;
-			$this->model = $modelClass::model();
+			$this->model = new $modelClass;
 		}
 		else if ($modelClass instanceof Document)
 		{
@@ -87,7 +93,8 @@ class DataProvider extends CDataProvider
 		{
 			throw new ManganException('Invalid model type for ' . __CLASS__);
 		}
-		
+
+		$this->_finder = new Finder(new EntityManager($this->model));
 		$this->_criteria = $this->model->getDbCriteria();
 		if (isset($config['criteria']))
 		{
@@ -164,7 +171,7 @@ class DataProvider extends CDataProvider
 
 	/**
 	 * Fetches the data from the persistent data storage.
-	 * @return array list of data items
+	 * @return Document[]|Cursor list of data items
 	 * @since v1.0
 	 */
 	protected function fetchData()
@@ -191,7 +198,7 @@ class DataProvider extends CDataProvider
 			$sort->applyOrder($this->_criteria);
 		}
 
-		return $this->model->findAll($this->_criteria);
+		return $this->_finder->findAll($this->_criteria);
 	}
 
 	/**
@@ -225,7 +232,7 @@ class DataProvider extends CDataProvider
 	 */
 	public function calculateTotalItemCount()
 	{
-		return $this->model->count($this->_criteria);
+		return $this->_finder->count($this->_criteria);
 	}
 
 	/**

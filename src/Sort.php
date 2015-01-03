@@ -39,7 +39,7 @@ class Sort extends CSort
 	 * This method will use {@link directions} to determine which columns need to be sorted.
 	 * They will be put in the ORDER BY clause. If the criteria already has non-empty {@link EMongoRecordDataProvider::order} value,
 	 * the new value will be appended to it.
-	 * @param EMongoRecordDataProvider $criteria the query criteria
+	 * @param Criteria $criteria the query criteria
 	 */
 	public function applyOrder($criteria)
 	{
