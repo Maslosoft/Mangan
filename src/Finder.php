@@ -56,7 +56,7 @@ class Finder implements IFinder
 
 	/**
 	 * Constructor
-	 * @param EntityManage $em
+	 * @param EntityManager $em
 	 */
 	public function __construct(EntityManager $em)
 	{
@@ -242,8 +242,7 @@ class Finder implements IFinder
 	/**
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $condition query condition or criteria.
-	 * @param array $params parameters to be bound to an SQL statement.
+	 * @param Criteria $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
 	public function exists(Criteria $criteria)
@@ -254,7 +253,7 @@ class Finder implements IFinder
 	/**
 	 * Resets all scopes and criteria applied including default scope.
 	 *
-	 * @return Document
+	 * @return Finder
 	 * @since v1.0
 	 */
 	public function resetScope()
