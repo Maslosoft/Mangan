@@ -207,6 +207,51 @@ class Finder implements IFinder
 	}
 
 	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|Criteria $criteria query criteria.
+	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.0
+	 */
+	public function count($criteria = null)
+	{
+		$this->applyScopes($criteria);
+		return $this->em->getCollection()->count($criteria->getConditions());
+	}
+
+	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.2.2
+	 */
+	public function countByAttributes(array $attributes)
+	{
+		$criteria = new Criteria;
+		foreach ($attributes as $name => $value)
+		{
+			$criteria->$name = $value;
+		}
+
+		$this->applyScopes($criteria);
+
+		return $this->em->getCollection()->count($criteria->getConditions());
+	}
+
+	/**
+	 * Checks whether there is row satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $condition query condition or criteria.
+	 * @param array $params parameters to be bound to an SQL statement.
+	 * @return boolean whether there is row satisfying the specified condition.
+	 */
+	public function exists(Criteria $criteria)
+	{
+		return $this->count($criteria) > 0;
+	}
+
+	/**
 	 * Resets all scopes and criteria applied including default scope.
 	 *
 	 * @return Document

@@ -111,6 +111,42 @@ trait FinderTrait
 		return $this->_getFinder()->findAllByAttributes($attributes);
 	}
 
+	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|Criteria $criteria query criteria.
+	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.0
+	 */
+	public function count($criteria = null)
+	{
+		return $this->_getFinder()->count($criteria);
+	}
+
+	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.2.2
+	 */
+	public function countByAttributes(array $attributes)
+	{
+		return $this->_getFinder()->countByAttributes($attributes);
+	}
+
+		/**
+	 * Checks whether there is row satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $condition query condition or criteria.
+	 * @param array $params parameters to be bound to an SQL statement.
+	 * @return boolean whether there is row satisfying the specified condition.
+	 */
+	public function exists(Criteria $criteria)
+	{
+		return $this->_getFinder()->exists($criteria);
+	}
+
 	private function _getFinder()
 	{
 		if (null === $this->_finder)

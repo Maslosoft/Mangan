@@ -58,19 +58,18 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 
 	/**
 	 * Add scopes functionality.
-	 * @see Component::__call()
 	 * @since v1.0
 	 */
-	public function __call($name, $parameters)
-	{
-		$scopes = $this->scopes();
-		if (isset($scopes[$name]))
-		{
-			$this->getDbCriteria()->mergeWith($scopes[$name]);
-			return $this;
-		}
-//		return parent::__call($name, $parameters);
-	}
+
+//	public function __call($name, $parameters)
+//	{
+//		$scopes = $this->scopes();
+//		if (isset($scopes[$name]))
+//		{
+//			$this->getDbCriteria()->mergeWith($scopes[$name]);
+//			return $this;
+//		}
+//	}
 
 	/**
 	 * Constructor {@see setScenario()}.
@@ -84,7 +83,7 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 		$this->meta = ManganMeta::create($this);
 		$this->setLang($lang);
 
-// internally used by populateRecord() and model()
+		// internally used by populateRecord() and model()
 		if ($scenario == null)
 		{
 			return;
@@ -92,11 +91,6 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 
 		$this->setScenario($scenario);
 		$this->init();
-
-		$this->attachBehaviors($this->behaviors());
-		$this->afterConstruct();
-
-		$this->initEmbeddedDocuments();
 	}
 
 	/**
@@ -174,10 +168,10 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * as an array whose keys must be properties of {@link Criteria}.
 	 * @since v1.0
 	 */
-	public function scopes()
-	{
-		return [];
-	}
+//	public function scopes()
+//	{
+//		return [];
+//	}
 
 	/**
 	 * Returns the default named scope that should be implicitly applied to all queries for this model.
@@ -188,10 +182,10 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * of {@link Criteria}.
 	 * @since v1.2.2
 	 */
-	public function defaultScope()
-	{
-		return [];
-	}
+//	public function defaultScope()
+//	{
+//		return [];
+//	}
 
 	/**
 	 * Resets all scopes and criteria applied including default scope.
@@ -199,11 +193,11 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * @return Document
 	 * @since v1.0
 	 */
-	public function resetScope()
-	{
-		$this->_criteria = new Criteria();
-		return $this;
-	}
+//	public function resetScope()
+//	{
+//		$this->_criteria = new Criteria();
+//		return $this;
+//	}
 
 	/**
 	 * Applies the query scopes to the given criteria.
@@ -212,72 +206,27 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * @param Criteria|array $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
 	 * @since v1.2.2
 	 */
-	public function applyScopes(&$criteria)
-	{
-		if ($criteria === null)
-		{
-			$criteria = new Criteria();
-		}
-		elseif (is_array($criteria))
-		{
-			$criteria = new Criteria($criteria);
-		}
-		elseif (!($criteria instanceof Criteria))
-		{
-			throw new MongoException('Cannot apply scopes to criteria');
-		}
-		if (($c = $this->getDbCriteria(false)) !== null)
-		{
-			$c->mergeWith($criteria);
-			$criteria = $c;
-			$this->_criteria = null;
-		}
-	}
-
-	/**
-	 * Counts all documents satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
-	 * @return integer Count of all documents satisfying the specified condition.
-	 * @since v1.0
-	 */
-	public function count($criteria = null)
-	{
-		$this->applyScopes($criteria);
-		return $this->getCollection()->count($criteria->getConditions());
-	}
-
-	/**
-	 * Counts all documents satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return integer Count of all documents satisfying the specified condition.
-	 * @since v1.2.2
-	 */
-	public function countByAttributes(array $attributes)
-	{
-		$criteria = new Criteria;
-		foreach ($attributes as $name => $value)
-		{
-			$criteria->$name = $value;
-		}
-
-		$this->applyScopes($criteria);
-
-		return $this->getCollection()->count($criteria->getConditions());
-	}
-
-	/**
-	 * Checks whether there is row satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $condition query condition or criteria.
-	 * @param array $params parameters to be bound to an SQL statement.
-	 * @return boolean whether there is row satisfying the specified condition.
-	 */
-	public function exists(Criteria $criteria)
-	{
-		return $this->count($criteria) > 0;
-	}
+//	public function applyScopes(&$criteria)
+//	{
+//		if ($criteria === null)
+//		{
+//			$criteria = new Criteria();
+//		}
+//		elseif (is_array($criteria))
+//		{
+//			$criteria = new Criteria($criteria);
+//		}
+//		elseif (!($criteria instanceof Criteria))
+//		{
+//			throw new MongoException('Cannot apply scopes to criteria');
+//		}
+//		if (($c = $this->getDbCriteria(false)) !== null)
+//		{
+//			$c->mergeWith($criteria);
+//			$criteria = $c;
+//			$this->_criteria = null;
+//		}
+//	}
 
 	/**
 	 * This method is invoked before an AR finder executes a find call.
@@ -291,19 +240,19 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * parameter which represents the current query criteria as passed to a find method of AR.
 	 * @since v1.0
 	 */
-	protected function beforeFind()
-	{
-		if ($this->hasEventHandler('onBeforeFind'))
-		{
-			$event = new ModelEvent($this);
-			$this->onBeforeFind($event);
-			return $event->isValid;
-		}
-		else
-		{
-			return true;
-		}
-	}
+//	protected function beforeFind()
+//	{
+//		if ($this->hasEventHandler('onBeforeFind'))
+//		{
+//			$event = new ModelEvent($this);
+//			$this->onBeforeFind($event);
+//			return $event->isValid;
+//		}
+//		else
+//		{
+//			return true;
+//		}
+//	}
 
 	/**
 	 * This method is invoked after each record is instantiated by a find method.
@@ -312,13 +261,13 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * Make sure you call the parent implementation so that the event is raised properly.
 	 * @since v1.0
 	 */
-	protected function afterFind()
-	{
-		if ($this->hasEventHandler('onAfterFind'))
-		{
-			$this->onAfterFind(new ModelEvent($this));
-		}
-	}
+//	protected function afterFind()
+//	{
+//		if ($this->hasEventHandler('onAfterFind'))
+//		{
+//			$this->onAfterFind(new ModelEvent($this));
+//		}
+//	}
 
 	/**
 	 * Creates an Document with the given attributes.

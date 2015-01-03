@@ -8,14 +8,20 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\Cursor;
+use Maslosoft\Mangan\Document;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface IFinder
 {
+
 	const EventBeforeFind = 'beforeFind';
 	const EventAfterFind = 'afterFind';
+
 	/**
 	 * Finds a single Document with the specified condition.
 	 * @param array|Criteria $criteria query criteria.
@@ -77,4 +83,31 @@ interface IFinder
 	 * @since v1.0
 	 */
 	public function findAllByAttributes(array $attributes);
+
+	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param array|Criteria $criteria query criteria.
+	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.0
+	 */
+	public function count($criteria = null);
+
+	/**
+	 * Counts all documents satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return integer Count of all documents satisfying the specified condition.
+	 * @since v1.2.2
+	 */
+	public function countByAttributes(array $attributes);
+
+	/**
+	 * Checks whether there is row satisfying the specified condition.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed $condition query condition or criteria.
+	 * @param array $params parameters to be bound to an SQL statement.
+	 * @return boolean whether there is row satisfying the specified condition.
+	 */
+	public function exists(Criteria $criteria);
 }
