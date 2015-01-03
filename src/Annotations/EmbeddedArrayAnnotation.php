@@ -2,8 +2,8 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 use Maslosoft\Mangan\Sanitizers\EmbeddedArray;
 
 /**
@@ -14,7 +14,7 @@ use Maslosoft\Mangan\Sanitizers\EmbeddedArray;
  * @template EmbeddedArray('${defaultClassName}')
  * @author Piotr
  */
-class EmbeddedArrayAnnotation extends MetaAnnotation
+class EmbeddedArrayAnnotation extends ManganAnnotation
 {
 
 	public $value = true;

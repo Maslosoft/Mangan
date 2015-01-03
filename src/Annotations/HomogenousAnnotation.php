@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 
 /**
  * HomogenousAnnotation
@@ -17,7 +17,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  * @Target('class')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class HomogenousAnnotation extends MetaAnnotation
+class HomogenousAnnotation extends ManganAnnotation
 {
 
 	public $value = true;

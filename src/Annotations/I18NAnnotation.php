@@ -3,10 +3,9 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use InvalidArgumentException;
-use Maslosoft\Addendum\Collections\MetaAnnotation;
 use Maslosoft\Mangan\Decorators\I18NDecorator;
-use Maslosoft\Mangan\ManganException;
 use Maslosoft\Mangan\Meta\I18NMeta;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 
 /**
  * This annotation indicates internationallized fields
@@ -14,7 +13,7 @@ use Maslosoft\Mangan\Meta\I18NMeta;
  * @Target('property')
  * @author Piotr
  */
-class I18NAnnotation extends MetaAnnotation
+class I18NAnnotation extends ManganAnnotation
 {
 
 	public $value = true;

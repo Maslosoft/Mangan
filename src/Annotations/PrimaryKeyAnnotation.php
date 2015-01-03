@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 
 /**
  * PrimaryKey
@@ -16,7 +16,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  * FIXME This currently set *field* meta, while it should set *type* meta
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class PrimaryKeyAnnotation extends MetaAnnotation
+class PrimaryKeyAnnotation extends ManganAnnotation
 {
 
 	public function init()

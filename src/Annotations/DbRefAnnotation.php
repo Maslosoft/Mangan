@@ -2,15 +2,15 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
 use Maslosoft\Mangan\Meta\DbRefMeta;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 
 /**
  * ReferenceAnnotation
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefAnnotation extends MetaAnnotation
+class DbRefAnnotation extends ManganAnnotation
 {
 
 	public $class = '';

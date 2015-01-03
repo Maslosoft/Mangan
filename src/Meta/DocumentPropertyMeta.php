@@ -37,6 +37,12 @@ class DocumentPropertyMeta extends MetaProperty
 	public $embedded = null;
 
 	/**
+	 * I18N metadata
+	 * @var I18NMeta
+	 */
+	public $i18n = null;
+
+	/**
 	 * Decorators
 	 * @var string[]
 	 */

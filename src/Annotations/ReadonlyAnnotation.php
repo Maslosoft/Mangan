@@ -2,13 +2,13 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 
 /**
  * Readonly indicator for mongo documents
  * @template Readonly
  */
-class ReadonlyAnnotation extends MetaAnnotation
+class ReadonlyAnnotation extends ManganAnnotation
 {
 
 	public $value = true;

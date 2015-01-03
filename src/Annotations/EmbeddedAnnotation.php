@@ -2,8 +2,8 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 use Maslosoft\Mangan\Sanitizers\Embedded;
 use stdClass;
 
@@ -21,7 +21,7 @@ use stdClass;
  * @template Embedded(${defaultClassName})
  * @author Piotr
  */
-class EmbeddedAnnotation extends MetaAnnotation
+class EmbeddedAnnotation extends ManganAnnotation
 {
 
 	public $value = true;

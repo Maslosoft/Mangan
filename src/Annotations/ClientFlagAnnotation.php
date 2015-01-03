@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Meta\ManganAnnotation;
 
 /**
  * ClientFlag
@@ -19,7 +19,7 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  * @Target('class')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ClientFlagAnnotation extends MetaAnnotation
+class ClientFlagAnnotation extends ManganAnnotation
 {
 
 	use \Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
