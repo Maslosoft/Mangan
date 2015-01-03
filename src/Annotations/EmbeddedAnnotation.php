@@ -15,7 +15,6 @@ use stdClass;
  * <ul>
  * 		<li><b>Embedded(Company\Product\EmbeddedClassName)</b>: Embed with namespaced class literal</li>
  * 		<li><b>Embedded(EmbeddedClassName)</b>: Embed with default class</li>
- * 		<li><b>Embedded({'EmbeddedClassName', params...})</b>: Embed with default class and optional params (currently none)</li>
  * </ul>
  * @Target('property')
  * @template Embedded(${defaultClassName})
@@ -28,19 +27,7 @@ class EmbeddedAnnotation extends ManganAnnotation
 
 	public function init()
 	{
-		$params = new stdClass();
-		if (is_array($this->value))
-		{
-			$className = array_shift($this->value);
-			$params = (object) $this->value;
-		}
-		else
-		{
-			$className = $this->value;
-		}
-		$this->_entity->embedded = $className;
-		$this->_entity->embeddedParams = $params;
-		$this->_entity->direct = false;
+		$this->_entity->embedded = $this->value;
 		$this->_entity->sanitizer = Embedded::class;
 		$this->_entity->decorators[] = EmbeddedDecorator::class;
 	}

@@ -31,8 +31,8 @@ class DocumentPropertyMeta extends MetaProperty
 	public $dbRef = null;
 
 	/**
-	 * Embedded document metadata
-	 * @var EmbeddedMeta
+	 * Embedded document default class
+	 * @var string
 	 */
 	public $embedded = null;
 
