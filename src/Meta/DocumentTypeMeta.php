@@ -26,6 +26,18 @@ class DocumentTypeMeta extends MetaType
 	  \Maslosoft\Mangan\Traits\Access\GetSet;
 
 	/**
+	 * Field label
+	 * @var string
+	 */
+	public $label = '';
+
+	/**
+	 * Description
+	 * @var string
+	 */
+	public $description = '';
+
+	/**
 	 * Collection name
 	 * @var string
 	 */

@@ -8,15 +8,16 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * PrimaryKey
  * TODO Make it possible to configure compound primary key. This should be made by using annotation on multiple fields
  * FIXME This currently set *field* meta, while it should set *type* meta
+ * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class PrimaryKeyAnnotation extends ManganAnnotation
+class PrimaryKeyAnnotation extends ManganPropertyAnnotation
 {
 
 	public function init()

@@ -9,6 +9,7 @@
 namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaProperty;
+use Maslosoft\Mangan\Sanitizers\ISanitizer;
 
 /**
  * DocumentPropertyMeta
@@ -25,6 +26,12 @@ class DocumentPropertyMeta extends MetaProperty
 	public $label = '';
 
 	/**
+	 * Description
+	 * @var string
+	 */
+	public $description = '';
+
+	/**
 	 * DB Ref metadata
 	 * @var DbRefMeta
 	 */
@@ -32,7 +39,7 @@ class DocumentPropertyMeta extends MetaProperty
 
 	/**
 	 * Embedded document default class
-	 * @var string
+	 * @var string|bool
 	 */
 	public $embedded = null;
 
@@ -47,4 +54,11 @@ class DocumentPropertyMeta extends MetaProperty
 	 * @var string[]
 	 */
 	public $decorators = [];
+
+	/**
+	 * Sanitizer
+	 * @var ISanitizer
+	 */
+	public $sanitizer = null;
+
 }

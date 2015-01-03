@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
 
 /**
  * CollectionName
@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Meta\ManganAnnotation;
  * @template CollectionName('${name}')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class CollectionNameAnnotation extends ManganAnnotation
+class CollectionNameAnnotation extends ManganTypeAnnotation
 {
 
 	public $value;

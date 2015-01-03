@@ -2,7 +2,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * If true, value should be saved in database.
@@ -12,7 +12,7 @@ use Maslosoft\Mangan\Meta\ManganAnnotation;
  * @template Persistent(${false})
  * @author Piotr
  */
-class PersistentAnnotation extends ManganAnnotation
+class PersistentAnnotation extends ManganPropertyAnnotation
 {
 
 	public $value = true;

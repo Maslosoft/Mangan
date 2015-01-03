@@ -3,9 +3,8 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 use Maslosoft\Mangan\Sanitizers\Embedded;
-use stdClass;
 
 /**
  * Annotation for embedded document in mongo
@@ -20,7 +19,7 @@ use stdClass;
  * @template Embedded(${defaultClassName})
  * @author Piotr
  */
-class EmbeddedAnnotation extends ManganAnnotation
+class EmbeddedAnnotation extends ManganPropertyAnnotation
 {
 
 	public $value = true;

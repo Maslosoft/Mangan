@@ -2,14 +2,14 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * Label
  * Set translated entity 'label' field
  * @template Label('${text}')
  */
-class LabelAnnotation extends ManganAnnotation
+class LabelAnnotation extends ManganPropertyAnnotation
 {
 
 	public $value = '';

@@ -18,4 +18,16 @@ use Maslosoft\Addendum\Collections\MetaMethod;
 class DocumentMethodMeta extends MetaMethod
 {
 
+	/**
+	 * Field label
+	 * @var string
+	 */
+	public $label = '';
+
+	/**
+	 * Description
+	 * @var string
+	 */
+	public $description = '';
+
 }

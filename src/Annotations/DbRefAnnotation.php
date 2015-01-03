@@ -3,14 +3,14 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Mangan\Meta\DbRefMeta;
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * ReferenceAnnotation
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefAnnotation extends ManganAnnotation
+class DbRefAnnotation extends ManganPropertyAnnotation
 {
 
 	public $class = '';

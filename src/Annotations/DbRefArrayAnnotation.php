@@ -8,6 +8,8 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+
 /**
  * DbRefArray
  *

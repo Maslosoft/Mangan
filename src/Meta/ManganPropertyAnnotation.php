@@ -8,20 +8,19 @@
 
 namespace Maslosoft\Mangan\Meta;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
-
 /**
- * ManganAnnotation
+ * ManganPropertyAnnotation
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-abstract class ManganAnnotation extends MetaAnnotation
+abstract class ManganPropertyAnnotation extends ManganAnnotation
 {
 
 	/**
-	 * Model metadata object
-	 * @var ManganMeta
+	 * Annotatins entity, it can be either class, property, or method
+	 * Its conrete annotation implementation responsibility to decide what to do with it.
+	 * @var DocumentPropertyMeta
 	 */
-	protected $_meta = null;
+	protected $_entity = null;
 
 }
