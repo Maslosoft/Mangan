@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d5a0226baa670912ae87a221ed9c1b9b",
+    "hash": "3061e5ead2b3ae2303bb56aea3fa2611",
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.0.0-alpha.1",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "c2a5c1c5b888a07478549445e6b6cffba2b07b23"
+                "reference": "548d0cec2a500895f1c80ea00678ab0030bdab1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/c2a5c1c5b888a07478549445e6b6cffba2b07b23",
-                "reference": "c2a5c1c5b888a07478549445e6b6cffba2b07b23",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/548d0cec2a500895f1c80ea00678ab0030bdab1e",
+                "reference": "548d0cec2a500895f1c80ea00678ab0030bdab1e",
                 "shasum": ""
             },
             "require": {
@@ -33,8 +33,8 @@
             },
             "type": "yii-extension",
             "autoload": {
-                "psr-0": {
-                    "Maslosoft\\Addendum\\": "./"
+                "psr-4": {
+                    "Maslosoft\\Addendum\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -57,7 +57,7 @@
                 "metadata",
                 "yii"
             ],
-            "time": "2014-12-19 13:05:24"
+            "time": "2015-01-03 15:05:51"
         },
         {
             "name": "maslosoft/embedi",
@@ -1885,7 +1885,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "maslosoft/addendum": 15,
         "maslosoft/mangantest": 20
     },
     "prefer-stable": false,
