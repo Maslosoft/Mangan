@@ -66,4 +66,10 @@ class DocumentPropertyMeta extends MetaProperty
 	 * @var bool
 	 */
 	public $persistent = true;
+
+	/**
+	 * Whenever property is read only
+	 * @var bool
+	 */
+	public $readonly = false;
 }
