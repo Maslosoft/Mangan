@@ -61,4 +61,9 @@ class DocumentPropertyMeta extends MetaProperty
 	 */
 	public $sanitizer = null;
 
+	/**
+	 * If field should be persistent, by default true
+	 * @var bool
+	 */
+	public $persistent = true;
 }

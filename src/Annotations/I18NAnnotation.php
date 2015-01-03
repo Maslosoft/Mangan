@@ -5,7 +5,7 @@ namespace Maslosoft\Mangan\Annotations;
 use InvalidArgumentException;
 use Maslosoft\Mangan\Decorators\I18NDecorator;
 use Maslosoft\Mangan\Meta\I18NMeta;
-use Maslosoft\Mangan\Meta\ManganAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * This annotation indicates internationallized fields
@@ -13,7 +13,7 @@ use Maslosoft\Mangan\Meta\ManganAnnotation;
  * @Target('property')
  * @author Piotr
  */
-class I18NAnnotation extends ManganAnnotation
+class I18NAnnotation extends ManganPropertyAnnotation
 {
 
 	public $value = true;
