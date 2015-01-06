@@ -10,7 +10,7 @@ namespace Maslosoft\Mangan\Sanitizers;
 
 /**
  * EmbeddedArray
- *
+ * @deprecated since version number
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class EmbeddedArray implements ISanitizer

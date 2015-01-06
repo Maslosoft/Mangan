@@ -10,7 +10,7 @@ namespace Maslosoft\Mangan\Sanitizers;
 
 /**
  * Embedded
- *
+ * @deprecated since version number
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Embedded implements ISanitizer

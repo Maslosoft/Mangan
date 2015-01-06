@@ -14,6 +14,7 @@ use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Interfaces\IFinder;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * FinderTrait
@@ -135,7 +136,7 @@ trait FinderTrait
 		return $this->_getFinder()->countByAttributes($attributes);
 	}
 
-		/**
+	/**
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $condition query condition or criteria.
@@ -151,7 +152,8 @@ trait FinderTrait
 	{
 		if (null === $this->_finder)
 		{
-			$this->_finder = new Finder(new EntityManager($this));
+			$finderClass = ManganMeta::create($this)->type()->finder? : Finder::class;
+			$this->_finder = new $finderClass(new EntityManager($this));
 		}
 		return $this->_finder;
 	}

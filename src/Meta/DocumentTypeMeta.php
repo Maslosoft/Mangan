@@ -68,6 +68,12 @@ class DocumentTypeMeta extends MetaType
 	public $homogenous = true;
 
 	/**
+	 * Finder class name to use in FinderTrait
+	 * @var string
+	 */
+	public $finder = null;
+
+	/**
 	 * Values of properties
 	 * @var mixed
 	 */

@@ -10,7 +10,7 @@ namespace Maslosoft\Mangan\Sanitizers;
 
 /**
  * DbRefArray
- *
+ * @deprecated since version number
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class DbRefArray implements ISanitizer
