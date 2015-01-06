@@ -12,6 +12,7 @@ use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\IEntityManager;
 use Maslosoft\Mangan\Interfaces\IFinder;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoException;
@@ -56,9 +57,9 @@ class Finder implements IFinder
 
 	/**
 	 * Constructor
-	 * @param EntityManager $em
+	 * @param IEntityManager $em
 	 */
-	public function __construct(EntityManager $em)
+	public function __construct(IEntityManager $em)
 	{
 		$this->model = $em->model;
 		$this->em = $em;
@@ -115,13 +116,13 @@ class Finder implements IFinder
 	 */
 	public function findAllByPk($pkValues, $criteria = null)
 	{
-		$criteria = new Criteria($criteria);
+		$pkCriteria = new Criteria($criteria);
 		foreach ($pkValues as $pkValue)
 		{
-			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
+			$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 		}
 
-		return $this->findAll($criteria);
+		return $this->findAll($pkCriteria);
 	}
 
 	/**
