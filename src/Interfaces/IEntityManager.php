@@ -23,12 +23,6 @@ interface IEntityManager
 	const EventBeforeDelete = 'beforeDelete';
 	const EventAfterDelete = 'afterDelete';
 
-	/**
-	 * Get model associated with current instance of entity manager
-	 * @return IModel
-	 */
-	public function getModel();
-
 	public function insert();
 
 	public function update(array $attributes = null, $modify = false);

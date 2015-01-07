@@ -35,13 +35,13 @@ class Finder implements IFinder
 	 *
 	 * @var EntityManager
 	 */
-	public $em = null;
+	private $em = null;
 
 	/**
 	 *
 	 * @var EventDispatcher
 	 */
-	public $ed = null;
+	private $ed = null;
 
 	/**
 	 * Finder criteria
@@ -57,11 +57,12 @@ class Finder implements IFinder
 
 	/**
 	 * Constructor
+	 * TODO This should have model as param, not entity manager
 	 * @param IEntityManager $em
 	 */
 	public function __construct(IEntityManager $em)
 	{
-		$this->model = $em->getModel();
+		$this->model = $em->model;
 		$this->em = $em;
 		$this->_class = get_class($this->model);
 	}
