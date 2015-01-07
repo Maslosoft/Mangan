@@ -10,7 +10,7 @@ services:
   - mongodb
 install:
   - composer self-update
-  - composer install --dev --prefer-source
+  - composer install --dev
   - composer update maslosoft/mangantest
 before_script:
 # Wait for mongodb
