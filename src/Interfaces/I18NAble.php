@@ -15,6 +15,9 @@ namespace Maslosoft\Mangan\Interfaces;
 interface I18NAble
 {
 
+	const EventBeforeLangChange = 'beforeLangChange';
+	const EventAfterLangChange = 'afterLangChange';
+
 	/**
 	 * Get language code
 	 * @return string Language code
@@ -35,7 +38,7 @@ interface I18NAble
 	public function getRawI18N();
 
 	/**
-	 * Set i18n values in all alnguages.
+	 * Set i18n values in all languages.
 	 * This method must keep `$values` for further use, by method `getRawI18N`.
 	 * @param mixed[] $values
 	 */
@@ -43,12 +46,14 @@ interface I18NAble
 
 	/**
 	 * This method must return available language codes
+	 * @deprecated since version number
 	 * @return string[] Array of language codes
 	 */
 	public function getLanguages();
 
 	/**
 	 * Set all available language codes
+	 * @deprecated since version number
 	 * @param string[] $languages
 	 */
 	public function setLangauges($languages);

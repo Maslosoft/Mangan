@@ -31,6 +31,7 @@ class PersistentDecorator implements IDecorator
 		if(ManganMeta::create($model)->$name->persistent)
 		{
 			$model->$name = $dbValue;
+			return false;
 		}
 	}
 
@@ -47,6 +48,7 @@ class PersistentDecorator implements IDecorator
 		if(ManganMeta::create($model)->$name->persistent)
 		{
 			$dbValue = $model->$name;
+			return false;
 		}
 	}
 

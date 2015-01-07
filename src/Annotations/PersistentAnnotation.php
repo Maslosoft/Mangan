@@ -2,6 +2,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Mangan\Decorators\PersistentDecorator;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
@@ -19,7 +20,8 @@ class PersistentAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->persistent = (bool)$this->value;
+		$this->_entity->persistent = (bool) $this->value;
+		$this->_entity->decorators[] = PersistentDecorator::class;
 	}
 
 }

@@ -31,7 +31,7 @@ class I18NDecorator implements IDecorator
 	{
 		if (!$model instanceof I18NAble)
 		{
-			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
+			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), I18NAble::class));
 		}
 		$model->setRawI18N($dbValue);
 		$model->$name = $dbValue[$model->getLang()];
@@ -50,7 +50,11 @@ class I18NDecorator implements IDecorator
 	{
 		if (!$model instanceof I18NAble)
 		{
-			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields', get_class($model), I18NAble::class));
+			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), I18NAble::class));
+		}
+		foreach($model->getRawI18N() as $code => $value)
+		{
+			$dbValue[$code] = $value;
 		}
 		$dbValue[$model->getLang()] = $model->$name;
 		return true;
