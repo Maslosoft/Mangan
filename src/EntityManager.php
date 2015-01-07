@@ -136,6 +136,11 @@ class EntityManager implements IEntityManager
 		 */
 	}
 
+	public function getModel()
+	{
+		return $this->model;
+	}
+
 	public function setAttributes($atributes)
 	{
 		/**

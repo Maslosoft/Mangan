@@ -61,7 +61,7 @@ class Finder implements IFinder
 	 */
 	public function __construct(IEntityManager $em)
 	{
-		$this->model = $em->model;
+		$this->model = $em->getModel();
 		$this->em = $em;
 		$this->_class = get_class($this->model);
 	}
