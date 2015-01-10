@@ -25,7 +25,7 @@ class DbRefManager
 	/**
 	 * Extract minimum set of data to create db reference
 	 * @param IModel $model
-	 * @param DbRef $field
+	 * @param string $field
 	 */
 	public static function extractRef($model, $field)
 	{
@@ -58,9 +58,12 @@ class DbRefManager
 		return $dbRef;
 	}
 
-//	public static function createModel($mod)
-
-	public static function save($referenced, $dbRef)
+	/**
+	 * Save referenced model
+	 * @param IModel $referenced
+	 * @param DbRef $dbRef
+	 */
+	public static function save($referenced, DbRef $dbRef)
 	{
 		// Ensure ref is same as referenced model
 		foreach ($dbRef->fields as $name => $value)

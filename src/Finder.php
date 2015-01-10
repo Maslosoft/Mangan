@@ -78,7 +78,7 @@ class Finder implements IFinder
 	public static function create($model)
 	{
 		$finderClass = ManganMeta::create($model)->type()->finder? : Finder::class;
-		return new $finderClass(new EntityManager($model));
+		return new $finderClass(EntityManager::create($model));
 	}
 
 	/**

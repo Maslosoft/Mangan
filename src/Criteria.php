@@ -346,10 +346,7 @@ class Criteria extends Component
 
 	/**
 	 * Return selected fields
-	 *
-	 * @param boolean $forCursor MongoCursor::fields() method requires
-	 * the fields to be specified as a hashmap. When this parameter is set
-	 * to true, then we'll return the fields in this format.
+	 * @return bool[] Fields used for select
 	 * @since v1.3.1
 	 */
 	public function getSelect()

@@ -84,8 +84,7 @@ interface IEntityManager
 	/**
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $condition query criteria.
+	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteAll($criteria = null);

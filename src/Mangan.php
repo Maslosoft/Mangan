@@ -113,7 +113,6 @@ class Mangan
 	 * Get instance of Mangan component
 	 * @new
 	 * @param string $connectionId
-	 * @param mixed[] $config
 	 * @return Mangan
 	 */
 	public static function instance($connectionId = self::DefaultConnectionId)

@@ -15,7 +15,6 @@ use CFileHelper;
 use Exception;
 use MongoGridFSFile;
 use PHPThumb\GD;
-use PhpThumbFactory;
 
 /**
  * Class for storing embedded images
@@ -39,9 +38,7 @@ class Image extends File
 
 	/**
 	 * Get resized image
-	 * @param int $width
-	 * @param int $height
-	 * @param bool $adaptive If true adaptive (with crop) resize will be used, if false best match scalling will be used
+	 * @param ImageParams $params
 	 * @return MongoGridFSFile
 	 */
 	public function get(ImageParams $params = null)
