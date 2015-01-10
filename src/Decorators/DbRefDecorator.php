@@ -35,7 +35,7 @@ class DbRefDecorator implements IDecorator
 		$referenced = new $dbRef->class;
 		$finder = new Finder(new EntityManager($referenced));
 
-		$finder->findByAttributes($dbRef->fields);
+		$model->$name = $finder->findByAttributes($dbRef->fields);
 	}
 
 	public function write($model, $name, &$dbValue)
