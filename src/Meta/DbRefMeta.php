@@ -38,7 +38,7 @@ class DbRefMeta extends BaseMeta
 	 * Target document field name
 	 * @var string
 	 */
-	public $field = '_id';
+	public $field = '';
 
 	/**
 	 * Whenever referenced objects should be updated on save of main document
