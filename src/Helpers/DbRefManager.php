@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;

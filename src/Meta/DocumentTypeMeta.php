@@ -9,10 +9,12 @@
 namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaType;
+use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\ManganException;
 use ReflectionClass;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Model meta container
@@ -68,10 +70,18 @@ class DocumentTypeMeta extends MetaType
 	public $homogenous = true;
 
 	/**
-	 * Finder class name to use in FinderTrait
+	 * Finder class name to return by Finder from create method
+	 * @see Finder::create()
 	 * @var string
 	 */
 	public $finder = null;
+
+	/**
+	 * Entity Manager class name to return by EntityManager from create method
+	 * @see EntityManager::create()
+	 * @var string
+	 */
+	public $entityManager = null;
 
 	/**
 	 * Values of properties

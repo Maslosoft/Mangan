@@ -8,12 +8,14 @@
 
 namespace Maslosoft\Mangan\Model;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+
 /**
  * DbRef
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRef
+class DbRef implements IAnnotated
 {
 
 	public $class = '';

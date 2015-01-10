@@ -15,6 +15,7 @@ use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
+use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Interfaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
@@ -134,6 +135,19 @@ class EntityManager implements IEntityManager
 		  }
 		 *
 		 */
+	}
+
+	/**
+	 * Create model related entity manager.
+	 * This will create customized entity manger if defined in model with EntityManager annotation.
+	 * If no custom entity manager is defined this will return default EntityManager.
+	 * @param IModel $model
+	 * @return IEntityManager
+	 */
+	public static function create($model)
+	{
+		$emClass = ManganMeta::create($model)->type()->entityManager? : EntityManager::class;
+		return new $emClass($model);
 	}
 
 	public function setAttributes($atributes)

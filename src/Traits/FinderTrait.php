@@ -152,8 +152,7 @@ trait FinderTrait
 	{
 		if (null === $this->_finder)
 		{
-			$finderClass = ManganMeta::create($this)->type()->finder? : Finder::class;
-			$this->_finder = new $finderClass(new EntityManager($this));
+			$this->_finder = Finder::create($this);
 		}
 		return $this->_finder;
 	}

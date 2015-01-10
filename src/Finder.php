@@ -14,6 +14,7 @@ use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
 use Maslosoft\Mangan\Interfaces\IFinder;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoException;
 
@@ -65,6 +66,19 @@ class Finder implements IFinder
 		$this->model = $em->model;
 		$this->em = $em;
 		$this->_class = get_class($this->model);
+	}
+
+	/**
+	 * Create model related finder.
+	 * This will create customized finder if defined in model with Finder annotation.
+	 * If no custom finder is defined this will return default Finder.
+	 * @param IModel $model
+	 * @return IFinder
+	 */
+	public static function create($model)
+	{
+		$finderClass = ManganMeta::create($model)->type()->finder? : Finder::class;
+		return new $finderClass(new EntityManager($model));
 	}
 
 	/**

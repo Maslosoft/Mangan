@@ -11,20 +11,19 @@ namespace Maslosoft\Mangan\Annotations;
 use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
 
 /**
- * FinderAnnotation
- * 
- * @template Finder(${finderClassLiteral})
+ * Set custom entity manager class
  * @Target('class')
+ * @template EntityManager(${entityManagerLiteral})
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class FinderAnnotation extends ManganTypeAnnotation
+class EntityManagerAnnotation extends ManganTypeAnnotation
 {
 
 	public $value = null;
 
 	public function init()
 	{
-		$this->_entity->finder = $this->value;
+		$this->_entity->entityManager = $this->value;
 	}
 
 }
