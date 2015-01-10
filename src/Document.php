@@ -13,13 +13,10 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Core\Component;
-use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\IActiveRecord;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use MongoCursor;
 use MongoDB;
-use MongoException;
 use MongoId;
 
 /**
@@ -33,7 +30,8 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 
 	use \Maslosoft\Mangan\Traits\EntityManagerTrait,
 	  \Maslosoft\Mangan\Traits\FinderTrait,
-	  \Maslosoft\Mangan\Traits\CollectionNameTrait;
+	  \Maslosoft\Mangan\Traits\CollectionNameTrait,
+	  \Maslosoft\Mangan\Traits\WithCriteriaTrait;
 
 	/**
 	 * Mongo id field
@@ -54,13 +52,11 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 	 * @var string
 	 */
 	public $id;
-	private $_criteria = null; // query criteria (used by finder only)
 
 	/**
 	 * Add scopes functionality.
 	 * @since v1.0
 	 */
-
 //	public function __call($name, $parameters)
 //	{
 //		$scopes = $this->scopes();
@@ -91,48 +87,6 @@ abstract class Document extends EmbeddedDocument implements IActiveRecord
 
 		$this->setScenario($scenario);
 		$this->init();
-	}
-
-	/**
-	 * Returns the mongo criteria associated with this model.
-	 * @param boolean $createIfNull whether to create a criteria instance if it does not exist. Defaults to true.
-	 * @return Criteria the query criteria that is associated with this model.
-	 * This criteria is mainly used by {@link scopes named scope} feature to accumulate
-	 * different criteria specifications.
-	 * @since v1.0
-	 */
-	public function getDbCriteria($createIfNull = true)
-	{
-		if ($this->_criteria === null)
-		{
-			if (($c = $this->defaultScope()) !== [] || $createIfNull)
-			{
-				$this->_criteria = new Criteria($c);
-			}
-		}
-		return $this->_criteria;
-	}
-
-	/**
-	 * Set girrent object, this will override previous criteria
-	 *
-	 * @param Criteria $criteria
-	 * @since v1.0
-	 */
-	public function setDbCriteria($criteria)
-	{
-		if (is_array($criteria))
-		{
-			$this->_criteria = new Criteria($criteria);
-		}
-		else if ($criteria instanceof Criteria)
-		{
-			$this->_criteria = $criteria;
-		}
-		else
-		{
-			$this->_criteria = new Criteria();
-		}
 	}
 
 	/**

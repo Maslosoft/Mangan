@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use CDataProvider;
+use Maslosoft\Mangan\Interfaces\IWithCriteria;
 
 /**
  * Mongo document data provider
@@ -84,7 +85,7 @@ class DataProvider extends CDataProvider
 			$this->modelClass = $modelClass;
 			$this->model = new $modelClass;
 		}
-		else if ($modelClass instanceof Document)
+		elseif (is_object($modelClass))
 		{
 			$this->modelClass = get_class($modelClass);
 			$this->model = $modelClass;
@@ -95,7 +96,10 @@ class DataProvider extends CDataProvider
 		}
 
 		$this->_finder = new Finder(new EntityManager($this->model));
-		$this->_criteria = $this->model->getDbCriteria();
+		if ($this->model instanceof IWithCriteria)
+		{
+			$this->_criteria = $this->model->getDbCriteria();
+		}
 		if (isset($config['criteria']))
 		{
 			$this->_criteria->mergeWith($config['criteria']);
@@ -114,7 +118,7 @@ class DataProvider extends CDataProvider
 		{
 			$this->$key = $value;
 		}
-		
+
 		if ($this->keyField !== null)
 		{
 			if (is_array($this->keyField))
@@ -140,15 +144,19 @@ class DataProvider extends CDataProvider
 
 	/**
 	 * Sets the query criteria.
-	 * @param array $value the query criteria. Array representing the MongoDB query criteria.
+	 * @param Criteria|array $criteria the query criteria. Array representing the MongoDB query criteria.
 	 * @since v1.0
 	 */
 	public function setCriteria($criteria)
 	{
 		if (is_array($criteria))
+		{
 			$this->_criteria = new Criteria($criteria);
-		else if ($criteria instanceof Criteria)
+		}
+		elseif ($criteria instanceof Criteria)
+		{
 			$this->_criteria = $criteria;
+		}
 	}
 
 	/**
@@ -213,6 +221,7 @@ class DataProvider extends CDataProvider
 
 	/**
 	 * Fetches the data item keys from the persistent data storage.
+	 * TODO Add support for composite pk
 	 * @return array list of data item keys.
 	 * @since v1.0
 	 */
@@ -220,7 +229,9 @@ class DataProvider extends CDataProvider
 	{
 		$keys = [];
 		foreach ($this->getData() as $i => $data)
+		{
 			$keys[$i] = $data->{$this->keyField};
+		}
 
 		return $keys;
 	}
@@ -247,10 +258,15 @@ class DataProvider extends CDataProvider
 		$directions = [];
 		foreach ($segs as $seg)
 		{
+			$matches = [];
 			if (preg_match('/(.*?)(\s+(desc|asc))?$/i', trim($seg), $matches))
+			{
 				$directions[$matches[1]] = isset($matches[3]) && !strcasecmp($matches[3], 'desc');
+			}
 			else
+			{
 				$directions[trim($seg)] = false;
+			}
 		}
 		return $directions;
 	}

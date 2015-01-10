@@ -16,11 +16,9 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Collections\Meta;
-use Maslosoft\Mangan\Core\Component;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\IActiveDocument;
-use Maslosoft\Mangan\Model\Model;
 use Yii;
 
 /**
