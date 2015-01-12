@@ -14,6 +14,7 @@ use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
 use Maslosoft\Mangan\Interfaces\IFinder;
+use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 use MongoException;
@@ -34,15 +35,9 @@ class Finder implements IFinder
 
 	/**
 	 *
-	 * @var EntityManager
+	 * @var IEntityManager
 	 */
 	private $em = null;
-
-	/**
-	 *
-	 * @var EventDispatcher
-	 */
-	private $ed = null;
 
 	/**
 	 * Finder criteria
@@ -51,7 +46,7 @@ class Finder implements IFinder
 	private $_criteria = null;
 
 	/**
-	 * Current mdoel class
+	 * Current model class
 	 * @var string
 	 */
 	private $_class = '';

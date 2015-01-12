@@ -11,8 +11,7 @@ namespace Maslosoft\Mangan\Decorators;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Model\DbRef as DbRef2;
-use Maslosoft\Mangan\Sanitizers\DbRef;
+use Maslosoft\Mangan\Model\DbRef;
 use Maslosoft\Mangan\Transformers\FromDocument;
 use Maslosoft\Mangan\Transformers\FromRawArray;
 
@@ -41,7 +40,7 @@ class DbRefArrayDecorator implements IDecorator
 		$refs = [];
 		foreach ($dbValues as $key => $dbValue)
 		{
-			$dbValue['_class'] = DbRef2::class;
+			$dbValue['_class'] = DbRef::class;
 			$dbRef = FromRawArray::toDocument($dbValue);
 			/* @var $dbRef DbRef */
 			$referenced = new $dbRef->class;
