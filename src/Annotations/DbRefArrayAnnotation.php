@@ -8,14 +8,24 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 
 /**
- * DbRefArray
- *
+ * DB reference array annotation
+ * @template DbRefArray(${class}, ${updatable})
+ * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class DbRefArrayAnnotation extends DbRefAnnotation
 {
+
+	public function init()
+	{
+		$refMeta = $this->_createMeta();
+		$refMeta->single = false;
+		$refMeta->isArray = true;
+		$this->_entity->dbRef = $refMeta;
+		$this->_entity->decorators[] = DbRefArrayDecorator::class;
+	}
 
 }

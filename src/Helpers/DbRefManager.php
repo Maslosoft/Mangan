@@ -26,29 +26,16 @@ class DbRefManager
 	 * Extract minimum set of data to create db reference
 	 * @param IModel $model
 	 * @param string $field
+	 * @param IModel $referenced
 	 */
-	public static function extractRef($model, $field)
+	public static function extractRef($model, $field, $referenced = null)
 	{
-		$referenced = $model->$field;
-		$meta = ManganMeta::create($model);
-		$fieldMeta = $meta->field($field);
+		if(null === $referenced)
+		{
+			$referenced = $model->$field;
+		}
 		$dbRef = new DbRef();
-		if ($fieldMeta->dbRef->field)
-		{
-			$refFields = [];
-			if (is_array($fieldMeta->dbRef->field))
-			{
-				$refFields = $fieldMeta->dbRef->field;
-			}
-			else
-			{
-				$refFields = [$fieldMeta->dbRef->field];
-			}
-		}
-		else
-		{
-			$refFields = PkManager::prepareFromModel($referenced)->getConditions();
-		}
+		$refFields = PkManager::prepareFromModel($referenced)->getConditions();
 		$sanitizer = new Sanitizer($model);
 		foreach ($refFields as $name => $value)
 		{

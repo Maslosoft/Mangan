@@ -26,8 +26,10 @@ class DbRefDecorator implements IDecorator
 
 	public function read($model, $name, &$dbValue)
 	{
-		if(!$dbValue)
+		if (!$dbValue)
 		{
+			$fieldMeta = ManganMeta::create($model)->field($name);
+			$model->$name = $fieldMeta->default;
 			return;
 		}
 		$dbRef = FromRawArray::toDocument($dbValue);
@@ -40,10 +42,14 @@ class DbRefDecorator implements IDecorator
 
 	public function write($model, $name, &$dbValue)
 	{
+		if(!$model->$name)
+		{
+			return;
+		}
 		$dbRef = DbRefManager::extractRef($model, $name);
 		$referenced = $model->$name;
 		$fieldMeta = ManganMeta::create($model)->field($name);
-		if($fieldMeta->dbRef->updatable)
+		if ($fieldMeta->dbRef->updatable)
 		{
 			DbRefManager::save($referenced, $dbRef);
 		}
