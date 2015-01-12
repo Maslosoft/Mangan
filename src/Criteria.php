@@ -118,9 +118,13 @@ class Criteria extends Component
 				{
 					$fieldNameArray = explode('.', $fieldName);
 					if (count($fieldNameArray) === 1)
+					{
 						$fieldName = array_shift($fieldNameArray);
+					}
 					else
+					{
 						$fieldName = array_pop($fieldNameArray);
+					}
 
 					foreach ($conditions as $operator => $value)
 					{
@@ -132,18 +136,30 @@ class Criteria extends Component
 				}
 
 			if (isset($criteria['select']))
+			{
 				$this->select($criteria['select']);
+			}
 			if (isset($criteria['limit']))
+			{
 				$this->limit($criteria['limit']);
+			}
 			if (isset($criteria['offset']))
+			{
 				$this->offset($criteria['offset']);
+			}
 			if (isset($criteria['sort']))
+			{
 				$this->setSort($criteria['sort']);
+			}
 			if (isset($criteria['useCursor']))
+			{
 				$this->setUseCursor($criteria['useCursor']);
+			}
 		}
-		else if ($criteria instanceof Criteria)
+		elseif ($criteria instanceof Criteria)
+		{
 			$this->mergeWith($criteria);
+		}
 	}
 
 	/**
@@ -158,9 +174,13 @@ class Criteria extends Component
 	public function mergeWith($criteria)
 	{
 		if (is_array($criteria))
+		{
 			$criteria = new Criteria($criteria);
+		}
 		else if (empty($criteria))
+		{
 			return $this;
+		}
 
 		$opTable = array_values(self::$operators);
 
@@ -174,27 +194,45 @@ class Criteria extends Component
 				if (isset($this->_conditions[$fieldName]) && is_array($this->_conditions[$fieldName]))
 				{
 					foreach ($this->_conditions[$fieldName] as $operator => $value)
+					{
 						if (!in_array($operator, $opTable))
+						{
 							unset($this->_conditions[$fieldName][$operator]);
+						}
+					}
 				}
 				else
+				{
 					$this->_conditions[$fieldName] = [];
+				}
 
 				foreach ($conds as $operator => $value)
+				{
 					$this->_conditions[$fieldName][$operator] = $value;
+				}
 			}
 			else
+			{
 				$this->_conditions[$fieldName] = $conds;
+			}
 		}
 
 		if (!empty($criteria->_limit))
+		{
 			$this->_limit = $criteria->_limit;
+		}
 		if (!empty($criteria->_offset))
+		{
 			$this->_offset = $criteria->_offset;
+		}
 		if (!empty($criteria->_sort))
+		{
 			$this->_sort = array_merge($this->_sort, $criteria->_sort);
+		}
 		if (!empty($criteria->_select))
+		{
 			$this->_select = array_merge($this->_select, $criteria->_select);
+		}
 
 		return $this;
 	}
@@ -239,7 +277,9 @@ class Criteria extends Component
 			return $this;
 		}
 		else
+		{
 			return parent::__call($fieldName, $parameters);
+		}
 	}
 
 	/**
@@ -396,7 +436,9 @@ class Criteria extends Component
 	public function select(array $fieldList = null)
 	{
 		if ($fieldList !== null)
+		{
 			$this->setSelect(array_merge($this->_select, $fieldList));
+		}
 		return $this;
 	}
 
@@ -463,7 +505,9 @@ class Criteria extends Component
 		else
 		{
 			if (!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
+			{
 				$this->_conditions[$fieldName] = [];
+			}
 
 			if ($op != self::$operators['equals'])
 			{
@@ -477,7 +521,9 @@ class Criteria extends Component
 				$this->_conditions[$fieldName][$op] = $value;
 			}
 			else
+			{
 				$this->_conditions[$fieldName] = $value;
+			}
 		}
 		return $this;
 	}
