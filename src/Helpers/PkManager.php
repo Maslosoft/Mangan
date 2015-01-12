@@ -125,7 +125,7 @@ class PkManager
 	private static function _prepareField($model, $name, $value, Criteria &$criteria)
 	{
 		$sanitizer = new Sanitizer($model);
-		$criteria->$name = $sanitizer->write($name, $value);
+		$criteria->addCond($name, '==', $sanitizer->write($name, $value));
 	}
 
 }

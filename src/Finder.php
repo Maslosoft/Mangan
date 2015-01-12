@@ -117,7 +117,7 @@ class Finder implements IFinder
 		$pkCriteria = new Criteria($criteria);
 		$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
-		return $this->find($criteria);
+		return $this->find($pkCriteria);
 	}
 
 	/**
