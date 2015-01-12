@@ -18,7 +18,6 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 {
 
 	public $class;
-	public $field;
 	public $updatable;
 	public $value;
 

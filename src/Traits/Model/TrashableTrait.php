@@ -82,7 +82,7 @@ trait TrashableTrait
 		Event::trigger($this->data, ITrash::EventBeforeRestore);
 
 		$em->save();
-		$finder = new Finder($em);
+		$finder = new Finder($this->data);
 		$model = $finder->find(PkManager::prepareFromModel($this->data));
 		if (!$model)
 		{

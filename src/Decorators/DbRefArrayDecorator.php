@@ -44,7 +44,7 @@ class DbRefArrayDecorator implements IDecorator
 			$dbRef = FromRawArray::toDocument($dbValue);
 			/* @var $dbRef DbRef */
 			$referenced = new $dbRef->class;
-			$finder = new Finder(new EntityManager($referenced));
+			$finder = new Finder($referenced);
 
 			$refs[$key] = $finder->findByAttributes($dbRef->fields);
 		}

@@ -95,7 +95,7 @@ class DataProvider extends CDataProvider
 			throw new ManganException('Invalid model type for ' . __CLASS__);
 		}
 
-		$this->_finder = new Finder(new EntityManager($this->model));
+		$this->_finder = new Finder($this->model);
 		if ($this->model instanceof IWithCriteria)
 		{
 			$this->_criteria = $this->model->getDbCriteria();

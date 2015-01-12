@@ -59,12 +59,13 @@ class Finder implements IFinder
 	/**
 	 * Constructor
 	 * TODO This should have model as param, not entity manager
+	 * @param object $model Model instance
 	 * @param IEntityManager $em
 	 */
-	public function __construct(IEntityManager $em)
+	public function __construct($model, $em = null)
 	{
-		$this->model = $em->model;
-		$this->em = $em;
+		$this->model = $model;
+		$this->em = $em? : EntityManager::create($model);
 		$this->_class = get_class($this->model);
 	}
 
@@ -78,7 +79,7 @@ class Finder implements IFinder
 	public static function create($model)
 	{
 		$finderClass = ManganMeta::create($model)->type()->finder? : Finder::class;
-		return new $finderClass(EntityManager::create($model));
+		return new $finderClass($model);
 	}
 
 	/**
