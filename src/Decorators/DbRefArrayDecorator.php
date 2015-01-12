@@ -8,10 +8,10 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Model\DbRef as DbRef2;
 use Maslosoft\Mangan\Sanitizers\DbRef;
 use Maslosoft\Mangan\Transformers\FromDocument;
 use Maslosoft\Mangan\Transformers\FromRawArray;
@@ -41,11 +41,11 @@ class DbRefArrayDecorator implements IDecorator
 		$refs = [];
 		foreach ($dbValues as $key => $dbValue)
 		{
+			$dbValue['_class'] = DbRef2::class;
 			$dbRef = FromRawArray::toDocument($dbValue);
 			/* @var $dbRef DbRef */
 			$referenced = new $dbRef->class;
-			$finder = new Finder($referenced);
-			$found = $finder->findByAttributes($dbRef->fields);
+			$found = (new Finder($referenced))->findByPk($dbRef->pk);
 			if(!$found)
 			{
 				continue;
@@ -58,17 +58,21 @@ class DbRefArrayDecorator implements IDecorator
 	public function write($model, $name, &$dbValue)
 	{
 		$fieldMeta = ManganMeta::create($model)->field($name);
+		$dbValue = $fieldMeta->default;
+		
+		// Empty
 		if (!$model->$name)
 		{
-			$dbValue = $fieldMeta->default;
 			return;
 		}
+
+		// Bogus data
 		if (!is_array($model->$name))
 		{
-			$dbValue = $fieldMeta->default;
 			return;
 		}
-		$dbValue = $fieldMeta->default;
+
+		// Store DbRefs and optionally referenced model
 		foreach ($model->$name as $key => $referenced)
 		{
 			$dbRef = DbRefManager::extractRef($model, $name, $referenced);
@@ -76,7 +80,7 @@ class DbRefArrayDecorator implements IDecorator
 			{
 				DbRefManager::save($referenced, $dbRef);
 			}
-			$dbValue[$key] = FromDocument::toRawArray($dbRef);
+			$dbValue[$key] = FromDocument::toRawArray($dbRef, false);
 		}
 	}
 

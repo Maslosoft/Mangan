@@ -66,7 +66,7 @@ class PkManager
 	/**
 	 * Get primary key from model
 	 * @param IModel $model
-	 * @return ObjectId|mixed|mixed[]
+	 * @return MongoId|mixed|mixed[]
 	 */
 	public static function getFromModel($model)
 	{
@@ -83,6 +83,35 @@ class PkManager
 		else
 		{
 			$pkValue = $sanitizer->write($pkField, $model->$pkField);
+		}
+		return $pkValue;
+	}
+
+	/**
+	 * Apply pk value to model
+	 * @param IModel $model
+	 * @param MongoId|mixed|mixed[] $pkValue
+	 * @return type
+	 * @throws CriteriaException
+	 */
+	public static function applyToModel($model, $pkValue)
+	{
+		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
+		$sanitizer = new Sanitizer($model);
+		if (is_array($pkField))
+		{
+			foreach ($pkField as $name)
+			{
+				if (!array_key_exists($name, $pkValue))
+				{
+					throw new CriteriaException(sprintf('Composite primary key field `%s` not specied for model `%s`, required fields: `%s`', $name, get_class($model), implode('`, `', $pkField)));
+				}
+				$model->$name = $sanitizer->read($name, $pkValue[$name]);
+			}
+		}
+		else
+		{
+			$model->$pkField = $sanitizer->read($pkField, $pkValue);
 		}
 		return $pkValue;
 	}

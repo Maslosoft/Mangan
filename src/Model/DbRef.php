@@ -18,7 +18,16 @@ use Maslosoft\Addendum\Interfaces\IAnnotated;
 class DbRef implements IAnnotated
 {
 
+	/**
+	 * Referenced object class name
+	 * @var string
+	 */
 	public $class = '';
-	public $fields = [];
+
+	/**
+	 * Primary key to retrieve object
+	 * @var ObjectId|mixed|mixed[]
+	 */
+	public $pk = null;
 
 }

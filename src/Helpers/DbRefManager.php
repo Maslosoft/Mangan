@@ -35,12 +35,7 @@ class DbRefManager
 			$referenced = $model->$field;
 		}
 		$dbRef = new DbRef();
-		$refFields = PkManager::prepareFromModel($referenced)->getConditions();
-		$sanitizer = new Sanitizer($model);
-		foreach ($refFields as $name => $value)
-		{
-			$dbRef->fields[$name] = $sanitizer->write($name, $value);
-		}
+		$dbRef->pk = PkManager::getFromModel($referenced);
 		$dbRef->class = get_class($referenced);
 		return $dbRef;
 	}
@@ -53,10 +48,7 @@ class DbRefManager
 	public static function save($referenced, DbRef $dbRef)
 	{
 		// Ensure ref is same as referenced model
-		foreach ($dbRef->fields as $name => $value)
-		{
-			$referenced->$name = $value;
-		}
+		PkManager::applyToModel($referenced, $dbRef->pk);
 		$em = new EntityManager($referenced);
 		$em->save();
 	}

@@ -32,12 +32,11 @@ class DbRefDecorator implements IDecorator
 			$model->$name = $fieldMeta->default;
 			return;
 		}
+		$dbValue['_class'] = DbRef::class;
 		$dbRef = FromRawArray::toDocument($dbValue);
 		/* @var $dbRef DbRef */
 		$referenced = new $dbRef->class;
-		$finder = new Finder($referenced);
-
-		$model->$name = $finder->findByAttributes($dbRef->fields);
+		$model->$name = (new Finder($referenced))->findByPk($dbRef->pk);
 	}
 
 	public function write($model, $name, &$dbValue)
@@ -53,7 +52,7 @@ class DbRefDecorator implements IDecorator
 		{
 			DbRefManager::save($referenced, $dbRef);
 		}
-		$dbValue = FromDocument::toRawArray($dbRef);
+		$dbValue = FromDocument::toRawArray($dbRef, false);
 	}
 
 }
