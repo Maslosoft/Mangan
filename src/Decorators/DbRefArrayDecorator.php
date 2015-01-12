@@ -8,7 +8,7 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -45,8 +45,12 @@ class DbRefArrayDecorator implements IDecorator
 			/* @var $dbRef DbRef */
 			$referenced = new $dbRef->class;
 			$finder = new Finder($referenced);
-
-			$refs[$key] = $finder->findByAttributes($dbRef->fields);
+			$found = $finder->findByAttributes($dbRef->fields);
+			if(!$found)
+			{
+				continue;
+			}
+			$refs[$key] = $found;
 		}
 		$model->$name = $refs;
 	}

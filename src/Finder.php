@@ -200,7 +200,7 @@ class Finder implements IFinder
 		$criteria = new Criteria();
 		foreach ($attributes as $name => $value)
 		{
-			$criteria->$name('==', $value);
+			$criteria->addCond($name, '==', $value);
 		}
 		return $this->find($criteria);
 	}

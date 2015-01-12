@@ -8,9 +8,11 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\CriteriaException;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -58,20 +60,31 @@ class PkManager
 	 */
 	public static function prepareFromModel($model)
 	{
+		return self::prepare($model, self::getFromModel($model));
+	}
+
+	/**
+	 * Get primary key from model
+	 * @param IModel $model
+	 * @return ObjectId|mixed|mixed[]
+	 */
+	public static function getFromModel($model)
+	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$pkValue = [];
+		$sanitizer = new Sanitizer($model);
 		if (is_array($pkField))
 		{
 			foreach ($pkField as $name)
 			{
-				$pkValue[$name] = $model->$name;
+				$pkValue[$name] = $sanitizer->write($name, $model->$name);
 			}
 		}
 		else
 		{
-			$pkValue = $model->$pkField;
+			$pkValue = $sanitizer->write($pkField, $model->$pkField);
 		}
-		return self::prepare($model, $pkValue);
+		return $pkValue;
 	}
 
 	/**
