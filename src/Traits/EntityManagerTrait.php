@@ -12,6 +12,7 @@ use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
 use Maslosoft\Mangan\Modifier;
+use MongoCollection;
 use MongoException;
 
 /**
@@ -162,6 +163,15 @@ trait EntityManagerTrait
 	public function refresh()
 	{
 		$this->_getEm()->refresh();
+	}
+
+	/**
+	 *
+	 * @return MongoCollection
+	 */
+	public function getCollection()
+	{
+		return $this->_getEm()->getCollection();
 	}
 
 	private function _getEm()

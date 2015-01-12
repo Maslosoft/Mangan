@@ -23,7 +23,7 @@ class FromDocument
 	/**
 	 * Returns the given object as an associative array
 	 * Fires beforeToArray and afterToArray events
-	 * @param IModel $document
+	 * @param IModel|object $document
 	 * @param bool $withClassName Whenever to include special _class field
 	 * @return array an associative array of the contents of this object
 	 * @since v1.0.8

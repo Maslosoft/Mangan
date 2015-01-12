@@ -38,7 +38,7 @@ class EntityManager implements IEntityManager
 
 	/**
 	 * Model
-	 * @var IAnnotated
+	 * @var IModel
 	 */
 	public $model = null;
 

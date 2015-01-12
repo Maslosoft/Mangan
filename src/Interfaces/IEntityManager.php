@@ -10,6 +10,8 @@ namespace Maslosoft\Mangan\Interfaces;
 
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Modifier;
+use MongoCollection;
+use MongoException;
 
 /**
  *
@@ -25,8 +27,30 @@ interface IEntityManager
 
 	public function insert();
 
+	/**
+	 * Updates the row represented by this active record.
+	 * All loaded attributes will be saved to the database.
+	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
+	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
+	 * meaning all attributes that are loaded from DB will be saved.
+	 * @param boolean modify if set true only selected attributes will be replaced, and not
+	 * the whole document
+	 * @return boolean whether the update is successful
+	 * @throws MongoException if the record is new
+	 * @throws MongoException on fail of update
+	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @since v1.0
+	 */
 	public function update(array $attributes = null, $modify = false);
 
+	/**
+	 * Atomic, in-place update method.
+	 *
+	 * @since v1.3.6
+	 * @param Modifier $modifier updating rules to apply
+	 * @param Criteria $criteria condition to limit updating rules
+	 * @return boolean
+	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null);
 
 	/**
@@ -95,4 +119,10 @@ interface IEntityManager
 	 * @since v1.0
 	 */
 	public function refresh();
+
+	/**
+	 * Get mongodb collection
+	 * @return MongoCollection PHP Driver MongoCollection instance
+	 */
+	public function getCollection();
 }
