@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Interfaces\IScenarios;
 
 /**
@@ -20,7 +21,7 @@ class ScenarioManager
 
 	/**
 	 * Set Scenario
-	 * @param IScenarios $model
+	 * @param IScenarios|IModel|object $model
 	 * @param string $scenario
 	 */
 	public static function setScenario($model, $scenario)
@@ -33,7 +34,7 @@ class ScenarioManager
 
 	/**
 	 * Get scenario
-	 * @param IScenarios $model
+	 * @param IScenarios|IModel|object $model
 	 * @return string Scenario, by default IScenarios::Insert
 	 */
 	public static function getScenario($model)

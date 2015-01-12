@@ -85,7 +85,12 @@ class EntityManager implements IEntityManager
 	private $_class = '';
 	private $_db = null;
 
-	public function __construct(IAnnotated $model)
+	/**
+	 * Create entity manager
+	 * @param IModel|object $model
+	 * @throws ManganException
+	 */
+	public function __construct($model)
 	{
 		$this->model = $model;
 		$this->_class = get_class($model);
@@ -240,7 +245,7 @@ class EntityManager implements IEntityManager
 	 * @since v1.3.6
 	 * @param Modifier $modifier updating rules to apply
 	 * @param Criteria $criteria condition to limit updating rules
-	 * @return boolean
+	 * @return boolean|mixed[]
 	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null)
 	{

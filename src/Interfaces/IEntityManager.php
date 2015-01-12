@@ -49,7 +49,7 @@ interface IEntityManager
 	 * @since v1.3.6
 	 * @param Modifier $modifier updating rules to apply
 	 * @param Criteria $criteria condition to limit updating rules
-	 * @return boolean
+	 * @return boolean|mixed[]
 	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null);
 
