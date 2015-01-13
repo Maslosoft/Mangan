@@ -57,4 +57,16 @@ interface I18NAble
 	 * @param string[] $languages
 	 */
 	public function setLangauges($languages);
+
+	/**
+	 * Get default language code
+	 * @param string $code
+	 */
+	public function getDefaultLanguage();
+
+	/**
+	 * Set default language code
+	 * @param string $code
+	 */
+	public function setDefaultLanguage($code);
 }

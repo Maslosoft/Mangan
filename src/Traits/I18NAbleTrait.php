@@ -82,6 +82,16 @@ trait I18NAbleTrait
 		$this->_rawI18N = $values;
 	}
 
+	public function getDefaultLanguage()
+	{
+		return $this->_defaultLanguage;
+	}
+
+	public function setDefaultLanguage($language)
+	{
+		$this->_defaultLanguage = $language;
+	}
+
 	/**
 	 * Change i18n attributes values to apropriate language
 	 * @param string $fromCode

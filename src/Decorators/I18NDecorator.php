@@ -35,7 +35,32 @@ class I18NDecorator implements IDecorator
 			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), I18NAble::class));
 		}
 		$model->setRawI18N($dbValue);
-		$model->$name = $dbValue[$model->getLang()];
+		$lang = $model->getLang();
+		if(array_key_exists($lang, $dbValue))
+		{
+			$model->$name = $dbValue[$lang];
+		}
+		else
+		{
+			$defaultLang = $model->getDefaultLanguage();
+			$i18nMeta = \Maslosoft\Mangan\Meta\ManganMeta::create($model)->field($name)->i18n;
+			if($i18nMeta->allowDefault && array_key_exists($defaultLang, $dbValue))
+			{
+				$model->$name = $dbValue[$defaultLang];
+				return true;
+			}
+			if($i18nMeta->allowAny)
+			{
+				foreach($dbValue as $value)
+				{
+					if($value)
+					{
+						$model->$name = $value;
+					}
+				}
+			}
+		}
+		
 		return true;
 	}
 
