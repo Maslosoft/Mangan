@@ -1,12 +1,14 @@
 <?php
 
 /**
- * @author Piotr Maselkowski, Maslosoft
- * @copyright 2013 Maslosoft http://maslosoft.com
- * @license New BSD license
- * @version 2.0.1
- * @category ext
- * @package maslosoft/yii-mangan
+ * This software package is licensed under New BSD license.
+ *
+ * @package maslosoft/mangan
+ * @licence New BSD
+ * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
+ * @copyright Copyright (c) Maslosoft
+ * @copyright Copyright (c) Others as mentioned in code
+ * @link http://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan\Model;
