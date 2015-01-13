@@ -10,7 +10,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IActiveDocument extends IModel, IWithCollectionName, I18NAble, IOwnered, IScenarios, IValidatable
+interface IActiveDocument extends IModel, I18NAble, IOwnered, IScenarios, IValidatable
 {
 	
 }

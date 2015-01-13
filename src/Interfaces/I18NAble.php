@@ -60,7 +60,6 @@ interface I18NAble
 
 	/**
 	 * Get default language code
-	 * @param string $code
 	 */
 	public function getDefaultLanguage();
 

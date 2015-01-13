@@ -12,7 +12,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IActiveRecord extends IActiveDocument, IFinder, IEntityManager
+interface IActiveRecord extends IActiveDocument, IFinder, IEntityManager, IWithCollectionName
 {
 	
 }
