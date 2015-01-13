@@ -1,9 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi
- * @author Philippe Gaultier <pgaultier@ibitux.com>
- * @copyright 2011 Ibitux http://www.ibitux.com
  * @license New BSD license
  * @version 1.3
  * @category ext
@@ -24,7 +21,9 @@ use Maslosoft\Mangan\Core\Component;
  *
  * For modifiers list {@see \Maslosoft\Mangan\Modifier::$modifiers}
  *
- * @author		Philippe Gaultier <pgaultier@ibitux.com>
+ * @author Ianaré Sévi
+ * @author Philippe Gaultier <pgaultier@ibitux.com>
+ * @copyright 2011 Ibitux http://www.ibitux.com
  * @since		v1.3.6
  */
 class Modifier extends Component

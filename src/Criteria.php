@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi
- * @author Dariusz Górecki <darek.krk@gmail.com>
- * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright 2011 CleverIT http://www.cleverit.com.pl
- * @license New BSD license
  * @version 1.3
  * @category ext
  * @package ext.YiiMongoDbSuite
@@ -29,8 +24,11 @@ use Maslosoft\Mangan\Core\Component;
  *
  * For operators list {@see Criteria::$operators}
  *
- * @author		Dariusz Górecki <darek.krk@gmail.com>
- * @since		v1.0
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @license New BSD license
  */
 class Criteria extends Component
 {

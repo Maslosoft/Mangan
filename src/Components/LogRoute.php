@@ -1,8 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi (merge into MongoDB)
- * @author aoyagikouhei (original author)
  * @license New BSD license
  * @version 1.3
  * @category ext
@@ -46,6 +44,8 @@ use Yii;
  * safe						: safe flag						: defalut false
  * timeout					: timeout miliseconds			: defalut null i.e. MongoCursor::$timeout
  *
+ * @author Ianaré Sévi (merge into MongoDB)
+ * @author aoyagikouhei (original author)
  */
 
 /**

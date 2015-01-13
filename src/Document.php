@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi
- * @author Dariusz Górecki <darek.krk@gmail.com>
- * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @license New BSD license
  * @version 2.0.1
  * @category ext
@@ -22,6 +18,10 @@ use MongoId;
 /**
  * Document
  *
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @property-read MongoDB $db
  * @since v1.0
  */

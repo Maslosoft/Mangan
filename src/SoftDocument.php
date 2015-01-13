@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi
- * @author Dariusz Górecki <darek.krk@gmail.com>
- * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @license New BSD license
  * @version 1.3
  * @category ext
@@ -18,6 +14,10 @@ use Maslosoft\Mangan\Core\Component;
 /**
  * SoftDocument
  *
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @since v1.3.4
  */
 class SoftDocument extends Document

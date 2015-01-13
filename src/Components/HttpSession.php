@@ -1,8 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi (merge into MongoDB)
- * @author aoyagikouhei (original author)
  * @license New BSD license
  * @version 1.3
  * @category ext
@@ -41,6 +39,8 @@ use Yii;
  * safe						: safe flag						: default false
  * timeout					: timeout miliseconds		: default null
  *
+ * @author Ianaré Sévi (merge into MongoDB)
+ * @author aoyagikouhei (original author)
  */
 class HttpSession extends CHttpSession
 {

@@ -1,12 +1,6 @@
 <?php
 
 /**
- * @author Ianaré Sévi
- * @author Dariusz Górecki <darek.krk@gmail.com>
- * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
- * @author Piotr Maselkowski, Maslosoft
- * @copyright 2011 CleverIT http://www.cleverit.com.pl
- * @copyright 2013 Maslosoft http://maslosoft.com
  * @license New BSD license
  * @version 2.0.1
  * @category ext
@@ -24,6 +18,12 @@ use Yii;
 /**
  * EmbeddedDocument
  *
+ * @author Ianaré Sévi
+ * @author Dariusz Górecki <darek.krk@gmail.com>
+ * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @author Piotr Maselkowski, Maslosoft
+ * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @copyright 2013 Maslosoft http://maslosoft.com
  * @since v1.0.8
  * @property Meta $meta Model metadata
  */
