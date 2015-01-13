@@ -23,6 +23,7 @@ trait I18NAbleTrait
 	private $_lang = 'en';
 	private $_rawI18N = [];
 	private $_languages = ['en'];
+	private $_defaultLanguage = 'en';
 
 	/**
 	 * Get language code
