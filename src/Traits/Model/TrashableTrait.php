@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This SOFTWARE PRODUCT is protected by copyright laws and international copyright treaties,
- * as well as other intellectual property laws and treaties.
- * This SOFTWARE PRODUCT is licensed, not sold.
- * For full licence agreement see enclosed LICENCE.html file.
+ * This software package is licensed under New BSD license.
  *
- * @licence LICENCE.html
+ * @package maslosoft/mangan
+ * @licence New BSD
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
- * @link http://maslosoft.com/
+ * @copyright Copyright (c) Others as mentioned in code
+ * @link http://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan\Traits\Model;
