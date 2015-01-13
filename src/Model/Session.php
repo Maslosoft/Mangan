@@ -8,17 +8,15 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use Maslosoft\Mangan\Document;
+use Maslosoft\Mangan\Interfaces\IModel;
 use MongoDate;
 use MongoId;
-use Yii;
 
 /**
  * Session model. This can be used to display session data.
- * FIXME This must inherit from Maslosoft\Mangan\Document this is temporary solution
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Session extends \Maslosoft\Components\MongoDocument
+class Session implements IModel
 {
 
 	/**
@@ -40,6 +38,7 @@ class Session extends \Maslosoft\Components\MongoDocument
 	/**
 	 * Activity datetime
 	 * @Label('Last activity')
+	 * @Sanitizer('MongoDate')
 	 * @Readonly
 	 * @var MongoDate
 	 */
@@ -47,12 +46,9 @@ class Session extends \Maslosoft\Components\MongoDocument
 
 	/**
 	 * @Readonly
+	 * @Sanitizer('MongoStringId')
 	 * @var MongoId
 	 */
 	public $userId = null;
 
-	public function getCollectionName()
-	{
-		return Yii::app()->session->collectionName;
-	}
 }

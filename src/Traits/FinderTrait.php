@@ -11,10 +11,8 @@ namespace Maslosoft\Mangan\Traits;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Document;
-use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Interfaces\IFinder;
-use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * FinderTrait

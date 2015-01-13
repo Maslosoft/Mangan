@@ -8,7 +8,6 @@
 
 namespace Maslosoft\Mangan\Traits;
 
-use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Interfaces\IWithCollectionName;
 
 /**
