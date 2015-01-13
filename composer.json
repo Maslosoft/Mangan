@@ -53,7 +53,8 @@
 		"maslosoft/embedi": "~0.0"
 	},
 	"require-dev": {
-		"maslosoft/mangantest": "dev-master"
+		"maslosoft/mangantest": "dev-master",
+		"maslosoft/hedron": "~1"
 	},
 	"suggest":{
 		"monolog/monolog" : "Sends your logs to files, sockets, inboxes, databases and various web services",

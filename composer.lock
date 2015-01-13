@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3061e5ead2b3ae2303bb56aea3fa2611",
+    "hash": "7b383585ac6ded423588933f6888b9bb",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -655,17 +655,62 @@
             "time": "2014-10-12 19:18:40"
         },
         {
+            "name": "maslosoft/hedron",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maslosoft/Hedron.git",
+                "reference": "4a646651b1b369c6dbabe14ba1e0b3e6b3fab7de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maslosoft/Hedron/zipball/4a646651b1b369c6dbabe14ba1e0b3e6b3fab7de",
+                "reference": "4a646651b1b369c6dbabe14ba1e0b3e6b3fab7de",
+                "shasum": ""
+            },
+            "require": {
+                "phpunit/php-code-coverage": "~2",
+                "symfony/console": "~2",
+                "symfony/finder": "~2",
+                "symfony/yaml": "~2",
+                "zordius/lightncandy": "0.18.*"
+            },
+            "bin": [
+                "bin/hedron",
+                "bin/hedron.bat"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maslosoft\\Hedron\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "New BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Maselkowski",
+                    "email": "pmaselkowski@gmail.com"
+                }
+            ],
+            "description": "PHP source code class header applier",
+            "homepage": "http://maslosoft.com/hedron/",
+            "time": "2015-01-13 09:15:11"
+        },
+        {
             "name": "maslosoft/mangantest",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "ea7fd3f59f4f0569cabc94ae03cc30ed99fa78eb"
+                "reference": "f36df77d6ee6918aa911c9b16402d335c96f0a61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/ea7fd3f59f4f0569cabc94ae03cc30ed99fa78eb",
-                "reference": "ea7fd3f59f4f0569cabc94ae03cc30ed99fa78eb",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/f36df77d6ee6918aa911c9b16402d335c96f0a61",
+                "reference": "f36df77d6ee6918aa911c9b16402d335c96f0a61",
                 "shasum": ""
             },
             "require": {
@@ -691,7 +736,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-01-07 14:44:59"
+            "time": "2015-01-12 14:34:56"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1884,6 +1929,53 @@
                 "yii"
             ],
             "time": "2014-12-21 19:30:17"
+        },
+        {
+            "name": "zordius/lightncandy",
+            "version": "v0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zordius/lightncandy.git",
+                "reference": "24be6909c37391f4648ce1fdf19036b11bd56d05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zordius/lightncandy/zipball/24be6909c37391f4648ce1fdf19036b11bd56d05",
+                "reference": "24be6909c37391f4648ce1fdf19036b11bd56d05",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.0.17"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/lightncandy.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zordius Chen",
+                    "email": "zordius@yahoo-inc.com"
+                }
+            ],
+            "description": "An extremely fast PHP implementation of handlebars ( http://handlebarsjs.com/ ) and mustache ( http://mustache.github.io/ ).",
+            "homepage": "https://github.com/zordius/lightncandy",
+            "keywords": [
+                "handlebars",
+                "logicless",
+                "mustache",
+                "php",
+                "template"
+            ],
+            "time": "2015-01-01 04:37:19"
         }
     ],
     "aliases": [],
