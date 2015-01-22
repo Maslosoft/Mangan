@@ -127,43 +127,10 @@ class Finder implements IFinder
 	}
 
 	/**
-	 * Finds all documents with the specified primary keys.
-	 * In MongoDB world every document has '_id' unique field, so with this method that
-	 * field is in use as PK by default.
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pkValues primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
-	 * @return Document[]|Cursor - Array or cursor of Documents
-	 * @since v1.0
-	 */
-	public function findAllByPk($pkValues, $criteria = null)
-	{
-		$pkCriteria = new Criteria($criteria);
-		$conditions = [];
-		foreach ($pkValues as $pkValue)
-		{
-			/**
-			 * TODO Possibly move to PkManager
-			 */
-			$c = PkManager::prepare($this->model, $pkValue);
-			foreach($c->getConditions() as $field => $value)
-			{
-				$conditions[$field][] = $value;
-			}
-		}
-		foreach ($conditions as $field => $value)
-		{
-			$pkCriteria->addCond($field, 'in', $value);
-		}
-
-		return $this->findAll($pkCriteria);
-	}
-
-	/**
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
-	 * @return Document[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
+	 * @return IModel[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAll($criteria = null)
@@ -206,6 +173,57 @@ class Finder implements IFinder
 	}
 
 	/**
+	 * Finds all documents with the specified attributes.
+	 *
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return IModel[]|Cursor - Array or cursor of Documents
+	 * @since v1.0
+	 */
+	public function findAllByAttributes(array $attributes)
+	{
+		$criteria = new Criteria();
+		foreach ($attributes as $name => $value)
+		{
+			$criteria->$name('==', $value);
+		}
+
+		return $this->findAll($criteria);
+	}
+
+	/**
+	 * Finds all documents with the specified primary keys.
+	 * In MongoDB world every document has '_id' unique field, so with this method that
+	 * field is in use as PK by default.
+	 * See {@link find()} for detailed explanation about $condition.
+	 * @param mixed $pkValues primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param array|Criteria $criteria query criteria.
+	 * @return IModel[]|Cursor - Array or cursor of Documents
+	 * @since v1.0
+	 */
+	public function findAllByPk($pkValues, $criteria = null)
+	{
+		$pkCriteria = new Criteria($criteria);
+		$conditions = [];
+		foreach ($pkValues as $pkValue)
+		{
+			/**
+			 * TODO Possibly move to PkManager
+			 */
+			$c = PkManager::prepare($this->model, $pkValue);
+			foreach ($c->getConditions() as $field => $value)
+			{
+				$conditions[$field][] = $value;
+			}
+		}
+		foreach ($conditions as $field => $value)
+		{
+			$pkCriteria->addCond($field, 'in', $value);
+		}
+
+		return $this->findAll($pkCriteria);
+	}
+
+	/**
 	 * Finds document with the specified attributes.
 	 *
 	 * See {@link find()} for detailed explanation about $condition.
@@ -221,24 +239,6 @@ class Finder implements IFinder
 			$criteria->addCond($name, '==', $value);
 		}
 		return $this->find($criteria);
-	}
-
-	/**
-	 * Finds all documents with the specified attributes.
-	 *
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return Document[]|Cursor - Array or cursor of Documents
-	 * @since v1.0
-	 */
-	public function findAllByAttributes(array $attributes)
-	{
-		$criteria = new Criteria();
-		foreach ($attributes as $name => $value)
-		{
-			$criteria->$name('==', $value);
-		}
-
-		return $this->findAll($criteria);
 	}
 
 	/**
@@ -337,12 +337,11 @@ class Finder implements IFinder
 //		}
 	}
 
-
 	/**
 	 * Creates an model with the given attributes.
 	 * This method is internally used by the find methods.
 	 * @param mixed[] $data attribute values (column name=>column value)
-	 * @return IModel the newly created document. The class of the object is the same as the model class.
+	 * @return IModel|null the newly created document. The class of the object is the same as the model class.
 	 * Null is returned if the input data is false.
 	 * @since v1.0
 	 */
@@ -369,7 +368,7 @@ class Finder implements IFinder
 	 * This parameter is added in version 1.0.3.
 	 * @param string $index the name of the attribute whose value will be used as indexes of the query result array.
 	 * If null, it means the array will be indexed by zero-based integers.
-	 * @return array list of active records.
+	 * @return IModel[] array list of active records.
 	 * @since v1.0
 	 */
 	protected function populateRecords($cursor)
@@ -386,4 +385,5 @@ class Finder implements IFinder
 	{
 		return Event::handled($this->model, IFinder::EventBeforeFind);
 	}
+
 }
