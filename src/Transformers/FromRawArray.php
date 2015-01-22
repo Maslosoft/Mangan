@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
+use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -56,20 +57,22 @@ class FromRawArray
 
 	private static function _toDocument($className, $data)
 	{
-		$document = new $className;
-		$meta = ManganMeta::create($document);
-		$decorator = new Decorator($document);
-		foreach ($data as $field => $data)
+		$model = new $className;
+		$meta = ManganMeta::create($model);
+		$decorator = new Decorator($model);
+		$sanitizer = new Sanitizer($model);
+		foreach ($data as $name => $value)
 		{
-			$fieldMeta = $meta->$field;
+			$fieldMeta = $meta->$name;
 			/* @var \Maslosoft\Mangan\Meta\DocumentPropertyMeta $fieldMeta */
 			if (!$fieldMeta)
 			{
 				continue;
 			}
-			$decorator->read($field, $data);
+			$decorator->read($name, $value);
+			$model->$name = $sanitizer->read($name, $model->$name);
 		}
-		return $document;
+		return $model;
 	}
 
 }

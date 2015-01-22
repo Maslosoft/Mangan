@@ -30,7 +30,7 @@ interface IEntityManager
 	const EventBeforeDelete = 'beforeDelete';
 	const EventAfterDelete = 'afterDelete';
 
-	public function insert();
+	public function insert($model = null);
 
 	/**
 	 * Updates the row represented by this active record.

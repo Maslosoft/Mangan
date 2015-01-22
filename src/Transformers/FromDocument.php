@@ -42,8 +42,8 @@ class FromDocument
 		$sanitizer = new Sanitizer($model);
 		foreach ($meta->fields() as $name => $field)
 		{
+			$model->$name = $sanitizer->write($name, $model->$name);
 			$decorator->write($name, $arr[$name]);
-			$arr[$name] = $sanitizer->write($name, $model->$name);
 		}
 		if ($withClassName)
 		{

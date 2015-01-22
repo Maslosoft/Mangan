@@ -172,11 +172,12 @@ class EntityManager implements IEntityManager
 		;
 	}
 
-	public function insert()
+	public function insert($model = null)
 	{
+		$model = $model? : $this->model;
 		if ($this->_beforeSave())
 		{
-			$rawData = FromDocument::toRawArray($this->model);
+			$rawData = FromDocument::toRawArray($model);
 
 			$result = $this->_collection->insert($rawData, $this->options->getSaveOptions());
 

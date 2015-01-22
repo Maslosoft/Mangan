@@ -70,6 +70,7 @@ trait EntityManagerTrait
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
 	 * and its {@link scenario} property will be set to be 'update'.
+	 * @param IModel $model if want to insert different model than set in constructor
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws MongoException if the record is not new
 	 * @throws MongoException on fail of insert or insert of empty document
@@ -77,9 +78,9 @@ trait EntityManagerTrait
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function insert()
+	public function insert($model = null)
 	{
-		return $this->_getEm()->insert();
+		return $this->_getEm()->insert($model);
 	}
 
 	/**
