@@ -171,10 +171,10 @@ class Finder implements IFinder
 			{
 				$cursor->fields($criteria->getSelect(true));
 			}
-			if ($this->getMongoDBComponent()->enableProfiling)
-			{
+//			if ($this->getMongoDBComponent()->enableProfiling)
+//			{
 //				Yii::log($this->_class . '.findAll()' . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
-			}
+//			}
 			if ($this->getUseCursor())
 			{
 				return new Cursor($cursor, $this->model());
