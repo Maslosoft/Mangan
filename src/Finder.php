@@ -280,7 +280,7 @@ class Finder implements IFinder
 	 * @param Criteria $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
-	public function exists(Criteria $criteria)
+	public function exists(Criteria $criteria = null)
 	{
 		return $this->count($criteria) > 0;
 	}
