@@ -104,7 +104,7 @@ class Finder implements IFinder
 		{
 			$this->applyScopes($criteria);
 			$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
-			return FromRawArray::toDocument($data);
+			return $this->populateRecord($data);
 		}
 		return null;
 	}
@@ -337,10 +337,6 @@ class Finder implements IFinder
 //		}
 	}
 
-	private function _beforeFind()
-	{
-		return Event::handled($this->model, IFinder::EventBeforeFind);
-	}
 
 	/**
 	 * Creates an model with the given attributes.
@@ -386,4 +382,8 @@ class Finder implements IFinder
 		return $records;
 	}
 
+	private function _beforeFind()
+	{
+		return Event::handled($this->model, IFinder::EventBeforeFind);
+	}
 }
