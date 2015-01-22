@@ -175,7 +175,7 @@ class EntityManager implements IEntityManager
 	public function insert($model = null)
 	{
 		$model = $model? : $this->model;
-		if ($this->_beforeSave())
+		if ($this->_beforeSave($model))
 		{
 			$rawData = FromDocument::toRawArray($model);
 
@@ -184,7 +184,7 @@ class EntityManager implements IEntityManager
 			// strict comparison needed
 			if ($result !== false)
 			{
-				$this->_afterSave();
+				$this->_afterSave($model);
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -212,7 +212,7 @@ class EntityManager implements IEntityManager
 		{
 			throw new MongoException('The Document cannot be updated because it is new.');
 		}
-		if ($this->_beforeSave())
+		if ($this->_beforeSave($this->model))
 		{
 			$rawData = FromDocument::toRawArray($this->model);
 
@@ -238,7 +238,7 @@ class EntityManager implements IEntityManager
 			}
 			if ($result !== false)
 			{ // strict comparison needed
-				$this->_afterSave();
+				$this->_afterSave($this->model);
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -435,12 +435,12 @@ class EntityManager implements IEntityManager
 	 * @see EventBeforeSave
 	 * @return boolean
 	 */
-	private function _beforeSave()
+	private function _beforeSave($model)
 	{
-		$result = Event::Valid($this->model, IEntityManager::EventBeforeSave);
+		$result = Event::Valid($model, IEntityManager::EventBeforeSave);
 		if ($result)
 		{
-			(new Signal)->emit(new BeforeSave($this->model));
+			(new Signal)->emit(new BeforeSave($model));
 		}
 		return $result;
 	}
@@ -450,11 +450,11 @@ class EntityManager implements IEntityManager
 	 * @see EventAfterSave
 	 * @return boolean
 	 */
-	private function _afterSave()
+	private function _afterSave($model)
 	{
-		Event::trigger($this->model, IEntityManager::EventAfterSave);
-		(new Signal)->emit(new AfterSave($this->model));
-		ScenarioManager::setScenario($this->model, IScenarios::Update);
+		Event::trigger($model, IEntityManager::EventAfterSave);
+		(new Signal)->emit(new AfterSave($model));
+		ScenarioManager::setScenario($model, IScenarios::Update);
 	}
 
 	/**
