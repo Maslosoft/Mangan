@@ -115,4 +115,11 @@ interface IFinder
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
 	public function exists(Criteria $criteria);
+
+	/**
+	 * Whenever to use cursor
+	 * @param type $useCursor
+	 * @return IFinder
+	 */
+	public function withCursor($useCursor = true);
 }

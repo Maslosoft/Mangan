@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
+use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -28,23 +29,25 @@ class FromDocument
 	/**
 	 * Returns the given object as an associative array
 	 * Fires beforeToArray and afterToArray events
-	 * @param IModel|object $document
+	 * @param IModel|object $model
 	 * @param bool $withClassName Whenever to include special _class field
 	 * @return array an associative array of the contents of this object
 	 * @since v1.0.8
 	 */
-	public static function toRawArray($document, $withClassName = true)
+	public static function toRawArray($model, $withClassName = true)
 	{
-		$meta = ManganMeta::create($document);
-		$decorator = new Decorator($document);
+		$meta = ManganMeta::create($model);
+		$decorator = new Decorator($model);
 		$arr = [];
+		$sanitizer = new Sanitizer($model);
 		foreach ($meta->fields() as $name => $field)
 		{
 			$decorator->write($name, $arr[$name]);
+			$arr[$name] = $sanitizer->write($name, $model->$name);
 		}
 		if ($withClassName)
 		{
-			$arr['_class'] = get_class($document);
+			$arr['_class'] = get_class($model);
 		}
 		return $arr;
 	}
