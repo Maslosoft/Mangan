@@ -15,13 +15,14 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
-use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
 use Maslosoft\Mangan\Interfaces\IFinder;
 use Maslosoft\Mangan\Interfaces\IModel;
+use Maslosoft\Mangan\Interfaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\FromRawArray;
+use MongoCursor;
 use MongoException;
 
 /**
@@ -57,8 +58,13 @@ class Finder implements IFinder
 	private $_class = '';
 
 	/**
+	 * Whenever to use corsors
+	 * @var bool
+	 */
+	private $_useCursor;
+
+	/**
 	 * Constructor
-	 * TODO This should have model as param, not entity manager
 	 * @param object $model Model instance
 	 * @param IEntityManager $em
 	 */
@@ -133,9 +139,21 @@ class Finder implements IFinder
 	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$pkCriteria = new Criteria($criteria);
+		$conditions = [];
 		foreach ($pkValues as $pkValue)
 		{
-			$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
+			/**
+			 * TODO Possibly move to PkManager
+			 */
+			$c = PkManager::prepare($this->model, $pkValue);
+			foreach($c->getConditions() as $field => $value)
+			{
+				$conditions[$field][] = $value;
+			}
+		}
+		foreach ($conditions as $field => $value)
+		{
+			$pkCriteria->addCond($field, 'in', $value);
 		}
 
 		return $this->findAll($pkCriteria);
@@ -175,9 +193,9 @@ class Finder implements IFinder
 //			{
 //				Yii::log($this->_class . '.findAll()' . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
 //			}
-			if ($this->getUseCursor())
+			if ($this->_useCursor)
 			{
-				return new Cursor($cursor, $this->model());
+				return new Cursor($cursor, $this->model);
 			}
 			else
 			{
@@ -268,6 +286,17 @@ class Finder implements IFinder
 	}
 
 	/**
+	 * Whenever to use cursor
+	 * @param type $useCursor
+	 * @return IFinder
+	 */
+	public function withCursor($useCursor = true)
+	{
+		$this->_useCursor = true;
+		return $this;
+	}
+
+	/**
 	 * Resets all scopes and criteria applied including default scope.
 	 *
 	 * @return Finder
@@ -311,6 +340,50 @@ class Finder implements IFinder
 	private function _beforeFind()
 	{
 		return Event::handled($this->model, IFinder::EventBeforeFind);
+	}
+
+	/**
+	 * Creates an model with the given attributes.
+	 * This method is internally used by the find methods.
+	 * @param mixed[] $data attribute values (column name=>column value)
+	 * @return IModel the newly created document. The class of the object is the same as the model class.
+	 * Null is returned if the input data is false.
+	 * @since v1.0
+	 */
+	protected function populateRecord($data)
+	{
+		if ($data !== null)
+		{
+			$model = FromRawArray::toDocument($data, $this->model);
+			ScenarioManager::setScenario($model, IScenarios::Update);
+			Event::trigger($model, IFinder::EventAfterFind);
+			return $model;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Creates a list of documents based on the input data.
+	 * This method is internally used by the find methods.
+	 * @param MongoCursor $cursor Results found to populate active records.
+	 * @param boolean $callAfterFind whether to call {@link afterFind} after each record is populated.
+	 * This parameter is added in version 1.0.3.
+	 * @param string $index the name of the attribute whose value will be used as indexes of the query result array.
+	 * If null, it means the array will be indexed by zero-based integers.
+	 * @return array list of active records.
+	 * @since v1.0
+	 */
+	protected function populateRecords($cursor)
+	{
+		$records = array();
+		foreach ($cursor as $data)
+		{
+			$records[] = $this->populateRecord($data);
+		}
+		return $records;
 	}
 
 }

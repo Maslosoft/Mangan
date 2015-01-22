@@ -4,9 +4,9 @@ paths:
     log: tests/_output
     data: vendor/maslosoft/mangantest/tests/_data
     helpers: vendor/maslosoft/mangantest/tests/_support
-#extensions:
-#    enabled:
-#        - Maslosoft\ManganTest\Extensions\MongoWipe
+extensions:
+    enabled:
+        - Maslosoft\ManganTest\Extensions\MongoWipe
 settings:
     bootstrap: _bootstrap.php
     colors: true

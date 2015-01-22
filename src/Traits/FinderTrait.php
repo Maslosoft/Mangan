@@ -151,6 +151,17 @@ trait FinderTrait
 		return $this->_getFinder()->exists($criteria);
 	}
 
+
+	/**
+	 * Whenever to use cursor
+	 * @param type $useCursor
+	 * @return IFinder
+	 */
+	public function withCursor($useCursor = true)
+	{
+		return $this->_getFinder()->withCursor($useCursor);
+	}
+
 	private function _getFinder()
 	{
 		if (null === $this->_finder)
