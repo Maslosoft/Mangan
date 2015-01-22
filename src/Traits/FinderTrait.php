@@ -146,7 +146,7 @@ trait FinderTrait
 	 * @param array $params parameters to be bound to an SQL statement.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
-	public function exists(Criteria $criteria)
+	public function exists(Criteria $criteria = null)
 	{
 		return $this->_getFinder()->exists($criteria);
 	}
