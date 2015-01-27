@@ -85,6 +85,10 @@ class I18NDecorator implements IDecorator
 		}
 		foreach($model->getRawI18N() as $code => $value)
 		{
+			if(!$code)
+			{
+				continue;
+			}
 			$dbValue[$code] = $value;
 		}
 		$dbValue[$model->getLang()] = $model->$name;
