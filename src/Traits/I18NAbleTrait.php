@@ -36,7 +36,7 @@ trait I18NAbleTrait
 	 */
 	public function getLang()
 	{
-		return $this->_lang;
+		return $this->_lang? : $this->getDefaultLanguage();
 	}
 
 	public function getLanguages()
@@ -64,7 +64,7 @@ trait I18NAbleTrait
 		{
 			return;
 		}
-		if(!in_array($code, $this->getLanguages()))
+		if (!in_array($code, $this->getLanguages()))
 		{
 			return;
 		}
@@ -94,7 +94,7 @@ trait I18NAbleTrait
 
 	public function getDefaultLanguage()
 	{
-		return $this->_defaultLanguage;
+		return $this->_defaultLanguage? : 'en';
 	}
 
 	public function setDefaultLanguage($language)
