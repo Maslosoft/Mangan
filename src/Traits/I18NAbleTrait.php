@@ -64,6 +64,10 @@ trait I18NAbleTrait
 		{
 			return;
 		}
+		if(!in_array($code, $this->getLanguages()))
+		{
+			return;
+		}
 		if (!Event::valid($this, I18NAble::EventBeforeLangChange))
 		{
 			return;
