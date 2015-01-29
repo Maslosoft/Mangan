@@ -55,6 +55,12 @@ class EntityManager implements IEntityManager
 
 	/**
 	 *
+	 * @var ScopeManager
+	 */
+	private $sm = null;
+
+	/**
+	 *
 	 * @var 
 	 */
 	public $meta = null;
@@ -88,7 +94,6 @@ class EntityManager implements IEntityManager
 	 * @var string
 	 */
 	private $_class = '';
-	private $_db = null;
 
 	/**
 	 * Create entity manager
@@ -98,6 +103,7 @@ class EntityManager implements IEntityManager
 	public function __construct($model)
 	{
 		$this->model = $model;
+		$this->sm = new ScopeManager($model);
 		$this->_class = get_class($model);
 		$this->options = new EntityOptions($model);
 		$this->collectionName = CollectionNamer::nameCollection($model);
@@ -160,11 +166,14 @@ class EntityManager implements IEntityManager
 		return new $emClass($model);
 	}
 
+	/**
+	 * Set attributes en masse
+	 * TODO Check if it's ok to use
+	 * @param mixed[] $atributes
+	 */
 	public function setAttributes($atributes)
 	{
-		/**
-		 * TODO Set attributes from array
-		 */
+		$this->model = Transformers\FromRawArray::toDocument($atributes);
 	}
 
 	public function __set($name, $value)
@@ -257,7 +266,7 @@ class EntityManager implements IEntityManager
 	{
 		if ($modifier->canApply === true)
 		{
-			$this->applyScopes($criteria);
+			$this->sm->apply($criteria);
 			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), $this->options->getSaveOptions([
 						'upsert' => false,
 						'multiple' => true
@@ -370,7 +379,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function deleteOne($criteria = null)
 	{
-		$this->applyScopes($criteria);
+		$this->sm->apply($criteria);
 
 		return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 							'justOne' => true
@@ -388,7 +397,7 @@ class EntityManager implements IEntityManager
 	{
 		if ($this->_beforeDelete())
 		{
-			$this->applyScopes($criteria);
+			$this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 			return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
@@ -406,7 +415,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function deleteAll($criteria = null)
 	{
-		$this->applyScopes($criteria);
+		$this->sm->apply($criteria);
 
 		return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 							'justOne' => false
@@ -428,7 +437,7 @@ class EntityManager implements IEntityManager
 
 	}
 
-// <editor-fold defaultstate="collapsed" desc="Event handling">
+// <editor-fold defaultstate="collapsed" desc="Event and Signal handling">
 
 	/**
 	 * Take care of EventBeforeSave
