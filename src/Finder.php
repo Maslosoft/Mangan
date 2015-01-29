@@ -21,7 +21,7 @@ use Maslosoft\Mangan\Interfaces\IFinder;
 use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Interfaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Transformers\FromRawArray;
+use Maslosoft\Mangan\Transformers\RawArray;
 use MongoCursor;
 use MongoException;
 
@@ -349,7 +349,7 @@ class Finder implements IFinder
 	{
 		if ($data !== null)
 		{
-			$model = FromRawArray::toDocument($data, $this->model);
+			$model = RawArray::toModel($data, $this->model);
 			ScenarioManager::setScenario($model, IScenarios::Update);
 			Event::trigger($model, IFinder::EventAfterFind);
 			return $model;

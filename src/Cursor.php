@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan;
 use Countable;
 use Iterator;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Transformers\FromRawArray;
+use Maslosoft\Mangan\Transformers\RawArray;
 use MongoCursor;
 
 /**
@@ -82,7 +82,7 @@ class Cursor implements Iterator, Countable
 			return null;
 		}
 
-		return FromRawArray::toDocument($document, $this->_model);
+		return RawArray::toModel($document, $this->_model);
 	}
 
 	/**

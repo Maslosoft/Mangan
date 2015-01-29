@@ -19,25 +19,50 @@ use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
- * FromRawArray
+ * RawArray
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class FromRawArray
+class RawArray
 {
+
+	/**
+	 * Returns the given object as an associative array
+	 * @param IModel|object $model
+	 * @param bool $withClassName Whenever to include special _class field
+	 * @return array an associative array of the contents of this object
+	 * @since v1.0.8
+	 */
+	public static function fromModel($model, $withClassName = true)
+	{
+		$meta = ManganMeta::create($model);
+		$decorator = new Decorator($model);
+		$arr = [];
+		$sanitizer = new Sanitizer($model);
+		foreach ($meta->fields() as $name => $field)
+		{
+			$model->$name = $sanitizer->write($name, $model->$name);
+			$decorator->write($name, $arr[$name]);
+		}
+		if ($withClassName)
+		{
+			$arr['_class'] = get_class($model);
+		}
+		return $arr;
+	}
 
 	/**
 	 * Create document from array
 	 * TODO Enforce $className if collection is homogenous
 	 * @return object
 	 */
-	public static function toDocument($data, $className = null)
+	public static function toModel($data, $className = null)
 	{
-		if(!$data)
+		if (!$data)
 		{
 			return null;
 		}
-		if(is_object($className))
+		if (is_object($className))
 		{
 			$className = get_class($className);
 		}
