@@ -90,129 +90,43 @@ abstract class EmbeddedDocument implements IActiveDocument
 
 	}
 
-// <editor-fold defaultstate="collapsed" desc="Events">
-	/**
-	 * @since v1.0.8
-	 */
-	public function onBeforeEmbeddedDocsInit($event)
-	{
-		$this->raiseEvent('onBeforeEmbeddedDocsInit', $event);
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	public function onAfterEmbeddedDocsInit($event)
-	{
-		$this->raiseEvent('onAfterEmbeddedDocsInit', $event);
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	public function onBeforeToArray($event)
-	{
-		$this->raiseEvent('onBeforeToArray', $event);
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	public function onAfterToArray($event)
-	{
-		$this->raiseEvent('onAfterToArray', $event);
-	}
-
-	public function onClassNotFound($event)
-	{
-		$this->raiseEvent(__FUNCTION__, $event);
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	protected function beforeToArray()
-	{
-		$event = new ModelEvent($this);
-		$this->onBeforeToArray($event);
-		return $event->isValid;
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	protected function afterToArray()
-	{
-		$this->onAfterToArray(new ModelEvent($this));
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	protected function beforeEmbeddedDocsInit()
-	{
-		$event = new ModelEvent($this);
-		$this->onBeforeEmbeddedDocsInit($event);
-		return $event->isValid;
-	}
-
-	/**
-	 * @since v1.0.8
-	 */
-	protected function afterEmbeddedDocsInit()
-	{
-		$this->onAfterEmbeddedDocsInit(new ModelEvent());
-	}
-
-	/**
-	 * Embedded class not found event handling
-	 * @param string $className
-	 * @return string
-	 */
-	protected function classNotfound($className)
-	{
-		$event = new ClassNotFound();
-		$event->notFound = $className;
-		$this->onClassNotFound($event);
-		return $event->replacement;
-	}
-
 	/**
 	 * This ensures that embedded documents are also validated
+	 * TODO Move to validator class
 	 * @since v1.0.8
 	 */
-	public function afterValidate()
-	{
-		if ($this->hasEmbeddedDocuments())
-		{
-			foreach ($this->meta->properties('embedded') as $field => $className)
-			{
-				if ($this->meta->$field->embeddedArray)
-				{
-					foreach ((array) $this->$field as $doc)
-					{
-						if ($doc instanceof EmbeddedDocument)
-						{
-							if (!$doc->validate())
-							{
-								$this->addErrors($doc->getErrors());
-							}
-						}
-					}
-				}
-				else
-				{
-					if ($this->$field instanceof EmbeddedDocument)
-					{
-						if (!$this->$field->validate())
-						{
-							$this->addErrors($this->$field->getErrors());
-						}
-					}
-				}
-			}
-		}
-	}
+//	public function afterValidate()
+//	{
+//		if ($this->hasEmbeddedDocuments())
+//		{
+//			foreach ($this->meta->properties('embedded') as $field => $className)
+//			{
+//				if ($this->meta->$field->embeddedArray)
+//				{
+//					foreach ((array) $this->$field as $doc)
+//					{
+//						if ($doc instanceof EmbeddedDocument)
+//						{
+//							if (!$doc->validate())
+//							{
+//								$this->addErrors($doc->getErrors());
+//							}
+//						}
+//					}
+//				}
+//				else
+//				{
+//					if ($this->$field instanceof EmbeddedDocument)
+//					{
+//						if (!$this->$field->validate())
+//						{
+//							$this->addErrors($this->$field->getErrors());
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
 
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Default model implementation">
@@ -253,14 +167,7 @@ abstract class EmbeddedDocument implements IActiveDocument
 	 */
 	public function attributeNames()
 	{
-		if (!isset(self::$_attributes[$className]))
-		{
-			return self::$_attributes[$className] = array_keys((array) $this->meta->fields());
-		}
-		else
-		{
-			return self::$_attributes[$className];
-		}
+		return array_keys($this->meta->fields());
 	}
 
 	public function attributeLabels()

@@ -24,7 +24,18 @@ use Maslosoft\Mangan\Document;
 interface IFinder
 {
 
+	/**
+	 * This event is triggered before an AR finder executes a find call.
+	 * The find calls include {@link find}, {@link findAll}, {@link findByPk},
+	 * {@link findAllByPk}, {@link findByAttributes} and {@link findAllByAttributes}.
+	 */
 	const EventBeforeFind = 'beforeFind';
+
+	/**
+	 * This event is trigerred after each record is instantiated by a find method.
+	 * The find calls include {@link find}, {@link findAll}, {@link findByPk},
+	 * {@link findAllByPk}, {@link findByAttributes} and {@link findAllByAttributes}.
+	 */
 	const EventAfterFind = 'afterFind';
 
 	/**
