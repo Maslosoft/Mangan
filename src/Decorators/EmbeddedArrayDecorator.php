@@ -14,8 +14,7 @@
 namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Mangan\Interfaces\IOwnered;
-use Maslosoft\Mangan\Transformers\FromDocument;
-use Maslosoft\Mangan\Transformers\FromRawArray;
+use Maslosoft\Mangan\Transformers\RawArray;
 
 /**
  * EmbeddedArrayDecorator
@@ -33,7 +32,7 @@ class EmbeddedArrayDecorator implements IDecorator
 			foreach ($dbValue as $key => $data)
 			{
 				EmbeddedDecorator::ensureClass($model, $name, $data);
-				$embedded = FromRawArray::toDocument($data);
+				$embedded = RawArray::toModel($data);
 				if ($embedded instanceof IOwnered)
 				{
 					$embedded->setOwner($model);
@@ -56,7 +55,7 @@ class EmbeddedArrayDecorator implements IDecorator
 			$key = 0;
 			foreach ($model->$name as $key => $document)
 			{
-				$data = FromDocument::toRawArray($document);
+				$data = RawArray::fromModel($document);
 				$dbValue[$key] = $data;
 			}
 		}

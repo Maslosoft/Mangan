@@ -28,7 +28,7 @@ use Maslosoft\Mangan\Signals\AfterDelete;
 use Maslosoft\Mangan\Signals\AfterSave;
 use Maslosoft\Mangan\Signals\BeforeDelete;
 use Maslosoft\Mangan\Signals\BeforeSave;
-use Maslosoft\Mangan\Transformers\FromDocument;
+use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
 use MongoException;
@@ -173,7 +173,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function setAttributes($atributes)
 	{
-		$this->model = Transformers\FromRawArray::toDocument($atributes);
+		$this->model = Transformers\RawArray::toModel($atributes);
 	}
 
 	public function __set($name, $value)
@@ -186,7 +186,7 @@ class EntityManager implements IEntityManager
 		$model = $model? : $this->model;
 		if ($this->_beforeSave($model))
 		{
-			$rawData = FromDocument::toRawArray($model);
+			$rawData = RawArray::fromModel($model);
 
 			$result = $this->_collection->insert($rawData, $this->options->getSaveOptions());
 
@@ -223,7 +223,7 @@ class EntityManager implements IEntityManager
 		}
 		if ($this->_beforeSave($this->model))
 		{
-			$rawData = FromDocument::toRawArray($this->model);
+			$rawData = RawArray::fromModel($this->model);
 
 			// filter attributes if set in param
 			if ($attributes !== null)

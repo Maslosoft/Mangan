@@ -17,8 +17,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
-use Maslosoft\Mangan\Transformers\FromDocument;
-use Maslosoft\Mangan\Transformers\FromRawArray;
+use Maslosoft\Mangan\Transformers\RawArray;
 
 /**
  * DbRefArray
@@ -46,7 +45,7 @@ class DbRefArrayDecorator implements IDecorator
 		foreach ($dbValues as $key => $dbValue)
 		{
 			$dbValue['_class'] = DbRef::class;
-			$dbRef = FromRawArray::toDocument($dbValue);
+			$dbRef = RawArray::toModel($dbValue);
 			/* @var $dbRef DbRef */
 			$referenced = new $dbRef->class;
 			$found = (new Finder($referenced))->findByPk($dbRef->pk);
@@ -84,7 +83,7 @@ class DbRefArrayDecorator implements IDecorator
 			{
 				DbRefManager::save($referenced, $dbRef);
 			}
-			$dbValue[$key] = FromDocument::toRawArray($dbRef, false);
+			$dbValue[$key] = RawArray::fromModel($dbRef, false);
 		}
 	}
 
