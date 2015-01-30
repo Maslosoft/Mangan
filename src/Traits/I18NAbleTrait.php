@@ -77,7 +77,7 @@ trait I18NAbleTrait
 		Event::trigger($this, I18NAble::EventAfterLangChange);
 	}
 
-	public function setLangauges($languages)
+	public function setLanguages($languages)
 	{
 		$this->_languages = $languages;
 	}

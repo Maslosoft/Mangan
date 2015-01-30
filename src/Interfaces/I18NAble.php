@@ -61,7 +61,7 @@ interface I18NAble
 	 * @deprecated since version number
 	 * @param string[] $languages
 	 */
-	public function setLangauges($languages);
+	public function setLanguages($languages);
 
 	/**
 	 * Get default language code
