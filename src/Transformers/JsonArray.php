@@ -27,6 +27,16 @@ class JsonArray implements ITransformator
 		$sanitizer = new Sanitizer($model);
 		foreach ($meta->fields() as $name => $field)
 		{
+			$fieldMeta = $meta->$name;
+			/* @var $fieldMeta DocumentPropertyMeta */
+			if (!$fieldMeta)
+			{
+				continue;
+			}
+			if ($fieldMeta->toJson === false)
+			{
+				continue;
+			}
 			$model->$name = $sanitizer->write($name, $model->$name);
 		}
 		if ($withClassName)
@@ -68,7 +78,7 @@ class JsonArray implements ITransformator
 			{
 				continue;
 			}
-			if ($fieldMeta->toJson === false)
+			if ($fieldMeta->fromJson === false)
 			{
 				continue;
 			}
