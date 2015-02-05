@@ -1,47 +1,33 @@
 <?php
 
-/**
- * This software package is licensed under New BSD license.
- *
- * @package maslosoft/mangan
- * @licence New BSD
- * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
- * @copyright Copyright (c) Maslosoft
- * @copyright Copyright (c) Others as mentioned in code
- * @link http://maslosoft.com/mangan/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Mangan\Exceptions\TransformatorException;
-use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
- * RawArray
+ * DocumentArray
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class RawArray
+class JsonArray implements ITransformator
 {
-
-	/**
-	 * Returns the given object as an associative array
-	 * @param IModel|object $model
-	 * @param bool $withClassName Whenever to include special _class field
-	 * @return array an associative array of the contents of this object
-	 */
 	public static function fromModel($model, $withClassName = true)
 	{
 		$meta = ManganMeta::create($model);
-		$decorator = new Decorator($model);
 		$arr = [];
 		$sanitizer = new Sanitizer($model);
 		foreach ($meta->fields() as $name => $field)
 		{
 			$model->$name = $sanitizer->write($name, $model->$name);
-			$decorator->write($name, $arr[$name]);
 		}
 		if ($withClassName)
 		{
@@ -50,11 +36,6 @@ class RawArray
 		return $arr;
 	}
 
-	/**
-	 * Create document from array
-	 * TODO Enforce $className if collection is homogenous
-	 * @return object
-	 */
 	public static function toModel($data, $className = null)
 	{
 		if (!$data)
@@ -76,25 +57,22 @@ class RawArray
 				throw new TransformatorException('Could not determine document type');
 			}
 		}
-		return self::_toDocument($className, $data);
-	}
-
-	private static function _toDocument($className, $data)
-	{
 		$model = new $className;
 		$meta = ManganMeta::create($model);
-		$decorator = new Decorator($model);
 		$sanitizer = new Sanitizer($model);
 		foreach ($data as $name => $value)
 		{
 			$fieldMeta = $meta->$name;
-			/* @var \Maslosoft\Mangan\Meta\DocumentPropertyMeta $fieldMeta */
+			/* @var $fieldMeta DocumentPropertyMeta */
 			if (!$fieldMeta)
 			{
 				continue;
 			}
-			$decorator->read($name, $value);
-			$model->$name = $sanitizer->read($name, $model->$name);
+			if ($fieldMeta->toJson === false)
+			{
+				continue;
+			}
+			$model->$name = $sanitizer->read($name, $value);
 		}
 		return $model;
 	}
