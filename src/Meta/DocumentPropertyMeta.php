@@ -88,10 +88,24 @@ class DocumentPropertyMeta extends MetaProperty
 	public $toJson = true;
 
 	/**
+	 * Whenever property should be included when converting from Json
+	 * @see JsonArray
+	 * @var bool
+	 */
+	public $fromJson = true;
+
+	/**
 	 * Whenever property should be included when converting to document array
 	 * @see DocumentArray
 	 * @var bool
 	 */
 	public $toArray = true;
+
+	/**
+	 * Whenever property should be included when converting from document array
+	 * @see DocumentArray
+	 * @var bool
+	 */
+	public $fromArray = true;
 
 }
