@@ -15,6 +15,8 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\Sanitizers\ISanitizer;
+use Maslosoft\Mangan\Transformers\DocumentArray;
+use Maslosoft\Mangan\Transformers\JsonArray;
 
 /**
  * DocumentPropertyMeta
@@ -77,4 +79,19 @@ class DocumentPropertyMeta extends MetaProperty
 	 * @var bool
 	 */
 	public $readonly = false;
+
+	/**
+	 * Whenever property should be included when converting to Json
+	 * @see JsonArray
+	 * @var bool
+	 */
+	public $toJson = true;
+
+	/**
+	 * Whenever property should be included when converting to document array
+	 * @see DocumentArray
+	 * @var bool
+	 */
+	public $toArray = true;
+
 }
