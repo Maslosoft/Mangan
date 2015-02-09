@@ -97,6 +97,7 @@ class DocumentTypeMeta extends MetaType
 	public function __construct(ReflectionClass $info = null)
 	{
 		// Client Options must be unset to allow cascading int EntityOptions
+		parent::__construct($info);
 		foreach ($this->_getOptionNames() as $name)
 		{
 			PropertyMaker::defineProperty($this, $name);
