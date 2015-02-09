@@ -97,6 +97,10 @@ class Mangan
 		]
 	];
 
+	public $validators = [
+		
+	];
+
 	/**
 	 * Connection ID
 	 * @var string
