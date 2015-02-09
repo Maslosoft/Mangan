@@ -11,15 +11,20 @@ namespace Maslosoft\Mangan\Transformers\Filters;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
- * ITransformatorFilter
+ * JsonFilter
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ITransformatorFilter
+class JsonFilter implements ITransformatorFilter
 {
-	public function fromModel($model, DocumentPropertyMeta $fieldMeta);
+	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
+	{
+		return $fieldMeta->toJson;
+	}
 
-	public function toModel($model, DocumentPropertyMeta $fieldMeta);
-
+	public function toModel($model, DocumentPropertyMeta $fieldMeta)
+	{
+		return $fieldMeta->fromJson;
+	}
 
 }

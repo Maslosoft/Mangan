@@ -11,15 +11,21 @@ namespace Maslosoft\Mangan\Transformers\Filters;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
- * ITransformatorFilter
+ * PersistentFilter
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ITransformatorFilter
+class PersistentFilter implements ITransformatorFilter
 {
-	public function fromModel($model, DocumentPropertyMeta $fieldMeta);
 
-	public function toModel($model, DocumentPropertyMeta $fieldMeta);
+	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
+	{
+		return $fieldMeta->persistent;
+	}
 
+	public function toModel($model, DocumentPropertyMeta $fieldMeta)
+	{
+		return $fieldMeta->persistent;
+	}
 
 }
