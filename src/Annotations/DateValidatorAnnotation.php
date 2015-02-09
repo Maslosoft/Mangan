@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Bridge\Yii\Annotations;
+namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Base\ValidatorAnnotation;
 use Maslosoft\Addendum\Interfaces\IBuiltInValidatorAnnotation;

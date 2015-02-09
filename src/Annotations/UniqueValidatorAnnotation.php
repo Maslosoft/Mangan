@@ -11,35 +11,33 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Bridge\Yii\Annotations;
+namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Base\ValidatorAnnotation;
 use Maslosoft\Addendum\Interfaces\IBuiltInValidatorAnnotation;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CExistValidator.
+ * This is not actual validator. For validator class @see CUniqueValidator.
  */
 
 /**
- * CExistValidator validates that the attribute value exists in a table.
- *
- * This validator is often used to verify that a foreign key contains a value
- * that can be found in the foreign table.
+ * CUniqueValidator validates that the attribute value is unique in the corresponding database table.
  *
  * When using the {@link message} property to define a custom error message, the message
  * may contain additional placeholders that will be replaced with the actual content. In addition
  * to the "{attribute}" placeholder, recognized by all validators (see {@link CValidator}),
- * CExistValidator allows for the following placeholders to be specified:
+ * CUniqueValidator allows for the following placeholders to be specified:
  * <ul>
- * <li>{value}: replaced with value of the attribute.</li>
+ * <li>{value}: replaced with current value of the attribute.</li>
  * </ul>
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$
  * @package system.validators
+ * @since 1.0
  */
-class ExistValidatorAnnotation extends ValidatorAnnotation implements IBuiltInValidatorAnnotation
+class UniqueValidatorAnnotation extends ValidatorAnnotation implements IBuiltInValidatorAnnotation
 {
 
 	/**
@@ -49,9 +47,15 @@ class ExistValidatorAnnotation extends ValidatorAnnotation implements IBuiltInVa
 	public $caseSensitive = true;
 
 	/**
+	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
+	 * meaning that if the attribute is empty, it is considered valid.
+	 */
+	public $allowEmpty = true;
+
+	/**
 	 * @var string the ActiveRecord class name that should be used to
-	 * look for the attribute value being validated. Defaults to null,
-	 * meaning using the ActiveRecord class of the attribute being validated.
+	 * look for the attribute value being validated. Defaults to null, meaning using
+	 * the class of the object currently being validated.
 	 * You may use path alias to reference a class name here.
 	 * @see attributeName
 	 */
@@ -73,11 +77,5 @@ class ExistValidatorAnnotation extends ValidatorAnnotation implements IBuiltInVa
 	 */
 	public $criteria = array(
 	);
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
 
 }
