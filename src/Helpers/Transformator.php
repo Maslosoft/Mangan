@@ -60,6 +60,11 @@ abstract class Transformator
 		$this->_model = $document;
 	}
 
+	public function getTransformatorClass()
+	{
+		return $this->_transformatorClass;
+	}
+
 	public function getModel()
 	{
 		return $this->_model;

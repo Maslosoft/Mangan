@@ -33,7 +33,7 @@ class Decorator extends Transformator
 	 */
 	public function read($name, &$dbValue)
 	{
-		$this->getFor($name)->read($this->getModel(), $name, $dbValue);
+		$this->getFor($name)->read($this->getModel(), $name, $dbValue, $this->getTransformatorClass());
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Decorator extends Transformator
 	 */
 	public function write($name, &$dbValue)
 	{
-		$this->getFor($name)->write($this->getModel(), $name, $dbValue);
+		$this->getFor($name)->write($this->getModel(), $name, $dbValue, $this->getTransformatorClass());
 	}
 
 	/**

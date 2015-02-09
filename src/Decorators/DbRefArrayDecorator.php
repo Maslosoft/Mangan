@@ -27,7 +27,7 @@ use Maslosoft\Mangan\Transformers\RawArray;
 class DbRefArrayDecorator implements IDecorator
 {
 
-	public function read($model, $name, &$dbValues)
+	public function read($model, $name, &$dbValues, $transformatorClass = ITransformator::class)
 	{
 		if (!$dbValues)
 		{
@@ -45,7 +45,7 @@ class DbRefArrayDecorator implements IDecorator
 		foreach ($dbValues as $key => $dbValue)
 		{
 			$dbValue['_class'] = DbRef::class;
-			$dbRef = RawArray::toModel($dbValue);
+			$dbRef = $transformatorClass::toModel($dbValue);
 			/* @var $dbRef DbRef */
 			$referenced = new $dbRef->class;
 			$found = (new Finder($referenced))->findByPk($dbRef->pk);
@@ -58,7 +58,7 @@ class DbRefArrayDecorator implements IDecorator
 		$model->$name = $refs;
 	}
 
-	public function write($model, $name, &$dbValue)
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		$fieldMeta = ManganMeta::create($model)->field($name);
 		$dbValue = $fieldMeta->default;
@@ -83,7 +83,7 @@ class DbRefArrayDecorator implements IDecorator
 			{
 				DbRefManager::save($referenced, $dbRef);
 			}
-			$dbValue[$key] = RawArray::fromModel($dbRef, false);
+			$dbValue[$key] = $transformatorClass::fromModel($dbRef, false);
 		}
 	}
 

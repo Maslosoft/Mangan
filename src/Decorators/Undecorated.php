@@ -13,6 +13,9 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Mangan\Interfaces\IModel;
+use Maslosoft\Mangan\Transformers\ITransformator;
+
 /**
  * Undecorated
  *
@@ -24,12 +27,12 @@ class Undecorated implements IDecorator
 	/**
 	 * This will be called when getting value.
 	 * This should return end user value.
-	 * @param EmbeddedDocument $model Document model which will be decorated
+	 * @param IModel $model Document model which will be decorated
 	 * @param string $name Field name
 	 * @param mixed $dbValue
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, $name, &$dbValue)
+	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		$model->$name = $dbValue;
 	}
@@ -37,12 +40,12 @@ class Undecorated implements IDecorator
 	/**
 	 * This will be called when setting value.
 	 * This should return db acceptable value
-	 * @param EmbeddedDocument $model Document model which will be decorated
+	 * @param IModel $model Document model which will be decorated
 	 * @param string $name Field name
 	 * @param mixed $dbValue
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValue)
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		$dbValue = $model->$name;
 	}

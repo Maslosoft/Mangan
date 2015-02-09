@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
 use Maslosoft\Mangan\Decorators\IDecorator;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * Container for decorators
@@ -38,19 +39,19 @@ class CompoundDecorator implements IDecorator
 		$this->_decorators = $decorators;
 	}
 
-	public function read($model, $name, &$dbValue)
+	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		foreach ($this->_decorators as $decorator)
 		{
-			$decorator->read($model, $name, $dbValue);
+			$decorator->read($model, $name, $dbValue, $transformatorClass);
 		}
 	}
 
-	public function write($model, $name, &$dbValue)
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		foreach ($this->_decorators as $decorator)
 		{
-			$decorator->write($model, $name, $dbValue);
+			$decorator->write($model, $name, $dbValue, $transformatorClass);
 		}
 	}
 

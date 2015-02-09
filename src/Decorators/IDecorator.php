@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Mangan\EmbeddedDocument;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * This should modify fields bahavior
@@ -28,9 +29,10 @@ interface IDecorator
 	 * @param EmbeddedDocument $model Document model which will be decorated
 	 * @param string $name Field name
 	 * @param mixed $dbValue
+	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, $name, &$dbValue);
+	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class);
 
 	/**
 	 * This will be called when setting value.
@@ -38,7 +40,8 @@ interface IDecorator
 	 * @param EmbeddedDocument $model Document model which will be decorated
 	 * @param string $name Field name
 	 * @param mixed $dbValue
+	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValue);
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class);
 }
