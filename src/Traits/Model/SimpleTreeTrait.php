@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Models\Traits;
+namespace Maslosoft\Mangan\Traits\Model;
 
 use CEvent;
 use Maslosoft\Ilmatar\Components\MongoDocument;
