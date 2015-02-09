@@ -16,6 +16,8 @@ namespace Maslosoft\Mangan\Decorators;
 use Maslosoft\Mangan\Interfaces\I18NAble;
 use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\ManganException;
+use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * This creates i18n fields
@@ -33,7 +35,7 @@ class I18NDecorator implements IDecorator
 	 * @param mixed $dbValue
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, $name, &$dbValue)
+	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		if (!$model instanceof I18NAble)
 		{
@@ -48,7 +50,7 @@ class I18NDecorator implements IDecorator
 		else
 		{
 			$defaultLang = $model->getDefaultLanguage();
-			$i18nMeta = \Maslosoft\Mangan\Meta\ManganMeta::create($model)->field($name)->i18n;
+			$i18nMeta = ManganMeta::create($model)->field($name)->i18n;
 			if($i18nMeta->allowDefault && array_key_exists($defaultLang, $dbValue))
 			{
 				$model->$name = $dbValue[$defaultLang];
@@ -77,7 +79,7 @@ class I18NDecorator implements IDecorator
 	 * @param mixed $dbValue
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValue)
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		if (!$model instanceof I18NAble)
 		{

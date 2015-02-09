@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan\Decorators;
 use Maslosoft\Mangan\Interfaces\IOwnered;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Transformers\RawArray;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * EmbeddedDecorator
@@ -26,10 +26,10 @@ use Maslosoft\Mangan\Transformers\RawArray;
 class EmbeddedDecorator implements IDecorator
 {
 
-	public function read($model, $name, &$dbValue)
+	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		self::ensureClass($model, $name, $dbValue);
-		$embedded = RawArray::toModel($dbValue);
+		$embedded = $transformatorClass::toModel($dbValue);
 		if($embedded instanceof IOwnered)
 		{
 			$embedded->setOwner($model);
@@ -37,9 +37,9 @@ class EmbeddedDecorator implements IDecorator
 		$model->$name = $embedded;
 	}
 
-	public function write($model, $name, &$dbValue)
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
-		$dbValue = RawArray::fromModel($model->$name);
+		$dbValue = $transformatorClass::fromModel($model->$name);
 	}
 
 	public static function ensureClass($model, $name, &$dbValue)

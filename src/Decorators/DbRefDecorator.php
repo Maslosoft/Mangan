@@ -13,12 +13,11 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
-use Maslosoft\Mangan\Transformers\RawArray;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * DbRefDecorator
@@ -28,7 +27,7 @@ use Maslosoft\Mangan\Transformers\RawArray;
 class DbRefDecorator implements IDecorator
 {
 
-	public function read($model, $name, &$dbValue)
+	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		if (!$dbValue)
 		{
@@ -37,13 +36,13 @@ class DbRefDecorator implements IDecorator
 			return;
 		}
 		$dbValue['_class'] = DbRef::class;
-		$dbRef = RawArray::toModel($dbValue);
+		$dbRef = $transformatorClass::toModel($dbValue);
 		/* @var $dbRef DbRef */
 		$referenced = new $dbRef->class;
 		$model->$name = (new Finder($referenced))->findByPk($dbRef->pk);
 	}
 
-	public function write($model, $name, &$dbValue)
+	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		if(!$model->$name)
 		{
@@ -56,7 +55,7 @@ class DbRefDecorator implements IDecorator
 		{
 			DbRefManager::save($referenced, $dbRef);
 		}
-		$dbValue = RawArray::fromModel($dbRef, false);
+		$dbValue = $transformatorClass::fromModel($dbRef, false);
 	}
 
 }
