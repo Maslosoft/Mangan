@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Helpers\Decorator;
 use Maslosoft\Mangan\Decorators\IDecorator;
 use Maslosoft\Mangan\Helpers\Transformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 
 /**
  * Decorator
@@ -46,13 +47,15 @@ class Decorator extends Transformator
 	}
 
 	/**
-	 *
+	 * Get transformer
+	 * @param type $transformatorClass
+	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $meta
 	 * @return IDecorator
 	 */
-	protected function _getTransformer(DocumentPropertyMeta $meta)
+	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
-		return Factory::create($meta);
+		return Factory::create($transformatorClass, $modelMeta, $meta);
 	}
 
 }

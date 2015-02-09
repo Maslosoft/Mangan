@@ -14,7 +14,19 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\EmbeDi\EmbeDi;
+use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
+use Maslosoft\Mangan\Decorators\DbRefDecorator;
+use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
+use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
+use Maslosoft\Mangan\Decorators\I18NDecorator;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
+use Maslosoft\Mangan\Transformers\DocumentArray;
+use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
+use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
+use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
+use Maslosoft\Mangan\Transformers\ITransformator;
+use Maslosoft\Mangan\Transformers\JsonArray;
+use Maslosoft\Mangan\Transformers\RawArray;
 use MongoClient;
 use MongoException;
 
@@ -44,6 +56,46 @@ class Mangan
 	 * @since v1.0
 	 */
 	public $connectionString = 'mongodb://localhost:27017';
+
+	/**
+	 * Configuration of decorators for transformers
+	 * Array key is decorator class name or interface, values are decorator class names.
+	 * @var string[][]
+	 */
+	public $decorators = [
+		ITransformator::class => [
+			DbRefArrayDecorator::class,
+			DbRefDecorator::class,
+			EmbeddedArrayDecorator::class,
+			EmbeddedDecorator::class,
+		],
+		DocumentArray::class => [
+		],
+		JsonArray::class => [
+		],
+		RawArray::class => [
+			I18NDecorator::class
+		]
+	];
+
+	/**
+	 * Configuration of property filters for transformers
+	 * Array key is decorator class name or interface, values are filter class names.
+	 * @var string[][]
+	 */
+	public $filters = [
+		ITransformator::class => [
+		],
+		DocumentArray::class => [
+			DocumentArrayFilter::class,
+		],
+		JsonArray::class => [
+			JsonFilter::class,
+		],
+		RawArray::class => [
+			PersistentFilter::class
+		]
+	];
 
 	/**
 	 * Connection ID

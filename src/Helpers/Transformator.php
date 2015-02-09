@@ -16,8 +16,10 @@ namespace Maslosoft\Mangan\Helpers;
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Sanitizers\ISanitizer;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * Transformator
@@ -45,9 +47,16 @@ abstract class Transformator
 	 */
 	private $_model = null;
 
-	public function __construct($document)
+	/**
+	 * Transormator class name
+	 * @var string
+	 */
+	private $_transformatorClass = ITransformator::class;
+
+	public function __construct($document, $transformatorClass = ITransformator::class)
 	{
 		$this->_meta = ManganMeta::create($document);
+		$this->_transformatorClass = $transformatorClass;
 		$this->_model = $document;
 	}
 
@@ -69,7 +78,7 @@ abstract class Transformator
 			{
 				throw new TransformatorException(sprintf('There is not metadata for field `%s` of model `%s`, have you declared this field?', $name, get_class($this->getModel())));
 			}
-			$this->_transformators[$name] = $this->_getTransformer($this->_meta->$name);
+			$this->_transformators[$name] = $this->_getTransformer($this->_transformatorClass, $this->_meta->type(), $this->_meta->$name);
 		}
 		return $this->_transformators[$name];
 	}
@@ -84,5 +93,5 @@ abstract class Transformator
 		throw new TransformatorException(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
 	}
 
-	abstract protected function _getTransformer(DocumentPropertyMeta $meta);
+	abstract protected function _getTransformer($transformatorClass, DocumentTypeMeta $documentMeta,  DocumentPropertyMeta $fieldMeta);
 }

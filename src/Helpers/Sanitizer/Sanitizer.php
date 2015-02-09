@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
 use Maslosoft\Mangan\Helpers\Transformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 
 /**
  * Sanitizer
@@ -34,7 +35,7 @@ class Sanitizer extends Transformator
 		return $this->getFor($name)->write($this->getModel(), $phpValue);
 	}
 
-	protected function _getTransformer(DocumentPropertyMeta $meta)
+	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
 		return Factory::create($meta);
 	}

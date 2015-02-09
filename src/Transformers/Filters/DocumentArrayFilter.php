@@ -11,15 +11,21 @@ namespace Maslosoft\Mangan\Transformers\Filters;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
- * ITransformatorFilter
+ * DocumentArrayFilter
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ITransformatorFilter
+class DocumentArrayFilter implements ITransformatorFilter
 {
-	public function fromModel($model, DocumentPropertyMeta $fieldMeta);
 
-	public function toModel($model, DocumentPropertyMeta $fieldMeta);
+	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
+	{
+		return $fieldMeta->toArray;
+	}
 
+	public function toModel($model, DocumentPropertyMeta $fieldMeta)
+	{
+		return $fieldMeta->fromArray;
+	}
 
 }
