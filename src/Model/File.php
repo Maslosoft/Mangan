@@ -21,7 +21,6 @@ use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\Mangan;
 use MongoGridFSFile;
 use MongoId;
-use Yii;
 
 /**
  * Class for storing embedded files
@@ -33,6 +32,7 @@ class File extends EmbeddedDocument
 
 	/**
 	 * @SafeValidator
+	 * @Sanitizer('MongoObjectId')
 	 * @var MongoId
 	 */
 	public $id = null;
@@ -71,18 +71,15 @@ class File extends EmbeddedDocument
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		parent::__construct($scenario, $lang);
-		$this->setId(new MongoId);
-		/**
-		 * TODO Fix this...
-		 */
+		$this->id = new MongoId;
 		$mangan = new Mangan($this->meta->type()->connectionId);
 		$this->_db = $mangan->getDbInstance();
 	}
 
 	public function setOwner(EmbeddedDocument $owner)
 	{
-		parent::setOwner($owner);
-		$root = $owner->getRoot();
+//		parent::setOwner($owner);
+//		$root = $owner->getRoot();
 
 		/**
 		 * TODO Attach event handler
@@ -100,20 +97,11 @@ class File extends EmbeddedDocument
 
 	public function getId()
 	{
-		if (!$this->getAttribute('id'))
+		if (!$this->id instanceof MongoId)
 		{
-			$this->setAttribute('id', new MongoId());
+			$this->id = new MongoId($this->id);
 		}
-		return $this->getAttribute('id');
-	}
-
-	public function setId($value)
-	{
-		if (!$value instanceof MongoId)
-		{
-			$value = new MongoId($value);
-		}
-		$this->setAttribute('id', $value);
+		return $this->id;
 	}
 
 	/**
@@ -196,7 +184,7 @@ class File extends EmbeddedDocument
 		header('Cache-Control: max-age=86400');
 		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
 		echo $file->getBytes();
-		Yii::app()->end();
+		exit;
 	}
 
 	protected function _stream(MongoGridFSFile $file)
@@ -226,7 +214,7 @@ class File extends EmbeddedDocument
 			}
 			flush();
 		}
-		Yii::app()->end();
+		exit;
 	}
 
 	/**
