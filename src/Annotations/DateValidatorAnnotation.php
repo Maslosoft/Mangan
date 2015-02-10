@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Base\ValidatorAnnotation;
-use Maslosoft\Addendum\Interfaces\IBuiltInValidatorAnnotation;
+use Maslosoft\Mangan\Base\ValidatorAnnotation;
+use Maslosoft\Mangan\Base\IBuiltInValidatorAnnotation;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
