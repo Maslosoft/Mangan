@@ -39,6 +39,17 @@ class EmbeddedDecorator implements IDecorator
 
 	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
+		if(null === $model->$name)
+		{
+			$fieldMeta = ManganMeta::create($model)->$name;
+			$className = $fieldMeta->embedded;
+			if(!$className)
+			{
+				return null;
+			}
+			$dbValue = $transformatorClass::fromModel(new $className);
+			return;
+		}
 		$dbValue = $transformatorClass::fromModel($model->$name);
 	}
 
@@ -48,7 +59,7 @@ class EmbeddedDecorator implements IDecorator
 		{
 			$meta = ManganMeta::create($model)->$name;
 			/* @var $meta DocumentPropertyMeta */
-			$dbValue['_class'] = $meta->embedded->class;
+			$dbValue['_class'] = $meta->embedded;
 		}
 	}
 }

@@ -41,8 +41,14 @@ class I18NDecorator implements IDecorator
 		{
 			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), I18NAble::class));
 		}
-		$model->setRawI18N($dbValue);
 		$lang = $model->getLang();
+		if(!is_array($dbValue))
+		{
+			$value = $dbValue;
+			$dbValue = [];
+			$dbValue[$lang] = $value;
+		}
+		$model->setRawI18N($dbValue);
 		if(array_key_exists($lang, $dbValue))
 		{
 			$model->$name = $dbValue[$lang];
