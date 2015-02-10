@@ -97,10 +97,6 @@ class Mangan
 		]
 	];
 
-	public $validators = [
-		
-	];
-
 	/**
 	 * Connection ID
 	 * @var string
@@ -244,6 +240,7 @@ class Mangan
 
 	/**
 	 * Get MongoDB instance
+	 * @return \MongoDB Mongo DB instance
 	 * @since v1.0
 	 */
 	public function getDbInstance()
