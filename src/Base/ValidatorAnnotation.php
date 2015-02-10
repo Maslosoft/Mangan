@@ -1,15 +1,15 @@
 <?php
 
-namespace Maslosoft\Addendum\Base;
+namespace Maslosoft\Mangan\Base;
 
-use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * Base class for validator annotations
  *
  * @author Piotr
  */
-abstract class ValidatorAnnotation extends MetaAnnotation
+abstract class ValidatorAnnotation extends ManganPropertyAnnotation
 {
 
 	/**
