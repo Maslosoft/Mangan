@@ -18,6 +18,7 @@ use CUploadedFile;
 use Exception;
 use finfo;
 use Maslosoft\Mangan\EmbeddedDocument;
+use Maslosoft\Mangan\Mangan;
 use MongoGridFSFile;
 use MongoId;
 use Yii;
@@ -71,22 +72,30 @@ class File extends EmbeddedDocument
 	{
 		parent::__construct($scenario, $lang);
 		$this->setId(new MongoId);
-		$this->_db = Yii::app()->mongodb->getDbInstance();
+		/**
+		 * TODO Fix this...
+		 */
+		$mangan = new Mangan($this->meta->type()->connectionId);
+		$this->_db = $mangan->getDbInstance();
 	}
 
 	public function setOwner(EmbeddedDocument $owner)
 	{
 		parent::setOwner($owner);
 		$root = $owner->getRoot();
-		if ($root->hasEvent('onAfterDelete'))
-		{
-			$onAfterDelete = function($event)
-			{
-				$this->_onAfterDelete($event);
-			};
-			$onAfterDelete->bindTo($this);
-			$root->onAfterDelete = $onAfterDelete;
-		}
+
+		/**
+		 * TODO Attach event handler
+		 */
+//		if ($root->hasEvent('onAfterDelete'))
+//		{
+//			$onAfterDelete = function($event)
+//			{
+//				$this->_onAfterDelete($event);
+//			};
+//			$onAfterDelete->bindTo($this);
+//			$root->onAfterDelete = $onAfterDelete;
+//		}
 	}
 
 	public function getId()
