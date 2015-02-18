@@ -78,16 +78,15 @@ class File extends EmbeddedDocument
 		$this->_db = $mangan->getDbInstance();
 	}
 
-	public function setOwner(IOwnered $owner)
+	public function setOwner($owner)
 	{
 		parent::setOwner($owner);
 		$root = $owner->getRoot();
-		$onAfterDelete = function($event)
+		$onAfterDelete = function()
 		{
-			$this->_onAfterDelete($event);
+			$this->_onAfterDelete();
 		};
 		$onAfterDelete->bindTo($this);
-		$root->onAfterDelete = $onAfterDelete;
 		Event::on($root, EntityManager::EventAfterDelete, $onAfterDelete);
 	}
 

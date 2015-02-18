@@ -94,7 +94,7 @@ class Event implements IEvent
 	 *
 	 * For more details about how to declare an event handler, please refer to [[Component::on()]].
 	 *
-	 * @param string $class the fully qualified class name to which the event handler needs to attach.
+	 * @param string|object $class the fully qualified class name to which the event handler needs to attach.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
 	 * @param mixed $data the data to be passed to the event handler when the event is triggered.
