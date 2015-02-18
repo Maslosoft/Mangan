@@ -160,6 +160,10 @@ class Mangan
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
 		$this->_di = new EmbeDi($connectionId);
+		if (!$connectionId)
+		{
+			$connectionId = self::DefaultConnectionId;
+		}
 		$this->connectionId = $connectionId;
 		$this->_di->configure($this);
 		$this->_cs = new ConnectionStorage($this, $connectionId);

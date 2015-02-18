@@ -14,9 +14,8 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Collections\Meta;
-use Maslosoft\Mangan\Events\ClassNotFound;
-use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\IActiveDocument;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Yii;
 
 /**
@@ -56,7 +55,7 @@ abstract class EmbeddedDocument implements IActiveDocument
 	/**
 	 * Model metadata
 	 * @Persistent(false)
-	 * @var Meta
+	 * @var ManganMeta
 	 */
 	public $meta = null;
 
@@ -71,7 +70,7 @@ abstract class EmbeddedDocument implements IActiveDocument
 	{
 		$this->_class = get_class($this);
 
-		$this->meta = Meta::create($this);
+		$this->meta = ManganMeta::create($this);
 
 		$this->setLang($lang);
 		$this->setScenario($scenario);

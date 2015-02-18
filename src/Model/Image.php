@@ -13,7 +13,6 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use CFileHelper;
 use Exception;
 use MongoGridFSFile;
 use PHPThumb\GD;
@@ -92,7 +91,7 @@ class Image extends File
 	 */
 	public function isImage($name)
 	{
-		return in_array(strtolower(CFileHelper::getExtension($name)), ['jpg', 'jpeg', 'gif', 'png']);
+		return in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'gif', 'png']);
 	}
 
 	protected function _set($tempName, $fileName, $params = [])

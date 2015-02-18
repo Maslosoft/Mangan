@@ -13,11 +13,13 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use CMap;
 use CUploadedFile;
 use Exception;
 use finfo;
 use Maslosoft\Mangan\EmbeddedDocument;
+use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Interfaces\IOwnered;
 use Maslosoft\Mangan\Mangan;
 use MongoGridFSFile;
 use MongoId;
@@ -76,23 +78,17 @@ class File extends EmbeddedDocument
 		$this->_db = $mangan->getDbInstance();
 	}
 
-	public function setOwner(EmbeddedDocument $owner)
+	public function setOwner(IOwnered $owner)
 	{
-//		parent::setOwner($owner);
-//		$root = $owner->getRoot();
-
-		/**
-		 * TODO Attach event handler
-		 */
-//		if ($root->hasEvent('onAfterDelete'))
-//		{
-//			$onAfterDelete = function($event)
-//			{
-//				$this->_onAfterDelete($event);
-//			};
-//			$onAfterDelete->bindTo($this);
-//			$root->onAfterDelete = $onAfterDelete;
-//		}
+		parent::setOwner($owner);
+		$root = $owner->getRoot();
+		$onAfterDelete = function($event)
+		{
+			$this->_onAfterDelete($event);
+		};
+		$onAfterDelete->bindTo($this);
+		$root->onAfterDelete = $onAfterDelete;
+		Event::on($root, EntityManager::EventAfterDelete, $onAfterDelete);
 	}
 
 	public function getId()
@@ -159,7 +155,7 @@ class File extends EmbeddedDocument
 			'parentId' => $this->getId(),
 			'isTemp' => false
 		];
-		return $this->_db->getGridFS()->findOne(CMap::mergeArray($criteria, $params));
+		return $this->_db->getGridFS()->findOne(array_merge($criteria, $params));
 	}
 
 	/**
@@ -245,7 +241,7 @@ class File extends EmbeddedDocument
 		$this->filename = $fileName;
 		$this->contentType = $mime;
 		$this->size = filesize($tempName);
-		$params = CMap::mergeArray($data, $params);
+		$params = array_merge($data, $params);
 
 		// Replace existing file, remove previous
 		if (!$params['isTemp'])
