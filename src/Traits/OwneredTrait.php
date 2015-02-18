@@ -37,7 +37,7 @@ trait OwneredTrait
 
 	/**
 	 * Get document root
-	 * @return IModel Root document
+	 * @return object Root document
 	 */
 	public function getRoot()
 	{

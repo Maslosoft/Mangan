@@ -29,7 +29,7 @@ interface IOwnered
 
 	/**
 	 * Get class owner
-	 * @param IModel $owner
+	 * @param object $owner
 	 */
 	public function setOwner($owner);
 

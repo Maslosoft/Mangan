@@ -323,7 +323,7 @@ class EntityManager implements IEntityManager
 	public function refresh()
 	{
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
-		if (!$this->getIsNewRecord() && $this->getCollection()->count($conditions) == 1)
+		if ($this->getCollection()->count($conditions) == 1)
 		{
 			$this->setAttributes($this->getCollection()->find($conditions), false);
 			return true;
@@ -342,22 +342,15 @@ class EntityManager implements IEntityManager
 	 */
 	public function delete()
 	{
-		if (!$this->getIsNewRecord())
+		if ($this->_beforeDelete())
 		{
-			if ($this->_beforeDelete())
-			{
-				$result = $this->deleteOne(PkManager::prepareFromModel($this->model));
+			$result = $this->deleteOne(PkManager::prepareFromModel($this->model));
 
-				if ($result !== false)
-				{
-					$this->_afterDelete();
-					$this->setIsNewRecord(true);
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+			if ($result !== false)
+			{
+				$this->_afterDelete();
+				$this->setIsNewRecord(true);
+				return true;
 			}
 			else
 			{
@@ -366,7 +359,7 @@ class EntityManager implements IEntityManager
 		}
 		else
 		{
-			throw new MongoException('The Document cannot be deleted because it is new.');
+			return false;
 		}
 	}
 

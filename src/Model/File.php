@@ -81,7 +81,7 @@ class File extends EmbeddedDocument
 	public function setOwner($owner)
 	{
 		parent::setOwner($owner);
-		$root = $owner->getRoot();
+		$root = $this->getRoot();
 		$onAfterDelete = function()
 		{
 			$this->_onAfterDelete();
