@@ -13,9 +13,10 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\Events\ClassNotFound;
-use Yii;
+use Maslosoft\Mangan\Events\Event;
 
 /**
  * Helper which can be used to resolve not found classes of embedded documents.
@@ -23,18 +24,20 @@ use Yii;
  * Use this in class constructor, ie:
  * <pre>
  * public function __construct($scenario = 'insert', $lang = '')
- *	{
- *		parent::__construct($scenario, $lang);
- *		$resolver = new Maslosoft\Mangan\Helpers\NotFoundResolver($this);
- *		$resolver->classMap = [
- *			'LegacyName' => 'Company\Models\UberName'
- *		];
- *	}
+ * 	{
+ * 		parent::__construct($scenario, $lang);
+ * 		$resolver = new Maslosoft\Mangan\Helpers\NotFoundResolver($this);
+ * 		$resolver->classMap = [
+ * 			'LegacyName' => 'Company\Models\UberName'
+ * 		];
+ * 	}
  * </pre>
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class NotFoundResolver
 {
+
+	const EventClassNotFound = 'classNotFound';
 
 	/**
 	 * Class map in form:
@@ -49,26 +52,22 @@ class NotFoundResolver
 	 */
 	protected $document = null;
 
-	public function __construct(EmbeddedDocument $document, $classMap = [])
+	public function __construct(IAnnotated $document, $classMap = [])
 	{
-		if ($document->hasEvent('onClassNotfound'))
+		$onClassNotFound = function($event)
 		{
-			$onClassNotFound = function($event)
-			{
-				return $this->_onClassNotFound($event);
-			};
-			$onClassNotFound->bindTo($this);
-			$document->onClassNotFound = $onClassNotFound;
-		}
+			return $this->_onClassNotFound($event);
+		};
+		$onClassNotFound->bindTo($this);
+		Event::on($document, self::EventClassNotFound, $onClassNotFound);
 		$this->classMap = $classMap;
 	}
 
 	private function _onClassNotFound(ClassNotFound $event)
 	{
-
-		if(isset($this->classMap[$event->notFound]))
+		if (isset($this->classMap[$event->notFound]))
 		{
-			Yii::trace(sprintf('Not found class `%s`, replaced with %s', $event->notFound, $event->replacement), 'Maslosoft.Mangan.Helpers.NotFoundResolver');
+//			Yii::trace(sprintf('Not found class `%s`, replaced with %s', $event->notFound, $event->replacement), 'Maslosoft.Mangan.Helpers.NotFoundResolver');
 			$event->replacement = $this->classMap[$event->notFound];
 		}
 		return $event->replacement;

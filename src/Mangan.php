@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
@@ -20,6 +21,7 @@ use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Decorators\I18NDecorator;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
 use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
@@ -28,6 +30,7 @@ use Maslosoft\Mangan\Transformers\ITransformator;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use MongoClient;
+use MongoDB;
 use MongoException;
 
 /**
@@ -180,6 +183,16 @@ class Mangan
 		return new self($connectionId);
 	}
 
+	/**
+	 * Get instance of Mangan configured for particular model
+	 * @param IAnnotated $model
+	 */
+	public static function fromModel(IAnnotated $model)
+	{
+		$connectionId = ManganMeta::create($model)->type()->connectionId;
+		return new self($connectionId);
+	}
+
 	public function init()
 	{
 		$this->_di->store($this);
@@ -244,7 +257,7 @@ class Mangan
 
 	/**
 	 * Get MongoDB instance
-	 * @return \MongoDB Mongo DB instance
+	 * @return MongoDB Mongo DB instance
 	 * @since v1.0
 	 */
 	public function getDbInstance()
