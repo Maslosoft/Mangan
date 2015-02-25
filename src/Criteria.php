@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Core\Component;
 
 /**
@@ -81,6 +82,12 @@ class Criteria extends Component
 	private $_sort = [];
 	private $_workingFields = [];
 	private $_useCursor = null;
+
+	/**
+	 * Whenever to use decorators when creating conditions
+	 * @var bool
+	 */
+	private $_withDecorators = true;
 
 	/**
 	 * Constructor
@@ -305,13 +312,23 @@ class Criteria extends Component
 		$this->addCond($fieldList, '==', $value);
 	}
 
+	public function withDecorators($withDecorators = true)
+	{
+		$this->_withDecorators = $withDecorators;
+	}
+
 	/**
 	 * Return query array
+	 * @param IAnnotated $model Model used to decorate and sanitize criteria
 	 * @return array query array
 	 * @since v1.0
 	 */
-	public function getConditions()
+	public function getConditions($model = null)
 	{
+		if($model && $this->_withDecorators)
+		{
+			
+		}
 		return $this->_conditions;
 	}
 
@@ -407,9 +424,13 @@ class Criteria extends Component
 		foreach ($select as $key => $value)
 		{
 			if (is_int($key))
+			{
 				$this->_select[$value] = true;
+			}
 			else
+			{
 				$this->_select[$key] = $value;
+			}
 		}
 	}
 

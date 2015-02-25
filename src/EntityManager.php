@@ -173,7 +173,13 @@ class EntityManager implements IEntityManager
 	 */
 	public function setAttributes($atributes)
 	{
-		$this->model = Transformers\RawArray::toModel($atributes);
+		$model = Transformers\RawArray::toModel($atributes);
+		unset($atributes['_class']);
+		unset($atributes['_key']);
+		foreach($atributes as $name => $value)
+		{
+			$this->model->$name = $model->$name;
+		}
 	}
 
 	public function __set($name, $value)
@@ -325,7 +331,7 @@ class EntityManager implements IEntityManager
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
 		if ($this->getCollection()->count($conditions) == 1)
 		{
-			$this->setAttributes($this->getCollection()->find($conditions), false);
+			$this->setAttributes($this->getCollection()->findOne($conditions), false);
 			return true;
 		}
 		else

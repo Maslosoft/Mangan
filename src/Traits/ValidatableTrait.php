@@ -17,21 +17,31 @@ use Maslosoft\Mangan\Interfaces\IValidatable;
 
 /**
  * ValidatableTrait
- * FIXME Need implementng
  * @see IValidatable
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait ValidatableTrait
 {
 
+	/**
+	 * Validator instance
+	 * @var \Maslosoft\Mangan\Validator
+	 */
+	private $_validator = null;
+
 	public function getErrors()
 	{
+		if ($this->_validator)
+		{
+			return $this->_validator->getErrors();
+		}
 		return [];
 	}
 
 	public function validate()
 	{
-		return true;
+		$this->_validator = new \Maslosoft\Mangan\Validator($this);
+		return $this->_validator->validate();
 	}
 
 }
