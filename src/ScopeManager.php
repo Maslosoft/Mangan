@@ -33,9 +33,15 @@ class ScopeManager
 		$this->model = $model;
 	}
 
-	public function apply(Criteria $criteria)
+	public function apply(Criteria &$criteria = null)
 	{
+		if (null === $criteria)
+		{
+			$criteria = new Criteria();
+			return $this;
+		}
 		$criteria->mergeWith($this->criteria);
+		return $this;
 	}
 
 	public function reset()
@@ -43,4 +49,5 @@ class ScopeManager
 		$this->_criteria = new Criteria();
 		return $this;
 	}
+
 }
