@@ -13,8 +13,6 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Core\Component;
-
 /**
  * SoftDocument
  *
@@ -46,10 +44,6 @@ class SoftDocument extends Document
 		{
 			return $this->softAttributes[$name];
 		}
-		else
-		{
-			return parent::__get($name);
-		}
 	}
 
 	/**
@@ -63,8 +57,6 @@ class SoftDocument extends Document
 		{ // Use of array_key_exists is mandatory !!!
 			$this->softAttributes[$name] = $value;
 		}
-		else
-			parent::__set($name, $value);
 	}
 
 	/**
@@ -78,15 +70,11 @@ class SoftDocument extends Document
 		{
 			return true;
 		}
-		else
-		{
-			return parent::__isset($name);
-		}
+		return false;
 	}
 
 	/**
 	 * Adds soft attributes support to magic __unset method
-	 * @see Component::__unset()
 	 * @since v1.3.4
 	 */
 	public function __unset($name)
@@ -94,10 +82,6 @@ class SoftDocument extends Document
 		if (array_key_exists($name, $this->softAttributes)) // Use of array_key_exists is mandatory !!!
 		{
 			unset($this->softAttributes[$name]);
-		}
-		else
-		{
-			parent::__unset($name);
 		}
 	}
 
@@ -146,7 +130,6 @@ class SoftDocument extends Document
 	{
 		$class = get_class($this);
 		$model = new $class(null);
-		$model->initEmbeddedDocuments();
 
 		$model->initSoftAttributes(
 				array_diff(
@@ -156,22 +139,6 @@ class SoftDocument extends Document
 
 		$model->setAttributes($attributes, false);
 		return $model;
-	}
-
-	/**
-	 * This method does the actual convertion to an array
-	 * Does not fire any events
-	 * @return array an associative array of the contents of this object
-	 * @since v1.3.4
-	 */
-	protected function _toArray($associative = true)
-	{
-		$arr = parent::_toArray($associative);
-		foreach ($this->softAttributes as $key => $value)
-		{
-			$arr[$key] = $value;
-		}
-		return $arr;
 	}
 
 	/**

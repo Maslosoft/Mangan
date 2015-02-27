@@ -13,8 +13,6 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Core\Component;
-
 /**
  * \Maslosoft\Mangan\Modifier
  *

@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Core\Component;
 
 /**
  * Criteria
@@ -36,7 +35,7 @@ use Maslosoft\Mangan\Core\Component;
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @license New BSD license
  */
-class Criteria extends Component
+class Criteria
 {
 
 	/**
@@ -249,7 +248,6 @@ class Criteria extends Component
 
 	/**
 	 * If we have operator add it otherwise call parent implementation
-	 * @see Component::__call()
 	 * @since v1.0
 	 */
 	public function __call($fieldName, $parameters)
@@ -285,10 +283,6 @@ class Criteria extends Component
 					$this->addCond($fieldName, $operatorName, $value);
 			}
 			return $this;
-		}
-		else
-		{
-			return parent::__call($fieldName, $parameters);
 		}
 	}
 
