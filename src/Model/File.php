@@ -74,7 +74,7 @@ class File extends EmbeddedDocument
 	{
 		parent::__construct($scenario, $lang);
 		$this->id = new MongoId;
-		$mangan = new Mangan($this->meta->type()->connectionId);
+		$mangan = Mangan::fromModel($this);
 		$this->_db = $mangan->getDbInstance();
 	}
 

@@ -33,16 +33,22 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
+		$refMeta = $this->_getMeta();
+		$refMeta->single = true;
+		$refMeta->isArray = false;
+		$this->_entity->dbRef = $refMeta;
+		$this->_entity->decorators[] = DbRefDecorator::class;
+	}
+
+	protected function _getMeta()
+	{
 		$data = ParamsExpander::expand($this, ['class', 'updatable']);
 		$refMeta = new DbRefMeta($data);
 		if (!$refMeta->class)
 		{
 			$refMeta->class = get_class($this->_component);
 		}
-		$refMeta->single = true;
-		$refMeta->isArray = false;
-		$this->_entity->dbRef = $refMeta;
-		$this->_entity->decorators[] = DbRefDecorator::class;
+		return $refMeta;
 	}
 
 }
