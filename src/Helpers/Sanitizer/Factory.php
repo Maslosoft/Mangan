@@ -13,7 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
-use Maslosoft\Addendum\Collections\MetaProperty;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Sanitizers\ArraySanitizer;
 use Maslosoft\Mangan\Sanitizers\Boolean;
 use Maslosoft\Mangan\Sanitizers\Double;
 use Maslosoft\Mangan\Sanitizers\Integer;
@@ -28,7 +29,21 @@ use Maslosoft\Mangan\Sanitizers\String;
 class Factory
 {
 
-	public static function create(MetaProperty $meta)
+	public static function create(DocumentPropertyMeta $meta)
+	{
+		$sanitizer = self::_resolve($meta);
+		if ($sanitizer)
+		{
+			if ($meta->sanitizeArray)
+			{
+				return new ArraySanitizer($sanitizer);
+			}
+			return $sanitizer;
+		}
+		return new PassThrough();
+	}
+
+	private static function _resolve(DocumentPropertyMeta $meta)
 	{
 		if ($meta->sanitizer)
 		{
@@ -54,7 +69,7 @@ class Factory
 			case 'string':
 				return new String;
 		}
-		return new PassThrough();
+		return false;
 	}
 
 }

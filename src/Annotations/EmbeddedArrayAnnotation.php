@@ -33,7 +33,6 @@ class EmbeddedArrayAnnotation extends ManganPropertyAnnotation
 	public function init()
 	{
 		$this->_entity->embedded = $this->value;
-		$this->_entity->sanitizer = EmbeddedArray::class;
 		$this->_entity->decorators[] = EmbeddedArrayDecorator::class;
 	}
 
