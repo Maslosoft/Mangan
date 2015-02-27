@@ -203,22 +203,8 @@ class Finder implements IFinder
 	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$pkCriteria = new Criteria($criteria);
-		$conditions = [];
-		foreach ($pkValues as $pkValue)
-		{
-			/**
-			 * TODO Possibly move to PkManager
-			 */
-			$c = PkManager::prepare($this->model, $pkValue);
-			foreach ($c->getConditions() as $field => $value)
-			{
-				$conditions[$field][] = $value;
-			}
-		}
-		foreach ($conditions as $field => $value)
-		{
-			$pkCriteria->addCond($field, 'in', $value);
-		}
+
+		PkManager::prepareAll($this->model, $pkValues, $pkCriteria);
 
 		return $this->findAll($pkCriteria);
 	}
