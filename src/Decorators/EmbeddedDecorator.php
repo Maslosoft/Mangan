@@ -72,7 +72,8 @@ class EmbeddedDecorator implements IDecorator
 		if (!class_exists($class))
 		{
 			$event = new ClassNotFound($model);
-			if (Event::handled($model, NotFoundResolver::EventClassNotFound, $event))
+			$event->notFound = $class;
+			if (Event::hasHandler($model, NotFoundResolver::EventClassNotFound) && Event::handled($model, NotFoundResolver::EventClassNotFound, $event))
 			{
 				$class = $event->replacement;
 			}
