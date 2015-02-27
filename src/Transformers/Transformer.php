@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
@@ -55,9 +56,13 @@ abstract class Transformer
 	/**
 	 * Create document from array
 	 * TODO Enforce $className if collection is homogenous
-	 * @return object
+	 * @param mixed[] $data
+	 * @param stirng|object $className
+	 * @param IAnnotated $instance
+	 * @return IAnnotated
+	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null)
+	public static function toModel($data, $className = null, $instance = null)
 	{
 		if (!$data)
 		{
@@ -78,12 +83,19 @@ abstract class Transformer
 				throw new TransformatorException('Could not determine document type');
 			}
 		}
-		return self::_toDocument($className, $data);
+		return self::_toDocument($className, $data, $instance);
 	}
 
-	private static function _toDocument($className, $data)
+	private static function _toDocument($className, $data, $instance)
 	{
-		$model = new $className;
+		if ($instance)
+		{
+			$model = $instance;
+		}
+		else
+		{
+			$model = new $className;
+		}
 		$meta = ManganMeta::create($model);
 		$decorator = new Decorator($model, get_called_class());
 		$sanitizer = new Sanitizer($model);
