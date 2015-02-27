@@ -181,8 +181,8 @@ class EntityManager implements IEntityManager
 		{
 			$rawData = RawArray::fromModel($model);
 
-			$result = $this->_collection->insert($rawData, $this->options->getSaveOptions());
-
+			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
+			$result = $this->_result($rawResult, true);
 			// strict comparison needed
 			if ($result !== false)
 			{
@@ -238,6 +238,7 @@ class EntityManager implements IEntityManager
 			{
 				$result = $this->getCollection()->save($rawData, $this->options->getSaveOptions());
 			}
+			$result = $this->_result($result);
 			if ($result !== false)
 			{ // strict comparison needed
 				$this->_afterSave($this->model);
@@ -264,7 +265,7 @@ class EntityManager implements IEntityManager
 						'upsert' => false,
 						'multiple' => true
 			]));
-			return $result;
+			return $this->_result($result);
 		}
 		else
 		{
@@ -368,9 +369,10 @@ class EntityManager implements IEntityManager
 	{
 		$this->sm->apply($criteria);
 
-		return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 							'justOne' => true
 		]));
+		return $this->_result($result);
 	}
 
 	/**
@@ -387,9 +389,10 @@ class EntityManager implements IEntityManager
 			$this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
-			return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 								'justOne' => true
 			]));
+			return $this->_result($result);
 		}
 		return false;
 	}
@@ -407,9 +410,10 @@ class EntityManager implements IEntityManager
 		{
 			$this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepareAll($this->model, $pkValues, $criteria));
-			return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 								'justOne' => false
 			]));
+			return $this->_result($result);
 		}
 		return false;
 	}
@@ -425,9 +429,10 @@ class EntityManager implements IEntityManager
 	{
 		$this->sm->apply($criteria);
 
-		return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 							'justOne' => false
 		]));
+		return $this->_result($result);
 	}
 
 	public function getCollection()
@@ -443,6 +448,25 @@ class EntityManager implements IEntityManager
 	public function setIsNewRecord($new = true)
 	{
 
+	}
+
+	/**
+	 * Make status uniform
+	 * @param bool|array $result
+	 * @param bool $insert Set to true for inserts
+	 * @return bool Return true if secceed
+	 */
+	private function _result($result, $insert = false)
+	{
+		if(is_array($result))
+		{
+			if($insert)
+			{
+				return (bool)$result['ok'];
+			}
+			return (bool)$result['n'];
+		}
+		return $result;
 	}
 
 // <editor-fold defaultstate="collapsed" desc="Event and Signal handling">
