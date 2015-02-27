@@ -269,7 +269,7 @@ class EntityManager implements IEntityManager
 	{
 		if ($modifier->canApply === true)
 		{
-			$this->sm->apply($criteria);
+			$criteria = $this->sm->apply($criteria);
 			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), $this->options->getSaveOptions([
 						'upsert' => false,
 						'multiple' => true
@@ -339,7 +339,7 @@ class EntityManager implements IEntityManager
 	{
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
 		$data = $this->getCollection()->findOne($conditions);
-		if (null === $data)
+		if (null !== $data)
 		{
 			$this->setAttributes($data, false);
 			return true;
@@ -387,7 +387,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function deleteOne($criteria = null)
 	{
-		$this->sm->apply($criteria);
+		$criteria = $this->sm->apply($criteria);
 
 		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 					'justOne' => true
@@ -406,7 +406,7 @@ class EntityManager implements IEntityManager
 	{
 		if ($this->_beforeDelete())
 		{
-			$this->sm->apply($criteria);
+			$criteria = $this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
@@ -428,7 +428,7 @@ class EntityManager implements IEntityManager
 	{
 		if ($this->_beforeDelete())
 		{
-			$this->sm->apply($criteria);
+			$criteria = $this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepareAll($this->model, $pkValues, $criteria));
 			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 						'justOne' => false
@@ -447,7 +447,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function deleteAll($criteria = null)
 	{
-		$this->sm->apply($criteria);
+		$criteria = $this->sm->apply($criteria);
 
 		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
 					'justOne' => false

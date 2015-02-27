@@ -109,7 +109,7 @@ class Finder implements IFinder
 	{
 		if ($this->_beforeFind())
 		{
-			$this->sm->apply($criteria);
+			$criteria = $this->sm->apply($criteria);
 			$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
 			return $this->populateRecord($data);
 		}
@@ -144,7 +144,7 @@ class Finder implements IFinder
 	{
 		if ($this->_beforeFind())
 		{
-			$this->sm->apply($criteria);
+			$criteria = $this->sm->apply($criteria);
 			$cursor = $this->em->getCollection()->find($criteria->getConditions());
 
 			if ($criteria->getSort() !== null)
@@ -242,7 +242,7 @@ class Finder implements IFinder
 	 */
 	public function count($criteria = null)
 	{
-		$this->sm->apply($criteria);
+		$criteria = $this->sm->apply($criteria);
 		return $this->em->getCollection()->count($criteria->getConditions());
 	}
 
@@ -261,7 +261,7 @@ class Finder implements IFinder
 			$criteria->$name = $value;
 		}
 
-		$this->sm->apply($criteria);
+		$criteria = $this->sm->apply($criteria);
 
 		return $this->em->getCollection()->count($criteria->getConditions());
 	}
