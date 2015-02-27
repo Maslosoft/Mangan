@@ -194,9 +194,7 @@ class EntityManager implements IEntityManager
 		$model = $model? : $this->model;
 		if ($this->_beforeSave($model))
 		{
-			$rawData = RawArray::fromModel($model);
-
-			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
+			$rawResult = $this->_collection->insert(RawArray::fromModel($model), $this->options->getSaveOptions());
 			$result = $this->_result($rawResult, true);
 			// strict comparison needed
 			if ($result !== false)
@@ -303,16 +301,28 @@ class EntityManager implements IEntityManager
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
+	 * @param IModel $model if want to insert different model than set in constructor
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
-	public function save($runValidation = true)
+	public function save($runValidation = true, $model = null)
 	{
 		if (!$runValidation || $this->validator->validate())
 		{
-			$existsCriteria = PkManager::prepareFromModel($this->model);
-			$exists = Finder::create($this->model)->exists($existsCriteria);
-			return $exists ? $this->insert() : $this->update();
+			$model = $model? : $this->model;
+			if ($this->_beforeSave($model))
+			{
+				$rawResult = $this->_collection->save(RawArray::fromModel($model), $this->options->getSaveOptions());
+				$result = $this->_result($rawResult, true);
+				// strict comparison needed
+				if ($result !== false)
+				{
+					$this->_afterSave($model);
+					return true;
+				}
+				throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
+			}
+			return false;
 		}
 		else
 		{
