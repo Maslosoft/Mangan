@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.0.9",
+            "version": "3.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "5c0c668f3df7335cbcdbe5149fbf0334bab29413"
+                "reference": "6bf4e2b046a9f198bde2d477412003ec1ac89c4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/5c0c668f3df7335cbcdbe5149fbf0334bab29413",
-                "reference": "5c0c668f3df7335cbcdbe5149fbf0334bab29413",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/6bf4e2b046a9f198bde2d477412003ec1ac89c4b",
+                "reference": "6bf4e2b046a9f198bde2d477412003ec1ac89c4b",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-02-10 14:00:11"
+            "time": "2015-02-27 13:41:49"
         },
         {
             "name": "maslosoft/embedi",
