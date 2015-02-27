@@ -13,10 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Meta\DbRefMeta;
-use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
-use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
@@ -34,39 +33,16 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$refMeta = $this->_createMeta();
+		$data = ParamsExpander::expand($this, ['class', 'updatable']);
+		$refMeta = new DbRefMeta($data);
+		if (!$refMeta->class)
+		{
+			$refMeta->class = get_class($this->_component);
+		}
 		$refMeta->single = true;
 		$refMeta->isArray = false;
 		$this->_entity->dbRef = $refMeta;
 		$this->_entity->decorators[] = DbRefDecorator::class;
 	}
-
-	/**
-	 * Create DBRefMeta from annotation data
-	 * @return DbRefMeta
-	 */
-	protected function _createMeta()
-	{
-		$data = [];
-		foreach (['class', 'updatable'] as $key => $name)
-		{
-			if (isset($this->value[$key]))
-			{
-				$data[$name] = $this->value[$key];
-				unset($this->value[$key]);
-			}
-			if (isset($this->value[$name]))
-			{
-				$data[$name] = $this->value[$name];
-			}
-			if (isset($this->$name))
-			{
-				$data[$name] = $this->$name;
-			}
-		}
-		return new DbRefMeta($data);
-	}
-
-
 
 }
