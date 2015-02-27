@@ -135,7 +135,7 @@ trait EntityManagerTrait
 	 */
 	public function deleteByPk($pkValue, $criteria = null)
 	{
-		$this->_getEm()->deleteByPk($pkValue, $criteria);
+		return $this->_getEm()->deleteByPk($pkValue, $criteria);
 	}
 
 	/**
@@ -147,7 +147,7 @@ trait EntityManagerTrait
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null)
 	{
-		$this->_getEm()->deleteAllByPk($pkValues, $criteria);
+		return $this->_getEm()->deleteAllByPk($pkValues, $criteria);
 	}
 
 	/**
@@ -158,7 +158,7 @@ trait EntityManagerTrait
 	 */
 	public function deleteAll($criteria = null)
 	{
-		$this->_getEm()->deleteAll($criteria);
+		return $this->_getEm()->deleteAll($criteria);
 	}
 
 	/**
@@ -170,7 +170,7 @@ trait EntityManagerTrait
 	 */
 	public function deleteOne($criteria = null)
 	{
-		$this->_getEm()->deleteOne($criteria);
+		return $this->_getEm()->deleteOne($criteria);
 	}
 
 	/**
@@ -180,7 +180,7 @@ trait EntityManagerTrait
 	 */
 	public function refresh()
 	{
-		$this->_getEm()->refresh();
+		return $this->_getEm()->refresh();
 	}
 
 	/**
