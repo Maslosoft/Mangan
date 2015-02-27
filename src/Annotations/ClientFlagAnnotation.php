@@ -33,7 +33,7 @@ class ClientFlagAnnotation extends ManganTypeAnnotation
 
 	public function init()
 	{
-		foreach ($this->_properties as $name => $value)
+		foreach ($this->value as $name => $value)
 		{
 			$this->_entity->$name = $value;
 		}
