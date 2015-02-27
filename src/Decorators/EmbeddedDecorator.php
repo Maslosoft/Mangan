@@ -13,7 +13,11 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Mangan\Events\ClassNotFound;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Interfaces\IOwnered;
+use Maslosoft\Mangan\ManganException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\ITransformator;
@@ -30,7 +34,7 @@ class EmbeddedDecorator implements IDecorator
 	{
 		self::ensureClass($model, $name, $dbValue);
 		$embedded = $transformatorClass::toModel($dbValue);
-		if($embedded instanceof IOwnered)
+		if ($embedded instanceof IOwnered)
 		{
 			$embedded->setOwner($model);
 		}
@@ -39,11 +43,11 @@ class EmbeddedDecorator implements IDecorator
 
 	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
-		if(null === $model->$name)
+		if (null === $model->$name)
 		{
 			$fieldMeta = ManganMeta::create($model)->$name;
 			$className = $fieldMeta->embedded;
-			if(!$className)
+			if (!$className)
 			{
 				return null;
 			}
@@ -59,7 +63,25 @@ class EmbeddedDecorator implements IDecorator
 		{
 			$meta = ManganMeta::create($model)->$name;
 			/* @var $meta DocumentPropertyMeta */
-			$dbValue['_class'] = $meta->embedded;
+			$class = $meta->embedded;
 		}
+		else
+		{
+			$class = $dbValue['_class'];
+		}
+		if (!class_exists($class))
+		{
+			$event = new ClassNotFound($model);
+			if (Event::handled($model, NotFoundResolver::EventClassNotFound, $event))
+			{
+				$class = $event->replacement;
+			}
+			else
+			{
+				throw new ManganException(sprintf("Embedded model class `%s` not found in model `%s` field `%s`", $class, get_class($model), $name));
+			}
+		}
+		$dbValue['_class'] = $class;
 	}
+
 }
