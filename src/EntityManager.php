@@ -221,15 +221,17 @@ class EntityManager implements IEntityManager
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function update(array $attributes = null, $modify = false)
+	public function update(array $attributes = null)
 	{
 		if ($this->_beforeSave($this->model))
 		{
 			$rawData = RawArray::fromModel($this->model);
 
 			// filter attributes if set in param
+			$modify = false;
 			if ($attributes !== null)
 			{
+				$modify = true;
 				foreach ($rawData as $key => $value)
 				{
 					if (!in_array($key, $attributes))
@@ -255,6 +257,7 @@ class EntityManager implements IEntityManager
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
+		return false;
 	}
 
 	/**
