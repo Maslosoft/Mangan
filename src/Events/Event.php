@@ -168,7 +168,7 @@ class Event implements IEvent
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 */
-	public static function trigger($class, $name, $event = null)
+	public static function trigger($class, $name, &$event = null)
 	{
 		if (empty(self::$_events[$name]))
 		{
