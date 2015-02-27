@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Core\Exception;
+use Exception;
 
 /**
  * \Maslosoft\Mangan\MongoException
