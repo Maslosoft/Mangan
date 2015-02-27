@@ -32,10 +32,14 @@ class PkManager
 	 * Prepare multi pk criteria
 	 * @param IAnnotated $model
 	 * @param mixed[] $pkValues
-	 * @param Criteria $criteria
+	 * @param Criteria|null $criteria
 	 */
-	public static function prepareAll($model, $pkValues, Criteria $criteria)
+	public static function prepareAll($model, $pkValues, Criteria $criteria = null)
 	{
+		if(null === $criteria)
+		{
+			$criteria = new Criteria();
+		}
 		$conditions = [];
 		foreach ($pkValues as $pkValue)
 		{
@@ -49,6 +53,7 @@ class PkManager
 		{
 			$criteria->addCond($field, 'in', $value);
 		}
+		return $criteria;
 	}
 
 	/**

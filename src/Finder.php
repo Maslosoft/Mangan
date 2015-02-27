@@ -40,10 +40,16 @@ class Finder implements IFinder
 	public $model = null;
 
 	/**
-	 *
+	 * Entity manager instance
 	 * @var IEntityManager
 	 */
 	private $em = null;
+
+	/**
+	 * Scope manager instance
+	 * @var ScopeManager
+	 */
+	private $sm = null;
 
 	/**
 	 * Finder criteria
@@ -72,6 +78,7 @@ class Finder implements IFinder
 	{
 		$this->model = $model;
 		$this->em = $em? : EntityManager::create($model);
+		$this->sm = new ScopeManager($model);
 		$this->_class = get_class($this->model);
 	}
 
@@ -102,7 +109,7 @@ class Finder implements IFinder
 	{
 		if ($this->_beforeFind())
 		{
-			$this->applyScopes($criteria);
+			$this->sm->apply($criteria);
 			$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
 			return $this->populateRecord($data);
 		}
@@ -137,7 +144,7 @@ class Finder implements IFinder
 	{
 		if ($this->_beforeFind())
 		{
-			$this->applyScopes($criteria);
+			$this->sm->apply($criteria);
 			$cursor = $this->em->getCollection()->find($criteria->getConditions());
 
 			if ($criteria->getSort() !== null)
@@ -203,7 +210,6 @@ class Finder implements IFinder
 	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$pkCriteria = new Criteria($criteria);
-
 		PkManager::prepareAll($this->model, $pkValues, $pkCriteria);
 
 		return $this->findAll($pkCriteria);
@@ -236,7 +242,7 @@ class Finder implements IFinder
 	 */
 	public function count($criteria = null)
 	{
-		$this->applyScopes($criteria);
+		$this->sm->apply($criteria);
 		return $this->em->getCollection()->count($criteria->getConditions());
 	}
 
@@ -255,7 +261,7 @@ class Finder implements IFinder
 			$criteria->$name = $value;
 		}
 
-		$this->applyScopes($criteria);
+		$this->sm->apply($criteria);
 
 		return $this->em->getCollection()->count($criteria->getConditions());
 	}
@@ -292,35 +298,6 @@ class Finder implements IFinder
 	{
 		$this->_criteria = new Criteria();
 		return $this;
-	}
-
-	/**
-	 * Applies the query scopes to the given criteria.
-	 * This method merges {@link dbCriteria} with the given criteria parameter.
-	 * It then resets {@link dbCriteria} to be null.
-	 * @param Criteria|array $criteria the query criteria. This parameter may be modified by merging {@link dbCriteria}.
-	 * @since v1.2.2
-	 */
-	public function applyScopes(&$criteria)
-	{
-		if ($criteria === null)
-		{
-			$criteria = new Criteria();
-		}
-		elseif (is_array($criteria))
-		{
-			$criteria = new Criteria($criteria);
-		}
-		elseif (!($criteria instanceof Criteria))
-		{
-			throw new MongoException('Cannot apply scopes to criteria');
-		}
-//		if (($c = $this->model->getDbCriteria(false)) !== null)
-//		{
-//			$c->mergeWith($criteria);
-//			$criteria = $c;
-//			$this->_criteria = null;
-//		}
 	}
 
 	/**
