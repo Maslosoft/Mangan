@@ -13,7 +13,6 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
@@ -168,23 +167,11 @@ class EntityManager implements IEntityManager
 
 	/**
 	 * Set attributes en masse
-	 * TODO Check if it's ok to use
 	 * @param mixed[] $atributes
 	 */
 	public function setAttributes($atributes)
 	{
-		$model = Transformers\RawArray::toModel($atributes);
-		unset($atributes['_class']);
-		unset($atributes['_key']);
-		foreach($atributes as $name => $value)
-		{
-			$this->model->$name = $model->$name;
-		}
-	}
-
-	public function __set($name, $value)
-	{
-		;
+		RawArray::toModel($atributes, $this->model, $this->model);
 	}
 
 	public function insert($model = null)
