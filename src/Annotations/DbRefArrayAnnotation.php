@@ -13,10 +13,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
-use Maslosoft\Mangan\Meta\DbRefMeta;
-use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * DB reference array annotation
@@ -24,19 +21,14 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
  * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefArrayAnnotation extends ManganPropertyAnnotation
+class DbRefArrayAnnotation extends DbRefAnnotation
 {
 
 	public $value = [];
 
 	public function init()
 	{
-		$data = ParamsExpander::expand($this, ['class', 'updatable']);
-		$refMeta = new DbRefMeta($data);
-		if (!$refMeta->class)
-		{
-			$refMeta->class = get_class($this->_component);
-		}
+		$refMeta = $this->_getMeta();
 		$refMeta->single = false;
 		$refMeta->isArray = true;
 		$this->_entity->dbRef = $refMeta;

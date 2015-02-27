@@ -33,9 +33,4 @@ class LabelAnnotation extends ManganPropertyAnnotation
 		$this->_entity->label = $this->value;
 	}
 
-	public function __toString()
-	{
-		return $this->value;
-	}
-
 }

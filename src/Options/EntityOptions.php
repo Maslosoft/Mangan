@@ -69,8 +69,8 @@ class EntityOptions
 		}
 
 		$this->_meta = ManganMeta::create($model)->type();
-		$this->_connectionId = $this->_meta->connectionId? : Mangan::DefaultConnectionId;
-		$this->_mangan = new Mangan($this->_connectionId);
+		$this->_mangan = Mangan::fromModel($model);
+		$this->_connectionId = $this->_mangan->connectionId;
 	}
 
 	public function __get($name)

@@ -108,7 +108,7 @@ class EntityManager implements IEntityManager
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
 		$this->validator = new Validator($model);
-		$mangan = new Mangan($this->meta->type()->connectionId? : Mangan::DefaultConnectionId);
+		$mangan = Mangan::fromModel($model);
 		if (!$this->collectionName)
 		{
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
