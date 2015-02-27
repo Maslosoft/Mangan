@@ -14,10 +14,13 @@
 namespace Maslosoft\Mangan\Traits\Model;
 
 use CEvent;
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Ilmatar\Components\MongoDocument;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Interfaces\ISimpleTree;
+use Maslosoft\Mangan\Interfaces\ITrash;
 use MongoId;
 
 /**
@@ -32,12 +35,8 @@ trait SimpleTreeTrait
 	use WithParentTrait;
 
 	/**
-	 * @KoBindable(true)
-	 * Embedded array is used here to properly populate nested children
-	 * In fact it is embedded array but not stored in db
-	 * @EmbeddedArray
-	 * @Persistent(false);
-	 * @var type
+	 * @DbRefArray
+	 * @var IAnnotated[]
 	 */
 	public $children = null;
 
@@ -49,44 +48,31 @@ trait SimpleTreeTrait
 
 	public function init()
 	{
-		parent::init();
-		return;
-		if ($this->hasEvent('onBeforeTrash'))
+		/**
+		 * TODO This propably should be initialized somewhere else
+		 */
+		$onBeforeTrash = function($event)
 		{
-			$onBeforeTrash = function($event)
-			{
-				$this->_onBeforeTrash($event);
-			};
-			$onBeforeTrash->bindTo($this);
-			$this->onBeforeTrash = $onBeforeTrash;
-		}
-		if ($this->hasEvent('onAfterTrash'))
-		{
-			$onAfterTrash = function($event)
-			{
-				$this->_onAfterTrash($event);
-			};
-			$onAfterTrash->bindTo($this);
-			$this->onAfterTrash = $onAfterTrash;
-		}
-		if ($this->hasEvent('onBeforeRestore'))
-		{
-			$onBeforeRestore = function($event)
-			{
+			$this->_onBeforeTrash($event);
+		};
+		$onBeforeTrash->bindTo($this);
+		Event::on($this, ITrash::EventBeforeTrash, $onBeforeTrash);
 
-			};
-			$onBeforeRestore->bindTo($this);
-			$this->onBeforeRestore = $onBeforeRestore;
-		}
-		if ($this->hasEvent('onAfterRestore'))
+
+		$onAfterTrash = function($event)
 		{
-			$onAfterRestore = function($event)
-			{
-				$this->_onAfterRestore($event);
-			};
-			$onAfterRestore->bindTo($this);
-			$this->onAfterRestore = $onAfterRestore;
-		}
+			$this->_onAfterTrash($event);
+		};
+		$onAfterTrash->bindTo($this);
+		Event::on($this, ITrash::EventAfterTrash, $onAfterTrash);
+
+
+		$onAfterRestore = function($event)
+		{
+			$this->_onAfterRestore($event);
+		};
+		$onAfterRestore->bindTo($this);
+		Event::on($this, ITrash::EventAfterRestore, $onAfterRestore);
 	}
 
 	private function _onBeforeTrash($event)
