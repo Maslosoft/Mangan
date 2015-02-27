@@ -19,7 +19,7 @@ namespace Maslosoft\Mangan\Events;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ClassNotFound extends Event
+class ClassNotFound extends ModelEvent
 {
 
 	/**
