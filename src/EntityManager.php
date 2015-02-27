@@ -267,7 +267,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null)
 	{
-		if ($modifier->canApply === true)
+		if ($modifier->canApply())
 		{
 			$criteria = $this->sm->apply($criteria);
 			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), $this->options->getSaveOptions([
