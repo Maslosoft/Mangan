@@ -28,9 +28,20 @@ use Maslosoft\Mangan\Core\Component;
  * @author Ianaré Sévi
  * @author Philippe Gaultier <pgaultier@ibitux.com>
  * @copyright 2011 Ibitux http://www.ibitux.com
+ * @method void inc(string $fieldName, mixed $value) inc shorthand
+ * @method void set(string $fieldName, mixed $value) set shorthand
+ * @method void unset(string $fieldName, mixed $value) unset shorthand
+ * @method void push(string $fieldName, mixed $value) push shorthand
+ * @method void pushAll(string $fieldName, mixed $value) pushAll shorthand
+ * @method void addToSet(string $fieldName, mixed $value) addToSet shorthand
+ * @method void pop(string $fieldName, mixed $value) pop shorthand
+ * @method void pull(string $fieldName, mixed $value) pull shorthand
+ * @method void pullAll(string $fieldName, mixed $value) pullAll shorthand
+ * @method void rename(string $fieldName, mixed $value) rename shorthand
+ *
  * @since		v1.3.6
  */
-class Modifier extends Component
+class Modifier
 {
 
 	/**
@@ -90,8 +101,15 @@ class Modifier extends Component
 				}
 			}
 		}
-		else if ($modifier instanceof Modifier)
+		if ($modifier instanceof Modifier)
+		{
 			$this->mergeWith($modifier);
+		}
+	}
+
+	public function __call($name, $arguments)
+	{
+		return $this->addModifier(array_shift($arguments), $name, array_shift($arguments));
 	}
 
 	/**
@@ -106,9 +124,13 @@ class Modifier extends Component
 			foreach ($rule as $operator => $value)
 			{
 				if (isset($modifier[$operator]) && is_array($modifier[$operator]))
+				{
 					$modifier[$operator] = array_merge($modifier[$operator], [$fieldName => $value]);
+				}
 				else
+				{
 					$modifier[$operator] = [$fieldName => $value];
+				}
 			}
 		}
 		return $modifier;
@@ -131,9 +153,13 @@ class Modifier extends Component
 	public function mergeWith($modifier)
 	{
 		if (is_array($modifier))
+		{
 			$modifier = new Modifier($modifier);
-		else if (empty($modifier))
+		}
+		if (empty($modifier))
+		{
 			return $this;
+		}
 
 		foreach ($modifier->getFields() as $fieldName => $rule)
 		{
@@ -159,12 +185,16 @@ class Modifier extends Component
 	 * Check if we have modifiers to apply.
 	 * @return boolean
 	 */
-	public function getCanApply()
+	public function canApply()
 	{
 		if (count($this->_fields) > 0)
+		{
 			return true;
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 }
