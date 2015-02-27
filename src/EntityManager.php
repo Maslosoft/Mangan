@@ -339,7 +339,7 @@ class EntityManager implements IEntityManager
 	{
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
 		$data = $this->getCollection()->findOne($conditions);
-		if ($data)
+		if (null === $data)
 		{
 			$this->setAttributes($data, false);
 			return true;
