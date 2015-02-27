@@ -30,6 +30,21 @@ interface IEntityManager
 	const EventBeforeDelete = 'beforeDelete';
 	const EventAfterDelete = 'afterDelete';
 
+	/**
+	 * Inserts a row into the table based on this active record attributes.
+	 * If the table's primary key is auto-incremental and is null before insertion,
+	 * it will be populated with the actual value after insertion.
+	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
+	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
+	 * and its {@link scenario} property will be set to be 'update'.
+	 * @param IModel $model if want to insert different model than set in constructor
+	 * @return boolean whether the attributes are valid and the record is inserted successfully.
+	 * @throws MongoException if the record is not new
+	 * @throws MongoException on fail of insert or insert of empty document
+	 * @throws MongoException on fail of insert, when safe flag is set to true
+	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @since v1.0
+	 */
 	public function insert($model = null);
 
 	/**
