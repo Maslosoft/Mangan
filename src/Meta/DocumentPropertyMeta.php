@@ -69,6 +69,12 @@ class DocumentPropertyMeta extends MetaProperty
 	public $sanitizer = null;
 
 	/**
+	 * Whenever sanitization should be performed for array of elements
+	 * @var bool
+	 */
+	public $sanitizeArray = false;
+
+	/**
 	 * If field should be persistent, by default true
 	 * @var bool
 	 */
