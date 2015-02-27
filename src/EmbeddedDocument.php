@@ -16,7 +16,6 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Interfaces\IActiveDocument;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Yii;
 
 /**
  * EmbeddedDocument
@@ -171,12 +170,7 @@ abstract class EmbeddedDocument implements IActiveDocument
 
 	public function attributeLabels()
 	{
-		$labels = [];
-		foreach ($this->meta->properties('label') as $key => $label)
-		{
-			$labels[$key] = Yii::t('', $label);
-		}
-		return $labels;
+		return $this->meta->properties('label');
 	}
 
 // </editor-fold>
