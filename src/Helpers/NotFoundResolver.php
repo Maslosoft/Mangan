@@ -69,6 +69,7 @@ class NotFoundResolver
 		{
 //			Yii::trace(sprintf('Not found class `%s`, replaced with %s', $event->notFound, $event->replacement), 'Maslosoft.Mangan.Helpers.NotFoundResolver');
 			$event->replacement = $this->classMap[$event->notFound];
+			$event->handled = true;
 		}
 		return $event->replacement;
 	}
