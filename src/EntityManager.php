@@ -397,6 +397,27 @@ class EntityManager implements IEntityManager
 	/**
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed[] $pkValues Primary keys array
+	 * @param array|Criteria $criteria query criteria.
+	 * @since v1.0
+	 */
+	public function deleteAllByPk($pkValues, $criteria = null)
+	{
+		if ($this->_beforeDelete())
+		{
+			$this->sm->apply($criteria);
+			$criteria->mergeWith(PkManager::prepareAll($this->model, $pkValues, $criteria));
+			return $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
+								'justOne' => false
+			]));
+		}
+		return false;
+	}
+
+	/**
+	 * Deletes documents with the specified primary keys.
+	 * <b>Does not raise beforeDelete</b>
+	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
 	 */

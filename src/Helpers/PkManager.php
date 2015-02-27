@@ -29,6 +29,29 @@ class PkManager
 {
 
 	/**
+	 * Prepare multi pk criteria
+	 * @param IAnnotated $model
+	 * @param mixed[] $pkValues
+	 * @param Criteria $criteria
+	 */
+	public static function prepareAll($model, $pkValues, Criteria $criteria)
+	{
+		$conditions = [];
+		foreach ($pkValues as $pkValue)
+		{
+			$c = PkManager::prepare($model, $pkValue);
+			foreach ($c->getConditions() as $field => $value)
+			{
+				$conditions[$field][] = $value;
+			}
+		}
+		foreach ($conditions as $field => $value)
+		{
+			$criteria->addCond($field, 'in', $value);
+		}
+	}
+
+	/**
 	 * Prepare pk criteria from user provided data
 	 * @param IAnnotated $model
 	 * @param mixed|mixed[] $pkValue

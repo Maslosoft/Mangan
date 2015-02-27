@@ -104,11 +104,20 @@ interface IEntityManager
 	/**
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
 	 */
-	public function deleteByPk($pk, $criteria = null);
+	public function deleteByPk($pkValue, $criteria = null);
+
+	/**
+	 * Deletes documents with the specified primary keys.
+	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * @param mixed[] $pkValues Primary keys array
+	 * @param array|Criteria $criteria query criteria.
+	 * @since v1.0
+	 */
+	public function deleteAllByPk($pkValues, $criteria = null);
 
 	/**
 	 * Deletes documents with the specified primary keys.
