@@ -8,20 +8,21 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.0.4",
+            "version": "3.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "21f156cfcc76dcd23d97e82a5e9ba47a1f7cb0fa"
+                "reference": "5c0c668f3df7335cbcdbe5149fbf0334bab29413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/21f156cfcc76dcd23d97e82a5e9ba47a1f7cb0fa",
-                "reference": "21f156cfcc76dcd23d97e82a5e9ba47a1f7cb0fa",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/5c0c668f3df7335cbcdbe5149fbf0334bab29413",
+                "reference": "5c0c668f3df7335cbcdbe5149fbf0334bab29413",
                 "shasum": ""
             },
             "require": {
-                "maslosoft/miniview": "~1.0",
+                "maslosoft/embedi": "*",
+                "maslosoft/signals": "*",
                 "php": ">=5.5.0",
                 "psr/log": "~1.0"
             },
@@ -31,10 +32,10 @@
             "suggest": {
                 "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services"
             },
-            "type": "yii-extension",
+            "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Maslosoft\\Addendum\\": "src/"
+                    "Maslosoft\\Addendum\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -49,15 +50,14 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Annotations for Yii Framework",
+            "description": "Easy to use php annotations",
             "keywords": [
                 "addendum",
                 "annotation",
                 "annotations",
-                "metadata",
-                "yii"
+                "metadata"
             ],
-            "time": "2015-01-07 17:33:40"
+            "time": "2015-02-10 14:00:11"
         },
         {
             "name": "maslosoft/embedi",
@@ -98,60 +98,29 @@
             "time": "2015-01-20 16:35:31"
         },
         {
-            "name": "maslosoft/miniview",
-            "version": "1.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Maslosoft/MiniView.git",
-                "reference": "5e26a602f3050b158fa3b45e884c9cb6e11521aa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/5e26a602f3050b158fa3b45e884c9cb6e11521aa",
-                "reference": "5e26a602f3050b158fa3b45e884c9cb6e11521aa",
-                "shasum": ""
-            },
-            "require-dev": {
-                "maslosoft/hedron": "~1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Maslosoft\\MiniView\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "New BSD"
-            ],
-            "authors": [
-                {
-                    "name": "Peter Maselkowski",
-                    "email": "pmaselkowski@gmail.com"
-                }
-            ],
-            "description": "Mini view is minimal template rendering library based on Yii controller renderer",
-            "homepage": "http://maslosoft.com/miniview/",
-            "time": "2015-01-13 16:54:06"
-        },
-        {
             "name": "maslosoft/signals",
-            "version": "1.0.3",
+            "version": "1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "677bd1922d5c502b51b2cd9bd309efad2c66a996"
+                "reference": "00474618c7b82f3c9be4b78db741812c012f2d72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/677bd1922d5c502b51b2cd9bd309efad2c66a996",
-                "reference": "677bd1922d5c502b51b2cd9bd309efad2c66a996",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/00474618c7b82f3c9be4b78db741812c012f2d72",
+                "reference": "00474618c7b82f3c9be4b78db741812c012f2d72",
                 "shasum": ""
             },
             "require": {
-                "maslosoft/addendum": "~3"
+                "maslosoft/addendum": "*",
+                "maslosoft/embedi": "*",
+                "psr/log": "~1"
             },
-            "type": "yii-extension",
+            "require-dev": {
+                "maslosoft/hedron": "dev-master",
+                "maslosoft/signalstest": "dev-master"
+            },
+            "type": "library",
             "autoload": {
                 "psr-4": {
                     "Maslosoft\\Signals\\": "src/"
@@ -169,17 +138,16 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Cross-component communication for Yii",
+            "description": "Wireless Cross-Component Communication",
             "keywords": [
                 "event",
                 "events",
                 "signal",
                 "signals",
                 "slot",
-                "slots",
-                "yii"
+                "slots"
             ],
-            "time": "2015-01-03 15:11:10"
+            "time": "2015-02-03 14:35:04"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -706,12 +674,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "f36df77d6ee6918aa911c9b16402d335c96f0a61"
+                "reference": "28502fc5de883d3bd158c1ad9f712b3e28658676"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/f36df77d6ee6918aa911c9b16402d335c96f0a61",
-                "reference": "f36df77d6ee6918aa911c9b16402d335c96f0a61",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/28502fc5de883d3bd158c1ad9f712b3e28658676",
+                "reference": "28502fc5de883d3bd158c1ad9f712b3e28658676",
                 "shasum": ""
             },
             "require": {
@@ -737,7 +705,44 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-01-12 14:34:56"
+            "time": "2015-02-27 12:35:37"
+        },
+        {
+            "name": "maslosoft/miniview",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maslosoft/MiniView.git",
+                "reference": "5e26a602f3050b158fa3b45e884c9cb6e11521aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/5e26a602f3050b158fa3b45e884c9cb6e11521aa",
+                "reference": "5e26a602f3050b158fa3b45e884c9cb6e11521aa",
+                "shasum": ""
+            },
+            "require-dev": {
+                "maslosoft/hedron": "~1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maslosoft\\MiniView\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "New BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Maselkowski",
+                    "email": "pmaselkowski@gmail.com"
+                }
+            ],
+            "description": "Mini view is minimal template rendering library based on Yii controller renderer",
+            "homepage": "http://maslosoft.com/miniview/",
+            "time": "2015-01-13 16:54:06"
         },
         {
             "name": "phpunit/php-code-coverage",
