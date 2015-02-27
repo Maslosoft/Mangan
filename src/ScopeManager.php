@@ -36,21 +36,20 @@ class ScopeManager
 	/**
 	 * Apply scopes to criteria, will create criteria object if not provided and pass it by reference
 	 * @param Criteria|array|null $criteria
-	 * @return \Maslosoft\Mangan\ScopeManager
+	 * @return Criteria
 	 */
 	public function apply(&$criteria = null)
 	{
 		if (null === $criteria)
 		{
-			$criteria = new Criteria();
-			return $this;
+			return new Criteria();
 		}
 		if(is_array($criteria))
 		{
 			$criteria = new Criteria($criteria);
 		}
 		$criteria->mergeWith($this->criteria);
-		return $this;
+		return $criteria;
 	}
 
 	public function reset()
