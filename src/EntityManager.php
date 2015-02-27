@@ -316,9 +316,10 @@ class EntityManager implements IEntityManager
 	public function refresh()
 	{
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
-		if ($this->getCollection()->count($conditions) == 1)
+		$data = $this->getCollection()->findOne($conditions);
+		if ($data)
 		{
-			$this->setAttributes($this->getCollection()->findOne($conditions), false);
+			$this->setAttributes($data, false);
 			return true;
 		}
 		else
