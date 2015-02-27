@@ -174,6 +174,21 @@ class EntityManager implements IEntityManager
 		RawArray::toModel($atributes, $this->model, $this->model);
 	}
 
+	/**
+	 * Inserts a row into the table based on this active record attributes.
+	 * If the table's primary key is auto-incremental and is null before insertion,
+	 * it will be populated with the actual value after insertion.
+	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
+	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
+	 * and its {@link scenario} property will be set to be 'update'.
+	 * @param IModel $model if want to insert different model than set in constructor
+	 * @return boolean whether the attributes are valid and the record is inserted successfully.
+	 * @throws MongoException if the record is not new
+	 * @throws MongoException on fail of insert or insert of empty document
+	 * @throws MongoException on fail of insert, when safe flag is set to true
+	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @since v1.0
+	 */
 	public function insert($model = null)
 	{
 		$model = $model? : $this->model;
@@ -210,10 +225,6 @@ class EntityManager implements IEntityManager
 	 */
 	public function update(array $attributes = null, $modify = false)
 	{
-		if ($this->getIsNewRecord())
-		{
-			throw new MongoException('The Document cannot be updated because it is new.');
-		}
 		if ($this->_beforeSave($this->model))
 		{
 			$rawData = RawArray::fromModel($this->model);
@@ -292,16 +303,16 @@ class EntityManager implements IEntityManager
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
-	public function save($runValidation = true, $attributes = null)
+	public function save($runValidation = true)
 	{
-		if (!$runValidation || $this->validator->validate($attributes))
+		if (!$runValidation || $this->validator->validate())
 		{
-			return $this->getIsNewRecord() ? $this->insert($attributes) : $this->update($attributes);
+			$existsCriteria = PkManager::prepareFromModel($this->model);
+			$exists = Finder::create($this->model)->exists($existsCriteria);
+			return $exists ? $this->insert() : $this->update();
 		}
 		else
 		{
@@ -344,7 +355,6 @@ class EntityManager implements IEntityManager
 			if ($result !== false)
 			{
 				$this->_afterDelete();
-				$this->setIsNewRecord(true);
 				return true;
 			}
 			else
@@ -370,7 +380,7 @@ class EntityManager implements IEntityManager
 		$this->sm->apply($criteria);
 
 		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-							'justOne' => true
+					'justOne' => true
 		]));
 		return $this->_result($result);
 	}
@@ -390,7 +400,7 @@ class EntityManager implements IEntityManager
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-								'justOne' => true
+						'justOne' => true
 			]));
 			return $this->_result($result);
 		}
@@ -411,7 +421,7 @@ class EntityManager implements IEntityManager
 			$this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepareAll($this->model, $pkValues, $criteria));
 			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-								'justOne' => false
+						'justOne' => false
 			]));
 			return $this->_result($result);
 		}
@@ -430,7 +440,7 @@ class EntityManager implements IEntityManager
 		$this->sm->apply($criteria);
 
 		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-							'justOne' => false
+					'justOne' => false
 		]));
 		return $this->_result($result);
 	}
@@ -438,16 +448,6 @@ class EntityManager implements IEntityManager
 	public function getCollection()
 	{
 		return $this->_collection;
-	}
-
-	public function getIsNewRecord()
-	{
-		return true;
-	}
-
-	public function setIsNewRecord($new = true)
-	{
-
 	}
 
 	/**
@@ -458,13 +458,13 @@ class EntityManager implements IEntityManager
 	 */
 	private function _result($result, $insert = false)
 	{
-		if(is_array($result))
+		if (is_array($result))
 		{
-			if($insert)
+			if ($insert)
 			{
-				return (bool)$result['ok'];
+				return (bool) $result['ok'];
 			}
-			return (bool)$result['n'];
+			return (bool) $result['n'];
 		}
 		return $result;
 	}
