@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 /**
  * FromJson annotation
  * Use this annotation to ignore or include field when converting from JSON array
- * @Target('field')
+ * @Target('property')
  * @template FromJson(false)
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 /**
  * ToArray annotation
  * Use this annotation to ignore or include field when converting to array
- * @Target('field')
+ * @Target('property')
  * @template ToArray(false)
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
