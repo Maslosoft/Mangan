@@ -272,14 +272,12 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony Filesystem Component",
@@ -672,17 +670,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "d4852de0c63079b32868b9fc515338e4d50f7594"
+                "reference": "bf1afacbf98ad299fb61e6f0a736c31be5aad06e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/d4852de0c63079b32868b9fc515338e4d50f7594",
-                "reference": "d4852de0c63079b32868b9fc515338e4d50f7594",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/bf1afacbf98ad299fb61e6f0a736c31be5aad06e",
+                "reference": "bf1afacbf98ad299fb61e6f0a736c31be5aad06e",
                 "shasum": ""
             },
             "require": {
-                "codeception/codeception": "*",
-                "yiisoft/yii": "1.1.*"
+                "codeception/codeception": "*"
             },
             "type": "library",
             "autoload": {
@@ -703,7 +700,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-02-27 13:33:34"
+            "time": "2015-02-27 13:50:33"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1966,96 +1963,6 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2015-01-25 04:39:26"
-        },
-        {
-            "name": "yiisoft/yii",
-            "version": "1.1.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii.git",
-                "reference": "bca0420b6799b0b2a7966aa90bcd15cb4aa73563"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii/zipball/bca0420b6799b0b2a7966aa90bcd15cb4aa73563",
-                "reference": "bca0420b6799b0b2a7966aa90bcd15cb4aa73563",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.1.0"
-            },
-            "bin": [
-                "framework/yiic"
-            ],
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "framework/YiiBase.php",
-                    "framework/yii.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Qiang Xue",
-                    "email": "qiang.xue@gmail.com",
-                    "homepage": "http://www.yiiframework.com/",
-                    "role": "Founder and project lead"
-                },
-                {
-                    "name": "Alexander Makarov",
-                    "email": "sam@rmcreative.ru",
-                    "homepage": "http://rmcreative.ru/",
-                    "role": "Core framework development"
-                },
-                {
-                    "name": "Maurizio Domba",
-                    "homepage": "http://mdomba.info/",
-                    "role": "Core framework development"
-                },
-                {
-                    "name": "Carsten Brandt",
-                    "email": "mail@cebe.cc",
-                    "homepage": "http://cebe.cc/",
-                    "role": "Core framework development"
-                },
-                {
-                    "name": "Wei Zhuo",
-                    "email": "weizhuo@gmail.com",
-                    "role": "Project site maintenance and development"
-                },
-                {
-                    "name": "Sebastián Thierer",
-                    "email": "sebas@artfos.com",
-                    "role": "Component development"
-                },
-                {
-                    "name": "Jeffrey Winesett",
-                    "email": "jefftulsa@gmail.com",
-                    "role": "Documentation and marketing"
-                },
-                {
-                    "name": "Timur Ruziev",
-                    "email": "resurtm@gmail.com",
-                    "homepage": "http://resurtm.com/",
-                    "role": "Core framework development"
-                },
-                {
-                    "name": "Paul Klimov",
-                    "email": "klimov.paul@gmail.com",
-                    "role": "Core framework development"
-                }
-            ],
-            "description": "Yii Web Programming Framework",
-            "homepage": "http://www.yiiframework.com/",
-            "keywords": [
-                "framework",
-                "yii"
-            ],
-            "time": "2014-12-21 19:30:17"
         },
         {
             "name": "zordius/lightncandy",
