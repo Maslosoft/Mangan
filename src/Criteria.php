@@ -83,10 +83,11 @@ class Criteria
 	private $_useCursor = null;
 
 	/**
-	 * Whenever to use decorators when creating conditions
-	 * @var bool
+	 * Model to use for decorators and sanitizer when creating conditions.
+	 * If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
+	 * @var IAnnotated
 	 */
-	private $_withDecorators = true;
+	private $_model = null;
 
 	/**
 	 * Constructor
@@ -306,9 +307,10 @@ class Criteria
 		$this->addCond($fieldList, '==', $value);
 	}
 
-	public function withDecorators($withDecorators = true)
+	public function decorateWith($model)
 	{
-		$this->_withDecorators = $withDecorators;
+		$this->_model = $model;
+		return $this;
 	}
 
 	/**
@@ -317,12 +319,8 @@ class Criteria
 	 * @return array query array
 	 * @since v1.0
 	 */
-	public function getConditions($model = null)
+	public function getConditions()
 	{
-		if($model && $this->_withDecorators)
-		{
-			
-		}
 		return $this->_conditions;
 	}
 
