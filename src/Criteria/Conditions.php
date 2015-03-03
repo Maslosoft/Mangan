@@ -33,7 +33,7 @@ class Conditions
 		
 	}
 
-	public function toArray()
+	public function get()
 	{
 		
 	}

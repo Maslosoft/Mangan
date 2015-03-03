@@ -307,6 +307,12 @@ class Criteria
 		$this->addCond($fieldList, '==', $value);
 	}
 
+	/**
+	 * Decorate and sanitize criteria with provided model.
+	 * 
+	 * @param IAnnotated
+	 * @return Criteria
+	 */
 	public function decorateWith($model)
 	{
 		$this->_model = $model;
@@ -315,7 +321,6 @@ class Criteria
 
 	/**
 	 * Return query array
-	 * @param IAnnotated $model Model used to decorate and sanitize criteria
 	 * @return array query array
 	 * @since v1.0
 	 */
