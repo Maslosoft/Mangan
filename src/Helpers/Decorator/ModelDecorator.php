@@ -23,7 +23,6 @@ class ModelDecorator extends Transformator
 
 	/**
 	 * Read value from database
-	 * @param string $name
 	 * @param mixed $dbValue
 	 */
 	public function read(&$dbValue)
@@ -34,7 +33,6 @@ class ModelDecorator extends Transformator
 
 	/**
 	 * Write value into database
-	 * @param string $name
 	 * @param mixed $dbValue
 	 */
 	public function write(&$dbValue)

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Addendum\Collections\Meta;
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -31,7 +31,7 @@ abstract class Transformator
 
 	/**
 	 * Metadata for document
-	 * @var Meta
+	 * @var ManganMeta
 	 */
 	private $_meta = null;
 
@@ -53,23 +53,40 @@ abstract class Transformator
 	 */
 	private $_transformatorClass = ITransformator::class;
 
-	public function __construct($document, $transformatorClass = ITransformator::class)
+	/**
+	 * Class constructor
+	 * @param IAnnotated $model
+	 * @param string $transformatorClass
+	 */
+	public function __construct($model, $transformatorClass = ITransformator::class)
 	{
-		$this->_meta = ManganMeta::create($document);
+		$this->_meta = ManganMeta::create($model);
 		$this->_transformatorClass = $transformatorClass;
-		$this->_model = $document;
+		$this->_model = $model;
 	}
 
+	/**
+	 * Get transformator class
+	 * @return string
+	 */
 	public function getTransformatorClass()
 	{
 		return $this->_transformatorClass;
 	}
 
+	/**
+	 * Get model isntance
+	 * @return IAnnotated
+	 */
 	public function getModel()
 	{
 		return $this->_model;
 	}
 
+	/**
+	 * Get mangan metadata
+	 * @return ManganMeta
+	 */
 	public function getMeta()
 	{
 		return $this->_meta;
@@ -84,7 +101,7 @@ abstract class Transformator
 	{
 		if (!array_key_exists($name, $this->_transformators))
 		{
-			if(!$this->_meta->$name)
+			if (!$this->_meta->$name)
 			{
 				throw new TransformatorException(sprintf('There is not metadata for field `%s` of model `%s`, have you declared this field?', $name, get_class($this->getModel())));
 			}
@@ -103,5 +120,5 @@ abstract class Transformator
 		throw new TransformatorException(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
 	}
 
-	abstract protected function _getTransformer($transformatorClass, DocumentTypeMeta $documentMeta,  DocumentPropertyMeta $fieldMeta);
+	abstract protected function _getTransformer($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta);
 }

@@ -11,14 +11,13 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Validators;
+namespace Maslosoft\Mangan\Validators\BuiltIn;
 
-use CModel;
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IValidator;
-use Yii;
 
 /**
  * CUniqueValidator class file.
@@ -38,7 +37,7 @@ use Yii;
  * @package system.validators
  * @since 1.0
  */
-class MongoUniqueValidator implements IValidator
+class UniqueValidator implements IValidator
 {
 
 	/**
@@ -90,10 +89,10 @@ class MongoUniqueValidator implements IValidator
 	/**
 	 * Validates the attribute of the object.
 	 * If there is any error, the error message is added to the object.
-	 * @param CModel $model the object being validated
+	 * @param IAnnotated $model the object being validated
 	 * @param string $attribute the attribute being validated
 	 */
-	protected function isValid($model, $attribute)
+	protected function isValid(IAnnotated $model, $attribute)
 	{
 		$value = $model->$attribute;
 		if ($this->allowEmpty && $this->isEmpty($value))
@@ -103,7 +102,7 @@ class MongoUniqueValidator implements IValidator
 
 		$criteria = (new Criteria)->decorateWith($model);
 		$criteria->addCond($attribute, '==', $value);
-		
+
 		if ($this->criteria !== [])
 		{
 			$criteria->mergeWith($this->criteria);
@@ -114,47 +113,27 @@ class MongoUniqueValidator implements IValidator
 		$found = $finder->find($criteria);
 
 		// Not found entirely
-		if($found)
+		if ($found)
 		{
-			return;
+			return true;
 		}
 
 		// Same pk
 		/**
-		 * TODO investigate if it's good
+		 * TODO investigate if it's ok to check like that
 		 */
 		if (PkManager::prepareFromModel($found)->getConditions() === PkManager::prepareFromModel($model)->getConditions())
 		{
-			return;
+			return true;
 		}
-		//
-		else
-		{
-			$criteria->limit = 2;
-			$objects = $model->findAll($criteria);
-			$n = count($objects);
-			if ($n === 1)
-			{
-				if ($column->isPrimaryKey)  // primary key is modified and not unique
-				{
-					$exists = $model->getOldPrimaryKey() != $model->getPrimaryKey();
-				}
-				else // non-primary key, need to exclude the current record based on PK
-				{
-					$exists = $objects[0]->getPrimaryKey() != $model->getOldPrimaryKey();
-				}
-			}
-			else
-			{
-				$exists = $n > 1;
-			}
-		}
+		$message = $this->message !== null ? $this->message : '{attribute} "{value}" has already been taken.';
+		$this->addError($model, $attribute, $message, ['{value}' => $value]);
+		return false;
+	}
 
-		if ($exists)
-		{
-			$message = $this->message !== null ? $this->message : Yii::t('yii', '{attribute} "{value}" has already been taken.');
-			$this->addError($model, $attribute, $message, ['{value}' => $value]);
-		}
+	public function addError($message)
+	{
+
 	}
 
 }

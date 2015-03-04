@@ -28,7 +28,6 @@ abstract class Transformer
 	/**
 	 * Returns the given object as an associative array
 	 * @param IModel|object $model
-	 * @param bool $withClassName Whenever to include special _class field
 	 * @param string[] $fields Fields to transform
 	 * @return array an associative array of the contents of this object
 	 */
@@ -43,7 +42,7 @@ abstract class Transformer
 		$arr = [];
 		foreach ($meta->fields() as $name => $fieldMeta)
 		{
-			if($fields && !in_array($name, $fields))
+			if ((bool) $fields && !in_array($name, $fields))
 			{
 				continue;
 			}
@@ -62,7 +61,7 @@ abstract class Transformer
 	 * Create document from array
 	 * TODO Enforce $className if collection is homogenous
 	 * @param mixed[] $data
-	 * @param stirng|object $className
+	 * @param string|object $className
 	 * @param IAnnotated $instance
 	 * @return IAnnotated
 	 * @throws TransformatorException
