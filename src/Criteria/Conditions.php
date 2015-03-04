@@ -28,6 +28,17 @@ class Conditions
 		
 	}
 
+	public function addOr()
+	{
+		return $this;
+	}
+
+	public function addAnd()
+	{
+		return $this;
+	}
+
+
 	public function fromArray($conditions)
 	{
 		
