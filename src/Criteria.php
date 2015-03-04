@@ -43,32 +43,107 @@ class Criteria
 	 * @var array $operators supported operators lists
 	 */
 	public static $operators = [
+
+		// Comparison
+
+		// Matches values that are equal to a specified value.
+		'eq' => '$eq',
+		'equals' => '$eq',
+		'==' => '$eq',
+
+		// Matches values that are greater than a specified value.
+		'gt' => '$gt',
 		'greater' => '$gt',
 		'>' => '$gt',
+
+		// Matches values that are greater than or equal to a specified value.
+		'gte' => '$gte',
 		'greatereq' => '$gte',
 		'>=' => '$gte',
+
+		// Matches values that are less than a specified value.
+		'lt' => '$lt',
 		'less' => '$lt',
 		'<' => '$lt',
+
+		// Matches values that are less than or equal to a specified value.
+		'lte' => '$lte',
 		'lesseq' => '$lte',
 		'<=' => '$lte',
+
+		// Matches all values that are not equal to a specified value.
+		'ne' => '$ne',
 		'noteq' => '$ne',
 		'!=' => '$ne',
 		'<>' => '$ne',
+
+		// Matches any of the values specified in an array.
 		'in' => '$in',
+
+		// Matches none of the values specified in an array.
 		'notin' => '$nin',
-		'all' => '$all',
-		'size' => '$size',
-		'type' => '$type',
+
+		// Logical
+		// Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
+		'or' => '$or',
+
+		// Joins query clauses with a logical AND returns all documents that match the conditions of both clauses.
+		'and' => '$and',
+
+		// Inverts the effect of a query expression and returns documents that do not match the query expression.
+		'not' => '$not',
+
+		// Joins query clauses with a logical NOR returns all documents that fail to match both clauses.
+		'nor' => '$nor',
+
+		// Element
+		// Matches documents that have the specified field.
 		'exists' => '$exists',
 		'notexists' => '$exists',
-		'elemmatch' => '$elemMatch',
+
+		// Selects documents if a field is of the specified type.
+		'type' => '$type',
+
+		// Evaluation
+		// Performs a modulo operation on the value of a field and selects documents with a specified result.
 		'mod' => '$mod',
 		'%' => '$mod',
-		'equals' => '$$eq',
-		'eq' => '$$eq',
-		'==' => '$$eq',
+		
+		// Selects documents where values match a specified regular expression.
+		'regex' => '$regex',
+		
+		// Performs text search.
+		'text' => '$text',
+
+		// Matches documents that satisfy a JavaScript expression.
 		'where' => '$where',
-		'or' => '$or'
+
+		// Geospatial
+		// Selects geometries within a bounding GeoJSON geometry. The `2dsphere` and `2d` indexes support $geoWithin.
+		'geoWithin' => '$geoWithin',
+
+		// Selects geometries that intersect with a GeoJSON geometry. The `2dsphere` index supports $geoIntersects.
+		'geoIntersects' => '$geoIntersects',
+
+		// Returns geospatial objects in proximity to a point. Requires a geospatial index. The `2dsphere` and `2d` indexes support $near.
+		'near' => '$near',
+
+		// Returns geospatial objects in proximity to a point on a sphere. Requires a geospatial index. The `2dsphere` and `2d` indexes support $nearSphere.
+		'nearSphere' => '$nearSphere',
+
+		// Array
+		// Matches arrays that contain all elements specified in the query.
+		'all' => '$all',
+
+		// Selects documents if element in the array field matches all the specified $elemMatch conditions.
+		'elemmatch' => '$elemMatch',
+
+		// Selects documents if the array field is a specified size.
+		'size' => '$size',
+		
+		// Comments
+		'comment' => '$comment'
+
 	];
 
 	const SORT_ASC = 1;
@@ -140,8 +215,7 @@ class Criteria
 					{
 						$this->setWorkingFields($fieldNameArray);
 						$operator = strtolower($operator);
-
-						$this->$fieldName($operator, $value);
+						$this->addCond($fieldName, $operator, $value);
 					}
 				}
 
