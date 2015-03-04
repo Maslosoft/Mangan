@@ -29,6 +29,9 @@ use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
 use Maslosoft\Mangan\Transformers\ITransformator;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
+use Maslosoft\Mangan\Transformers\SafeArray;
+use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
+use Maslosoft\Mangan\Validators\Proxy\BooleanValidator;
 use MongoClient;
 use MongoDB;
 use MongoException;
@@ -97,7 +100,18 @@ class Mangan
 		],
 		RawArray::class => [
 			PersistentFilter::class
-		]
+		],
+		SafeArray::class => [
+			
+		],
+	];
+
+	/**
+	 * Mapping for validators. Key is validator proxy class name, value is concrete validator implementation
+	 * @var string[]
+	 */
+	public $validators = [
+		BooleanProxy::class => BooleanValidator::class,
 	];
 
 	/**
