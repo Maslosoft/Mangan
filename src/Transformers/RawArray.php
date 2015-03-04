@@ -14,8 +14,8 @@
 namespace Maslosoft\Mangan\Transformers;
 
 /**
- * RawArray
- *
+ * This transformer is by default configured to store document in database.
+ * 
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class RawArray extends Transformer implements ITransformator
