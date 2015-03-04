@@ -97,9 +97,9 @@ class I18NDecorator implements IDecorator
 			{
 				continue;
 			}
-			$dbValue[$code] = $value;
+			$dbValue[$name][$code] = $value;
 		}
-		$dbValue[$model->getLang()] = $model->$name;
+		$dbValue[$name][$model->getLang()] = $model->$name;
 		return true;
 	}
 

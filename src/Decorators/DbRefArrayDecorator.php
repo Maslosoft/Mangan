@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
-use Maslosoft\Mangan\Transformers\RawArray;
+use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * DbRefArray
@@ -61,7 +61,7 @@ class DbRefArrayDecorator implements IDecorator
 	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		$fieldMeta = ManganMeta::create($model)->field($name);
-		$dbValue = $fieldMeta->default;
+		$dbValue[$name] = $fieldMeta->default;
 		
 		// Empty
 		if (!$model->$name)
@@ -83,7 +83,7 @@ class DbRefArrayDecorator implements IDecorator
 			{
 				DbRefManager::save($referenced, $dbRef);
 			}
-			$dbValue[$key] = $transformatorClass::fromModel($dbRef, false);
+			$dbValue[$name][$key] = $transformatorClass::fromModel($dbRef, false);
 		}
 	}
 
