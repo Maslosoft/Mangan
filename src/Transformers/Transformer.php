@@ -11,6 +11,7 @@ namespace Maslosoft\Mangan\Transformers;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
+use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\IModel;
@@ -31,12 +32,14 @@ abstract class Transformer
 	 * @param string[] $fields Fields to transform
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel($model, $withClassName = true, $fields = [])
+	public static function fromModel($model, $fields = [])
 	{
 		$meta = ManganMeta::create($model);
-		$decorator = new Decorator($model, get_called_class());
+		$calledClass = get_called_class();
+		$decorator = new Decorator($model, $calledClass);
+		$md = new ModelDecorator($model, $calledClass);
 		$sanitizer = new Sanitizer($model);
-		$filter = new Filter($model, get_called_class());
+		$filter = new Filter($model, $calledClass);
 		$arr = [];
 		foreach ($meta->fields() as $name => $fieldMeta)
 		{
@@ -51,13 +54,7 @@ abstract class Transformer
 			$model->$name = $sanitizer->write($name, $model->$name);
 			$decorator->write($name, $arr);
 		}
-		/**
-		 * TODO This should be handled by decorator
-		 */
-		if ($withClassName)
-		{
-			$arr['_class'] = get_class($model);
-		}
+		$md->write($arr);
 		return $arr;
 	}
 
@@ -105,9 +102,11 @@ abstract class Transformer
 			$model = new $className;
 		}
 		$meta = ManganMeta::create($model);
-		$decorator = new Decorator($model, get_called_class());
+		$calledClass = get_called_class();
+		$decorator = new Decorator($model, $calledClass);
+		$md = new ModelDecorator($model, $calledClass);
 		$sanitizer = new Sanitizer($model);
-		$filter = new Filter($model, get_called_class());
+		$filter = new Filter($model, $calledClass);
 		foreach ($data as $name => $value)
 		{
 			$fieldMeta = $meta->$name;
@@ -123,6 +122,7 @@ abstract class Transformer
 			$decorator->read($name, $value);
 			$model->$name = $sanitizer->read($name, $model->$name);
 		}
+		$md->read($data);
 		return $model;
 	}
 

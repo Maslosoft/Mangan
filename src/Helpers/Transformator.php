@@ -70,6 +70,11 @@ abstract class Transformator
 		return $this->_model;
 	}
 
+	public function getMeta()
+	{
+		return $this->_meta;
+	}
+
 	/**
 	 *
 	 * @param string $name
