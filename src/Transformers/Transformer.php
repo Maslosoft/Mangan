@@ -49,7 +49,7 @@ abstract class Transformer
 				continue;
 			}
 			$model->$name = $sanitizer->write($name, $model->$name);
-			$decorator->write($name, $arr[$name]);
+			$decorator->write($name, $arr);
 		}
 		/**
 		 * TODO This should be handled by decorator

@@ -51,17 +51,17 @@ class EmbeddedArrayDecorator implements IDecorator
 	{
 		if (is_array($model->$name))
 		{
-			$dbValue = [];
+			$dbValue[$name] = [];
 			$key = 0;
 			foreach ($model->$name as $key => $document)
 			{
 				$data = $transformatorClass::fromModel($document);
-				$dbValue[$key] = $data;
+				$dbValue[$name][$key] = $data;
 			}
 		}
 		else
 		{
-			$dbValue = $model->$name;
+			$dbValue[$name] = $model->$name;
 		}
 	}
 

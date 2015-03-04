@@ -55,7 +55,7 @@ class DbRefDecorator implements IDecorator
 		{
 			DbRefManager::save($referenced, $dbRef);
 		}
-		$dbValue = $transformatorClass::fromModel($dbRef, false);
+		$dbValue[$name] = $transformatorClass::fromModel($dbRef, false);
 	}
 
 }

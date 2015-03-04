@@ -47,7 +47,7 @@ class Undecorated implements IDecorator
 	 */
 	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
-		$dbValue = $model->$name;
+		$dbValue[$name] = $model->$name;
 	}
 
 }

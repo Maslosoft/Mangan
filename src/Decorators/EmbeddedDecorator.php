@@ -51,10 +51,10 @@ class EmbeddedDecorator implements IDecorator
 			{
 				return null;
 			}
-			$dbValue = $transformatorClass::fromModel(new $className);
+			$dbValue[$name] = $transformatorClass::fromModel(new $className);
 			return;
 		}
-		$dbValue = $transformatorClass::fromModel($model->$name);
+		$dbValue[$name] = $transformatorClass::fromModel($model->$name);
 	}
 
 	public static function ensureClass($model, $name, &$dbValue)

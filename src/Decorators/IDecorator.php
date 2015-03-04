@@ -37,11 +37,11 @@ interface IDecorator
 	/**
 	 * This will be called when setting value.
 	 * This should return db acceptable value
-	 * @param EmbeddedDocument $model Document model which will be decorated
-	 * @param string $name Field name
-	 * @param mixed $dbValue
+	 * @param EmbeddedDocument $model Model which is about to be decorated
+	 * @param string $name Current field name
+	 * @param mixed[] $dbValues Whole model values from database. This is associative array with keys same as model properties (use $name param to access value). This is passed by reference.
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class);
+	public function write($model, $name, &$dbValues, $transformatorClass = ITransformator::class);
 }
