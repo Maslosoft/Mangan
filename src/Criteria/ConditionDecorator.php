@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Criteria\Conditions;
+namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
@@ -46,22 +46,25 @@ class ConditionDecorator
 			];
 		}
 		$this->model->$field = $value;
-		return $this->_flatten($field, CriteriaArray::fromModel($this->model, false, [$field]));
+		$data = CriteriaArray::fromModel($this->model, [$field]);
+		return $this->_flatten($field, $this->model->$field, $data[$field]);
 	}
 
-	private function _flatten($field, $data)
+	private function _flatten($field, $srcValue, $data)
 	{
-		// strstr is safe here, as field anyway cannot start with dot
-		if(!strstr($field, '.'))
-		{
-			return $data;
-		}
-		$parts = explode('.', $field);
 		$value = $data;
-		foreach($parts as $name)
+		while(is_array($value))
 		{
-			$value = $value[$name];
+			$key = key($value);
+			$value = $value[$key];
+			$field = "$field.$key";
+			if($srcValue === $value)
+			{
+				break;
+			}
 		}
+		
+		
 		return [
 			$field => $value
 		];
