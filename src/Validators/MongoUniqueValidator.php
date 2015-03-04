@@ -14,9 +14,10 @@
 namespace Maslosoft\Mangan\Validators;
 
 use CModel;
-use CValidator;
 use Maslosoft\Mangan\Criteria;
-use Maslosoft\Mangan\Document;
+use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\IValidator;
 use Yii;
 
 /**
@@ -37,7 +38,7 @@ use Yii;
  * @package system.validators
  * @since 1.0
  */
-class MongoUniqueValidator extends CValidator
+class MongoUniqueValidator implements IValidator
 {
 
 	/**
@@ -89,38 +90,44 @@ class MongoUniqueValidator extends CValidator
 	/**
 	 * Validates the attribute of the object.
 	 * If there is any error, the error message is added to the object.
-	 * @param CModel $object the object being validated
+	 * @param CModel $model the object being validated
 	 * @param string $attribute the attribute being validated
 	 */
-	protected function validateAttribute($object, $attribute)
+	protected function isValid($model, $attribute)
 	{
-		$value = $object->$attribute;
+		$value = $model->$attribute;
 		if ($this->allowEmpty && $this->isEmpty($value))
 		{
-			return;
+			return true;
 		}
 
-		$className = $this->className === null ? get_class($object) : Yii::import($this->className);
-
-		$model = Document::model($className);
-		$criteria = new Criteria;
-		if($model->meta->{$attribute}->i18n)
-		{
-			$criteria->addCond(sprintf('%s.%s', $model->getLang(), $attribute), '==', $value);
-		}
-		else
-		{
-			$criteria->addCond($attribute, '==', $value);
-		}
+		$criteria = (new Criteria)->decorateWith($model);
+		$criteria->addCond($attribute, '==', $value);
+		
 		if ($this->criteria !== [])
 		{
 			$criteria->mergeWith($this->criteria);
 		}
 
-		if (!$object instanceof Document || $object->isNewRecord)
+		$finder = new Finder($model);
+
+		$found = $finder->find($criteria);
+
+		// Not found entirely
+		if($found)
 		{
-			$exists = $model->exists($criteria);
+			return;
 		}
+
+		// Same pk
+		/**
+		 * TODO investigate if it's good
+		 */
+		if (PkManager::prepareFromModel($found)->getConditions() === PkManager::prepareFromModel($model)->getConditions())
+		{
+			return;
+		}
+		//
 		else
 		{
 			$criteria->limit = 2;
@@ -130,11 +137,11 @@ class MongoUniqueValidator extends CValidator
 			{
 				if ($column->isPrimaryKey)  // primary key is modified and not unique
 				{
-					$exists = $object->getOldPrimaryKey() != $object->getPrimaryKey();
+					$exists = $model->getOldPrimaryKey() != $model->getPrimaryKey();
 				}
 				else // non-primary key, need to exclude the current record based on PK
 				{
-					$exists = $objects[0]->getPrimaryKey() != $object->getOldPrimaryKey();
+					$exists = $objects[0]->getPrimaryKey() != $model->getOldPrimaryKey();
 				}
 			}
 			else
@@ -146,7 +153,7 @@ class MongoUniqueValidator extends CValidator
 		if ($exists)
 		{
 			$message = $this->message !== null ? $this->message : Yii::t('yii', '{attribute} "{value}" has already been taken.');
-			$this->addError($object, $attribute, $message, ['{value}' => $value]);
+			$this->addError($model, $attribute, $message, ['{value}' => $value]);
 		}
 	}
 
