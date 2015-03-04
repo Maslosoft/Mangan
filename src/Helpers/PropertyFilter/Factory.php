@@ -11,6 +11,7 @@ namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
+use Maslosoft\Mangan\Transformers\Filters\Unfiltered;
 use Maslosoft\Transformers\Filters\ITransformatorFilter;
 
 /**
@@ -38,7 +39,7 @@ class Factory
 			}
 			return current($filterNames);
 		}
-		return new Unfilrered();
+		return new Unfiltered();
 	}
 
 	private static function getManganFilters($connectionId, $transformatorClass)
