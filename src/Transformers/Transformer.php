@@ -28,17 +28,22 @@ abstract class Transformer
 	 * Returns the given object as an associative array
 	 * @param IModel|object $model
 	 * @param bool $withClassName Whenever to include special _class field
+	 * @param string[] $fields Fields to transform
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel($model, $withClassName = true)
+	public static function fromModel($model, $withClassName = true, $fields = [])
 	{
 		$meta = ManganMeta::create($model);
 		$decorator = new Decorator($model, get_called_class());
 		$sanitizer = new Sanitizer($model);
 		$filter = new Filter($model, get_called_class());
 		$arr = [];
-		foreach ($meta->fields() as $name => $field)
+		foreach ($meta->fields() as $name => $fieldMeta)
 		{
+			if($fields && !in_array($name, $fields))
+			{
+				continue;
+			}
 			if (!$filter->fromModel($model, $meta->$name))
 			{
 				continue;
@@ -46,6 +51,9 @@ abstract class Transformer
 			$model->$name = $sanitizer->write($name, $model->$name);
 			$decorator->write($name, $arr[$name]);
 		}
+		/**
+		 * TODO This should be handled by decorator
+		 */
 		if ($withClassName)
 		{
 			$arr['_class'] = get_class($model);
