@@ -28,6 +28,7 @@ use Maslosoft\Mangan\Signals\AfterSave;
 use Maslosoft\Mangan\Signals\BeforeDelete;
 use Maslosoft\Mangan\Signals\BeforeSave;
 use Maslosoft\Mangan\Transformers\RawArray;
+use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
 use MongoException;
@@ -171,7 +172,7 @@ class EntityManager implements IEntityManager
 	 */
 	public function setAttributes($atributes)
 	{
-		RawArray::toModel($atributes, $this->model, $this->model);
+		SafeArray::toModel($atributes, $this->model, $this->model);
 	}
 
 	/**
