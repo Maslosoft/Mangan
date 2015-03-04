@@ -48,14 +48,14 @@ class Decorator extends Transformator
 
 	/**
 	 * Get transformer
-	 * @param type $transformatorClass
+	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $meta
 	 * @return IDecorator
 	 */
 	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
-		return Factory::create($transformatorClass, $modelMeta, $meta);
+		return Factory::createForField($transformatorClass, $modelMeta, $meta);
 	}
 
 }

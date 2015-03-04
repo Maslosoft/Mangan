@@ -27,7 +27,7 @@ class CompoundModelDecorator implements IModelDecorator
 
 	/**
 	 *
-	 * @param IDecorator[] $decorators
+	 * @param IModelDecorator[] $decorators
 	 */
 	public function __construct($decorators)
 	{

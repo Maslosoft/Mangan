@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
+use Maslosoft\Mangan\Decorators\IDecorator;
 use Maslosoft\Mangan\Decorators\IModelDecorator;
 use Maslosoft\Mangan\Decorators\Undecorated;
 use Maslosoft\Mangan\Mangan;
@@ -21,7 +22,7 @@ use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use ReflectionClass;
 
 /**
- * Factory
+ * Factory for creating decorators
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
@@ -40,7 +41,14 @@ class Factory
 	 */
 	private static $_modelDecorators = [];
 
-	public static function create($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
+	/**
+	 * Create decorator
+	 * @param string $transformatorClass
+	 * @param DocumentTypeMeta $modelMeta
+	 * @param DocumentPropertyMeta $meta
+	 * @return Undecorated|CompoundDecorator|IDecorator
+	 */
+	public static function createForField($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
 		if ($meta->decorators)
 		{
@@ -66,7 +74,7 @@ class Factory
 	 * Create decorators for model. This returns all de
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
-	 * @return CompoundDecorator
+	 * @return CompoundModelDecorator
 	 */
 	public static function createForModel($transformatorClass, DocumentTypeMeta $modelMeta)
 	{
@@ -86,6 +94,12 @@ class Factory
 		return self::$_modelDecorators[$modelMeta->connectionId][$transformatorClass];
 	}
 
+	/**
+	 * Get mangan decorators for selected connection id
+	 * @param string $connectionId
+	 * @param string $transformatorClass
+	 * @return bool[]
+	 */
 	private static function getManganDecorators($connectionId, $transformatorClass)
 	{
 		if (!isset(self::$_configs[$connectionId]))
