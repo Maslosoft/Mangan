@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Interfaces\IValidatable;
 
 /**
@@ -39,7 +38,12 @@ class Validator implements IValidatable
 		$this->_model = $model;
 	}
 
-	public function validate()
+	/**
+	 * Validate model, optionally only selected fields
+	 * @param string[] $fields
+	 * @return boolean
+	 */
+	public function validate($fields = [])
 	{
 		return true;
 	}
