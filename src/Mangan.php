@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\EmbeDi\EmbeDi;
+use Maslosoft\Mangan\Decorators\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
@@ -22,6 +23,7 @@ use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Decorators\I18NDecorator;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Transformers\CriteriaArray;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
 use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
@@ -75,12 +77,18 @@ class Mangan
 			EmbeddedArrayDecorator::class,
 			EmbeddedDecorator::class,
 		],
+		CriteriaArray::class => [
+			I18NDecorator::class,
+		],
 		DocumentArray::class => [
+			ClassNameDecorator::class,
 		],
 		JsonArray::class => [
+			ClassNameDecorator::class,
 		],
 		RawArray::class => [
-			I18NDecorator::class
+			I18NDecorator::class,
+			ClassNameDecorator::class,
 		]
 	];
 

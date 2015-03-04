@@ -42,12 +42,12 @@ class Undecorated implements IDecorator
 	 * This should return db acceptable value
 	 * @param IModel $model Document model which will be decorated
 	 * @param string $name Field name
-	 * @param mixed $dbValue
+	 * @param mixed $dbValues
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValues, $transformatorClass = ITransformator::class)
 	{
-		$dbValue[$name] = $model->$name;
+		$dbValues[$name] = $model->$name;
 	}
 
 }
