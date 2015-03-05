@@ -11,9 +11,6 @@ before_install:
   - echo "deb [arch=amd64] http://s3.amazonaws.com/tokumx-debs $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/tokumx.list
   - sudo apt-get update
   - sudo apt-get install tokumx
-  - sudo echo "port = 27018" >> /etc/tokumx.conf
-  - sudo service tokumx restart
-  - sudo service mongodb start
 install:
   - composer self-update
   - composer install --dev
