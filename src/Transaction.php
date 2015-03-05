@@ -81,12 +81,27 @@ class Transaction
 
 	public function commit()
 	{
-		$this->cmd->call(self::CommandCommit);
+		$this->_finish(self::CommandCommit);
 	}
 
 	public function rollback()
 	{
-		$this->cmd->call(self::CommandRollback);
+		$this->_finish(self::CommandRollback);
+	}
+
+	private function _finish($command)
+	{
+		try
+		{
+			$this->cmd->call($command);
+		}
+		catch (Exception $e)
+		{
+			throw $e;
+		} finally
+		{
+			self::$isActive = false;
+		}
 	}
 
 }

@@ -20,7 +20,8 @@ namespace Maslosoft\Mangan\Traits;
  */
 trait AvailableCommands
 {
-
+	abstract public function call($command, $arguments = []);
+	
 	/**
 	 * returns the hash of the first BSONElement val in a BSONObj
 	 */

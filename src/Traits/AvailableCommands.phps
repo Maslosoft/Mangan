@@ -20,5 +20,6 @@ namespace Maslosoft\Mangan\Traits;
  */
 trait AvailableCommands
 {
-
+	abstract public function call($command, $arguments = []);
+	
 }
