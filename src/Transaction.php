@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Exception;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\TransactionException;
 use Maslosoft\Mangan\Helpers\CommandProxy;
