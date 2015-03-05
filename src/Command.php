@@ -21,13 +21,12 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * Command
- * @method string[] buildinfo() Mongo build information
- * @method string listCommands() List commands
+ * 
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Command
 {
-
+	use Traits\AvailableCommands;
 	/**
 	 *
 	 * @var IAnnotated
