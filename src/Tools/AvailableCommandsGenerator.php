@@ -13,6 +13,10 @@
 
 namespace Maslosoft\Mangan\Tools;
 
+use Maslosoft\Mangan\Command;
+use Maslosoft\MiniView\MiniView;
+use ReflectionClass;
+
 /**
  * AvailableCommandsGenerator
  *
@@ -23,9 +27,45 @@ class AvailableCommandsGenerator
 
 	public function generate()
 	{
-		$cmd = new \Maslosoft\Mangan\Command();
-		$commands = $cmd->listCommands();
-		
+		$destName = (new ReflectionClass(\Maslosoft\Mangan\Traits\AvailableCommands::class))->getFileName();
+		$srcName = $destName . 's';
+
+		$view = new MiniView($this);
+		$cmd = new Command();
+		$commands = $cmd->listCommands()['commands'];
+		$functions = [];
+		foreach ($commands as $name => $cmdData)
+		{
+			if ($cmdData['adminOnly'])
+			{
+				continue;
+			}
+			$functions[] = $view->render('command', [
+				'mongoName' => $name,
+				'name' => $this->_sanitize($name),
+				'help' => explode("\n", $cmdData['help'])
+					], true);
+		}
+
+		$src = file_get_contents($srcName);
+		$code = implode("\n", $functions) . "\n}";
+		$result = str_replace('}', $code, $src);
+
+		file_put_contents($destName, $result);
+	}
+
+	private function _sanitize($name)
+	{
+		$renames = [
+			'clone' => 'cloneDb',
+			'eval' => 'evalJs',
+			'mapreduce.shardedfinish' => 'mapReduceShardedFinish'
+		];
+		if (isset($renames[$name]))
+		{
+			return $renames[$name];
+		}
+		return $name;
 	}
 
 }
