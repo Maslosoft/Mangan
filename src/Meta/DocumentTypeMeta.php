@@ -17,7 +17,7 @@ use Maslosoft\Addendum\Collections\MetaType;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
-use Maslosoft\Mangan\ManganException;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
