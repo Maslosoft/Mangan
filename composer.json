@@ -50,7 +50,8 @@
 		"maslosoft/addendum": "~3",
 		"maslosoft/signals": "~1",
 		"masterexploder/phpthumb": "2.0",
-		"maslosoft/embedi": "~0.0"
+		"maslosoft/embedi": "~0.0",
+		"maslosoft/miniview": "~1.0"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master",

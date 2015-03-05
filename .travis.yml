@@ -8,13 +8,19 @@ matrix:
     - php: hhvm
 services:
   - mongodb
+before_install:
+  - sudo service mongodb stop
+  - sudo apt-get install tokumx
+  - sudo echo "port = 27018" >> /etc/tokumx.conf
+  - sudo service tokumx restart
+  - sudo service mongodb start
 install:
   - composer self-update
   - composer install --dev
   - composer update maslosoft/mangantest
 before_script:
 # Wait for mongodb
-  - sleep 15
+  - sleep 5
   - phpenv config-add travis.ini
 after_script:
   - wget --no-check-certificate https://scrutinizer-ci.com/ocular.phar
