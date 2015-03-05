@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Interfaces\IOwnered;
-use Maslosoft\Mangan\ManganException;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\ITransformator;

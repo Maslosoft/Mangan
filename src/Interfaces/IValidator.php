@@ -8,12 +8,16 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface IValidator
 {
+
 	public function addError($message);
-	public function isValid();
+
+	public function isValid(IAnnotated $model, $attribute);
 }

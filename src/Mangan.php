@@ -32,8 +32,10 @@ use Maslosoft\Mangan\Transformers\ITransformator;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
+use Maslosoft\Mangan\Validators\BuiltIn\UniqueValidator;
 use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
 use Maslosoft\Mangan\Validators\Proxy\BooleanValidator;
+use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
 use MongoClient;
 use MongoDB;
 use MongoException;
@@ -110,7 +112,6 @@ class Mangan
 			PersistentFilter::class
 		],
 		SafeArray::class => [
-			
 		],
 	];
 
@@ -120,6 +121,7 @@ class Mangan
 	 */
 	public $validators = [
 		BooleanProxy::class => BooleanValidator::class,
+		UniqueProxy::class => UniqueValidator::class,
 	];
 
 	/**

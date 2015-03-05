@@ -13,10 +13,8 @@
 
 namespace Maslosoft\Mangan\Exceptions;
 
-use Maslosoft\Mangan\ManganException;
-
 /**
- * CriteriaException
+ * Criteria Exception
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

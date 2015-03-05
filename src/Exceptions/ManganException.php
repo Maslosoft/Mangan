@@ -11,12 +11,12 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan;
+namespace Maslosoft\Mangan\Exceptions;
 
 use Exception;
 
 /**
- * \Maslosoft\Mangan\MongoException
+ * Mangan exception
  *
  * @author Ianaré Sévi
  * @author Dariusz Górecki <darek.krk@gmail.com>

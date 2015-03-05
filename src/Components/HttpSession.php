@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Components;
 
 use CHttpSession;
 use Maslosoft\Mangan\Mangan;
-use Maslosoft\Mangan\ManganException;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use MongoCollection;
 use MongoDate;
 use MongoId;
