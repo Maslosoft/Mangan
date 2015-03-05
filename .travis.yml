@@ -6,10 +6,10 @@ php:
 matrix:
   allow_failures:
     - php: hhvm
-services:
-  - mongodb
 before_install:
-  - sudo service mongodb stop
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key 505A7412
+  - echo "deb [arch=amd64] http://s3.amazonaws.com/tokumx-debs $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/tokumx.list
+  - sudo apt-get update
   - sudo apt-get install tokumx
   - sudo echo "port = 27018" >> /etc/tokumx.conf
   - sudo service tokumx restart
