@@ -50,7 +50,7 @@ class CommandProxy extends Command
 		{
 			try
 			{
-				parent::call($command, $arguments);
+				return parent::call($command, $arguments);
 			}
 			catch (CommandNotFoundException $e)
 			{

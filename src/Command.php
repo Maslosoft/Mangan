@@ -17,6 +17,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 /**
  * Command
  * @method string[] buildinfo() Mongo build information
+ * @method string listCommands() List commands
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Command
@@ -74,6 +75,7 @@ class Command
 			}
 			throw new CommandException(sprintf('Could not execute command `%s`, mongo returned: "%s"', $command, $result['errmsg']));
 		}
+		return $result;
 	}
 
 	public function __call($name, $arguments)
