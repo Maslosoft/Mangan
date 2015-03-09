@@ -16,9 +16,10 @@ namespace Maslosoft\Mangan\Helpers;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\CriteriaException;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
-use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use MongoId;
 
 /**
  * Primary key manager
@@ -36,7 +37,7 @@ class PkManager
 	 */
 	public static function prepareAll($model, $pkValues, Criteria $criteria = null)
 	{
-		if(null === $criteria)
+		if (null === $criteria)
 		{
 			$criteria = new Criteria();
 		}
@@ -63,7 +64,7 @@ class PkManager
 	 * @return Criteria
 	 * @throws CriteriaException
 	 */
-	public static function prepare($model, $pkValue)
+	public static function prepare(IAnnotated $model, $pkValue)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$criteria = new Criteria();
@@ -91,17 +92,17 @@ class PkManager
 	 * @param IAnnotated $model
 	 * @return Criteria
 	 */
-	public static function prepareFromModel($model)
+	public static function prepareFromModel(IAnnotated $model)
 	{
 		return self::prepare($model, self::getFromModel($model));
 	}
 
 	/**
 	 * Get primary key from model
-	 * @param IModel $model
+	 * @param IAnnotated $model
 	 * @return MongoId|mixed|mixed[]
 	 */
-	public static function getFromModel($model)
+	public static function getFromModel(IAnnotated $model)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$pkValue = [];
@@ -122,12 +123,12 @@ class PkManager
 
 	/**
 	 * Apply pk value to model
-	 * @param IModel $model
+	 * @param IAnnotated $model
 	 * @param MongoId|mixed|mixed[] $pkValue
 	 * @return type
 	 * @throws CriteriaException
 	 */
-	public static function applyToModel($model, $pkValue)
+	public static function applyToModel(IAnnotated $model, $pkValue)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$sanitizer = new Sanitizer($model);
@@ -151,11 +152,12 @@ class PkManager
 
 	/**
 	 * Create pk criteria for single field
+	 * @param IAnnotated $model Model instance
 	 * @param string $name
 	 * @param mixed $value
 	 * @param Criteria $criteria
 	 */
-	private static function _prepareField($model, $name, $value, Criteria &$criteria)
+	private static function _prepareField(IAnnotated $model, $name, $value, Criteria &$criteria)
 	{
 		$sanitizer = new Sanitizer($model);
 		$criteria->addCond($name, '==', $sanitizer->write($name, $value));
