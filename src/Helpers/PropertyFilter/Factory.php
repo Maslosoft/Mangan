@@ -43,7 +43,7 @@ class Factory
 	public static function create($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta)
 	{
 		$filterNames = self::getManganFilters($documentMeta->connectionId, $transformatorClass);
-		if ((bool) $filterNames)
+		if (count($filterNames) > 0)
 		{
 			if (count($filterNames) > 1)
 			{
