@@ -125,7 +125,7 @@ abstract class Transformator
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $fieldMeta
-	 * @return IDecorator
+	 * @return object
 	 */
 	abstract protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $fieldMeta);
 }

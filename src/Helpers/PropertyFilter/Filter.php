@@ -36,9 +36,16 @@ class Filter extends Transformator implements ITransformatorFilter
 		return $this->getFor($fieldMeta->name)->fromModel($model, $fieldMeta);
 	}
 
-	protected function _getTransformer($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta)
+		/**
+	 * Get transformer
+	 * @param string $transformatorClass
+	 * @param DocumentTypeMeta $modelMeta
+	 * @param DocumentPropertyMeta $fieldMeta
+	 * @return ITransformatorFilter
+	 */
+	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $fieldMeta)
 	{
-		return Factory::create($transformatorClass, $documentMeta, $fieldMeta);
+		return Factory::create($transformatorClass, $modelMeta, $fieldMeta);
 	}
 
 }
