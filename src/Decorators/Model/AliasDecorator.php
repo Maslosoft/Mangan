@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan\Decorators\Model;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -25,7 +26,7 @@ class AliasDecorator implements IModelDecorator
 	/**
 	 * This will be called when getting value.
 	 * This should return end user value.
-	 * @param EmbeddedDocument $model Document model which will be decorated
+	 * @param IAnnotated $model Document model which will be decorated
 	 * @param mixed $dbValues
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true if value should be assigned to model
@@ -46,7 +47,7 @@ class AliasDecorator implements IModelDecorator
 	/**
 	 * This will be called when setting value.
 	 * This should return db acceptable value
-	 * @param EmbeddedDocument $model Model which is about to be decorated
+	 * @param IAnnotated $model Model which is about to be decorated
 	 * @param mixed[] $dbValues Whole model values from database. This is associative array with keys same as model properties (use $name param to access value). This is passed by reference.
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true to store value to database
