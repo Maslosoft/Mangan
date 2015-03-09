@@ -16,8 +16,8 @@ namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
+use Maslosoft\Mangan\Transformers\Filters\ITransformatorFilter;
 use Maslosoft\Mangan\Transformers\Filters\Unfiltered;
-use Maslosoft\Transformers\Filters\ITransformatorFilter;
 
 /**
  * Factory
@@ -33,12 +33,19 @@ class Factory
 	 */
 	private static $_configs = [];
 
+	/**
+	 * Create filter
+	 * @param string $transformatorClass
+	 * @param DocumentTypeMeta $documentMeta
+	 * @param DocumentPropertyMeta $fieldMeta
+	 * @return Unfiltered|MultiFilter
+	 */
 	public static function create($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta)
 	{
 		$filterNames = self::getManganFilters($documentMeta->connectionId, $transformatorClass);
 		if ($filterNames)
 		{
-			if(count($filterNames) > 1)
+			if (count($filterNames) > 1)
 			{
 				return new MultiFilter($filterNames);
 			}
@@ -47,9 +54,15 @@ class Factory
 		return new Unfiltered();
 	}
 
+	/**
+	 * Get filters for connection and transformator class
+	 * @param string $connectionId
+	 * @param string $transformatorClass
+	 * @return ITransformatorFilter[]
+	 */
 	private static function getManganFilters($connectionId, $transformatorClass)
 	{
-		if(!isset(self::$_configs[$connectionId]))
+		if (!isset(self::$_configs[$connectionId]))
 		{
 			self::$_configs[$connectionId] = [];
 		}
