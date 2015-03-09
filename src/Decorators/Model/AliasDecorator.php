@@ -71,7 +71,7 @@ class AliasDecorator implements IModelDecorator
 
 	private function _readValue($meta, $from, $to, &$dbValues, $model)
 	{
-		if(!array_key_exists($from, $dbValues))
+		if (!array_key_exists($from, $dbValues))
 		{
 			return;
 		}
@@ -85,7 +85,7 @@ class AliasDecorator implements IModelDecorator
 
 	private function _writeValue($meta, $from, $to, &$dbValues)
 	{
-		if(!array_key_exists($from, $dbValues))
+		if (!array_key_exists($from, $dbValues))
 		{
 			return;
 		}
