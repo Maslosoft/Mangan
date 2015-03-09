@@ -19,7 +19,6 @@ use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
-use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -32,11 +31,11 @@ abstract class Transformer
 
 	/**
 	 * Returns the given object as an associative array
-	 * @param IModel|object $model
+	 * @param IAnnotated|object $model
 	 * @param string[] $fields Fields to transform
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel($model, $fields = [])
+	public static function fromModel(IAnnotated $model, $fields = [])
 	{
 		$meta = ManganMeta::create($model);
 		$calledClass = get_called_class();
@@ -71,7 +70,7 @@ abstract class Transformer
 	 * @return IAnnotated
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, $instance = null)
+	public static function toModel($data, $className = null, IAnnotated $instance = null)
 	{
 		if (!$data)
 		{

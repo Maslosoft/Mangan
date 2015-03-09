@@ -16,7 +16,6 @@ namespace Maslosoft\Mangan\Decorators;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\I18NAble;
-use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\ITransformator;
 
