@@ -25,20 +25,29 @@ class MongoObjectId implements ISanitizer
 
 	public function read($model, $dbValue)
 	{
-		if (!$dbValue instanceof MongoId)
-		{
-			$dbValue = new MongoId($dbValue);
-		}
-		return $dbValue;
+		return $this->_cast($dbValue);
 	}
 
 	public function write($model, $phpValue)
 	{
-		if (!$phpValue instanceof MongoId)
+		return $this->_cast($phpValue);
+	}
+
+	protected function _cast($value)
+	{
+		if (!$value instanceof MongoId)
 		{
-			$phpValue = new MongoId($phpValue);
+			if (is_array($value) && isset($value['$id']))
+			{
+				$value = $value['$id'];
+			}
+			if (is_object($value) && isset($value->{'$id'}))
+			{
+				$value = $value->{'$id'};
+			}
+			$value = new MongoId($value);
 		}
-		return $phpValue;
+		return $value;
 	}
 
 }

@@ -15,12 +15,14 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\EmbeDi\EmbeDi;
-use Maslosoft\Mangan\Decorators\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Decorators\I18NDecorator;
+use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
+use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
@@ -78,6 +80,7 @@ class Mangan
 			DbRefDecorator::class,
 			EmbeddedArrayDecorator::class,
 			EmbeddedDecorator::class,
+			AliasDecorator::class,
 		],
 		CriteriaArray::class => [
 			I18NDecorator::class,

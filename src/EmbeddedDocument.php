@@ -53,7 +53,7 @@ abstract class EmbeddedDocument implements IActiveDocument
 
 	/**
 	 * Model metadata
-	 * @Persistent(false)
+	 * @Ignored
 	 * @var ManganMeta
 	 */
 	public $meta = null;
