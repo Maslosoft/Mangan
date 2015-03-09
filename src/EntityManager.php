@@ -191,7 +191,7 @@ class EntityManager implements IEntityManager
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function insert($model = null)
+	public function insert(IAnnotated $model = null)
 	{
 		$model = $model? : $this->model;
 		if ($this->_beforeSave($model))

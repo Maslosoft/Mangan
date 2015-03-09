@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
@@ -23,7 +25,7 @@ interface IOwnered
 	/**
 	 * Set class owner
 
-	 * @return IModel Owner
+	 * @return IAnnotated Owner
 	 */
 	public function getOwner();
 
@@ -35,7 +37,7 @@ interface IOwnered
 
 	/**
 	 * Get document root
-	 * @return IModel Root document
+	 * @return IAnnotated Root document
 	 */
 	public function getRoot();
 }

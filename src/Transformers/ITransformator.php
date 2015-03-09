@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
@@ -22,16 +24,20 @@ interface ITransformator
 
 	/**
 	 * Returns the given object as an associative array
-	 * @param IModel|object $model
+	 * @param IAnnotated $model
 	 * @param bool $withClassName Whenever to include special _class field
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel($model, $withClassName = true);
+	public static function fromModel(IAnnotated $model, $withClassName = true);
 
 	/**
 	 * Create document from array
 	 * TODO Enforce $className if collection is homogenous
-	 * @return object
+	 *
+	 * @param mixed[] $data
+	 * @param string $className
+	 * @param IAnnotated $instance
+	 * @return IAnnotated Model instance
 	 */
-	public static function toModel($data, $className = null);
+	public static function toModel($data, $className = null, IAnnotated $instance = null);
 }
