@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.0.11",
+            "version": "3.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "6bf4e2b046a9f198bde2d477412003ec1ac89c4b"
+                "reference": "56df8f31fc004926f42f8ccacd45a1ca74ed58f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/6bf4e2b046a9f198bde2d477412003ec1ac89c4b",
-                "reference": "6bf4e2b046a9f198bde2d477412003ec1ac89c4b",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/56df8f31fc004926f42f8ccacd45a1ca74ed58f5",
+                "reference": "56df8f31fc004926f42f8ccacd45a1ca74ed58f5",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,8 @@
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "maslosoft/addendumtest": "dev-master"
+                "maslosoft/addendumtest": "dev-master",
+                "maslosoft/hedron": "*"
             },
             "suggest": {
                 "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services"
@@ -57,7 +58,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-02-27 13:41:49"
+            "time": "2015-03-09 09:54:55"
         },
         {
             "name": "maslosoft/embedi",
@@ -744,12 +745,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "31892901eadefc7c2b363381c4503af2c0a9c685"
+                "reference": "5e1f08cd585d6cbf5a2945c509bff39194f05e3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/31892901eadefc7c2b363381c4503af2c0a9c685",
-                "reference": "31892901eadefc7c2b363381c4503af2c0a9c685",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/5e1f08cd585d6cbf5a2945c509bff39194f05e3e",
+                "reference": "5e1f08cd585d6cbf5a2945c509bff39194f05e3e",
                 "shasum": ""
             },
             "require": {
@@ -775,7 +776,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-03-05 11:09:40"
+            "time": "2015-03-05 13:03:59"
         },
         {
             "name": "myclabs/deep-copy",

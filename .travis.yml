@@ -2,10 +2,12 @@ language: php
 php:
   - 5.6
   - 5.5
+  - nightly
   - hhvm
 matrix:
   allow_failures:
-    - php: hhvm
+    - php:
+      - nightly
 before_install:
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key 505A7412
   - echo "deb [arch=amd64] http://s3.amazonaws.com/tokumx-debs $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/tokumx.list
@@ -15,11 +17,15 @@ install:
   - composer self-update
   - composer install --dev
   - composer update maslosoft/mangantest
+# For hhvm
+  - composer require mongofill/mongofill
 before_script:
 # Wait for mongodb
   - sleep 5
-  - phpenv config-add travis.ini
+  - printf "extension=mongo.so\n" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 after_script:
   - wget --no-check-certificate https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --repository=g/Maslosoft/Mangan --revision=`git rev-parse HEAD` --format=php-clover ./tests/_output/coverage.clover
-script: vendor/bin/codecept run unit --coverage --html --coverage-html=. --coverage-xml=./coverage.clover
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then php ocular.phar code-coverage:upload --repository=g/Maslosoft/Mangan --revision=`git rev-parse HEAD` --format=php-clover ./tests/_output/coverage.clover; fi;'
+script:
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ] || [ "$TRAVIS_PHP_VERSION" == "nightly" ]; then vendor/bin/codecept run unit; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then vendor/bin/codecept run unit --coverage --html --coverage-html=. --coverage-xml=./coverage.clover; fi;'
