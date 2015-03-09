@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e76989db39edf5b539b62b90d6587392",
+    "hash": "973c032c44346976011a6291d2fbd866",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -236,6 +236,136 @@
                 "rotate"
             ],
             "time": "2013-07-12 17:57:58"
+        },
+        {
+            "name": "mongofill/mongofill",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mongofill/mongofill.git",
+                "reference": "b710c153d3830db96955e4dfb8afdb963afff342"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mongofill/mongofill/zipball/b710c153d3830db96955e4dfb8afdb963afff342",
+                "reference": "b710c153d3830db96955e4dfb8afdb963afff342",
+                "shasum": ""
+            },
+            "provide": {
+                "ext-mongo": "*"
+            },
+            "require-dev": {
+                "athletic/athletic": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    {
+                        "Mongofill": "src/"
+                    },
+                    {
+                        "Mongo": "src/Mongo.php"
+                    },
+                    {
+                        "MongoBinData": "src/MongoBinData.php"
+                    },
+                    {
+                        "MongoClient": "src/MongoClient.php"
+                    },
+                    {
+                        "MongoCode": "src/MongoCode.php"
+                    },
+                    {
+                        "MongoCollection": "src/MongoCollection.php"
+                    },
+                    {
+                        "MongoConnectionException": "src/MongoConnectionException.php"
+                    },
+                    {
+                        "MongoCursor": "src/MongoCursor.php"
+                    },
+                    {
+                        "MongoCursorException": "src/MongoCursorException.php"
+                    },
+                    {
+                        "MongoCursorTimeoutException": "src/MongoCursorTimeoutException.php"
+                    },
+                    {
+                        "MongoDB": "src/MongoDB.php"
+                    },
+                    {
+                        "MongoDBRef": "src/MongoDBRef.php"
+                    },
+                    {
+                        "MongoDate": "src/MongoDate.php"
+                    },
+                    {
+                        "MongoException": "src/MongoException.php"
+                    },
+                    {
+                        "MongoGridFS": "src/MongoGridFS.php"
+                    },
+                    {
+                        "MongoGridFSFile": "src/MongoGridFSFile.php"
+                    },
+                    {
+                        "MongoGridFSException": "src/MongoGridFSException.php"
+                    },
+                    {
+                        "MongoGridFSCursor": "src/MongoGridFSCursor.php"
+                    },
+                    {
+                        "MongoId": "src/MongoId.php"
+                    },
+                    {
+                        "MongoInt32": "src/MongoInt32.php"
+                    },
+                    {
+                        "MongoInt64": "src/MongoInt64.php"
+                    },
+                    {
+                        "MongoLog": "src/MongoLog.php"
+                    },
+                    {
+                        "MongoMaxKey": "src/MongoMaxKey.php"
+                    },
+                    {
+                        "MongoMinKey": "src/MongoMinKey.php"
+                    },
+                    {
+                        "MongoRegex": "src/MongoRegex.php"
+                    },
+                    {
+                        "MongoResultException": "src/MongoResultException.php"
+                    },
+                    {
+                        "MongoTimestamp": "src/MongoTimestamp.php"
+                    }
+                ],
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Husák",
+                    "email": "husak.j@gmail.com"
+                },
+                {
+                    "name": "Mongofill Community",
+                    "homepage": "https://github.com/mongofill/mongofill/graphs/contributors"
+                },
+                {
+                    "name": "Máximo Cuadros",
+                    "email": "mcuadros@gmail.com"
+                }
+            ],
+            "description": "Polyfill of PECL Mongo extension",
+            "time": "2015-03-02 10:55:12"
         },
         {
             "name": "psr/log",
@@ -745,12 +875,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "07aaa1d652662bd52f121ec56aeae0bc77a332e1"
+                "reference": "1c2ad7bcdb6f0452d5e9fb5da96c74d015573027"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/07aaa1d652662bd52f121ec56aeae0bc77a332e1",
-                "reference": "07aaa1d652662bd52f121ec56aeae0bc77a332e1",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/1c2ad7bcdb6f0452d5e9fb5da96c74d015573027",
+                "reference": "1c2ad7bcdb6f0452d5e9fb5da96c74d015573027",
                 "shasum": ""
             },
             "require": {
@@ -776,7 +906,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-03-09 11:16:40"
+            "time": "2015-03-09 14:37:31"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2133,6 +2263,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "mongofill/mongofill": 20,
         "maslosoft/mangantest": 20
     },
     "prefer-stable": false,
