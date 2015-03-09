@@ -267,7 +267,7 @@ class Finder implements IFinder
 	/**
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param Criteria $criteria query condition or criteria.
+	 * @param Criteria|null $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
 	public function exists(Criteria $criteria = null)
