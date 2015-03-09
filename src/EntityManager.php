@@ -195,7 +195,8 @@ class EntityManager implements IEntityManager
 		$model = $model? : $this->model;
 		if ($this->_beforeSave($model))
 		{
-			$rawResult = $this->_collection->insert(RawArray::fromModel($model), $this->options->getSaveOptions());
+			$rawData = RawArray::fromModel($model);
+			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
 			$result = $this->_result($rawResult, true);
 			// strict comparison needed
 			if ($result !== false)
