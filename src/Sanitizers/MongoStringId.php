@@ -13,8 +13,6 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use MongoId;
-
 /**
  * MongoStringId
  * This sanitizer provide mongo id as string, while saving to db as `ObjectId`
