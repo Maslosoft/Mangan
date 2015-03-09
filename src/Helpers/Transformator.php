@@ -120,5 +120,12 @@ abstract class Transformator
 		throw new TransformatorException(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
 	}
 
-	abstract protected function _getTransformer($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta);
+	/**
+	 * Get transformer
+	 * @param string $transformatorClass
+	 * @param DocumentTypeMeta $modelMeta
+	 * @param DocumentPropertyMeta $fieldMeta
+	 * @return IDecorator
+	 */
+	abstract protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $fieldMeta);
 }
