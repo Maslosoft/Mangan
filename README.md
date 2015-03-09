@@ -3,6 +3,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
 <img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master" style="height:18px"/>
+[![HHVM Status](http://hhvm.h4cc.de/badge/maslosoft/mangan.svg)](http://hhvm.h4cc.de/package/maslosoft/mangan)
 
 ######Advanced MongoDB document mapper for Yii
 

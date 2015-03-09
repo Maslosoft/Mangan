@@ -47,11 +47,11 @@
 		"issues": "https://github.com/Maslosoft/Mangan/issues"
 	},
 	"require": {
-		"maslosoft/addendum": "~3",
-		"maslosoft/signals": "~1",
+		"maslosoft/addendum": "*",
+		"maslosoft/signals": "*",
 		"masterexploder/phpthumb": "2.0",
-		"maslosoft/embedi": "~0.0",
-		"maslosoft/miniview": "~1.0"
+		"maslosoft/embedi": "*",
+		"maslosoft/miniview": "*"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master",

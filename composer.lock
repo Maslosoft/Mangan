@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "89adff2136df0f1919bd97ef45982d09",
+    "hash": "0861e2c3f6be7bb5306b4791546ed386",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -62,16 +62,16 @@
         },
         {
             "name": "maslosoft/embedi",
-            "version": "0.0.9",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/EmbeDi.git",
-                "reference": "d7a533cf447bbb762b0359db9278ed8b48ce5979"
+                "reference": "9a830148da7ce1f777605d0c1db840ec9b834c7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/EmbeDi/zipball/d7a533cf447bbb762b0359db9278ed8b48ce5979",
-                "reference": "d7a533cf447bbb762b0359db9278ed8b48ce5979",
+                "url": "https://api.github.com/repos/Maslosoft/EmbeDi/zipball/9a830148da7ce1f777605d0c1db840ec9b834c7a",
+                "reference": "9a830148da7ce1f777605d0c1db840ec9b834c7a",
                 "shasum": ""
             },
             "require-dev": {
@@ -96,7 +96,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-01-20 16:35:31"
+            "time": "2015-03-09 11:41:03"
         },
         {
             "name": "maslosoft/miniview",
@@ -745,12 +745,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "5e1f08cd585d6cbf5a2945c509bff39194f05e3e"
+                "reference": "07aaa1d652662bd52f121ec56aeae0bc77a332e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/5e1f08cd585d6cbf5a2945c509bff39194f05e3e",
-                "reference": "5e1f08cd585d6cbf5a2945c509bff39194f05e3e",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/07aaa1d652662bd52f121ec56aeae0bc77a332e1",
+                "reference": "07aaa1d652662bd52f121ec56aeae0bc77a332e1",
                 "shasum": ""
             },
             "require": {
@@ -776,7 +776,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-03-05 13:03:59"
+            "time": "2015-03-09 11:16:40"
         },
         {
             "name": "myclabs/deep-copy",
