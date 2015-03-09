@@ -37,7 +37,7 @@ abstract class Transformator
 
 	/**
 	 * Hash map of sanitizers
-	 * @var ISanitizer[]
+	 * @var object[]
 	 */
 	private $_transformators = [];
 
