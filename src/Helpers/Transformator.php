@@ -58,7 +58,7 @@ abstract class Transformator
 	 * @param IAnnotated $model
 	 * @param string $transformatorClass
 	 */
-	public function __construct($model, $transformatorClass = ITransformator::class)
+	public function __construct(IAnnotated $model, $transformatorClass = ITransformator::class)
 	{
 		$this->_meta = ManganMeta::create($model);
 		$this->_transformatorClass = $transformatorClass;
