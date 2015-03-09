@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0861e2c3f6be7bb5306b4791546ed386",
+    "hash": "e76989db39edf5b539b62b90d6587392",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -137,16 +137,16 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.0.9",
+            "version": "1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "00474618c7b82f3c9be4b78db741812c012f2d72"
+                "reference": "86cd8230a9822efdc450937084cd479d7a6b6d53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/00474618c7b82f3c9be4b78db741812c012f2d72",
-                "reference": "00474618c7b82f3c9be4b78db741812c012f2d72",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/86cd8230a9822efdc450937084cd479d7a6b6d53",
+                "reference": "86cd8230a9822efdc450937084cd479d7a6b6d53",
                 "shasum": ""
             },
             "require": {
@@ -155,7 +155,7 @@
                 "psr/log": "~1"
             },
             "require-dev": {
-                "maslosoft/hedron": "dev-master",
+                "maslosoft/hedron": "*",
                 "maslosoft/signalstest": "dev-master"
             },
             "type": "library",
@@ -185,7 +185,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2015-02-03 14:35:04"
+            "time": "2015-03-09 12:34:02"
         },
         {
             "name": "masterexploder/phpthumb",
