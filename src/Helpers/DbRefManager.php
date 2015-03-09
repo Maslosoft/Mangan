@@ -13,15 +13,15 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\EntityManager;
-use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
-use Maslosoft\Mangan\Interfaces\IModel;
-use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Model\DbRef;
 
 /**
- * DbRefManager
+ * Helper class for db refs
  *
+ * @internal
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class DbRefManager
@@ -29,13 +29,13 @@ class DbRefManager
 
 	/**
 	 * Extract minimum set of data to create db reference
-	 * @param IModel $model
+	 * @param IAnnotated $model
 	 * @param string $field
-	 * @param IModel $referenced
+	 * @param IAnnotated $referenced
 	 */
-	public static function extractRef($model, $field, $referenced = null)
+	public static function extractRef(IAnnotated $model, $field, IAnnotated $referenced = null)
 	{
-		if(null === $referenced)
+		if (null === $referenced)
 		{
 			$referenced = $model->$field;
 		}
@@ -47,10 +47,10 @@ class DbRefManager
 
 	/**
 	 * Save referenced model
-	 * @param IModel $referenced
+	 * @param IAnnotated $referenced
 	 * @param DbRef $dbRef
 	 */
-	public static function save($referenced, DbRef $dbRef)
+	public static function save(IAnnotated $referenced, DbRef $dbRef)
 	{
 		// Ensure ref is same as referenced model
 		PkManager::applyToModel($referenced, $dbRef->pk);

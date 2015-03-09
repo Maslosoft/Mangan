@@ -26,7 +26,9 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  */
 class Command
 {
+
 	use Traits\AvailableCommands;
+
 	/**
 	 *
 	 * @var IAnnotated
