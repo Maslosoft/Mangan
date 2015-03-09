@@ -13,9 +13,10 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\I18NAble;
 use Maslosoft\Mangan\Interfaces\IModel;
-use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\ITransformator;
 
@@ -30,7 +31,7 @@ class I18NDecorator implements IDecorator
 	/**
 	 * This will be called when getting value.
 	 * This should return end user value.
-	 * @param IModel $model Document model which will be decorated
+	 * @param IAnnotated $model Document model which will be decorated
 	 * @param string $name Field name
 	 * @param mixed $dbValue
 	 * @return bool Return true if value should be assigned to model
@@ -80,7 +81,7 @@ class I18NDecorator implements IDecorator
 	/**
 	 * This will be called when setting value.
 	 * This should return db acceptable value
-	 * @param IModel $model Document model which will be decorated
+	 * @param IAnnotated $model Document model which will be decorated
 	 * @param string $name Field name
 	 * @param mixed $dbValue
 	 * @return bool Return true to store value to database
