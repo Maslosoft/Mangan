@@ -13,13 +13,14 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
-use Maslosoft\Mangan\Interfaces\IModel;
 use Maslosoft\Mangan\Interfaces\IScenarios;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
@@ -97,10 +98,10 @@ class EntityManager implements IEntityManager
 
 	/**
 	 * Create entity manager
-	 * @param IModel|object $model
+	 * @param IAnnotated $model
 	 * @throws ManganException
 	 */
-	public function __construct($model)
+	public function __construct(IAnnotated $model)
 	{
 		$this->model = $model;
 		$this->sm = new ScopeManager($model);
@@ -157,7 +158,7 @@ class EntityManager implements IEntityManager
 	 * Create model related entity manager.
 	 * This will create customized entity manger if defined in model with EntityManager annotation.
 	 * If no custom entity manager is defined this will return default EntityManager.
-	 * @param IModel $model
+	 * @param IAnnotated $model
 	 * @return IEntityManager
 	 */
 	public static function create($model)
@@ -182,7 +183,7 @@ class EntityManager implements IEntityManager
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
 	 * and its {@link scenario} property will be set to be 'update'.
-	 * @param IModel $model if want to insert different model than set in constructor
+	 * @param IAnnotated $model if want to insert different model than set in constructor
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws MongoException if the record is not new
 	 * @throws MongoException on fail of insert or insert of empty document
@@ -306,7 +307,7 @@ class EntityManager implements IEntityManager
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param IModel $model if want to insert different model than set in constructor
+	 * @param IAnnotated $model if want to insert different model than set in constructor
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
