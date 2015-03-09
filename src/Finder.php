@@ -325,14 +325,10 @@ class Finder implements IFinder
 	 * Creates a list of documents based on the input data.
 	 * This method is internally used by the find methods.
 	 * @param MongoCursor $cursor Results found to populate active records.
-	 * @param boolean $callAfterFind whether to call {@link afterFind} after each record is populated.
-	 * This parameter is added in version 1.0.3.
-	 * @param string $index the name of the attribute whose value will be used as indexes of the query result array.
-	 * If null, it means the array will be indexed by zero-based integers.
 	 * @return IAnnotated[] array list of active records.
 	 * @since v1.0
 	 */
-	protected function populateRecords($cursor)
+	protected function populateRecords(MongoCursor $cursor)
 	{
 		$records = array();
 		foreach ($cursor as $data)
@@ -342,6 +338,10 @@ class Finder implements IFinder
 		return $records;
 	}
 
+	/**
+	 * Trigger before find event
+	 * @return boolean
+	 */
 	private function _beforeFind()
 	{
 		return Event::handled($this->model, IFinder::EventBeforeFind);

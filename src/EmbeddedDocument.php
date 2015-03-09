@@ -160,7 +160,7 @@ abstract class EmbeddedDocument implements IActiveDocument
 	 * Returns the list of attribute names.
 	 * By default, this method returns all public properties of the class.
 	 * You may override this method to change the default.
-	 * @return array list of attribute names. Defaults to all public properties of the class.
+	 * @return string[] list of attribute names. Defaults to all public properties of the class.
 	 * @since v1.0.8
 	 */
 	public function attributeNames()
@@ -168,6 +168,10 @@ abstract class EmbeddedDocument implements IActiveDocument
 		return array_keys($this->meta->fields());
 	}
 
+	/**
+	 * Attribute labels
+	 * @return string[]
+	 */
 	public function attributeLabels()
 	{
 		return $this->meta->properties('label');

@@ -384,7 +384,7 @@ class Criteria
 	/**
 	 * Decorate and sanitize criteria with provided model.
 	 * 
-	 * @param IAnnotated
+	 * @param IAnnotated $model
 	 * @return Criteria
 	 */
 	public function decorateWith($model)
