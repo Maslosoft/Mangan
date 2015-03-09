@@ -199,8 +199,8 @@ class EntityManager implements IEntityManager
 			$rawData = RawArray::fromModel($model);
 			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
 			$result = $this->_result($rawResult, true);
-			// strict comparison needed
-			if ($result !== false)
+			
+			if ($result)
 			{
 				$this->_afterSave($model);
 				return true;
@@ -253,8 +253,8 @@ class EntityManager implements IEntityManager
 				$result = $this->getCollection()->save($rawData, $this->options->getSaveOptions());
 			}
 			$result = $this->_result($result);
-			if ($result !== false)
-			{ // strict comparison needed
+			if ($result)
+			{
 				$this->_afterSave($this->model);
 				return true;
 			}
@@ -269,7 +269,7 @@ class EntityManager implements IEntityManager
 	 * @since v1.3.6
 	 * @param Modifier $modifier updating rules to apply
 	 * @param Criteria $criteria condition to limit updating rules
-	 * @return boolean|mixed[]
+	 * @return boolean
 	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null)
 	{
@@ -320,8 +320,8 @@ class EntityManager implements IEntityManager
 			{
 				$rawResult = $this->_collection->save(RawArray::fromModel($model), $this->options->getSaveOptions());
 				$result = $this->_result($rawResult, true);
-				// strict comparison needed
-				if ($result !== false)
+				
+				if ($result)
 				{
 					$this->_afterSave($model);
 					return true;
@@ -505,7 +505,6 @@ class EntityManager implements IEntityManager
 	/**
 	 * Take care of EventAfterSave
 	 * @see EventAfterSave
-	 * @return boolean
 	 */
 	private function _afterSave($model)
 	{
