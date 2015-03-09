@@ -11,28 +11,24 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Decorators;
+namespace Maslosoft\Mangan\Decorators\Model;
 
 /**
- * ClassNameDecorator
- *
+ * This decorator interface is used to decorate entire model
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ClassNameDecorator implements IModelDecorator
+interface IModelDecorator
 {
 
 	/**
 	 * This will be called when getting value.
 	 * This should return end user value.
 	 * @param EmbeddedDocument $model Document model which will be decorated
-	 * @param mixed $dbValue
+	 * @param mixed $dbValues
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, &$dbValue, $transformatorClass = ITransformator::class)
-	{
-		
-	}
+	public function read($model, &$dbValues, $transformatorClass = ITransformator::class);
 
 	/**
 	 * This will be called when setting value.
@@ -42,12 +38,5 @@ class ClassNameDecorator implements IModelDecorator
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, &$dbValues, $transformatorClass = ITransformator::class)
-	{
-		if (!isset($dbValues['_class']))
-		{
-			$dbValues['_class'] = get_class($model);
-		}
-	}
-
+	public function write($model, &$dbValues, $transformatorClass = ITransformator::class);
 }

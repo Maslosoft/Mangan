@@ -14,10 +14,18 @@
 namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaType;
+use Maslosoft\Mangan\Annotations\AliasAnnotation;
+use Maslosoft\Mangan\Annotations\CollectionNameAnnotation;
+use Maslosoft\Mangan\Annotations\ConnectionIdAnnotation;
+use Maslosoft\Mangan\Annotations\EntityManagerAnnotation;
+use Maslosoft\Mangan\Annotations\FinderAnnotation;
+use Maslosoft\Mangan\Annotations\HomogenousAnnotation;
+use Maslosoft\Mangan\Annotations\LabelAnnotation;
+use Maslosoft\Mangan\Annotations\PrimaryKeyAnnotation;
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
-use Maslosoft\Mangan\Exceptions\ManganException;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -34,6 +42,7 @@ class DocumentTypeMeta extends MetaType
 
 	/**
 	 * Field label
+	 * @see LabelAnnotation
 	 * @var string
 	 */
 	public $label = '';
@@ -46,18 +55,21 @@ class DocumentTypeMeta extends MetaType
 
 	/**
 	 * Collection name
+	 * @see CollectionNameAnnotation
 	 * @var string
 	 */
 	public $collectionName = '';
 
 	/**
 	 * Connection ID
+	 * @see ConnectionIdAnnotation
 	 * @var string
 	 */
 	public $connectionId = Mangan::DefaultConnectionId;
 
 	/**
 	 * Primary key field or fields
+	 * @see PrimaryKeyAnnotation
 	 * @var string|array
 	 */
 	public $primaryKey = null;
@@ -70,6 +82,7 @@ class DocumentTypeMeta extends MetaType
 
 	/**
 	 * Whenever colleciton is homogenous
+	 * @see HomogenousAnnotation
 	 * @var bool
 	 */
 	public $homogenous = true;
@@ -77,6 +90,7 @@ class DocumentTypeMeta extends MetaType
 	/**
 	 * Finder class name to return by Finder from create method
 	 * @see Finder::create()
+	 * @see FinderAnnotation
 	 * @var string
 	 */
 	public $finder = null;
@@ -84,9 +98,17 @@ class DocumentTypeMeta extends MetaType
 	/**
 	 * Entity Manager class name to return by EntityManager from create method
 	 * @see EntityManager::create()
+	 * @see EntityManagerAnnotation
 	 * @var string
 	 */
 	public $entityManager = null;
+
+	/**
+	 * Property aliases. This consists of source property name as key, and destination property as value.
+	 * @var string[]
+	 * @see AliasAnnotation
+	 */
+	public $aliases = [];
 
 	/**
 	 * Values of properties

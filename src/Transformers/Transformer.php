@@ -77,6 +77,7 @@ abstract class Transformer
 		{
 			return null;
 		}
+		$data = (array)$data;
 		if (is_object($className))
 		{
 			$className = get_class($className);

@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
@@ -29,6 +30,7 @@ class PrimaryKeyAnnotation extends ManganPropertyAnnotation
 	{
 		// Set primaryKey value on type
 		$type = $this->_meta->type();
+		/* @var $type DocumentTypeMeta */
 		$name = $this->_entity->name;
 		// If key is already defined it means that it is composite
 		if ($type->primaryKey)
