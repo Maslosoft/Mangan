@@ -1,6 +1,6 @@
 {
 	"name": "maslosoft/mangan",
-	"license": "AGPL/Commercial",
+	"license": "AGPL or Commercial",
 	"authors": [
 		{
 			"name": "Peter Maselkowski",
@@ -9,11 +9,11 @@
 			"role": "Developer"
 		},
 		{
-			"name": "Ianaré Sévi",
+			"name": "Ianar\u00e9 S\u00e9vi",
 			"role": "Developer"
 		},
 		{
-			"name": "Dariusz Górecki",
+			"name": "Dariusz G\u00f3recki",
 			"email": "darek.krk@gmail.com",
 			"role": "Developer"
 		},
@@ -58,8 +58,8 @@
 		"maslosoft/mangantest": "dev-master",
 		"maslosoft/hedron": "~1"
 	},
-	"suggest":{
-		"monolog/monolog" : "Sends your logs to files, sockets, inboxes, databases and various web services"
+	"suggest": {
+		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services"
 	},
 	"autoload": {
 		"psr-4": {
