@@ -19,7 +19,6 @@ use finfo;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
-use Maslosoft\Mangan\Interfaces\IOwnered;
 use Maslosoft\Mangan\Mangan;
 use MongoGridFSFile;
 use MongoId;

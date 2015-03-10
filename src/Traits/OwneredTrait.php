@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Traits;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Interfaces\IOwnered;
 
 /**
@@ -23,27 +24,31 @@ use Maslosoft\Mangan\Interfaces\IOwnered;
 trait OwneredTrait
 {
 
-	private $owner = null;
+	/**
+	 * Owner reference or null if it's root object
+	 * @var IAnnotated|null
+	 */
+	private $_owner = null;
 
 	/**
 	 * Set class owner
 
-	 * @return IModel Owner
+	 * @return IAnnotated Owner
 	 */
 	public function getOwner()
 	{
-		return $this->owner;
+		return $this->_owner;
 	}
 
 	/**
 	 * Get document root
-	 * @return object Root document
+	 * @return IAnnotated Root document
 	 */
 	public function getRoot()
 	{
-		if ($this->owner instanceof IOwnered && $this->owner !== null)
+		if ($this->_owner instanceof IOwnered && $this->_owner !== null)
 		{
-			return $this->owner->getRoot();
+			return $this->_owner->getRoot();
 		}
 		else
 		{
@@ -53,11 +58,11 @@ trait OwneredTrait
 
 	/**
 	 * Get class owner
-	 * @param object $owner
+	 * @param IAnnotated|null $owner
 	 */
-	public function setOwner($owner)
+	public function setOwner(IAnnotated $owner = null)
 	{
-		$this->owner = $owner;
+		$this->_owner = $owner;
 	}
 
 }
