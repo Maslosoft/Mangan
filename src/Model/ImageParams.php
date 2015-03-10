@@ -13,8 +13,6 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use CComponent;
-
 /**
  * Description of EMongoImageParams
  * @since 2.0.2
@@ -24,8 +22,10 @@ use CComponent;
  * @property bool $isTemp This is to indicate that image is temporary, will be automatically set to true
  * @author Piotr
  */
-class ImageParams extends CComponent
+class ImageParams
 {
+
+	use \Maslosoft\Mangan\Traits\Access\GetSet;
 
 	/**
 	 *

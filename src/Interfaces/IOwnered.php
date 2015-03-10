@@ -31,9 +31,9 @@ interface IOwnered
 
 	/**
 	 * Get class owner
-	 * @param object $owner
+	 * @param IAnnotated|null $owner
 	 */
-	public function setOwner($owner);
+	public function setOwner(IAnnotated $owner = null);
 
 	/**
 	 * Get document root
