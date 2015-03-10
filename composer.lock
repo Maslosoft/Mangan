@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "973c032c44346976011a6291d2fbd866",
+    "hash": "1b8afce4a59eec833fdfed321d54673d",
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.0.12",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "56df8f31fc004926f42f8ccacd45a1ca74ed58f5"
+                "reference": "6f790d06e4afd773db095e6c5e49eb618a420213"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/56df8f31fc004926f42f8ccacd45a1ca74ed58f5",
-                "reference": "56df8f31fc004926f42f8ccacd45a1ca74ed58f5",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/6f790d06e4afd773db095e6c5e49eb618a420213",
+                "reference": "6f790d06e4afd773db095e6c5e49eb618a420213",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "New BSD"
+                "AGPL or Commercial"
             ],
             "authors": [
                 {
@@ -58,7 +58,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-03-09 09:54:55"
+            "time": "2015-03-10 11:00:28"
         },
         {
             "name": "maslosoft/embedi",
@@ -137,16 +137,16 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.0.10",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "86cd8230a9822efdc450937084cd479d7a6b6d53"
+                "reference": "62ba6bce6f68af7df066b0e04f290d41f4793e5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/86cd8230a9822efdc450937084cd479d7a6b6d53",
-                "reference": "86cd8230a9822efdc450937084cd479d7a6b6d53",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/62ba6bce6f68af7df066b0e04f290d41f4793e5d",
+                "reference": "62ba6bce6f68af7df066b0e04f290d41f4793e5d",
                 "shasum": ""
             },
             "require": {
@@ -166,7 +166,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GNU LESSER GENERAL PUBLIC LICENSE"
+                "AGPL or Commercial"
             ],
             "authors": [
                 {
@@ -185,7 +185,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2015-03-09 12:34:02"
+            "time": "2015-03-10 11:02:58"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -236,136 +236,6 @@
                 "rotate"
             ],
             "time": "2013-07-12 17:57:58"
-        },
-        {
-            "name": "mongofill/mongofill",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mongofill/mongofill.git",
-                "reference": "b710c153d3830db96955e4dfb8afdb963afff342"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mongofill/mongofill/zipball/b710c153d3830db96955e4dfb8afdb963afff342",
-                "reference": "b710c153d3830db96955e4dfb8afdb963afff342",
-                "shasum": ""
-            },
-            "provide": {
-                "ext-mongo": "*"
-            },
-            "require-dev": {
-                "athletic/athletic": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    {
-                        "Mongofill": "src/"
-                    },
-                    {
-                        "Mongo": "src/Mongo.php"
-                    },
-                    {
-                        "MongoBinData": "src/MongoBinData.php"
-                    },
-                    {
-                        "MongoClient": "src/MongoClient.php"
-                    },
-                    {
-                        "MongoCode": "src/MongoCode.php"
-                    },
-                    {
-                        "MongoCollection": "src/MongoCollection.php"
-                    },
-                    {
-                        "MongoConnectionException": "src/MongoConnectionException.php"
-                    },
-                    {
-                        "MongoCursor": "src/MongoCursor.php"
-                    },
-                    {
-                        "MongoCursorException": "src/MongoCursorException.php"
-                    },
-                    {
-                        "MongoCursorTimeoutException": "src/MongoCursorTimeoutException.php"
-                    },
-                    {
-                        "MongoDB": "src/MongoDB.php"
-                    },
-                    {
-                        "MongoDBRef": "src/MongoDBRef.php"
-                    },
-                    {
-                        "MongoDate": "src/MongoDate.php"
-                    },
-                    {
-                        "MongoException": "src/MongoException.php"
-                    },
-                    {
-                        "MongoGridFS": "src/MongoGridFS.php"
-                    },
-                    {
-                        "MongoGridFSFile": "src/MongoGridFSFile.php"
-                    },
-                    {
-                        "MongoGridFSException": "src/MongoGridFSException.php"
-                    },
-                    {
-                        "MongoGridFSCursor": "src/MongoGridFSCursor.php"
-                    },
-                    {
-                        "MongoId": "src/MongoId.php"
-                    },
-                    {
-                        "MongoInt32": "src/MongoInt32.php"
-                    },
-                    {
-                        "MongoInt64": "src/MongoInt64.php"
-                    },
-                    {
-                        "MongoLog": "src/MongoLog.php"
-                    },
-                    {
-                        "MongoMaxKey": "src/MongoMaxKey.php"
-                    },
-                    {
-                        "MongoMinKey": "src/MongoMinKey.php"
-                    },
-                    {
-                        "MongoRegex": "src/MongoRegex.php"
-                    },
-                    {
-                        "MongoResultException": "src/MongoResultException.php"
-                    },
-                    {
-                        "MongoTimestamp": "src/MongoTimestamp.php"
-                    }
-                ],
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jakub Husák",
-                    "email": "husak.j@gmail.com"
-                },
-                {
-                    "name": "Mongofill Community",
-                    "homepage": "https://github.com/mongofill/mongofill/graphs/contributors"
-                },
-                {
-                    "name": "Máximo Cuadros",
-                    "email": "mcuadros@gmail.com"
-                }
-            ],
-            "description": "Polyfill of PECL Mongo extension",
-            "time": "2015-03-02 10:55:12"
         },
         {
             "name": "psr/log",
@@ -2263,7 +2133,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mongofill/mongofill": 20,
         "maslosoft/mangantest": 20
     },
     "prefer-stable": false,
