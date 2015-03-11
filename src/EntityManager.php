@@ -347,7 +347,7 @@ class EntityManager implements IEntityManager
 		$data = $this->getCollection()->findOne($conditions);
 		if (null !== $data)
 		{
-			$this->setAttributes($data, false);
+			RawArray::toModel($data, $this->model, $this->model);
 			return true;
 		}
 		else
