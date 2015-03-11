@@ -745,12 +745,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "1c2ad7bcdb6f0452d5e9fb5da96c74d015573027"
+                "reference": "06dc12142f151dc61cd40ace959b4a5afc287f69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/1c2ad7bcdb6f0452d5e9fb5da96c74d015573027",
-                "reference": "1c2ad7bcdb6f0452d5e9fb5da96c74d015573027",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/06dc12142f151dc61cd40ace959b4a5afc287f69",
+                "reference": "06dc12142f151dc61cd40ace959b4a5afc287f69",
                 "shasum": ""
             },
             "require": {
@@ -776,7 +776,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-03-09 14:37:31"
+            "time": "2015-03-10 18:14:24"
         },
         {
             "name": "myclabs/deep-copy",
