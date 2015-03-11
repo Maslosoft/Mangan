@@ -7,6 +7,12 @@ paths:
 extensions:
     enabled:
         - Maslosoft\ManganTest\Extensions\MongoWipe
+    config:
+        Maslosoft\ManganTest\Extensions\MongoWipe:
+            connectionIds:
+                - mongodb
+                - second
+                - tokumx
 settings:
     bootstrap: _bootstrap.php
     colors: true
