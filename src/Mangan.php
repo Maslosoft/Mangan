@@ -256,11 +256,12 @@ class Mangan
 			$options = [];
 			foreach ($this->_getOptionNames() as $name)
 			{
-				if (isset($this->$name))
+				if (property_exists($this, $name))
 				{
 					$options[$name] = $this->$name;
 				}
 			}
+			
 			$this->_cs->mongoClient = new MongoClient($this->connectionString, $options);
 
 			return $this->_cs->mongoClient;
