@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\I18NAble;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -68,18 +69,27 @@ trait I18NAbleTrait
 		{
 			return;
 		}
-		if (!Event::valid($this, I18NAble::EventBeforeLangChange))
+		$event = new ModelEvent($this);
+		$event->data = $code;
+		if (!Event::valid($this, I18NAble::EventBeforeLangChange, $event))
 		{
 			return;
 		}
 		$this->_changeAttributesLang($this->_lang, $code);
 		$this->_lang = $code;
-		Event::trigger($this, I18NAble::EventAfterLangChange);
+		Event::trigger($this, I18NAble::EventAfterLangChange, $event);
 	}
 
 	public function setLanguages($languages)
 	{
+		$event = new ModelEvent($this);
+		$event->data = $languages;
+		if (!Event::valid($this, I18NAble::EventBeforeLanguagesSet, $event))
+		{
+			return;
+		}
 		$this->_languages = $languages;
+		Event::trigger($this, I18NAble::EventAfterLanguagesSet, $event);
 	}
 
 	/**

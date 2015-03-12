@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "6f790d06e4afd773db095e6c5e49eb618a420213"
+                "reference": "d845f6c6822fda8613fb07ead71a1498c5c03c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/6f790d06e4afd773db095e6c5e49eb618a420213",
-                "reference": "6f790d06e4afd773db095e6c5e49eb618a420213",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/d845f6c6822fda8613fb07ead71a1498c5c03c54",
+                "reference": "d845f6c6822fda8613fb07ead71a1498c5c03c54",
                 "shasum": ""
             },
             "require": {
@@ -58,7 +58,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-03-10 11:00:28"
+            "time": "2015-03-11 14:22:32"
         },
         {
             "name": "maslosoft/embedi",
@@ -745,12 +745,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "06dc12142f151dc61cd40ace959b4a5afc287f69"
+                "reference": "a347b620154fe71061852550da109a99d822f9b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/06dc12142f151dc61cd40ace959b4a5afc287f69",
-                "reference": "06dc12142f151dc61cd40ace959b4a5afc287f69",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/a347b620154fe71061852550da109a99d822f9b8",
+                "reference": "a347b620154fe71061852550da109a99d822f9b8",
                 "shasum": ""
             },
             "require": {
@@ -776,7 +776,7 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2015-03-10 18:14:24"
+            "time": "2015-03-12 17:10:36"
         },
         {
             "name": "myclabs/deep-copy",
