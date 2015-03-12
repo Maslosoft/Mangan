@@ -1,6 +1,9 @@
 {
 	"name": "maslosoft/mangan",
-	"license": "AGPL or Commercial",
+	"license": [
+		"AGPL",
+		"Commercial"
+	],
 	"authors": [
 		{
 			"name": "Peter Maselkowski",
@@ -57,8 +60,8 @@
 		"maslosoft/mangantest": "dev-master",
 		"maslosoft/hedron": "~1"
 	},
-	"suggest":{
-		"monolog/monolog" : "Sends your logs to files, sockets, inboxes, databases and various web services",
+	"suggest": {
+		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
 		"mongofill/mongofill": "Polyfill of PECL Mongo extension"
 	},
 	"autoload": {
