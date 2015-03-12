@@ -49,7 +49,7 @@ class ModelEvent
 
 	/**
 	 * Event params
-	 * @var mixed[]
+	 * @var mixed[]|null
 	 */
 	public $params = [];
 
