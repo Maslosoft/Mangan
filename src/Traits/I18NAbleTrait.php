@@ -52,6 +52,12 @@ trait I18NAbleTrait
 	 */
 	public function getRawI18N()
 	{
+		$meta = ManganMeta::create($this);
+		$fields = $meta->properties('i18n');
+		foreach ($fields as $name => $i18n)
+		{
+			$this->_rawI18N[$name][$this->getLang()] = $this->$name;
+		}
 		return $this->_rawI18N;
 	}
 
