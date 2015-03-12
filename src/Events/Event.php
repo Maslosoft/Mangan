@@ -96,7 +96,7 @@ class Event implements IEvent
 	 *
 	 * For more details about how to declare an event handler, please refer to [[Component::on()]].
 	 *
-	 * @param IAnnotated $model the fully qualified class name to which the event handler needs to attach.
+	 * @param IAnnotated $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
 	 * @param mixed $data the data to be passed to the event handler when the event is triggered.
@@ -124,7 +124,7 @@ class Event implements IEvent
 	 *
 	 * This method is the opposite of [[on()]].
 	 *
-	 * @param IAnnotated $model the fully qualified class name from which the event handler needs to be detached.
+	 * @param IAnnotated $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler to be removed.
 	 * If it is null, all handlers attached to the named event will be removed.
@@ -166,9 +166,10 @@ class Event implements IEvent
 	 * Triggers a class-level event.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
+	 * @param IAnnotated $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
+	 * @return bool True if event was triggered.
 	 */
 	public static function trigger(IAnnotated $model, $name, &$event = null)
 	{
@@ -215,9 +216,10 @@ class Event implements IEvent
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::isValid`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
+	 * @param IAnnotated $model the object specifying the class-level event.
 	 * @param string $name the event name.
-	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
+	 * @param ModelEvent $event the event parameter. If not set, a default [[ModelEvent]] object will be created.
+	 * @return bool True if event was triggered and is valid.
 	 */
 	public static function valid(IAnnotated $model, $name, $event = null)
 	{
@@ -236,7 +238,7 @@ class Event implements IEvent
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::handled`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
+	 * @param IAnnotated $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 * @return bool|null True if handled, false otherway, null if not triggered
@@ -251,11 +253,11 @@ class Event implements IEvent
 	}
 
 	/**
-	 * Whenever model has event.
+	 * Check if model has event handler.
 	 * **IMPORTANT**: It does not check for propagated events
-	 * @param IAnnotated $model
-	 * @param string $name
-	 * @return bool
+	 * @param IAnnotated $model the object specifying the class-level event
+	 * @param string $name the event name.
+	 * @return bool True if has handler
 	 */
 	public static function hasHandler(IAnnotated $model, $name)
 	{
