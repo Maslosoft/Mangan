@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Events;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
+
 /**
  * ModelEvent
  *
@@ -21,12 +23,48 @@ namespace Maslosoft\Mangan\Events;
 class ModelEvent
 {
 
-	public $isValid = false;
-	public $sender;
-	public $handled = false;
-	public $params;
+	/**
+	 * Event name
+	 * @var string
+	 */
+	public $name = '';
 
-	public function __construct($sender = null, $params = null)
+	/**
+	 * Whenever event is valid
+	 * @var bool
+	 */
+	public $isValid = false;
+
+	/**
+	 * Event sender
+	 * @var IAnnotated
+	 */
+	public $sender = null;
+
+	/**
+	 * Whenever event is handled
+	 * @var bool
+	 */
+	public $handled = false;
+
+	/**
+	 * Event params
+	 * @var mixed[]
+	 */
+	public $params = [];
+
+	/**
+	 * Event data
+	 * @var mixed[]
+	 */
+	public $data = [];
+
+	/**
+	 * Event constructor
+	 * @param IAnnotated $sender
+	 * @param mixed[] $params
+	 */
+	public function __construct(IAnnotated $sender = null, $params = null)
 	{
 		$this->sender = $sender;
 		$this->params = $params;

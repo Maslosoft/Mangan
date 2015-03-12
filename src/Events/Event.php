@@ -13,7 +13,9 @@
 
 namespace Maslosoft\Mangan\Events;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Events\IEvent;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * This is based on Yii 2 Events
@@ -85,8 +87,8 @@ class Event implements IEvent
 	 * `afterInsert` event:
 	 *
 	 * ~~~
-	 * Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_INSERT, function ($event) {
-	 * Yii::trace(get_class($event->sender) . ' is inserted.');
+	 * Event::on($model, EntityManaget::EventAfterInsert, function ($event) {
+	 *		var_dump(get_class($event->sender) . ' is inserted.');
 	 * });
 	 * ~~~
 	 *
@@ -94,7 +96,7 @@ class Event implements IEvent
 	 *
 	 * For more details about how to declare an event handler, please refer to [[Component::on()]].
 	 *
-	 * @param string|object $class the fully qualified class name to which the event handler needs to attach.
+	 * @param IAnnotated $model the fully qualified class name to which the event handler needs to attach.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
 	 * @param mixed $data the data to be passed to the event handler when the event is triggered.
@@ -104,9 +106,9 @@ class Event implements IEvent
 	 * handler list.
 	 * @see off()
 	 */
-	public static function on($class, $name, $handler, $data = null, $append = true)
+	public static function on(IAnnotated $model, $name, $handler, $data = null, $append = true)
 	{
-		$class = self::_getName($class);
+		$class = self::_getName($model);
 		if ($append || empty(self::$_events[$name][$class]))
 		{
 			self::$_events[$name][$class][] = [$handler, $data];
@@ -122,16 +124,16 @@ class Event implements IEvent
 	 *
 	 * This method is the opposite of [[on()]].
 	 *
-	 * @param string $class the fully qualified class name from which the event handler needs to be detached.
+	 * @param IAnnotated $model the fully qualified class name from which the event handler needs to be detached.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler to be removed.
 	 * If it is null, all handlers attached to the named event will be removed.
 	 * @return boolean whether a handler is found and detached.
 	 * @see on()
 	 */
-	public static function off($class, $name, $handler = null)
+	public static function off(IAnnotated $model, $name, $handler = null)
 	{
-		$class = self::_getName($class);
+		$class = self::_getName($model);
 		if (empty(self::$_events[$name][$class]))
 		{
 			return false;
@@ -164,11 +166,11 @@ class Event implements IEvent
 	 * Triggers a class-level event.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param string|object $class the object or the fully qualified class name specifying the class-level event.
+	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 */
-	public static function trigger($class, $name, &$event = null)
+	public static function trigger(IAnnotated $model, $name, &$event = null)
 	{
 		if (empty(self::$_events[$name]))
 		{
@@ -180,19 +182,18 @@ class Event implements IEvent
 		}
 		$event->handled = false;
 		$event->name = $name;
-		if (is_object($class))
+
+		if ($event->sender === null)
 		{
-			if ($event->sender === null)
-			{
-				$event->sender = $class;
-			}
+			$event->sender = $model;
 		}
-		$class = self::_getName($class);
+		self::_propagate($model, $name, $event);
+		$className = self::_getName($model);
 		do
 		{
-			if (!empty(self::$_events[$name][$class]))
+			if (!empty(self::$_events[$name][$className]))
 			{
-				foreach (self::$_events[$name][$class] as $handler)
+				foreach (self::$_events[$name][$className] as $handler)
 				{
 					$event->data = $handler[1];
 					call_user_func($handler[0], $event);
@@ -203,7 +204,7 @@ class Event implements IEvent
 				}
 			}
 		}
-		while (($class = get_parent_class($class)) !== false);
+		while (($className = get_parent_class($className)) !== false);
 	}
 
 	/**
@@ -211,15 +212,15 @@ class Event implements IEvent
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::isValid`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param string|object $class the object or the fully qualified class name specifying the class-level event.
+	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 */
-	public static function valid($class, $name, $event = null)
+	public static function valid(IAnnotated $model, $name, $event = null)
 	{
-		if (self::hasHandler($class, $name))
+		if (self::hasHandler($model, $name))
 		{
-			self::trigger($class, $name, $event);
+			self::trigger($model, $name, $event);
 			return $event->isValid;
 		}
 		else
@@ -228,38 +229,78 @@ class Event implements IEvent
 		}
 	}
 
-		/**
+	/**
 	 * Triggers a class-level event and checks if it's handled.
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::handled`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param string|object $class the object or the fully qualified class name specifying the class-level event.
+	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 */
-	public static function handled($class, $name, $event = null)
+	public static function handled(IAnnotated $model, $name, $event = null)
 	{
-		if (self::hasHandler($class, $name))
+		if (self::hasHandler($model, $name))
 		{
-			Event::trigger($class, $name, $event);
+			Event::trigger($model, $name, $event);
 			return $event->handled;
 		}
 		return true;
 	}
 
-	public static function hasHandler($class, $name)
+	/**
+	 * Whenever model has event
+	 * @param IAnnotated $model
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function hasHandler(IAnnotated $model, $name)
 	{
-		$class = self::_getName($class);
-		return !empty(self::$_events[$name][$class]);
+		$className = self::_getName($model);
+		return !empty(self::$_events[$name][$className]);
 	}
 
-	private static function _getName($class)
+	/**
+	 * Get class name
+	 * @param IAnnotated $class
+	 * @return string
+	 */
+	private static function _getName(IAnnotated $class)
 	{
-		if (is_object($class))
+		return ltrim(get_class($class), '\\');
+	}
+
+	/**
+	 * Propagate event
+	 * @param IAnnotated $class
+	 * @param string $name
+	 * @param ModelEvent $event
+	 */
+	private static function _propagate(IAnnotated $class, $name, &$event)
+	{
+		$meta = ManganMeta::create($class);
+		foreach ($meta->properties('propagateEvents') as $property => $propagate)
 		{
-			$class = get_class($class);
+			if (!$propagate)
+			{
+				continue;
+			}
+			if (!$class->$property)
+			{
+				continue;
+			}
+			// Trigger for arrays
+			if (is_array($class->$property))
+			{
+				foreach ($class->$property as $object)
+				{
+					self::trigger($object, $name, $event);
+				}
+				continue;
+			}
+			// Trigger for single value
+			self::trigger($class->$property, $name, $event);
 		}
-		return ltrim($class, '\\');
 	}
 
 }
