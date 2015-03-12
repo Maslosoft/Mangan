@@ -60,6 +60,12 @@ class ModelEvent
 	public $data = [];
 
 	/**
+	 * Whenever to propagate event
+	 * @var bool
+	 */
+	private $_propagate = true;
+
+	/**
 	 * Event constructor
 	 * @param IAnnotated $sender
 	 * @param mixed[] $params
@@ -68,6 +74,23 @@ class ModelEvent
 	{
 		$this->sender = $sender;
 		$this->params = $params;
+	}
+
+	/**
+	 * Stop event propagation
+	 */
+	public function stopPropagation()
+	{
+		$this->_propagate = false;
+	}
+
+	/**
+	 * Whenever to propagate event
+	 * @return bool
+	 */
+	public function propagate()
+	{
+		return $this->_propagate;
 	}
 
 }

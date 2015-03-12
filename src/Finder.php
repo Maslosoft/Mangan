@@ -344,6 +344,10 @@ class Finder implements IFinder
 	 */
 	private function _beforeFind()
 	{
+		if(!Event::hasHandler($this->model, IFinder::EventBeforeFind))
+		{
+			return true;
+		}
 		return Event::handled($this->model, IFinder::EventBeforeFind);
 	}
 
