@@ -88,7 +88,7 @@ class Event implements IEvent
 	 *
 	 * ~~~
 	 * Event::on($model, EntityManaget::EventAfterInsert, function ($event) {
-	 *		var_dump(get_class($event->sender) . ' is inserted.');
+	 * 		var_dump(get_class($event->sender) . ' is inserted.');
 	 * });
 	 * ~~~
 	 *
@@ -172,9 +172,10 @@ class Event implements IEvent
 	 */
 	public static function trigger(IAnnotated $model, $name, &$event = null)
 	{
+		$wasTriggered = false;
 		if (empty(self::$_events[$name]))
 		{
-			return;
+			return self::_propagate($model, $name, $event);
 		}
 		if ($event === null)
 		{
@@ -187,7 +188,6 @@ class Event implements IEvent
 		{
 			$event->sender = $model;
 		}
-		self::_propagate($model, $name, $event);
 		$className = self::_getName($model);
 		do
 		{
@@ -197,14 +197,16 @@ class Event implements IEvent
 				{
 					$event->data = $handler[1];
 					call_user_func($handler[0], $event);
+					$wasTriggered = true;
 					if ($event->handled)
 					{
-						return;
+						return true;
 					}
 				}
 			}
 		}
 		while (($className = get_parent_class($className)) !== false);
+		return self::_propagate($model, $name, $event) || $wasTriggered;
 	}
 
 	/**
@@ -218,9 +220,8 @@ class Event implements IEvent
 	 */
 	public static function valid(IAnnotated $model, $name, $event = null)
 	{
-		if (self::hasHandler($model, $name))
+		if (Event::trigger($model, $name, $event))
 		{
-			self::trigger($model, $name, $event);
 			return $event->isValid;
 		}
 		else
@@ -237,19 +238,20 @@ class Event implements IEvent
 	 * @param IAnnotated $model the object or the fully qualified class name specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
+	 * @return bool|null True if handled, false otherway, null if not triggered
 	 */
 	public static function handled(IAnnotated $model, $name, $event = null)
 	{
-		if (self::hasHandler($model, $name))
+		if (Event::trigger($model, $name, $event))
 		{
-			Event::trigger($model, $name, $event);
 			return $event->handled;
 		}
 		return true;
 	}
 
 	/**
-	 * Whenever model has event
+	 * Whenever model has event.
+	 * **IMPORTANT**: It does not check for propagated events
 	 * @param IAnnotated $model
 	 * @param string $name
 	 * @return bool
@@ -257,7 +259,16 @@ class Event implements IEvent
 	public static function hasHandler(IAnnotated $model, $name)
 	{
 		$className = self::_getName($model);
-		return !empty(self::$_events[$name][$className]);
+
+		do
+		{
+			if (!empty(self::$_events[$name][$className]))
+			{
+				return true;
+			}
+		}
+		while (($className = get_parent_class($className)) !== false);
+		return false;
 	}
 
 	/**
@@ -278,6 +289,11 @@ class Event implements IEvent
 	 */
 	private static function _propagate(IAnnotated $class, $name, &$event)
 	{
+		$wasTriggered = false;
+		if ($event && !$event->propagate())
+		{
+			return false;
+		}
 		$meta = ManganMeta::create($class);
 		foreach ($meta->properties('propagateEvents') as $property => $propagate)
 		{
@@ -294,13 +310,14 @@ class Event implements IEvent
 			{
 				foreach ($class->$property as $object)
 				{
-					self::trigger($object, $name, $event);
+					$wasTriggered = self::trigger($object, $name, $event);
 				}
 				continue;
 			}
 			// Trigger for single value
-			self::trigger($class->$property, $name, $event);
+			$wasTriggered = self::trigger($class->$property, $name, $event);
 		}
+		return $wasTriggered;
 	}
 
 }
