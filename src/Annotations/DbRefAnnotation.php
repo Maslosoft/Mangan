@@ -19,7 +19,7 @@ use Maslosoft\Mangan\Meta\DbRefMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
- * DB reference array annotation
+ * DB reference annotation
  * @template DbRef(${class}, ${updatable})
  * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
@@ -47,7 +47,7 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 		$refMeta = new DbRefMeta($data);
 		if (!$refMeta->class)
 		{
-			$refMeta->class = get_class($this->_component);
+			$refMeta->class = $this->_meta->type()->name;
 		}
 		return $refMeta;
 	}
