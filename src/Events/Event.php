@@ -285,9 +285,9 @@ class Event implements IEvent
 	 * Propagate event
 	 * @param IAnnotated $class
 	 * @param string $name
-	 * @param ModelEvent $event
+	 * @param ModelEvent|null $event
 	 */
-	private static function _propagate(IAnnotated $class, $name, &$event)
+	private static function _propagate(IAnnotated $class, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if ($event && !$event->propagate())
