@@ -54,7 +54,11 @@ class Factory
 		{
 			$activeDecorators = self::getManganDecorators($modelMeta->connectionId, $transformatorClass);
 			$decorators = [];
-			foreach ($meta->decorators as $decoratorName)
+			/**
+			 * TODO This is workaround, it not should be required to do array_unique
+			 * Further investigation needed
+			 */
+			foreach (array_unique($meta->decorators) as $decoratorName)
 			{
 				if (!isset($activeDecorators[$decoratorName]))
 				{
