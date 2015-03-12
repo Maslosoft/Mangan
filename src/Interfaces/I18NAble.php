@@ -20,6 +20,8 @@ namespace Maslosoft\Mangan\Interfaces;
 interface I18NAble
 {
 
+	const EventBeforeLanguagesSet = 'beforeLanguagesSet';
+	const EventAfterLanguagesSet = 'afterLanguagesSet';
 	const EventBeforeLangChange = 'beforeLangChange';
 	const EventAfterLangChange = 'afterLangChange';
 
