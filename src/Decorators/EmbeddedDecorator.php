@@ -33,7 +33,7 @@ class EmbeddedDecorator implements IDecorator
 	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
 	{
 		self::ensureClass($model, $name, $dbValue);
-		$embedded = $transformatorClass::toModel($dbValue);
+		$embedded = $transformatorClass::toModel($dbValue, $model->$name, $model->$name);
 		if ($embedded instanceof IOwnered)
 		{
 			$embedded->setOwner($model);
