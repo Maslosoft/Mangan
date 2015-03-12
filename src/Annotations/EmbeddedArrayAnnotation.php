@@ -15,7 +15,6 @@ namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
-use Maslosoft\Mangan\Sanitizers\EmbeddedArray;
 
 /**
  * Annotation for array of embedded documents in mongo
@@ -33,6 +32,7 @@ class EmbeddedArrayAnnotation extends ManganPropertyAnnotation
 	public function init()
 	{
 		$this->_entity->embedded = $this->value;
+		$this->_entity->propagateEvents = true;
 		$this->_entity->decorators[] = EmbeddedArrayDecorator::class;
 	}
 

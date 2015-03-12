@@ -256,7 +256,7 @@ class Mangan
 			$options = [];
 			foreach ($this->_getOptionNames() as $name)
 			{
-				if (property_exists($this, $name))
+				if (isset($this->$name))
 				{
 					$options[$name] = $this->$name;
 				}

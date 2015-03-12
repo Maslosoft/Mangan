@@ -32,6 +32,7 @@ class DbRefArrayAnnotation extends DbRefAnnotation
 		$refMeta->single = false;
 		$refMeta->isArray = true;
 		$this->_entity->dbRef = $refMeta;
+		$this->_entity->propagateEvents = true;
 		$this->_entity->decorators[] = DbRefArrayDecorator::class;
 	}
 

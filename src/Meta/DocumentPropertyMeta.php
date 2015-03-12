@@ -122,4 +122,10 @@ class DocumentPropertyMeta extends MetaProperty
 	 */
 	public $fromArray = true;
 
+	/**
+	 * Whenever events should be propagated to this property sub objects
+	 * @var bool
+	 */
+	public $propagateEvents = false;
+
 }
