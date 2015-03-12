@@ -20,7 +20,6 @@ use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 
 /**
  * Decorator
- *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Decorator extends Transformator

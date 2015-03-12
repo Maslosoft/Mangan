@@ -32,7 +32,10 @@ class EmbeddedArrayDecorator implements IDecorator
 			foreach ($dbValue as $key => $data)
 			{
 				EmbeddedDecorator::ensureClass($model, $name, $data);
-				$embedded = $transformatorClass::toModel($data);
+				
+				// Set ensured class to $dbValue
+				$instance = $this->_getInstance($model->$name, $dbValue, $data);
+				$embedded = $transformatorClass::toModel($data, $instance, $instance);
 				if ($embedded instanceof IOwnered)
 				{
 					$embedded->setOwner($model);
@@ -65,4 +68,33 @@ class EmbeddedArrayDecorator implements IDecorator
 		}
 	}
 
+	/**
+	 * TODO: This relies on _id
+	 * @param type $instances
+	 * @param type $dbValue
+	 * @param type $data
+	 * @return type
+	 */
+	private function _getInstance($instances, $dbValue, $data)
+	{
+		if(!count($instances))
+		{
+			return null;
+		}
+		$map = [];
+		foreach($dbValue as $val)
+		{
+			$id = (string)$val['_id'];
+			$map[$id] = true;
+		}
+		foreach($instances as $instance)
+		{
+			$id = (string)$instance->_id;
+			if(isset($map[$id]) && $data['_id'] == $id && $instance instanceof $data['_class'])
+			{
+				return $instance;
+			}
+		}
+		return null;
+	}
 }
