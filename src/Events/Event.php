@@ -191,17 +191,18 @@ class Event implements IEvent
 		$className = self::_getName($model);
 		do
 		{
-			if (!empty(self::$_events[$name][$className]))
+			if (empty(self::$_events[$name][$className]))
 			{
-				foreach (self::$_events[$name][$className] as $handler)
+				continue;
+			}
+			foreach (self::$_events[$name][$className] as $handler)
+			{
+				$event->data = $handler[1];
+				call_user_func($handler[0], $event);
+				$wasTriggered = true;
+				if ($event->handled)
 				{
-					$event->data = $handler[1];
-					call_user_func($handler[0], $event);
-					$wasTriggered = true;
-					if ($event->handled)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 		}
