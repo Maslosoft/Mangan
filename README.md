@@ -2,7 +2,7 @@
 <!-- Auto generated do not modify between `header` and `/header` -->
 
 # <a href="http://maslosoft.com/mangan/">Maslosoft Mangan</a>
-<a href="http://maslosoft.com/mangan/">__</a>
+<a href="http://maslosoft.com/mangan/">_MongoDB Object Persister_</a>
 
 <a href="https://packagist.org/packages/maslosoft/mangan" title="Latest Stable Version">
 <img src="https://poser.pugx.org/maslosoft/mangan/v/stable.svg" alt="Latest Stable Version" style="height: 20px;"/>
@@ -16,7 +16,7 @@
 
 ### Quick Install
 ```bash
-	composer require maslosoft/mangan:"*"
+composer require maslosoft/mangan:"*"
 ```
 
 <!--/header-->

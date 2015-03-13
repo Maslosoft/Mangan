@@ -1,5 +1,6 @@
 {
 	"name": "maslosoft/mangan",
+	"description": "MongoDB Object Persister",
 	"license": [
 		"AGPL",
 		"Commercial"
@@ -68,6 +69,5 @@
 		"psr-4": {
 			"Maslosoft\\Mangan\\": "src/"
 		}
-	},
-	"description": ""
+	}
 }
