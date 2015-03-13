@@ -1,11 +1,25 @@
-#Yii Mangan
+<!--header-->
+<!-- Auto generated do not modify between `header` and `/header` -->
 
+# <a href="http://maslosoft.com/mangan/">Maslosoft Mangan</a>
+<a href="http://maslosoft.com/mangan/">__</a>
+
+<a href="https://packagist.org/packages/maslosoft/mangan" title="Latest Stable Version">
+<img src="https://poser.pugx.org/maslosoft/mangan/v/stable.svg" alt="Latest Stable Version" style="height: 20px;"/>
+</a>
+<a href="https://packagist.org/packages/maslosoft/mangan" title="License">
+<img src="https://poser.pugx.org/maslosoft/mangan/license.svg" alt="License" style="height: 20px;"/>
+</a>
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
-<img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master" style="height:18px"/>
-[![HHVM Status](http://hhvm.h4cc.de/badge/maslosoft/mangan.svg)](http://hhvm.h4cc.de/package/maslosoft/mangan)
+<img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
+<img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
 
-######Advanced MongoDB document mapper for Yii
+### Quick Install
+```bash
+	composer require maslosoft/mangan:"*"
+```
+
+<!--/header-->
 
 This extension originally started as a fork of [YiiMongoDbSuite](canni.github.com/YiiMongoDbSuite "YiiMongoDbSuite"),
 written by [canni](https://github.com/canni "canni") and further improved by several developers ([mintao](https://github.com/mintao "mintao"), et al).

@@ -68,5 +68,6 @@
 		"psr-4": {
 			"Maslosoft\\Mangan\\": "src/"
 		}
-	}
+	},
+	"description": ""
 }
