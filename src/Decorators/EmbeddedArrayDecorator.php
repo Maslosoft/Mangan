@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Interfaces\IOwnered;
 use Maslosoft\Mangan\Transformers\ITransformator;
 
@@ -70,10 +71,10 @@ class EmbeddedArrayDecorator implements IDecorator
 
 	/**
 	 * TODO: This relies on _id
-	 * @param type $instances
-	 * @param type $dbValue
-	 * @param type $data
-	 * @return type
+	 * @param IAnnotated[] $instances
+	 * @param mixed[] $dbValue
+	 * @param mixed[] $data
+	 * @return IAnnotated|null
 	 */
 	private function _getInstance($instances, $dbValue, $data)
 	{
