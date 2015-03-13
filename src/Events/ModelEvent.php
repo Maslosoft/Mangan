@@ -55,7 +55,7 @@ class ModelEvent
 
 	/**
 	 * Event data
-	 * @var mixed[]
+	 * @var mixed
 	 */
 	public $data = [];
 
