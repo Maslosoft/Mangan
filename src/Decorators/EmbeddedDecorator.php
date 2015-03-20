@@ -47,7 +47,7 @@ class EmbeddedDecorator implements IDecorator
 		{
 			$fieldMeta = ManganMeta::create($model)->$name;
 			/* @var $fieldMeta DocumentPropertyMeta */
-			$className = $fieldMeta->embedded;
+			$className = $fieldMeta->embedded->class;
 			if (!is_string($className))
 			{
 				return null;
@@ -64,7 +64,7 @@ class EmbeddedDecorator implements IDecorator
 		{
 			$fieldMeta = ManganMeta::create($model)->$name;
 			/* @var $fieldMeta DocumentPropertyMeta */
-			$class = $fieldMeta->embedded;
+			$class = $fieldMeta->embedded->class;
 		}
 		else
 		{
