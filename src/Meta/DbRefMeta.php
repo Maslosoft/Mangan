@@ -45,4 +45,10 @@ class DbRefMeta extends BaseMeta
 	 */
 	public $updatable = false;
 
+	/**
+	 * Comparing key. This is used to update db ref instances from external sources.
+	 * This is only usefull in db ref arrays.
+	 * @var string|array
+	 */
+	public $key = null;
 }

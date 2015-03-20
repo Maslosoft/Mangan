@@ -47,7 +47,7 @@ class DocumentPropertyMeta extends MetaProperty
 
 	/**
 	 * Embedded document default class
-	 * @var string|bool
+	 * @var EmbeddedMeta
 	 */
 	public $embedded = null;
 

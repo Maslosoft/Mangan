@@ -13,7 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
+use Maslosoft\Mangan\Meta\EmbeddedMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
@@ -36,7 +38,10 @@ class EmbeddedAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->embedded = $this->value;
+		$data = ParamsExpander::expand($this, ['class']);
+		$meta = new EmbeddedMeta($data);
+		$meta->single = true;
+		$this->_entity->embedded = $meta;
 		$this->_entity->propagateEvents = true;
 		$this->_entity->decorators[] = EmbeddedDecorator::class;
 	}

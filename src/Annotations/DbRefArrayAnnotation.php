@@ -26,9 +26,16 @@ class DbRefArrayAnnotation extends DbRefAnnotation
 
 	public $value = [];
 
+	/**
+	 * Comparing key. This is used to update db ref instances from external sources.
+	 * @var string|array
+	 */
+	public $key = null;
+
 	public function init()
 	{
 		$refMeta = $this->_getMeta();
+		$refMeta->key = $this->key;
 		$refMeta->single = false;
 		$refMeta->isArray = true;
 		$this->_entity->dbRef = $refMeta;

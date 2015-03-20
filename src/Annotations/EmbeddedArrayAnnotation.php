@@ -13,25 +13,44 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
-use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+use Maslosoft\Mangan\Meta\EmbeddedMeta;
 
 /**
  * Annotation for array of embedded documents in mongo
  * defaultClassName will be used for getting empty properties,
- * but any type of embedded document can be stored within this field
+ * but any type of embedded document can be stored within this field.
+ * By default, when updating from external source, documents are compared by pk.
+ * This can be ovverriden with `key` property.
+ * Examples:
+ * <ul>
+ *		<li>&commat;EmbeddedArray() - Embedded array with any model</li>
+ *		<li>&commat;EmbeddedArray(Company\ClassName) - Embedded array with default class</li>
+ *		<li>&commat;EmbeddedArray(Company\ClassName, '_id') - Embedded array with default class and compare key `_id`</li>
+ * 	<li>&commat;EmbeddedArray(Company\ClassName, {'login', 'email'}) - Embedded array with default class and composite compare key `_id`</li>
+ * </ul>
  * @Target('property')
  * @template EmbeddedArray('${defaultClassName}')
  * @author Piotr
  */
-class EmbeddedArrayAnnotation extends ManganPropertyAnnotation
+class EmbeddedArrayAnnotation extends EmbeddedAnnotation
 {
 
 	public $value = true;
 
+	/**
+	 * Comparing key. This is used to update db ref instances from external sources.
+	 * @var string|array
+	 */
+	public $key = null;
+
 	public function init()
 	{
-		$this->_entity->embedded = $this->value;
+		$data = ParamsExpander::expand($this, ['class', 'key']);
+		$meta = new EmbeddedMeta($data);
+		$meta->isArray = true;
+		$this->_entity->embedded = $meta;
 		$this->_entity->propagateEvents = true;
 		$this->_entity->decorators[] = EmbeddedArrayDecorator::class;
 	}
