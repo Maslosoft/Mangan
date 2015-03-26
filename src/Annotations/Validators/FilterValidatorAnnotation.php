@@ -47,7 +47,7 @@ class FilterValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
-		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 			'filter',
 			'message',
 			'skipOnError',
