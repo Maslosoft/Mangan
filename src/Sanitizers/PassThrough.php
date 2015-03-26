@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
 
 /**
  * PassThrough

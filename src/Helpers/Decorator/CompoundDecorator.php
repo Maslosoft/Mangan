@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
-use Maslosoft\Mangan\Decorators\IDecorator;
-use Maslosoft\Mangan\Transformers\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransofmator;
 
 /**
  * Container for decorators

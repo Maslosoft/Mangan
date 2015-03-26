@@ -14,7 +14,8 @@
 namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Transformers\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 
 /**
  * Undecorated

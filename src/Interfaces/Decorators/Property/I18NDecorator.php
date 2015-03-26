@@ -11,13 +11,13 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Decorators;
+namespace Maslosoft\Mangan\Interfaces\Decorators\Property;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\I18NAble;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * This creates i18n fields

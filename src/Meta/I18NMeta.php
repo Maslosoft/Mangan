@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Meta;
 
-use Maslosoft\Mangan\Decorators\I18NDecorator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 
 /**

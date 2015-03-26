@@ -14,10 +14,11 @@
 namespace Maslosoft\Mangan\Decorators\Model;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * AliasDecorator

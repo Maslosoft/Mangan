@@ -15,9 +15,10 @@ namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
-use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * DbRefArray

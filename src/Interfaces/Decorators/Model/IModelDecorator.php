@@ -11,10 +11,10 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Decorators\Model;
+namespace Maslosoft\Mangan\Interfaces\Decorators\Model;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Transformers\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 
 /**
  * This decorator interface is used to decorate entire model

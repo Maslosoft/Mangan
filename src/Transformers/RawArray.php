@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+
 /**
  * This transformer is by default configured to store document in database.
  * 

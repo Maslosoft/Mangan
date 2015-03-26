@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Events;
+namespace Maslosoft\Mangan\Interfaces\Events;
 
 /**
  *

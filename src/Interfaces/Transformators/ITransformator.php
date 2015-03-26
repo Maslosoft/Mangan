@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Transformers;
+namespace Maslosoft\Mangan\Interfaces\Transformators;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 
