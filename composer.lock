@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.1.2",
+            "version": "3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "d1f5f2ffd6bbe65a0fa93a50c56ce681e034bc83"
+                "reference": "a39382dd98e14d1b85e4a4a7088ea383935738e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/d1f5f2ffd6bbe65a0fa93a50c56ce681e034bc83",
-                "reference": "d1f5f2ffd6bbe65a0fa93a50c56ce681e034bc83",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/a39382dd98e14d1b85e4a4a7088ea383935738e9",
+                "reference": "a39382dd98e14d1b85e4a4a7088ea383935738e9",
                 "shasum": ""
             },
             "require": {
@@ -60,7 +60,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-03-17 18:02:26"
+            "time": "2015-03-26 17:42:20"
         },
         {
             "name": "maslosoft/embedi",
@@ -102,16 +102,16 @@
         },
         {
             "name": "maslosoft/gazebo",
-            "version": "1.1.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Gazebo.git",
-                "reference": "9627db46deb0b48c937d9de0d9452639b8952078"
+                "reference": "c49f5dd4ca4bd851f2a901114ce2f0df47eb6641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/9627db46deb0b48c937d9de0d9452639b8952078",
-                "reference": "9627db46deb0b48c937d9de0d9452639b8952078",
+                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/c49f5dd4ca4bd851f2a901114ce2f0df47eb6641",
+                "reference": "c49f5dd4ca4bd851f2a901114ce2f0df47eb6641",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
                 }
             ],
             "description": "Plugin container",
-            "time": "2015-03-26 11:58:10"
+            "time": "2015-03-26 15:43:53"
         },
         {
             "name": "maslosoft/miniview",
