@@ -13,6 +13,10 @@
 
 namespace Maslosoft\Mangan\Annotations\Validators\Validators;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
+use Maslosoft\Mangan\Annotations\Validators\ValidatorAnnotation;
+use Maslosoft\Mangan\Meta\ValidatorMeta;
+
 /**
  * NOTE: This class is automatically generated from Yii validator class.
  * This is not actual validator. For validator class @see CBooleanValidator.
