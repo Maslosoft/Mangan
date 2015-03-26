@@ -13,6 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations\Validators;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
+use Maslosoft\Mangan\Meta\ValidatorMeta;
+
 /**
  * NOTE: This class is automatically generated from Yii validator class.
  * This is not actual validator. For validator class @see CEmailValidator.
@@ -26,7 +29,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
  * @package system.validators
  * @since 1.0
  */
-class EmailValidatorAnnotation extends ValidatorAnnotation 
+class EmailValidatorAnnotation extends ValidatorAnnotation
 {
 
 	/**

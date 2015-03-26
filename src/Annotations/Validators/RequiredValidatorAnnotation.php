@@ -13,6 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations\Validators;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
+use Maslosoft\Mangan\Meta\ValidatorMeta;
+
 /**
  * NOTE: This class is automatically generated from Yii validator class.
  * This is not actual validator. For validator class @see CRequiredValidator.
@@ -36,7 +39,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
  */
 class RequiredValidatorAnnotation extends ValidatorAnnotation
 {
-
+	public $value = '';
 	/**
 	 * @var mixed the desired value that the attribute must have.
 	 * If this is null, the validator will validate that the specified attribute does not have null or empty value.

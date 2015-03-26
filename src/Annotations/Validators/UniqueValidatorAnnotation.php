@@ -13,12 +13,15 @@
 
 namespace Maslosoft\Mangan\Annotations\Validators;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
+use Maslosoft\Mangan\Meta\ValidatorMeta;
+
 /**
  * UniqueValidator
  * 
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class UniqueValidatorAnnotation extends ValidatorAnnotation
+class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 {
 
 	/**
@@ -69,19 +72,18 @@ class UniqueValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-					'allowEmpty',
-					'className',
-					'attributeName',
-					'criteria',
-					'message',
-					'skipOnError',
-					'on',
-					'safe',
-					'enableClientValidation',
-					'except',
-					'proxy'
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'allowEmpty',
+			'className',
+			'attributeName',
+			'criteria',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
 		]));
 	}
-
 }
