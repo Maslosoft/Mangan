@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "3.1.3",
+            "version": "3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "a39382dd98e14d1b85e4a4a7088ea383935738e9"
+                "reference": "31c03b1e71ed10efb04d2b9b7156a951c9c075e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/a39382dd98e14d1b85e4a4a7088ea383935738e9",
-                "reference": "a39382dd98e14d1b85e4a4a7088ea383935738e9",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/31c03b1e71ed10efb04d2b9b7156a951c9c075e4",
+                "reference": "31c03b1e71ed10efb04d2b9b7156a951c9c075e4",
                 "shasum": ""
             },
             "require": {
@@ -60,7 +60,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-03-26 17:42:20"
+            "time": "2015-03-26 19:22:59"
         },
         {
             "name": "maslosoft/embedi",
@@ -183,16 +183,16 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "62ba6bce6f68af7df066b0e04f290d41f4793e5d"
+                "reference": "74ea21e95b2746bf5003d627c1acb577061f489e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/62ba6bce6f68af7df066b0e04f290d41f4793e5d",
-                "reference": "62ba6bce6f68af7df066b0e04f290d41f4793e5d",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/74ea21e95b2746bf5003d627c1acb577061f489e",
+                "reference": "74ea21e95b2746bf5003d627c1acb577061f489e",
                 "shasum": ""
             },
             "require": {
@@ -204,15 +204,19 @@
                 "maslosoft/hedron": "*",
                 "maslosoft/signalstest": "dev-master"
             },
+            "bin": [
+                "signals"
+            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Maslosoft\\Signals\\": "src/"
+                    "Maslosoft\\Signals\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "AGPL or Commercial"
+                "AGPL",
+                "Commercial"
             ],
             "authors": [
                 {
@@ -231,7 +235,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2015-03-10 11:02:58"
+            "time": "2015-03-26 19:27:25"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -792,12 +796,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "8511b2046dfa6ac28b6bfb69bf6125fb828407ba"
+                "reference": "6ddd0eaf582cd2ff1694e2346d97852497c39e02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/8511b2046dfa6ac28b6bfb69bf6125fb828407ba",
-                "reference": "8511b2046dfa6ac28b6bfb69bf6125fb828407ba",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/6ddd0eaf582cd2ff1694e2346d97852497c39e02",
+                "reference": "6ddd0eaf582cd2ff1694e2346d97852497c39e02",
                 "shasum": ""
             },
             "require": {
@@ -824,7 +828,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-03-26 10:16:22"
+            "time": "2015-03-26 18:15:18"
         },
         {
             "name": "myclabs/deep-copy",
