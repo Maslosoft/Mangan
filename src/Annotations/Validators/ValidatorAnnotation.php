@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Base;
+namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
  *
  * @author Piotr
  */
-abstract class ValidatorAnnotation extends ManganPropertyAnnotation
+class ValidatorAnnotation extends ManganPropertyAnnotation
 {
 
 	/**

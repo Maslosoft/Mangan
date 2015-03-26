@@ -11,17 +11,15 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Annotations;
-
-use Maslosoft\Mangan\Base\ValidatorAnnotation;
+namespace Maslosoft\Mangan\Annotations\Validators;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CInValidator.
+ * This is not actual validator. For validator class @see CMatchValidator.
  */
 
 /**
- * CRangeValidator validates that the attribute value is among the list (specified via {@link range}).
+ * CRegularExpressionValidator validates that the attribute value matches to the specified {@link pattern regular expression}.
  * You may invert the validation logic with help of the {@link not} property (available since 1.1.5).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -29,18 +27,13 @@ use Maslosoft\Mangan\Base\ValidatorAnnotation;
  * @package system.validators
  * @since 1.0
  */
-class InValidatorAnnotation extends ValidatorAnnotation
+class MatchValidatorAnnotation extends ValidatorAnnotation
 {
 
 	/**
-	 * @var array list of valid values that the attribute value should be among
+	 * @var string the regular expression to be matched with
 	 */
-	public $range = NULL;
-
-	/**
-	 * @var boolean whether the comparison is strict (both type and value must be the same)
-	 */
-	public $strict = false;
+	public $pattern = NULL;
 
 	/**
 	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
@@ -50,7 +43,7 @@ class InValidatorAnnotation extends ValidatorAnnotation
 
 	/**
 	 * @var boolean whether to invert the validation logic. Defaults to false. If set to true,
-	 * the attribute value should NOT be among the list of values defined via {@link range}.
+	 * the regular expression defined via {@link pattern} should NOT match the attribute value.
 	 * @since 1.1.5
 	 * */
 	public $not = false;
