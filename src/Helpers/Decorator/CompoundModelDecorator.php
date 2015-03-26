@@ -13,9 +13,9 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
-use Maslosoft\Mangan\Decorators\IDecorator;
-use Maslosoft\Mangan\Decorators\Model\IModelDecorator;
-use Maslosoft\Mangan\Transformers\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+
 
 /**
  * CompoundModelDecorator

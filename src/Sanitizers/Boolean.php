@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+
 /**
  * Bool
  *

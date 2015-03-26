@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Events;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Events\IEvent;
+use Maslosoft\Mangan\Interfaces\Events\IEvent;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**

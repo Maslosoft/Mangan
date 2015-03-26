@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+
 /**
  * String
  * This sanitizer forces values to be string

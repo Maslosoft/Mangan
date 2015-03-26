@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Sanitizers;
+namespace Maslosoft\Mangan\Interfaces\Sanitizers\Property;
 
 /**
  *

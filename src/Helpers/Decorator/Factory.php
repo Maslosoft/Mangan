@@ -13,9 +13,9 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
-use Maslosoft\Mangan\Decorators\IDecorator;
-use Maslosoft\Mangan\Decorators\Model\IModelDecorator;
 use Maslosoft\Mangan\Decorators\Undecorated;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;

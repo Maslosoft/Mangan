@@ -15,11 +15,10 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Sanitizers\ISanitizer;
-use Maslosoft\Mangan\Transformers\ITransformator;
 
 /**
  * Transformator

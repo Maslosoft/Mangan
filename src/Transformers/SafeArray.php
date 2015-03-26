@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 
 /**
  * This transformer is configured to set only safe attributes - from any external source.

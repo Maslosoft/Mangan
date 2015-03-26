@@ -11,10 +11,10 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Decorators;
+namespace Maslosoft\Mangan\Interfaces\Decorators\Property;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Transformers\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 
 /**
  * This should modify fields bahavior
