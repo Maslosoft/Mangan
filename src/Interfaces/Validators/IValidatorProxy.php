@@ -11,18 +11,23 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces;
-
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+namespace Maslosoft\Mangan\Interfaces\Validators;
 
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IValidator
+interface IValidatorProxy
 {
+	/**
+	 * Set validator
+	 * @param IValidator $validator
+	 */
+	public function setValidator(IValidator $validator);
 
-	public function addError($message);
-
-	public function isValid(IAnnotated $model, $attribute);
+	/**
+	 * Get validator
+	 * @return IValidator Validator instance
+	 */
+	public function getValidator();
 }

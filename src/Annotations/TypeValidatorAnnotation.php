@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Mangan\Base\ValidatorAnnotation;
-use Maslosoft\Mangan\Base\IBuiltInValidatorAnnotation;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
@@ -55,7 +54,7 @@ use Maslosoft\Mangan\Base\IBuiltInValidatorAnnotation;
  * @package system.validators
  * @since 1.0
  */
-class TypeValidatorAnnotation extends ValidatorAnnotation implements IBuiltInValidatorAnnotation
+class TypeValidatorAnnotation extends ValidatorAnnotation
 {
 
 	/**
