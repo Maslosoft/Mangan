@@ -40,7 +40,7 @@ use Maslosoft\Mangan\Base\IBuiltInValidatorAnnotation;
  * @package system.validators
  * @since 1.0
  */
-class FilterValidatorAnnotation extends ValidatorAnnotation implements IBuiltInValidatorAnnotation
+class FilterValidatorAnnotation extends ValidatorAnnotation
 {
 
 	/**

@@ -17,7 +17,7 @@ use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\IValidator;
+use Maslosoft\Mangan\Interfaces\Validators\IValidator;
 
 /**
  * CUniqueValidator class file.

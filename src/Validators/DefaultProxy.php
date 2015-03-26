@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Validators;
 
-use Maslosoft\Mangan\Interfaces\IValidator;
-use Maslosoft\Mangan\Interfaces\IValidatorProxy;
+use Maslosoft\Mangan\Interfaces\Validators\IValidator;
+use Maslosoft\Mangan\Interfaces\Validators\IValidatorProxy;
 
 /**
  * BaseProxy
@@ -23,4 +23,5 @@ use Maslosoft\Mangan\Interfaces\IValidatorProxy;
  */
 class DefaultProxy implements IValidator, IValidatorProxy
 {
+
 }

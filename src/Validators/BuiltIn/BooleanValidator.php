@@ -13,7 +13,8 @@
 
 namespace Maslosoft\Mangan\Validators\BuiltIn;
 
-use Maslosoft\Mangan\Interfaces\IValidator;
+use Maslosoft\Mangan\Interfaces\Validators\IValidator;
+
 
 /**
  * BooleanValidator

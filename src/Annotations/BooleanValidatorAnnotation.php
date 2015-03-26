@@ -37,7 +37,7 @@ use Maslosoft\Mangan\Base\IBuiltInValidatorAnnotation;
  * @version $Id$
  * @package system.validators
  */
-class BooleanValidatorAnnotation extends ValidatorAnnotation implements IBuiltInValidatorAnnotation
+class BooleanValidatorAnnotation extends ValidatorAnnotation
 {
 
 	/**
