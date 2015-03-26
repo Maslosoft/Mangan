@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Transformers\Filters;
 
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
@@ -26,11 +27,15 @@ class SafeFilter implements ITransformatorFilter
 
 	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		return $fieldMeta->safe;
+		return true;
 	}
 
 	public function toModel($model, DocumentPropertyMeta $fieldMeta)
 	{
+		if($fieldMeta->safe === null)
+		{
+			return true;
+		}
 		return $fieldMeta->safe;
 	}
 

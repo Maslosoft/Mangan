@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Transformers\Filters;
+namespace Maslosoft\Mangan\Interfaces\Filters\Property;
 
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
@@ -22,9 +22,8 @@ use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
  */
 interface ITransformatorFilter
 {
+
 	public function fromModel($model, DocumentPropertyMeta $fieldMeta);
 
 	public function toModel($model, DocumentPropertyMeta $fieldMeta);
-
-
 }

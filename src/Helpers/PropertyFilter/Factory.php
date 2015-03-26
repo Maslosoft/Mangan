@@ -13,10 +13,10 @@
 
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
+use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
-use Maslosoft\Mangan\Transformers\Filters\ITransformatorFilter;
 use Maslosoft\Mangan\Transformers\Filters\Unfiltered;
 
 /**

@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Transformers\Filters;
 
+use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**

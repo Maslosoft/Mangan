@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
+use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
-use Maslosoft\Mangan\Transformers\Filters\ITransformatorFilter;
 
 /**
  * MultiFilter
