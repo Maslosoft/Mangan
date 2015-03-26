@@ -11,9 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Annotations;
-
-use Maslosoft\Mangan\Base\ValidatorAnnotation;
+namespace Maslosoft\Mangan\Annotations\Validators;
 
 /**
  * UniqueValidator

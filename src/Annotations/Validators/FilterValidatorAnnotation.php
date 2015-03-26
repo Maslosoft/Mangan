@@ -11,10 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Annotations;
-
-use Maslosoft\Mangan\Base\ValidatorAnnotation;
-use Maslosoft\Mangan\Base\IBuiltInValidatorAnnotation;
+namespace Maslosoft\Mangan\Annotations\Validators;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
