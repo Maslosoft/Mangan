@@ -14,9 +14,9 @@
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
 use Maslosoft\Mangan\Helpers\Transformator;
+use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
-use Maslosoft\Mangan\Transformers\Filters\ITransformatorFilter;
 
 /**
  * Filter

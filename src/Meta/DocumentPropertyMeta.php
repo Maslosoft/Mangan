@@ -84,9 +84,9 @@ class DocumentPropertyMeta extends MetaProperty
 	/**
 	 * Whenever attribute is safe for mass assignement
 	 * @see EntityManager::setAttributes()
-	 * @var boolean
+	 * @var boolean|null
 	 */
-	public $safe = true;
+	public $safe = null;
 
 	/**
 	 * Whenever property is read only
