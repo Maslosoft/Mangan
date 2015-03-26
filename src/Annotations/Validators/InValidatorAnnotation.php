@@ -53,4 +53,20 @@ class InValidatorAnnotation extends ValidatorAnnotation
 	 * */
 	public $not = false;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'range',
+			'strict',
+			'allowEmpty',
+			'not',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

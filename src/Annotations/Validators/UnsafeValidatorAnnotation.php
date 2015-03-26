@@ -36,4 +36,9 @@ class UnsafeValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $safe = false;
 
+	public function init()
+	{
+		$this->_entity->safe = false;
+	}
+
 }

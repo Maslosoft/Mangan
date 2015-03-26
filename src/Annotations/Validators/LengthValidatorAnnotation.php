@@ -86,4 +86,23 @@ class LengthValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $encoding = NULL;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'max',
+			'min',
+			'is',
+			'tooShort',
+			'tooLong',
+			'allowEmpty',
+			'encoding',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

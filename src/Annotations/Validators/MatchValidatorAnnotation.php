@@ -48,4 +48,19 @@ class MatchValidatorAnnotation extends ValidatorAnnotation
 	 * */
 	public $not = false;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'pattern',
+			'allowEmpty',
+			'not',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

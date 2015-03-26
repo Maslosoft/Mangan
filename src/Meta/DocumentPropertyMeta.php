@@ -128,4 +128,10 @@ class DocumentPropertyMeta extends MetaProperty
 	 */
 	public $propagateEvents = false;
 
+	/**
+	 * Validators configuration
+	 * @var ValidatorMeta[]
+	 */
+	public $validators = [];
+
 }

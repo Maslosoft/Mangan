@@ -152,4 +152,27 @@ class FileValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $tooMany = NULL;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'allowEmpty',
+			'types',
+			'mimeTypes',
+			'minSize',
+			'maxSize',
+			'tooLarge',
+			'tooSmall',
+			'wrongType',
+			'wrongMimeType',
+			'maxFiles',
+			'tooMany',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

@@ -13,7 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations\Validators;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+use Maslosoft\Mangan\Meta\ValidatorMeta;
 
 /**
  * Base class for validator annotations
@@ -64,12 +66,23 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 	 */
 	public $except = NULL;
 
+	/**
+	 * Validator proxy class
+	 * @var string
+	 */
+	public $proxy = '';
+
 	public function init()
 	{
-		$name = preg_replace('~Annotation$~', '', lcfirst(get_class($this)));
-		$value = array_intersect_key((array) $this, array_flip($this->_publicProperties));
-		unset($value['name']);
-		$this->_entity->$name = $value;
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
 	}
 
 }

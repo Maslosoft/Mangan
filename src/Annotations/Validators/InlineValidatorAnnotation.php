@@ -44,4 +44,19 @@ class InlineValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $clientValidate = NULL;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'method',
+			'params',
+			'clientValidate',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }
