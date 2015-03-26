@@ -60,4 +60,20 @@ class BooleanValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $allowEmpty = true;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'trueValue',
+			'falseValue',
+			'strict',
+			'allowEmpty',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

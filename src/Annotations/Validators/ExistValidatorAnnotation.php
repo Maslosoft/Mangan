@@ -77,4 +77,21 @@ class ExistValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $allowEmpty = true;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'caseSensitive',
+			'className',
+			'attributeName',
+			'criteria',
+			'allowEmpty',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

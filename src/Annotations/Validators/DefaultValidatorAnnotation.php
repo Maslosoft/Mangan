@@ -43,4 +43,18 @@ class DefaultValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $setOnEmpty = true;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'value',
+			'setOnEmpty',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

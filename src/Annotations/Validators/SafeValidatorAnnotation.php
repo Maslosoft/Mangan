@@ -17,7 +17,8 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * Safe validator marks the associated attributes to be safe for massive assignments.
- *
+ * This in fact is same as SafeAnnotation.
+ * Could be used as simply as `&commat;Safe`.
  */
 class SafeValidatorAnnotation extends ManganPropertyAnnotation
 {

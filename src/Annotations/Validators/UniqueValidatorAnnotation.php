@@ -14,34 +14,12 @@
 namespace Maslosoft\Mangan\Annotations\Validators;
 
 /**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CUniqueValidator.
- */
-
-/**
- * CUniqueValidator validates that the attribute value is unique in the corresponding database table.
- *
- * When using the {@link message} property to define a custom error message, the message
- * may contain additional placeholders that will be replaced with the actual content. In addition
- * to the "{attribute}" placeholder, recognized by all validators (see {@link CValidator}),
- * CUniqueValidator allows for the following placeholders to be specified:
- * <ul>
- * <li>{value}: replaced with current value of the attribute.</li>
- * </ul>
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @version $Id$
- * @package system.validators
- * @since 1.0
+ * UniqueValidator
+ * 
+ * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class UniqueValidatorAnnotation extends ValidatorAnnotation
 {
-
-	/**
-	 * @var boolean whether the comparison is case sensitive. Defaults to true.
-	 * Note, by setting it to false, you are assuming the attribute type is string.
-	 */
-	public $caseSensitive = true;
 
 	/**
 	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
@@ -55,24 +33,55 @@ class UniqueValidatorAnnotation extends ValidatorAnnotation
 	 * the class of the object currently being validated.
 	 * You may use path alias to reference a class name here.
 	 * @see attributeName
+	 * @since 1.0.8
 	 */
-	public $className = NULL;
+	public $className;
 
 	/**
 	 * @var string the ActiveRecord class attribute name that should be
 	 * used to look for the attribute value being validated. Defaults to null,
 	 * meaning using the name of the attribute being validated.
 	 * @see className
+	 * @since 1.0.8
 	 */
-	public $attributeName = NULL;
+	public $attributeName;
 
 	/**
-	 * @var mixed additional query criteria. Either an array or CDbCriteria.
-	 * This will be combined with the condition that checks if the attribute
-	 * value exists in the corresponding table column.
+	 * @var array additional query criteria. This will be combined with the condition
+	 * that checks if the attribute value exists in the corresponding table column.
 	 * This array will be used to instantiate a {@link CDbCriteria} object.
+	 * @since 1.0.8
 	 */
-	public $criteria = array(
-	);
+	public $criteria = [];
+
+	/**
+	 * @var string the user-defined error message. The placeholders "{attribute}" and "{value}"
+	 * are recognized, which will be replaced with the actual attribute name and value, respectively.
+	 */
+	public $message;
+
+	/**
+	 * @var boolean whether this validation rule should be skipped if when there is already a validation
+	 * error for the current attribute. Defaults to true.
+	 * @since 1.1.1
+	 */
+	public $skipOnError = true;
+
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+					'allowEmpty',
+					'className',
+					'attributeName',
+					'criteria',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
+		]));
+	}
 
 }

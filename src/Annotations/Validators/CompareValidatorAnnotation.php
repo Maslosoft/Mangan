@@ -87,4 +87,21 @@ class CompareValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $operator = '=';
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'compareAttribute',
+			'compareValue',
+			'strict',
+			'allowEmpty',
+			'operator',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }

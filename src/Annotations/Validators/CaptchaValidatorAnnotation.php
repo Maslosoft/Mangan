@@ -49,4 +49,20 @@ class CaptchaValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $allowEmpty = false;
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+					'caseSensitive',
+					'captchaAction',
+					'allowEmpty',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
+		]));
+	}
+
 }

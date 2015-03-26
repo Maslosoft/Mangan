@@ -85,4 +85,24 @@ class NumericalValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $numberPattern = '/^\\s*[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?\\s*$/';
 
+	public function init()
+	{
+		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
+			'integerOnly',
+			'allowEmpty',
+			'max',
+			'min',
+			'tooBig',
+			'tooSmall',
+			'integerPattern',
+			'integerPattern',
+			'message',
+			'skipOnError',
+			'on',
+			'safe',
+			'enableClientValidation',
+			'except',
+			'proxy'
+		]));
+	}
 }
