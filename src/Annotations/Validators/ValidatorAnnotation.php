@@ -25,6 +25,8 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class ValidatorAnnotation extends ManganPropertyAnnotation
 {
 
+	const Ns = __NAMESPACE__;
+
 	/**
 	 * @var string the user-defined error message. Different validators may define various
 	 * placeholders in the message that are to be replaced with actual values. All validators
@@ -74,14 +76,14 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
 
