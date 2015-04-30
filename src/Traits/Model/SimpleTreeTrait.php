@@ -13,12 +13,13 @@
 
 namespace Maslosoft\Mangan\Traits\Model;
 
-use CEvent;
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Ilmatar\Components\MongoDocument;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\RawFinder;
 use Maslosoft\Mangan\Interfaces\ISimpleTree;
 use Maslosoft\Mangan\Interfaces\ITrash;
 use MongoId;
@@ -75,15 +76,15 @@ trait SimpleTreeTrait
 		Event::on($this, ITrash::EventAfterRestore, $onAfterRestore);
 	}
 
-	private function _onBeforeTrash($event)
+	private function _onBeforeTrash(ModelEvent $event)
 	{
 		$event->handled = true;
 	}
 
 	/**
-	 * @param CEvent $event
+	 * @param ModelEvent $event
 	 */
-	private function _onAfterTrash($event)
+	private function _onAfterTrash(ModelEvent $event)
 	{
 		foreach ($event->sender->children as $child)
 		{
@@ -91,22 +92,22 @@ trait SimpleTreeTrait
 		}
 	}
 
-	private function _onAfterRestore($event)
+	private function _onAfterRestore(ModelEvent $event)
 	{
 		// Root nodes does not have parentId
 		if ($this->parentId)
 		{
-			if (!$this->findByPk(new MongoId($this->parentId)))
+			if (!(new RawFinder($this))->findByPk(new MongoId($this->parentId)))
 			{
 				$this->parentId = null;
-				$this->update(['parentId'], true);
+				(new EntityManager($this))->update(['parentId']);
 			}
 		}
 	}
 
 	/**
 	 * TODO This MUST be binded only if explicitly requested
-	 * TODO This should be handled by `Related` annotation
+	 * TODO This should be handled by `DbRef` annotation
 	 * @return MongoDocument[]
 	 */
 	public function getChildren($full = false)
@@ -150,17 +151,17 @@ trait SimpleTreeTrait
 	public function moveTo($parentId, $order = [])
 	{
 		$this->parentId = $parentId;
-		(new EntityManager($this))->update(['parentId'], true);
-		$this->update(['parentId'], true);
+		(new EntityManager($this))->update(['parentId']);
+		
 		$i = 0;
 
-		$node = new self;
+		$node = new static;
 		$em = new EntityManager($node);
 		foreach ((array) $order as $id)
 		{
 			$node->_id = $id;
 			$node->order = $i++;
-			$em->update(['order'], true);
+			$em->update(['order']);
 		}
 	}
 

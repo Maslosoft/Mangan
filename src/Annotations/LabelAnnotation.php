@@ -27,9 +27,6 @@ class LabelAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		// Note: Translation cannot be done here, as it depends on language, and it is cached
-		// $this->value = Yii::t('', $this->value);
-
 		$this->_entity->label = $this->value;
 	}
 
