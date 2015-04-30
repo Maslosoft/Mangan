@@ -119,10 +119,7 @@ class UniqueValidator implements IValidator
 		}
 
 		// Same pk
-		/**
-		 * TODO investigate if it's ok to check like that
-		 */
-		if (PkManager::prepareFromModel($found)->getConditions() === PkManager::prepareFromModel($model)->getConditions())
+		if (PkManager::compare($found, $model))
 		{
 			return true;
 		}

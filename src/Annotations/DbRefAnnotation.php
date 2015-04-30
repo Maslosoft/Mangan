@@ -38,6 +38,7 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 		$refMeta->isArray = false;
 		$this->_entity->dbRef = $refMeta;
 		$this->_entity->propagateEvents = true;
+		$this->_entity->owned = true;
 		$this->_entity->decorators[] = DbRefDecorator::class;
 	}
 

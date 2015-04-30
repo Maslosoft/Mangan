@@ -18,7 +18,6 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\IOwnered;
 use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -35,10 +34,6 @@ class EmbeddedDecorator implements IDecorator
 	{
 		self::ensureClass($model, $name, $dbValue);
 		$embedded = $transformatorClass::toModel($dbValue, $model->$name, $model->$name);
-		if ($embedded instanceof IOwnered)
-		{
-			$embedded->setOwner($model);
-		}
 		$model->$name = $embedded;
 	}
 

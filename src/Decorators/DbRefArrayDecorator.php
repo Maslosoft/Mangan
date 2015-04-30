@@ -13,8 +13,10 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
 use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -43,19 +45,69 @@ class DbRefArrayDecorator implements IDecorator
 		 * If document has composite key this must be taken care too while comparision for sorting is made.
 		 */
 		$refs = [];
+		$unsortedRefs = [];
+		$pks = [];
+		$sort = [];
+
+		// Collect primary keys
 		foreach ($dbValues as $key => $dbValue)
 		{
 			$dbValue['_class'] = DbRef::class;
 			$dbRef = $transformatorClass::toModel($dbValue);
-			/* @var $dbRef DbRef */
-			$referenced = new $dbRef->class;
-			$found = (new Finder($referenced))->findByPk($dbRef->pk);
-			if(!$found)
+
+			// Collect keys separatelly for each type
+			$pks[$dbRef->class][$key] = $dbRef->pk;
+			$sort[$key] = $dbRef->pk;
+		}
+
+		// Fetch all types of db ref's en masse
+		foreach($pks as $referenced => $pkValues)
+		{
+			$found = (new Finder(new $referenced))->findAllByPk($pkValues);
+
+			if (!$found)
 			{
 				continue;
 			}
-			$refs[$key] = $found;
+			foreach($found as $document)
+			{
+				$unsortedRefs[] = $document;
+			}
 		}
+
+		// Sort as stored ref
+		foreach($sort as $key => $pk)
+		{
+			foreach($unsortedRefs as $document)
+			{
+				if(PkManager::compare($pk, $document))
+				{
+					$refs[$key] = $document;
+				}
+			}
+		}
+
+		// Merge existing
+//		if($model->$name && is_array($model->$name))
+//		{
+////			foreach($model->$name as )
+//		}
+//
+//		foreach ($dbValues as $key => $dbValue)
+//		{
+//			$dbValue['_class'] = DbRef::class;
+//			$dbRef = $transformatorClass::toModel($dbValue);
+//			/* @var $dbRef DbRef */
+//			$referenced = new $dbRef->class;
+//			$found = (new Finder($referenced))->findByPk($dbRef->pk);
+//
+//			if (!$found)
+//			{
+//				continue;
+//			}
+//
+//			$refs[$key] = $found;
+//		}
 		$model->$name = $refs;
 	}
 
@@ -63,7 +115,7 @@ class DbRefArrayDecorator implements IDecorator
 	{
 		$fieldMeta = ManganMeta::create($model)->field($name);
 		$dbValue[$name] = $fieldMeta->default;
-		
+
 		// Empty
 		if (!$model->$name)
 		{
@@ -86,6 +138,36 @@ class DbRefArrayDecorator implements IDecorator
 			}
 			$dbValue[$name][$key] = $transformatorClass::fromModel($dbRef, false);
 		}
+	}
+
+	/**
+	 * TODO: This relies on _id
+	 * @param IAnnotated[] $instances
+	 * @param mixed[] $dbValue
+	 * @param mixed[] $data
+	 * @return IAnnotated|null
+	 */
+	private function _getInstance($instances, $dbValue, $data)
+	{
+		if (!count($instances))
+		{
+			return null;
+		}
+		$map = [];
+		foreach ($dbValue as $val)
+		{
+			$id = (string) $val['_id'];
+			$map[$id] = true;
+		}
+		foreach ($instances as $instance)
+		{
+			$id = (string) $instance->_id;
+			if (isset($map[$id]) && $data['_id'] == $id && $instance instanceof $data['_class'])
+			{
+				return $instance;
+			}
+		}
+		return null;
 	}
 
 }

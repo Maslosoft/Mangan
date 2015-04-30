@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Mangan\Criteria\ConditionDecorator;
 
 /**
  * Criteria
@@ -165,6 +166,12 @@ class Criteria
 	private $_model = null;
 
 	/**
+	 * Condition decorator
+	 * @var ConditionDecorator
+	 */
+	private $cd = null;
+
+	/**
 	 * Constructor
 	 * Example criteria:
 	 *
@@ -192,10 +199,12 @@ class Criteria
 	 * );
 	 * </PRE>
 	 * @param mixed $criteria
+	 * @param IAnnotated|null Model to use for criteria decoration
 	 * @since v1.0
 	 */
-	public function __construct($criteria = null)
+	public function __construct($criteria = null, IAnnotated $model = null)
 	{
+		$this->cd = new ConditionDecorator($model);
 		if (is_array($criteria))
 		{
 			if (isset($criteria['conditions']))
@@ -390,6 +399,7 @@ class Criteria
 	public function decorateWith($model)
 	{
 		$this->_model = $model;
+		$this->cd  = new ConditionDecorator($model);
 		return $this;
 	}
 
@@ -453,10 +463,15 @@ class Criteria
 
 	/**
 	 * @since v1.0
+	 * TODO Decorate
 	 */
 	public function setSort(array $sort)
 	{
-		$this->_sort = $sort;
+		foreach($sort as $fieldName => $order)
+		{
+			$decorated = $this->cd->decorate($fieldName);
+			$this->_sort[key($decorated)] = $order;
+		}
 	}
 
 	/**
@@ -568,11 +583,13 @@ class Criteria
 	 * Each call will be groupped with previous calls
 	 * @param string $fieldName
 	 * @param integer $order
+	 * @return Criteria
 	 * @since v1.0
 	 */
 	public function sort($fieldName, $order)
 	{
-		$this->_sort[$fieldName] = intval($order);
+		$decorated = $this->cd->decorate($fieldName);
+		$this->_sort[key($decorated)] = intval($order);
 		return $this;
 	}
 
@@ -587,6 +604,9 @@ class Criteria
 	 */
 	public function addCond($fieldName, $op, $value)
 	{
+		$decorated = $this->cd->decorate($fieldName, $value);
+		$fieldName = key($decorated);
+		$value = current($decorated);
 		$op = self::$operators[$op];
 
 		if ($op == self::$operators['or'])

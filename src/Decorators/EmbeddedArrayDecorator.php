@@ -15,7 +15,6 @@ namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\IOwnered;
 use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 
 /**
@@ -38,10 +37,6 @@ class EmbeddedArrayDecorator implements IDecorator
 				// Set ensured class to $dbValue
 				$instance = $this->_getInstance($model->$name, $dbValue, $data);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance);
-				if ($embedded instanceof IOwnered)
-				{
-					$embedded->setOwner($model);
-				}
 				$docs[$key] = $embedded;
 			}
 			$model->$name = $docs;
