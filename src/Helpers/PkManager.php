@@ -203,6 +203,9 @@ class PkManager
 			return false;
 		}
 
+		/**
+		 * TODO Currently commented sanitizers. Investigate if it's nessesary.
+		 */
 		// Get sanitizer if one of params is model
 		// NOTE: if both params are models,
 		// ignore sanitizers as it's values are already sanitized by _compareNormalize()
