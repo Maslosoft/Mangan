@@ -13,7 +13,10 @@
 
 namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
+use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Sanitizers\ArraySanitizer;
 use Maslosoft\Mangan\Sanitizers\Boolean;
 use Maslosoft\Mangan\Sanitizers\Double;
@@ -29,9 +32,9 @@ use Maslosoft\Mangan\Sanitizers\String;
 class Factory
 {
 
-	public static function create(DocumentPropertyMeta $meta)
+	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta)
 	{
-		$sanitizer = self::_resolve($meta);
+		$sanitizer = self::_resolve($meta, $modelMeta);
 		if ($sanitizer)
 		{
 			if ($meta->sanitizeArray)
@@ -43,7 +46,7 @@ class Factory
 		return new PassThrough();
 	}
 
-	private static function _resolve(DocumentPropertyMeta $meta)
+	private static function _resolve(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta)
 	{
 		if ($meta->sanitizer)
 		{
@@ -54,6 +57,10 @@ class Factory
 			else
 			{
 				$className = $meta->sanitizer;
+			}
+			if(!ClassChecker::exists($className))
+			{
+				throw new ManganException(sprintf("Sanitizer class `%s` not found for field `%s` in model `%s`", $className, $meta->name, $modelMeta->name));
 			}
 			return new $className;
 		}
