@@ -13,10 +13,9 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
-use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Helpers\RawFinder;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
 use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -39,9 +38,11 @@ class DbRefArrayDecorator implements IDecorator
 			return;
 		}
 		/**
-		 * NOTE: Documents must be sorted as $dbRefs, however mongo does not guarantiee sorting.
+		 * NOTE: Documents must be sorted as $dbRefs,
+		 * however mongo does not guarantiee sorting by list of id's.
 		 * This require sorting in php.
-		 * If document has composite key this must be taken care too while comparision for sorting is made.
+		 * If document has composite key this must be taken care too
+		 * while comparision for sorting is made.
 		 */
 		$refs = [];
 		$unsortedRefs = [];
@@ -60,12 +61,13 @@ class DbRefArrayDecorator implements IDecorator
 		}
 
 		// Fetch all types of db ref's en masse
-		/**
-		 * TODO Use raw finder to update instances like in Embedded Arrays
-		 */
+		$i = 0;
+		$unsortedPks = [];
 		foreach ($pks as $referenced => $pkValues)
 		{
-			$found = (new Finder(new $referenced))->findAllByPk($pkValues);
+			// Find all referenced documents
+			$refModel = new $referenced;
+			$found = (new RawFinder($refModel))->findAllByPk($pkValues);
 
 			if (!$found)
 			{
@@ -73,43 +75,49 @@ class DbRefArrayDecorator implements IDecorator
 			}
 			foreach ($found as $document)
 			{
-				$unsortedRefs[] = $document;
+				// Collect unsorted documents
+				$unsortedRefs[$i] = $document;
+
+				// Collect pk's
+				$unsortedPks[$i] = PkManager::getFromArray($document, $refModel);
+				$i++;
+			}
+		}
+
+		// Find existing documents
+		$existing = [];
+		foreach ($model->$name as $key => $document)
+		{
+			foreach ($sort as $i => $pk)
+			{
+				if (PkManager::compare($pk, $document))
+				{
+					// Set existing document with key same as in sort
+					$existing[$i] = $document;
+				}
 			}
 		}
 
 		// Sort as stored ref
 		foreach ($sort as $key => $pk)
 		{
-			foreach ($unsortedRefs as $document)
+			foreach ($unsortedRefs as $i => $document)
 			{
-				if (PkManager::compare($pk, $document))
+				if (PkManager::compare($pk, $unsortedPks[$i]))
 				{
-					$refs[$key] = $document;
+					if (array_key_exists($key, $existing))
+					{
+						// Update existing instance
+						$refs[$key] = $transformatorClass::toModel($document, $existing[$key], $existing[$key]);
+					}
+					else
+					{
+						// Create new instance
+						$refs[$key] = $transformatorClass::toModel($document);
+					}
 				}
 			}
 		}
-
-		// Merge existing
-//		if($model->$name && is_array($model->$name))
-//		{
-////			foreach($model->$name as )
-//		}
-//
-//		foreach ($dbValues as $key => $dbValue)
-//		{
-//			$dbValue['_class'] = DbRef::class;
-//			$dbRef = $transformatorClass::toModel($dbValue);
-//			/* @var $dbRef DbRef */
-//			$referenced = new $dbRef->class;
-//			$found = (new Finder($referenced))->findByPk($dbRef->pk);
-//
-//			if (!$found)
-//			{
-//				continue;
-//			}
-//
-//			$refs[$key] = $found;
-//		}
 		$model->$name = $refs;
 	}
 
