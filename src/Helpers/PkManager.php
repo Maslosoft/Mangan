@@ -122,6 +122,31 @@ class PkManager
 	}
 
 	/**
+	 * Get pk criteria from raw array
+	 * @param mixed[] $data
+	 * @param IAnnotated $model
+	 * @return mixed[]
+	 */
+	public static function getFromArray($data, IAnnotated $model)
+	{
+		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
+		$pkValue = [];
+		$sanitizer = new Sanitizer($model);
+		if (is_array($pkField))
+		{
+			foreach ($pkField as $name)
+			{
+				$pkValue[$name] = $sanitizer->write($name, $data[$name]);
+			}
+		}
+		else
+		{
+			$pkValue = $sanitizer->write($pkField, $data[$pkField]);
+		}
+		return $pkValue;
+	}
+
+	/**
 	 * Apply pk value to model
 	 * @param IAnnotated $model
 	 * @param MongoId|mixed|mixed[] $pkValue
