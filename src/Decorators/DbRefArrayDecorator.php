@@ -39,7 +39,6 @@ class DbRefArrayDecorator implements IDecorator
 			return;
 		}
 		/**
-		 * TODO Optimize to retrieve documents with one query by Criteria $in.
 		 * NOTE: Documents must be sorted as $dbRefs, however mongo does not guarantiee sorting.
 		 * This require sorting in php.
 		 * If document has composite key this must be taken care too while comparision for sorting is made.

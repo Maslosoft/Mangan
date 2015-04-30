@@ -108,6 +108,7 @@ class Finder implements IFinder
 		if ($this->_beforeFind())
 		{
 			$criteria = $this->sm->apply($criteria);
+			$criteria->decorateWith($this->model);
 			$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
 			return $this->populateRecord($data);
 		}
@@ -126,6 +127,7 @@ class Finder implements IFinder
 	{
 
 		$pkCriteria = new Criteria($criteria);
+		$pkCriteria->decorateWith($this->model);
 		$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 		return $this->find($pkCriteria);
@@ -143,6 +145,7 @@ class Finder implements IFinder
 		if ($this->_beforeFind())
 		{
 			$criteria = $this->sm->apply($criteria);
+			$criteria->decorateWith($this->model);
 			$cursor = $this->em->getCollection()->find($criteria->getConditions());
 
 			if ($criteria->getSort() !== null)
@@ -187,6 +190,7 @@ class Finder implements IFinder
 	public function findAllByAttributes(array $attributes)
 	{
 		$criteria = new Criteria();
+		$criteria->decorateWith($this->model);
 		foreach ($attributes as $name => $value)
 		{
 			$criteria->$name('==', $value);
@@ -208,6 +212,7 @@ class Finder implements IFinder
 	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$pkCriteria = new Criteria($criteria);
+		$pkCriteria->decorateWith($this->model);
 		PkManager::prepareAll($this->model, $pkValues, $pkCriteria);
 
 		return $this->findAll($pkCriteria);
@@ -224,6 +229,7 @@ class Finder implements IFinder
 	public function findByAttributes(array $attributes)
 	{
 		$criteria = new Criteria();
+		$criteria->decorateWith($this->model);
 		foreach ($attributes as $name => $value)
 		{
 			$criteria->addCond($name, '==', $value);
@@ -241,6 +247,7 @@ class Finder implements IFinder
 	public function count($criteria = null)
 	{
 		$criteria = $this->sm->apply($criteria);
+		$criteria->decorateWith($this->model);
 		return $this->em->getCollection()->count($criteria->getConditions());
 	}
 
@@ -254,6 +261,7 @@ class Finder implements IFinder
 	public function countByAttributes(array $attributes)
 	{
 		$criteria = new Criteria;
+		$criteria->decorateWith($this->model);
 		foreach ($attributes as $name => $value)
 		{
 			$criteria->$name = $value;
@@ -295,6 +303,7 @@ class Finder implements IFinder
 	public function resetScope()
 	{
 		$this->_criteria = new Criteria();
+		$this->_criteria->decorateWith($this->model);
 		return $this;
 	}
 
