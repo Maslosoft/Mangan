@@ -70,8 +70,8 @@ class DocumentPropertyMeta extends MetaProperty
 	public $decorators = [];
 
 	/**
-	 * Sanitizer
-	 * @var ISanitizer
+	 * Sanitizer short name or class name
+	 * @var string
 	 */
 	public $sanitizer = null;
 

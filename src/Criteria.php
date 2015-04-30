@@ -592,13 +592,14 @@ class Criteria
 			}
 
 			// Decorate each value
+			$values = [];
 			foreach ($value as $val)
 			{
 				$decorated = $this->cd->decorate($fieldName, $val);
 				$fieldName = key($decorated);
-				$vals[] = current($decorated);
+				$values[] = current($decorated);
 			}
-			$value = $vals;
+			$value = $values;
 		}
 		else
 		{

@@ -60,7 +60,10 @@ class DbRefArrayDecorator implements IDecorator
 		}
 
 		// Fetch all types of db ref's en masse
-		foreach($pks as $referenced => $pkValues)
+		/**
+		 * TODO Use raw finder to update instances like in Embedded Arrays
+		 */
+		foreach ($pks as $referenced => $pkValues)
 		{
 			$found = (new Finder(new $referenced))->findAllByPk($pkValues);
 
@@ -68,18 +71,18 @@ class DbRefArrayDecorator implements IDecorator
 			{
 				continue;
 			}
-			foreach($found as $document)
+			foreach ($found as $document)
 			{
 				$unsortedRefs[] = $document;
 			}
 		}
 
 		// Sort as stored ref
-		foreach($sort as $key => $pk)
+		foreach ($sort as $key => $pk)
 		{
-			foreach($unsortedRefs as $document)
+			foreach ($unsortedRefs as $document)
 			{
-				if(PkManager::compare($pk, $document))
+				if (PkManager::compare($pk, $document))
 				{
 					$refs[$key] = $document;
 				}
@@ -137,36 +140,6 @@ class DbRefArrayDecorator implements IDecorator
 			}
 			$dbValue[$name][$key] = $transformatorClass::fromModel($dbRef, false);
 		}
-	}
-
-	/**
-	 * TODO: This relies on _id
-	 * @param IAnnotated[] $instances
-	 * @param mixed[] $dbValue
-	 * @param mixed[] $data
-	 * @return IAnnotated|null
-	 */
-	private function _getInstance($instances, $dbValue, $data)
-	{
-		if (!count($instances))
-		{
-			return null;
-		}
-		$map = [];
-		foreach ($dbValue as $val)
-		{
-			$id = (string) $val['_id'];
-			$map[$id] = true;
-		}
-		foreach ($instances as $instance)
-		{
-			$id = (string) $instance->_id;
-			if (isset($map[$id]) && $data['_id'] == $id && $instance instanceof $data['_class'])
-			{
-				return $instance;
-			}
-		}
-		return null;
 	}
 
 }
