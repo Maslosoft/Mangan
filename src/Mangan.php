@@ -21,6 +21,7 @@ use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
 use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
+use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\I18NDecorator;
@@ -81,6 +82,7 @@ class Mangan
 			EmbeddedArrayDecorator::class,
 			EmbeddedDecorator::class,
 			AliasDecorator::class,
+			OwnerDecorator::class,
 		],
 		CriteriaArray::class => [
 			I18NDecorator::class,

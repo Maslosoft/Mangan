@@ -52,6 +52,7 @@ class EmbeddedArrayAnnotation extends EmbeddedAnnotation
 		$meta->isArray = true;
 		$this->_entity->embedded = $meta;
 		$this->_entity->propagateEvents = true;
+		$this->_entity->owned = true;
 		$this->_entity->decorators[] = EmbeddedArrayDecorator::class;
 	}
 

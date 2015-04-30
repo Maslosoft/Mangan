@@ -52,6 +52,12 @@ class DocumentPropertyMeta extends MetaProperty
 	public $embedded = null;
 
 	/**
+	 * If document is owned set this to true
+	 * @var bool
+	 */
+	public $owned = false;
+
+	/**
 	 * I18N metadata
 	 * @var I18NMeta
 	 */

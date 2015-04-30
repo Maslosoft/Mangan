@@ -42,7 +42,7 @@ class ConditionDecorator
 		$this->model = new $className;
 	}
 
-	public function decorate($field, $value)
+	public function decorate($field, $value = null)
 	{
 		if(!$this->model)
 		{
