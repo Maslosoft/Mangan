@@ -50,6 +50,9 @@ class Sort extends CSort
 		if (!empty($order))
 		{
 			// i18n patch
+			/**
+			 * TODO i18n is now supported by criteria
+			 */
 			if (isset($this->model) && isset($this->model->meta))
 			{
 				$directions = [];
