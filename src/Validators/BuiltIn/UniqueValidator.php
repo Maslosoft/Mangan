@@ -92,10 +92,10 @@ class UniqueValidator implements IValidator
 	 * @param IAnnotated $model the object being validated
 	 * @param string $attribute the attribute being validated
 	 */
-	protected function isValid(IAnnotated $model, $attribute)
+	public function isValid(IAnnotated $model, $attribute)
 	{
 		$value = $model->$attribute;
-		if ($this->allowEmpty && $this->isEmpty($value))
+		if ($this->allowEmpty && empty($value))
 		{
 			return true;
 		}
@@ -113,7 +113,7 @@ class UniqueValidator implements IValidator
 		$found = $finder->find($criteria);
 
 		// Not found entirely
-		if ($found)
+		if (null === $found)
 		{
 			return true;
 		}
