@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Validators\BuiltIn;
 
+use Maslosoft\Addendum\Interfaces\IAnnotated;
 use Maslosoft\Mangan\Interfaces\Validators\IValidator;
-
 
 /**
  * BooleanValidator
@@ -23,10 +23,11 @@ use Maslosoft\Mangan\Interfaces\Validators\IValidator;
  */
 class BooleanValidator implements IValidator
 {
-	public function isValid($model, $field)
+
+	public function isValid(IAnnotated $model, $field)
 	{
 		$valid = filter_var($model->$field, FILTER_VALIDATE_BOOLEAN);
-		if(!$valid)
+		if (!$valid)
 		{
 			$this->addError('Attribute must be either true or false');
 		}
