@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Mangan\Annotations\Validators\SafeValidatorAnnotation;
+
 /**
  * This is alias for SafeValidatorAnnotation
  * @see SafeValidatorAnnotation
