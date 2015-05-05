@@ -16,21 +16,21 @@ namespace Maslosoft\Mangan\Sanitizers;
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
 
 /**
- * String
- * This sanitizer forces values to be string
+ * Bool
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class String implements ISanitizer
+class BooleanSanitizer implements ISanitizer
 {
 
 	public function read($model, $dbValue)
 	{
-		return (string) $dbValue;
+		return (bool) $dbValue;
 	}
 
 	public function write($model, $phpValue)
 	{
-		return (string) $phpValue;
+		return (bool) $phpValue;
 	}
 
 }

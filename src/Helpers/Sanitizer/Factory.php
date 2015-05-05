@@ -18,11 +18,11 @@ use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Sanitizers\ArraySanitizer;
-use Maslosoft\Mangan\Sanitizers\Boolean;
-use Maslosoft\Mangan\Sanitizers\Double;
-use Maslosoft\Mangan\Sanitizers\Integer;
+use Maslosoft\Mangan\Sanitizers\BooleanSanitizer;
+use Maslosoft\Mangan\Sanitizers\DoubleSanitizer;
+use Maslosoft\Mangan\Sanitizers\IntegerSanitizer;
 use Maslosoft\Mangan\Sanitizers\PassThrough;
-use Maslosoft\Mangan\Sanitizers\String;
+use Maslosoft\Mangan\Sanitizers\StringSanitizer;
 
 /**
  * Factory
@@ -68,13 +68,13 @@ class Factory
 		switch (gettype($meta->default))
 		{
 			case 'boolean':
-				return new Boolean;
+				return new BooleanSanitizer;
 			case 'double':
-				return new Double;
+				return new DoubleSanitizer;
 			case 'integer':
-				return new Integer;
+				return new IntegerSanitizer;
 			case 'string':
-				return new String;
+				return new StringSanitizer;
 		}
 		return false;
 	}

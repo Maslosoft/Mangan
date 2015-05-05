@@ -16,21 +16,21 @@ namespace Maslosoft\Mangan\Sanitizers;
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
 
 /**
- * Bool
- *
+ * Integer
+ * This sanitizer forces type to be integer
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Boolean implements ISanitizer
+class IntegerSanitizer implements ISanitizer
 {
 
 	public function read($model, $dbValue)
 	{
-		return (bool) $dbValue;
+		return (int) $dbValue;
 	}
 
 	public function write($model, $phpValue)
 	{
-		return (bool) $phpValue;
+		return (int) $phpValue;
 	}
 
 }

@@ -14,32 +14,23 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
-use MongoDate;
 
 /**
- * Date
- *
+ * String
+ * This sanitizer forces values to be string
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Date implements ISanitizer
+class StringSanitizer implements ISanitizer
 {
 
 	public function read($model, $dbValue)
 	{
-		if ($dbValue instanceof MongoDate)
-		{
-			return $dbValue;
-		}
-		return new MongoDate((int) $dbValue);
+		return (string) $dbValue;
 	}
 
 	public function write($model, $phpValue)
 	{
-		if ($phpValue instanceof MongoDate)
-		{
-			return $phpValue;
-		}
-		return new MongoDate((int) $phpValue);
+		return (string) $phpValue;
 	}
 
 }
