@@ -24,4 +24,24 @@ use Maslosoft\Mangan\Interfaces\Validators\IValidatorProxy;
 class DefaultProxy implements IValidator, IValidatorProxy
 {
 
+	public function addError($message)
+	{
+		
+	}
+
+	public function getValidator()
+	{
+
+	}
+
+	public function isValid(\Maslosoft\Addendum\Interfaces\IAnnotated $model, $attribute)
+	{
+		
+	}
+
+	public function setValidator(IValidator $validator)
+	{
+
+	}
+
 }
