@@ -14,23 +14,32 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use MongoDate;
 
 /**
- * Integer
- * This sanitizer forces type to be integer
+ * Date
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Integer implements ISanitizer
+class DateSanitizer implements ISanitizer
 {
 
 	public function read($model, $dbValue)
 	{
-		return (int) $dbValue;
+		if ($dbValue instanceof MongoDate)
+		{
+			return $dbValue;
+		}
+		return new MongoDate((int) $dbValue);
 	}
 
 	public function write($model, $phpValue)
 	{
-		return (int) $phpValue;
+		if ($phpValue instanceof MongoDate)
+		{
+			return $phpValue;
+		}
+		return new MongoDate((int) $phpValue);
 	}
 
 }

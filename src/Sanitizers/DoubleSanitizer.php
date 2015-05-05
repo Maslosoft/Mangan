@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Double implements ISanitizer
+class DoubleSanitizer implements ISanitizer
 {
 
 	public function read($model, $dbValue)
