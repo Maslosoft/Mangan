@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "026a1f38d43a24bc478564015f73f318",
+    "hash": "825a1ba4731a775b689445dc19364899",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -829,6 +829,53 @@
             ],
             "description": "Tests for mangan",
             "time": "2015-04-30 10:05:15"
+        },
+        {
+            "name": "maslosoft/zamm",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maslosoft/Zamm.git",
+                "reference": "adeef7e082b1fa487461ed3b086e8ee898e7d3e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maslosoft/Zamm/zipball/adeef7e082b1fa487461ed3b086e8ee898e7d3e7",
+                "reference": "adeef7e082b1fa487461ed3b086e8ee898e7d3e7",
+                "shasum": ""
+            },
+            "require": {
+                "maslosoft/addendum": "~3.0",
+                "maslosoft/embedi": "*",
+                "maslosoft/miniview": "*",
+                "symfony/console": "~2.6",
+                "symfony/finder": "~2.6"
+            },
+            "require-dev": {
+                "maslosoft/hedron": "*"
+            },
+            "bin": [
+                "zamm"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maslosoft\\Zamm\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL",
+                "Commercial"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Maselkowski",
+                    "email": "pmaselkowski@gmail.com"
+                }
+            ],
+            "description": "Zamm is a documentation tool",
+            "time": "2015-05-02 10:23:35"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2201,7 +2248,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "maslosoft/mangantest": 20
+        "maslosoft/mangantest": 20,
+        "maslosoft/zamm": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
