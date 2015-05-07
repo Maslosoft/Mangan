@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "825a1ba4731a775b689445dc19364899",
+    "hash": "0ed9a10c88cf15f794defa5b4d13f1c5",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -789,6 +789,34 @@
             "description": "PHP source code class header applier",
             "homepage": "http://maslosoft.com/hedron/",
             "time": "2015-03-19 11:05:06"
+        },
+        {
+            "name": "maslosoft/mangan-examples",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maslosoft/ManganExamples.git",
+                "reference": "1b02897bab29de32fadb9f31431b298d9fee1921"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maslosoft/ManganExamples/zipball/1b02897bab29de32fadb9f31431b298d9fee1921",
+                "reference": "1b02897bab29de32fadb9f31431b298d9fee1921",
+                "shasum": ""
+            },
+            "require-dev": {
+                "maslosoft/hedron": "*"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Peter Maselkowski",
+                    "email": "pmaselkowski@gmail.com"
+                }
+            ],
+            "description": "Examples for Mangan project",
+            "time": "2015-05-07 06:34:38"
         },
         {
             "name": "maslosoft/mangantest",
@@ -2249,7 +2277,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "maslosoft/mangantest": 20,
-        "maslosoft/zamm": 20
+        "maslosoft/zamm": 20,
+        "maslosoft/mangan-examples": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
