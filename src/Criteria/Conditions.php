@@ -11,7 +11,7 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Criteria\Conditions;
+namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\IAnnotated;
 
