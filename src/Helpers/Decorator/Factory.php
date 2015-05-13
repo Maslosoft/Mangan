@@ -58,6 +58,10 @@ class Factory
 			 * TODO This is workaround, it not should be required to do array_unique
 			 * Further investigation needed
 			 */
+			if(!is_array($meta->decorators))
+			{
+				throw new ManganException('Meta `decorators` should be array');
+			}
 			foreach (array_unique($meta->decorators) as $decoratorName)
 			{
 				if (!isset($activeDecorators[$decoratorName]))
