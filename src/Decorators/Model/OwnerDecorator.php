@@ -33,18 +33,22 @@ class OwnerDecorator implements IModelDecorator
 	 */
 	public function read($model, &$dbValues, $transformatorClass = ITransformator::class)
 	{
-		foreach(ManganMeta::create($model)->properties('owned') as $name => $metaProperty)
+		foreach (ManganMeta::create($model)->properties('owned') as $name => $metaProperty)
 		{
 			/* @var $metaProperty DocumentPropertyMeta */
-			if($model->$name instanceof IOwnered)
+			if (!isset($model->$name))
+			{
+				continue;
+			}
+			if ($model->$name instanceof IOwnered)
 			{
 				$model->$name->setOwner($model);
 			}
-			if(is_array($model->$name))
+			if (is_array($model->$name))
 			{
-				foreach($model->$name as $document)
+				foreach ($model->$name as $document)
 				{
-					if($document instanceof IOwnered)
+					if ($document instanceof IOwnered)
 					{
 						$document->setOwner($model);
 					}

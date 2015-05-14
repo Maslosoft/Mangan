@@ -56,10 +56,11 @@ class EmbeddedDecorator implements IDecorator
 
 	public static function ensureClass($model, $name, &$dbValue)
 	{
-		if (!array_key_exists('_class', $dbValue))
+		if (!is_array($dbValue) || !array_key_exists('_class', $dbValue))
 		{
 			$fieldMeta = ManganMeta::create($model)->$name;
 			/* @var $fieldMeta DocumentPropertyMeta */
+
 			$class = $fieldMeta->embedded->class;
 		}
 		else
