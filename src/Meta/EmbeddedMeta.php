@@ -13,7 +13,7 @@ namespace Maslosoft\Mangan\Meta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class EmbeddedMeta
+class EmbeddedMeta extends BaseMeta
 {
 
 	/**
