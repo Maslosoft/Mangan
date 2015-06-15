@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use CDataProvider;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\IWithCriteria;
 
 /**
