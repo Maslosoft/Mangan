@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
 use Maslosoft\Mangan\Decorators\Undecorated;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
 use Maslosoft\Mangan\Mangan;
@@ -58,7 +59,7 @@ class Factory
 			 * TODO This is workaround, it not should be required to do array_unique
 			 * Further investigation needed
 			 */
-			if(!is_array($meta->decorators))
+			if (!is_array($meta->decorators))
 			{
 				throw new ManganException('Meta `decorators` should be array');
 			}
