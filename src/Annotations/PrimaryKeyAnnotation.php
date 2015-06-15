@@ -17,9 +17,36 @@ use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
- * PrimaryKey
- * TODO Make it possible to configure compound primary key. This should be made by using annotation on multiple fields
- * FIXME This currently set *field* meta, while it should set *type* meta
+ * PrimaryKey annotation.
+ * To define simple primary key mark field with &commat;PrimaryKey annotation.
+ * To define composite primary key, use this annotation on several fields.
+ * Example of simple pk:
+ * ```
+ * class MyModel
+ * {
+ * 	/**
+ *     * &commat;PrimaryKey
+ *     * /
+ * 	public $_id = '';
+ * }
+ * ```
+ *
+ *
+ * Example of composite primary key:
+ * ```
+ * class MyModel
+ * {
+ * 	/**
+ *     * &commat;PrimaryKey
+ *     * /
+ * 	public $code = '';
+ *
+ * 	/**
+ *     * &commat;PrimaryKey
+ *     * /
+ * 	public $language = '';
+ * }
+ * ```
  * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

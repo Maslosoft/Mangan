@@ -103,6 +103,10 @@ class DataProvider extends CDataProvider
 		{
 			$this->_criteria = $this->model->getDbCriteria();
 		}
+		else
+		{
+			$this->_criteria = new Criteria();
+		}
 		if (isset($config['criteria']))
 		{
 			$this->_criteria->mergeWith($config['criteria']);
