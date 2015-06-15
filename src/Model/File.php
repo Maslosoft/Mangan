@@ -178,6 +178,7 @@ class File extends EmbeddedDocument
 		header('Cache-Control: max-age=86400');
 		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
 		echo $file->getBytes();
+		// Exit application after sending file
 		exit;
 	}
 
@@ -208,6 +209,7 @@ class File extends EmbeddedDocument
 			}
 			flush();
 		}
+		// Exit application after stream completed
 		exit;
 	}
 
