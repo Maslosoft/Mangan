@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Events;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Events\IEvent;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -96,7 +96,7 @@ class Event implements IEvent
 	 *
 	 * For more details about how to declare an event handler, please refer to [[Component::on()]].
 	 *
-	 * @param IAnnotated $model the object specifying the class-level event.
+	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
 	 * @param mixed $data the data to be passed to the event handler when the event is triggered.
@@ -106,7 +106,7 @@ class Event implements IEvent
 	 * handler list.
 	 * @see off()
 	 */
-	public static function on(IAnnotated $model, $name, $handler, $data = null, $append = true)
+	public static function on(AnnotatedInterface $model, $name, $handler, $data = null, $append = true)
 	{
 		$class = self::_getName($model);
 		if ($append || empty(self::$_events[$name][$class]))
@@ -124,14 +124,14 @@ class Event implements IEvent
 	 *
 	 * This method is the opposite of [[on()]].
 	 *
-	 * @param IAnnotated $model the object specifying the class-level event.
+	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler to be removed.
 	 * If it is null, all handlers attached to the named event will be removed.
 	 * @return boolean whether a handler is found and detached.
 	 * @see on()
 	 */
-	public static function off(IAnnotated $model, $name, $handler = null)
+	public static function off(AnnotatedInterface $model, $name, $handler = null)
 	{
 		$class = self::_getName($model);
 		if (empty(self::$_events[$name][$class]))
@@ -166,12 +166,12 @@ class Event implements IEvent
 	 * Triggers a class-level event.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param IAnnotated $model the object specifying the class-level event.
+	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 * @return bool True if event was triggered.
 	 */
-	public static function trigger(IAnnotated $model, $name, &$event = null)
+	public static function trigger(AnnotatedInterface $model, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if (empty(self::$_events[$name]))
@@ -216,12 +216,12 @@ class Event implements IEvent
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::isValid`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param IAnnotated $model the object specifying the class-level event.
+	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[ModelEvent]] object will be created.
 	 * @return bool True if event was triggered and is valid.
 	 */
-	public static function valid(IAnnotated $model, $name, $event = null)
+	public static function valid(AnnotatedInterface $model, $name, $event = null)
 	{
 		if (Event::trigger($model, $name, $event))
 		{
@@ -238,12 +238,12 @@ class Event implements IEvent
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::handled`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param IAnnotated $model the object specifying the class-level event.
+	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 * @return bool|null True if handled, false otherway, null if not triggered
 	 */
-	public static function handled(IAnnotated $model, $name, $event = null)
+	public static function handled(AnnotatedInterface $model, $name, $event = null)
 	{
 		if (Event::trigger($model, $name, $event))
 		{
@@ -255,11 +255,11 @@ class Event implements IEvent
 	/**
 	 * Check if model has event handler.
 	 * **IMPORTANT**: It does not check for propagated events
-	 * @param IAnnotated $model the object specifying the class-level event
+	 * @param AnnotatedInterface $model the object specifying the class-level event
 	 * @param string $name the event name.
 	 * @return bool True if has handler
 	 */
-	public static function hasHandler(IAnnotated $model, $name)
+	public static function hasHandler(AnnotatedInterface $model, $name)
 	{
 		$className = self::_getName($model);
 
@@ -276,21 +276,21 @@ class Event implements IEvent
 
 	/**
 	 * Get class name
-	 * @param IAnnotated $class
+	 * @param AnnotatedInterface $class
 	 * @return string
 	 */
-	private static function _getName(IAnnotated $class)
+	private static function _getName(AnnotatedInterface $class)
 	{
 		return ltrim(get_class($class), '\\');
 	}
 
 	/**
 	 * Propagate event
-	 * @param IAnnotated $class
+	 * @param AnnotatedInterface $class
 	 * @param string $name
 	 * @param ModelEvent|null $event
 	 */
-	private static function _propagate(IAnnotated $class, $name, &$event = null)
+	private static function _propagate(AnnotatedInterface $class, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if ($event && !$event->propagate())

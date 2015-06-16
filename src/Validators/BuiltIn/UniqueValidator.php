@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Validators\BuiltIn;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
@@ -89,10 +89,10 @@ class UniqueValidator implements IValidator
 	/**
 	 * Validates the attribute of the object.
 	 * If there is any error, the error message is added to the object.
-	 * @param IAnnotated $model the object being validated
+	 * @param AnnotatedInterface $model the object being validated
 	 * @param string $attribute the attribute being validated
 	 */
-	public function isValid(IAnnotated $model, $attribute)
+	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$value = $model->$attribute;
 		if ($this->allowEmpty && empty($value))

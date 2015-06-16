@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\Meta;
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Options\MetaOptions;
 use Maslosoft\Mangan\Options\ManganMetaOptions;
 
@@ -28,11 +28,11 @@ class ManganMeta extends Meta
 	/**
 	 * TODO Move this to class constructor
 	 * Create instance of Metadata specifically designed for Mangan
-	 * @param IAnnotated $component
+	 * @param AnnotatedInterface $component
 	 * @param MetaOptions $options
 	 * @return ManganMeta
 	 */
-	public static function create(IAnnotated $component, MetaOptions $options = null)
+	public static function create(AnnotatedInterface $component, MetaOptions $options = null)
 	{
 		if (null === $options)
 		{

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces\Transformators;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  *
@@ -24,11 +24,11 @@ interface ITransformator
 
 	/**
 	 * Returns the given object as an associative array
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param bool $withClassName Whenever to include special _class field
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel(IAnnotated $model, $withClassName = true);
+	public static function fromModel(AnnotatedInterface $model, $withClassName = true);
 
 	/**
 	 * Create document from array
@@ -36,8 +36,8 @@ interface ITransformator
 	 *
 	 * @param mixed[] $data
 	 * @param string $className
-	 * @param IAnnotated $instance
-	 * @return IAnnotated Model instance
+	 * @param AnnotatedInterface $instance
+	 * @return AnnotatedInterface Model instance
 	 */
-	public static function toModel($data, $className = null, IAnnotated $instance = null);
+	public static function toModel($data, $className = null, AnnotatedInterface $instance = null);
 }

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
@@ -215,9 +215,9 @@ class Mangan
 
 	/**
 	 * Get instance of Mangan configured for particular model
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 */
-	public static function fromModel(IAnnotated $model)
+	public static function fromModel(AnnotatedInterface $model)
 	{
 		$connectionId = ManganMeta::create($model)->type()->connectionId;
 		return new self($connectionId);

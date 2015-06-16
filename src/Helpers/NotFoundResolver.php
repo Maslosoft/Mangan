@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
@@ -52,7 +52,7 @@ class NotFoundResolver
 	 */
 	protected $document = null;
 
-	public function __construct(IAnnotated $document, $classMap = [])
+	public function __construct(AnnotatedInterface $document, $classMap = [])
 	{
 		$onClassNotFound = function($event)
 		{

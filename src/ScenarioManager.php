@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\IScenarios;
 
 /**
@@ -26,10 +26,10 @@ class ScenarioManager
 
 	/**
 	 * Set Scenario
-	 * @param IScenarios|IAnnotated $model
+	 * @param IScenarios|AnnotatedInterface $model
 	 * @param string $scenario
 	 */
-	public static function setScenario(IAnnotated $model, $scenario)
+	public static function setScenario(AnnotatedInterface $model, $scenario)
 	{
 		if ($model instanceof IScenarios)
 		{
@@ -39,10 +39,10 @@ class ScenarioManager
 
 	/**
 	 * Get scenario
-	 * @param IScenarios|IAnnotated $model
+	 * @param IScenarios|AnnotatedInterface $model
 	 * @return string Scenario, by default IScenarios::Insert
 	 */
-	public static function getScenario(IAnnotated $model)
+	public static function getScenario(AnnotatedInterface $model)
 	{
 		if ($model instanceof IScenarios)
 		{

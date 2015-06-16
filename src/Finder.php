@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\IEntityManager;
@@ -33,7 +33,7 @@ class Finder implements IFinder
 
 	/**
 	 * Model
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	public $model = null;
 
@@ -84,10 +84,10 @@ class Finder implements IFinder
 	 * Create model related finder.
 	 * This will create customized finder if defined in model with Finder annotation.
 	 * If no custom finder is defined this will return default Finder.
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @return IFinder
 	 */
-	public static function create(IAnnotated $model)
+	public static function create(AnnotatedInterface $model)
 	{
 		$finderClass = ManganMeta::create($model)->type()->finder? : Finder::class;
 		return new $finderClass($model);
@@ -137,7 +137,7 @@ class Finder implements IFinder
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
-	 * @return IAnnotated[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
+	 * @return AnnotatedInterface[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAll($criteria = null)
@@ -184,7 +184,7 @@ class Finder implements IFinder
 	 * Finds all documents with the specified attributes.
 	 *
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return IAnnotated[]|Cursor - Array or cursor of Documents
+	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
 	public function findAllByAttributes(array $attributes)
@@ -206,7 +206,7 @@ class Finder implements IFinder
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pkValues primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
-	 * @return IAnnotated[]|Cursor - Array or cursor of Documents
+	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
 	public function findAllByPk($pkValues, $criteria = null)
@@ -311,7 +311,7 @@ class Finder implements IFinder
 	 * Creates an model with the given attributes.
 	 * This method is internally used by the find methods.
 	 * @param mixed[] $data attribute values (column name=>column value)
-	 * @return IAnnotated|null the newly created document. The class of the object is the same as the model class.
+	 * @return AnnotatedInterface|null the newly created document. The class of the object is the same as the model class.
 	 * Null is returned if the input data is false.
 	 * @since v1.0
 	 */
@@ -334,7 +334,7 @@ class Finder implements IFinder
 	 * Creates a list of documents based on the input data.
 	 * This method is internally used by the find methods.
 	 * @param MongoCursor $cursor Results found to populate active records.
-	 * @return IAnnotated[] array list of active records.
+	 * @return AnnotatedInterface[] array list of active records.
 	 * @since v1.0
 	 */
 	protected function populateRecords(MongoCursor $cursor)

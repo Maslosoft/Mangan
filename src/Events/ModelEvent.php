@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Events;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  * ModelEvent
@@ -37,7 +37,7 @@ class ModelEvent
 
 	/**
 	 * Event sender
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	public $sender = null;
 
@@ -67,10 +67,10 @@ class ModelEvent
 
 	/**
 	 * Event constructor
-	 * @param IAnnotated $sender
+	 * @param AnnotatedInterface $sender
 	 * @param mixed[] $params
 	 */
-	public function __construct(IAnnotated $sender = null, $params = null)
+	public function __construct(AnnotatedInterface $sender = null, $params = null)
 	{
 		$this->sender = $sender;
 		$this->params = $params;

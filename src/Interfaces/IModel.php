@@ -13,13 +13,13 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IModel extends IAnnotated
+interface IModel extends AnnotatedInterface
 {
 	
 }

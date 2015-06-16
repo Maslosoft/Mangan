@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Criteria;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 
 /**
@@ -28,13 +28,13 @@ class ConditionDecorator
 
 	/**
 	 * Model instance
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	private $model = null;
 
-	public function __construct(IAnnotated $model = null)
+	public function __construct(AnnotatedInterface $model = null)
 	{
-		if(!$model || !$model instanceof IAnnotated)
+		if(!$model || !$model instanceof AnnotatedInterface)
 		{
 			return;
 		}

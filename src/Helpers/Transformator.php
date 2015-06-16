@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
@@ -54,10 +54,10 @@ abstract class Transformator
 
 	/**
 	 * Class constructor
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param string $transformatorClass
 	 */
-	public function __construct(IAnnotated $model, $transformatorClass = ITransformator::class)
+	public function __construct(AnnotatedInterface $model, $transformatorClass = ITransformator::class)
 	{
 		$this->_meta = ManganMeta::create($model);
 		$this->_transformatorClass = $transformatorClass;
@@ -75,7 +75,7 @@ abstract class Transformator
 
 	/**
 	 * Get model isntance
-	 * @return IAnnotated
+	 * @return AnnotatedInterface
 	 */
 	public function getModel()
 	{

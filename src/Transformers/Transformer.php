@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
@@ -31,11 +31,11 @@ abstract class Transformer
 
 	/**
 	 * Returns the given object as an associative array
-	 * @param IAnnotated|object $model
+	 * @param AnnotatedInterface|object $model
 	 * @param string[] $fields Fields to transform
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel(IAnnotated $model, $fields = [])
+	public static function fromModel(AnnotatedInterface $model, $fields = [])
 	{
 		$meta = ManganMeta::create($model);
 		$calledClass = get_called_class();
@@ -66,11 +66,11 @@ abstract class Transformer
 	 * TODO Enforce $className if collection is homogenous
 	 * @param mixed[] $data
 	 * @param string|object $className
-	 * @param IAnnotated $instance
-	 * @return IAnnotated
+	 * @param AnnotatedInterface $instance
+	 * @return AnnotatedInterface
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, IAnnotated $instance = null)
+	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
 	{
 		if (!$data)
 		{

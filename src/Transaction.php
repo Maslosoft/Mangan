@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use Exception;
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\TransactionException;
 use Maslosoft\Mangan\Helpers\CommandProxy;
 
@@ -53,10 +53,10 @@ class Transaction
 
 	/**
 	 * Begin new transaction
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param enum $isolation
 	 */
-	public function __construct(IAnnotated $model, $isolation = self::IsolationMVCC)
+	public function __construct(AnnotatedInterface $model, $isolation = self::IsolationMVCC)
 	{
 		if (!self::$isAvailable)
 		{

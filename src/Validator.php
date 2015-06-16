@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\IValidatable;
 
 /**
@@ -29,11 +29,11 @@ class Validator implements IValidatable
 
 	/**
 	 * Model instance
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	private $_model = null;
 
-	public function __construct(IAnnotated $model)
+	public function __construct(AnnotatedInterface $model)
 	{
 		$this->_model = $model;
 	}

@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan;
 
 use Countable;
 use Iterator;
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Transformers\RawArray;
 use MongoCursor;
 
@@ -40,7 +40,7 @@ class Cursor implements Iterator, Countable
 	protected $_cursor;
 
 	/**
-	 * @var IAnnotated $_model the model used for instantiating objects
+	 * @var AnnotatedInterface $_model the model used for instantiating objects
 	 * @since v1.3.4
 	 */
 	protected $_model;
@@ -49,10 +49,10 @@ class Cursor implements Iterator, Countable
 	 * Construct a new Cursor
 	 *
 	 * @param MongoCursor $cursor the cursor returned by the query
-	 * @param IAnnotated $model the model for instantiating objects
+	 * @param AnnotatedInterface $model the model for instantiating objects
 	 * @since v1.3.4
 	 */
-	public function __construct(MongoCursor $cursor, IAnnotated $model)
+	public function __construct(MongoCursor $cursor, AnnotatedInterface $model)
 	{
 		$this->_cursor = $cursor;
 		$this->_model = $model;

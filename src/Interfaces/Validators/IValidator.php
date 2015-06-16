@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces\Validators;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  *
@@ -24,5 +24,5 @@ interface IValidator
 
 	public function addError($message);
 
-	public function isValid(IAnnotated $model, $attribute);
+	public function isValid(AnnotatedInterface $model, $attribute);
 }

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\CriteriaException;
 use Maslosoft\Mangan\Helpers\PkManager;
@@ -31,7 +31,7 @@ class PkManager
 
 	/**
 	 * Prepare multi pk criteria
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param mixed[] $pkValues
 	 * @param Criteria|null $criteria
 	 */
@@ -59,12 +59,12 @@ class PkManager
 
 	/**
 	 * Prepare pk criteria from user provided data
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param mixed|mixed[] $pkValue
 	 * @return Criteria
 	 * @throws CriteriaException
 	 */
-	public static function prepare(IAnnotated $model, $pkValue)
+	public static function prepare(AnnotatedInterface $model, $pkValue)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$criteria = new Criteria();
@@ -89,20 +89,20 @@ class PkManager
 
 	/**
 	 * Create pk criteria from model data
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @return Criteria
 	 */
-	public static function prepareFromModel(IAnnotated $model)
+	public static function prepareFromModel(AnnotatedInterface $model)
 	{
 		return self::prepare($model, self::getFromModel($model));
 	}
 
 	/**
 	 * Get primary key from model
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @return MongoId|mixed|mixed[]
 	 */
-	public static function getFromModel(IAnnotated $model)
+	public static function getFromModel(AnnotatedInterface $model)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$pkValue = [];
@@ -124,10 +124,10 @@ class PkManager
 	/**
 	 * Get pk criteria from raw array
 	 * @param mixed[] $data
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @return mixed[]
 	 */
-	public static function getFromArray($data, IAnnotated $model)
+	public static function getFromArray($data, AnnotatedInterface $model)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$pkValue = [];
@@ -148,12 +148,12 @@ class PkManager
 
 	/**
 	 * Apply pk value to model
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param MongoId|mixed|mixed[] $pkValue
 	 * @return type
 	 * @throws CriteriaException
 	 */
-	public static function applyToModel(IAnnotated $model, $pkValue)
+	public static function applyToModel(AnnotatedInterface $model, $pkValue)
 	{
 		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
 		$sanitizer = new Sanitizer($model);
@@ -194,8 +194,8 @@ class PkManager
 	 *
 	 * </code>
 	 * </pre>
-	 * @param IAnnotated|mixed[] $source
-	 * @param IAnnotated|mixed[] $target
+	 * @param AnnotatedInterface|mixed[] $source
+	 * @param AnnotatedInterface|mixed[] $target
 	 * @return boolean true if pk's points to same document
 	 */
 	public static function compare($source, $target)
@@ -203,7 +203,7 @@ class PkManager
 		$models = false;
 
 		// Check if both params are models
-		if ($source instanceof IAnnotated && $target instanceof IAnnotated)
+		if ($source instanceof AnnotatedInterface && $target instanceof AnnotatedInterface)
 		{
 			// If different types return false
 			if (!$source instanceof $target)
@@ -236,11 +236,11 @@ class PkManager
 		// ignore sanitizers as it's values are already sanitized by _compareNormalize()
 //		if ($models)
 //		{
-//			if ($source instanceof IAnnotated)
+//			if ($source instanceof AnnotatedInterface)
 //			{
 //				$sanitizer = new Sanitizer($source);
 //			}
-//			elseif ($target instanceof IAnnotated)
+//			elseif ($target instanceof AnnotatedInterface)
 //			{
 //				$sanitizer = new Sanitizer($target);
 //			}
@@ -281,7 +281,7 @@ class PkManager
 
 	private static function _compareNormalize($value)
 	{
-		if ($value instanceof IAnnotated)
+		if ($value instanceof AnnotatedInterface)
 		{
 			$value = self::getFromModel($value);
 		}
@@ -298,12 +298,12 @@ class PkManager
 
 	/**
 	 * Create pk criteria for single field
-	 * @param IAnnotated $model Model instance
+	 * @param AnnotatedInterface $model Model instance
 	 * @param string $name
 	 * @param mixed $value
 	 * @param Criteria $criteria
 	 */
-	private static function _prepareField(IAnnotated $model, $name, $value, Criteria &$criteria)
+	private static function _prepareField(AnnotatedInterface $model, $name, $value, Criteria &$criteria)
 	{
 		$sanitizer = new Sanitizer($model);
 		$criteria->addCond($name, '==', $sanitizer->write($name, $value));

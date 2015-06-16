@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Traits\Model;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Ilmatar\Components\MongoDocument;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
@@ -37,7 +37,7 @@ trait SimpleTreeTrait
 
 	/**
 	 * @DbRefArray
-	 * @var IAnnotated[]
+	 * @var AnnotatedInterface[]
 	 */
 	public $children = null;
 
