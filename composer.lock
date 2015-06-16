@@ -921,12 +921,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "f3dfef3f02e9020adc4ffd0c5e4c3918b9cbc72a"
+                "reference": "7d86767ad0f5cb1812fb095527aa9083405e177c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/f3dfef3f02e9020adc4ffd0c5e4c3918b9cbc72a",
-                "reference": "f3dfef3f02e9020adc4ffd0c5e4c3918b9cbc72a",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/7d86767ad0f5cb1812fb095527aa9083405e177c",
+                "reference": "7d86767ad0f5cb1812fb095527aa9083405e177c",
                 "shasum": ""
             },
             "require": {
@@ -953,7 +953,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-06-16 09:29:46"
+            "time": "2015-06-16 11:10:14"
         },
         {
             "name": "maslosoft/zamm",
