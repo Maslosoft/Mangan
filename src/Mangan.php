@@ -25,6 +25,7 @@ use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\I18NDecorator;
+use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
@@ -263,7 +264,7 @@ class Mangan
 					$options[$name] = $this->$name;
 				}
 			}
-			
+
 			$this->_cs->mongoClient = new MongoClient($this->connectionString, $options);
 
 			return $this->_cs->mongoClient;
@@ -296,7 +297,7 @@ class Mangan
 		{
 			if (!$this->dbName)
 			{
-				throw new ManganException(sprintf("Database name is required for connectionId: `%s`", $this->connectionId));
+				throw new ManganException(sprintf("Database name is required for connectionId: `%s`", $this->connectionId), ExceptionCodeInterface::RequireDbName);
 			}
 			try
 			{
@@ -304,7 +305,7 @@ class Mangan
 			}
 			catch (MongoException $e)
 			{
-				throw new ManganException(sprintf('Invalid database name: `%s`, for connectionId: `%s`', $this->dbName, $this->connectionId));
+				throw new ManganException(sprintf('Could not select db name: `%s`, for connectionId: `%s` - %s', $this->dbName, $this->connectionId, $e->getMessage()), ExceptionCodeInterface::CouldNotSelect, $e);
 			}
 			return $this->_cs->mongoDB = $db;
 		}
