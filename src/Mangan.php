@@ -190,6 +190,12 @@ class Mangan
 	 */
 	private $_di = null;
 
+	/**
+	 * Version number holder
+	 * @var string
+	 */
+	private static $_version = null;
+
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
 		$this->_di = new EmbeDi($connectionId);
@@ -200,6 +206,19 @@ class Mangan
 		$this->connectionId = $connectionId;
 		$this->_di->configure($this);
 		$this->_cs = new ConnectionStorage($this, $connectionId);
+	}
+
+	/**
+	 * Get mangan version
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		if (null === self::$_version)
+		{
+			self::$_version = require __DIR__ . '/version.php';
+		}
+		return self::$_version;
 	}
 
 	/**
