@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 
 /**
@@ -134,7 +134,7 @@ class Criteria
 	/**
 	 * Model to use for decorators and sanitizer when creating conditions.
 	 * If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	private $_model = null;
 
@@ -172,10 +172,10 @@ class Criteria
 	 * );
 	 * </PRE>
 	 * @param mixed $criteria
-	 * @param IAnnotated|null Model to use for criteria decoration
+	 * @param AnnotatedInterface|null Model to use for criteria decoration
 	 * @since v1.0
 	 */
-	public function __construct($criteria = null, IAnnotated $model = null)
+	public function __construct($criteria = null, AnnotatedInterface $model = null)
 	{
 		$this->cd = new ConditionDecorator($model);
 		if (is_array($criteria))
@@ -366,7 +366,7 @@ class Criteria
 	/**
 	 * Decorate and sanitize criteria with provided model.
 	 * 
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @return Criteria
 	 */
 	public function decorateWith($model)

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Model\DbRef;
@@ -29,11 +29,11 @@ class DbRefManager
 
 	/**
 	 * Extract minimum set of data to create db reference
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @param string $field
-	 * @param IAnnotated $referenced
+	 * @param AnnotatedInterface $referenced
 	 */
-	public static function extractRef(IAnnotated $model, $field, IAnnotated $referenced = null)
+	public static function extractRef(AnnotatedInterface $model, $field, AnnotatedInterface $referenced = null)
 	{
 		if (null === $referenced)
 		{
@@ -47,10 +47,10 @@ class DbRefManager
 
 	/**
 	 * Save referenced model
-	 * @param IAnnotated $referenced
+	 * @param AnnotatedInterface $referenced
 	 * @param DbRef $dbRef
 	 */
-	public static function save(IAnnotated $referenced, DbRef $dbRef)
+	public static function save(AnnotatedInterface $referenced, DbRef $dbRef)
 	{
 		// Ensure ref is same as referenced model
 		PkManager::applyToModel($referenced, $dbRef->pk);

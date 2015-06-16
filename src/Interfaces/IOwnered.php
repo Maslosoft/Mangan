@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  *
@@ -25,19 +25,19 @@ interface IOwnered
 	/**
 	 * Set class owner
 
-	 * @return IAnnotated Owner
+	 * @return AnnotatedInterface Owner
 	 */
 	public function getOwner();
 
 	/**
 	 * Get class owner
-	 * @param IAnnotated|null $owner
+	 * @param AnnotatedInterface|null $owner
 	 */
-	public function setOwner(IAnnotated $owner = null);
+	public function setOwner(AnnotatedInterface $owner = null);
 
 	/**
 	 * Get document root
-	 * @return IAnnotated Root document
+	 * @return AnnotatedInterface Root document
 	 */
 	public function getRoot();
 }

@@ -34,7 +34,7 @@ class DefaultProxy implements IValidator, IValidatorProxy
 
 	}
 
-	public function isValid(\Maslosoft\Addendum\Interfaces\IAnnotated $model, $attribute)
+	public function isValid(\Maslosoft\Addendum\Interfaces\AnnotatedInterface $model, $attribute)
 	{
 		
 	}

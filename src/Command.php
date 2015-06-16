@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\CommandException;
 use Maslosoft\Mangan\Exceptions\CommandNotFoundException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
@@ -31,7 +31,7 @@ class Command
 
 	/**
 	 *
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	private $model = null;
 
@@ -47,7 +47,7 @@ class Command
 	 */
 	private $meta = null;
 
-	public function __construct(IAnnotated $model = null)
+	public function __construct(AnnotatedInterface $model = null)
 	{
 		$this->model = $model;
 		if (!$model)

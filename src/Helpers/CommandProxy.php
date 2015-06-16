@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Command;
 use Maslosoft\Mangan\Exceptions\CommandNotFoundException;
 use Maslosoft\Mangan\Mangan;
@@ -34,7 +34,7 @@ class CommandProxy extends Command
 	 */
 	private $available = null;
 
-	public function __construct(IAnnotated $model = null)
+	public function __construct(AnnotatedInterface $model = null)
 	{
 		parent::__construct($model);
 		$this->available = new CommandProxyStorage($this, Mangan::fromModel($model)->connectionId);

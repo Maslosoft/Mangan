@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
@@ -44,7 +44,7 @@ class EntityManager implements IEntityManager
 
 	/**
 	 * Model
-	 * @var IAnnotated
+	 * @var AnnotatedInterface
 	 */
 	public $model = null;
 
@@ -98,10 +98,10 @@ class EntityManager implements IEntityManager
 
 	/**
 	 * Create entity manager
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @throws ManganException
 	 */
-	public function __construct(IAnnotated $model)
+	public function __construct(AnnotatedInterface $model)
 	{
 		$this->model = $model;
 		$this->sm = new ScopeManager($model);
@@ -158,7 +158,7 @@ class EntityManager implements IEntityManager
 	 * Create model related entity manager.
 	 * This will create customized entity manger if defined in model with EntityManager annotation.
 	 * If no custom entity manager is defined this will return default EntityManager.
-	 * @param IAnnotated $model
+	 * @param AnnotatedInterface $model
 	 * @return IEntityManager
 	 */
 	public static function create($model)
@@ -183,7 +183,7 @@ class EntityManager implements IEntityManager
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
 	 * and its {@link scenario} property will be set to be 'update'.
-	 * @param IAnnotated $model if want to insert different model than set in constructor
+	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws MongoException if the record is not new
 	 * @throws MongoException on fail of insert or insert of empty document
@@ -191,7 +191,7 @@ class EntityManager implements IEntityManager
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function insert(IAnnotated $model = null)
+	public function insert(AnnotatedInterface $model = null)
 	{
 		$model = $model? : $this->model;
 		if ($this->_beforeSave($model))
@@ -307,7 +307,7 @@ class EntityManager implements IEntityManager
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param IAnnotated $model if want to insert different model than set in constructor
+	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */

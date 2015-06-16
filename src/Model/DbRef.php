@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  * DbRef
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRef implements IAnnotated
+class DbRef implements AnnotatedInterface
 {
 
 	/**

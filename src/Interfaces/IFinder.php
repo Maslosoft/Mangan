@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Document;
@@ -65,7 +65,7 @@ interface IFinder
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
-	 * @return IAnnotated[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
+	 * @return AnnotatedInterface[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
 	public function findAll($criteria = null);
@@ -74,7 +74,7 @@ interface IFinder
 	 * Finds all documents with the specified attributes.
 	 *
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return IAnnotated[]|Cursor - Array or cursor of Documents
+	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
 	public function findAllByAttributes(array $attributes);
@@ -86,7 +86,7 @@ interface IFinder
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
-	 * @return IAnnotated[]|Cursor - Array or cursor of Documents
+	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
 	public function findAllByPk($pk, $criteria = null);

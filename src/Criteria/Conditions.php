@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Criteria;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  * Conditions

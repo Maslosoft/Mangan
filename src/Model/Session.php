@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use MongoDate;
 use MongoId;
 
@@ -21,7 +21,7 @@ use MongoId;
  * Session model. This can be used to display session data.
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Session implements IAnnotated
+class Session implements AnnotatedInterface
 {
 
 	/**

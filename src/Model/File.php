@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Model;
 
 use Exception;
 use finfo;
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
@@ -77,7 +77,7 @@ class File extends EmbeddedDocument
 		$this->_db = $mangan->getDbInstance();
 	}
 
-	public function setOwner(IAnnotated $owner = null)
+	public function setOwner(AnnotatedInterface $owner = null)
 	{
 		parent::setOwner($owner);
 		$root = $this->getRoot();

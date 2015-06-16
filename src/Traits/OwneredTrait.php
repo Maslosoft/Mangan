@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Traits;
 
-use Maslosoft\Addendum\Interfaces\IAnnotated;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\IOwnered;
 
 /**
@@ -26,14 +26,14 @@ trait OwneredTrait
 
 	/**
 	 * Owner reference or null if it's root object
-	 * @var IAnnotated|null
+	 * @var AnnotatedInterface|null
 	 */
 	private $_owner = null;
 
 	/**
 	 * Set class owner
 
-	 * @return IAnnotated Owner
+	 * @return AnnotatedInterface Owner
 	 */
 	public function getOwner()
 	{
@@ -42,7 +42,7 @@ trait OwneredTrait
 
 	/**
 	 * Get document root
-	 * @return IAnnotated Root document
+	 * @return AnnotatedInterface Root document
 	 */
 	public function getRoot()
 	{
@@ -58,9 +58,9 @@ trait OwneredTrait
 
 	/**
 	 * Get class owner
-	 * @param IAnnotated|null $owner
+	 * @param AnnotatedInterface|null $owner
 	 */
-	public function setOwner(IAnnotated $owner = null)
+	public function setOwner(AnnotatedInterface $owner = null)
 	{
 		$this->_owner = $owner;
 	}
