@@ -43,7 +43,7 @@ trait I18NAbleTrait
 
 	/**
 	 *
-	 * @return type
+	 * @return string[]
 	 * @Ignore
 	 */
 	public function getLanguages()
