@@ -25,11 +25,21 @@ trait ScenariosTrait
 
 	private $_scenario = IScenarios::Insert;
 
+	/**
+	 *
+	 * @return string
+	 * @Ignore
+	 */
 	public function getScenario()
 	{
 		return $this->_scenario;
 	}
 
+	/**
+	 *
+	 * @param string $scenario
+	 * @Ignore
+	 */
 	public function setScenario($scenario)
 	{
 		$this->_scenario = $scenario;

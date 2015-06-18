@@ -47,6 +47,9 @@ trait SimpleTreeTrait
 	 */
 	public $order = 1000000;
 
+	/**
+	 * @Ignore
+	 */
 	public function init()
 	{
 		/**
@@ -109,6 +112,7 @@ trait SimpleTreeTrait
 	 * TODO This MUST be binded only if explicitly requested
 	 * TODO This should be handled by `DbRef` annotation
 	 * @return MongoDocument[]
+	 * @Ignore
 	 */
 	public function getChildren($full = false)
 	{
@@ -138,21 +142,25 @@ trait SimpleTreeTrait
 		return $children;
 	}
 
+	/**
+	 * @Ignore
+	 */
 	public function setChildren()
 	{
-		
+
 	}
 
 	/**
 	 * Move to a new parent
 	 * @param string|MongoId $parentId
 	 * @param string[]|MongoId[] $order
+	 * @Ignore
 	 */
 	public function moveTo($parentId, $order = [])
 	{
 		$this->parentId = $parentId;
 		(new EntityManager($this))->update(['parentId']);
-		
+
 		$i = 0;
 
 		$node = new static;

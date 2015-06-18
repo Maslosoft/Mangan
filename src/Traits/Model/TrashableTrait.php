@@ -33,6 +33,11 @@ use MongoId;
 trait TrashableTrait
 {
 
+	/**
+	 * Move to trash
+	 * @return boolean
+	 * @Ignore
+	 */
 	public function trash()
 	{
 		if (Event::hasHandler($this, ITrash::EventBeforeTrash))
@@ -68,6 +73,7 @@ trait TrashableTrait
 	 * Restore trashed item
 	 * @return boolean
 	 * @throws Exception
+	 * @Ignore
 	 */
 	public function restore()
 	{

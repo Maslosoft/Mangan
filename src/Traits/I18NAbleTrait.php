@@ -34,12 +34,18 @@ trait I18NAbleTrait
 	/**
 	 * Get language code
 	 * @return string Language code
+	 * @Ignore
 	 */
 	public function getLang()
 	{
 		return $this->_lang? : $this->getDefaultLanguage();
 	}
 
+	/**
+	 *
+	 * @return type
+	 * @Ignore
+	 */
 	public function getLanguages()
 	{
 		return $this->_languages;
@@ -49,6 +55,7 @@ trait I18NAbleTrait
 	 * Get i18n values with all languages.
 	 * This method must return value set by `setRawI18N`
 	 * @return mixed[] Associative array of language values
+	 * @Ignore
 	 */
 	public function getRawI18N()
 	{
@@ -64,6 +71,7 @@ trait I18NAbleTrait
 	/**
 	 * Set language code
 	 * @param string $code
+	 * @Ignore
 	 */
 	public function setLang($code)
 	{
@@ -86,6 +94,12 @@ trait I18NAbleTrait
 		Event::trigger($this, I18NAble::EventAfterLangChange, $event);
 	}
 
+	/**
+	 *
+	 * @param type $languages
+	 * @return void
+	 * @Ignore
+	 */
 	public function setLanguages($languages)
 	{
 		$event = new ModelEvent($this);
@@ -102,17 +116,28 @@ trait I18NAbleTrait
 	 * Set i18n values in all languages.
 	 * This method must keep `$values` for further use, by method `getRawI18N`.
 	 * @param mixed[] $values
+	 * @Ignore
 	 */
 	public function setRawI18N($values)
 	{
 		$this->_rawI18N = $values;
 	}
 
+	/**
+	 *
+	 * @return string
+	 * @Ignore
+	 */
 	public function getDefaultLanguage()
 	{
 		return $this->_defaultLanguage? : 'en';
 	}
 
+	/**
+	 *
+	 * @param string $language
+	 * @Ignore
+	 */
 	public function setDefaultLanguage($language)
 	{
 		$this->_defaultLanguage = $language;

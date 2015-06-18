@@ -29,6 +29,11 @@ trait ValidatableTrait
 	 */
 	private $_validator = null;
 
+	/**
+	 *
+	 * @return string[]
+	 * @Ignore
+	 */
 	public function getErrors()
 	{
 		if ($this->_validator)
@@ -38,6 +43,11 @@ trait ValidatableTrait
 		return [];
 	}
 
+	/**
+	 *
+	 * @return bool
+	 * @Ignore
+	 */
 	public function validate()
 	{
 		$this->_validator = new \Maslosoft\Mangan\Validator($this);

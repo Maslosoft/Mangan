@@ -37,6 +37,7 @@ trait WithCriteriaTrait
 	 * This criteria is mainly used by {@link scopes named scope} feature to accumulate
 	 * different criteria specifications.
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function getDbCriteria($createIfNull = true)
 	{
@@ -55,6 +56,7 @@ trait WithCriteriaTrait
 	 *
 	 * @param Criteria|array $criteria
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function setDbCriteria($criteria)
 	{

@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Traits\Model;
 
+use Maslosoft\Mangan\Sanitizers\MongoStringId;
 use MongoId;
 
 /**
@@ -25,7 +26,8 @@ trait WithParentTrait
 
 	/**
 	 * @SafeValidator
-	 * @Sanitizer('MongoStringId')
+	 * @Sanitizer(MongoStringId)
+	 * @see MongoStringId
 	 * @var MongoId
 	 */
 	public $parentId = null;
