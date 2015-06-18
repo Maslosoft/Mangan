@@ -32,6 +32,7 @@ trait CollectionNameTrait
 	 * use {@see setCollection()}.
 	 * @return string collection name
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function getCollectionName()
 	{

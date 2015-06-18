@@ -58,6 +58,7 @@ trait EntityManagerTrait
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function save($runValidation = true, $attributes = null)
 	{
@@ -78,6 +79,7 @@ trait EntityManagerTrait
 	 * @throws MongoException on fail of insert, when safe flag is set to true
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function insert(AnnotatedInterface $model = null)
 	{
@@ -95,6 +97,7 @@ trait EntityManagerTrait
 	 * @throws MongoException on fail of update
 	 * @throws MongoException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function update(array $attributes = null)
 	{
@@ -108,6 +111,7 @@ trait EntityManagerTrait
 	 * @param Modifier $modifier updating rules to apply
 	 * @param Criteria $criteria condition to limit updating rules
 	 * @return boolean|mixed[]
+	 * @Ignore
 	 */
 	public function updateAll(Modifier $modifier, Criteria $criteria = null)
 	{
@@ -119,6 +123,7 @@ trait EntityManagerTrait
 	 * @return boolean whether the deletion is successful.
 	 * @throws MongoException if the record is new
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function delete()
 	{
@@ -131,6 +136,7 @@ trait EntityManagerTrait
 	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function deleteByPk($pkValue, $criteria = null)
 	{
@@ -143,6 +149,7 @@ trait EntityManagerTrait
 	 * @param mixed[] $pkValues Primary keys array
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null)
 	{
@@ -154,6 +161,7 @@ trait EntityManagerTrait
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function deleteAll($criteria = null)
 	{
@@ -166,6 +174,7 @@ trait EntityManagerTrait
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|Criteria $criteria query criteria.
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function deleteOne($criteria = null)
 	{
@@ -176,6 +185,7 @@ trait EntityManagerTrait
 	 * Repopulates this active record with the latest data.
 	 * @return boolean whether the row still exists in the database. If true, the latest data will be populated to this active record.
 	 * @since v1.0
+	 * @Ignore
 	 */
 	public function refresh()
 	{
@@ -185,6 +195,7 @@ trait EntityManagerTrait
 	/**
 	 *
 	 * @return MongoCollection
+	 * @Ignore
 	 */
 	public function getCollection()
 	{
