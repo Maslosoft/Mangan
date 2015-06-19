@@ -38,6 +38,12 @@ class Finder implements FinderInterface
 	public $model = null;
 
 	/**
+	 * Mangan instance
+	 * @var Mangan
+	 */
+	private $mn = null;
+
+	/**
 	 * Entity manager instance
 	 * @var EntityManagerInterface
 	 */
@@ -59,7 +65,7 @@ class Finder implements FinderInterface
 	 * Whenever to use corsors
 	 * @var bool
 	 */
-	private $_useCursor;
+	private $_useCursor = false;
 
 	/**
 	 * Constructor
@@ -71,6 +77,8 @@ class Finder implements FinderInterface
 		$this->model = $model;
 		$this->em = $em? : EntityManager::create($model);
 		$this->sm = new ScopeManager($model);
+		$this->mn = Mangan::fromModel($model);
+		$this->withCursor($this->mn->useCursor);
 	}
 
 	/**
@@ -278,12 +286,12 @@ class Finder implements FinderInterface
 
 	/**
 	 * Whenever to use cursor
-	 * @param type $useCursor
+	 * @param bool $useCursor
 	 * @return FinderInterface
 	 */
 	public function withCursor($useCursor = true)
 	{
-		$this->_useCursor = true;
+		$this->_useCursor = $useCursor;
 		return $this;
 	}
 
