@@ -228,36 +228,11 @@ class PkManager
 			return false;
 		}
 
-		/**
-		 * TODO Currently commented sanitizers. Investigate if it's nessesary.
-		 */
-		// Get sanitizer if one of params is model
-		// NOTE: if both params are models,
-		// ignore sanitizers as it's values are already sanitized by _compareNormalize()
-//		if ($models)
-//		{
-//			if ($source instanceof AnnotatedInterface)
-//			{
-//				$sanitizer = new Sanitizer($source);
-//			}
-//			elseif ($target instanceof AnnotatedInterface)
-//			{
-//				$sanitizer = new Sanitizer($target);
-//			}
-//		}
-
 		// Compare values
 		foreach ($src as $name => $srcVal)
 		{
 			// This is safe as keys are checked previously
 			$trgVal = $trg[$name];
-
-			// Apply sanitizers
-//			if ($sanitizer)
-//			{
-//				$srcVal = $sanitizer->read($name, $srcVal);
-//				$trgVal = $sanitizer->read($name, $trgVal);
-//			}
 
 			// Special case for mongo id
 			if ($srcVal instanceof \MongoId || $trgVal instanceof \MongoId)
@@ -287,7 +262,7 @@ class PkManager
 		}
 
 		// Simple pk
-		if(!is_array($value))
+		if (!is_array($value))
 		{
 			return [$value];
 		}
