@@ -22,9 +22,9 @@ use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
 use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
+use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
-use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -43,6 +43,9 @@ use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
 use MongoClient;
 use MongoDB;
 use MongoException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * MongoDB
@@ -52,9 +55,11 @@ use MongoException;
  * @author Dariusz Górecki <darek.krk@gmail.com>
  * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
+ * @property LoggerInterface $logger Logger
+ * @property-read string $version Current version
  * @since v1.0
  */
-class Mangan
+class Mangan implements LoggerAwareInterface
 {
 
 	const DefaultConnectionId = 'mongodb';
@@ -62,11 +67,10 @@ class Mangan
 	use Traits\Defaults\MongoClientOptions;
 
 	/**
-	 * @var string host:port
-	 *
 	 * Correct syntax is:
 	 * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
 	 * @example mongodb://localhost:27017
+	 * @var string host:port
 	 * @since v1.0
 	 */
 	public $connectionString = 'mongodb://localhost:27017';
@@ -156,7 +160,6 @@ class Mangan
 	public $safeFlag = false;
 
 	/**
-	 * TODO Move to finder
 	 * If set to TRUE findAll* methods of models, will return {@see Cursor} instead of
 	 * raw array of models.
 	 *
@@ -191,6 +194,12 @@ class Mangan
 	private $_di = null;
 
 	/**
+	 * Logger
+	 * @var LoggerInterface
+	 */
+	private $_logger = null;
+
+	/**
 	 * Version number holder
 	 * @var string
 	 */
@@ -208,6 +217,16 @@ class Mangan
 		$this->_cs = new ConnectionStorage($this, $connectionId);
 	}
 
+	public function __get($name)
+	{
+		return $this->{'get' . ucfirst($name)}();
+	}
+
+	public function __set($name, $value)
+	{
+		$this->{'set' . ucfirst($name)}($value);
+	}
+
 	/**
 	 * Get mangan version
 	 * @return string
@@ -219,6 +238,28 @@ class Mangan
 			self::$_version = require __DIR__ . '/version.php';
 		}
 		return self::$_version;
+	}
+
+	/**
+	 * Set PSR compliant logger
+	 * @param LoggerInterface $logger
+	 */
+	public function setLogger(LoggerInterface $logger)
+	{
+		$this->_logger = $logger;
+	}
+
+	/**
+	 * Get PSR compliant logger
+	 * @return LoggerInterface
+	 */
+	public function getLogger()
+	{
+		if (null === $this->_logger)
+		{
+			$this->_logger = new NullLogger;
+		}
+		return $this->_logger;
 	}
 
 	/**

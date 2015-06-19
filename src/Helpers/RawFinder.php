@@ -19,6 +19,13 @@ use Maslosoft\Mangan\Finder;
 class RawFinder extends Finder
 {
 
+	public function __construct($model, $em = null)
+	{
+		parent::__construct($model, $em);
+		// Cannot use cursors in raw finder, as it will clash with PkManager
+		$this->withCursor(false);
+	}
+
 	protected function populateRecord($data)
 	{
 		return $data;
