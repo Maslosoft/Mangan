@@ -19,7 +19,7 @@ use Yii;
 
 /**
  * Represents information relevant to sorting Document dataProviders.
- * 
+ *
  * @author Ianaré Sévi
  * @author Dariusz Górecki <darek.krk@gmail.com>
  * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
@@ -69,38 +69,11 @@ class Sort extends CSort
 						$attribute = $name;
 					}
 					$directions[$attribute] = $direction;
-					/*
-					  TODO If sorting on subfields that are empty, null, or non existent,
-					  they are always first (in ASC order) so below code has no effect
-					  if($this->model->meta->$name->i18nAllowDefault)
-					  {
-					  var_dump('blasf');
-					  $attribute = sprintf('%s.%s', $name, Yii::app()->defaultLanguage);
-					  $directions[$attribute] = $direction;
-					  }
-					  if($this->model->meta->$name->i18nAllowAny)
-					  {
-					  foreach(Yii::app()->languages as $lang => $langName)
-					  {
-					  if($lang == Yii::app()->language)
-					  {
-					  continue;
-					  }
-					  $attribute = sprintf('%s.%s', $name, $lang);
-					  $directions[$attribute] = $direction;
-					  }
-					  }
-					 */
 				}
-				//var_dump($directions);
 				$order = $directions;
 			}
 
 			$criteria->setSort($order);
-			// todo JOIN this new array properly with existing sort criteria - it just overwrites it now
-			//if(!empty($criteria->order))
-			//	$criteria->order.=', ';
-			//$criteria->order.=$order;
 		}
 	}
 
@@ -135,6 +108,8 @@ class Sort extends CSort
 	 * to the attribute (see {@link resolveLabel}).
 	 * @param array $htmlOptions additional HTML attributes for the hyperlink tag
 	 * @return string the generated hyperlink
+	 * @deprecated since version number
+	 * TODO This should be part of GridView
 	 */
 	public function link($attribute, $label = null, $htmlOptions = [])
 	{
@@ -190,6 +165,7 @@ class Sort extends CSort
 	 * This will invoke {@link CActiveRecord::getAttributeLabel} to determine what label to use.
 	 * If the attribute refers to a virtual attribute declared in {@link attributes},
 	 * then the label given in the {@link attributes} will be returned instead.
+	 * @deprecated since version number
 	 * @param string $attribute the attribute name.
 	 * @return string the attribute label
 	 */
@@ -274,7 +250,12 @@ class Sort extends CSort
 	 * @param array $directions the sort directions indexed by attribute names.
 	 * The sort direction is true if the corresponding attribute should be
 	 * sorted in descending order.
+	 * TODO Deprecated, this should return components or param fragment for url, ie:
+	 * ```php
+	 * dataproviderId=title:1,name:-1
+	 * ```
 	 * @return string the URL for sorting
+	 * @deprecated since version number
 	 */
 	public function createUrl($controller, $directions)
 	{
@@ -300,6 +281,7 @@ class Sort extends CSort
 	 *
 	 * @param string $attribute the attribute name that the user requests to sort on
 	 * @return mixed the attribute name or the virtual attribute definition. False if the attribute cannot be sorted.
+	 * @deprecated since version number
 	 */
 	public function resolveAttribute($attribute)
 	{
