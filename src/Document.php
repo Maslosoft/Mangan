@@ -39,22 +39,23 @@ abstract class Document extends EmbeddedDocument implements ActiveRecordInterfac
 
 	/**
 	 * Mongo id field
+	 * @Label('Database ID')
 	 * @KoBindable(false)
 	 * @Sanitizer(MongoObjectId)
 	 * @see MongoObjectId
-	 * @var MongoId|mixed
+	 * @var MongoId|null
 	 */
-	public $_id;
+	public $_id = null;
 
 	/**
 	 * Alias to _id
 	 * @Label('Database ID')
 	 * @Persistent(false)
-	 * @see setId()
-	 * @see getId()
-	 * @var string
+	 * @--Alias('_id')
+	 * @see https://github.com/Maslosoft/Mangan/issues/40
+	 * @var string|null
 	 */
-	public $id;
+	public $id = null;
 
 	/**
 	 * Constructor

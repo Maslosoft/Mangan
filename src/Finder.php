@@ -56,12 +56,6 @@ class Finder implements FinderInterface
 	private $_criteria = null;
 
 	/**
-	 * Current model class
-	 * @var string
-	 */
-	private $_class = '';
-
-	/**
 	 * Whenever to use corsors
 	 * @var bool
 	 */
@@ -77,7 +71,6 @@ class Finder implements FinderInterface
 		$this->model = $model;
 		$this->em = $em? : EntityManager::create($model);
 		$this->sm = new ScopeManager($model);
-		$this->_class = get_class($this->model);
 	}
 
 	/**
@@ -353,7 +346,7 @@ class Finder implements FinderInterface
 	 */
 	private function _beforeFind()
 	{
-		if(!Event::hasHandler($this->model, FinderInterface::EventBeforeFind))
+		if (!Event::hasHandler($this->model, FinderInterface::EventBeforeFind))
 		{
 			return true;
 		}

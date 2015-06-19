@@ -200,8 +200,6 @@ class PkManager
 	 */
 	public static function compare($source, $target)
 	{
-		$models = false;
-
 		// Check if both params are models
 		if ($source instanceof AnnotatedInterface && $target instanceof AnnotatedInterface)
 		{
@@ -210,7 +208,6 @@ class PkManager
 			{
 				return false;
 			}
-			$models = true;
 		}
 
 		$src = self::_compareNormalize($source);

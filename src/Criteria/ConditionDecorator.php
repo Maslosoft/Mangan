@@ -34,7 +34,7 @@ class ConditionDecorator
 
 	public function __construct(AnnotatedInterface $model = null)
 	{
-		if(!$model || !$model instanceof AnnotatedInterface)
+		if (!$model || !$model instanceof AnnotatedInterface)
 		{
 			return;
 		}
@@ -44,14 +44,13 @@ class ConditionDecorator
 
 	public function decorate($field, $value = null)
 	{
-		if(!$this->model)
+		if (!$this->model)
 		{
 			return [
 				$field => $value
 			];
 		}
 		$this->model->$field = $value;
-		$data2 = CriteriaArray::fromModel($this->model);
 		$data = CriteriaArray::fromModel($this->model, [$field]);
 		return $this->_flatten($field, $this->model->$field, $data[$field]);
 	}
@@ -59,20 +58,21 @@ class ConditionDecorator
 	private function _flatten($field, $srcValue, $data)
 	{
 		$value = $data;
-		while(is_array($value))
+		while (is_array($value))
 		{
 			$key = key($value);
 			$value = $value[$key];
 			$field = "$field.$key";
-			if($srcValue === $value)
+			if ($srcValue === $value)
 			{
 				break;
 			}
 		}
-		
-		
+
+
 		return [
 			$field => $value
 		];
 	}
+
 }

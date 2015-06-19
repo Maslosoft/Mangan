@@ -20,6 +20,7 @@ use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Mangan;
+use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use MongoGridFSFile;
 use MongoId;
 
@@ -33,10 +34,11 @@ class File extends EmbeddedDocument
 
 	/**
 	 * @SafeValidator
-	 * @Sanitizer('MongoObjectId')
+	 * @Sanitizer(MongoObjectId)
+	 * @see MongoObjectId
 	 * @var MongoId
 	 */
-	public $id = null;
+	public $_id = null;
 
 	/**
 	 * NOTE: This is also in gridfs, here is added to avoid querying gridfs just to get filename
@@ -72,7 +74,7 @@ class File extends EmbeddedDocument
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		parent::__construct($scenario, $lang);
-		$this->id = new MongoId;
+		$this->_id = new MongoId;
 		$mangan = Mangan::fromModel($this);
 		$this->_db = $mangan->getDbInstance();
 	}
@@ -91,11 +93,11 @@ class File extends EmbeddedDocument
 
 	public function getId()
 	{
-		if (!$this->id instanceof MongoId)
+		if (!$this->_id instanceof MongoId)
 		{
-			$this->id = new MongoId($this->id);
+			$this->_id = new MongoId($this->id);
 		}
-		return $this->id;
+		return $this->_id;
 	}
 
 	/**
@@ -226,7 +228,7 @@ class File extends EmbeddedDocument
 		/**
 		 * TODO Check if root data is saved corectly
 		 */
-		$rootId = $this->getRoot()->id;
+		$rootId = $this->getRoot()->_id;
 		$rootId = $rootId instanceof MongoId ? $rootId : new MongoId($rootId);
 		$data = [
 			'_id' => new MongoId(),

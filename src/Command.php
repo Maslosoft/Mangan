@@ -21,7 +21,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * Command
- * 
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Command
@@ -41,12 +41,6 @@ class Command
 	 */
 	private $mn = null;
 
-	/**
-	 *
-	 * @var ManganMeta
-	 */
-	private $meta = null;
-
 	public function __construct(AnnotatedInterface $model = null)
 	{
 		$this->model = $model;
@@ -56,7 +50,6 @@ class Command
 			return;
 		}
 		$this->mn = Mangan::fromModel($model);
-		$this->meta = ManganMeta::create($model);
 	}
 
 	public function call($command, $arguments = [])
