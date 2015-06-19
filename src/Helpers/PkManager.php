@@ -141,11 +141,6 @@ class PkManager
 		}
 		else
 		{
-			if (is_object($data))
-			{
-				var_dump($data);
-				throw new \Exception('Should be array');
-			}
 			$pkValue = $sanitizer->write($pkField, $data[$pkField]);
 		}
 		return $pkValue;
