@@ -5,6 +5,6 @@ touch ./toc/INSTALL.md
 touch ./toc/README.md
 touch ./toc/UPGRADE.md
 
-generate-md --layout ./toc/layout.html --input ./toc --output .
+generate-md --layout ./toc --input ./toc --output .
 cp ./toc/README.md ./README.md
 cp ./toc/CHANGELOG.md ./CHANGELOG.md
