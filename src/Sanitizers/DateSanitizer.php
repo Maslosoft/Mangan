@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 use MongoDate;
 
 /**
@@ -21,7 +21,7 @@ use MongoDate;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DateSanitizer implements ISanitizer
+class DateSanitizer implements SanitizerInterface
 {
 
 	public function read($model, $dbValue)

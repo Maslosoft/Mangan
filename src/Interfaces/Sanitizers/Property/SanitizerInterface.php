@@ -17,7 +17,7 @@ namespace Maslosoft\Mangan\Interfaces\Sanitizers\Property;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ISanitizer
+interface SanitizerInterface
 {
 
 	/**

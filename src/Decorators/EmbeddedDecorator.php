@@ -17,8 +17,8 @@ use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -27,17 +27,17 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class EmbeddedDecorator implements IDecorator
+class EmbeddedDecorator implements DecoratorInterface
 {
 
-	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		self::ensureClass($model, $name, $dbValue);
 		$embedded = $transformatorClass::toModel($dbValue, $model->$name, $model->$name);
 		$model->$name = $embedded;
 	}
 
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		if (null === $model->$name)
 		{

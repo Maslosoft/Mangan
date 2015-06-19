@@ -11,18 +11,18 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces;
+namespace Maslosoft\Mangan\Interfaces\Validators;
+
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ISimpleTree
+interface ValidatorInterface
 {
-	/**
-	 * Move to a new parent
-	 * @param string|MongoId $parentId
-	 * @param string[]|MongoId[] $order
-	 */
-	public function moveTo($parentId, $order = []);
+
+	public function addError($message);
+
+	public function isValid(AnnotatedInterface $model, $attribute);
 }

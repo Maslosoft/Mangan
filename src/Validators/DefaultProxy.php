@@ -13,15 +13,15 @@
 
 namespace Maslosoft\Mangan\Validators;
 
-use Maslosoft\Mangan\Interfaces\Validators\IValidator;
-use Maslosoft\Mangan\Interfaces\Validators\IValidatorProxy;
+use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
+use Maslosoft\Mangan\Interfaces\Validators\ValidatorProxyInterface;
 
 /**
  * BaseProxy
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DefaultProxy implements IValidator, IValidatorProxy
+class DefaultProxy implements ValidatorInterface, ValidatorProxyInterface
 {
 
 	public function addError($message)
@@ -39,7 +39,7 @@ class DefaultProxy implements IValidator, IValidatorProxy
 		
 	}
 
-	public function setValidator(IValidator $validator)
+	public function setValidator(ValidatorInterface $validator)
 	{
 
 	}

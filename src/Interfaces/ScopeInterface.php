@@ -13,13 +13,14 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IModel extends AnnotatedInterface
+interface ScopeInterface
 {
-	
+
+	public function getCriteria();
+
+	public function isDefault();
 }

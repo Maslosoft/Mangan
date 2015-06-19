@@ -14,14 +14,14 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Mangan\EntityManager;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
  * This transformer is configured to set only safe attributes - from any external source.
  * @see EntityManager::setAttributes()
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class SafeArray extends Transformer implements ITransformator
+class SafeArray extends Transformer implements TransformatorInterface
 {
 
 }

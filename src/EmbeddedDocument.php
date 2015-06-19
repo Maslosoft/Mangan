@@ -14,7 +14,8 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Collections\Meta;
-use Maslosoft\Mangan\Interfaces\IActiveDocument;
+use Maslosoft\Mangan\Interfaces\ActiveDocumentInterface;
+use Maslosoft\Mangan\Interfaces\InitInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -29,7 +30,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  * @since v1.0.8
  * @property Meta $meta Model metadata
  */
-abstract class EmbeddedDocument implements IActiveDocument
+abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterface
 {
 
 	use \Maslosoft\Mangan\Traits\I18NAbleTrait,

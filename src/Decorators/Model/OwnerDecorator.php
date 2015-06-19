@@ -9,9 +9,9 @@
 namespace Maslosoft\Mangan\Decorators\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
-use Maslosoft\Mangan\Interfaces\IOwnered;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
+use Maslosoft\Mangan\Interfaces\OwneredInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class OwnerDecorator implements IModelDecorator
+class OwnerDecorator implements ModelDecoratorInterface
 {
 
 	/**
@@ -31,7 +31,7 @@ class OwnerDecorator implements IModelDecorator
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, &$dbValues, $transformatorClass = ITransformator::class)
+	public function read($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
 		foreach (ManganMeta::create($model)->properties('owned') as $name => $metaProperty)
 		{
@@ -40,7 +40,7 @@ class OwnerDecorator implements IModelDecorator
 			{
 				continue;
 			}
-			if ($model->$name instanceof IOwnered)
+			if ($model->$name instanceof OwneredInterface)
 			{
 				$model->$name->setOwner($model);
 			}
@@ -48,7 +48,7 @@ class OwnerDecorator implements IModelDecorator
 			{
 				foreach ($model->$name as $document)
 				{
-					if ($document instanceof IOwnered)
+					if ($document instanceof OwneredInterface)
 					{
 						$document->setOwner($model);
 					}
@@ -65,7 +65,7 @@ class OwnerDecorator implements IModelDecorator
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, &$dbValues, $transformatorClass = ITransformator::class)
+	public function write($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
 
 	}

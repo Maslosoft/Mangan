@@ -13,17 +13,17 @@
 
 namespace Maslosoft\Mangan\Traits;
 
-use Maslosoft\Mangan\Interfaces\IScenarios;
+use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 
 /**
  * ScenariosTrait
- * @see IScenarios
+ * @see ScenariosInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait ScenariosTrait
 {
 
-	private $_scenario = IScenarios::Insert;
+	private $_scenario = ScenariosInterface::Insert;
 
 	/**
 	 *

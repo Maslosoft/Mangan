@@ -15,8 +15,8 @@ namespace Maslosoft\Mangan\Helpers\Decorator;
 
 use Maslosoft\Mangan\Decorators\Undecorated;
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -38,7 +38,7 @@ class Factory
 
 	/**
 	 * Model decorators
-	 * @var IModelDecorator[]
+	 * @var ModelDecoratorInterface[]
 	 */
 	private static $_modelDecorators = [];
 
@@ -47,7 +47,7 @@ class Factory
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $meta
-	 * @return Undecorated|CompoundDecorator|IDecorator
+	 * @return Undecorated|CompoundDecorator|DecoratorInterface
 	 */
 	public static function createForField($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
@@ -93,7 +93,7 @@ class Factory
 			$decorators = [];
 			foreach (self::getManganDecorators($modelMeta->connectionId, $transformatorClass) as $decoratorName => $active)
 			{
-				if ((new ReflectionClass($decoratorName))->implementsInterface(IModelDecorator::class))
+				if ((new ReflectionClass($decoratorName))->implementsInterface(ModelDecoratorInterface::class))
 				{
 					$decorators[] = new $decoratorName;
 				}

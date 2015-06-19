@@ -14,15 +14,15 @@
 namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
  * Undecorated
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Undecorated implements IDecorator
+class Undecorated implements DecoratorInterface
 {
 
 	/**
@@ -33,7 +33,7 @@ class Undecorated implements IDecorator
 	 * @param mixed $dbValue
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		$model->$name = $dbValue;
 	}
@@ -46,7 +46,7 @@ class Undecorated implements IDecorator
 	 * @param mixed $dbValues
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValues, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
 		$dbValues[$name] = $model->$name;
 	}

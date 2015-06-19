@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
-use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 
 /**
@@ -22,24 +22,24 @@ use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class CompoundModelDecorator implements IModelDecorator
+class CompoundModelDecorator implements ModelDecoratorInterface
 {
 	/**
 	 * Decorators
-	 * @var IModelDecorator[]
+	 * @var ModelDecoratorInterface[]
 	 */
 	private $_decorators = [];
 
 	/**
 	 *
-	 * @param IModelDecorator[] $decorators
+	 * @param ModelDecoratorInterface[] $decorators
 	 */
 	public function __construct($decorators)
 	{
 		$this->_decorators = $decorators;
 	}
 
-	public function read($model, &$dbValue, $transformatorClass = ITransformator::class)
+	public function read($model, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		foreach ($this->_decorators as $decorator)
 		{
@@ -47,7 +47,7 @@ class CompoundModelDecorator implements IModelDecorator
 		}
 	}
 
-	public function write($model, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		foreach ($this->_decorators as $decorator)
 		{

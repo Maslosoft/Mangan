@@ -11,26 +11,25 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Sanitizers;
-
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
+namespace Maslosoft\Mangan\Interfaces\Events;
 
 /**
- * Float
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
+ * @property string $name Name of event
+ * @property object $sender Sender
+ * @property mixed $data Event data
  */
-class DoubleSanitizer implements SanitizerInterface
+interface EventInterface
 {
 
-	public function read($model, $dbValue)
-	{
-		return (float) $dbValue;
-	}
-
-	public function write($model, $phpValue)
-	{
-		return (float) $phpValue;
-	}
+	/**
+	 * Ensure implementing class has this fields
+	 */
+//	const RequireFields = [
+//		'name',
+//		'sender',
+//		'data'
+//	];
 
 }

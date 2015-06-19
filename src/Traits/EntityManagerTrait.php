@@ -16,14 +16,14 @@ namespace Maslosoft\Mangan\Traits;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
-use Maslosoft\Mangan\Interfaces\IEntityManager;
+use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Modifier;
 use MongoCollection;
 use MongoException;
 
 /**
  * EntityManagerTrait
- * @see IEntityManager
+ * @see EntityManagerInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait EntityManagerTrait

@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
  * Bool
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class BooleanSanitizer implements ISanitizer
+class BooleanSanitizer implements SanitizerInterface
 {
 
 	public function read($model, $dbValue)

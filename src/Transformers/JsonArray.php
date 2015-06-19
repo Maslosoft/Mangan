@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
  * DocumentArray
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class JsonArray extends Transformer implements ITransformator
+class JsonArray extends Transformer implements TransformatorInterface
 {
 
 }

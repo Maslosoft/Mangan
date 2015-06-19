@@ -20,14 +20,14 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\RawFinder;
-use Maslosoft\Mangan\Interfaces\ISimpleTree;
-use Maslosoft\Mangan\Interfaces\ITrash;
+use Maslosoft\Mangan\Interfaces\SimpleTreeInterface;
+use Maslosoft\Mangan\Interfaces\TrashInterface;
 use MongoId;
 
 /**
  * TreeTrait
  *
- * @see ISimpleTree
+ * @see SimpleTreeInterface
  * @author Piotr
  */
 trait SimpleTreeTrait
@@ -60,7 +60,7 @@ trait SimpleTreeTrait
 			$this->_onBeforeTrash($event);
 		};
 		$onBeforeTrash->bindTo($this);
-		Event::on($this, ITrash::EventBeforeTrash, $onBeforeTrash);
+		Event::on($this, TrashInterface::EventBeforeTrash, $onBeforeTrash);
 
 
 		$onAfterTrash = function($event)
@@ -68,7 +68,7 @@ trait SimpleTreeTrait
 			$this->_onAfterTrash($event);
 		};
 		$onAfterTrash->bindTo($this);
-		Event::on($this, ITrash::EventAfterTrash, $onAfterTrash);
+		Event::on($this, TrashInterface::EventAfterTrash, $onAfterTrash);
 
 
 		$onAfterRestore = function($event)
@@ -76,7 +76,7 @@ trait SimpleTreeTrait
 			$this->_onAfterRestore($event);
 		};
 		$onAfterRestore->bindTo($this);
-		Event::on($this, ITrash::EventAfterRestore, $onAfterRestore);
+		Event::on($this, TrashInterface::EventAfterRestore, $onAfterRestore);
 	}
 
 	private function _onBeforeTrash(ModelEvent $event)

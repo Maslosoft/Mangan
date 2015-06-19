@@ -12,7 +12,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface Initializable
+interface InitInterface
 {
 	public function init();
 }

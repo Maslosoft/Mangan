@@ -14,11 +14,11 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\IOwnered;
+use Maslosoft\Mangan\Interfaces\OwneredInterface;
 
 /**
  * OwneredTrait
- * @see IOwnered
+ * @see OwneredInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait OwneredTrait
@@ -48,7 +48,7 @@ trait OwneredTrait
 	 */
 	public function getRoot()
 	{
-		if ($this->_owner instanceof IOwnered && $this->_owner !== null)
+		if ($this->_owner instanceof OwneredInterface && $this->_owner !== null)
 		{
 			return $this->_owner->getRoot();
 		}

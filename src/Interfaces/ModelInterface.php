@@ -11,19 +11,15 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces\Filters\Property;
+namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 
 /**
- * ITransformatorFilter
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ITransformatorFilter
+interface ModelInterface extends AnnotatedInterface
 {
-
-	public function fromModel($model, DocumentPropertyMeta $fieldMeta);
-
-	public function toModel($model, DocumentPropertyMeta $fieldMeta);
+	
 }

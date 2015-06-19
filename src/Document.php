@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Interfaces\IActiveRecord;
+use Maslosoft\Mangan\Interfaces\ActiveRecordInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use MongoDB;
@@ -29,7 +29,7 @@ use MongoId;
  * @property-read MongoDB $db
  * @since v1.0
  */
-abstract class Document extends EmbeddedDocument implements IActiveRecord
+abstract class Document extends EmbeddedDocument implements ActiveRecordInterface
 {
 
 	use \Maslosoft\Mangan\Traits\EntityManagerTrait,

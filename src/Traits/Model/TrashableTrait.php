@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\ITrash;
+use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Models\Trash;
 use MongoId;
@@ -40,10 +40,10 @@ trait TrashableTrait
 	 */
 	public function trash()
 	{
-		if (Event::hasHandler($this, ITrash::EventBeforeTrash))
+		if (Event::hasHandler($this, TrashInterface::EventBeforeTrash))
 		{
 			$event = new ModelEvent($this);
-			Event::trigger($this, ITrash::EventBeforeTrash, $event);
+			Event::trigger($this, TrashInterface::EventBeforeTrash, $event);
 			if (!$event->handled)
 			{
 				return false;
@@ -57,7 +57,7 @@ trait TrashableTrait
 		$trash->type = isset($meta->type()->label) ? $meta->type()->label : get_class($this);
 		$trash->save();
 
-		Event::trigger($this, ITrash::EventAfterTrash);
+		Event::trigger($this, TrashInterface::EventAfterTrash);
 
 		// Use deleteOne, to avoid beforeDelete event,
 		// which should be raised only when really removing document:
@@ -84,7 +84,7 @@ trait TrashableTrait
 		}
 		$em = new EntityManager($this->data);
 		//$this->data->init();
-		Event::trigger($this->data, ITrash::EventBeforeRestore);
+		Event::trigger($this->data, TrashInterface::EventBeforeRestore);
 
 		$em->save();
 		$finder = new Finder($this->data);
@@ -93,7 +93,7 @@ trait TrashableTrait
 		{
 			return false;
 		}
-		Event::trigger($model, ITrash::EventAfterRestore);
+		Event::trigger($model, TrashInterface::EventAfterRestore);
 
 		$trashEm = new EntityManager($this);
 		// $this->delete();

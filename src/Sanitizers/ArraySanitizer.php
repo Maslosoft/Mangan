@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
  * ArraySanitizer
@@ -21,16 +21,16 @@ use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
  * Use &commat;SanitizerArray annotation instead.
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ArraySanitizer implements ISanitizer
+class ArraySanitizer implements SanitizerInterface
 {
 
 	/**
 	 * Sanitizer instance
-	 * @var ISanitizer
+	 * @var SanitizerInterface
 	 */
 	private $_sanitizer = null;
 
-	public function __construct(ISanitizer $sanitizer)
+	public function __construct(SanitizerInterface $sanitizer)
 	{
 		$this->_sanitizer = $sanitizer;
 	}

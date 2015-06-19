@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Mangan\Interfaces\IWithCollectionName;
+use Maslosoft\Mangan\Interfaces\CollectionNameInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -31,7 +31,7 @@ class CollectionNamer
 
 	public static function nameCollection($model)
 	{
-		if ($model instanceof IWithCollectionName)
+		if ($model instanceof CollectionNameInterface)
 		{
 			return $model->getCollectionName();
 		}

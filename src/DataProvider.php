@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan;
 
 use CDataProvider;
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\IWithCriteria;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 
 /**
  * Mongo document data provider
@@ -100,7 +100,7 @@ class DataProvider extends CDataProvider
 		}
 
 		$this->_finder = new Finder($this->model);
-		if ($this->model instanceof IWithCriteria)
+		if ($this->model instanceof CriteriaInterface)
 		{
 			$this->_criteria = $this->model->getDbCriteria();
 		}

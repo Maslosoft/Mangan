@@ -16,8 +16,8 @@ namespace Maslosoft\Mangan\Decorators;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\RawFinder;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
 
@@ -26,10 +26,10 @@ use Maslosoft\Mangan\Model\DbRef;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefArrayDecorator implements IDecorator
+class DbRefArrayDecorator implements DecoratorInterface
 {
 
-	public function read($model, $name, &$dbValues, $transformatorClass = ITransformator::class)
+	public function read($model, $name, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
 		if (!$dbValues)
 		{
@@ -121,7 +121,7 @@ class DbRefArrayDecorator implements IDecorator
 		$model->$name = $refs;
 	}
 
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		$fieldMeta = ManganMeta::create($model)->field($name);
 		$dbValue[$name] = $fieldMeta->default;

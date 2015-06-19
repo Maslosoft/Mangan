@@ -16,9 +16,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IScope
+interface ActiveDocumentInterface extends ModelInterface, InternationalInterface, OwneredInterface, ScenariosInterface, ValidatableInterface
 {
-	public function getCriteria();
-
-	public function isDefault();
+	
 }

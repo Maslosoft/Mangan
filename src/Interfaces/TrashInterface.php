@@ -11,25 +11,18 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces\Events;
+namespace Maslosoft\Mangan\Interfaces;
 
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
- * @property string $name Name of event
- * @property object $sender Sender
- * @property mixed $data Event data
  */
-interface IEvent
+interface TrashInterface
 {
 
-	/**
-	 * Ensure implementing class has this fields
-	 */
-//	const RequireFields = [
-//		'name',
-//		'sender',
-//		'data'
-//	];
+	const EventBeforeTrash = 'beforeTrash';
+	const EventAfterTrash = 'afterTrash';
+	const EventBeforeRestore = 'beforeRestore';
+	const EventAfterRestore = 'afterRestore';
 
 }

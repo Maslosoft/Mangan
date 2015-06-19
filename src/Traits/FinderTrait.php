@@ -18,11 +18,11 @@ use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Finder;
-use Maslosoft\Mangan\Interfaces\IFinder;
+use Maslosoft\Mangan\Interfaces\FinderInterface;
 
 /**
  * FinderTrait
- * @see IFinder
+ * @see FinderInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait FinderTrait
@@ -164,7 +164,7 @@ trait FinderTrait
 	/**
 	 * Whenever to use cursor
 	 * @param type $useCursor
-	 * @return IFinder
+	 * @return FinderInterface
 	 * @Ignore
 	 */
 	public function withCursor($useCursor = true)

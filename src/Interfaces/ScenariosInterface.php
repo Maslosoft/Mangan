@@ -11,18 +11,28 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces\Validators;
-
-use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+namespace Maslosoft\Mangan\Interfaces;
 
 /**
- *
+ * Use this to provide scenarios
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IValidator
+interface ScenariosInterface
 {
 
-	public function addError($message);
+	const Insert = 'insert';
+	const Update = 'update';
+	const Delete = 'delete';
 
-	public function isValid(AnnotatedInterface $model, $attribute);
+	/**
+	 * Set Scenario
+	 * @param string $scenario
+	 */
+	public function setScenario($scenario);
+
+	/**
+	 * Get scenario
+	 * @return string Scenario, by default IScenarios::Insert
+	 */
+	public function getScenario();
 }

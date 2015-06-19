@@ -13,11 +13,11 @@
 
 namespace Maslosoft\Mangan\Traits;
 
-use Maslosoft\Mangan\Interfaces\IWithCollectionName;
+use Maslosoft\Mangan\Interfaces\CollectionNameInterface;
 
 /**
  * CollectionNameTrait
- * @see IWithCollectionName
+ * @see CollectionNameInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait CollectionNameTrait
