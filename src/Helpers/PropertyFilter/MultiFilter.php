@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
-use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
+use Maslosoft\Mangan\Interfaces\Filters\Property\TransformatorFilterInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
@@ -21,18 +21,18 @@ use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MultiFilter implements ITransformatorFilter
+class MultiFilter implements TransformatorFilterInterface
 {
 
 	/**
 	 * Decorators
-	 * @var ITransformatorFilter[]
+	 * @var TransformatorFilterInterface[]
 	 */
 	private $_filters = [];
 
 	/**
 	 *
-	 * @param ITransformatorFilter[] $decorators
+	 * @param TransformatorFilterInterface[] $decorators
 	 */
 	public function __construct($decorators)
 	{
@@ -43,7 +43,7 @@ class MultiFilter implements ITransformatorFilter
 	{
 		foreach ($this->_filters as $filter)
 		{
-			/* @var $filter ITransformatorFilter */
+			/* @var $filter TransformatorFilterInterface */
 			if (!$filter->fromModel($model, $fieldMeta))
 			{
 				return false;
@@ -56,7 +56,7 @@ class MultiFilter implements ITransformatorFilter
 	{
 		foreach ($this->_filters as $filter)
 		{
-			/* @var $filter ITransformatorFilter */
+			/* @var $filter TransformatorFilterInterface */
 			if (!$filter->toModel($model, $fieldMeta))
 			{
 				return false;

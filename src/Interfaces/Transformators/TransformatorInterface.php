@@ -19,7 +19,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ITransformator
+interface TransformatorInterface
 {
 
 	/**

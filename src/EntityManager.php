@@ -20,8 +20,8 @@ use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\IEntityManager;
-use Maslosoft\Mangan\Interfaces\IScenarios;
+use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
+use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\Mangan\Signals\AfterDelete;
@@ -39,7 +39,7 @@ use MongoException;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class EntityManager implements IEntityManager
+class EntityManager implements EntityManagerInterface
 {
 
 	/**
@@ -159,7 +159,7 @@ class EntityManager implements IEntityManager
 	 * This will create customized entity manger if defined in model with EntityManager annotation.
 	 * If no custom entity manager is defined this will return default EntityManager.
 	 * @param AnnotatedInterface $model
-	 * @return IEntityManager
+	 * @return EntityManagerInterface
 	 */
 	public static function create($model)
 	{
@@ -494,7 +494,7 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeSave($model)
 	{
-		$result = Event::Valid($model, IEntityManager::EventBeforeSave);
+		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
 		if ($result)
 		{
 			(new Signal)->emit(new BeforeSave($model));
@@ -508,9 +508,9 @@ class EntityManager implements IEntityManager
 	 */
 	private function _afterSave($model)
 	{
-		Event::trigger($model, IEntityManager::EventAfterSave);
+		Event::trigger($model, EntityManagerInterface::EventAfterSave);
 		(new Signal)->emit(new AfterSave($model));
-		ScenarioManager::setScenario($model, IScenarios::Update);
+		ScenarioManager::setScenario($model, ScenariosInterface::Update);
 	}
 
 	/**
@@ -523,11 +523,11 @@ class EntityManager implements IEntityManager
 	 */
 	private function _beforeDelete()
 	{
-		$result = Event::valid($this->model, IEntityManager::EventBeforeDelete);
+		$result = Event::valid($this->model, EntityManagerInterface::EventBeforeDelete);
 		if ($result)
 		{
 			(new Signal)->emit(new BeforeDelete($this->model));
-			ScenarioManager::setScenario($this->model, IScenarios::Insert);
+			ScenarioManager::setScenario($this->model, ScenariosInterface::Insert);
 		}
 		return $result;
 	}
@@ -541,7 +541,7 @@ class EntityManager implements IEntityManager
 	 */
 	private function _afterDelete()
 	{
-		Event::trigger($this->model, IEntityManager::EventAfterDelete, new ModelEvent($this->model));
+		Event::trigger($this->model, EntityManagerInterface::EventAfterDelete, new ModelEvent($this->model));
 		(new Signal)->emit(new AfterDelete($this->model));
 	}
 

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Helpers\Transformator;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -50,7 +50,7 @@ class Decorator extends Transformator
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $meta
-	 * @return IDecorator
+	 * @return DecoratorInterface
 	 */
 	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{

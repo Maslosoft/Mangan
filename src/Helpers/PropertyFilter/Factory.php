@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
-use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
+use Maslosoft\Mangan\Interfaces\Filters\Property\TransformatorFilterInterface;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -29,7 +29,7 @@ class Factory
 
 	/**
 	 * Filter instances
-	 * @var ITransformatorFilter[][]
+	 * @var TransformatorFilterInterface[][]
 	 */
 	private static $_configs = [];
 
@@ -58,7 +58,7 @@ class Factory
 	 * Get filters for connection and transformator class
 	 * @param string $connectionId
 	 * @param string $transformatorClass
-	 * @return ITransformatorFilter[]
+	 * @return TransformatorFilterInterface[]
 	 */
 	private static function getManganFilters($connectionId, $transformatorClass)
 	{

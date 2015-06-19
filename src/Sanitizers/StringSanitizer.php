@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
  * String
  * This sanitizer forces values to be string
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class StringSanitizer implements ISanitizer
+class StringSanitizer implements SanitizerInterface
 {
 
 	public function read($model, $dbValue)

@@ -14,14 +14,14 @@
 namespace Maslosoft\Mangan\Validators\BuiltIn;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\Validators\IValidator;
+use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 
 /**
  * BooleanValidator
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class BooleanValidator implements IValidator
+class BooleanValidator implements ValidatorInterface
 {
 
 	public function isValid(AnnotatedInterface $model, $field)

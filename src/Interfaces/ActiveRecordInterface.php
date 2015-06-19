@@ -12,11 +12,12 @@
  */
 
 namespace Maslosoft\Mangan\Interfaces;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IActiveDocument extends IModel, I18NAble, IOwnered, IScenarios, IValidatable
+interface ActiveRecordInterface extends ActiveDocumentInterface, FinderInterface, EntityManagerInterface, CollectionNameInterface
 {
 	
 }

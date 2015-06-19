@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
  * This transformer is by default configured to store document in database.
  * 
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class RawArray extends Transformer implements ITransformator
+class RawArray extends Transformer implements TransformatorInterface
 {
 
 }

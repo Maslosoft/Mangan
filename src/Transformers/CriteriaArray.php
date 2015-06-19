@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
  * Criteria array transformer
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class CriteriaArray extends Transformer implements ITransformator
+class CriteriaArray extends Transformer implements TransformatorInterface
 {
 
 }

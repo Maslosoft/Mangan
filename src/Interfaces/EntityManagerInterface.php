@@ -23,7 +23,7 @@ use MongoException;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IEntityManager
+interface EntityManagerInterface
 {
 
 	const EventAfterSave = 'afterSave';

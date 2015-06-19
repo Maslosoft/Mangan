@@ -15,8 +15,8 @@ namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
 
@@ -25,10 +25,10 @@ use Maslosoft\Mangan\Model\DbRef;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DbRefDecorator implements IDecorator
+class DbRefDecorator implements DecoratorInterface
 {
 
-	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		if (!$dbValue)
 		{
@@ -43,7 +43,7 @@ class DbRefDecorator implements IDecorator
 		$model->$name = (new Finder($referenced))->findByPk($dbRef->pk);
 	}
 
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		if(!$model->$name)
 		{

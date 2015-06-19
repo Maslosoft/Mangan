@@ -11,23 +11,16 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces\Validators;
+namespace Maslosoft\Mangan\Interfaces;
 
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IValidatorProxy
+interface ValidatableInterface
 {
-	/**
-	 * Set validator
-	 * @param IValidator $validator
-	 */
-	public function setValidator(IValidator $validator);
 
-	/**
-	 * Get validator
-	 * @return IValidator Validator instance
-	 */
-	public function getValidator();
+	public function validate();
+
+	public function getErrors();
 }

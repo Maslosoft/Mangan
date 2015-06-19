@@ -11,13 +11,19 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces;
+namespace Maslosoft\Mangan\Interfaces\Filters\Property;
+
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
+ * ITransformatorFilter
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IScopes
+interface TransformatorFilterInterface
 {
-	//put your code here
+
+	public function fromModel($model, DocumentPropertyMeta $fieldMeta);
+
+	public function toModel($model, DocumentPropertyMeta $fieldMeta);
 }

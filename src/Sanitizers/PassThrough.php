@@ -14,14 +14,14 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
  * PassThrough
  * Empty sanitizer, does not change anything
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class PassThrough implements ISanitizer
+class PassThrough implements SanitizerInterface
 {
 
 	/**

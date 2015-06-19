@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Transformers\Filters;
 
 use Maslosoft\Mangan\EntityManager;
-use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
+use Maslosoft\Mangan\Interfaces\Filters\Property\TransformatorFilterInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 
 /**
@@ -22,7 +22,7 @@ use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
  * @see EntityManager::setAttributes()
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class SafeFilter implements ITransformatorFilter
+class SafeFilter implements TransformatorFilterInterface
 {
 
 	public function fromModel($model, DocumentPropertyMeta $fieldMeta)

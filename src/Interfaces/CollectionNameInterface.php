@@ -13,31 +13,22 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-
 /**
- *
+ * Implement this interface to allow dynamic/callable collection names in documents
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IOwnered
+interface CollectionNameInterface
 {
 
 	/**
-	 * Set class owner
-
-	 * @return AnnotatedInterface Owner
+	 * This method must return collection name for use with this model
+	 * this must be implemented in child classes
+	 *
+	 * this is read-only defined only at class define
+	 * if you want to set different collection during run-time
+	 * use {@see setCollection()}.
+	 * @return string collection name
+	 * @since v1.0
 	 */
-	public function getOwner();
-
-	/**
-	 * Get class owner
-	 * @param AnnotatedInterface|null $owner
-	 */
-	public function setOwner(AnnotatedInterface $owner = null);
-
-	/**
-	 * Get document root
-	 * @return AnnotatedInterface Root document
-	 */
-	public function getRoot();
+	public function getCollectionName();
 }

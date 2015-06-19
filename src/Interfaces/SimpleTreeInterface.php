@@ -17,12 +17,12 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ITrash
+interface SimpleTreeInterface
 {
-
-	const EventBeforeTrash = 'beforeTrash';
-	const EventAfterTrash = 'afterTrash';
-	const EventBeforeRestore = 'beforeRestore';
-	const EventAfterRestore = 'afterRestore';
-
+	/**
+	 * Move to a new parent
+	 * @param string|MongoId $parentId
+	 * @param string[]|MongoId[] $order
+	 */
+	public function moveTo($parentId, $order = []);
 }

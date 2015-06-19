@@ -17,10 +17,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IValidatable
+interface ScopesInterface
 {
-
-	public function validate();
-
-	public function getErrors();
+	//put your code here
 }

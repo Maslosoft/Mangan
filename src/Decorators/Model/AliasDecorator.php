@@ -14,8 +14,8 @@
 namespace Maslosoft\Mangan\Decorators\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -25,7 +25,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class AliasDecorator implements IModelDecorator
+class AliasDecorator implements ModelDecoratorInterface
 {
 
 	/**
@@ -36,7 +36,7 @@ class AliasDecorator implements IModelDecorator
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, &$dbValues, $transformatorClass = ITransformator::class)
+	public function read($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
 		$meta = ManganMeta::create($model);
 
@@ -57,7 +57,7 @@ class AliasDecorator implements IModelDecorator
 	 * @param string $transformatorClass Transformator class used
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, &$dbValues, $transformatorClass = ITransformator::class)
+	public function write($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
 		$meta = ManganMeta::create($model);
 

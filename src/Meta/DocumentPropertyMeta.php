@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\EntityManager;
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\JsonArray;
 

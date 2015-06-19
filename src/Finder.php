@@ -16,9 +16,9 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\IEntityManager;
-use Maslosoft\Mangan\Interfaces\IFinder;
-use Maslosoft\Mangan\Interfaces\IScenarios;
+use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
+use Maslosoft\Mangan\Interfaces\FinderInterface;
+use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\RawArray;
 use MongoCursor;
@@ -28,7 +28,7 @@ use MongoCursor;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Finder implements IFinder
+class Finder implements FinderInterface
 {
 
 	/**
@@ -39,7 +39,7 @@ class Finder implements IFinder
 
 	/**
 	 * Entity manager instance
-	 * @var IEntityManager
+	 * @var EntityManagerInterface
 	 */
 	private $em = null;
 
@@ -70,7 +70,7 @@ class Finder implements IFinder
 	/**
 	 * Constructor
 	 * @param object $model Model instance
-	 * @param IEntityManager $em
+	 * @param EntityManagerInterface $em
 	 */
 	public function __construct($model, $em = null)
 	{
@@ -85,7 +85,7 @@ class Finder implements IFinder
 	 * This will create customized finder if defined in model with Finder annotation.
 	 * If no custom finder is defined this will return default Finder.
 	 * @param AnnotatedInterface $model
-	 * @return IFinder
+	 * @return FinderInterface
 	 */
 	public static function create(AnnotatedInterface $model)
 	{
@@ -286,7 +286,7 @@ class Finder implements IFinder
 	/**
 	 * Whenever to use cursor
 	 * @param type $useCursor
-	 * @return IFinder
+	 * @return FinderInterface
 	 */
 	public function withCursor($useCursor = true)
 	{
@@ -320,8 +320,8 @@ class Finder implements IFinder
 		if ($data !== null)
 		{
 			$model = RawArray::toModel($data, $this->model);
-			ScenarioManager::setScenario($model, IScenarios::Update);
-			Event::trigger($model, IFinder::EventAfterFind);
+			ScenarioManager::setScenario($model, ScenariosInterface::Update);
+			Event::trigger($model, FinderInterface::EventAfterFind);
 			return $model;
 		}
 		else
@@ -353,11 +353,11 @@ class Finder implements IFinder
 	 */
 	private function _beforeFind()
 	{
-		if(!Event::hasHandler($this->model, IFinder::EventBeforeFind))
+		if(!Event::hasHandler($this->model, FinderInterface::EventBeforeFind))
 		{
 			return true;
 		}
-		return Event::handled($this->model, IFinder::EventBeforeFind);
+		return Event::handled($this->model, FinderInterface::EventBeforeFind);
 	}
 
 }

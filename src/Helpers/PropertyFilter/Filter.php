@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
 use Maslosoft\Mangan\Helpers\Transformator;
-use Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter;
+use Maslosoft\Mangan\Interfaces\Filters\Property\TransformatorFilterInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 
@@ -23,7 +23,7 @@ use Maslosoft\Mangan\Meta\DocumentTypeMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Filter extends Transformator implements ITransformatorFilter
+class Filter extends Transformator implements TransformatorFilterInterface
 {
 
 	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
@@ -41,7 +41,7 @@ class Filter extends Transformator implements ITransformatorFilter
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $fieldMeta
-	 * @return ITransformatorFilter
+	 * @return TransformatorFilterInterface
 	 */
 	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $fieldMeta)
 	{

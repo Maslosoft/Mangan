@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -50,14 +50,14 @@ abstract class Transformator
 	 * Transormator class name
 	 * @var string
 	 */
-	private $_transformatorClass = ITransformator::class;
+	private $_transformatorClass = TransformatorInterface::class;
 
 	/**
 	 * Class constructor
 	 * @param AnnotatedInterface $model
 	 * @param string $transformatorClass
 	 */
-	public function __construct(AnnotatedInterface $model, $transformatorClass = ITransformator::class)
+	public function __construct(AnnotatedInterface $model, $transformatorClass = TransformatorInterface::class)
 	{
 		$this->_meta = ManganMeta::create($model);
 		$this->_transformatorClass = $transformatorClass;

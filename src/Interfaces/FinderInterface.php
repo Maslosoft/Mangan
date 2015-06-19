@@ -22,7 +22,7 @@ use Maslosoft\Mangan\Document;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IFinder
+interface FinderInterface
 {
 
 	/**
@@ -131,7 +131,7 @@ interface IFinder
 	/**
 	 * Whenever to use cursor
 	 * @param type $useCursor
-	 * @return IFinder
+	 * @return FinderInterface
 	 */
 	public function withCursor($useCursor = true);
 }

@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 use MongoId;
 
 /**
@@ -21,7 +21,7 @@ use MongoId;
  * This sanitizer forces MongoId type for both client and mongo
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MongoObjectId implements ISanitizer
+class MongoObjectId implements SanitizerInterface
 {
 
 	public function read($model, $dbValue)

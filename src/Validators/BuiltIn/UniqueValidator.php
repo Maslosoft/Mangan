@@ -17,7 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\Validators\IValidator;
+use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 
 /**
  * CUniqueValidator class file.
@@ -37,7 +37,7 @@ use Maslosoft\Mangan\Interfaces\Validators\IValidator;
  * @package system.validators
  * @since 1.0
  */
-class UniqueValidator implements IValidator
+class UniqueValidator implements ValidatorInterface
 {
 
 	/**

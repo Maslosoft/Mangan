@@ -14,18 +14,18 @@
 namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
  * EmbeddedArrayDecorator
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class EmbeddedArrayDecorator implements IDecorator
+class EmbeddedArrayDecorator implements DecoratorInterface
 {
 
-	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		if (is_array($dbValue))
 		{
@@ -47,7 +47,7 @@ class EmbeddedArrayDecorator implements IDecorator
 		}
 	}
 
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		if (is_array($model->$name))
 		{

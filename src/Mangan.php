@@ -24,9 +24,9 @@ use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\I18NDecorator;
+use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 use Maslosoft\Mangan\Transformers\DocumentArray;
@@ -77,7 +77,7 @@ class Mangan
 	 * @var string[][]
 	 */
 	public $decorators = [
-		ITransformator::class => [
+		TransformatorInterface::class => [
 			DbRefArrayDecorator::class,
 			DbRefDecorator::class,
 			EmbeddedArrayDecorator::class,
@@ -106,7 +106,7 @@ class Mangan
 	 * @var string[][]
 	 */
 	public $filters = [
-		ITransformator::class => [
+		TransformatorInterface::class => [
 		],
 		DocumentArray::class => [
 			DocumentArrayFilter::class,

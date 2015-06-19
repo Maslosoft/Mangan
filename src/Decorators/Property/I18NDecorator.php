@@ -11,12 +11,13 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces\Decorators\Property;
+namespace Maslosoft\Mangan\Decorators\Property;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\I18NAble;
-use Maslosoft\Mangan\Interfaces\Transformators\ITransformator;
+use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Mangan\Interfaces\InternationalInterface;
+use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -24,7 +25,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class I18NDecorator implements IDecorator
+class I18NDecorator implements DecoratorInterface
 {
 
 	/**
@@ -35,21 +36,21 @@ class I18NDecorator implements IDecorator
 	 * @param mixed $dbValue
 	 * @return bool Return true if value should be assigned to model
 	 */
-	public function read($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		if (!$model instanceof I18NAble)
+		if (!$model instanceof InternationalInterface)
 		{
-			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), I18NAble::class));
+			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), InternationalInterface::class));
 		}
 		$lang = $model->getLang();
-		if(!is_array($dbValue))
+		if (!is_array($dbValue))
 		{
 			$value = $dbValue;
 			$dbValue = [];
 			$dbValue[$lang] = $value;
 		}
 		$model->setRawI18N($dbValue);
-		if(array_key_exists($lang, $dbValue))
+		if (array_key_exists($lang, $dbValue))
 		{
 			$model->$name = $dbValue[$lang];
 		}
@@ -57,23 +58,23 @@ class I18NDecorator implements IDecorator
 		{
 			$defaultLang = $model->getDefaultLanguage();
 			$i18nMeta = ManganMeta::create($model)->field($name)->i18n;
-			if($i18nMeta->allowDefault && array_key_exists($defaultLang, $dbValue))
+			if ($i18nMeta->allowDefault && array_key_exists($defaultLang, $dbValue))
 			{
 				$model->$name = $dbValue[$defaultLang];
 				return true;
 			}
-			if($i18nMeta->allowAny)
+			if ($i18nMeta->allowAny)
 			{
-				foreach($dbValue as $value)
+				foreach ($dbValue as $value)
 				{
-					if($value)
+					if ($value)
 					{
 						$model->$name = $value;
 					}
 				}
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -85,19 +86,19 @@ class I18NDecorator implements IDecorator
 	 * @param mixed $dbValue
 	 * @return bool Return true to store value to database
 	 */
-	public function write($model, $name, &$dbValue, $transformatorClass = ITransformator::class)
+	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		if (!$model instanceof I18NAble)
+		if (!$model instanceof InternationalInterface)
 		{
-			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), I18NAble::class));
+			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), InternationalInterface::class));
 		}
-		foreach($model->getRawI18N() as $field => $value)
+		foreach ($model->getRawI18N() as $field => $value)
 		{
-			if($field !== $name)
+			if ($field !== $name)
 			{
 				continue;
 			}
-			foreach($value as $code => $string)
+			foreach ($value as $code => $string)
 			{
 				$dbValue[$name][$code] = $string;
 			}

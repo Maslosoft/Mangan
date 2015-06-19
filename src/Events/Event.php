@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Events;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\Events\IEvent;
+use Maslosoft\Mangan\Interfaces\Events\EventInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -41,7 +41,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Event implements IEvent
+class Event implements EventInterface
 {
 
 	/**
@@ -73,7 +73,7 @@ class Event implements IEvent
 
 	/**
 	 * Array of events
-	 * @var IEvent[]
+	 * @var EventInterface[]
 	 */
 	private static $_events = [];
 

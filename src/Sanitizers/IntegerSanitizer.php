@@ -13,14 +13,14 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer;
+use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
  * Integer
  * This sanitizer forces type to be integer
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class IntegerSanitizer implements ISanitizer
+class IntegerSanitizer implements SanitizerInterface
 {
 
 	public function read($model, $dbValue)

@@ -1,5 +1,35 @@
 # Change Log
 
+## Verision 4 possibly backward incompatible changes:
+
+Ranamed interfaces:
+
+Maslosoft\Mangan\Interfaces\IActiveDocument -> Maslosoft\Mangan\Interfaces\ActiveDocumentInterface
+Maslosoft\Mangan\Interfaces\IActiveRecord -> Maslosoft\Mangan\Interfaces\ActiveRecordInterface
+Maslosoft\Mangan\Interfaces\IWithCollectionName -> Maslosoft\Mangan\Interfaces\CollectionNameInterface
+Maslosoft\Mangan\Interfaces\IWithCriteria -> Maslosoft\Mangan\Interfaces\CriteriaInterface
+Maslosoft\Mangan\Interfaces\Decorators\Model\IModelDecorator -> Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface
+Maslosoft\Mangan\Interfaces\Decorators\Property\IDecorator -> Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface
+Maslosoft\Mangan\Interfaces\IEntityManager -> Maslosoft\Mangan\Interfaces\EntityManagerInterface
+Maslosoft\Mangan\Interfaces\Events\IEvent -> Maslosoft\Mangan\Interfaces\Events\EventInterface
+Maslosoft\Mangan\Interfaces\Filters\Property\ITransformatorFilter -> Maslosoft\Mangan\Interfaces\Filters\Property\TransformatorFilterInterface
+Maslosoft\Mangan\Interfaces\IFinder -> Maslosoft\Mangan\Interfaces\FinderInterface
+Maslosoft\Mangan\Interfaces\Initializable -> Maslosoft\Mangan\Interfaces\InitInterface
+Maslosoft\Mangan\Interfaces\I18NAble -> Maslosoft\Mangan\Interfaces\InternationalInterface
+Maslosoft\Mangan\Interfaces\IModel -> Maslosoft\Mangan\Interfaces\ModelInterface
+Maslosoft\Mangan\Interfaces\IOwnered -> Maslosoft\Mangan\Interfaces\OwneredInterface
+Maslosoft\Mangan\Interfaces\Sanitizers\Property\ISanitizer -> Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface
+Maslosoft\Mangan\Interfaces\IScenarios -> Maslosoft\Mangan\Interfaces\ScenariosInterface
+Maslosoft\Mangan\Interfaces\IScope -> Maslosoft\Mangan\Interfaces\ScopeInterface
+Maslosoft\Mangan\Interfaces\IScopes -> Maslosoft\Mangan\Interfaces\ScopesInterface
+Maslosoft\Mangan\Interfaces\ISimpleTree -> Maslosoft\Mangan\Interfaces\SimpleTreeInterface
+Maslosoft\Mangan\Interfaces\Transformators\ITransformator -> Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface
+Maslosoft\Mangan\Interfaces\ITrash -> Maslosoft\Mangan\Interfaces\TrashInterface
+Maslosoft\Mangan\Interfaces\IValidatable -> Maslosoft\Mangan\Interfaces\ValidatableInterface
+Maslosoft\Mangan\Interfaces\Validators\IValidator -> Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface
+Maslosoft\Mangan\Interfaces\Validators\IValidatorProxy -> Maslosoft\Mangan\Interfaces\Validators\ValidatorProxyInterface
+
+
 ## [Unreleased](https://github.com/Maslosoft/Mangan/tree/HEAD)
 
 [Full Changelog](https://github.com/Maslosoft/Mangan/compare/3.1.5...HEAD)

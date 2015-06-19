@@ -15,12 +15,12 @@ namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
-use Maslosoft\Mangan\Interfaces\I18NAble;
+use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * I18NableTrait
- * @see I18NAble
+ * @see InternationalInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait I18NAbleTrait
@@ -85,13 +85,13 @@ trait I18NAbleTrait
 		}
 		$event = new ModelEvent($this);
 		$event->data = $code;
-		if (!Event::valid($this, I18NAble::EventBeforeLangChange, $event))
+		if (!Event::valid($this, InternationalInterface::EventBeforeLangChange, $event))
 		{
 			return;
 		}
 		$this->_changeAttributesLang($this->_lang, $code);
 		$this->_lang = $code;
-		Event::trigger($this, I18NAble::EventAfterLangChange, $event);
+		Event::trigger($this, InternationalInterface::EventAfterLangChange, $event);
 	}
 
 	/**
@@ -104,12 +104,12 @@ trait I18NAbleTrait
 	{
 		$event = new ModelEvent($this);
 		$event->data = $languages;
-		if (!Event::valid($this, I18NAble::EventBeforeLanguagesSet, $event))
+		if (!Event::valid($this, InternationalInterface::EventBeforeLanguagesSet, $event))
 		{
 			return;
 		}
 		$this->_languages = $languages;
-		Event::trigger($this, I18NAble::EventAfterLanguagesSet, $event);
+		Event::trigger($this, InternationalInterface::EventAfterLanguagesSet, $event);
 	}
 
 	/**

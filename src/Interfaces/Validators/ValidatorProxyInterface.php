@@ -11,28 +11,23 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Interfaces;
+namespace Maslosoft\Mangan\Interfaces\Validators;
 
 /**
- * Use this to provide scenarios
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IScenarios
+interface ValidatorProxyInterface
 {
-
-	const Insert = 'insert';
-	const Update = 'update';
-	const Delete = 'delete';
+	/**
+	 * Set validator
+	 * @param ValidatorInterface $validator
+	 */
+	public function setValidator(ValidatorInterface $validator);
 
 	/**
-	 * Set Scenario
-	 * @param string $scenario
+	 * Get validator
+	 * @return ValidatorInterface Validator instance
 	 */
-	public function setScenario($scenario);
-
-	/**
-	 * Get scenario
-	 * @return string Scenario, by default IScenarios::Insert
-	 */
-	public function getScenario();
+	public function getValidator();
 }

@@ -14,14 +14,14 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Interfaces\IValidatable;
+use Maslosoft\Mangan\Interfaces\ValidatableInterface;
 
 /**
  * Validator
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Validator implements IValidatable
+class Validator implements ValidatableInterface
 {
 
 	const EventBeforeValidate = 'beforeValidate';

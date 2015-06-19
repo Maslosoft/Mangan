@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Criteria;
  * @see Criteria
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface IWithCriteria
+interface CriteriaInterface
 {
 
 	/**

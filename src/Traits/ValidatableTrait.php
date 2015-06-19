@@ -13,11 +13,11 @@
 
 namespace Maslosoft\Mangan\Traits;
 
-use Maslosoft\Mangan\Interfaces\IValidatable;
+use Maslosoft\Mangan\Interfaces\ValidatableInterface;
 
 /**
  * ValidatableTrait
- * @see IValidatable
+ * @see ValidatableInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait ValidatableTrait

@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use InvalidArgumentException;
-use Maslosoft\Mangan\Interfaces\Decorators\Property\I18NDecorator;
+use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Meta\I18NMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 

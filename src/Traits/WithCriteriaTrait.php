@@ -14,11 +14,11 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Criteria;
-use Maslosoft\Mangan\Interfaces\IWithCriteria;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 
 /**
  * WithCriteriaTrait
- * @see IWithCriteria
+ * @see CriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait WithCriteriaTrait
