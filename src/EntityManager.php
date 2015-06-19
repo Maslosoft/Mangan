@@ -62,7 +62,7 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 *
-	 * @var 
+	 * @var
 	 */
 	public $meta = null;
 
@@ -91,12 +91,6 @@ class EntityManager implements EntityManagerInterface
 	private $_collection = null;
 
 	/**
-	 * Model class name
-	 * @var string
-	 */
-	private $_class = '';
-
-	/**
 	 * Create entity manager
 	 * @param AnnotatedInterface $model
 	 * @throws ManganException
@@ -105,7 +99,6 @@ class EntityManager implements EntityManagerInterface
 	{
 		$this->model = $model;
 		$this->sm = new ScopeManager($model);
-		$this->_class = get_class($model);
 		$this->options = new EntityOptions($model);
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
@@ -116,42 +109,6 @@ class EntityManager implements EntityManagerInterface
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
 		}
 		$this->_collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
-
-		/*
-		 * TODO Ensure indexes
-
-		  if ($this->ensureIndexes && !isset(self::$_indexes[$this->getCollectionName()]))
-		  {
-		  $indexInfo = $this->getCollection()->getIndexInfo();
-		  array_shift($indexInfo); // strip out default _id index
-
-		  $indexes = [];
-		  foreach ($indexInfo as $index)
-		  {
-		  $indexes[$index['name']] = [
-		  'key' => $index['key'],
-		  'unique' => isset($index['unique']) ? $index['unique'] : false,
-		  ];
-		  }
-		  self::$_indexes[$this->getCollectionName()] = $indexes;
-
-		  $this->ensureIndexes();
-		  }
-		 *
-		  method ensureIndexes:
-		  $indexNames = array_keys(self::$_indexes[$this->getCollectionName()]);
-		  foreach ($this->indexes() as $name => $index)
-		  {
-		  if (!in_array($name, $indexNames))
-		  {
-		  $this->getCollection()->ensureIndex(
-		  $index['key'], ['unique' => isset($index['unique']) ? $index['unique'] : false, 'name' => $name]
-		  );
-		  self::$_indexes[$this->getCollectionName()][$name] = $index;
-		  }
-		  }
-		 *
-		 */
 	}
 
 	/**
@@ -199,7 +156,7 @@ class EntityManager implements EntityManagerInterface
 			$rawData = RawArray::fromModel($model);
 			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
 			$result = $this->_result($rawResult, true);
-			
+
 			if ($result)
 			{
 				$this->_afterSave($model);
@@ -320,7 +277,7 @@ class EntityManager implements EntityManagerInterface
 			{
 				$rawResult = $this->_collection->save(RawArray::fromModel($model), $this->options->getSaveOptions());
 				$result = $this->_result($rawResult, true);
-				
+
 				if ($result)
 				{
 					$this->_afterSave($model);

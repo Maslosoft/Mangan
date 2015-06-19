@@ -25,17 +25,17 @@ class ScopeManager
 	 * Model instance
 	 * @var IModel
 	 */
-	private $model = null;
+	private $_model = null;
 
 	/**
 	 *
 	 * @var Criteria
 	 */
-	private $criteria = null;
+	private $_criteria = null;
 
 	public function __construct($model)
 	{
-		$this->model = $model;
+		$this->_model = $model;
 	}
 
 	/**
@@ -117,7 +117,7 @@ class ScopeManager
 		{
 			$criteria = new Criteria($criteria);
 		}
-		$criteria->mergeWith($this->criteria);
+		$criteria->mergeWith($this->_criteria);
 		return $criteria;
 	}
 

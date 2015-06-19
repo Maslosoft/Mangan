@@ -132,13 +132,6 @@ class Criteria
 	private $_useCursor = null;
 
 	/**
-	 * Model to use for decorators and sanitizer when creating conditions.
-	 * If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
-	 * @var AnnotatedInterface
-	 */
-	private $_model = null;
-
-	/**
 	 * Condition decorator
 	 * @var ConditionDecorator
 	 */
@@ -365,13 +358,12 @@ class Criteria
 
 	/**
 	 * Decorate and sanitize criteria with provided model.
-	 * 
-	 * @param AnnotatedInterface $model
+
+	 * @param AnnotatedInterface $model Model to use for decorators and sanitizer when creating conditions. If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
 	 * @return Criteria
 	 */
 	public function decorateWith($model)
 	{
-		$this->_model = $model;
 		$this->cd = new ConditionDecorator($model);
 		return $this;
 	}
@@ -586,7 +578,7 @@ class Criteria
 		if (in_array($op, $arrayOperators))
 		{
 			// Ensure array
-			if(!is_array($value))
+			if (!is_array($value))
 			{
 				$value = [$value];
 			}

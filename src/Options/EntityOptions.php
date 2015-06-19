@@ -13,7 +13,6 @@
 
 namespace Maslosoft\Mangan\Options;
 
-use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -28,12 +27,6 @@ class EntityOptions
 {
 
 	use \Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
-
-	/**
-	 * Model instance
-	 * @var Document
-	 */
-	private $_model = null;
 
 	/**
 	 *
@@ -54,12 +47,6 @@ class EntityOptions
 	private $_values = [];
 	private $_defaults = [];
 
-	/**
-	 *
-	 * @var string
-	 */
-	private $_connectionId = Mangan::DefaultConnectionId;
-
 	public function __construct($model)
 	{
 		// This is to use get/set
@@ -70,7 +57,6 @@ class EntityOptions
 
 		$this->_meta = ManganMeta::create($model)->type();
 		$this->_mangan = Mangan::fromModel($model);
-		$this->_connectionId = $this->_mangan->connectionId;
 	}
 
 	public function __get($name)
@@ -108,7 +94,7 @@ class EntityOptions
 		{
 			$result[$name] = $this->$name;
 		}
-		foreach($extraOptions as $name => $value)
+		foreach ($extraOptions as $name => $value)
 		{
 			$result[$name] = $value;
 		}
