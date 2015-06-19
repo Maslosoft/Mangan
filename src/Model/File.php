@@ -95,7 +95,7 @@ class File extends EmbeddedDocument
 	{
 		if (!$this->_id instanceof MongoId)
 		{
-			$this->_id = new MongoId($this->id);
+			$this->_id = new MongoId($this->_id);
 		}
 		return $this->_id;
 	}
