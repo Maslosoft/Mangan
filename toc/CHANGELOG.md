@@ -3,7 +3,7 @@
 ## Verision 4 possibly backward incompatible changes:
 
 Ranamed interfaces:
-
+```php
 Maslosoft\Mangan\Interfaces\IActiveDocument -> Maslosoft\Mangan\Interfaces\ActiveDocumentInterface
 Maslosoft\Mangan\Interfaces\IActiveRecord -> Maslosoft\Mangan\Interfaces\ActiveRecordInterface
 Maslosoft\Mangan\Interfaces\IWithCollectionName -> Maslosoft\Mangan\Interfaces\CollectionNameInterface
@@ -28,7 +28,7 @@ Maslosoft\Mangan\Interfaces\ITrash -> Maslosoft\Mangan\Interfaces\TrashInterface
 Maslosoft\Mangan\Interfaces\IValidatable -> Maslosoft\Mangan\Interfaces\ValidatableInterface
 Maslosoft\Mangan\Interfaces\Validators\IValidator -> Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface
 Maslosoft\Mangan\Interfaces\Validators\IValidatorProxy -> Maslosoft\Mangan\Interfaces\Validators\ValidatorProxyInterface
-
+```
 
 ## [Unreleased](https://github.com/Maslosoft/Mangan/tree/HEAD)
 
