@@ -56,7 +56,8 @@
 		"masterexploder/phpthumb": "2.0",
 		"maslosoft/embedi": "*",
 		"maslosoft/miniview": "*",
-		"maslosoft/gazebo": "*"
+		"maslosoft/gazebo": "*",
+		"psr/log": "^1.0"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master",
