@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
@@ -67,7 +68,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		{
 			$class = $dbValue['_class'];
 		}
-		if (!class_exists($class))
+		if (!ClassChecker::exists($class))
 		{
 			$event = new ClassNotFound($model);
 			$event->notFound = $class;
