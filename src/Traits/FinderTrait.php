@@ -47,7 +47,7 @@ trait FinderTrait
 	 */
 	public function find($criteria = null)
 	{
-		$this->_getFinder()->find($criteria);
+		return $this->_getFinder()->find($criteria);
 	}
 
 	/**
