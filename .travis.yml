@@ -14,7 +14,7 @@ before_install:
   - sudo apt-get install tokumx
 install:
   - composer install --prefer-dist --dev
-  - composer update maslosoft/mangantest
+  - pushd vendor/maslosoft/mangantest && git reset --hard && git pull && popd
 # For hhvm
   - composer require mongofill/mongofill:"@dev"
 before_script:
