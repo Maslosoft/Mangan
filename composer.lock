@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "4.0.2",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "fd789b26615a70fdbe294faeb1e4a62ee25f912a"
+                "reference": "2047b4676961826ba42254baeabb61314976fcd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/fd789b26615a70fdbe294faeb1e4a62ee25f912a",
-                "reference": "fd789b26615a70fdbe294faeb1e4a62ee25f912a",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/2047b4676961826ba42254baeabb61314976fcd1",
+                "reference": "2047b4676961826ba42254baeabb61314976fcd1",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-07-07 17:11:32"
+            "time": "2015-07-09 13:02:25"
         },
         {
             "name": "maslosoft/cache",
@@ -188,16 +188,16 @@
         },
         {
             "name": "maslosoft/gazebo",
-            "version": "1.1.3",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Gazebo.git",
-                "reference": "9fa38e5f39e77de95b893bc607f58e1d63237e05"
+                "reference": "729f61d4d5e3a1153191eb94d8ae9cab2688cf4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/9fa38e5f39e77de95b893bc607f58e1d63237e05",
-                "reference": "9fa38e5f39e77de95b893bc607f58e1d63237e05",
+                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/729f61d4d5e3a1153191eb94d8ae9cab2688cf4a",
+                "reference": "729f61d4d5e3a1153191eb94d8ae9cab2688cf4a",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
                 }
             ],
             "description": "Plugin container",
-            "time": "2015-05-05 08:41:04"
+            "time": "2015-07-09 13:26:23"
         },
         {
             "name": "maslosoft/miniview",
@@ -978,12 +978,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "483fb1c4c5a6516c5d88555720dfe25a0020c4bd"
+                "reference": "45297f3d97164d5684d371100679c0bf25cbe645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/483fb1c4c5a6516c5d88555720dfe25a0020c4bd",
-                "reference": "483fb1c4c5a6516c5d88555720dfe25a0020c4bd",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/45297f3d97164d5684d371100679c0bf25cbe645",
+                "reference": "45297f3d97164d5684d371100679c0bf25cbe645",
                 "shasum": ""
             },
             "require": {
@@ -1010,7 +1010,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-07-03 14:56:49"
+            "time": "2015-07-09 12:52:32"
         },
         {
             "name": "maslosoft/zamm",

@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
+use Maslosoft\Mangan\Helpers\Finalizer\FinalizingManager;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -58,7 +59,7 @@ abstract class Transformer
 			$decorator->write($name, $arr);
 		}
 		$md->write($arr);
-		return $arr;
+		return FinalizingManager::fromModel($arr, static::class, $model);
 	}
 
 	/**
@@ -76,7 +77,7 @@ abstract class Transformer
 		{
 			return null;
 		}
-		$data = (array)$data;
+		$data = (array) $data;
 		if (is_object($className))
 		{
 			$className = get_class($className);
@@ -92,7 +93,8 @@ abstract class Transformer
 				throw new TransformatorException('Could not determine document type');
 			}
 		}
-		return self::_toDocument($className, $data, $instance);
+		$model = self::_toDocument($className, $data, $instance);
+		return FinalizingManager::toModel(static::class, $model);
 	}
 
 	private static function _toDocument($className, $data, $instance)
