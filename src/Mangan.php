@@ -216,7 +216,7 @@ class Mangan implements LoggerAwareInterface
 	 * Instances of mangan
 	 * @var Mangan[]
 	 */
-	private static $_instances = [];
+	private static $_mn = [];
 
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
@@ -276,18 +276,20 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Get instance of Mangan component
+	 * Get flyweight instance of Mangan component.
+	 * Only one instance will be created for each `$connectionId`.
+	 *
 	 * @new
 	 * @param string $connectionId
 	 * @return Mangan
 	 */
-	public static function instance($connectionId = self::DefaultConnectionId)
+	public static function fly($connectionId = self::DefaultConnectionId)
 	{
-		if (empty(self::$_instances[$connectionId]))
+		if (empty(self::$_mn[$connectionId]))
 		{
-			self::$_instances[$connectionId] = new static($connectionId);
+			self::$_mn[$connectionId] = new static($connectionId);
 		}
-		return self::$_instances[$connectionId];
+		return self::$_mn[$connectionId];
 	}
 
 	/**
@@ -298,7 +300,7 @@ class Mangan implements LoggerAwareInterface
 	public static function fromModel(AnnotatedInterface $model)
 	{
 		$connectionId = ManganMeta::create($model)->type()->connectionId;
-		return self::instance($connectionId);
+		return self::fly($connectionId);
 	}
 
 	public function init()
@@ -307,8 +309,9 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Connect to DB if connection is already connected this method does nothing
-	 * @since v1.0
+	 * Connect to DB if connection is already connected this method return connection status.
+	 *
+	 * @return bool Returns true if connected
 	 */
 	public function connect()
 	{
@@ -316,6 +319,7 @@ class Mangan implements LoggerAwareInterface
 		{
 			return $this->getConnection()->connect();
 		}
+		return $this->getConnection()->connected;
 	}
 
 	/**
@@ -354,10 +358,12 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Set the connection
+	 * Set the connection by suppling `MongoClient` instance.
+	 *
+	 * Use this to set connection from external source.
+	 * In most scenarios this does not need to be called.
 	 *
 	 * @param MongoClient $connection
-	 * @since v1.0
 	 */
 	public function setConnection(MongoClient $connection)
 	{
@@ -366,8 +372,8 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Get MongoDB instance
+	 *
 	 * @return MongoDB Mongo DB instance
-	 * @since v1.0
 	 */
 	public function getDbInstance()
 	{
@@ -394,10 +400,12 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Set MongoDB instance
-	 * Enter description here ...
+	 * Set MongoDB instance by suppling database name.
+	 *
+	 * Use this to select db from external source.
+	 * In most scenarios this does not need to be called.
+	 *
 	 * @param string $name
-	 * @since v1.0
 	 */
 	public function setDbInstance($name)
 	{
@@ -407,7 +415,6 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Closes the currently active Mongo connection.
 	 * It does nothing if the connection is already closed.
-	 * @since v1.0
 	 */
 	protected function close()
 	{
@@ -420,9 +427,7 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Drop the current DB
-	 * TODO Move to entity manager
-	 * @since v1.0
+	 * Drop current database
 	 */
 	public function dropDb()
 	{

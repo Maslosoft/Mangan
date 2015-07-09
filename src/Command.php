@@ -46,7 +46,7 @@ class Command
 		$this->model = $model;
 		if (!$model)
 		{
-			$this->mn = Mangan::instance();
+			$this->mn = Mangan::fly();
 			return;
 		}
 		$this->mn = Mangan::fromModel($model);
