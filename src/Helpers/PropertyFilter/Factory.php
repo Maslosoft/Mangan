@@ -70,7 +70,7 @@ class Factory
 		{
 			self::$_configs[$connectionId] = [];
 			self::$_configs[$connectionId][$transformatorClass] = [];
-			$mangan = new Mangan($connectionId);
+			$mangan = Mangan::instance($connectionId);
 			$tranformator = new $transformatorClass;
 			foreach ($mangan->filters as $implementer => $filterClasses)
 			{

@@ -21,11 +21,18 @@ namespace Maslosoft\Mangan\Meta;
 abstract class BaseMeta
 {
 
-	public function __construct($data)
+	use \Maslosoft\Addendum\Traits\MetaState;
+
+	public function __construct($data = null)
 	{
-		if(is_array($data))
+		// For internal use
+		if (null === $data)
 		{
-			foreach($data as $key => $value)
+			return;
+		}
+		if (is_array($data))
+		{
+			foreach ($data as $key => $value)
 			{
 				$this->$key = $value;
 			}
