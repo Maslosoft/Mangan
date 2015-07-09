@@ -205,6 +205,12 @@ class Mangan implements LoggerAwareInterface
 	 */
 	private static $_version = null;
 
+	/**
+	 * Instances of mangan
+	 * @var Mangan[]
+	 */
+	private static $_instances = [];
+
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
 		$this->_di = new EmbeDi($connectionId);
@@ -270,7 +276,11 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public static function instance($connectionId = self::DefaultConnectionId)
 	{
-		return new self($connectionId);
+		if (empty(self::$_instances[$connectionId]))
+		{
+			self::$_instances[$connectionId] = new self($connectionId);
+		}
+		return self::$_instances[$connectionId];
 	}
 
 	/**
@@ -280,7 +290,7 @@ class Mangan implements LoggerAwareInterface
 	public static function fromModel(AnnotatedInterface $model)
 	{
 		$connectionId = ManganMeta::create($model)->type()->connectionId;
-		return new self($connectionId);
+		return self::instance($connectionId);
 	}
 
 	public function init()

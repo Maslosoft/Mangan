@@ -21,6 +21,8 @@ namespace Maslosoft\Mangan\Meta;
 class I18NMeta
 {
 
+	use \Maslosoft\Addendum\Traits\MetaState;
+
 	public $enabled = false;
 	public $allowDefault = false;
 	public $allowAny = false;
