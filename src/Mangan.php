@@ -286,6 +286,7 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Get instance of Mangan configured for particular model
 	 * @param AnnotatedInterface $model
+	 * @return Mangan
 	 */
 	public static function fromModel(AnnotatedInterface $model)
 	{
