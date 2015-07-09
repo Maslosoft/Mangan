@@ -105,6 +105,13 @@ class Mangan implements LoggerAwareInterface
 	];
 
 	/**
+	 * Configuration for finalizers.
+	 * @var string[][]
+	 */
+	public $finalizers = [
+	];
+
+	/**
 	 * Configuration of property filters for transformers
 	 * Array key is decorator class name or interface, values are filter class names.
 	 * @var string[][]
@@ -278,7 +285,7 @@ class Mangan implements LoggerAwareInterface
 	{
 		if (empty(self::$_instances[$connectionId]))
 		{
-			self::$_instances[$connectionId] = new self($connectionId);
+			self::$_instances[$connectionId] = new static($connectionId);
 		}
 		return self::$_instances[$connectionId];
 	}
