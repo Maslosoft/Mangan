@@ -220,7 +220,7 @@ class Mangan implements LoggerAwareInterface
 
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
-		$this->_di = new EmbeDi($connectionId);
+		$this->_di = EmbeDi::fly($connectionId);
 		if (!$connectionId)
 		{
 			$connectionId = self::DefaultConnectionId;
@@ -228,6 +228,10 @@ class Mangan implements LoggerAwareInterface
 		$this->connectionId = $connectionId;
 		$this->_di->configure($this);
 		$this->_cs = new ConnectionStorage($this, $connectionId);
+		if (empty(self::$_mn[$connectionId]))
+		{
+			self::$_mn[$connectionId] = $this;
+		}
 	}
 
 	public function __get($name)
