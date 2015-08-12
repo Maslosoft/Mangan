@@ -35,7 +35,7 @@ class ClassNameDecorator implements ModelDecoratorInterface
 	 */
 	public function read($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
-		
+
 	}
 
 	/**
@@ -48,10 +48,7 @@ class ClassNameDecorator implements ModelDecoratorInterface
 	 */
 	public function write($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
-		if (!isset($dbValues['_class']))
-		{
-			$dbValues['_class'] = get_class($model);
-		}
+		$dbValues['_class'] = get_class($model);
 	}
 
 }
