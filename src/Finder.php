@@ -275,13 +275,17 @@ class Finder implements FinderInterface
 
 	/**
 	 * Checks whether there is row satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * See {@link find()} for detailed explanation about $criteria
 	 * @param Criteria|null $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
 	public function exists(Criteria $criteria = null)
 	{
-		return $this->count($criteria) > 0;
+		$criteria = $this->sm->apply($criteria);
+		$criteria->decorateWith($this->model);
+		$cursor = $this->em->getCollection()->find($criteria->getConditions());
+		$cursor->limit(1);
+		return (bool) $cursor->count(true);
 	}
 
 	/**

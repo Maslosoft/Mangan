@@ -205,7 +205,7 @@ class DataProvider extends CDataProvider
 		  $sort=array();
 		  foreach($this->getSortDirections($order) as $name=>$descending)
 		  {
-		  $sort[$name]=$descending ? Criteria::SORT_DESC : Criteria::SORT_ASC;
+		  $sort[$name]=$descending ? Criteria::SortDesc : Criteria::SortAsc;
 		  }
 		  $this->_criteria->setSort($sort);
 		  } */

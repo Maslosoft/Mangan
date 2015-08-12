@@ -125,7 +125,7 @@ trait SimpleTreeTrait
 			}
 			$criteria = new Criteria();
 			$criteria->addCond('parentId', '==', new MongoId((string) $this->id));
-			$criteria->sort('order', Criteria::SORT_ASC);
+			$criteria->sort('order', Criteria::SortAsc);
 			if (!$full)
 			{
 				$criteria->select([

@@ -120,8 +120,15 @@ class Criteria
 		'comment' => '$comment'
 	];
 
-	const SORT_ASC = 1;
-	const SORT_DESC = -1;
+	/**
+	 * Sort Ascending
+	 */
+	const SortAsc = 1;
+
+	/**
+	 * Sort Descending
+	 */
+	const SortDesc = -1;
 
 	private $_select = [];
 	private $_limit = null;
@@ -161,7 +168,7 @@ class Criteria
 	 * 	'select'=>array('fieldName', 'fieldName2'),
 	 * 	'limit'=>10,
 	 *  'offset'=>20,
-	 *  'sort'=>array('fieldName1'=>Criteria::SORT_ASC, 'fieldName2'=>Criteria::SORT_DESC),
+	 *  'sort'=>array('fieldName1'=>Criteria::SortAsc, 'fieldName2'=>Criteria::SortDesc),
 	 * );
 	 * </PRE>
 	 * @param mixed $criteria
@@ -427,8 +434,20 @@ class Criteria
 	}
 
 	/**
+	 * Set sorting of results. Use model field names as keys and Criteria's sort consntants.
+	 *
+	 * Afields will be automatically decorated according to model.
+	 * For instance, when sorting on i18n field simply use field name, without language prefix.
+	 *
+	 * Example:
+	 * ```php
+	 * $criteria = new Criteria();
+	 * $sort = [
+	 * 		'title' => Criteria::SortAsc
+	 * ];
+	 * $criteria->setSort();
+	 * ```
 	 * @since v1.0
-	 * TODO Decorate
 	 */
 	public function setSort(array $sort)
 	{
@@ -544,7 +563,7 @@ class Criteria
 	}
 
 	/**
-	 * Add sorting, avaliabe orders are: Criteria::SORT_ASC and Criteria::SORT_DESC
+	 * Add sorting, avaliabe orders are: Criteria::SortAsc and Criteria::SortDesc
 	 * Each call will be groupped with previous calls
 	 * @param string $fieldName
 	 * @param integer $order
