@@ -147,16 +147,16 @@
         },
         {
             "name": "maslosoft/embedi",
-            "version": "1.0.9",
+            "version": "1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/EmbeDi.git",
-                "reference": "caecda610466c9b6dd732b8256be6aba19b99ad6"
+                "reference": "debf2e6522cdcadcec2286958b598e958b46feb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/EmbeDi/zipball/caecda610466c9b6dd732b8256be6aba19b99ad6",
-                "reference": "caecda610466c9b6dd732b8256be6aba19b99ad6",
+                "url": "https://api.github.com/repos/Maslosoft/EmbeDi/zipball/debf2e6522cdcadcec2286958b598e958b46feb8",
+                "reference": "debf2e6522cdcadcec2286958b598e958b46feb8",
                 "shasum": ""
             },
             "require-dev": {
@@ -184,7 +184,7 @@
                 }
             ],
             "description": "Embedded DI container",
-            "time": "2015-08-11 10:21:30"
+            "time": "2015-08-11 10:54:18"
         },
         {
             "name": "maslosoft/gazebo",
@@ -978,12 +978,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "45297f3d97164d5684d371100679c0bf25cbe645"
+                "reference": "4a466b16dff038af826104baf5691a6cea4a5502"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/45297f3d97164d5684d371100679c0bf25cbe645",
-                "reference": "45297f3d97164d5684d371100679c0bf25cbe645",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/4a466b16dff038af826104baf5691a6cea4a5502",
+                "reference": "4a466b16dff038af826104baf5691a6cea4a5502",
                 "shasum": ""
             },
             "require": {
@@ -1010,7 +1010,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-07-09 12:52:32"
+            "time": "2015-08-12 09:36:46"
         },
         {
             "name": "maslosoft/zamm",
