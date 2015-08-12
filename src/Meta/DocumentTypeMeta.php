@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaType;
 use Maslosoft\Mangan\Annotations\AliasAnnotation;
+use Maslosoft\Mangan\Annotations\ClientFlagAnnotation;
 use Maslosoft\Mangan\Annotations\CollectionNameAnnotation;
 use Maslosoft\Mangan\Annotations\ConnectionIdAnnotation;
 use Maslosoft\Mangan\Annotations\EntityManagerAnnotation;
@@ -66,6 +67,13 @@ class DocumentTypeMeta extends MetaType
 	 * @var string
 	 */
 	public $connectionId = Mangan::DefaultConnectionId;
+
+	/**
+	 * Annotation defined client connection flags
+	 * @see ClientFlagAnnotation
+	 * @var mixed[]
+	 */
+	public $clientFlags = [];
 
 	/**
 	 * Primary key field or fields

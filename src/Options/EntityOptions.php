@@ -30,12 +30,6 @@ class EntityOptions
 
 	/**
 	 *
-	 * @var DocumentTypeMeta
-	 */
-	private $_meta = null;
-
-	/**
-	 *
 	 * @var Mangan
 	 */
 	private $_mangan = null;
@@ -55,16 +49,15 @@ class EntityOptions
 			PropertyMaker::defineProperty($this, $name, $this->_defaults);
 		}
 
-		$this->_meta = ManganMeta::create($model)->type();
+		foreach (ManganMeta::create($model)->type()->clientFlags as $name => $value)
+		{
+			$this->_values[$name] = $value;
+		}
 		$this->_mangan = Mangan::fromModel($model);
 	}
 
 	public function __get($name)
 	{
-		if (isset($this->_meta->$name))
-		{
-			return $this->_meta->$name;
-		}
 		if (array_key_exists($name, $this->_values))
 		{
 			return $this->_values[$name]; // We have flag set, return it
