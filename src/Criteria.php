@@ -130,6 +130,18 @@ class Criteria
 	 */
 	const SortDesc = -1;
 
+	/**
+	 * Sort Ascending
+	 * @deprecated since version 4.0.7
+	 */
+	const SORT_ASC = 1;
+
+	/**
+	 * Sort Descending
+	 * @deprecated since version 4.0.7
+	 */
+	const SORT_DESC = -1;
+
 	private $_select = [];
 	private $_limit = null;
 	private $_offset = null;
