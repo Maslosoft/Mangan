@@ -53,7 +53,7 @@ class ScopeManager
 	 * 		),
 	 * 	),
 	 * 	'recently'=>array(
-	 * 		'sort'=>array('create_time'=>Criteria::SORT_DESC),
+	 * 		'sort'=>array('create_time'=>Criteria::SortDesc),
 	 * 		'limit'=>5,
 	 * 	),
 	 * );

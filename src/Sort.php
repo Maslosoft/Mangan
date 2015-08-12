@@ -125,7 +125,7 @@ class Sort extends CSort
 		$directions = $this->getDirections();
 		if (isset($directions[$attribute]))
 		{
-			$class = ($directions[$attribute] == Criteria::SORT_DESC) ? 'desc' : 'asc';
+			$class = ($directions[$attribute] == Criteria::SortDesc) ? 'desc' : 'asc';
 			if (isset($htmlOptions['class']))
 			{
 				$htmlOptions['class'].=' ' . $class;
@@ -143,7 +143,7 @@ class Sort extends CSort
 		}
 		else
 		{
-			$direction = Criteria::SORT_ASC;
+			$direction = Criteria::SortAsc;
 		}
 
 		if ($this->multiSort)
@@ -201,16 +201,16 @@ class Sort extends CSort
 						if ($descending)
 						{
 							$attribute = substr($attribute, 0, $pos);
-							$direction = Criteria::SORT_DESC;
+							$direction = Criteria::SortDesc;
 						}
 						else
 						{
-							$direction = Criteria::SORT_ASC;
+							$direction = Criteria::SortAsc;
 						}
 					}
 					else
 					{
-						$direction = Criteria::SORT_ASC;
+						$direction = Criteria::SortAsc;
 					}
 
 					if (($this->resolveAttribute($attribute)) !== false)
@@ -262,7 +262,7 @@ class Sort extends CSort
 		$sorts = [];
 		foreach ($directions as $attribute => $direction)
 		{
-			if ($direction == Criteria::SORT_DESC)
+			if ($direction == Criteria::SortDesc)
 			{
 				$sorts[] = $attribute;
 			}
