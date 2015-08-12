@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
+use Maslosoft\Mangan\Criteria\Conditions;
 
 /**
  * Criteria
@@ -146,6 +147,12 @@ class Criteria
 	private $_limit = null;
 	private $_offset = null;
 	private $_conditions = [];
+
+	/**
+	 * Raw conditions array
+	 * @var mixed[]
+	 */
+	private $_rawConds = [];
 	private $_sort = [];
 	private $_workingFields = [];
 	private $_useCursor = null;
@@ -260,41 +267,6 @@ class Criteria
 			return $this;
 		}
 
-		$opTable = array_values(self::$operators);
-
-		foreach ($criteria->_conditions as $fieldName => $conds)
-		{
-			if (
-					is_array($conds) &&
-					count(array_diff(array_keys($conds), $opTable)) == 0
-			)
-			{
-				if (isset($this->_conditions[$fieldName]) && is_array($this->_conditions[$fieldName]))
-				{
-					foreach ($this->_conditions[$fieldName] as $operator => $value)
-					{
-						if (!in_array($operator, $opTable))
-						{
-							unset($this->_conditions[$fieldName][$operator]);
-						}
-					}
-				}
-				else
-				{
-					$this->_conditions[$fieldName] = [];
-				}
-
-				foreach ($conds as $operator => $value)
-				{
-					$this->_conditions[$fieldName][$operator] = $value;
-				}
-			}
-			else
-			{
-				$this->_conditions[$fieldName] = $conds;
-			}
-		}
-
 		if (!empty($criteria->_limit))
 		{
 			$this->_limit = $criteria->_limit;
@@ -312,7 +284,49 @@ class Criteria
 			$this->_select = array_merge($this->_select, $criteria->_select);
 		}
 
+
+
+		$this->_conditions = $this->_mergeConditions($this->_conditions, $criteria->getConditions());
+
 		return $this;
+	}
+
+	private function _mergeConditions($source, $conditions)
+	{
+		$opTable = array_values(self::$operators);
+		foreach ($conditions as $fieldName => $conds)
+		{
+			if (
+					is_array($conds) &&
+					count(array_diff(array_keys($conds), $opTable)) == 0
+			)
+			{
+				if (isset($source[$fieldName]) && is_array($source[$fieldName]))
+				{
+					foreach ($source[$fieldName] as $operator => $value)
+					{
+						if (!in_array($operator, $opTable))
+						{
+							unset($source[$fieldName][$operator]);
+						}
+					}
+				}
+				else
+				{
+					$source[$fieldName] = [];
+				}
+
+				foreach ($conds as $operator => $value)
+				{
+					$source[$fieldName][$operator] = $value;
+				}
+			}
+			else
+			{
+				$source[$fieldName] = $conds;
+			}
+		}
+		return $source;
 	}
 
 	/**
@@ -394,7 +408,12 @@ class Criteria
 	 */
 	public function getConditions()
 	{
-		return $this->_conditions;
+		$conditions = [];
+		foreach ($this->_rawConds as $c)
+		{
+			$conditions = $this->_makeCond($c[Conditions::FieldName], $c[Conditions::Operator], $c[Conditions::Value], $conditions);
+		}
+		return $this->_mergeConditions($this->_conditions, $conditions);
 	}
 
 	/**
@@ -600,6 +619,25 @@ class Criteria
 	 */
 	public function addCond($fieldName, $op, $value)
 	{
+		$this->_rawConds[] = [
+			Conditions::FieldName => $fieldName,
+			Conditions::Operator => $op,
+			Conditions::Value => $value
+		];
+		return $this;
+	}
+
+	/**
+	 * Get condition
+	 * If specified field already has a condition, values will be merged
+	 * duplicates will be overriden by new values!
+	 * @param string $fieldName
+	 * @param string $op operator
+	 * @param mixed $value
+	 * @since v1.0
+	 */
+	private function _makeCond($fieldName, $op, $value, $conditions = [])
+	{
 		// For array values
 		$arrayOperators = [
 			'or',
@@ -636,36 +674,36 @@ class Criteria
 
 		if ($op == self::$operators['or'])
 		{
-			if (!isset($this->_conditions[$op]))
+			if (!isset($conditions[$op]))
 			{
-				$this->_conditions[$op] = [];
+				$conditions[$op] = [];
 			}
-			$this->_conditions[$op][] = [$fieldName => $value];
+			$conditions[$op][] = [$fieldName => $value];
 		}
 		else
 		{
-			if (!isset($this->_conditions[$fieldName]) && $op != self::$operators['equals'])
+			if (!isset($conditions[$fieldName]) && $op != self::$operators['equals'])
 			{
-				$this->_conditions[$fieldName] = [];
+				$conditions[$fieldName] = [];
 			}
 
 			if ($op != self::$operators['equals'])
 			{
 				if (
-						!is_array($this->_conditions[$fieldName]) ||
-						count(array_diff(array_keys($this->_conditions[$fieldName]), array_values(self::$operators))) > 0
+						!is_array($conditions[$fieldName]) ||
+						count(array_diff(array_keys($conditions[$fieldName]), array_values(self::$operators))) > 0
 				)
 				{
-					$this->_conditions[$fieldName] = [];
+					$conditions[$fieldName] = [];
 				}
-				$this->_conditions[$fieldName][$op] = $value;
+				$conditions[$fieldName][$op] = $value;
 			}
 			else
 			{
-				$this->_conditions[$fieldName] = $value;
+				$conditions[$fieldName] = $value;
 			}
 		}
-		return $this;
+		return $conditions;
 	}
 
 }
