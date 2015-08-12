@@ -23,6 +23,10 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 class Conditions
 {
 
+	const FieldName = 1;
+	const Operator = 2;
+	const Value = 3;
+
 	public function __construct()
 	{
 		;
@@ -30,7 +34,7 @@ class Conditions
 
 	public function add()
 	{
-		
+
 	}
 
 	public function addOr()
@@ -43,14 +47,14 @@ class Conditions
 		return $this;
 	}
 
-
 	public function fromArray($conditions)
 	{
-		
+
 	}
 
 	public function get()
 	{
-		
+
 	}
+
 }
