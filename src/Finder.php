@@ -276,6 +276,7 @@ class Finder implements FinderInterface
 	/**
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $criteria
+	 * See https://blog.serverdensity.com/checking-if-a-document-exists-mongodb-slow-findone-vs-find/ for performance info
 	 * @param Criteria|null $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
@@ -283,9 +284,16 @@ class Finder implements FinderInterface
 	{
 		$criteria = $this->sm->apply($criteria);
 		$criteria->decorateWith($this->model);
+		/**
+		 * TODO Use as limited fields set as possible here:
+		 * Pk Fields, or only id, or fields used as query, still need to investigate
+		 */
 		$cursor = $this->em->getCollection()->find($criteria->getConditions());
 		$cursor->limit(1);
-		return (bool) $cursor->count(true);
+		
+		// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see: 
+		// https://github.com/mongofill/mongofill/issues/86
+		return ($cursor->count() !== 0);
 	}
 
 	/**
