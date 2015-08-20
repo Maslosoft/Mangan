@@ -28,6 +28,10 @@ use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Sanitizers\DateSanitizer;
+use Maslosoft\Mangan\Sanitizers\MongoObjectId;
+use Maslosoft\Mangan\Sanitizers\MongoStringId;
+use Maslosoft\Mangan\Sanitizers\UnixDateSanitizer;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
@@ -139,6 +143,17 @@ class Mangan implements LoggerAwareInterface
 	public $validators = [
 		BooleanProxy::class => BooleanValidator::class,
 		UniqueProxy::class => UniqueValidator::class,
+	];
+
+	/**
+	 * Sanitizers ramapping for common scenarios.
+	 * @var string[][]
+	 */
+	public $sanitizersMap = [
+		JsonArray::class => [
+			MongoObjectId::class => MongoStringId::class,
+			DateSanitizer::class => UnixDateSanitizer::class
+		]
 	];
 
 	/**
