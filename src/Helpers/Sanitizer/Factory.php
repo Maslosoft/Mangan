@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
 use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Exceptions\ManganException;
+use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Sanitizers\ArraySanitizer;
@@ -32,24 +33,47 @@ use Maslosoft\Mangan\Sanitizers\StringSanitizer;
 class Factory
 {
 
-	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta)
+	private static $sanitizers = [];
+	private static $arraySanitizers = [];
+
+	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta, $transformatorClass)
 	{
 		$sanitizer = self::_resolve($meta, $modelMeta);
-		if ($sanitizer)
+
+		/**
+		 * TODO Remap here
+		 */
+		$map = Mangan::fly($modelMeta->connectionId)->sanitizersMap;
+		if (isset($map[$transformatorClass]))
 		{
-			if ($meta->sanitizeArray)
-			{
-				return new ArraySanitizer($sanitizer);
-			}
-			return $sanitizer;
+			
 		}
-		return new PassThrough();
+
+
+		// Sanitize as array
+		if ($meta->sanitizeArray)
+		{
+			if (!isset(self::$arraySanitizers[$sanitizer]))
+			{
+				self::$arraySanitizers[$sanitizer] = new ArraySanitizer(new $sanitizer);
+			}
+			return self::$arraySanitizers[$sanitizer];
+		}
+
+		// Sanitize scalar/single value
+		if (!isset(self::$sanitizers[$sanitizer]))
+		{
+			self::$sanitizers[$sanitizer] = new $sanitizer;
+		}
+		return self::$sanitizers[$sanitizer];
 	}
 
 	private static function _resolve(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta)
 	{
+		// Sanitizer is explicitly set
 		if ($meta->sanitizer)
 		{
+			// If short name is used add default namespace
 			if (strstr($meta->sanitizer, '\\') === false)
 			{
 				$className = sprintf('%s\%s', PassThrough::Ns, $meta->sanitizer);
@@ -58,25 +82,28 @@ class Factory
 			{
 				$className = $meta->sanitizer;
 			}
-			if(!ClassChecker::exists($className))
+			if (!ClassChecker::exists($className))
 			{
 				throw new ManganException(sprintf("Sanitizer class `%s` not found for field `%s` in model `%s`", $className, $meta->name, $modelMeta->name));
 			}
-			return new $className;
+			return $className;
 		}
 
+		// Guess sanitizer
 		switch (gettype($meta->default))
 		{
 			case 'boolean':
-				return new BooleanSanitizer;
+				return BooleanSanitizer::class;
 			case 'double':
-				return new DoubleSanitizer;
+				return DoubleSanitizer::class;
 			case 'integer':
-				return new IntegerSanitizer;
+				return IntegerSanitizer::class;
 			case 'string':
-				return new StringSanitizer;
+				return StringSanitizer::class;
 		}
-		return false;
+
+		// Fallback to passthrough
+		return PassThrough::class;
 	}
 
 }

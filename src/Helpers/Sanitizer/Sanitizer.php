@@ -37,7 +37,7 @@ class Sanitizer extends Transformator
 
 	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
-		return Factory::create($meta, $modelMeta);
+		return Factory::create($meta, $modelMeta, $transformatorClass);
 	}
 
 }
