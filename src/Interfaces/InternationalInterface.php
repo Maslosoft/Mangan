@@ -53,14 +53,12 @@ interface InternationalInterface
 
 	/**
 	 * This method must return available language codes
-	 * @deprecated since version number
 	 * @return string[] Array of language codes
 	 */
 	public function getLanguages();
 
 	/**
 	 * Set all available language codes
-	 * @deprecated since version number
 	 * @param string[] $languages
 	 */
 	public function setLanguages($languages);
