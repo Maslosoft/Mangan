@@ -40,15 +40,12 @@ class Factory
 	{
 		$sanitizer = self::_resolve($meta, $modelMeta);
 
-		/**
-		 * TODO Remap here
-		 */
+		// Remap sanitizer if needed
 		$map = Mangan::fly($modelMeta->connectionId)->sanitizersMap;
-		if (isset($map[$transformatorClass]))
+		if (isset($map[$transformatorClass]) && isset($map[$transformatorClass][$sanitizer]))
 		{
-			
+			$sanitizer = $map[$transformatorClass][$sanitizer];
 		}
-
 
 		// Sanitize as array
 		if ($meta->sanitizeArray)

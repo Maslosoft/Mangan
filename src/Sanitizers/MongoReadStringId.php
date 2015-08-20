@@ -15,18 +15,13 @@ namespace Maslosoft\Mangan\Sanitizers;
 
 /**
  * MongoStringId
- * This sanitizer provide mongo id as string
+ * This sanitizer provide mongo id as string, while saving to db as `ObjectId`
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MongoStringId extends MongoObjectId
+class MongoReadStringId extends MongoObjectId
 {
 
 	public function read($model, $dbValue)
-	{
-		return (string) $this->_cast($dbValue);
-	}
-
-	public function write($model, $dbValue)
 	{
 		return (string) $this->_cast($dbValue);
 	}
