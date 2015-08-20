@@ -18,16 +18,16 @@ use MongoDate;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class UnixDateSanitizer extends DateSanitizer
+class DateWriteUnixSanitizer extends DateSanitizer
 {
 
-	public function read($model, $dbValue)
+	public function write($model, $dbValue)
 	{
 		if ($dbValue instanceof MongoDate)
 		{
-			return $dbValue->sec;
+			return (int) $dbValue->sec;
 		}
-		return (new MongoDate((int) $dbValue))->sec;
+		return (int) (new MongoDate((int) $dbValue))->sec;
 	}
 
 }

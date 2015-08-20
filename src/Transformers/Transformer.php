@@ -20,6 +20,7 @@ use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
 use Maslosoft\Mangan\Helpers\Finalizer\FinalizingManager;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -42,16 +43,16 @@ abstract class Transformer
 		$calledClass = get_called_class();
 		$decorator = new Decorator($model, $calledClass);
 		$md = new ModelDecorator($model, $calledClass);
-		$sanitizer = new Sanitizer($model);
+		$sanitizer = new Sanitizer($model, $calledClass);
 		$filter = new Filter($model, $calledClass);
 		$arr = [];
 		foreach ($meta->fields() as $name => $fieldMeta)
 		{
-			if ((bool) $fields && !in_array($name, $fields))
+			if (!empty($fields) && !in_array($name, $fields))
 			{
 				continue;
 			}
-			if (!$filter->fromModel($model, $meta->$name))
+			if (!$filter->fromModel($model, $fieldMeta))
 			{
 				continue;
 			}
@@ -111,12 +112,12 @@ abstract class Transformer
 		$calledClass = get_called_class();
 		$decorator = new Decorator($model, $calledClass);
 		$md = new ModelDecorator($model, $calledClass);
-		$sanitizer = new Sanitizer($model);
+		$sanitizer = new Sanitizer($model, $calledClass);
 		$filter = new Filter($model, $calledClass);
 		foreach ($data as $name => $value)
 		{
 			$fieldMeta = $meta->$name;
-			/* @var \Maslosoft\Mangan\Meta\DocumentPropertyMeta $fieldMeta */
+			/* @var $fieldMeta DocumentPropertyMeta */
 			if (!$fieldMeta)
 			{
 				continue;
