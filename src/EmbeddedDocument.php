@@ -55,6 +55,7 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	/**
 	 * Model metadata
 	 * @Ignored
+	 * @Persistent(false)
 	 * @var ManganMeta
 	 */
 	public $meta = null;

@@ -26,7 +26,7 @@ use MongoId;
 
 /**
  * TreeTrait
- *
+ * TODO Simple tree needs serious refactor
  * @see SimpleTreeInterface
  * @author Piotr
  */
@@ -100,54 +100,17 @@ trait SimpleTreeTrait
 		// Root nodes does not have parentId
 		if ($this->parentId)
 		{
+			// Put node to root if parent does not exists
+			/**
+			 * TODO Use exists here instead of raw finder.
+			 * TODO investigate why rawfinder was used here.
+			 */
 			if (!(new RawFinder($this))->findByPk(new MongoId($this->parentId)))
 			{
 				$this->parentId = null;
 				(new EntityManager($this))->update(['parentId']);
 			}
 		}
-	}
-
-	/**
-	 * TODO This MUST be binded only if explicitly requested
-	 * TODO This should be handled by `DbRef` annotation
-	 * @return MongoDocument[]
-	 * @Ignore
-	 */
-	public function getChildren($full = false)
-	{
-		$children = $this->getAttribute('children');
-		if (null === $children)
-		{
-			if (!$this->id)
-			{
-				return [];
-			}
-			$criteria = new Criteria();
-			$criteria->addCond('parentId', '==', new MongoId((string) $this->id));
-			$criteria->sort('order', Criteria::SortAsc);
-			if (!$full)
-			{
-				$criteria->select([
-					'_id',
-					'parentId',
-					'title',
-					'order'
-				]);
-			}
-			$children = $this->findAll($criteria);
-
-			$this->setAttribute('children', $children);
-		}
-		return $children;
-	}
-
-	/**
-	 * @Ignore
-	 */
-	public function setChildren()
-	{
-
 	}
 
 	/**

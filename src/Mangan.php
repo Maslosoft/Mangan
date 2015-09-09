@@ -110,6 +110,7 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Configuration for finalizers.
+	 * @see https://github.com/Maslosoft/Mangan/issues/36
 	 * @var string[][]
 	 */
 	public $finalizers = [
