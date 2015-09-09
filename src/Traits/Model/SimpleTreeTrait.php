@@ -14,8 +14,6 @@
 namespace Maslosoft\Mangan\Traits\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Ilmatar\Components\MongoDocument;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
