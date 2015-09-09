@@ -50,6 +50,7 @@ class ConditionDecorator
 				$field => $value
 			];
 		}
+
 		$this->model->$field = $value;
 		$data = CriteriaArray::fromModel($this->model, [$field]);
 		return $this->_flatten($field, $this->model->$field, $data[$field]);

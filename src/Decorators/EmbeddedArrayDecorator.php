@@ -33,11 +33,11 @@ class EmbeddedArrayDecorator implements DecoratorInterface
 			foreach ($dbValue as $key => $data)
 			{
 				EmbeddedDecorator::ensureClass($model, $name, $data);
-				
+
 				// Set ensured class to $dbValue
 				$instance = $this->_getInstance($model->$name, $dbValue, $data);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance);
-				$docs[$key] = $embedded;
+				$docs[] = $embedded;
 			}
 			$model->$name = $docs;
 		}
@@ -56,7 +56,7 @@ class EmbeddedArrayDecorator implements DecoratorInterface
 			foreach ($model->$name as $key => $document)
 			{
 				$data = $transformatorClass::fromModel($document);
-				$dbValue[$name][$key] = $data;
+				$dbValue[$name][] = $data;
 			}
 		}
 		else
@@ -74,24 +74,25 @@ class EmbeddedArrayDecorator implements DecoratorInterface
 	 */
 	private function _getInstance($instances, $dbValue, $data)
 	{
-		if(!count($instances))
+		if (!count($instances))
 		{
 			return null;
 		}
 		$map = [];
-		foreach($dbValue as $val)
+		foreach ($dbValue as $val)
 		{
-			$id = (string)$val['_id'];
+			$id = (string) $val['_id'];
 			$map[$id] = true;
 		}
-		foreach($instances as $instance)
+		foreach ($instances as $instance)
 		{
-			$id = (string)$instance->_id;
-			if(isset($map[$id]) && $data['_id'] == $id && $instance instanceof $data['_class'])
+			$id = (string) $instance->_id;
+			if (isset($map[$id]) && $data['_id'] == $id && $instance instanceof $data['_class'])
 			{
 				return $instance;
 			}
 		}
 		return null;
 	}
+
 }
