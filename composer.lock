@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ea5bc8ee624f15afefa2012106a34e50",
+    "hash": "180193d316caf6b8492e86bf236934ec",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -372,6 +372,137 @@
                 "rotate"
             ],
             "time": "2013-07-12 17:57:58"
+        },
+        {
+            "name": "mongofill/mongofill",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mongofill/mongofill.git",
+                "reference": "c2a16b7cb6c8fa94aa4c286acd8b4a90c3a843f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mongofill/mongofill/zipball/c2a16b7cb6c8fa94aa4c286acd8b4a90c3a843f5",
+                "reference": "c2a16b7cb6c8fa94aa4c286acd8b4a90c3a843f5",
+                "shasum": ""
+            },
+            "provide": {
+                "ext-mongo": "*"
+            },
+            "require-dev": {
+                "athletic/athletic": "dev-master",
+                "phpunit/phpunit": "~4.7.7"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    {
+                        "Mongofill": "src/"
+                    },
+                    {
+                        "Mongo": "src/Mongo.php"
+                    },
+                    {
+                        "MongoBinData": "src/MongoBinData.php"
+                    },
+                    {
+                        "MongoClient": "src/MongoClient.php"
+                    },
+                    {
+                        "MongoCode": "src/MongoCode.php"
+                    },
+                    {
+                        "MongoCollection": "src/MongoCollection.php"
+                    },
+                    {
+                        "MongoConnectionException": "src/MongoConnectionException.php"
+                    },
+                    {
+                        "MongoCursor": "src/MongoCursor.php"
+                    },
+                    {
+                        "MongoCursorException": "src/MongoCursorException.php"
+                    },
+                    {
+                        "MongoCursorTimeoutException": "src/MongoCursorTimeoutException.php"
+                    },
+                    {
+                        "MongoDB": "src/MongoDB.php"
+                    },
+                    {
+                        "MongoDBRef": "src/MongoDBRef.php"
+                    },
+                    {
+                        "MongoDate": "src/MongoDate.php"
+                    },
+                    {
+                        "MongoException": "src/MongoException.php"
+                    },
+                    {
+                        "MongoGridFS": "src/MongoGridFS.php"
+                    },
+                    {
+                        "MongoGridFSFile": "src/MongoGridFSFile.php"
+                    },
+                    {
+                        "MongoGridFSException": "src/MongoGridFSException.php"
+                    },
+                    {
+                        "MongoGridFSCursor": "src/MongoGridFSCursor.php"
+                    },
+                    {
+                        "MongoId": "src/MongoId.php"
+                    },
+                    {
+                        "MongoInt32": "src/MongoInt32.php"
+                    },
+                    {
+                        "MongoInt64": "src/MongoInt64.php"
+                    },
+                    {
+                        "MongoLog": "src/MongoLog.php"
+                    },
+                    {
+                        "MongoMaxKey": "src/MongoMaxKey.php"
+                    },
+                    {
+                        "MongoMinKey": "src/MongoMinKey.php"
+                    },
+                    {
+                        "MongoRegex": "src/MongoRegex.php"
+                    },
+                    {
+                        "MongoResultException": "src/MongoResultException.php"
+                    },
+                    {
+                        "MongoTimestamp": "src/MongoTimestamp.php"
+                    }
+                ],
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Husák",
+                    "email": "husak.j@gmail.com"
+                },
+                {
+                    "name": "Mongofill Community",
+                    "homepage": "https://github.com/mongofill/mongofill/graphs/contributors"
+                },
+                {
+                    "name": "Máximo Cuadros",
+                    "email": "mcuadros@gmail.com"
+                }
+            ],
+            "description": "Polyfill of PECL Mongo extension",
+            "time": "2015-08-22 21:39:36"
         },
         {
             "name": "psr/log",
@@ -978,12 +1109,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "8f43d7eaf5cd7326b6e0b45fe25d1c22a4bf2e53"
+                "reference": "ac9ad43b46cad881ac910fd8fd4edcf9d288e46f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/8f43d7eaf5cd7326b6e0b45fe25d1c22a4bf2e53",
-                "reference": "8f43d7eaf5cd7326b6e0b45fe25d1c22a4bf2e53",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/ac9ad43b46cad881ac910fd8fd4edcf9d288e46f",
+                "reference": "ac9ad43b46cad881ac910fd8fd4edcf9d288e46f",
                 "shasum": ""
             },
             "require": {
@@ -1010,7 +1141,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-10-05 11:20:32"
+            "time": "2015-10-05 11:52:54"
         },
         {
             "name": "maslosoft/zamm",
@@ -2374,6 +2505,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "mongofill/mongofill": 20,
         "maslosoft/mangantest": 20,
         "maslosoft/zamm": 20,
         "maslosoft/mangan-examples": 20

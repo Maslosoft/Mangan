@@ -6,26 +6,27 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Interfaces;
+namespace Maslosoft\Mangan\Profillers;
 
+use Maslosoft\Mangan\Interfaces\ProfilerInterface;
 use MongoCursor;
 
 /**
+ * NullProfiller
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ProfillerInterface
+class NullProfiler implements ProfilerInterface
 {
 
-	/**
-	 * Profile any data
-	 * @param string $data
-	 */
-	public function profile($data);
+	public function profile($data)
+	{
+		// Do nothing
+	}
 
-	/**
-	 * Profile cursor
-	 * @param MongoCursor $cursor
-	 */
-	public function cursor(MongoCursor $cursor);
+	public function cursor(MongoCursor $cursor)
+	{
+		// Do nothing
+	}
+
 }

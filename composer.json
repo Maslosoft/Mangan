@@ -57,7 +57,8 @@
 		"maslosoft/embedi": "*",
 		"maslosoft/miniview": "*",
 		"maslosoft/gazebo": "*",
-		"psr/log": "^1.0"
+		"psr/log": "^1.0",
+		"mongofill/mongofill": "@dev"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master",
