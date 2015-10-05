@@ -17,6 +17,8 @@ use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Interfaces\ActiveDocumentInterface;
 use Maslosoft\Mangan\Interfaces\InitInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Sanitizers\MongoObjectId;
+use MongoId;
 
 /**
  * EmbeddedDocument
