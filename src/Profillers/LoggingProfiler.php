@@ -9,7 +9,7 @@
 namespace Maslosoft\Mangan\Profillers;
 
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
-use Maslosoft\Mangan\Interfaces\ProfillerInterface;
+use Maslosoft\Mangan\Interfaces\ProfilerInterface;
 use Maslosoft\Mangan\Mangan;
 use MongoCursor;
 
@@ -18,7 +18,7 @@ use MongoCursor;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class LoggingProfiller implements ProfillerInterface, ManganAwareInterface
+class LoggingProfiler implements ProfilerInterface, ManganAwareInterface
 {
 
 	/**
@@ -48,7 +48,7 @@ class LoggingProfiller implements ProfillerInterface, ManganAwareInterface
 	/**
 	 * Set mangan instance
 	 * @param Mangan $mangan
-	 * @return LoggingProfiller
+	 * @return LoggingProfiler
 	 */
 	public function setMangan(Mangan $mangan)
 	{

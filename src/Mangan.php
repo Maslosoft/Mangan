@@ -27,10 +27,10 @@ use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
-use Maslosoft\Mangan\Interfaces\ProfillerInterface;
+use Maslosoft\Mangan\Interfaces\ProfilerInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Profillers\NullProfiller;
+use Maslosoft\Mangan\Profillers\NullProfiler;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
 use Maslosoft\Mangan\Sanitizers\DateWriteUnixSanitizer;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
@@ -227,9 +227,9 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Profiller
-	 * @var ProfillerInterface
+	 * @var ProfilerInterface
 	 */
-	private $_profiller = null;
+	private $_profiler = null;
 
 	/**
 	 * Version number holder
@@ -307,31 +307,31 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Get profiller instance. This is guaranted, if not configured will return NullProfiller.
-	 * @see NullProfiller
-	 * @return ProfillerInterface
+	 * Get profiler instance. This is guaranted, if not configured will return NullProfiller.
+	 * @see NullProfiler
+	 * @return ProfilerInterface
 	 */
-	public function getProfiller()
+	public function getProfiler()
 	{
-		if (null === $this->_profiller)
+		if (null === $this->_profiler)
 		{
-			$this->_profiller = new NullProfiller;
+			$this->_profiler = new NullProfiler;
 		}
-		if ($this->_profiller instanceof ManganAwareInterface)
+		if ($this->_profiler instanceof ManganAwareInterface)
 		{
-			$this->_profiller->setMangan($this);
+			$this->_profiler->setMangan($this);
 		}
-		return $this->_profiller;
+		return $this->_profiler;
 	}
 
 	/**
-	 * Set profiller instance
-	 * @param ProfillerInterface $profiller
+	 * Set profiler instance
+	 * @param ProfilerInterface $profiller
 	 * @return Mangan
 	 */
-	public function setProfiller(ProfillerInterface $profiller)
+	public function setProfiler(ProfilerInterface $profiller)
 	{
-		$this->_profiller = $profiller;
+		$this->_profiler = $profiller;
 		return $this;
 	}
 

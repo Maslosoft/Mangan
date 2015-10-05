@@ -165,7 +165,7 @@ class Finder implements FinderInterface
 			{
 				$cursor->fields($criteria->getSelect(true));
 			}
-			$this->mn->getProfiller()->cursor($cursor);
+			$this->mn->getProfiler()->cursor($cursor);
 			if ($this->_useCursor)
 			{
 				return new Cursor($cursor, $this->model);
