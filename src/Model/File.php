@@ -21,6 +21,7 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Helpers\IdHelper;
 use Maslosoft\Mangan\Mangan;
+use MongoDB;
 use MongoGridFSFile;
 use MongoId;
 
@@ -31,6 +32,8 @@ use MongoId;
  */
 class File extends EmbeddedDocument
 {
+
+	const TmpPrefix = 'tmp';
 
 	/**
 	 * NOTE: This is also in gridfs, here is added to avoid querying gridfs just to get filename
@@ -61,6 +64,11 @@ class File extends EmbeddedDocument
 	 * @var string
 	 */
 	public $contentType = '';
+
+	/**
+	 * Mongo DB instance
+	 * @var MongoDB
+	 */
 	private $_db = null;
 
 	public function __construct($scenario = 'insert', $lang = '')
@@ -147,7 +155,15 @@ class File extends EmbeddedDocument
 			'parentId' => $this->_id,
 			'isTemp' => false
 		];
-		return $this->_db->getGridFS()->findOne(array_merge($criteria, $params));
+		$conditions = array_merge($criteria, $params);
+		if (!$conditions['isTemp'])
+		{
+			return $this->_db->getGridFS()->findOne($conditions);
+		}
+		else
+		{
+			return $this->_db->getGridFS(self::TmpPrefix)->findOne($conditions);
+		}
 	}
 
 	/**
@@ -257,10 +273,20 @@ class File extends EmbeddedDocument
 				'parentId' => $this->_id
 			];
 			$this->_db->getGridFS()->remove($oldFiles);
+			$this->_db->getGridFS(self::TmpPrefix)->remove($oldFiles);
 		}
 
 		// Store new file
-		$this->_db->getGridFS()->put($tempName, $params);
+		if (!$params['isTemp'])
+		{
+			// In main storage
+			$this->_db->getGridFS()->put($tempName, $params);
+		}
+		else
+		{
+			// In temporary gfs
+			$this->_db->getGridFS(self::TmpPrefix)->put($tempName, $params);
+		}
 	}
 
 	/**
@@ -272,6 +298,7 @@ class File extends EmbeddedDocument
 			'parentId' => $this->_id
 		];
 		$this->_db->getGridFS()->remove($criteria);
+		$this->_db->getGridFS(self::TmpPrefix)->remove($criteria);
 	}
 
 }
