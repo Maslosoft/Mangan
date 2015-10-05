@@ -19,8 +19,8 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Helpers\IdHelper;
 use Maslosoft\Mangan\Mangan;
-use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use MongoGridFSFile;
 use MongoId;
 
@@ -223,10 +223,10 @@ class File extends EmbeddedDocument
 		if (!$this->getRoot()->_id instanceof MongoId)
 		{
 			// Assume string id
-			if (is_string($this->getRoot()->_id) && strlen($this->getRoot()->_id) == 24)
+			if (IdHelper::isId($this->getRoot()->_id))
 			{
 				// Convert existing string id to MongoId
-				$this->getRoot()->_id = new MongoId($this->getRoot()->_id);
+				$this->getRoot()->_id = new MongoId((string) $this->getRoot()->_id);
 			}
 			else
 			{
