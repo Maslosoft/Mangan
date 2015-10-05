@@ -53,7 +53,22 @@ trait I18NAbleTrait
 
 	/**
 	 * Get i18n values with all languages.
-	 * This method must return value set by `setRawI18N`
+	 * This returns all language values of all class fields. Class field names are
+	 * keys for arrays of language values, with language codes as a keys.
+	 *
+	 * Example returned variable:
+	 * ```php
+	 * [
+	 * 		'name' => [
+	 * 			'en' => 'January',
+	 * 			'pl' => 'Styczeń'
+	 * 		],
+	 * 		'description' => [
+	 * 			'en' => 'First mothn of a year'
+	 * 			'pl' => 'Pierwszy miesiąc roku'
+	 * 		]
+	 * ]
+	 * ```
 	 * @return mixed[] Associative array of language values
 	 * @Ignore
 	 */
@@ -69,7 +84,26 @@ trait I18NAbleTrait
 	}
 
 	/**
-	 * Set language code
+	 * Set language code. This changes current model language.
+	 * After setting language model attributes will store values in different locale.
+	 *
+	 * Language code must be previously set by `setLanguages`.
+	 * When trying to set undefined language code, method will do nothing.
+	 * When setting already choosen language code, method will also ignore this call.
+	 * Example method calls:
+	 * ```php
+	 * // Set available languages
+	 * $model->setLanguages(['en', 'pl']);
+	 *
+	 * // Will ignore as en is by default
+	 * $model->setLang('en');
+	 *
+	 * // Will set pl as language
+	 * $model->setLang('pl');
+	 *
+	 * // Will ignore as ru is not available
+	 * $model->setLang('ru')
+	 * ```
 	 * @param string $code
 	 * @Ignore
 	 */
@@ -95,9 +129,15 @@ trait I18NAbleTrait
 	}
 
 	/**
-	 *
-	 * @param type $languages
-	 * @return void
+	 * Set available languages. This method accepts one parameter,
+	 * array contaning language codes prefably in short ISO form.
+	 * Example valid array and method calls:
+	 * ```php
+	 * $languages = ['en', 'pl', 'ru'];
+	 * $model->setLanguages($languages);
+	 * $model2->setLanguages(['en']);
+	 * ```
+	 * @param string[] $languages
 	 * @Ignore
 	 */
 	public function setLanguages($languages)

@@ -40,7 +40,6 @@ abstract class Document extends EmbeddedDocument implements ActiveRecordInterfac
 	/**
 	 * Mongo id field
 	 * @Label('Database ID')
-	 * @KoBindable(false)
 	 * @Sanitizer(MongoObjectId)
 	 * @see MongoObjectId
 	 * @var MongoId|null
@@ -51,7 +50,7 @@ abstract class Document extends EmbeddedDocument implements ActiveRecordInterfac
 	 * Alias to _id
 	 * @Label('Database ID')
 	 * @Persistent(false)
-	 * @--Alias('_id')
+	 * @Alias('_id')
 	 * @see https://github.com/Maslosoft/Mangan/issues/40
 	 * @var string|null
 	 */
@@ -77,16 +76,19 @@ abstract class Document extends EmbeddedDocument implements ActiveRecordInterfac
 	}
 
 	/**
-	 * Returns the static model of the specified Document class.
-	 * The model returned is a static instance of the Document class.
-	 * It is provided for invoking class-level methods (something similar to static class methods.)
+	 * Returns the empty model of the specified Document class.
+	 * It is provided for invoking class-level methods, espacially userfull for finders.
+	 *
+	 * Example usage:
+	 * ```php
+	 * $user = User::model()->findByPk('5612470866a19540308b4568');
+	 * ```
 	 * @param string $lang
 	 * @return Document model instance.
 	 */
 	public static function model($lang = null)
 	{
-		$className = get_called_class();
-		return new $className(null, $lang);
+		return new static(null, $lang);
 	}
 
 }

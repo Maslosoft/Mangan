@@ -33,14 +33,6 @@ class File extends EmbeddedDocument
 {
 
 	/**
-	 * @SafeValidator
-	 * @Sanitizer(MongoObjectId)
-	 * @see MongoObjectId
-	 * @var MongoId
-	 */
-	public $_id = null;
-
-	/**
 	 * NOTE: This is also in gridfs, here is added to avoid querying gridfs just to get filename
 	 * @var string
 	 */
@@ -152,7 +144,7 @@ class File extends EmbeddedDocument
 	protected function _get($params = [])
 	{
 		$criteria = [
-			'parentId' => $this->getId(),
+			'parentId' => $this->_id,
 			'isTemp' => false
 		];
 		return $this->_db->getGridFS()->findOne(array_merge($criteria, $params));
@@ -228,11 +220,24 @@ class File extends EmbeddedDocument
 		/**
 		 * TODO Check if root data is saved corectly
 		 */
+		if (!$this->getRoot()->_id instanceof MongoId)
+		{
+			// Assume string id
+			if (is_string($this->getRoot()->_id) && strlen($this->getRoot()->_id) == 24)
+			{
+				// Convert existing string id to MongoId
+				$this->getRoot()->_id = new MongoId($this->getRoot()->_id);
+			}
+			else
+			{
+				// Set new id now
+				$this->getRoot()->_id = new MongoId;
+			}
+		}
 		$rootId = $this->getRoot()->_id;
-		$rootId = $rootId instanceof MongoId ? $rootId : new MongoId($rootId);
 		$data = [
 			'_id' => new MongoId(),
-			'parentId' => $this->getId(),
+			'parentId' => $this->_id,
 			'rootClass' => $this->getRoot()->_class,
 			'rootId' => $rootId,
 			'filename' => $fileName,
@@ -249,7 +254,7 @@ class File extends EmbeddedDocument
 		if (!$params['isTemp'])
 		{
 			$oldFiles = [
-				'parentId' => $this->getId()
+				'parentId' => $this->_id
 			];
 			$this->_db->getGridFS()->remove($oldFiles);
 		}
@@ -264,7 +269,7 @@ class File extends EmbeddedDocument
 	protected function _onAfterDelete()
 	{
 		$criteria = [
-			'parentId' => $this->getId()
+			'parentId' => $this->_id
 		];
 		$this->_db->getGridFS()->remove($criteria);
 	}

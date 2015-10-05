@@ -19,7 +19,9 @@ use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
 /**
  * Make alias to field. If any of two fields will not be default, both field will be set.
  * Example, alias to `_id` on field `id`:
- *		&commat;Alias('_id')
+ *
+ * 		&commat;Alias('_id')
+ *
  * @template Alias('${fieldName}')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
