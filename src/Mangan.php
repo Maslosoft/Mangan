@@ -26,8 +26,11 @@ use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
+use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
+use Maslosoft\Mangan\Interfaces\ProfillerInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Profillers\NullProfiller;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
 use Maslosoft\Mangan\Sanitizers\DateWriteUnixSanitizer;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
@@ -223,6 +226,12 @@ class Mangan implements LoggerAwareInterface
 	private $_logger = null;
 
 	/**
+	 * Profiller
+	 * @var ProfillerInterface
+	 */
+	private $_profiller = null;
+
+	/**
 	 * Version number holder
 	 * @var string
 	 */
@@ -276,10 +285,12 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Set PSR compliant logger
 	 * @param LoggerInterface $logger
+	 * @return Mangan
 	 */
 	public function setLogger(LoggerInterface $logger)
 	{
 		$this->_logger = $logger;
+		return $this;
 	}
 
 	/**
@@ -293,6 +304,35 @@ class Mangan implements LoggerAwareInterface
 			$this->_logger = new NullLogger;
 		}
 		return $this->_logger;
+	}
+
+	/**
+	 * Get profiller instance. This is guaranted, if not configured will return NullProfiller.
+	 * @see NullProfiller
+	 * @return ProfillerInterface
+	 */
+	public function getProfiller()
+	{
+		if (null === $this->_profiller)
+		{
+			$this->_profiller = new NullProfiller;
+		}
+		if ($this->_profiller instanceof ManganAwareInterface)
+		{
+			$this->_profiller->setMangan($this);
+		}
+		return $this->_profiller;
+	}
+
+	/**
+	 * Set profiller instance
+	 * @param ProfillerInterface $profiller
+	 * @return Mangan
+	 */
+	public function setProfiller(ProfillerInterface $profiller)
+	{
+		$this->_profiller = $profiller;
+		return $this;
 	}
 
 	/**

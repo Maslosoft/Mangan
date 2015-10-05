@@ -165,10 +165,7 @@ class Finder implements FinderInterface
 			{
 				$cursor->fields($criteria->getSelect(true));
 			}
-//			if ($this->getMongoDBComponent()->enableProfiling)
-//			{
-//				Yii::log($this->_class . '.findAll()' . var_export($cursor->explain(), true), CLogger::LEVEL_PROFILE, 'Maslosoft.Mangan.Document');
-//			}
+			$this->mn->getProfiller()->cursor($cursor);
 			if ($this->_useCursor)
 			{
 				return new Cursor($cursor, $this->model);
