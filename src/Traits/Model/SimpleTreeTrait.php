@@ -35,6 +35,7 @@ trait SimpleTreeTrait
 
 	/**
 	 * @DbRefArray
+	 * @RelatedArray(parentId)
 	 * @var AnnotatedInterface[]
 	 */
 	public $children = null;
@@ -46,35 +47,37 @@ trait SimpleTreeTrait
 	public $order = 1000000;
 
 	/**
+	 * NOTE: This must be called by class using this trait
 	 * @Ignore
 	 */
 	public function init()
 	{
-		/**
-		 * TODO This propably should be initialized somewhere else
-		 */
-		$onBeforeTrash = function($event)
+		if ($this instanceof TrashInterface)
 		{
-			$this->_onBeforeTrash($event);
-		};
-		$onBeforeTrash->bindTo($this);
-		Event::on($this, TrashInterface::EventBeforeTrash, $onBeforeTrash);
+			// Trash related events
+			$onBeforeTrash = function($event)
+			{
+				$this->_onBeforeTrash($event);
+			};
+			$onBeforeTrash->bindTo($this);
+			Event::on($this, TrashInterface::EventBeforeTrash, $onBeforeTrash);
 
 
-		$onAfterTrash = function($event)
-		{
-			$this->_onAfterTrash($event);
-		};
-		$onAfterTrash->bindTo($this);
-		Event::on($this, TrashInterface::EventAfterTrash, $onAfterTrash);
+			$onAfterTrash = function($event)
+			{
+				$this->_onAfterTrash($event);
+			};
+			$onAfterTrash->bindTo($this);
+			Event::on($this, TrashInterface::EventAfterTrash, $onAfterTrash);
 
 
-		$onAfterRestore = function($event)
-		{
-			$this->_onAfterRestore($event);
-		};
-		$onAfterRestore->bindTo($this);
-		Event::on($this, TrashInterface::EventAfterRestore, $onAfterRestore);
+			$onAfterRestore = function($event)
+			{
+				$this->_onAfterRestore($event);
+			};
+			$onAfterRestore->bindTo($this);
+			Event::on($this, TrashInterface::EventAfterRestore, $onAfterRestore);
+		}
 	}
 
 	private function _onBeforeTrash(ModelEvent $event)
