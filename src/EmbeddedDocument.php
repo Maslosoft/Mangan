@@ -42,7 +42,6 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	 * Mongo id field
 	 * NOTE: This is usefull for embedded documents too, as it is used for keeping order
 	 * @Label('Database ID')
-	 * @KoBindable(false)
 	 * @Sanitizer(MongoObjectId)
 	 * @see MongoObjectId
 	 * @var MongoId|null

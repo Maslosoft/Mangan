@@ -65,36 +65,49 @@ class AliasDecorator implements ModelDecoratorInterface
 		/* @var $typeMeta DocumentTypeMeta */
 		foreach ($typeMeta->aliases as $from => $to)
 		{
-			$this->_writeValue($meta, $from, $to, $dbValues);
-			$this->_writeValue($meta, $to, $from, $dbValues);
+			$this->_writeValue($meta, $from, $to, $dbValues, $model);
+			$this->_writeValue($meta, $to, $from, $dbValues, $model);
 		}
 	}
 
 	private function _readValue($meta, $from, $to, &$dbValues, $model)
 	{
-		if (!array_key_exists($from, $dbValues))
+		$fieldMeta = $meta->$from;
+		if (!$fieldMeta)
 		{
 			return;
 		}
-		$fieldMeta = $meta->$from;
 		/* @var $fieldMeta DocumentPropertyMeta */
-		if ($fieldMeta->default !== $dbValues[$from])
+		if ($fieldMeta->default !== $model->$from)
 		{
 			$model->$to = $model->$from;
 		}
 	}
 
-	private function _writeValue($meta, $from, $to, &$dbValues)
+	private function _writeValue($meta, $from, $to, &$dbValues, $model)
 	{
-		if (!array_key_exists($from, $dbValues))
+		$fieldMeta = $meta->$from;
+		if (!$fieldMeta)
 		{
 			return;
 		}
-		$fieldMeta = $meta->$from;
+		if (!array_key_exists($from, $dbValues))
+		{
+			$dbValues[$from] = $fieldMeta->default;
+		}
+		if (!array_key_exists($to, $dbValues))
+		{
+			$dbValues[$to] = $fieldMeta->default;
+		}
 		/* @var $fieldMeta DocumentPropertyMeta */
 		if ($fieldMeta->default !== $dbValues[$from])
 		{
 			$dbValues[$to] = $dbValues[$from];
+		}
+		// Set model value too
+		if ($fieldMeta->default !== $model->$from)
+		{
+			$model->$to = $model->$from;
 		}
 	}
 

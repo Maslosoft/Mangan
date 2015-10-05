@@ -290,8 +290,8 @@ class Finder implements FinderInterface
 		 */
 		$cursor = $this->em->getCollection()->find($criteria->getConditions());
 		$cursor->limit(1);
-		
-		// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see: 
+
+		// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
 		// https://github.com/mongofill/mongofill/issues/86
 		return ($cursor->count() !== 0);
 	}
