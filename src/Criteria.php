@@ -13,9 +13,11 @@
 
 namespace Maslosoft\Mangan;
 
+use Exception;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\Mangan\Criteria\Conditions;
+use Maslosoft\Mangan\Interfaces\SortInterface;
 
 /**
  * Criteria
@@ -470,27 +472,82 @@ class Criteria
 	 * Afields will be automatically decorated according to model.
 	 * For instance, when sorting on i18n field simply use field name, without language prefix.
 	 *
-	 * Example:
+	 * Sort by title example:
 	 * ```php
 	 * $criteria = new Criteria();
 	 * $sort = [
 	 * 		'title' => Criteria::SortAsc
 	 * ];
-	 * $criteria->setSort();
+	 * $criteria->setSort($sort);
 	 * ```
-	 * @since v1.0
+	 * If title is declared as i18n and language is set to `en`, it will sort by `title.en` ascending in this case.
+	 *
+	 * Subsequent calls to setSort will override existing sort field and add new ones.
+	 *
+	 * Sort by title and then reverse order and add another field example:
+	 * ```php
+	 * $criteria = new Criteria();
+	 * $sort = [
+	 * 		'title' => Criteria::SortAsc
+	 * ];
+	 * $criteria->setSort($sort);
+	 * // Override order and add second sort field
+	 * $sort = [
+	 * 		'title' => Criteria::SortDesc,
+	 * 			'active' => Critera::SortAsc
+	 * ];
+	 * $criteria->setSort($sort);
+	 * ```
+	 * Will sort by title descending, then active ascending
+	 *
+	 * When using `Sort` object as param, it will replace entire sorting
+	 * information with that provided by `Sort` instance.
+	 *
+	 * Sort by title and then replace with `Sort` instance example:
+	 * ```php
+	 * $criteria = new Criteria();
+	 * $sort = [
+	 * 		'title' => Criteria::SortAsc
+	 * 			'active' => Critera::SortAsc
+	 * ];
+	 * $criteria->setSort($sort);
+	 *
+	 * // Override order completely with new Sort instance
+	 * $sort = new Sort([
+	 * 		'title' => Criteria::SortDesc,
+	 * ];
+	 * $criteria->setSort($sort);
+	 * ```
+	 * Will sort by title descending
+	 *
+	 *
+	 * @param mixed[]|SortInterface
+	 * @return Criteria
 	 */
-	public function setSort(array $sort)
+	public function setSort($sort)
 	{
-		foreach ($sort as $fieldName => $order)
+		if ($sort instanceof SortInterface)
 		{
-			$decorated = $this->cd->decorate($fieldName);
-			$this->_sort[key($decorated)] = $order;
+			$this->_sort = $sort->getSort();
 		}
+		else
+		{
+			if (!is_array($sort))
+			{
+				throw new Exception();
+			}
+			foreach ($sort as $fieldName => $order)
+			{
+				$decorated = $this->cd->decorate($fieldName);
+				$this->_sort[key($decorated)] = $order;
+			}
+		}
+		return $this;
 	}
 
 	/**
-	 * @since v1.3.7
+	 * Whenever to use cursor
+	 * @return bool Whever to use Cursor
 	 */
 	public function getUseCursor()
 	{
@@ -498,11 +555,14 @@ class Criteria
 	}
 
 	/**
-	 * @since v1.3.7
+	 * Use cursor for fetching data
+	 * @param bool $useCursor Whenever to use cursor
+	 * @return Criteria
 	 */
 	public function setUseCursor($useCursor)
 	{
 		$this->_useCursor = $useCursor;
+		return $this;
 	}
 
 	/**
@@ -516,7 +576,14 @@ class Criteria
 	}
 
 	/**
-	 * @since v1.3.1
+	 * Set field to select.
+	 * Pass array with field names as keys and true as value, ie:
+	 * ```php
+	 * $criteria->setSelect(['_id' => true, 'title' => true]);
+	 * ```
+	 *
+	 * @param bool[] $select Fields to select
+	 * @return Criteria
 	 */
 	public function setSelect(array $select)
 	{
@@ -533,6 +600,7 @@ class Criteria
 				$this->_select[$key] = $value;
 			}
 		}
+		return $this;
 	}
 
 	/**

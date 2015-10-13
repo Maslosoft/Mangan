@@ -13,9 +13,11 @@
 
 namespace Maslosoft\Mangan;
 
-use CDataProvider;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\DataProviderInterface;
+use Maslosoft\Mangan\Interfaces\FinderInterface;
+use Maslosoft\Mangan\Interfaces\SortInterface;
 
 /**
  * Mongo document data provider
@@ -33,7 +35,7 @@ use Maslosoft\Mangan\Interfaces\CriteriaInterface;
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @since v1.0
  */
-class DataProvider extends CDataProvider
+class DataProvider implements DataProviderInterface// extends CDataProvider
 {
 
 	public static $CLS = __CLASS__;
@@ -61,7 +63,7 @@ class DataProvider extends CDataProvider
 
 	/**
 	 * Finder instance
-	 * @var Finder
+	 * @var FinderInterface
 	 */
 	private $_finder = null;
 
@@ -71,9 +73,11 @@ class DataProvider extends CDataProvider
 	private $_criteria;
 
 	/**
-	 * @var Sort
+	 * @var SortInterface
 	 */
 	private $_sort;
+	private $_data = null;
+	private $_totalItemCount = null;
 
 	/**
 	 * Constructor.
@@ -99,7 +103,7 @@ class DataProvider extends CDataProvider
 			throw new ManganException('Invalid model type for ' . __CLASS__);
 		}
 
-		$this->_finder = new Finder($this->model);
+		$this->_finder = Finder::create($this->model);
 		if ($this->model instanceof CriteriaInterface)
 		{
 			$this->_criteria = $this->model->getDbCriteria();
@@ -121,7 +125,6 @@ class DataProvider extends CDataProvider
 			$this->_criteria->setSelect($fields);
 		}
 
-		$this->setId(base_convert(crc32($this->modelClass), 10, 36));
 		foreach ($config as $key => $value)
 		{
 			$this->$key = $value;
@@ -176,13 +179,61 @@ class DataProvider extends CDataProvider
 		if ($this->_sort === null)
 		{
 			$this->_sort = new Sort;
-			$this->_sort->model = $this->model;
-			if (($id = $this->getId()) != '')
-			{
-				$this->_sort->sortVar = $id . '_sort';
-			}
+			$this->_sort->setModel($this->model);
 		}
 		return $this->_sort;
+	}
+
+	/**
+	 * Set sort
+	 * @param SortInterface $sort
+	 */
+	public function setSort(SortInterface $sort)
+	{
+		$this->_sort = $sort;
+	}
+
+	/**
+	 * Returns the pagination object.
+	 * @param string $className the pagination object class name. Parameter is available since version 1.1.13.
+	 * @return CPagination|false the pagination object. If this is false, it means the pagination is disabled.
+	 */
+	public function getPagination($className = 'CPagination')
+	{
+		return false;
+//		if($this->_pagination===null)
+//		{
+//			$this->_pagination=new $className;
+//			if(($id=$this->getId())!='')
+//				$this->_pagination->pageVar=$id.'_page';
+//		}
+//		return $this->_pagination;
+	}
+
+	/**
+	 * Returns the number of data items in the current page.
+	 * This is equivalent to <code>count($provider->getData())</code>.
+	 * When {@link pagination} is set false, this returns the same value as {@link totalItemCount}.
+	 * @param boolean $refresh whether the number of data items should be re-calculated.
+	 * @return integer the number of data items in the current page.
+	 */
+	public function getItemCount($refresh = false)
+	{
+		return count($this->getData($refresh));
+	}
+
+	/**
+	 * Returns the total number of data items.
+	 * When {@link pagination} is set false, this returns the same value as {@link itemCount}.
+	 * @return integer total number of possible data items.
+	 */
+	public function getTotalItemCount()
+	{
+		if ($this->_totalItemCount === null)
+		{
+			$this->_totalItemCount = $this->_finder->count($this->_criteria);
+		}
+		return $this->_totalItemCount;
 	}
 
 	/**
@@ -200,18 +251,10 @@ class DataProvider extends CDataProvider
 			$this->_criteria->setOffset($pagination->getOffset());
 		}
 
-		/* if(($sort=$this->getSort())!==false && ($order=$sort->getOrderBy())!='')
-		  {
-		  $sort=array();
-		  foreach($this->getSortDirections($order) as $name=>$descending)
-		  {
-		  $sort[$name]=$descending ? Criteria::SortDesc : Criteria::SortAsc;
-		  }
-		  $this->_criteria->setSort($sort);
-		  } */
-		if (($sort = $this->getSort()) !== false)
+		$sort = $this->getSort();
+		if ($sort->isSorted())
 		{
-			$sort->applyOrder($this->_criteria);
+			$this->_criteria->setSort($sort);
 		}
 
 		return $this->_finder->findAll($this->_criteria);
@@ -224,59 +267,15 @@ class DataProvider extends CDataProvider
 	 */
 	public function getData($refresh = false)
 	{
-		return parent::getData($refresh)? : [];
-	}
-
-	/**
-	 * Fetches the data item keys from the persistent data storage.
-	 * TODO Add support for composite pk
-	 * @return array list of data item keys.
-	 * @since v1.0
-	 */
-	protected function fetchKeys()
-	{
-		$keys = [];
-		foreach ($this->getData() as $i => $data)
+		if ($this->_data === null || $refresh)
 		{
-			$keys[$i] = $data->{$this->keyField};
+			$this->_data = $this->fetchData();
 		}
-
-		return $keys;
-	}
-
-	/**
-	 * Calculates the total number of data items.
-	 * @return integer the total number of data items.
-	 * @since v1.0
-	 */
-	public function calculateTotalItemCount()
-	{
-		return $this->_finder->count($this->_criteria);
-	}
-
-	/**
-	 * Converts the "ORDER BY" clause into an array representing the sorting directions.
-	 * @param string $order the "ORDER BY" clause.
-	 * @return array the sorting directions (field name => whether it is descending sort)
-	 * @since v1.0
-	 */
-	protected function getSortDirections($order)
-	{
-		$segs = explode(',', $order);
-		$directions = [];
-		foreach ($segs as $seg)
+		if ($this->_data === null)
 		{
-			$matches = [];
-			if (preg_match('/(.*?)(\s+(desc|asc))?$/i', trim($seg), $matches))
-			{
-				$directions[$matches[1]] = isset($matches[3]) && !strcasecmp($matches[3], 'desc');
-			}
-			else
-			{
-				$directions[trim($seg)] = false;
-			}
+			return [];
 		}
-		return $directions;
+		return $this->_data;
 	}
 
 }
