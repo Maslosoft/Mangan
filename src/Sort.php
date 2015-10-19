@@ -40,7 +40,7 @@ class Sort implements SortInterface
 
 	/**
 	 * @Ignore
-	 * @var Document
+	 * @var AnnotatedInterface
 	 */
 	public $model = null;
 
@@ -84,7 +84,7 @@ class Sort implements SortInterface
 	 */
 	public function replace($field, $order)
 	{
-		if (!in_array($order, [Sort::SortAsc, Sort::SortDesc]))
+		if (!in_array($order, [self::SortAsc, self::SortDesc]))
 		{
 			throw new InvalidArgumentException(sprintf('Invalid order `%s` value for field `%s` of model %s', $order, $field, get_class($this->model)));
 		}
