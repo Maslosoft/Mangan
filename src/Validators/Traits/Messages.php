@@ -24,7 +24,7 @@ trait Messages
 	public $message = null;
 	private $messages = [];
 
-	public function addError($message, ... $params)
+	public function addError($message, $params = [])
 	{
 		if (!empty($this->message))
 		{
