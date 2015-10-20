@@ -10,6 +10,7 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * EmailValidator
@@ -46,15 +47,26 @@ class EmailValidator implements ValidatorInterface
 
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
+		if ($this->allowEmpty && empty($model->$attribute))
+		{
+			return true;
+		}
+		$label = ManganMeta::create($model)->field($attribute)->label;
+
+		if (!is_scalar($model->$attribute))
+		{
+			$this->addError('{attribute} must be valid email address', ['{attribute}' => $label]);
+			return false;
+		}
 		$valid = filter_var($model->$attribute, FILTER_VALIDATE_EMAIL);
 		if (!$valid)
 		{
-			$this->addError('Attribute must be valid email address');
+			$this->addError('{attribute} must be valid email address', ['{attribute}' => $label]);
 			return false;
 		}
 		if (!preg_match($this->pattern, $model->$attribute))
 		{
-			$this->addError('Attribute must be valid email address');
+			$this->addError('{attribute} must be valid email address', ['{attribute}' => $label]);
 			return false;
 		}
 		$domain = rtrim(substr($model->$attribute, strpos($model->$attribute, '@') + 1), '>');
