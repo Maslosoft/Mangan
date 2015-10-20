@@ -73,12 +73,6 @@ class UniqueValidator implements ValidatorInterface
 	public $criteria = [];
 
 	/**
-	 * @var string the user-defined error message. The placeholders "{attribute}" and "{value}"
-	 * are recognized, which will be replaced with the actual attribute name and value, respectively.
-	 */
-	public $message;
-
-	/**
 	 * Validates the attribute of the object.
 	 * If there is any error, the error message is added to the object.
 	 * @param AnnotatedInterface $model the object being validated
