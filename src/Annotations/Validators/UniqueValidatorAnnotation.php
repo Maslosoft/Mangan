@@ -18,17 +18,14 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 
 /**
  * UniqueValidator
- * 
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 {
 
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\SkipOnError;
 
 	/**
 	 * @var string the ActiveRecord class name that should be used to
@@ -63,27 +60,21 @@ class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $message;
 
-	/**
-	 * @var boolean whether this validation rule should be skipped if when there is already a validation
-	 * error for the current attribute. Defaults to true.
-	 * @since 1.1.1
-	 */
-	public $skipOnError = true;
-
 	public function init()
 	{
 		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
-			'allowEmpty',
-			'className',
-			'attributeName',
-			'criteria',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'allowEmpty',
+					'className',
+					'attributeName',
+					'criteria',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

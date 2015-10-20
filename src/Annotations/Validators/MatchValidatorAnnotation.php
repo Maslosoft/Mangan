@@ -33,16 +33,12 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class MatchValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+
 	/**
 	 * @var string the regular expression to be matched with
 	 */
 	public $pattern = NULL;
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
 
 	/**
 	 * @var boolean whether to invert the validation logic. Defaults to false. If set to true,
@@ -54,16 +50,17 @@ class MatchValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'pattern',
-			'allowEmpty',
-			'not',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'pattern',
+					'allowEmpty',
+					'not',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

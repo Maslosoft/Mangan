@@ -37,7 +37,7 @@ class DefaultValidatorAnnotation extends ValidatorAnnotation
 	/**
 	 * @var mixed the default value to be set to the specified attributes.
 	 */
-	public $value = NULL;
+	public $value = null;
 
 	/**
 	 * @var boolean whether to set the default value only when the attribute value is null or empty string.
@@ -49,15 +49,16 @@ class DefaultValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'value',
-			'setOnEmpty',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'value',
+					'setOnEmpty',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

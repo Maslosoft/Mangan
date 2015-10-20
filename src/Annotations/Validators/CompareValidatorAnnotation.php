@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
+use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
@@ -52,6 +53,9 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class CompareValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\Strict;
+
 	/**
 	 * @var string the name of the attribute to be compared with
 	 */
@@ -61,18 +65,6 @@ class CompareValidatorAnnotation extends ValidatorAnnotation
 	 * @var string the constant value to be compared with
 	 */
 	public $compareValue = NULL;
-
-	/**
-	 * @var boolean whether the comparison is strict (both value and type must be the same.)
-	 * Defaults to false.
-	 */
-	public $strict = false;
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to false.
-	 * If this is true, it means the attribute is considered valid when it is empty.
-	 */
-	public $allowEmpty = false;
 
 	/**
 	 * @var string the operator for comparison. Defaults to '='.
@@ -90,21 +82,28 @@ class CompareValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $operator = '=';
 
+	/**
+	 * Validator proxy class
+	 * @var string
+	 */
+	public $proxy = CompareProxy::class;
+
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'compareAttribute',
-			'compareValue',
-			'strict',
-			'allowEmpty',
-			'operator',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'compareAttribute',
+					'compareValue',
+					'strict',
+					'allowEmpty',
+					'operator',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

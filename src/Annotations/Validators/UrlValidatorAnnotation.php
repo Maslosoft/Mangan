@@ -32,6 +32,8 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class UrlValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+
 	/**
 	 * @var string the regular expression used to validate the attribute value.
 	 * Since version 1.1.7 the pattern may contain a {schemes} token that will be replaced
@@ -57,26 +59,21 @@ class UrlValidatorAnnotation extends ValidatorAnnotation
 	 * */
 	public $defaultScheme = NULL;
 
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
-
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'pattern',
-			'validSchemes',
-			'defaultScheme',
-			'allowEmpty',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'pattern',
+					'validSchemes',
+					'defaultScheme',
+					'allowEmpty',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

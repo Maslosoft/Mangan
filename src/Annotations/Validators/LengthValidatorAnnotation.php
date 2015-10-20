@@ -28,9 +28,9 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
  *
  * In addition to the {@link message} property for setting a custom error message,
  * CStringValidator has a couple custom error messages you can set that correspond to different
- * validation scenarios. For defining a custom message when the string is too short, 
- * you may use the {@link tooShort} property. Similarly with {@link tooLong}. The messages may contain 
- * placeholders that will be replaced with the actual content. In addition to the "{attribute}" 
+ * validation scenarios. For defining a custom message when the string is too short,
+ * you may use the {@link tooShort} property. Similarly with {@link tooLong}. The messages may contain
+ * placeholders that will be replaced with the actual content. In addition to the "{attribute}"
  * placeholder, recognized by all validators (see {@link CValidator}), CStringValidator allows for the following
  * placeholders to be specified:
  * <ul>
@@ -47,36 +47,32 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class LengthValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+
 	/**
 	 * @var integer maximum length. Defaults to null, meaning no maximum limit.
 	 */
-	public $max = NULL;
+	public $max = null;
 
 	/**
 	 * @var integer minimum length. Defaults to null, meaning no minimum limit.
 	 */
-	public $min = NULL;
+	public $min = null;
 
 	/**
 	 * @var integer exact length. Defaults to null, meaning no exact length limit.
 	 */
-	public $is = NULL;
+	public $is = null;
 
 	/**
 	 * @var string user-defined error message used when the value is too short.
 	 */
-	public $tooShort = NULL;
+	public $tooShort = null;
 
 	/**
 	 * @var string user-defined error message used when the value is too long.
 	 */
-	public $tooLong = NULL;
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
+	public $tooLong = null;
 
 	/**
 	 * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
@@ -87,25 +83,26 @@ class LengthValidatorAnnotation extends ValidatorAnnotation
 	 * If this property is set false, then strlen() will be used even if mbstring is enabled.
 	 * @since 1.1.1
 	 */
-	public $encoding = NULL;
+	public $encoding = null;
 
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'max',
-			'min',
-			'is',
-			'tooShort',
-			'tooLong',
-			'allowEmpty',
-			'encoding',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'max',
+					'min',
+					'is',
+					'tooShort',
+					'tooLong',
+					'allowEmpty',
+					'encoding',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

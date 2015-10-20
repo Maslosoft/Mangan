@@ -18,6 +18,7 @@ use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * CUniqueValidator class file.
@@ -40,14 +41,12 @@ use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 class UniqueValidator implements ValidatorInterface
 {
 
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\SkipOnError,
+	  \Maslosoft\Mangan\Validators\Traits\Messages;
 
 	/**
-	 * @var string the ActiveRecord class name that should be used to
+	 * @var string the document class name that should be used to
 	 * look for the attribute value being validated. Defaults to null, meaning using
 	 * the class of the object currently being validated.
 	 * You may use path alias to reference a class name here.
@@ -78,13 +77,6 @@ class UniqueValidator implements ValidatorInterface
 	 * are recognized, which will be replaced with the actual attribute name and value, respectively.
 	 */
 	public $message;
-
-	/**
-	 * @var boolean whether this validation rule should be skipped if when there is already a validation
-	 * error for the current attribute. Defaults to true.
-	 * @since 1.1.1
-	 */
-	public $skipOnError = true;
 
 	/**
 	 * Validates the attribute of the object.
@@ -123,14 +115,9 @@ class UniqueValidator implements ValidatorInterface
 		{
 			return true;
 		}
-		$message = $this->message !== null ? $this->message : '{attribute} "{value}" has already been taken.';
-		$this->addError($model, $attribute, $message, ['{value}' => $value]);
+		$label = ManganMeta::create($model)->field($attribute)->label;
+		$this->addError('{attribute} "{value}" has already been taken.', ['{attribute}' => $label, '{value}' => $value]);
 		return false;
-	}
-
-	public function addError($message)
-	{
-
 	}
 
 }

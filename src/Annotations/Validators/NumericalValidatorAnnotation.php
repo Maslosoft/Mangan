@@ -26,11 +26,11 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
  *
  * In addition to the {@link message} property for setting a custom error message,
  * CNumberValidator has a couple custom error messages you can set that correspond to different
- * validation scenarios. To specify a custom message when the numeric value is too big, 
+ * validation scenarios. To specify a custom message when the numeric value is too big,
  * you may use the {@link tooBig} property. Similarly with {@link tooSmall}.
- * The messages may contain additional placeholders that will be replaced 
- * with the actual content. In addition to the "{attribute}" placeholder, recognized by all 
- * validators (see {@link CValidator}), CNumberValidator allows for the following placeholders 
+ * The messages may contain additional placeholders that will be replaced
+ * with the actual content. In addition to the "{attribute}" placeholder, recognized by all
+ * validators (see {@link CValidator}), CNumberValidator allows for the following placeholders
  * to be specified:
  * <ul>
  * <li>{min}: when using {@link tooSmall}, replaced with the lower limit of the number {@link min}.</li>
@@ -45,16 +45,12 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class NumericalValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+
 	/**
 	 * @var boolean whether the attribute value can only be an integer. Defaults to false.
 	 */
 	public $integerOnly = false;
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
 
 	/**
 	 * @var integer|float upper limit of the number. Defaults to null, meaning no upper limit.
@@ -91,21 +87,22 @@ class NumericalValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'integerOnly',
-			'allowEmpty',
-			'max',
-			'min',
-			'tooBig',
-			'tooSmall',
-			'integerPattern',
-			'integerPattern',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'integerOnly',
+					'allowEmpty',
+					'max',
+					'min',
+					'tooBig',
+					'tooSmall',
+					'integerPattern',
+					'integerPattern',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

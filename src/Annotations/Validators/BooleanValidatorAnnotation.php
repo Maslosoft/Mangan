@@ -11,11 +11,12 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Annotations\Validators\Validators;
+namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Annotations\Validators\ValidatorAnnotation;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
+use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
 
 /**
  * NOTE: This class is automatically generated from Yii validator class.
@@ -41,6 +42,9 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class BooleanValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\Strict,
+	  \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+
 	/**
 	 * @var mixed the value representing true status. Defaults to '1'.
 	 */
@@ -52,32 +56,26 @@ class BooleanValidatorAnnotation extends ValidatorAnnotation
 	public $falseValue = '0';
 
 	/**
-	 * @var boolean whether the comparison to {@link trueValue} and {@link falseValue} is strict.
-	 * When this is true, the attribute value and type must both match those of {@link trueValue} or {@link falseValue}.
-	 * Defaults to false, meaning only the value needs to be matched.
+	 * Validator proxy class
+	 * @var string
 	 */
-	public $strict = false;
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
+	public $proxy = BooleanProxy::class;
 
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'trueValue',
-			'falseValue',
-			'strict',
-			'allowEmpty',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'trueValue',
+					'falseValue',
+					'strict',
+					'allowEmpty',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

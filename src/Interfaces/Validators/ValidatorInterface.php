@@ -22,7 +22,9 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 interface ValidatorInterface
 {
 
+	public function isValid(AnnotatedInterface $model, $attribute);
+
 	public function addError($message);
 
-	public function isValid(AnnotatedInterface $model, $attribute);
+	public function getErrors();
 }
