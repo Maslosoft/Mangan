@@ -64,7 +64,7 @@
 		"maslosoft/mangantest": "dev-master",
 		"maslosoft/hedron": "~1",
 		"maslosoft/zamm": "@dev",
-		"maslosoft/mangan-examples": "@dev"
+		"maslosoft/mangan-examples": "*"
 	},
 	"suggest": {
 		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
