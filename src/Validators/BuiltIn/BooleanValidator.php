@@ -24,19 +24,21 @@ use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 class BooleanValidator implements ValidatorInterface
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\Messages;
+
 	public function isValid(AnnotatedInterface $model, $field)
 	{
+		if (is_bool($model->$field))
+		{
+			return true;
+		}
 		$valid = filter_var($model->$field, FILTER_VALIDATE_BOOLEAN);
 		if (!$valid)
 		{
 			$this->addError('Attribute must be either true or false');
+			return false;
 		}
 		return true;
-	}
-
-	public function addError($message)
-	{
-
 	}
 
 }
