@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
+use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
 
 /**
  * UniqueValidator
@@ -62,6 +63,7 @@ class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = UniqueProxy::class;
 		$this->_entity->validators = new ValidatorMeta(ParamsExpander::expand($this, [
 					'allowEmpty',
 					'className',

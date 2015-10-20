@@ -19,11 +19,6 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
 
 /**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CBooleanValidator.
- */
-
-/**
  * CBooleanValidator validates that the attribute value is either {@link trueValue}  or {@link falseValue}.
  *
  * When using the {@link message} property to define a custom error message, the message

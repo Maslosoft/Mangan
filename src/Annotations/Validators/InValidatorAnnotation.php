@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CInValidator.
- */
+use Maslosoft\Mangan\Validators\BuiltIn\RangeValidator;
 
 /**
  * CRangeValidator validates that the attribute value is among the list (specified via {@link range}).
@@ -33,21 +29,13 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class InValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\Strict;
+
 	/**
 	 * @var array list of valid values that the attribute value should be among
 	 */
 	public $range = NULL;
-
-	/**
-	 * @var boolean whether the comparison is strict (both type and value must be the same)
-	 */
-	public $strict = false;
-
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
 
 	/**
 	 * @var boolean whether to invert the validation logic. Defaults to false. If set to true,
@@ -58,18 +46,20 @@ class InValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = RangeValidator::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'range',
-			'strict',
-			'allowEmpty',
-			'not',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'range',
+					'strict',
+					'allowEmpty',
+					'not',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CLengthValidator.
- */
+use Maslosoft\Mangan\Validators\Proxy\StringProxy;
 
 /**
  * CStringValidator validates that the attribute value is of certain length.
@@ -87,6 +83,7 @@ class LengthValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = StringProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'max',
 					'min',

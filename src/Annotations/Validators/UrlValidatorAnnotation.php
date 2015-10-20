@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CUrlValidator.
- */
+use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
 
 /**
  * CUrlValidator validates that the attribute value is a valid http or https URL.
@@ -36,6 +32,7 @@ class UrlValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = UrlProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'allowEmpty',
 					'message',

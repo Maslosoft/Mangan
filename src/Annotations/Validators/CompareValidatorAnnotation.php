@@ -18,11 +18,6 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
 
 /**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CCompareValidator.
- */
-
-/**
  * CCompareValidator compares the specified attribute value with another value and validates if they are equal.
  *
  * The value being compared with can be another attribute value
@@ -82,14 +77,9 @@ class CompareValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $operator = '=';
 
-	/**
-	 * Validator proxy class
-	 * @var string
-	 */
-	public $proxy = CompareProxy::class;
-
 	public function init()
 	{
+		$this->proxy = CompareProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'compareAttribute',
 					'compareValue',

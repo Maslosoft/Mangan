@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CMatchValidator.
- */
+use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
 
 /**
  * CRegularExpressionValidator validates that the attribute value matches to the specified {@link pattern regular expression}.
@@ -49,6 +45,7 @@ class MatchValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = RegexProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'pattern',
 					'allowEmpty',
