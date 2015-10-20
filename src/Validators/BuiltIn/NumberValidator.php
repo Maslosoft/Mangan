@@ -48,18 +48,6 @@ class NumberValidator implements ValidatorInterface
 	 */
 	public $tooSmall = NULL;
 
-	/**
-	 * @var string the regular expression for matching integers.
-	 * @since 1.1.7
-	 */
-	public $integerPattern = '/^\s*[+-]?\d+\s*$/';
-
-	/**
-	 * @var string the regular expression for matching numbers.
-	 * @since 1.1.7
-	 */
-	public $numberPattern = '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/';
-
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$value = $model->$attribute;
