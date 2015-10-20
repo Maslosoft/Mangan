@@ -43,10 +43,24 @@ use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
+use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\NumberValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\RangeValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\RegexValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\RequiredValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\StringValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\UniqueValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\UrlValidator;
 use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
 use Maslosoft\Mangan\Validators\Proxy\BooleanValidator;
+use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
+use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
+use Maslosoft\Mangan\Validators\Proxy\RangeProxy;
+use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
+use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
+use Maslosoft\Mangan\Validators\Proxy\StringProxy;
 use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
+use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
 use MongoClient;
 use MongoDB;
 use MongoException;
@@ -147,6 +161,14 @@ class Mangan implements LoggerAwareInterface
 	public $validators = [
 		BooleanProxy::class => BooleanValidator::class,
 		UniqueProxy::class => UniqueValidator::class,
+		EmailProxy::class => EmailValidator::class,
+		NumberProxy::class => NumberValidator::class,
+		RangeProxy::class => RangeValidator::class,
+		RegexProxy::class => RegexValidator::class,
+		RequiredProxy::class => RequiredValidator::class,
+		StringProxy::class => StringValidator::class,
+		UniqueProxy::class => UniqueValidator::class,
+		UrlProxy::class => UrlValidator::class
 	];
 
 	/**

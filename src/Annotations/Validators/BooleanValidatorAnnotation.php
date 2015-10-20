@@ -55,14 +55,9 @@ class BooleanValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $falseValue = '0';
 
-	/**
-	 * Validator proxy class
-	 * @var string
-	 */
-	public $proxy = BooleanProxy::class;
-
 	public function init()
 	{
+		$this->proxy = BooleanProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'trueValue',
 					'falseValue',
