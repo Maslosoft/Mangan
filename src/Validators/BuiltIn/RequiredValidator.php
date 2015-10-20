@@ -49,12 +49,28 @@ class RequiredValidator implements ValidatorInterface
 			if (!$this->strict && $value != $this->requiredValue || $this->strict && $value !== $this->requiredValue)
 			{
 				$this->addError('{attribute} must be {value}.', ['{attribute}' => $label, '{value}' => $this->requiredValue]);
+				return false;
 			}
 		}
 		elseif ($this->isEmpty($value, $this->trim))
 		{
 			$this->addError('{attribute} cannot be blank.', ['{attribute}' => $label]);
+			return false;
 		}
+		return true;
+	}
+
+	/**
+	 * Checks if the given value is empty.
+	 * A value is considered empty if it is null, an empty array, or the trimmed result is an empty string.
+	 * Note that this method is different from PHP empty(). It will return false when the value is 0.
+	 * @param mixed $value the value to be checked
+	 * @param boolean $trim whether to perform trimming before checking if the string is empty. Defaults to false.
+	 * @return boolean whether the value is empty
+	 */
+	protected function isEmpty($value, $trim = false)
+	{
+		return $value === null || $value === array() || $value === '' || $trim && is_scalar($value) && trim($value) === '';
 	}
 
 }

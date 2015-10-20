@@ -26,7 +26,7 @@ class DefaultProxy implements ValidatorInterface, ValidatorProxyInterface
 
 	public function addError($message)
 	{
-		
+
 	}
 
 	public function getValidator()
@@ -36,10 +36,15 @@ class DefaultProxy implements ValidatorInterface, ValidatorProxyInterface
 
 	public function isValid(\Maslosoft\Addendum\Interfaces\AnnotatedInterface $model, $attribute)
 	{
-		
+
 	}
 
 	public function setValidator(ValidatorInterface $validator)
+	{
+
+	}
+
+	public function getErrors()
 	{
 
 	}
