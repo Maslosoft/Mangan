@@ -34,37 +34,9 @@ class UrlValidatorAnnotation extends ValidatorAnnotation
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
-	/**
-	 * @var string the regular expression used to validate the attribute value.
-	 * Since version 1.1.7 the pattern may contain a {schemes} token that will be replaced
-	 * by a regular expression which represents the {@see validSchemes}.
-	 */
-	public $pattern = '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)/i';
-
-	/**
-	 * @var array list of URI schemes which should be considered valid. By default, http and https
-	 * are considered to be valid schemes.
-	 * @since 1.1.7
-	 * */
-	public $validSchemes = array(
-		0 => 'http',
-		1 => 'https',
-	);
-
-	/**
-	 * @var string the default URI scheme. If the input doesn't contain the scheme part, the default
-	 * scheme will be prepended to it (thus changing the input). Defaults to null, meaning a URL must
-	 * contain the scheme part.
-	 * @since 1.1.7
-	 * */
-	public $defaultScheme = NULL;
-
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-					'pattern',
-					'validSchemes',
-					'defaultScheme',
 					'allowEmpty',
 					'message',
 					'skipOnError',

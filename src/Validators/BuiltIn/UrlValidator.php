@@ -27,8 +27,11 @@ class UrlValidator implements ValidatorInterface
 		$valid = filter_var($model->$attribute, FILTER_VALIDATE_URL);
 		if (!$valid)
 		{
-			$this->addError('Attribute must be valid url');
+			$label = \Maslosoft\Mangan\Meta\ManganMeta::create($model)->field($attribute)->label;
+			$this->addError('{attribute} must be valid url', ['{attribute}' => $label]);
+			return false;
 		}
+		return true;
 	}
 
 }
