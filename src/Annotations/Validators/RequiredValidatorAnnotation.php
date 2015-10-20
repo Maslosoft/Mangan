@@ -39,7 +39,11 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
  */
 class RequiredValidatorAnnotation extends ValidatorAnnotation
 {
+
+	use \Maslosoft\Mangan\Validators\Traits\Strict;
+
 	public $value = '';
+
 	/**
 	 * @var mixed the desired value that the attribute must have.
 	 * If this is null, the validator will validate that the specified attribute does not have null or empty value.
@@ -48,14 +52,6 @@ class RequiredValidatorAnnotation extends ValidatorAnnotation
 	 * Defaults to null.
 	 */
 	public $requiredValue = NULL;
-
-	/**
-	 * @var boolean whether the comparison to {@link requiredValue} is strict.
-	 * When this is true, the attribute value and type must both match those of {@link requiredValue}.
-	 * Defaults to false, meaning only the value needs to be matched.
-	 * This property is only used when {@link requiredValue} is not null.
-	 */
-	public $strict = false;
 
 	public function init()
 	{

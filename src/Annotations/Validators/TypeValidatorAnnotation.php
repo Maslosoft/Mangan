@@ -58,6 +58,8 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 class TypeValidatorAnnotation extends ValidatorAnnotation
 {
 
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+
 	/**
 	 * @var string the data type that the attribute should be. Defaults to 'string'.
 	 * Valid values include 'string', 'integer', 'float', 'array', 'date', 'time' and 'datetime'.
@@ -85,27 +87,22 @@ class TypeValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $datetimeFormat = 'MM/dd/yyyy hh:mm';
 
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
-
 	public function init()
 	{
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'type',
-			'dateFormat',
-			'timeFormat',
-			'datetimeFormat',
-			'allowEmpty',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'type',
+					'dateFormat',
+					'timeFormat',
+					'datetimeFormat',
+					'allowEmpty',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }
