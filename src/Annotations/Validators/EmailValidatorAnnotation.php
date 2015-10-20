@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CEmailValidator.
- */
+use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
 
 /**
  * CEmailValidator validates that the attribute value is a valid email address.
@@ -31,6 +27,8 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
  */
 class EmailValidatorAnnotation extends ValidatorAnnotation
 {
+
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 	/**
 	 * @var string the regular expression used to validate the attribute value.
@@ -65,28 +63,24 @@ class EmailValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $checkPort = false;
 
-	/**
-	 * @var boolean whether the attribute value can be null or empty. Defaults to true,
-	 * meaning that if the attribute is empty, it is considered valid.
-	 */
-	public $allowEmpty = true;
-
 	public function init()
 	{
+		$this->proxy = EmailProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-			'pattern',
-			'fullPattern',
-			'allowName',
-			'checkMX',
-			'checkPort',
-			'allowEmpty',
-			'message',
-			'skipOnError',
-			'on',
-			'safe',
-			'enableClientValidation',
-			'except',
-			'proxy'
+					'pattern',
+					'fullPattern',
+					'allowName',
+					'checkMX',
+					'checkPort',
+					'allowEmpty',
+					'message',
+					'skipOnError',
+					'on',
+					'safe',
+					'enableClientValidation',
+					'except',
+					'proxy'
 		]));
 	}
+
 }

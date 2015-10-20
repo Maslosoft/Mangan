@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CRequiredValidator.
- */
+use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
 
 /**
  * CRequiredValidator validates that the specified attribute does not have null or empty value.
@@ -55,6 +51,7 @@ class RequiredValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = RequiredProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'requiredValue',
 					'strict',

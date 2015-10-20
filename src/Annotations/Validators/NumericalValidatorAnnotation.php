@@ -15,11 +15,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-
-/**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CNumericalValidator.
- */
+use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
 
 /**
  * CNumberValidator validates that the attribute value is a number.
@@ -74,6 +70,7 @@ class NumericalValidatorAnnotation extends ValidatorAnnotation
 
 	public function init()
 	{
+		$this->proxy = NumberProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'integerOnly',
 					'allowEmpty',

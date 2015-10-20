@@ -14,11 +14,6 @@
 namespace Maslosoft\Mangan\Annotations\Validators;
 
 /**
- * NOTE: This class is automatically generated from Yii validator class.
- * This is not actual validator. For validator class @see CUnsafeValidator.
- */
-
-/**
  * CUnsafeValidator marks the associated attributes to be unsafe so that they cannot be massively assigned.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
