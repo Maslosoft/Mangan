@@ -31,11 +31,11 @@ class Validator implements ValidatableInterface
 	 * Model instance
 	 * @var AnnotatedInterface
 	 */
-	private $_model = null;
+	private $model = null;
 
 	public function __construct(AnnotatedInterface $model)
 	{
-		$this->_model = $model;
+		$this->model = $model;
 	}
 
 	/**
