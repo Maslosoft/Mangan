@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
+use Maslosoft\Mangan\Decorators\EmbedRefArrayDecorator;
 
 /**
  * DB reference array annotation
@@ -42,6 +43,7 @@ class DbRefArrayAnnotation extends DbRefAnnotation
 		$this->_entity->propagateEvents = true;
 		$this->_entity->owned = true;
 		$this->_entity->decorators[] = DbRefArrayDecorator::class;
+		$this->_entity->decorators[] = EmbedRefArrayDecorator::class;
 	}
 
 }
