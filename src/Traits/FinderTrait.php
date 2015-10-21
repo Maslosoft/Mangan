@@ -152,7 +152,6 @@ trait FinderTrait
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $criteria query condition or criteria.
-	 * @param array $params parameters to be bound to an SQL statement.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 * @Ignore
 	 */
