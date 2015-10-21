@@ -19,6 +19,8 @@ use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
+use Maslosoft\Mangan\Decorators\EmbedRefArrayDecorator;
+use Maslosoft\Mangan\Decorators\EmbedRefDecorator;
 use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
 use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
@@ -103,8 +105,6 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public $decorators = [
 		TransformatorInterface::class => [
-			DbRefArrayDecorator::class,
-			DbRefDecorator::class,
 			EmbeddedArrayDecorator::class,
 			EmbeddedDecorator::class,
 			AliasDecorator::class,
@@ -115,11 +115,17 @@ class Mangan implements LoggerAwareInterface
 		],
 		DocumentArray::class => [
 			ClassNameDecorator::class,
+			EmbedRefDecorator::class,
+			EmbedRefArrayDecorator::class,
 		],
 		JsonArray::class => [
 			ClassNameDecorator::class,
+			EmbedRefDecorator::class,
+			EmbedRefArrayDecorator::class,
 		],
 		RawArray::class => [
+			DbRefArrayDecorator::class,
+			DbRefDecorator::class,
 			I18NDecorator::class,
 			ClassNameDecorator::class,
 		]

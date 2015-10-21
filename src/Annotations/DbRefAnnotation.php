@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
+use Maslosoft\Mangan\Decorators\EmbedRefDecorator;
 use Maslosoft\Mangan\Meta\DbRefMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
@@ -40,6 +41,7 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 		$this->_entity->propagateEvents = true;
 		$this->_entity->owned = true;
 		$this->_entity->decorators[] = DbRefDecorator::class;
+		$this->_entity->decorators[] = EmbedRefDecorator::class;
 	}
 
 	protected function _getMeta()
