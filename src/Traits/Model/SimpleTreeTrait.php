@@ -61,7 +61,7 @@ trait SimpleTreeTrait
 			{
 				$criteria = new Criteria();
 				$criteria->parentId = $this->_id;
-				$this->children = (new Finder($this))->findAll($criteria);
+				$this->children = (new Finder($this))->withCursor(false)->findAll($criteria);
 			}
 		};
 		$loadItems->bindTo($this);
