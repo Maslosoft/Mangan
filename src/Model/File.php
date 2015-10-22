@@ -20,6 +20,7 @@ use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Helpers\IdHelper;
+use Maslosoft\Mangan\Interfaces\FileInterface;
 use Maslosoft\Mangan\Mangan;
 use MongoDB;
 use MongoGridFSFile;
@@ -127,14 +128,14 @@ class File extends EmbeddedDocument
 
 	/**
 	 * Set file data
-	 * @param CUploadedFile|string $file
+	 * @param FileInterface|string $file
 	 */
 	public function set($file)
 	{
-		if ($file instanceof CUploadedFile)
+		if ($file instanceof FileInterface)
 		{
-			$tempName = $file->tempName;
-			$fileName = $file->name;
+			$tempName = $file->getTempName();
+			$fileName = $file->getFileName();
 		}
 		else
 		{
@@ -254,7 +255,7 @@ class File extends EmbeddedDocument
 		$data = [
 			'_id' => new MongoId(),
 			'parentId' => $this->_id,
-			'rootClass' => $this->getRoot()->_class,
+			'rootClass' => get_class($this->getRoot()),
 			'rootId' => $rootId,
 			'filename' => $fileName,
 			'contentType' => $mime,
