@@ -12,7 +12,7 @@
 </a>
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
 <img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
-<img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
+<img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master"/>
 
 ### Quick Install
 ```bash
