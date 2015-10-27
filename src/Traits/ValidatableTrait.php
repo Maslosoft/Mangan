@@ -32,7 +32,7 @@ trait ValidatableTrait
 	/**
 	 *
 	 * @return string[]
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getErrors()
 	{
@@ -46,7 +46,7 @@ trait ValidatableTrait
 	/**
 	 *
 	 * @return bool
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function validate()
 	{

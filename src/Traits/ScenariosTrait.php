@@ -28,7 +28,7 @@ trait ScenariosTrait
 	/**
 	 *
 	 * @return string
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getScenario()
 	{
@@ -38,7 +38,7 @@ trait ScenariosTrait
 	/**
 	 *
 	 * @param string $scenario
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function setScenario($scenario)
 	{

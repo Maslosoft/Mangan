@@ -32,7 +32,7 @@ trait CollectionNameTrait
 	 * by this annotation.
 	 *
 	 * @return string collection name
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getCollectionName()
 	{

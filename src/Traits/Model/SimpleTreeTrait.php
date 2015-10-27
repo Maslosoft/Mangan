@@ -51,7 +51,7 @@ trait SimpleTreeTrait
 
 	/**
 	 * NOTE: This must be called by class using this trait
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function initTree()
 	{
@@ -135,7 +135,7 @@ trait SimpleTreeTrait
 	 * Move to a new parent
 	 * @param string|MongoId $parentId
 	 * @param string[]|MongoId[] $order
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function moveTo($parentId, $order = [])
 	{

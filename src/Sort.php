@@ -39,7 +39,7 @@ class Sort implements SortInterface
 	const SORT_DESC = self::SortDesc;
 
 	/**
-	 * @Ignore
+	 * @Ignored
 	 * @var AnnotatedInterface
 	 */
 	public $model = null;

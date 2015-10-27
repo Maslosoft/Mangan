@@ -34,7 +34,7 @@ trait I18NAbleTrait
 	/**
 	 * Get language code
 	 * @return string Language code
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getLang()
 	{
@@ -44,7 +44,7 @@ trait I18NAbleTrait
 	/**
 	 *
 	 * @return string[]
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getLanguages()
 	{
@@ -70,7 +70,7 @@ trait I18NAbleTrait
 	 * ]
 	 * ```
 	 * @return mixed[] Associative array of language values
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getRawI18N()
 	{
@@ -105,7 +105,7 @@ trait I18NAbleTrait
 	 * $model->setLang('ru')
 	 * ```
 	 * @param string $code
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function setLang($code)
 	{
@@ -138,7 +138,7 @@ trait I18NAbleTrait
 	 * $model2->setLanguages(['en']);
 	 * ```
 	 * @param string[] $languages
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function setLanguages($languages)
 	{
@@ -156,7 +156,7 @@ trait I18NAbleTrait
 	 * Set i18n values in all languages.
 	 * This method must keep `$values` for further use, by method `getRawI18N`.
 	 * @param mixed[] $values
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function setRawI18N($values)
 	{
@@ -166,7 +166,7 @@ trait I18NAbleTrait
 	/**
 	 *
 	 * @return string
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getDefaultLanguage()
 	{
@@ -176,7 +176,7 @@ trait I18NAbleTrait
 	/**
 	 *
 	 * @param string $language
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function setDefaultLanguage($language)
 	{
