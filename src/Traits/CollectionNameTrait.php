@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Interfaces\CollectionNameInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * CollectionNameTrait
@@ -24,18 +25,22 @@ trait CollectionNameTrait
 {
 
 	/**
-	 * This method must return collection name for use with this model
-	 * this must be implemented in child classes
+	 * This method must return collection name for use with this model.
+	 * By default it uses full class name, with slashes replaced by dots.
 	 *
-	 * this is read-only defined only at class define
-	 * if you want to set different collection during run-time
-	 * use {@see setCollection()}.
+	 * If `CollectionName` annotation is defined, it will collection name defined
+	 * by this annotation.
+	 *
 	 * @return string collection name
-	 * @since v1.0
 	 * @Ignore
 	 */
 	public function getCollectionName()
 	{
+		$collectionName = ManganMeta::create($this)->type()->collectionName;
+		if (!empty($collectionName))
+		{
+			return $collectionName;
+		}
 		$name = get_class($this);
 		return ltrim(str_replace('\\', '.', $name), '\\');
 	}
