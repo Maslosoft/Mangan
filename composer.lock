@@ -269,16 +269,16 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.1.9",
+            "version": "1.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "1cbb3d92835d5f8e49259ad3f29501c2d4f9acb4"
+                "reference": "a8b386dc90623e534eec4a6e4a09eb16acbee5ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/1cbb3d92835d5f8e49259ad3f29501c2d4f9acb4",
-                "reference": "1cbb3d92835d5f8e49259ad3f29501c2d4f9acb4",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/a8b386dc90623e534eec4a6e4a09eb16acbee5ff",
+                "reference": "a8b386dc90623e534eec4a6e4a09eb16acbee5ff",
                 "shasum": ""
             },
             "require": {
@@ -322,7 +322,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2015-09-14 14:21:15"
+            "time": "2015-10-22 13:08:00"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -1125,16 +1125,16 @@
         },
         {
             "name": "maslosoft/mangan-examples",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganExamples.git",
-                "reference": "f948543120fb28f1b59a84f6259216477afdbbfb"
+                "reference": "030ed615f7e72bff31e6828f97965d62dc224f86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganExamples/zipball/f948543120fb28f1b59a84f6259216477afdbbfb",
-                "reference": "f948543120fb28f1b59a84f6259216477afdbbfb",
+                "url": "https://api.github.com/repos/Maslosoft/ManganExamples/zipball/030ed615f7e72bff31e6828f97965d62dc224f86",
+                "reference": "030ed615f7e72bff31e6828f97965d62dc224f86",
                 "shasum": ""
             },
             "require": {
@@ -1158,7 +1158,7 @@
                 }
             ],
             "description": "Examples for Mangan project",
-            "time": "2015-10-20 10:12:45"
+            "time": "2015-10-20 19:16:43"
         },
         {
             "name": "maslosoft/mangantest",
@@ -1166,12 +1166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "ce667bbb50a93e52850b816af01c0673210e1f43"
+                "reference": "ab1178b2c2a7a2d6a627a1ae26580ed653015acd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/ce667bbb50a93e52850b816af01c0673210e1f43",
-                "reference": "ce667bbb50a93e52850b816af01c0673210e1f43",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/ab1178b2c2a7a2d6a627a1ae26580ed653015acd",
+                "reference": "ab1178b2c2a7a2d6a627a1ae26580ed653015acd",
                 "shasum": ""
             },
             "require": {
@@ -1198,7 +1198,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-10-20 17:27:31"
+            "time": "2015-10-22 15:06:39"
         },
         {
             "name": "maslosoft/zamm",
@@ -1640,16 +1640,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.14",
+            "version": "4.8.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b4900675926860bef091644849305399b986efa2"
+                "reference": "be8f7b9eacf8243940f8412f8b4a9a434c73dd7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b4900675926860bef091644849305399b986efa2",
-                "reference": "b4900675926860bef091644849305399b986efa2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/be8f7b9eacf8243940f8412f8b4a9a434c73dd7b",
+                "reference": "be8f7b9eacf8243940f8412f8b4a9a434c73dd7b",
                 "shasum": ""
             },
             "require": {
@@ -1708,7 +1708,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-10-17 15:03:30"
+            "time": "2015-10-22 09:05:37"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
