@@ -34,7 +34,7 @@ trait OwneredTrait
 	 * Set class owner
 
 	 * @return AnnotatedInterface Owner
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getOwner()
 	{
@@ -44,7 +44,7 @@ trait OwneredTrait
 	/**
 	 * Get document root
 	 * @return AnnotatedInterface Root document
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function getRoot()
 	{
@@ -61,7 +61,7 @@ trait OwneredTrait
 	/**
 	 * Get class owner
 	 * @param AnnotatedInterface|null $owner
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function setOwner(AnnotatedInterface $owner = null)
 	{

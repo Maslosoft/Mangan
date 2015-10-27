@@ -43,7 +43,7 @@ trait FinderTrait
 	 *
 	 * @return Document the record found. Null if no record is found.
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function find($criteria = null)
 	{
@@ -56,7 +56,7 @@ trait FinderTrait
 	 * @param array|Criteria $criteria query criteria.
 	 * @return AnnotatedInterface[]|Cursor array list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function findAll($criteria = null)
 	{
@@ -69,7 +69,7 @@ trait FinderTrait
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
 	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function findAllByAttributes(array $attributes)
 	{
@@ -85,7 +85,7 @@ trait FinderTrait
 	 * @param array|Criteria $criteria query criteria.
 	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function findAllByPk($pk, $criteria = null)
 	{
@@ -101,7 +101,7 @@ trait FinderTrait
 	 * @param array|Criteria $criteria query criteria.
 	 * @return Document the document found. An null is returned if none is found.
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function findByPk($pk, $criteria = null)
 	{
@@ -115,7 +115,7 @@ trait FinderTrait
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
 	 * @return Document - the document found. An null is returned if none is found.
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function findByAttributes(array $attributes)
 	{
@@ -128,7 +128,7 @@ trait FinderTrait
 	 * @param array|Criteria $criteria query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.0
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function count($criteria = null)
 	{
@@ -141,7 +141,7 @@ trait FinderTrait
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.2.2
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function countByAttributes(array $attributes)
 	{
@@ -153,7 +153,7 @@ trait FinderTrait
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function exists(Criteria $criteria = null)
 	{
@@ -164,7 +164,7 @@ trait FinderTrait
 	 * Whenever to use cursor
 	 * @param type $useCursor
 	 * @return FinderInterface
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function withCursor($useCursor = true)
 	{

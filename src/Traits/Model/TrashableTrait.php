@@ -36,7 +36,7 @@ trait TrashableTrait
 	/**
 	 * Move to trash
 	 * @return boolean
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function trash()
 	{
@@ -73,7 +73,7 @@ trait TrashableTrait
 	 * Restore trashed item
 	 * @return boolean
 	 * @throws Exception
-	 * @Ignore
+	 * @Ignored
 	 */
 	public function restore()
 	{

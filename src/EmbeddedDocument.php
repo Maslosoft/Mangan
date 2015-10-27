@@ -52,6 +52,7 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 
 	/**
 	 * This holds key for document order
+	 * TODO Is this even nessesary?
 	 * @SafeValidator
 	 * @var string
 	 */
