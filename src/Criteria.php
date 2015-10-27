@@ -192,7 +192,7 @@ class Criteria
 	 *  'sort'=>array('fieldName1'=>Criteria::SortAsc, 'fieldName2'=>Criteria::SortDesc),
 	 * );
 	 * </PRE>
-	 * @param mixed $criteria
+	 * @param mixed|Criteria|Conditions $criteria
 	 * @param AnnotatedInterface|null Model to use for criteria decoration
 	 * @since v1.0
 	 */
@@ -246,6 +246,10 @@ class Criteria
 		elseif ($criteria instanceof Criteria)
 		{
 			$this->mergeWith($criteria);
+		}
+		elseif ($criteria instanceof Conditions)
+		{
+			$this->setConditions($criteria);
 		}
 	}
 
@@ -419,11 +423,19 @@ class Criteria
 	}
 
 	/**
-	 * @since v1.0
+	 * Set conditions
+	 * @param array|Conditions $conditions
+	 * @return Criteria
 	 */
-	public function setConditions(array $conditions)
+	public function setConditions($conditions)
 	{
+		if ($conditions instanceof Conditions)
+		{
+			$this->_conditions = $conditions->get();
+			return $this;
+		}
 		$this->_conditions = $conditions;
+		return $this;
 	}
 
 	/**
