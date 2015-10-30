@@ -60,6 +60,7 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 
 	/**
 	 * This holds type of this embedded document
+	 * TODO Is this even nessesary?
 	 * @SafeValidator
 	 * @var string
 	 */
@@ -67,8 +68,10 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 
 	/**
 	 * Model metadata
+	 * NOTE: Use ManganMeta or other meta class instead
 	 * @Ignored
 	 * @Persistent(false)
+	 * @deprecated since version 4.0.18
 	 * @var ManganMeta
 	 */
 	public $meta = null;
