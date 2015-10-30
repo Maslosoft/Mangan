@@ -118,6 +118,11 @@ class Mangan implements LoggerAwareInterface
 			EmbedRefDecorator::class,
 			EmbedRefArrayDecorator::class,
 		],
+		SafeArray::class => [
+			ClassNameDecorator::class,
+			EmbedRefDecorator::class,
+			EmbedRefArrayDecorator::class,
+		],
 		JsonArray::class => [
 			ClassNameDecorator::class,
 			EmbedRefDecorator::class,
