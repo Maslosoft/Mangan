@@ -14,14 +14,14 @@
 namespace Maslosoft\Mangan\Signals;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Signals\ISignal;
+use Maslosoft\Signals\Interfaces\SignalInterface;
 
 /**
  * AfterSave
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class AfterSave implements ISignal
+class AfterSave implements SignalInterface
 {
 
 	/**
