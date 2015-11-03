@@ -1,6 +1,6 @@
 # Change Log
 
-## Verision 4 possibly backward incompatible changes:
+## Version 4 possibly backward incompatible changes:
 
 Ranamed interfaces:
 ```php

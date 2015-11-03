@@ -11,8 +11,9 @@
 <img src="https://poser.pugx.org/maslosoft/mangan/license.svg" alt="License" style="height: 20px;"/>
 </a>
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master)
 <img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
-<img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master"/>
+<img src="http://hhvm.h4cc.de/badge/maslosoft/mangan.svg?style=flat"/>
 
 ### Quick Install
 ```bash
