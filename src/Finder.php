@@ -75,7 +75,7 @@ class Finder implements FinderInterface
 	public function __construct($model, $em = null)
 	{
 		$this->model = $model;
-		$this->em = $em? : EntityManager::create($model);
+		$this->em = $em ?: EntityManager::create($model);
 		$this->sm = new ScopeManager($model);
 		$this->mn = Mangan::fromModel($model);
 		$this->withCursor($this->mn->useCursor);
@@ -90,7 +90,7 @@ class Finder implements FinderInterface
 	 */
 	public static function create(AnnotatedInterface $model)
 	{
-		$finderClass = ManganMeta::create($model)->type()->finder? : Finder::class;
+		$finderClass = ManganMeta::create($model)->type()->finder ?: Finder::class;
 		return new $finderClass($model);
 	}
 
@@ -163,7 +163,7 @@ class Finder implements FinderInterface
 			}
 			if ($criteria->getSelect())
 			{
-				$cursor->fields($criteria->getSelect(true));
+				$cursor->fields($criteria->getSelect());
 			}
 			$this->mn->getProfiler()->cursor($cursor);
 			if ($this->_useCursor)
