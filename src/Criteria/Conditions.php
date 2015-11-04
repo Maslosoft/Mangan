@@ -86,37 +86,44 @@ class Conditions
 
 	public function __set($name, $value)
 	{
+		$this->field = $name;
 		$this->eq($value);
 		return $this;
 	}
 
 	public function eq($value)
 	{
+		$this->criteria->addCond($this->field, 'eq', $value);
 		return $this;
 	}
 
 	public function gt($value)
 	{
+		$this->criteria->addCond($this->field, 'gt', $value);
 		return $this;
 	}
 
 	public function gte($value)
 	{
+		$this->criteria->addCond($this->field, 'gte', $value);
 		return $this;
 	}
 
 	public function lt($value)
 	{
+		$this->criteria->addCond($this->field, 'lt', $value);
 		return $this;
 	}
 
 	public function lte($value)
 	{
+		$this->criteria->addCond($this->field, 'lte', $value);
 		return $this;
 	}
 
 	public function ne($value)
 	{
+		$this->criteria->addCond($this->field, 'ne', $value);
 		return $this;
 	}
 
