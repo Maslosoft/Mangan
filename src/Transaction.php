@@ -49,7 +49,7 @@ class Transaction
 	 * Whenever transactions are available in current database
 	 * @var bool
 	 */
-	private static $isAvailable = true;
+	private static $isAvailable = null;
 
 	/**
 	 * Begin new transaction
@@ -58,6 +58,11 @@ class Transaction
 	 */
 	public function __construct(AnnotatedInterface $model, $isolation = self::IsolationMVCC)
 	{
+		$this->cmd = new CommandProxy($model);
+		if (null === self::$isAvailable)
+		{
+			self::$isAvailable = $this->isAvailable();
+		}
 		if (!self::$isAvailable)
 		{
 			return;
@@ -67,7 +72,6 @@ class Transaction
 			throw new TransactionException('Transaction is already running');
 		}
 
-		$this->cmd = new CommandProxy($model);
 		$this->cmd->call(self::CommandBegin, [
 			'isolation' => $isolation
 		]);
