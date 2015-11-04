@@ -26,6 +26,7 @@ class ScenarioManager
 
 	/**
 	 * Set Scenario
+	 * @see ScenariosInterface
 	 * @param ScenariosInterface|AnnotatedInterface $model
 	 * @param string $scenario
 	 */
@@ -39,8 +40,9 @@ class ScenarioManager
 
 	/**
 	 * Get scenario
+	 * @see ScenariosInterface
 	 * @param ScenariosInterface|AnnotatedInterface $model
-	 * @return string Scenario, by default IScenarios::Insert
+	 * @return string Scenario, by default ScenariosInterface::Insert
 	 */
 	public static function getScenario(AnnotatedInterface $model)
 	{
@@ -48,7 +50,7 @@ class ScenarioManager
 		{
 			return $model->getScenario();
 		}
-		return self::Insert;
+		return ScenariosInterface::Insert;
 	}
 
 }

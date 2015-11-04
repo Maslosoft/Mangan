@@ -26,8 +26,12 @@ use MongoException;
 interface EntityManagerInterface
 {
 
-	const EventAfterSave = 'afterSave';
 	const EventBeforeSave = 'beforeSave';
+	const EventAfterSave = 'afterSave';
+	const EventBeforeInsert = 'beforeInsert';
+	const EventAfterInsert = 'afterInsert';
+	const EventBeforeUpdate = 'beforeUpdate';
+	const EventAfterUpdate = 'afterUpdate';
 	const EventBeforeDelete = 'beforeDelete';
 	const EventAfterDelete = 'afterDelete';
 

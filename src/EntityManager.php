@@ -120,12 +120,15 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public static function create($model)
 	{
-		$emClass = ManganMeta::create($model)->type()->entityManager? : EntityManager::class;
+		$emClass = ManganMeta::create($model)->type()->entityManager ?: EntityManager::class;
 		return new $emClass($model);
 	}
 
 	/**
-	 * Set attributes en masse
+	 * Set attributes en masse.
+	 * Attributes will be filtered according to SafeAnnotation.
+	 * Only attributes marked as safe will be set, other will be ignored.
+	 *
 	 * @param mixed[] $atributes
 	 */
 	public function setAttributes($atributes)
@@ -150,8 +153,8 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function insert(AnnotatedInterface $model = null)
 	{
-		$model = $model? : $this->model;
-		if ($this->_beforeSave($model))
+		$model = $model ?: $this->model;
+		if ($this->_beforeSave($model, EntityManagerInterface::EventBeforeInsert))
 		{
 			$rawData = RawArray::fromModel($model);
 			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
@@ -159,7 +162,7 @@ class EntityManager implements EntityManagerInterface
 
 			if ($result)
 			{
-				$this->_afterSave($model);
+				$this->_afterSave($model, EntityManagerInterface::EventAfterInsert);
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -168,7 +171,7 @@ class EntityManager implements EntityManagerInterface
 	}
 
 	/**
-	 * Updates the row represented by this active record.
+	 * Updates the row represented by this active document.
 	 * All loaded attributes will be saved to the database.
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
@@ -183,7 +186,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function update(array $attributes = null)
 	{
-		if ($this->_beforeSave($this->model))
+		if ($this->_beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
 		{
 			$rawData = RawArray::fromModel($this->model);
 
@@ -212,7 +215,7 @@ class EntityManager implements EntityManagerInterface
 			$result = $this->_result($result);
 			if ($result)
 			{
-				$this->_afterSave($this->model);
+				$this->_afterSave($this->model, EntityManagerInterface::EventAfterUpdate);
 				return true;
 			}
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -248,19 +251,11 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Saves the current record.
 	 *
-	 * The record is inserted as a row into the database table if its {@link isNewRecord}
-	 * property is true (usually the case when the record is created using the 'new'
-	 * operator). Otherwise, it will be used to update the corresponding row in the table
-	 * (usually the case if the record is obtained using one of those 'find' methods.)
+	 * The record is inserted as a row into the database collection or updated if exists.
 	 *
 	 * Validation will be performed before saving the record. If the validation fails,
 	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
 	 * validation errors.
-	 *
-	 * If the record is saved via insertion, its {@link isNewRecord} property will be
-	 * set false, and its {@link scenario} property will be set to be 'update'.
-	 * And if its primary key is auto-incremental and is not set before insertion,
-	 * the primary key will be populated with the automatically generated key value.
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
@@ -272,7 +267,7 @@ class EntityManager implements EntityManagerInterface
 	{
 		if (!$runValidation || $this->validator->validate())
 		{
-			$model = $model? : $this->model;
+			$model = $model ?: $this->model;
 			if ($this->_beforeSave($model))
 			{
 				$rawResult = $this->_collection->save(RawArray::fromModel($model), $this->options->getSaveOptions());
@@ -294,9 +289,10 @@ class EntityManager implements EntityManagerInterface
 	}
 
 	/**
-	 * Repopulates this active record with the latest data.
-	 * @return boolean whether the row still exists in the database. If true, the latest data will be populated to this active record.
-	 * @since v1.0
+	 * Reloads document from database.
+	 * It return true if document is reloaded and false if it's no longer exists.
+	 *
+	 * @return boolean
 	 */
 	public function refresh()
 	{
@@ -314,10 +310,9 @@ class EntityManager implements EntityManagerInterface
 	}
 
 	/**
-	 * Deletes the row corresponding to this Document.
+	 * Deletes the document from database.
 	 * @return boolean whether the deletion is successful.
 	 * @throws MongoException if the record is new
-	 * @since v1.0
 	 */
 	public function delete()
 	{
@@ -449,11 +444,15 @@ class EntityManager implements EntityManagerInterface
 	 * @see EventBeforeSave
 	 * @return boolean
 	 */
-	private function _beforeSave($model)
+	private function _beforeSave($model, $event = null)
 	{
 		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
 		if ($result)
 		{
+			if (!empty($event))
+			{
+				Event::trigger($model, $event);
+			}
 			(new Signal)->emit(new BeforeSave($model));
 		}
 		return $result;
@@ -463,9 +462,13 @@ class EntityManager implements EntityManagerInterface
 	 * Take care of EventAfterSave
 	 * @see EventAfterSave
 	 */
-	private function _afterSave($model)
+	private function _afterSave($model, $event = null)
 	{
 		Event::trigger($model, EntityManagerInterface::EventAfterSave);
+		if (!empty($event))
+		{
+			Event::trigger($model, $event);
+		}
 		(new Signal)->emit(new AfterSave($model));
 		ScenarioManager::setScenario($model, ScenariosInterface::Update);
 	}
@@ -484,7 +487,7 @@ class EntityManager implements EntityManagerInterface
 		if ($result)
 		{
 			(new Signal)->emit(new BeforeDelete($this->model));
-			ScenarioManager::setScenario($this->model, ScenariosInterface::Insert);
+			ScenarioManager::setScenario($this->model, ScenariosInterface::Delete);
 		}
 		return $result;
 	}
