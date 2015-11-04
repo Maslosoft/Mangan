@@ -187,10 +187,13 @@ class DataProvider implements DataProviderInterface// extends CDataProvider
 	/**
 	 * Set sort
 	 * @param SortInterface $sort
+	 * @return DataProvider
 	 */
 	public function setSort(SortInterface $sort)
 	{
 		$this->_sort = $sort;
+		$this->_sort->setModel($this->model);
+		return $this;
 	}
 
 	/**
