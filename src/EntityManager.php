@@ -270,7 +270,8 @@ class EntityManager implements EntityManagerInterface
 			$model = $model ?: $this->model;
 			if ($this->_beforeSave($model))
 			{
-				$rawResult = $this->_collection->save(RawArray::fromModel($model), $this->options->getSaveOptions());
+				$data = RawArray::fromModel($model);
+				$rawResult = $this->_collection->save($data, $this->options->getSaveOptions());
 				$result = $this->_result($rawResult, true);
 
 				if ($result)
@@ -278,7 +279,7 @@ class EntityManager implements EntityManagerInterface
 					$this->_afterSave($model);
 					return true;
 				}
-				throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
+				throw new MongoException("Can't save the document to disk, or attempting to save an empty document");
 			}
 			return false;
 		}
