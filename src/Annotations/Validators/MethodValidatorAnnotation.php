@@ -20,4 +20,9 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 class MethodValidatorAnnotation
 {
 
+	public function __construct()
+	{
+		throw new Exception('Not implemented, do not use (yet)');
+	}
+
 }
