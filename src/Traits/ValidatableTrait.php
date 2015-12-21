@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Interfaces\ValidatableInterface;
+use Maslosoft\Mangan\Validator;
 
 /**
  * ValidatableTrait
@@ -25,7 +26,7 @@ trait ValidatableTrait
 
 	/**
 	 * Validator instance
-	 * @var \Maslosoft\Mangan\Validator
+	 * @var Validator
 	 */
 	private $_validator = null;
 
@@ -37,6 +38,11 @@ trait ValidatableTrait
 	public function getErrors()
 	{
 		return $this->_getValidator()->getErrors();
+	}
+
+	public function setErrors($errors)
+	{
+		$this->_getValidator()->setErrors($errors);
 	}
 
 	/**
@@ -53,7 +59,7 @@ trait ValidatableTrait
 	{
 		if (null === $this->_validator)
 		{
-			$this->_validator = new \Maslosoft\Mangan\Validator($this);
+			$this->_validator = new Validator($this);
 		}
 		return $this->_validator;
 	}
