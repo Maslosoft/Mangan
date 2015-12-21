@@ -10,6 +10,7 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * UrlValidator
@@ -27,7 +28,7 @@ class UrlValidator implements ValidatorInterface
 		$valid = filter_var($model->$attribute, FILTER_VALIDATE_URL);
 		if (!$valid)
 		{
-			$label = \Maslosoft\Mangan\Meta\ManganMeta::create($model)->field($attribute)->label;
+			$label = ManganMeta::create($model)->field($attribute)->label;
 			$this->addError('{attribute} must be valid url', ['{attribute}' => $label]);
 			return false;
 		}
