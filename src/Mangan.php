@@ -43,6 +43,7 @@ use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
 use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
 use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
 use Maslosoft\Mangan\Transformers\JsonArray;
+use Maslosoft\Mangan\Transformers\JsonString;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
@@ -142,6 +143,8 @@ class Mangan implements LoggerAwareInterface
 	 * @var string[][]
 	 */
 	public $finalizers = [
+		JsonString::class => [
+		]
 	];
 
 	/**
