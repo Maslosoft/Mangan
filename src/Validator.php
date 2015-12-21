@@ -77,10 +77,31 @@ class Validator implements ValidatableInterface
 		{
 			$fieldMeta = $this->meta->field($name);
 
+			// Reset errors
+			$this->errors[$name] = [];
+
 			// Check if meta for field exists
 			if (empty($fieldMeta))
 			{
 				throw new InvalidArgumentException(sprintf("Unknown field `%s` in model `%s`", $name, get_class($this->model)));
+			}
+
+			// Validate sub documents
+			if ($fieldMeta->owned)
+			{
+				if (is_array($this->model->$name))
+				{
+					foreach ($this->model->$name as $model)
+					{
+						$validator = new Validator($model);
+						$valid[] = (int) $validator->validate();
+					}
+				}
+				elseif (!empty($this->model->$name))
+				{
+					$validator = new Validator($this->model->$name);
+					$valid[] = (int) $validator->validate();
+				}
 			}
 
 			// Skip field without validators
@@ -107,6 +128,12 @@ class Validator implements ValidatableInterface
 			{
 				$valid[] = false;
 				$this->errors[$name] = array_merge($this->errors[$name], $this->getErrors());
+
+				// Set errors to model instance if it implements ValidatableInterface
+				if ($this->model instanceof ValidatableInterface)
+				{
+					$this->model->setErrors($this->errors);
+				}
 			}
 		}
 		return count($valid) === array_sum($valid);
@@ -115,6 +142,14 @@ class Validator implements ValidatableInterface
 	public function getErrors()
 	{
 		return $this->errors;
+	}
+
+	public function setErrors($errors)
+	{
+		foreach ($errors as $field => $errors)
+		{
+			$this->errors[$field] = $errors;
+		}
 	}
 
 }

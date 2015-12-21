@@ -23,4 +23,6 @@ interface ValidatableInterface
 	public function validate();
 
 	public function getErrors();
+
+	public function setErrors($errors);
 }
