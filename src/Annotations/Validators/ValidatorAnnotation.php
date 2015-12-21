@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
+use Maslosoft\Mangan\Validators\Proxy\ClassValidatorProxy;
 
 /**
  * Base class for validator annotations
@@ -55,13 +56,6 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 	public $safe = true;
 
 	/**
-	 * @var boolean whether to perform client-side validation. Defaults to true.
-	 * Please refer to {@link CActiveForm::enableClientValidation} for more details about client-side validation.
-	 * @since 1.1.7
-	 */
-	public $enableClientValidation = true;
-
-	/**
 	 * @var array list of scenarios that the validator should not be applied to.
 	 * Each array value refers to a scenario name with the same name as its array key.
 	 * @since 1.1.11
@@ -73,19 +67,30 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 	 * @var string
 	 */
 	public $proxy = '';
+	public $class = '';
+	public $value = '';
 
 	public function init()
 	{
-		$this->proxy = ValidatorProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
-					'message',
-					'skipOnError',
-					'on',
-					'safe',
-					'enableClientValidation',
-					'except',
-					'proxy'
-		]));
+		$params = [
+			'class'
+		];
+		if (is_string($this->value))
+		{
+			$this->class = $this->value;
+		}
+		else
+		{
+			foreach (array_keys($this->value) as $key)
+			{
+				if (!is_numeric($key))
+				{
+					$params[] = $key;
+				}
+			}
+		}
+		$this->proxy = ClassValidatorProxy::class;
+		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, $params));
 	}
 
 }

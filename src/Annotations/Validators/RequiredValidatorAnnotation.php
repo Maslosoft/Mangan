@@ -38,8 +38,6 @@ class RequiredValidatorAnnotation extends ValidatorAnnotation
 
 	use \Maslosoft\Mangan\Validators\Traits\Strict;
 
-	public $value = '';
-
 	/**
 	 * @var mixed the desired value that the attribute must have.
 	 * If this is null, the validator will validate that the specified attribute does not have null or empty value.
