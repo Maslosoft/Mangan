@@ -36,11 +36,7 @@ trait ValidatableTrait
 	 */
 	public function getErrors()
 	{
-		if ($this->_validator)
-		{
-			return $this->_validator->getErrors();
-		}
-		return [];
+		return $this->_getValidator()->getErrors();
 	}
 
 	/**
@@ -50,8 +46,16 @@ trait ValidatableTrait
 	 */
 	public function validate()
 	{
-		$this->_validator = new \Maslosoft\Mangan\Validator($this);
-		return $this->_validator->validate();
+		return $this->_getValidator()->validate();
+	}
+
+	private function _getValidator()
+	{
+		if (null === $this->_validator)
+		{
+			$this->_validator = new \Maslosoft\Mangan\Validator($this);
+		}
+		return $this->_validator;
 	}
 
 }

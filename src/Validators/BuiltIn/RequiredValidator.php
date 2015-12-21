@@ -44,7 +44,7 @@ class RequiredValidator implements ValidatorInterface
 	{
 		$value = $model->$attribute;
 		$label = ManganMeta::create($model)->field($attribute)->label;
-		if ($this->requiredValue !== null)
+		if (!empty($this->requiredValue))
 		{
 			if (!$this->strict && $value != $this->requiredValue || $this->strict && $value !== $this->requiredValue)
 			{

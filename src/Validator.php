@@ -13,8 +13,11 @@
 
 namespace Maslosoft\Mangan;
 
+use InvalidArgumentException;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Helpers\Validator\Factory;
 use Maslosoft\Mangan\Interfaces\ValidatableInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * Validator
@@ -33,9 +36,29 @@ class Validator implements ValidatableInterface
 	 */
 	private $model = null;
 
+	/**
+	 * Metadata for model
+	 * @var ManganMeta
+	 */
+	private $meta = null;
+
+	/**
+	 * Array of error messages.
+	 * Keys are field names, secondary keys are numeric
+	 * @var string[][]
+	 */
+	private $errors = [];
+
 	public function __construct(AnnotatedInterface $model)
 	{
 		$this->model = $model;
+		$this->meta = ManganMeta::create($this->model);
+
+		// Ensure that errors array is initialized - even if does not have validators
+		foreach (array_keys($this->meta->fields()) as $name)
+		{
+			$this->errors[$name] = [];
+		}
 	}
 
 	/**
@@ -45,12 +68,53 @@ class Validator implements ValidatableInterface
 	 */
 	public function validate($fields = [])
 	{
-		return true;
+		$valid = [];
+		if (empty($fields))
+		{
+			$fields = array_keys($this->meta->fields());
+		}
+		foreach ($fields as $name)
+		{
+			$fieldMeta = $this->meta->field($name);
+
+			// Check if meta for field exists
+			if (empty($fieldMeta))
+			{
+				throw new InvalidArgumentException(sprintf("Unknown field `%s` in model `%s`", $name, get_class($this->model)));
+			}
+
+			// Skip field without validators
+			if (empty($fieldMeta->validators))
+			{
+				continue;
+			}
+			$valid[] = (int) $this->validateField($name, $fieldMeta);
+		}
+		return count($valid) === array_sum($valid);
+	}
+
+	private function validateField($name, Meta\DocumentPropertyMeta $meta)
+	{
+		$valid = [];
+		foreach ($meta->validators as $validatorMeta)
+		{
+			$validator = Factory::create($this->model, $validatorMeta);
+			if ($validator->isValid($this->model, $name))
+			{
+				$valid[] = true;
+			}
+			else
+			{
+				$valid[] = false;
+				$this->errors[$name] = array_merge($this->errors[$name], $this->getErrors());
+			}
+		}
+		return count($valid) === array_sum($valid);
 	}
 
 	public function getErrors()
 	{
-		return [];
+		return $this->errors;
 	}
 
 }
