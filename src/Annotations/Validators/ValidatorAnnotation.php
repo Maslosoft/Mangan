@@ -76,6 +76,7 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
+		$this->proxy = ValidatorProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'message',
 					'skipOnError',

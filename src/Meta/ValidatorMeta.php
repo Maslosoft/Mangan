@@ -17,10 +17,18 @@ class ValidatorMeta extends BaseMeta
 {
 
 	/**
-	 * Proxy class
+	 * Proxy class. This will use Mangan::validators configuration to init `$class` field.
+	 * NOTE: This is reserved and *cannot* be used as validator field.
 	 * @var string
 	 */
 	public $proxy = '';
+
+	/**
+	 * Validator class. If empty, will try to get from proxy class.
+	 * This has priority over `proxy` field.
+	 * @var string
+	 */
+	public $class = '';
 
 	/**
 	 * @var string the user-defined error message. Different validators may define various
@@ -50,13 +58,6 @@ class ValidatorMeta extends BaseMeta
 	public $safe = true;
 
 	/**
-	 * @var boolean whether to perform client-side validation. Defaults to true.
-	 * Please refer to {@link CActiveForm::enableClientValidation} for more details about client-side validation.
-	 * @since 1.1.7
-	 */
-	public $enableClientValidation = true;
-
-	/**
 	 * @var array list of scenarios that the validator should not be applied to.
 	 * Each array value refers to a scenario name with the same name as its array key.
 	 * @since 1.1.11
@@ -64,5 +65,4 @@ class ValidatorMeta extends BaseMeta
 	public $except = NULL;
 
 	// and more...
-	
 }

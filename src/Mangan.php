@@ -369,6 +369,15 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
+	 * Get dependecy injector.
+	 * @return EmbeDi
+	 */
+	public function getDi()
+	{
+		return $this->_di;
+	}
+
+	/**
 	 * Get flyweight instance of Mangan component.
 	 * Only one instance will be created for each `$connectionId`.
 	 *

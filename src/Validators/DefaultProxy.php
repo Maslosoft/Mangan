@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Validators;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorProxyInterface;
 
@@ -21,32 +22,38 @@ use Maslosoft\Mangan\Interfaces\Validators\ValidatorProxyInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class DefaultProxy implements ValidatorInterface, ValidatorProxyInterface
+abstract class DefaultProxy implements ValidatorInterface, ValidatorProxyInterface
 {
+
+	/**
+	 *
+	 * @var ValidatorInterface
+	 */
+	private $validator = null;
 
 	public function addError($message)
 	{
-
+		$this->validator->addError($message);
 	}
 
 	public function getValidator()
 	{
-
+		return $this->validator;
 	}
 
-	public function isValid(\Maslosoft\Addendum\Interfaces\AnnotatedInterface $model, $attribute)
+	public function isValid(AnnotatedInterface $model, $attribute)
 	{
-
+		return $this->validator->isValid($model, $attribute);
 	}
 
 	public function setValidator(ValidatorInterface $validator)
 	{
-
+		$this->validator = $validator;
 	}
 
 	public function getErrors()
 	{
-
+		return $this->validator->getErrors();
 	}
 
 }
