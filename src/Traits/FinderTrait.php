@@ -14,10 +14,10 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 
 /**
@@ -36,7 +36,7 @@ trait FinderTrait
 
 	/**
 	 * Finds a single Document with the specified condition.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 *
 	 * If an array, it is treated as the initial values for constructing a {@link Criteria} object;
 	 * Otherwise, it should be an instance of {@link Criteria}.
@@ -53,7 +53,7 @@ trait FinderTrait
 	/**
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return AnnotatedInterface[]|Cursor array list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 * @Ignored
@@ -82,7 +82,7 @@ trait FinderTrait
 	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 * @Ignored
@@ -98,7 +98,7 @@ trait FinderTrait
 	 * field is in use as PK!
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return Document the document found. An null is returned if none is found.
 	 * @since v1.0
 	 * @Ignored
@@ -125,7 +125,7 @@ trait FinderTrait
 	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.0
 	 * @Ignored
@@ -151,11 +151,11 @@ trait FinderTrait
 	/**
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $criteria query condition or criteria.
+	 * @param CriteriaInterface $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 * @Ignored
 	 */
-	public function exists(Criteria $criteria = null)
+	public function exists(CriteriaInterface $criteria = null)
 	{
 		return $this->_getFinder()->exists($criteria);
 	}

@@ -71,10 +71,10 @@ interface EntityManagerInterface
 	 *
 	 * @since v1.3.6
 	 * @param Modifier $modifier updating rules to apply
-	 * @param Criteria $criteria condition to limit updating rules
+	 * @param CriteriaInterface $criteria condition to limit updating rules
 	 * @return boolean|mixed[]
 	 */
-	public function updateAll(Modifier $modifier, Criteria $criteria = null);
+	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null);
 
 	/**
 	 * Saves the current record.
@@ -114,7 +114,7 @@ interface EntityManagerInterface
 	 * Deletes one document with the specified primary keys.
 	 * <b>Does not raise beforeDelete</b>
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteOne($criteria = null);
@@ -123,7 +123,7 @@ interface EntityManagerInterface
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteByPk($pkValue, $criteria = null);
@@ -132,7 +132,7 @@ interface EntityManagerInterface
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed[] $pkValues Primary keys array
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null);
@@ -140,7 +140,7 @@ interface EntityManagerInterface
 	/**
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteAll($criteria = null);

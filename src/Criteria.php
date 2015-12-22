@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\Mangan\Criteria\Conditions;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
+use Maslosoft\Mangan\Interfaces\Criteria\MergeableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SelectableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
@@ -190,7 +191,7 @@ class Criteria implements CriteriaInterface
 	 *  'sort'=>array('fieldName1'=>Criteria::SortAsc, 'fieldName2'=>Criteria::SortDesc),
 	 * );
 	 * </PRE>
-	 * @param mixed|Criteria|Conditions $criteria
+	 * @param mixed|CriteriaInterface|Conditions $criteria
 	 * @param AnnotatedInterface|null Model to use for criteria decoration
 	 * @since v1.0
 	 */
@@ -241,7 +242,7 @@ class Criteria implements CriteriaInterface
 				$this->setUseCursor($criteria['useCursor']);
 			}
 		}
-		elseif ($criteria instanceof Criteria)
+		elseif ($criteria instanceof MergeableInterface)
 		{
 			$this->mergeWith($criteria);
 		}

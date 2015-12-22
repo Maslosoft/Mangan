@@ -18,6 +18,7 @@ use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\CriteriaException;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use MongoId;
 
@@ -33,13 +34,17 @@ class PkManager
 	 * Prepare multi pk criteria
 	 * @param AnnotatedInterface $model
 	 * @param mixed[] $pkValues
-	 * @param Criteria|null $criteria
+	 * @param CriteriaInterface|null $criteria
 	 */
-	public static function prepareAll($model, $pkValues, Criteria $criteria = null)
+	public static function prepareAll($model, $pkValues, CriteriaInterface $criteria = null)
 	{
 		if (null === $criteria)
 		{
 			$criteria = new Criteria();
+		}
+		if (!$criteria instanceof Criteria)
+		{
+			throw new Exception(sprintf("Unsupported criteria class, currently only `%s` is supported, `%s` given", Criteria::class, get_class($criteria)));
 		}
 		$conditions = [];
 		foreach ($pkValues as $pkValue)

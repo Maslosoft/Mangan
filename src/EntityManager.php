@@ -20,6 +20,7 @@ use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -120,7 +121,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public static function create($model)
 	{
-		$emClass = ManganMeta::create($model)->type()->entityManager ?: EntityManager::class;
+		$emClass = ManganMeta::create($model)->type()->entityManager ? : EntityManager::class;
 		return new $emClass($model);
 	}
 
@@ -153,7 +154,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function insert(AnnotatedInterface $model = null)
 	{
-		$model = $model ?: $this->model;
+		$model = $model ? : $this->model;
 		if ($this->_beforeSave($model, EntityManagerInterface::EventBeforeInsert))
 		{
 			$rawData = RawArray::fromModel($model);
@@ -228,10 +229,10 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @since v1.3.6
 	 * @param Modifier $modifier updating rules to apply
-	 * @param Criteria $criteria condition to limit updating rules
+	 * @param CriteriaInterface $criteria condition to limit updating rules
 	 * @return boolean
 	 */
-	public function updateAll(Modifier $modifier, Criteria $criteria = null)
+	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null)
 	{
 		if ($modifier->canApply())
 		{
@@ -267,7 +268,7 @@ class EntityManager implements EntityManagerInterface
 	{
 		if (!$runValidation || $this->validator->validate())
 		{
-			$model = $model ?: $this->model;
+			$model = $model ? : $this->model;
 			if ($this->_beforeSave($model))
 			{
 				$data = RawArray::fromModel($model);
@@ -341,7 +342,7 @@ class EntityManager implements EntityManagerInterface
 	 * Deletes one document with the specified primary keys.
 	 * <b>Does not raise beforeDelete</b>
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteOne($criteria = null)
@@ -358,7 +359,7 @@ class EntityManager implements EntityManagerInterface
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteByPk($pkValue, $criteria = null)
@@ -380,7 +381,7 @@ class EntityManager implements EntityManagerInterface
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param mixed[] $pkValues Primary keys array
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null)
@@ -401,7 +402,7 @@ class EntityManager implements EntityManagerInterface
 	 * Deletes documents with the specified primary keys.
 	 * <b>Does not raise beforeDelete</b>
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
 	public function deleteAll($criteria = null)

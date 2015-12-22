@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+
 /**
  * ScopeManager
  *
@@ -104,8 +106,8 @@ class ScopeManager
 
 	/**
 	 * Apply scopes to criteria, will create criteria object if not provided and pass it by reference
-	 * @param Criteria|array|null $criteria
-	 * @return Criteria
+	 * @param CriteriaInterface|array|null $criteria
+	 * @return CriteriaInterface
 	 */
 	public function apply(&$criteria = null)
 	{
@@ -113,7 +115,7 @@ class ScopeManager
 		{
 			return new Criteria();
 		}
-		if (is_array($criteria))
+		elseif (is_array($criteria))
 		{
 			$criteria = new Criteria($criteria);
 		}
