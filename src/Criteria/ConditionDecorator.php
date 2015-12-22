@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Interfaces\ConditionDecoratorInterface;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 
 /**
@@ -23,7 +24,7 @@ use Maslosoft\Mangan\Transformers\CriteriaArray;
  * @internal Criteria sub component
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ConditionDecorator
+class ConditionDecorator implements ConditionDecoratorInterface
 {
 
 	/**

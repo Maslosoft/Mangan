@@ -6,17 +6,24 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Interfaces\Criteria;
+namespace Maslosoft\Mangan\Traits\Criteria;
 
+use Exception;
+use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
+use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 
 /**
- *
+ * SortableTrait
+ * @see SortableInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface SortableInterface
+trait SortableTrait
 {
+
+	private $_sort = [];
 
 	/**
 	 * Add sorting, avaliabe orders are: Criteria::SortAsc and Criteria::SortDesc
@@ -26,12 +33,27 @@ interface SortableInterface
 	 * @return Criteria
 	 * @since v1.0
 	 */
-	public function sort($fieldName, $order);
+	public function sort($fieldName, $order)
+	{
+		if ($this instanceof DecoratableInterface)
+		{
+			$decorated = $this->getCd()->decorate($fieldName);
+			$this->_sort[key($decorated)] = intval($order);
+		}
+		else
+		{
+			$this->_sort[$fieldName] = intval($order);
+		}
+		return $this;
+	}
 
 	/**
 	 * @since v1.0
 	 */
-	public function getSort();
+	public function getSort()
+	{
+		return $this->_sort;
+	}
 
 	/**
 	 * Set sorting of results. Use model field names as keys and Criteria's sort consntants.
@@ -91,5 +113,24 @@ interface SortableInterface
 	 * @param mixed[]|SortInterface
 	 * @return CriteriaInterface
 	 */
-	public function setSort($sort);
+	public function setSort($sort)
+	{
+		if ($sort instanceof SortInterface)
+		{
+			$this->_sort = $sort->getSort();
+		}
+		else
+		{
+			if (!is_array($sort))
+			{
+				throw new Exception(sprintf('Sort must be instance of `%s` or array, `%s` given', SortInterface::class, gettype($sort)));
+			}
+			foreach ($sort as $fieldName => $order)
+			{
+				$this->sort($fieldName, $order);
+			}
+		}
+		return $this;
+	}
+
 }

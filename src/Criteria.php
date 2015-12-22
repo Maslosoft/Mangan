@@ -13,10 +13,12 @@
 
 namespace Maslosoft\Mangan;
 
-use Exception;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\Mangan\Criteria\Conditions;
+use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
+use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 
 /**
@@ -39,8 +41,13 @@ use Maslosoft\Mangan\Interfaces\SortInterface;
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @license New BSD license
  */
-class Criteria
+class Criteria implements CriteriaInterface
 {
+
+	use Traits\Criteria\CursorAwareTrait,
+	  Traits\Criteria\DecoratableTrait,
+	  Traits\Criteria\LimitableTrait,
+	  Traits\Criteria\SortableTrait;
 
 	/**
 	 * @since v1.0
@@ -126,28 +133,26 @@ class Criteria
 	/**
 	 * Sort Ascending
 	 */
-	const SortAsc = 1;
+	const SortAsc = SortInterface::SortAsc;
 
 	/**
 	 * Sort Descending
 	 */
-	const SortDesc = -1;
+	const SortDesc = SortInterface::SortDesc;
 
 	/**
 	 * Sort Ascending
 	 * @deprecated since version 4.0.7
 	 */
-	const SORT_ASC = 1;
+	const SORT_ASC = SortInterface::SortAsc;
 
 	/**
 	 * Sort Descending
 	 * @deprecated since version 4.0.7
 	 */
-	const SORT_DESC = -1;
+	const SORT_DESC = SortInterface::SortDesc;
 
 	private $_select = [];
-	private $_limit = null;
-	private $_offset = null;
 	private $_conditions = [];
 
 	/**
@@ -155,15 +160,7 @@ class Criteria
 	 * @var mixed[]
 	 */
 	private $_rawConds = [];
-	private $_sort = [];
 	private $_workingFields = [];
-	private $_useCursor = null;
-
-	/**
-	 * Condition decorator
-	 * @var ConditionDecorator
-	 */
-	private $cd = null;
 
 	/**
 	 * Constructor
@@ -198,7 +195,7 @@ class Criteria
 	 */
 	public function __construct($criteria = null, AnnotatedInterface $model = null)
 	{
-		$this->cd = new ConditionDecorator($model);
+		$this->setCd(new ConditionDecorator($model));
 		if (is_array($criteria))
 		{
 			if (isset($criteria['conditions']))
@@ -259,31 +256,31 @@ class Criteria
 	 * - Limit and offet will be overriden
 	 * - Select fields list will be merged
 	 * - Sort fields list will be merged
-	 * @param array|Criteria $criteria
+	 * @param array|CriteriaInterface $criteria
 	 * @since v1.0
 	 */
 	public function mergeWith($criteria)
 	{
 		if (is_array($criteria))
 		{
-			$criteria = new Criteria($criteria);
+			$criteria = new static($criteria);
 		}
 		else if (empty($criteria))
 		{
 			return $this;
 		}
 
-		if (!empty($criteria->_limit))
+		if ($this instanceof LimitableInterface && $criteria instanceof LimitableInterface && !empty($criteria->getLimit()))
 		{
-			$this->_limit = $criteria->_limit;
+			$this->setLimit($criteria->getLimit());
 		}
-		if (!empty($criteria->_offset))
+		if ($this instanceof LimitableInterface && $criteria instanceof LimitableInterface && !empty($criteria->getOffset()))
 		{
-			$this->_offset = $criteria->_offset;
+			$this->setOffset($criteria->getOffset());
 		}
-		if (!empty($criteria->_sort))
+		if ($this instanceof SortableInterface && $criteria instanceof SortableInterface && !empty($criteria->getSort()))
 		{
-			$this->_sort = array_merge($this->_sort, $criteria->_sort);
+			$this->setSort($criteria->getSort());
 		}
 		if (!empty($criteria->_select))
 		{
@@ -396,17 +393,6 @@ class Criteria
 	}
 
 	/**
-	 * Decorate and sanitize criteria with provided model.
-	 * @param AnnotatedInterface $model Model to use for decorators and sanitizer when creating conditions. If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
-	 * @return Criteria
-	 */
-	public function decorateWith($model)
-	{
-		$this->cd = new ConditionDecorator($model);
-		return $this;
-	}
-
-	/**
 	 * Return query array
 	 * @return array query array
 	 * @since v1.0
@@ -434,145 +420,6 @@ class Criteria
 			return $this;
 		}
 		$this->_conditions = $conditions;
-		return $this;
-	}
-
-	/**
-	 * @since v1.0
-	 */
-	public function getLimit()
-	{
-		return $this->_limit;
-	}
-
-	/**
-	 * @since v1.0
-	 */
-	public function setLimit($limit)
-	{
-		$this->limit($limit);
-	}
-
-	/**
-	 * @since v1.0
-	 */
-	public function getOffset()
-	{
-		return $this->_offset;
-	}
-
-	/**
-	 * @since v1.0
-	 */
-	public function setOffset($offset)
-	{
-		$this->offset($offset);
-	}
-
-	/**
-	 * @since v1.0
-	 */
-	public function getSort()
-	{
-		return $this->_sort;
-	}
-
-	/**
-	 * Set sorting of results. Use model field names as keys and Criteria's sort consntants.
-	 *
-	 * Afields will be automatically decorated according to model.
-	 * For instance, when sorting on i18n field simply use field name, without language prefix.
-	 *
-	 * Sort by title example:
-	 * ```php
-	 * $criteria = new Criteria();
-	 * $sort = [
-	 * 		'title' => Criteria::SortAsc
-	 * ];
-	 * $criteria->setSort($sort);
-	 * ```
-	 * If title is declared as i18n and language is set to `en`, it will sort by `title.en` ascending in this case.
-	 *
-	 * Subsequent calls to setSort will override existing sort field and add new ones.
-	 *
-	 * Sort by title and then reverse order and add another field example:
-	 * ```php
-	 * $criteria = new Criteria();
-	 * $sort = [
-	 * 		'title' => Criteria::SortAsc
-	 * ];
-	 * $criteria->setSort($sort);
-	 * // Override order and add second sort field
-	 * $sort = [
-	 * 		'title' => Criteria::SortDesc,
-	 * 			'active' => Critera::SortAsc
-	 * ];
-	 * $criteria->setSort($sort);
-	 * ```
-	 * Will sort by title descending, then active ascending
-	 *
-	 * When using `Sort` object as param, it will replace entire sorting
-	 * information with that provided by `Sort` instance.
-	 *
-	 * Sort by title and then replace with `Sort` instance example:
-	 * ```php
-	 * $criteria = new Criteria();
-	 * $sort = [
-	 * 		'title' => Criteria::SortAsc
-	 * 			'active' => Critera::SortAsc
-	 * ];
-	 * $criteria->setSort($sort);
-	 *
-	 * // Override order completely with new Sort instance
-	 * $sort = new Sort([
-	 * 		'title' => Criteria::SortDesc,
-	 * ];
-	 * $criteria->setSort($sort);
-	 * ```
-	 * Will sort by title descending
-	 *
-	 *
-	 * @param mixed[]|SortInterface
-	 * @return Criteria
-	 */
-	public function setSort($sort)
-	{
-		if ($sort instanceof SortInterface)
-		{
-			$this->_sort = $sort->getSort();
-		}
-		else
-		{
-			if (!is_array($sort))
-			{
-				throw new Exception();
-			}
-			foreach ($sort as $fieldName => $order)
-			{
-				$decorated = $this->cd->decorate($fieldName);
-				$this->_sort[key($decorated)] = $order;
-			}
-		}
-		return $this;
-	}
-
-	/**
-	 * Whenever to use cursor
-	 * @return bool Whever to use Cursor
-	 */
-	public function getUseCursor()
-	{
-		return $this->_useCursor;
-	}
-
-	/**
-	 * Use cursor for fetching data
-	 * @param bool $useCursor Whenever to use cursor
-	 * @return Criteria
-	 */
-	public function setUseCursor($useCursor)
-	{
-		$this->_useCursor = $useCursor;
 		return $this;
 	}
 
@@ -649,47 +496,6 @@ class Criteria
 	}
 
 	/**
-	 * Set linit
-	 * Multiple calls will overrride previous value of limit
-	 *
-	 * @param integer $limit limit
-	 * @since v1.0
-	 */
-	public function limit($limit)
-	{
-		$this->_limit = intval($limit);
-		return $this;
-	}
-
-	/**
-	 * Set offset
-	 * Multiple calls will override previous value
-	 *
-	 * @param integer $offset offset
-	 * @since v1.0
-	 */
-	public function offset($offset)
-	{
-		$this->_offset = intval($offset);
-		return $this;
-	}
-
-	/**
-	 * Add sorting, avaliabe orders are: Criteria::SortAsc and Criteria::SortDesc
-	 * Each call will be groupped with previous calls
-	 * @param string $fieldName
-	 * @param integer $order
-	 * @return Criteria
-	 * @since v1.0
-	 */
-	public function sort($fieldName, $order)
-	{
-		$decorated = $this->cd->decorate($fieldName);
-		$this->_sort[key($decorated)] = intval($order);
-		return $this;
-	}
-
-	/**
 	 * Add condition
 	 * If specified field already has a condition, values will be merged
 	 * duplicates will be overriden by new values!
@@ -740,7 +546,7 @@ class Criteria
 			$values = [];
 			foreach ($value as $val)
 			{
-				$decorated = $this->cd->decorate($fieldName, $val);
+				$decorated = $this->getCd()->decorate($fieldName, $val);
 				$fieldName = key($decorated);
 				$values[] = current($decorated);
 			}
@@ -748,7 +554,7 @@ class Criteria
 		}
 		else
 		{
-			$decorated = $this->cd->decorate($fieldName, $value);
+			$decorated = $this->getCd()->decorate($fieldName, $value);
 			$fieldName = key($decorated);
 			$value = current($decorated);
 		}
