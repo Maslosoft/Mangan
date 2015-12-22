@@ -36,9 +36,13 @@ use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @since v1.0
  */
-class DataProvider implements DataProviderInterface// extends CDataProvider
+class DataProvider implements DataProviderInterface
 {
 
+	/**
+	 * @deprecated since version number
+	 * @var string
+	 */
 	public static $CLS = __CLASS__;
 
 	/**
@@ -69,7 +73,7 @@ class DataProvider implements DataProviderInterface// extends CDataProvider
 	private $_finder = null;
 
 	/**
-	 * @var Criteria
+	 * @var CriteriaInterface
 	 */
 	private $_criteria;
 

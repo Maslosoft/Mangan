@@ -36,13 +36,9 @@ trait FinderTrait
 
 	/**
 	 * Finds a single Document with the specified condition.
+	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 *
-	 * If an array, it is treated as the initial values for constructing a {@link Criteria} object;
-	 * Otherwise, it should be an instance of {@link Criteria}.
-	 *
-	 * @return Document the record found. Null if no record is found.
-	 * @since v1.0
+	 * @return AnnotatedInterface|null
 	 * @Ignored
 	 */
 	public function find($criteria = null)
@@ -51,11 +47,63 @@ trait FinderTrait
 	}
 
 	/**
+	 * Finds document with the specified primary key. Primary key by default
+	 * is defined by `_id` field. But could be any other. For simple (one column)
+	 * keys use it's value.
+	 *
+	 * For composite use key-value with column names as keys
+	 * and values for values.
+	 *
+	 * Example for simple pk:
+	 * ```php
+	 * $pk = '51b616fcc0986e30026d0748'
+	 * ```
+	 *
+	 * Composite pk:
+	 * ```php
+	 * $pk = [
+	 * 		'mainPk' => 1,
+	 * 		'secondaryPk' => 2
+	 * ];
+	 * ```
+	 *
+	 * @param mixed $pk primary key value. Use array for composite key.
+	 * @param array|CriteriaInterface $criteria
+	 * @return AnnotatedInterface|null
+	 * @Ignored
+	 */
+	public function findByPk($pk, $criteria = null)
+	{
+		return $this->_getFinder()->findByPk($pk, $criteria);
+	}
+
+	/**
+	 * Finds document with the specified attributes.
+	 * Attributes should be specified as key-value pairs.
+	 * This allows easier syntax for simple queries.
+	 *
+	 * Example:
+	 * ```php
+	 * $attributes = [
+	 * 		'name' => 'John',
+	 * 		'title' => 'dr'
+	 * ];
+	 * ```
+	 *
+	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @return AnnotatedInterface|null
+	 * @Ignored
+	 */
+	public function findByAttributes(array $attributes)
+	{
+		return $this->_getFinder()->findByAttributes($attributes);
+	}
+
+	/**
 	 * Finds all documents satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return AnnotatedInterface[]|Cursor array list of documents satisfying the specified condition. An empty array is returned if none is found.
-	 * @since v1.0
+	 * @return AnnotatedInterface[]|Cursor
 	 * @Ignored
 	 */
 	public function findAll($criteria = null)
@@ -67,8 +115,7 @@ trait FinderTrait
 	 * Finds all documents with the specified attributes.
 	 *
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
-	 * @since v1.0
+	 * @return AnnotatedInterface[]|Cursor
 	 * @Ignored
 	 */
 	public function findAllByAttributes(array $attributes)
@@ -81,10 +128,10 @@ trait FinderTrait
 	 * In MongoDB world every document has '_id' unique field, so with this method that
 	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
+	 *
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
-	 * @since v1.0
+	 * @return AnnotatedInterface[]|Cursor
 	 * @Ignored
 	 */
 	public function findAllByPk($pk, $criteria = null)
@@ -93,41 +140,10 @@ trait FinderTrait
 	}
 
 	/**
-	 * Finds document with the specified primary key.
-	 * In MongoDB world every document has '_id' unique field, so with this method that
-	 * field is in use as PK!
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return Document the document found. An null is returned if none is found.
-	 * @since v1.0
-	 * @Ignored
-	 */
-	public function findByPk($pk, $criteria = null)
-	{
-		return $this->_getFinder()->findByPk($pk, $criteria);
-	}
-
-	/**
-	 * Finds document with the specified attributes.
-	 *
-	 * See {@link find()} for detailed explanation about $condition.
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return Document - the document found. An null is returned if none is found.
-	 * @since v1.0
-	 * @Ignored
-	 */
-	public function findByAttributes(array $attributes)
-	{
-		return $this->_getFinder()->findByAttributes($attributes);
-	}
-
-	/**
 	 * Counts all documents satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return integer Count of all documents satisfying the specified condition.
-	 * @since v1.0
+	 * @return int
 	 * @Ignored
 	 */
 	public function count($criteria = null)
@@ -136,11 +152,18 @@ trait FinderTrait
 	}
 
 	/**
-	 * Counts all documents satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return integer Count of all documents satisfying the specified condition.
-	 * @since v1.2.2
+	 * Counts all documents found by attribute values.
+	 *
+	 * Example:
+	 * ```php
+	 * $attributes = [
+	 * 		'name' => 'John',
+	 * 		'title' => 'dr'
+	 * ];
+	 * ```
+	 *
+	 * @param mixed[] Array of attributes and values in form of ['attributeName' => 'value']
+	 * @return int
 	 * @Ignored
 	 */
 	public function countByAttributes(array $attributes)
@@ -149,10 +172,10 @@ trait FinderTrait
 	}
 
 	/**
-	 * Checks whether there is row satisfying the specified condition.
-	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param CriteriaInterface $criteria query condition or criteria.
-	 * @return boolean whether there is row satisfying the specified condition.
+	 * Checks whether there is document satisfying the specified condition.
+	 *
+	 * @param CriteriaInterface $criteria
+	 * @return bool
 	 * @Ignored
 	 */
 	public function exists(CriteriaInterface $criteria = null)
@@ -162,6 +185,7 @@ trait FinderTrait
 
 	/**
 	 * Whenever to use cursor
+	 *
 	 * @param type $useCursor
 	 * @return FinderInterface
 	 * @Ignored
@@ -171,6 +195,10 @@ trait FinderTrait
 		return $this->_getFinder()->withCursor($useCursor);
 	}
 
+	/**
+	 * Get finder instace
+	 * @return FinderInterface
+	 */
 	private function _getFinder()
 	{
 		if (null === $this->_finder)

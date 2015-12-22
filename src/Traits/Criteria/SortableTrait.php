@@ -44,6 +44,9 @@ trait SortableTrait
 		{
 			$decorated = $this->getCd()->decorate($fieldName);
 			$this->_sort[key($decorated)] = intval($order);
+			// NOTE: Ignore further bogus scrunitize report:
+			// Accessing _sort on the interface Maslosoft\Mangan\Interfa...ia\DecoratableInterface
+			// suggest that you code against a concrete implementation. How about adding an instanceof check?
 		}
 		else
 		{
