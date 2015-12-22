@@ -57,12 +57,13 @@
 		"maslosoft/embedi": "*",
 		"maslosoft/miniview": "*",
 		"maslosoft/gazebo": "*",
-		"psr/log": "^1.0",
+		"psr/log": "^1",
+		"symfony/yaml": "^3",
 		"mongofill/mongofill": "@dev"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master",
-		"maslosoft/hedron": "~1",
+		"maslosoft/hedron": "*",
 		"maslosoft/zamm": "@dev",
 		"maslosoft/mangan-examples": "*"
 	},

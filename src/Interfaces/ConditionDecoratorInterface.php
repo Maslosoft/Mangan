@@ -14,14 +14,10 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface SortInterface
+interface ConditionDecoratorInterface
 {
 
-	/**
-	 * Sort order
-	 */
-	const SortAsc = 1;
-	const SortDesc = -1;
+	public function __construct(AnnotatedInterface $model = null);
 
-	public function setModel(AnnotatedInterface $model = null);
+	public function decorate($field, $value = null);
 }
