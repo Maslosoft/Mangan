@@ -22,14 +22,15 @@ use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 /**
  * DecoratableTrait
  * @see DecoratableInterface
+ * @see CriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait DecoratableTrait
 {
 
 	/**
-	 *
-	 * @var type
+	 * Condition decorator instance
+	 * @var ConditionDecoratorInterface
 	 */
 	private $cd = null;
 
@@ -45,7 +46,7 @@ trait DecoratableTrait
 	/**
 	 * Set condition decorator interface
 	 * @param ConditionDecoratorInterface $cd
-	 * @return DecoratableTrait
+	 * @return CriteriaInterface
 	 */
 	public function setCd(ConditionDecoratorInterface $cd)
 	{

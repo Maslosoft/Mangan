@@ -242,6 +242,10 @@ class Criteria implements CriteriaInterface
 				$this->setUseCursor($criteria['useCursor']);
 			}
 		}
+		// NOTE:
+		//Scrunitizer: $criteria is of type object<Maslosoft\Mangan\...ria\MergeableInterface>, but the function expects a array|object<Maslosoft\M...aces\CriteriaInterface>.
+		// But for now it should be this way to easyli distinguish from Conditions.
+		// Future plan: Use CriteriaInterface here, and drop `$criteria instanceof Conditions` if clause. Conditions should implement CriteriaInterface too.
 		elseif ($criteria instanceof MergeableInterface)
 		{
 			$this->mergeWith($criteria);
