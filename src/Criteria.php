@@ -397,7 +397,6 @@ class Criteria
 
 	/**
 	 * Decorate and sanitize criteria with provided model.
-
 	 * @param AnnotatedInterface $model Model to use for decorators and sanitizer when creating conditions. If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
 	 * @return Criteria
 	 */
@@ -617,16 +616,18 @@ class Criteria
 
 	/**
 	 * @since v1.3.1
+	 * @deprecated since version number
 	 */
-	public function getWorkingFields()
+	protected function getWorkingFields()
 	{
 		return $this->_workingFields;
 	}
 
 	/**
 	 * @since v1.3.1
+	 * @deprecated since version number
 	 */
-	public function setWorkingFields(array $select)
+	protected function setWorkingFields(array $select)
 	{
 		$this->_workingFields = $select;
 	}
@@ -692,6 +693,9 @@ class Criteria
 	 * Add condition
 	 * If specified field already has a condition, values will be merged
 	 * duplicates will be overriden by new values!
+	 *
+	 * NOTE: Should NOT be part of interface
+	 *
 	 * @param string $fieldName
 	 * @param string $op operator
 	 * @param mixed $value
