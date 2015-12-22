@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
@@ -104,7 +104,7 @@ class DataProvider implements DataProviderInterface// extends CDataProvider
 		}
 
 		$this->_finder = Finder::create($this->model);
-		if ($this->model instanceof CriteriaInterface)
+		if ($this->model instanceof WithCriteriaInterface)
 		{
 			$this->_criteria = $this->model->getDbCriteria();
 		}
