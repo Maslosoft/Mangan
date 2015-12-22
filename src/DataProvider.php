@@ -14,10 +14,11 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
+use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 
 /**
  * Mongo document data provider
@@ -155,7 +156,7 @@ class DataProvider implements DataProviderInterface// extends CDataProvider
 
 	/**
 	 * Sets the query criteria.
-	 * @param Criteria|array $criteria the query criteria. Array representing the MongoDB query criteria.
+	 * @param CriteriaInterface|array $criteria the query criteria. Array representing the MongoDB query criteria.
 	 * @since v1.0
 	 */
 	public function setCriteria($criteria)
@@ -164,7 +165,7 @@ class DataProvider implements DataProviderInterface// extends CDataProvider
 		{
 			$this->_criteria = new Criteria($criteria);
 		}
-		elseif ($criteria instanceof Criteria)
+		elseif ($criteria instanceof CriteriaInterface)
 		{
 			$this->_criteria = $criteria;
 		}

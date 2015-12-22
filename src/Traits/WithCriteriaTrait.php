@@ -54,7 +54,7 @@ trait WithCriteriaTrait
 	/**
 	 * Set girrent object, this will override previous criteria
 	 *
-	 * @param Criteria|array $criteria
+	 * @param CriteriaInterface|array $criteria
 	 * @since v1.0
 	 * @Ignored
 	 */

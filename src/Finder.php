@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
@@ -75,7 +76,7 @@ class Finder implements FinderInterface
 	public function __construct($model, $em = null)
 	{
 		$this->model = $model;
-		$this->em = $em ?: EntityManager::create($model);
+		$this->em = $em ? : EntityManager::create($model);
 		$this->sm = new ScopeManager($model);
 		$this->mn = Mangan::fromModel($model);
 		$this->withCursor($this->mn->useCursor);
@@ -90,13 +91,13 @@ class Finder implements FinderInterface
 	 */
 	public static function create(AnnotatedInterface $model)
 	{
-		$finderClass = ManganMeta::create($model)->type()->finder ?: Finder::class;
+		$finderClass = ManganMeta::create($model)->type()->finder ? : Finder::class;
 		return new $finderClass($model);
 	}
 
 	/**
 	 * Finds a single Document with the specified condition.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 *
 	 * If an array, it is treated as the initial values for constructing a {@link Criteria} object;
 	 * Otherwise, it should be an instance of {@link Criteria}.
@@ -120,7 +121,7 @@ class Finder implements FinderInterface
 	 * Finds document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $criteria.
 	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return Document the document found. An null is returned if none is found.
 	 * @since v1.0
 	 */
@@ -137,7 +138,7 @@ class Finder implements FinderInterface
 	/**
 	 * Finds all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return AnnotatedInterface[]|Cursor list of documents satisfying the specified condition. An empty array is returned if none is found.
 	 * @since v1.0
 	 */
@@ -203,7 +204,7 @@ class Finder implements FinderInterface
 	 * field is in use as PK by default.
 	 * See {@link find()} for detailed explanation about $condition.
 	 * @param mixed $pkValues primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return AnnotatedInterface[]|Cursor - Array or cursor of Documents
 	 * @since v1.0
 	 */
@@ -238,7 +239,7 @@ class Finder implements FinderInterface
 	/**
 	 * Counts all documents satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param array|Criteria $criteria query criteria.
+	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return integer Count of all documents satisfying the specified condition.
 	 * @since v1.0
 	 */
@@ -274,10 +275,10 @@ class Finder implements FinderInterface
 	 * Checks whether there is row satisfying the specified condition.
 	 * See {@link find()} for detailed explanation about $criteria
 	 * See https://blog.serverdensity.com/checking-if-a-document-exists-mongodb-slow-findone-vs-find/ for performance info
-	 * @param Criteria|null $criteria query condition or criteria.
+	 * @param CriteriaInterface|null $criteria query condition or criteria.
 	 * @return boolean whether there is row satisfying the specified condition.
 	 */
-	public function exists(Criteria $criteria = null)
+	public function exists(CriteriaInterface $criteria = null)
 	{
 		$criteria = $this->sm->apply($criteria);
 		$criteria->decorateWith($this->model);
