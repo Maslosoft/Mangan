@@ -74,10 +74,6 @@ abstract class Transformer
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
 	{
-		if (!$data)
-		{
-			return null;
-		}
 		$data = (array) $data;
 		if (is_object($className))
 		{
