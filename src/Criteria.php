@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\Mangan\Criteria\Conditions;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
+use Maslosoft\Mangan\Interfaces\Criteria\SelectableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
@@ -47,6 +48,7 @@ class Criteria implements CriteriaInterface
 	use Traits\Criteria\CursorAwareTrait,
 	  Traits\Criteria\DecoratableTrait,
 	  Traits\Criteria\LimitableTrait,
+	  Traits\Criteria\SelectableTrait,
 	  Traits\Criteria\SortableTrait;
 
 	/**
@@ -152,7 +154,6 @@ class Criteria implements CriteriaInterface
 	 */
 	const SORT_DESC = SortInterface::SortDesc;
 
-	private $_select = [];
 	private $_conditions = [];
 
 	/**
@@ -257,6 +258,7 @@ class Criteria implements CriteriaInterface
 	 * - Select fields list will be merged
 	 * - Sort fields list will be merged
 	 * @param array|CriteriaInterface $criteria
+	 * @return CriteriaInterface
 	 * @since v1.0
 	 */
 	public function mergeWith($criteria)
@@ -265,7 +267,7 @@ class Criteria implements CriteriaInterface
 		{
 			$criteria = new static($criteria);
 		}
-		else if (empty($criteria))
+		elseif (empty($criteria))
 		{
 			return $this;
 		}
@@ -282,9 +284,9 @@ class Criteria implements CriteriaInterface
 		{
 			$this->setSort($criteria->getSort());
 		}
-		if (!empty($criteria->_select))
+		if ($this instanceof SelectableInterface && $criteria instanceof SelectableInterface && !empty($criteria->getSelect()))
 		{
-			$this->_select = array_merge($this->_select, $criteria->_select);
+			$this->select($criteria->getSelect());
 		}
 
 
@@ -424,78 +426,6 @@ class Criteria implements CriteriaInterface
 	}
 
 	/**
-	 * Return selected fields
-	 * @return bool[] Fields used for select
-	 * @since v1.3.1
-	 */
-	public function getSelect()
-	{
-		return $this->_select;
-	}
-
-	/**
-	 * Set field to select.
-	 * Pass array with field names as keys and true as value, ie:
-	 * ```php
-	 * $criteria->setSelect(['_id' => true, 'title' => true]);
-	 * ```
-	 *
-	 * @param bool[] $select Fields to select
-	 * @return Criteria
-	 */
-	public function setSelect(array $select)
-	{
-		$this->_select = [];
-		// Convert the select array to field=>true/false format
-		foreach ($select as $key => $value)
-		{
-			if (is_int($key))
-			{
-				$this->_select[$value] = true;
-			}
-			else
-			{
-				$this->_select[$key] = $value;
-			}
-		}
-		return $this;
-	}
-
-	/**
-	 * @since v1.3.1
-	 * @deprecated since version number
-	 */
-	protected function getWorkingFields()
-	{
-		return $this->_workingFields;
-	}
-
-	/**
-	 * @since v1.3.1
-	 * @deprecated since version number
-	 */
-	protected function setWorkingFields(array $select)
-	{
-		$this->_workingFields = $select;
-	}
-
-	/**
-	 * List of fields to get from DB
-	 * Multiple calls to this method will merge all given fields
-	 *
-	 * @param array $fieldList list of fields to select
-	 * @since v1.0
-	 */
-	public function select(array $fieldList = null)
-	{
-		if ($fieldList !== null)
-		{
-			$this->setSelect(array_merge($this->_select, $fieldList));
-		}
-		return $this;
-	}
-
-	/**
 	 * Add condition
 	 * If specified field already has a condition, values will be merged
 	 * duplicates will be overriden by new values!
@@ -518,9 +448,28 @@ class Criteria implements CriteriaInterface
 	}
 
 	/**
+	 * @since v1.3.1
+	 * @deprecated since version number
+	 */
+	protected function getWorkingFields()
+	{
+		return $this->_workingFields;
+	}
+
+	/**
+	 * @since v1.3.1
+	 * @deprecated since version number
+	 */
+	protected function setWorkingFields(array $select)
+	{
+		$this->_workingFields = $select;
+	}
+
+	/**
 	 * Get condition
 	 * If specified field already has a condition, values will be merged
 	 * duplicates will be overriden by new values!
+	 * @see getConditions
 	 * @param string $fieldName
 	 * @param string $op operator
 	 * @param mixed $value

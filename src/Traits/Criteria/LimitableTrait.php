@@ -1,12 +1,12 @@
 <?php
 
-namespace Maslosoft\Mangan\Traits\Criteria;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+namespace Maslosoft\Mangan\Traits\Criteria;
 
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
