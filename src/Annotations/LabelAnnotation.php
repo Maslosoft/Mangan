@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * Label
- * Set translated entity 'label' field
+ * Set entity's 'label' field
  * @template Label('${text}')
  */
 class LabelAnnotation extends ManganPropertyAnnotation
@@ -28,6 +28,11 @@ class LabelAnnotation extends ManganPropertyAnnotation
 	public function init()
 	{
 		$this->_entity->label = $this->value;
+	}
+
+	public function __toString()
+	{
+		return $this->value;
 	}
 
 }
