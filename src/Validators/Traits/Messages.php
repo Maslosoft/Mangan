@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Validators\Traits;
 
+use Maslosoft\Mangan\Sanitizers\StringSanitizer;
+
 /**
  * Basic implementation of messaging for validators
  *
@@ -24,9 +26,11 @@ trait Messages
 	/**
 	 * Custom error message. May contain special placeholders, ie: {attribute}, {value}
 	 * which will be replaced with attribute label or value, depending on validator.
+	 * @Sanitizer(StringSanitizer)
+	 * @see StringSanitizer
 	 * @var string
 	 */
-	public $message = null;
+	public $message = '';
 	private $messages = [];
 
 	public function addError($message, $params = [])
