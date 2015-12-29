@@ -127,7 +127,7 @@ class Validator implements ValidatableInterface
 			else
 			{
 				$valid[] = false;
-				$this->errors[$name] = array_merge($this->errors[$name], $this->getErrors());
+				$this->errors[$name] = array_merge($this->errors[$name], $validator->getErrors());
 
 				// Set errors to model instance if it implements ValidatableInterface
 				if ($this->model instanceof ValidatableInterface)
