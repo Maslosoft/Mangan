@@ -9,7 +9,7 @@ before_install:
   - echo "deb [arch=amd64] http://s3.amazonaws.com/tokumx-debs $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/tokumx.list
   - sudo apt-get update
   - sudo apt-get install -y tokumx
-  - sudo apt-get install -y dmtx-utils
+  - sudo apt-get install -y libdmtx-utils
 install:
   - composer install --prefer-dist --dev --no-interaction
   - pushd vendor/maslosoft/mangantest && git reset --hard && git pull && popd
