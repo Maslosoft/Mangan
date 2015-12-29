@@ -59,6 +59,7 @@
 		"maslosoft/gazebo": "*",
 		"psr/log": "^1",
 		"symfony/yaml": "^3",
+		"ptachoire/php-dmtx": "^1",
 		"mongofill/mongofill": "@dev"
 	},
 	"require-dev": {
