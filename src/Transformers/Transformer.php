@@ -65,7 +65,7 @@ abstract class Transformer
 
 	/**
 	 * Create document from array
-	 * TODO Enforce $className if collection is homogenous
+	 * 
 	 * @param mixed[] $data
 	 * @param string|object $className
 	 * @param AnnotatedInterface $instance
