@@ -46,6 +46,8 @@ use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\JsonString;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
+use Maslosoft\Mangan\Transformers\YamlArray;
+use Maslosoft\Mangan\Transformers\YamlString;
 use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\NumberValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\RangeValidator;
@@ -129,6 +131,11 @@ class Mangan implements LoggerAwareInterface
 			EmbedRefDecorator::class,
 			EmbedRefArrayDecorator::class,
 		],
+		YamlArray::class => [
+			ClassNameDecorator::class,
+			EmbedRefDecorator::class,
+			EmbedRefArrayDecorator::class,
+		],
 		RawArray::class => [
 			DbRefArrayDecorator::class,
 			DbRefDecorator::class,
@@ -143,8 +150,6 @@ class Mangan implements LoggerAwareInterface
 	 * @var string[][]
 	 */
 	public $finalizers = [
-		JsonString::class => [
-		]
 	];
 
 	/**
@@ -191,6 +196,10 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public $sanitizersMap = [
 		JsonArray::class => [
+			MongoObjectId::class => MongoWriteStringId::class,
+			DateSanitizer::class => DateWriteUnixSanitizer::class
+		],
+		YamlString::class => [
 			MongoObjectId::class => MongoWriteStringId::class,
 			DateSanitizer::class => DateWriteUnixSanitizer::class
 		],
