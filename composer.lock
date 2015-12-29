@@ -4,16 +4,16 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "28ead3cadceb95e514ded28893a012c0",
-    "content-hash": "85673d14dd52e3f1e1f6492123e8f7c1",
+    "hash": "85f81170632f5b0a04c0d629c7ed19ba",
+    "content-hash": "e3f82ba72ece4c162cd43a599fe87681",
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "4.0.6",
+            "version": "4.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "4b26f9c6ecaf9e16b7af997d61a558c88ec60b2a",
+                "reference": "888c2d201874f0eadb3b02d1b70255d0579984b2",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -23,8 +23,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/4b26f9c6ecaf9e16b7af997d61a558c88ec60b2a",
-                "reference": "4b26f9c6ecaf9e16b7af997d61a558c88ec60b2a",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/888c2d201874f0eadb3b02d1b70255d0579984b2",
+                "reference": "888c2d201874f0eadb3b02d1b70255d0579984b2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -75,7 +75,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-12-22 11:33:14"
+            "time": "2015-12-28 21:07:17"
         },
         {
             "name": "maslosoft/cache",
@@ -664,6 +664,55 @@
             "time": "2012-12-21 11:40:51"
         },
         {
+            "name": "ptachoire/php-dmtx",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/krichprollsch/php-dmtx.git",
+                "reference": "de35e34fe9223465cb7f52723dbb6d410216f245",
+                "mirrors": [
+                    {
+                        "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/krichprollsch/php-dmtx/zipball/de35e34fe9223465cb7f52723dbb6d410216f245",
+                "reference": "de35e34fe9223465cb7f52723dbb6d410216f245",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "symfony/options-resolver": "~2.5",
+                "symfony/process": "~2.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Dmtx": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pierre Tachoire",
+                    "email": "pierre.tachoire@gmail.com"
+                }
+            ],
+            "description": "Datamatrix r/w based on libdmtx <http://www.libdmtx.org/>",
+            "time": "2015-07-15 10:49:04"
+        },
+        {
             "name": "symfony/filesystem",
             "version": "v2.2.11",
             "target-dir": "Symfony/Component/Filesystem",
@@ -721,6 +770,133 @@
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
             "time": "2013-09-18 07:27:26"
+        },
+        {
+            "name": "symfony/options-resolver",
+            "version": "v2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "e7f62cf7d9e48238299cfa5d0556aee8cff1e075",
+                "mirrors": [
+                    {
+                        "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/e7f62cf7d9e48238299cfa5d0556aee8cff1e075",
+                "reference": "e7f62cf7d9e48238299cfa5d0556aee8cff1e075",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony OptionsResolver Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "time": "2015-11-18 13:45:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "62c254438b5040bc2217156e1570cf2206e8540c",
+                "mirrors": [
+                    {
+                        "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/62c254438b5040bc2217156e1570cf2206e8540c",
+                "reference": "62c254438b5040bc2217156e1570cf2206e8540c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-12-23 11:03:46"
         },
         {
             "name": "symfony/yaml",
@@ -1430,7 +1606,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "65a1e69eb93d9f17e098642b519d64647e43f8ae",
+                "reference": "de8263ddaa61b07c09eb408a37e94848ead4e23a",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1440,8 +1616,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/65a1e69eb93d9f17e098642b519d64647e43f8ae",
-                "reference": "65a1e69eb93d9f17e098642b519d64647e43f8ae",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/de8263ddaa61b07c09eb408a37e94848ead4e23a",
+                "reference": "de8263ddaa61b07c09eb408a37e94848ead4e23a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1474,7 +1650,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-12-28 18:39:25"
+            "time": "2015-12-29 08:49:46"
         },
         {
             "name": "maslosoft/zamm",
