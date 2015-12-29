@@ -25,11 +25,15 @@ class YamlString implements TransformatorInterface
 	 * Returns the given object as an associative array
 	 * @param AnnotatedInterface|object $model
 	 * @param string[] $fields Fields to transform
+	 *
+	 * @param int   $inline                 The level where you switch to inline YAML
+	 * @param int   $indent                 The amount of spaces to use for indentation of nested nodes.
+	 * @param bool  $exceptionOnInvalidType true if an exception must be thrown on invalid types (a PHP resource or object), false otherwise
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel(AnnotatedInterface $model, $fields = [])
+	public static function fromModel(AnnotatedInterface $model, $fields = [], $inline = 2, $indent = 4, $exceptionOnInvalidType = false)
 	{
-		return Yaml::dump(YamlArray::fromModel($model, $fields));
+		return Yaml::dump(YamlArray::fromModel($model, $fields), $inline, $indent, $exceptionOnInvalidType);
 	}
 
 	/**
@@ -38,12 +42,15 @@ class YamlString implements TransformatorInterface
 	 * @param mixed[] $data
 	 * @param string|object $className
 	 * @param AnnotatedInterface $instance
+	 *
+	 * @param bool   $exceptionOnInvalidType True if an exception must be thrown on invalid types false otherwise
+	 *
 	 * @return AnnotatedInterface
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
+	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, $exceptionOnInvalidType = false)
 	{
-		return YamlArray::toModel(Yaml::parse($data), $className, $instance);
+		return YamlArray::toModel(Yaml::parse($data, $exceptionOnInvalidType), $className, $instance);
 	}
 
 }
