@@ -33,7 +33,7 @@ class Factory
 	 * @param ValidatorMeta $validatorMeta
 	 * @return ValidatorInterface Validator instance
 	 */
-	public static function create(AnnotatedInterface $model, ValidatorMeta $validatorMeta)
+	public static function create(AnnotatedInterface $model, ValidatorMeta $validatorMeta, $fieldName = null)
 	{
 		$mn = Mangan::fromModel($model);
 		// Resolve validator class
@@ -45,11 +45,16 @@ class Factory
 			}
 			else
 			{
+				if (empty($fieldName))
+				{
+					$fieldName = '<not provided>';
+				}
 				$args = [
 					get_class($model),
-					$validatorMeta->proxy
+					$validatorMeta->proxy,
+					$fieldName
 				];
-				$msg = vsprintf("Could not resolve validator class from proxy. For model `%s`. Proxy class: `%s`", $args);
+				$msg = vsprintf("Could not resolve validator class from proxy. For model `%s`. Proxy class: `%s`. Model field: `%s`", $args);
 				throw new InvalidArgumentException($msg);
 			}
 		}

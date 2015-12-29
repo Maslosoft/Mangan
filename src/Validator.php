@@ -119,7 +119,7 @@ class Validator implements ValidatableInterface
 		$valid = [];
 		foreach ($meta->validators as $validatorMeta)
 		{
-			$validator = Factory::create($this->model, $validatorMeta);
+			$validator = Factory::create($this->model, $validatorMeta, $name);
 			if ($validator->isValid($this->model, $name))
 			{
 				$valid[] = true;
