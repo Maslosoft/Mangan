@@ -201,7 +201,7 @@ class Mangan implements LoggerAwareInterface
 			MongoObjectId::class => MongoWriteStringId::class,
 			DateSanitizer::class => DateWriteUnixSanitizer::class
 		],
-		YamlString::class => [
+		YamlArray::class => [
 			MongoObjectId::class => MongoWriteStringId::class,
 			DateSanitizer::class => DateWriteUnixSanitizer::class
 		],
