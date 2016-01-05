@@ -45,6 +45,18 @@ class RequiredValidator implements ValidatorInterface
 	 */
 	public $trim = true;
 
+	/**
+	 * @Label('{attribute} must be {value}')
+	 * @var string
+	 */
+	public $msgExact = '';
+
+	/**
+	 * @Label('{attribute} cannot be blank')
+	 * @var string
+	 */
+	public $msgBlank = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$value = $model->$attribute;
@@ -53,13 +65,13 @@ class RequiredValidator implements ValidatorInterface
 		{
 			if (!$this->strict && $value != $this->requiredValue || $this->strict && $value !== $this->requiredValue)
 			{
-				$this->addError('{attribute} must be {value}.', ['{attribute}' => $label, '{value}' => $this->requiredValue]);
+				$this->addError('msgExact', ['{attribute}' => $label, '{value}' => $this->requiredValue]);
 				return false;
 			}
 		}
 		elseif ($this->isEmpty($value, $this->trim))
 		{
-			$this->addError('{attribute} cannot be blank.', ['{attribute}' => $label]);
+			$this->addError('msgBlank', ['{attribute}' => $label]);
 			return false;
 		}
 		return true;

@@ -45,13 +45,39 @@ class StringValidator implements ValidatorInterface
 
 	/**
 	 * @var string user-defined error message used when the value is too short.
+	 * @deprecated use `msgTooShort` instead
 	 */
 	public $tooShort;
 
 	/**
 	 * @var string user-defined error message used when the value is too long.
+	 * @deprecated use `msgTooLong` instead
 	 */
 	public $tooLong;
+
+	/**
+	 * @Label('{attribute} is invalid')
+	 * @var string
+	 */
+	public $msgInvalid = '';
+
+	/**
+	 * @Label('{attribute} is too short (minimum is {min} characters)')
+	 * @var string
+	 */
+	public $msgTooShort = '';
+
+	/**
+	 * @Label('{attribute} is too long (maximum is {max} characters)')
+	 * @var string
+	 */
+	public $msgTooLong = '';
+
+	/**
+	 * @Label('{attribute} is of the wrong length (should be {length} characters)')
+	 * @var string
+	 */
+	public $msgLength = '';
 
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
@@ -63,12 +89,12 @@ class StringValidator implements ValidatorInterface
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		if (!is_scalar($value))
 		{
-			$this->addError('{attribute} is invalid', ['{attrbiute}' => $label]);
+			$this->addError('msgInvalid', ['{attribute}' => $label]);
 			return false;
 		}
 		if (!is_string($value))
 		{
-			$this->addError('{attribute} is invalid', ['{attrbiute}' => $label]);
+			$this->addError('msgInvalid', ['{attribute}' => $label]);
 			return false;
 		}
 		$length = mb_strlen($value);
@@ -80,7 +106,7 @@ class StringValidator implements ValidatorInterface
 				$this->addError($this->tooShort, ['{min}' => $this->min, '{attribute}' => $label]);
 				return false;
 			}
-			$this->addError('{attribute} is too short (minimum is {min} characters)', array('{min}' => $this->min, '{attribute}' => $label));
+			$this->addError('msgTooShort', array('{min}' => $this->min, '{attribute}' => $label));
 			return false;
 		}
 		if ($this->max !== null && $length > $this->max)
@@ -90,12 +116,12 @@ class StringValidator implements ValidatorInterface
 				$this->addError($this->tooLong, array('{max}' => $this->max, '{attribute}' => $label));
 				return false;
 			}
-			$this->addError('{attribute} is too long (maximum is {max} characters)', array('{max}' => $this->max, '{attribute}' => $label));
+			$this->addError('msgTooLong', array('{max}' => $this->max, '{attribute}' => $label));
 			return false;
 		}
 		if ($this->is !== null && $length !== $this->is)
 		{
-			$this->addError('{attribute} is of the wrong length (should be {length} characters)', array('{length}' => $this->is, '{attribute}' => $label));
+			$this->addError('msgLength', array('{length}' => $this->is, '{attribute}' => $label));
 			return false;
 		}
 		return true;

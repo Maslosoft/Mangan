@@ -56,6 +56,42 @@ class CompareValidator implements ValidatorInterface
 	 */
 	public $operator = '=';
 
+	/**
+	 * @Label('{attribute} must be repeated exactly')
+	 * @var string
+	 */
+	public $msgRepeat = '';
+
+	/**
+	 * @Label('{attribute} must not be equal to "{compareValue}"')
+	 * @var string
+	 */
+	public $msgEq = '';
+
+	/**
+	 * @Label('{attribute} must be greater than "{compareValue}"')
+	 * @var string
+	 */
+	public $msgGt = '';
+
+	/**
+	 * @Label('{attribute} must be greater than or equal to "{compareValue}"')
+	 * @var string
+	 */
+	public $msgGte = '';
+
+	/**
+	 * @Label('{attribute} must be less than "{compareValue}"')
+	 * @var string
+	 */
+	public $msgLt = '';
+
+	/**
+	 * @Label('{attribute} must be less than or equal to "{compareValue}"')
+	 * @var string
+	 */
+	public $msgLte = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$value = $model->$attribute;
@@ -82,42 +118,42 @@ class CompareValidator implements ValidatorInterface
 			case '==':
 				if (($this->strict && $value !== $compareValue) || (!$this->strict && $value != $compareValue))
 				{
-					$this->addError('{attribute} must be repeated exactly', ['{attribute}' => $compareLabel]);
+					$this->addError('msgRepeat', ['{attribute}' => $compareLabel]);
 					return false;
 				}
 				break;
 			case '!=':
 				if (($this->strict && $value === $compareValue) || (!$this->strict && $value == $compareValue))
 				{
-					$this->addError('{attribute} must not be equal to "{compareValue}"', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
+					$this->addError('msgEq', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
 					return false;
 				}
 				break;
 			case '>':
 				if ($value <= $compareValue)
 				{
-					$this->addError('{attribute} must be greater than "{compareValue}"', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
+					$this->addError('msgGt', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
 					return false;
 				}
 				break;
 			case '>=':
 				if ($value < $compareValue)
 				{
-					$this->addError('{attribute} must be greater than or equal to "{compareValue}"', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
+					$this->addError('msgGte', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
 					return false;
 				}
 				break;
 			case '<':
 				if ($value >= $compareValue)
 				{
-					$this->addError('{attribute} must be less than "{compareValue}"', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
+					$this->addError('msgLt', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
 					return false;
 				}
 				break;
 			case '<=':
 				if ($value > $compareValue)
 				{
-					$this->addError('{attribute} must be less than or equal to "{compareValue}"', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
+					$this->addError('msgLte', ['{attribute}' => $label, '{compareValue}' => $compareValue]);
 					return false;
 				}
 				break;

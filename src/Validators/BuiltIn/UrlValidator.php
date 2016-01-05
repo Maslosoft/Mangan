@@ -28,13 +28,19 @@ class UrlValidator implements ValidatorInterface
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
 	  \Maslosoft\Mangan\Validators\Traits\Messages;
 
+	/**
+	 * @Label('{attribute} must be valid url')
+	 * @var string
+	 */
+	public $msgNotUrl = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$valid = filter_var($model->$attribute, FILTER_VALIDATE_URL);
 		if (!$valid)
 		{
 			$label = ManganMeta::create($model)->field($attribute)->label;
-			$this->addError('{attribute} must be valid url', ['{attribute}' => $label]);
+			$this->addError('msgNotUrl', ['{attribute}' => $label]);
 			return false;
 		}
 		return true;

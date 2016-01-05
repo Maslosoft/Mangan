@@ -50,6 +50,24 @@ class EmailValidator implements ValidatorInterface
 	 */
 	public $checkPort = false;
 
+	/**
+	 * @Label('{attribute} must be valid email address')
+	 * @var string
+	 */
+	public $msgValid = '';
+
+	/**
+	 * @Label('Email domain "{domain}" does not exists')
+	 * @var string
+	 */
+	public $msgDomain = '';
+
+	/**
+	 * @Label('Email service does not seem to be running at "{domain}"')
+	 * @var string
+	 */
+	public $msgPort = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		if ($this->allowEmpty && empty($model->$attribute))
@@ -60,18 +78,18 @@ class EmailValidator implements ValidatorInterface
 
 		if (!is_scalar($model->$attribute))
 		{
-			$this->addError('{attribute} must be valid email address', ['{attribute}' => $label]);
+			$this->addError('msgValid', ['{attribute}' => $label]);
 			return false;
 		}
 		$valid = filter_var($model->$attribute, FILTER_VALIDATE_EMAIL);
 		if (!$valid)
 		{
-			$this->addError('{attribute} must be valid email address', ['{attribute}' => $label]);
+			$this->addError('msgValid', ['{attribute}' => $label]);
 			return false;
 		}
 		if (!preg_match($this->pattern, $model->$attribute))
 		{
-			$this->addError('{attribute} must be valid email address', ['{attribute}' => $label]);
+			$this->addError('msgValid', ['{attribute}' => $label]);
 			return false;
 		}
 		$domain = rtrim(substr($model->$attribute, strpos($model->$attribute, '@') + 1), '>');
@@ -81,7 +99,7 @@ class EmailValidator implements ValidatorInterface
 			{
 				if (!checkdnsrr($domain, 'MX'))
 				{
-					$this->addError('Email domain "{domain}" does not exists', ['{domain}' => $domain]);
+					$this->addError('msgDomain', ['{domain}' => $domain]);
 					return false;
 				}
 			}
@@ -90,7 +108,7 @@ class EmailValidator implements ValidatorInterface
 		{
 			if ($this->checkMxPorts($domain))
 			{
-				$this->addError('Email service does not seem to be running at "{domain}"', ['{domain}' => $domain]);
+				$this->addError('msgPort', ['{domain}' => $domain]);
 				return false;
 			}
 		}

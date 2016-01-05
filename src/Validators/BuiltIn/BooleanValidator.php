@@ -26,6 +26,12 @@ class BooleanValidator implements ValidatorInterface
 
 	use \Maslosoft\Mangan\Validators\Traits\Messages;
 
+	/**
+	 * @Label('Attribute must be either true or false')
+	 * @var string
+	 */
+	public $msgBoolean = '';
+
 	public function isValid(AnnotatedInterface $model, $field)
 	{
 		if (is_bool($model->$field))
@@ -35,7 +41,7 @@ class BooleanValidator implements ValidatorInterface
 		$valid = filter_var($model->$field, FILTER_VALIDATE_BOOLEAN);
 		if (!$valid)
 		{
-			$this->addError('Attribute must be either true or false');
+			$this->addError('msgBoolean');
 			return false;
 		}
 		return true;

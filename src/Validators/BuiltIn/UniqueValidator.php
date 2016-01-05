@@ -73,6 +73,12 @@ class UniqueValidator implements ValidatorInterface
 	public $criteria = [];
 
 	/**
+	 * @Label('{attribute} "{value}" has already been taken')
+	 * @var string
+	 */
+	public $msgTaken = '';
+
+	/**
 	 * Validates the attribute of the object.
 	 * If there is any error, the error message is added to the object.
 	 * @param AnnotatedInterface $model the object being validated
@@ -110,7 +116,7 @@ class UniqueValidator implements ValidatorInterface
 			return true;
 		}
 		$label = ManganMeta::create($model)->field($attribute)->label;
-		$this->addError('{attribute} "{value}" has already been taken.', ['{attribute}' => $label, '{value}' => $value]);
+		$this->addError('msgTaken', ['{attribute}' => $label, '{value}' => $value]);
 		return false;
 	}
 
