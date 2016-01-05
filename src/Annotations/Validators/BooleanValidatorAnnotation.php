@@ -38,8 +38,7 @@ class BooleanValidatorAnnotation extends ValidatorAnnotation
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\Strict,
-	  \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
+	  \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 	/**
 	 * @var mixed the value representing true status. Defaults to '1'.

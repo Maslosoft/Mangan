@@ -36,8 +36,7 @@ use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
 class RequiredValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\Strict,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
+	use \Maslosoft\Mangan\Validators\Traits\Strict;
 
 	/**
 	 * @var mixed the desired value that the attribute must have.

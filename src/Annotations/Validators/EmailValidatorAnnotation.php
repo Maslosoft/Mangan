@@ -28,8 +28,7 @@ use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
 class EmailValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 	/**
 	 * @var string the regular expression used to validate the attribute value.
