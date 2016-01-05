@@ -29,7 +29,8 @@ use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
 class MatchValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var string the regular expression to be matched with

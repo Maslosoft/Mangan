@@ -119,6 +119,44 @@ class Validator implements ValidatableInterface
 		$valid = [];
 		foreach ($meta->validators as $validatorMeta)
 		{
+			// Filter out validators based on scenarios
+			if (!empty($validatorMeta->on))
+			{
+				$on = (array) $validatorMeta->on;
+				$enabled = false;
+				foreach ($on as $scenario)
+				{
+					if ($scenario === ScenarioManager::getScenario($this->model))
+					{
+						$enabled = true;
+						break;
+					}
+				}
+				if (!$enabled)
+				{
+					continue;
+				}
+			}
+			if (!empty($validatorMeta->except))
+			{
+				$except = (array) $validatorMeta->except;
+				$enabled = true;
+				foreach ($except as $scenario)
+				{
+					if ($scenario === ScenarioManager::getScenario($this->model))
+					{
+						$enabled = false;
+						break;
+					}
+				}
+				if (!$enabled)
+				{
+					continue;
+				}
+			}
+
+
+			// Create validator and validate
 			$validator = Factory::create($this->model, $validatorMeta, $name);
 			if ($validator->isValid($this->model, $name))
 			{

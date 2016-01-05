@@ -43,7 +43,8 @@ use Maslosoft\Mangan\Validators\Proxy\StringProxy;
 class LengthValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var integer maximum length. Defaults to null, meaning no maximum limit.

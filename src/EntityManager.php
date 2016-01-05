@@ -141,10 +141,13 @@ class EntityManager implements EntityManagerInterface
 	 * Inserts a row into the table based on this active record attributes.
 	 * If the table's primary key is auto-incremental and is null before insertion,
 	 * it will be populated with the actual value after insertion.
+	 *
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
 	 * and its {@link scenario} property will be set to be 'update'.
+	 *
 	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
+	 *
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws MongoException if the record is not new
 	 * @throws MongoException on fail of insert or insert of empty document
@@ -175,10 +178,10 @@ class EntityManager implements EntityManagerInterface
 	 * Updates the row represented by this active document.
 	 * All loaded attributes will be saved to the database.
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
+	 *
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
-	 * @param boolean modify if set true only selected attributes will be replaced, and not
-	 * the whole document
+
 	 * @return boolean whether the update is successful
 	 * @throws MongoException if the record is new
 	 * @throws MongoException on fail of update

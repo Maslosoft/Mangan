@@ -30,7 +30,8 @@ class InValidatorAnnotation extends ValidatorAnnotation
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Strict;
+	  \Maslosoft\Mangan\Validators\Traits\Strict,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var array list of valid values that the attribute value should be among

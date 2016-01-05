@@ -49,7 +49,8 @@ class CompareValidatorAnnotation extends ValidatorAnnotation
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Strict;
+	  \Maslosoft\Mangan\Validators\Traits\Strict,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var string the name of the attribute to be compared with

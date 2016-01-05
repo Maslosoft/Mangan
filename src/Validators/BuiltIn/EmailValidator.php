@@ -26,7 +26,8 @@ class EmailValidator implements ValidatorInterface
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages;
+	  \Maslosoft\Mangan\Validators\Traits\Messages,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var string the regular expression used to validate the attribute value.
