@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan\Annotations;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
- * Sanitizer. There cen be only one sanitizer
+ * Sanitizer. There can be only one sanitizer per field.
  * @template Sanitizer(${SanitizerClass})
  * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>

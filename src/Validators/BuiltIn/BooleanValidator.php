@@ -25,7 +25,8 @@ class BooleanValidator implements ValidatorInterface
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
+	  \Maslosoft\Mangan\Validators\Traits\Safe;
 
 	/**
 	 * @Label('Attribute must be either true or false')

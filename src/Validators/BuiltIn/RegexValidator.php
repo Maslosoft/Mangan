@@ -28,7 +28,8 @@ class RegexValidator implements ValidatorInterface
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
 	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
+	  \Maslosoft\Mangan\Validators\Traits\Safe;
 
 	/**
 	 * @var string the regular expression to be matched with
