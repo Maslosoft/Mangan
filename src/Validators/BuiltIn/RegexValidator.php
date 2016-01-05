@@ -41,6 +41,12 @@ class RegexValidator implements ValidatorInterface
 	 * */
 	public $not = false;
 
+	/**
+	 * @Label('{attribute} has invalid value')
+	 * @var string
+	 */
+	public $msgInvalid = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$value = $model->$attribute;
@@ -56,7 +62,7 @@ class RegexValidator implements ValidatorInterface
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		if (!is_scalar($value))
 		{
-			$this->addError('{attribute} has invalid value', ['{attribute}' => $label]);
+			$this->addError('msgInvalid', ['{attribute}' => $label]);
 			return false;
 		}
 		$match = preg_match($this->pattern, $value);
@@ -64,7 +70,7 @@ class RegexValidator implements ValidatorInterface
 		{
 			if ($match)
 			{
-				$this->addError('{attribute} has invalid value', ['{attribute}' => $label]);
+				$this->addError('msgInvalid', ['{attribute}' => $label]);
 				return false;
 			}
 		}
@@ -72,7 +78,7 @@ class RegexValidator implements ValidatorInterface
 		{
 			if (!$match)
 			{
-				$this->addError('{attribute} has invalid value', ['{attribute}' => $label]);
+				$this->addError('msgInvalid', ['{attribute}' => $label]);
 				return false;
 			}
 		}

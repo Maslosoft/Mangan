@@ -45,13 +45,39 @@ class NumberValidator implements ValidatorInterface
 
 	/**
 	 * @var string user-defined error message used when the value is too big.
+	 * @deprecated Use `msgTooSmall` instead
 	 */
 	public $tooBig = NULL;
 
 	/**
 	 * @var string user-defined error message used when the value is too small.
+	 * @deprecated Use `msgTooBig` instead
 	 */
 	public $tooSmall = NULL;
+
+	/**
+	 * @Label('{attribute} must be a number')
+	 * @var string
+	 */
+	public $msgNumber = '';
+
+	/**
+	 * @Label('{attribute} must be an integer')
+	 * @var string
+	 */
+	public $msgInteger = '';
+
+	/**
+	 * @Label('{attribute} is too small (minimum is {min})')
+	 * @var string
+	 */
+	public $msgTooSmall = '';
+
+	/**
+	 * @Label('{attribute} is too big (maximum is {max})')
+	 * @var string
+	 */
+	public $msgTooBig = '';
 
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
@@ -64,12 +90,12 @@ class NumberValidator implements ValidatorInterface
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		if (!is_scalar($value))
 		{
-			$this->addError('{attribute} must be a number', ['{attribute}' => $label]);
+			$this->addError('msgNumber', ['{attribute}' => $label]);
 			return false;
 		}
 		if (!is_numeric($value))
 		{
-			$this->addError('{attribute} must be a number', ['{attribute}' => $label]);
+			$this->addError('msgNumber', ['{attribute}' => $label]);
 			return false;
 		}
 		if ($this->integerOnly)
@@ -77,7 +103,7 @@ class NumberValidator implements ValidatorInterface
 
 			if (!filter_var($value, FILTER_VALIDATE_INT))
 			{
-				$this->addError('{attribute} must be an integer', ['{attribute}' => $label]);
+				$this->addError('msgInteger', ['{attribute}' => $label]);
 				return false;
 			}
 		}
@@ -85,7 +111,7 @@ class NumberValidator implements ValidatorInterface
 		{
 			if (!filter_var($value, FILTER_VALIDATE_FLOAT))
 			{
-				$this->addError('{attribute} must be a number', ['{attribute}' => $label]);
+				$this->addError('msgNumber', ['{attribute}' => $label]);
 				return false;
 			}
 		}
@@ -96,7 +122,7 @@ class NumberValidator implements ValidatorInterface
 				$this->addError($this->tooSmall, ['{min}' => $this->min, '{attribute}' => $label]);
 				return false;
 			}
-			$this->addError('{attribute} is too small (minimum is {min})', ['{min}' => $this->min, '{attribute}' => $label]);
+			$this->addError('msgTooSmall', ['{min}' => $this->min, '{attribute}' => $label]);
 			return false;
 		}
 		if ($this->max !== null && $value > $this->max)
@@ -105,7 +131,7 @@ class NumberValidator implements ValidatorInterface
 			{
 				$this->addError($this->tooBig, ['{max}' => $this->max, '{attribute}' => $label]);
 			}
-			$this->addError('{attribute} is too big (maximum is {max})', ['{max}' => $this->max, '{attribute}' => $label]);
+			$this->addError('msgTooBig', ['{max}' => $this->max, '{attribute}' => $label]);
 			return false;
 		}
 		return true;

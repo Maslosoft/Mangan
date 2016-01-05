@@ -19,7 +19,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ValidatorInterface
+interface ValidatorInterface extends AnnotatedInterface
 {
 
 	public function isValid(AnnotatedInterface $model, $attribute);

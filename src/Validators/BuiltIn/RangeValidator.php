@@ -42,6 +42,18 @@ class RangeValidator implements ValidatorInterface
 	 * */
 	public $not = false;
 
+	/**
+	 * @Label('{attribute} is not in the list')
+	 * @var string
+	 */
+	public $msgIsNot = '';
+
+	/**
+	 * @Label('{attribute} is in the list')
+	 * @var string
+	 */
+	public $msgIs = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
 		$value = $model->$attribute;
@@ -73,12 +85,12 @@ class RangeValidator implements ValidatorInterface
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		if (!$this->not && !$result)
 		{
-			$this->addError('{attribute} is not in the list', ['{attribute}' => $label]);
+			$this->addError('msgIsNot', ['{attribute}' => $label]);
 			return false;
 		}
 		elseif ($this->not && $result)
 		{
-			$this->addError('{attribute} is in the list', ['{attribute}' => $label]);
+			$this->addError('msgIs', ['{attribute}' => $label]);
 			return false;
 		}
 		return true;
