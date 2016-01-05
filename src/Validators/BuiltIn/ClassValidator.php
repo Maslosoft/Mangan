@@ -23,7 +23,8 @@ class ClassValidator implements ValidatorInterface
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
 	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\Strict;
+	  \Maslosoft\Mangan\Validators\Traits\Strict,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	public $class = '';
 

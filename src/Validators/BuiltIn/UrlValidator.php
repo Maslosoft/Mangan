@@ -26,7 +26,8 @@ class UrlValidator implements ValidatorInterface
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages;
+	  \Maslosoft\Mangan\Validators\Traits\Messages,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @Label('{attribute} must be valid url')

@@ -43,7 +43,8 @@ class UniqueValidator implements ValidatorInterface
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
 	  \Maslosoft\Mangan\Validators\Traits\SkipOnError,
-	  \Maslosoft\Mangan\Validators\Traits\Messages;
+	  \Maslosoft\Mangan\Validators\Traits\Messages,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var string the document class name that should be used to

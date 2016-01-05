@@ -26,7 +26,8 @@ class StringValidator implements ValidatorInterface
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages;
+	  \Maslosoft\Mangan\Validators\Traits\Messages,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var integer maximum length. Defaults to null, meaning no maximum limit.

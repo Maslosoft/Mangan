@@ -28,7 +28,8 @@ use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
 class UrlValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	public function init()
 	{

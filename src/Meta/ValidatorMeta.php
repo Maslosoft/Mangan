@@ -67,7 +67,7 @@ class ValidatorMeta extends BaseMeta
 	 * Each array value refers to a scenario name with the same name as its array key.
 	 * @since 1.1.11
 	 */
-	public $except = NULL;
+	public $except;
 
 	// and more...
 }

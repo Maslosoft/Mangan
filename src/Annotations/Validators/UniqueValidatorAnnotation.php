@@ -25,7 +25,8 @@ use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
 class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
+	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
 
 	/**
 	 * @var string the ActiveRecord class name that should be used to
