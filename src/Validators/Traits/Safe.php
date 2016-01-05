@@ -11,22 +11,20 @@
  * @link http://maslosoft.com/mangan/
  */
 
-namespace Maslosoft\Mangan\Validators\BuiltIn;
+namespace Maslosoft\Mangan\Validators\Traits;
 
 /**
- * This validator forwards validation to specified class.
+ * Use this trait to add `strict` field
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ClassValidator implements ValidatorInterface
+trait Safe
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\Strict,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
-
-	public $class = '';
+	/**
+	 * When this is true atrtibute is considered safe, as it is validated
+	 * @var bool
+	 */
+	public $safe = true;
 
 }
