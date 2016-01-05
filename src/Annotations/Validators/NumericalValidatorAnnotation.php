@@ -41,8 +41,7 @@ use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
 class NumericalValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario;
+	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 	/**
 	 * @var boolean whether the attribute value can only be an integer. Defaults to false.
