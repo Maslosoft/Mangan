@@ -9,8 +9,8 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
-use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Decorators\EmbedRefDecorator;
+use Maslosoft\Mangan\Decorators\RelatedDecorator;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 use Maslosoft\Mangan\Meta\RelatedMeta;
 
@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\RelatedMeta;
  * RelatedAnnotation
  * Shorthand notation:
  *
- * Related(Company\Project\Projects, '_id' => 'entity_id', true)
+ * Related(Company\Project\Projects, join = {'_id' = 'entity_id'}, true)
  *
  * Expanded notation:
  *
@@ -42,7 +42,7 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 		$this->_entity->related = $relMeta;
 		$this->_entity->propagateEvents = true;
 		$this->_entity->owned = true;
-		$this->_entity->decorators[] = DbRefDecorator::class;
+		$this->_entity->decorators[] = RelatedDecorator::class;
 		$this->_entity->decorators[] = EmbedRefDecorator::class;
 	}
 
