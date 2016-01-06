@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
@@ -25,10 +26,29 @@ class SanitizerAnnotation extends ManganPropertyAnnotation
 {
 
 	public $value = null;
+	public $class;
 
 	public function init()
 	{
-		$this->_entity->sanitizer = $this->value;
+		$params = [
+			'class'
+		];
+		if (is_string($this->value))
+		{
+			$this->class = $this->value;
+		}
+		else
+		{
+			foreach (array_keys($this->value) as $key)
+			{
+				if (!is_numeric($key))
+				{
+					$params[] = $key;
+				}
+			}
+		}
+		$config = ParamsExpander::expand($this, $params);
+		$this->_entity->sanitizer = $config;
 	}
 
 }

@@ -28,11 +28,11 @@ class ArraySanitizer implements SanitizerInterface
 	 * Sanitizer instance
 	 * @var SanitizerInterface
 	 */
-	private $_sanitizer = null;
+	public $sanitizer = null;
 
-	public function __construct(SanitizerInterface $sanitizer)
+	public function __construct(SanitizerInterface $sanitizer = null)
 	{
-		$this->_sanitizer = $sanitizer;
+		$this->sanitizer = $sanitizer;
 	}
 
 	public function read($model, $dbValue)
@@ -40,7 +40,7 @@ class ArraySanitizer implements SanitizerInterface
 		$result = [];
 		foreach ((array) $dbValue as $key => $value)
 		{
-			$result[$key] = $this->_sanitizer->read($model, $value);
+			$result[$key] = $this->sanitizer->read($model, $value);
 		}
 		return $result;
 	}
@@ -50,7 +50,7 @@ class ArraySanitizer implements SanitizerInterface
 		$result = [];
 		foreach ((array) $phpValue as $key => $value)
 		{
-			$result[$key] = $this->_sanitizer->write($model, $value);
+			$result[$key] = $this->sanitizer->write($model, $value);
 		}
 		return $result;
 	}
