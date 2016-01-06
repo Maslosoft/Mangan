@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
 use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Gazebo\PluginFactory;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
@@ -38,14 +39,54 @@ class Factory
 
 	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta, $transformatorClass)
 	{
-		$sanitizer = self::_resolve($meta, $modelMeta);
+		$sanitizerClass = self::_resolve($meta, $modelMeta);
+
 
 		// Remap sanitizer if needed
+		$mapConfig = [];
 		$map = Mangan::fly($modelMeta->connectionId)->sanitizersMap;
-		if (isset($map[$transformatorClass]) && isset($map[$transformatorClass][$sanitizer]))
+		if (isset($map[$transformatorClass]) && isset($map[$transformatorClass][$sanitizerClass]))
 		{
-			$sanitizer = $map[$transformatorClass][$sanitizer];
+			$mapConfig = $map[$transformatorClass][$sanitizerClass];
+			if (is_string($mapConfig))
+			{
+				$mapClass = $mapConfig;
+				$mapConfig = [
+					'class' => $mapClass
+				];
+			}
 		}
+		if (is_array($meta->sanitizer))
+		{
+			$sanitizerConfig = $meta->sanitizer;
+			$sanitizerConfig['class'] = $sanitizerClass;
+		}
+		else
+		{
+			$sanitizerConfig = [];
+			$sanitizerConfig['class'] = $sanitizerClass;
+		}
+		if (!empty($mapConfig))
+		{
+			$sanitizerConfig = array_merge($sanitizerConfig, $mapConfig);
+		}
+
+		// Sanitize as array
+		if ($meta->sanitizeArray)
+		{
+			$sanitizerConfig = [
+				'class' => ArraySanitizer::class,
+				'sanitizer' => $sanitizerConfig
+			];
+		}
+		$config = [
+			$transformatorClass => [
+				$sanitizerConfig
+			]
+		];
+		$sanitizer = PluginFactory::fly($modelMeta->connectionId)->instance($config, $transformatorClass)[0];
+
+		return $sanitizer;
 
 		// Sanitize as array
 		if ($meta->sanitizeArray)
@@ -68,16 +109,24 @@ class Factory
 	private static function _resolve(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta)
 	{
 		// Sanitizer is explicitly set
-		if ($meta->sanitizer)
+		if (!empty($meta->sanitizer))
 		{
-			// If short name is used add default namespace
-			if (strstr($meta->sanitizer, '\\') === false)
+			if (is_array($meta->sanitizer))
 			{
-				$className = sprintf('%s\%s', PassThrough::Ns, $meta->sanitizer);
+				$name = $meta->sanitizer['class'];
 			}
 			else
 			{
-				$className = $meta->sanitizer;
+				$name = $meta->sanitizer;
+			}
+			// If short name is used add default namespace
+			if (strstr($name, '\\') === false)
+			{
+				$className = sprintf('%s\%s', PassThrough::Ns, $name);
+			}
+			else
+			{
+				$className = $name;
 			}
 			if (!ClassChecker::exists($className))
 			{

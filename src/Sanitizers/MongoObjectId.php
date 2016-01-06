@@ -24,6 +24,12 @@ use MongoId;
 class MongoObjectId implements SanitizerInterface
 {
 
+	/**
+	 * Whenever allow nulls
+	 * @var bool
+	 */
+	public $nullable = false;
+
 	public function read($model, $dbValue)
 	{
 		return $this->_cast($dbValue);
@@ -49,6 +55,10 @@ class MongoObjectId implements SanitizerInterface
 			if (!preg_match('~^[a-z0-9]{24}$~', $value))
 			{
 				$value = null;
+			}
+			if ($this->nullable && empty($value))
+			{
+				return null;
 			}
 			$value = new MongoId($value);
 		}
