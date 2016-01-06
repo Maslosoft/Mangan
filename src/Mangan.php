@@ -25,6 +25,7 @@ use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
 use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
 use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
+use Maslosoft\Mangan\Decorators\RelatedDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
@@ -46,7 +47,6 @@ use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Mangan\Transformers\YamlArray;
-use Maslosoft\Mangan\Transformers\YamlString;
 use Maslosoft\Mangan\Validators\BuiltIn\CompareValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\NumberValidator;
@@ -140,6 +140,7 @@ class Mangan implements LoggerAwareInterface
 		RawArray::class => [
 			DbRefArrayDecorator::class,
 			DbRefDecorator::class,
+			RelatedDecorator::class,
 			I18NDecorator::class,
 			ClassNameDecorator::class,
 		]
