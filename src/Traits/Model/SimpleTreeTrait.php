@@ -41,7 +41,7 @@ trait SimpleTreeTrait
 	 * @RelatedArray(parentId)
 	 * @var AnnotatedInterface[]
 	 */
-	public $children = null;
+	public $children = [];
 
 	/**
 	 * @Label('Manual sort')
@@ -57,7 +57,7 @@ trait SimpleTreeTrait
 	{
 		$loadItems = function()
 		{
-			if ($this->children == null && $this->parentId !== null)
+			if (empty($this->children) && $this->parentId !== null)
 			{
 				$criteria = new Criteria();
 				$criteria->parentId = $this->_id;
@@ -72,62 +72,44 @@ trait SimpleTreeTrait
 		if ($this instanceof TrashInterface)
 		{
 			// Trash related events
-			$onBeforeTrash = function($event)
+			$onBeforeTrash = function(ModelEvent $event)
 			{
-				$this->_onBeforeTrash($event);
+				$event->handled = true;
 			};
 			$onBeforeTrash->bindTo($this);
 			Event::on($this, TrashInterface::EventBeforeTrash, $onBeforeTrash);
 
 
-			$onAfterTrash = function($event)
+			$onAfterTrash = function(ModelEvent $event)
 			{
-				$this->_onAfterTrash($event);
+				foreach ($event->sender->children as $child)
+				{
+					$child->trash();
+				}
 			};
 			$onAfterTrash->bindTo($this);
 			Event::on($this, TrashInterface::EventAfterTrash, $onAfterTrash);
 
 
-			$onAfterRestore = function($event)
+			$onAfterRestore = function(ModelEvent $event)
 			{
-				$this->_onAfterRestore($event);
+				// Root nodes does not have parentId
+				if ($this->parentId)
+				{
+					// Put node to root if parent does not exists
+					/**
+					 * TODO Use exists here instead of raw finder.
+					 * TODO investigate why rawfinder was used here.
+					 */
+					if (!(new RawFinder($this))->findByPk(new MongoId($this->parentId)))
+					{
+						$this->parentId = null;
+						(new EntityManager($this))->update(['parentId']);
+					}
+				}
 			};
 			$onAfterRestore->bindTo($this);
 			Event::on($this, TrashInterface::EventAfterRestore, $onAfterRestore);
-		}
-	}
-
-	private function _onBeforeTrash(ModelEvent $event)
-	{
-		$event->handled = true;
-	}
-
-	/**
-	 * @param ModelEvent $event
-	 */
-	private function _onAfterTrash(ModelEvent $event)
-	{
-		foreach ($event->sender->children as $child)
-		{
-			$child->trash();
-		}
-	}
-
-	private function _onAfterRestore(ModelEvent $event)
-	{
-		// Root nodes does not have parentId
-		if ($this->parentId)
-		{
-			// Put node to root if parent does not exists
-			/**
-			 * TODO Use exists here instead of raw finder.
-			 * TODO investigate why rawfinder was used here.
-			 */
-			if (!(new RawFinder($this))->findByPk(new MongoId($this->parentId)))
-			{
-				$this->parentId = null;
-				(new EntityManager($this))->update(['parentId']);
-			}
 		}
 	}
 

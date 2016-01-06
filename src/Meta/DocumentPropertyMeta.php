@@ -45,13 +45,22 @@ class DocumentPropertyMeta extends MetaProperty
 	public $dbRef = null;
 
 	/**
-	 * Embedded document default class
+	 * Embedded document meta data
 	 * @var EmbeddedMeta
 	 */
 	public $embedded = null;
 
 	/**
-	 * If document is owned set this to true
+	 * Related document meta data
+	 * @var RelatedMeta
+	 */
+	public $related = null;
+
+	/**
+	 * If document is owned set this to true.
+	 *
+	 * **NOTE**: This should not be set directly, but rather by annotations.
+	 *
 	 * @var bool
 	 */
 	public $owned = false;
