@@ -8,14 +8,21 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 
 /**
  * RelatedArrayDecorator
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class RelatedArrayDecorator extends RelatedArrayDecorator
+class RelatedArrayDecorator extends RelatedDecorator
 {
+
+	protected function find(AnnotatedInterface $relModel, CriteriaInterface $criteria)
+	{
+		return (new Finder($relModel))->findAll($criteria);
+	}
 
 }
