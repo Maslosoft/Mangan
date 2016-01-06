@@ -29,7 +29,7 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 {
 
 	public $class;
-	public $updatable = true;
+	public $updatable;
 	public $value;
 
 	public function init()

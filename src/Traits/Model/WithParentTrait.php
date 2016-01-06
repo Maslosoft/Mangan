@@ -26,7 +26,7 @@ trait WithParentTrait
 
 	/**
 	 * @SafeValidator
-	 * @Sanitizer(MongoStringId)
+	 * @Sanitizer(MongoStringId, nullable = true)
 	 * @see MongoStringId
 	 * @var MongoId
 	 */

@@ -43,7 +43,7 @@ class DbRefMeta extends BaseMeta
 	 * Whenever referenced objects should be updated on save of main document
 	 * @var bool
 	 */
-	public $updatable = false;
+	public $updatable = true;
 
 	/**
 	 * Comparing key. This is used to update db ref instances from external sources.
@@ -51,4 +51,5 @@ class DbRefMeta extends BaseMeta
 	 * @var string|array
 	 */
 	public $key = null;
+
 }
