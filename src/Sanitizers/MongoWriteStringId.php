@@ -23,7 +23,7 @@ class MongoWriteStringId extends MongoObjectId
 
 	public function write($model, $dbValue)
 	{
-		return (string) $this->_cast($dbValue);
+		return $this->_cast($dbValue, true);
 	}
 
 }
