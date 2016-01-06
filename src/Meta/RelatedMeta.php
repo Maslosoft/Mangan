@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Meta;
 
+use Maslosoft\Mangan\Interfaces\SortInterface;
+
 /**
  * Related metadata holder
  *
@@ -67,5 +69,14 @@ class RelatedMeta extends BaseMeta
 	 * @var mixed[]
 	 */
 	public $join = [];
+
+	/**
+	 * Default order of related entities.
+	 * Key is sort field, value is direction, one of SortInterface constants.
+	 * 
+	 * @see SortInterface
+	 * @var int[]
+	 */
+	public $sort = [];
 
 }

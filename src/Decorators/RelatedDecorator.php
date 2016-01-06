@@ -45,29 +45,42 @@ class RelatedDecorator implements DecoratorInterface
 
 	public function write($model, $name, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
-		if (!empty($model->$name) && $model->$name instanceof AnnotatedInterface)
+		if (!empty($model->$name))
 		{
 			// Store empty field to trigger decorator read
 			$dbValues[$name] = null;
 
 			$fieldMeta = ManganMeta::create($model)->field($name);
 			$relMeta = $fieldMeta->related;
-			$fields = [];
-			foreach ($relMeta->join as $source => $rel)
+			if ($relMeta->single)
 			{
-				$fields[] = $rel;
-				$model->$name->$rel = $model->$source;
-			}
-			$em = new EntityManager($model->$name);
-			if ($relMeta->updatable)
-			{
-				// Update whole model
-				$em->update();
+				$models = [
+					$model->$name
+				];
 			}
 			else
 			{
-				// Update only relation info
-				$em->update($fields);
+				$models = $model->$name;
+			}
+			foreach ($models as $relModel)
+			{
+				$fields = [];
+				foreach ($relMeta->join as $source => $rel)
+				{
+					$fields[] = $rel;
+					$relModel->$rel = $model->$source;
+				}
+				$em = new EntityManager($relModel);
+				if ($relMeta->updatable)
+				{
+					// Update whole model
+					$em->update();
+				}
+				else
+				{
+					// Update only relation info
+					$em->update($fields);
+				}
 			}
 		}
 	}

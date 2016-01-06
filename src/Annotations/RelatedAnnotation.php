@@ -11,6 +11,7 @@ namespace Maslosoft\Mangan\Annotations;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\EmbedRefDecorator;
 use Maslosoft\Mangan\Decorators\RelatedDecorator;
+use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 use Maslosoft\Mangan\Meta\RelatedMeta;
 
@@ -18,11 +19,11 @@ use Maslosoft\Mangan\Meta\RelatedMeta;
  * RelatedAnnotation
  * Shorthand notation:
  *
- * Related(Company\Project\Projects, join = {'_id' = 'entity_id'}, true)
+ * Related(Company\Project\Projects, join = {'_id' = 'entity_id'}, sort = {'_id' = 1}, true)
  *
  * Expanded notation:
  *
- * Related(class = Company\Project\Projects, join = {'_id' => 'entity_id'}, updatable = true)
+ * Related(class = Company\Project\Projects, join = {'_id' => 'entity_id'}, sort = {'_id' = 1}, updatable = true)
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
@@ -52,11 +53,17 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 	 */
 	protected function _getMeta()
 	{
-		$data = ParamsExpander::expand($this, ['class', 'join', 'updatable']);
+		$data = ParamsExpander::expand($this, ['class', 'join', 'sort', 'updatable']);
 		$relMeta = new RelatedMeta($data);
 		if (!$relMeta->class)
 		{
 			$relMeta->class = $this->_meta->type()->name;
+		}
+		if (empty($relMeta->sort))
+		{
+			$relMeta->sort = [
+				'_id' => SortInterface::SortAsc
+			];
 		}
 		return $relMeta;
 	}

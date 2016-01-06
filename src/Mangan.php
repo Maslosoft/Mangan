@@ -25,6 +25,7 @@ use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
 use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
 use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
+use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
 use Maslosoft\Mangan\Decorators\RelatedDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
@@ -141,6 +142,7 @@ class Mangan implements LoggerAwareInterface
 			DbRefArrayDecorator::class,
 			DbRefDecorator::class,
 			RelatedDecorator::class,
+			RelatedArrayDecorator::class,
 			I18NDecorator::class,
 			ClassNameDecorator::class,
 		]
