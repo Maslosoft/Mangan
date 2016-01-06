@@ -40,7 +40,7 @@ class MongoObjectId implements SanitizerInterface
 		return $this->_cast($phpValue);
 	}
 
-	protected function _cast($value)
+	protected function _cast($value, $string = false)
 	{
 		if (!$value instanceof MongoId)
 		{
@@ -61,6 +61,10 @@ class MongoObjectId implements SanitizerInterface
 				return null;
 			}
 			$value = new MongoId($value);
+		}
+		if ($string)
+		{
+			return (string) $value;
 		}
 		return $value;
 	}
