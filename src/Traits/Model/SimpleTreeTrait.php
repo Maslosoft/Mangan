@@ -14,20 +14,16 @@
 namespace Maslosoft\Mangan\Traits\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
-use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\RawFinder;
-use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\SimpleTreeInterface;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use MongoId;
 
 /**
- * TreeTrait
- * TODO Simple tree needs serious refactor
+ * Related Tree Trait
  * @see SimpleTreeInterface
  * @author Piotr
  */
@@ -37,8 +33,7 @@ trait SimpleTreeTrait
 	use WithParentTrait;
 
 	/**
-	 * @DbRefArray
-	 * @RelatedArray(parentId)
+	 * @RelatedArray(join = {'_id' = 'parentId'}, sort = {'order' = 1}, updatable = true)
 	 * @var AnnotatedInterface[]
 	 */
 	public $children = [];
@@ -55,20 +50,6 @@ trait SimpleTreeTrait
 	 */
 	public function initTree()
 	{
-		$loadItems = function()
-		{
-			if (empty($this->children) && $this->parentId !== null)
-			{
-				$criteria = new Criteria();
-				$criteria->parentId = $this->_id;
-				$this->children = (new Finder($this))->withCursor(false)->findAll($criteria);
-			}
-		};
-		$loadItems->bindTo($this);
-
-		Event::on($this, FinderInterface::EventAfterFind, $loadItems);
-
-
 		if ($this instanceof TrashInterface)
 		{
 			// Trash related events

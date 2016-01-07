@@ -14,6 +14,7 @@ use Maslosoft\Mangan\Decorators\RelatedDecorator;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 use Maslosoft\Mangan\Meta\RelatedMeta;
+use UnexpectedValueException;
 
 /**
  * RelatedAnnotation
@@ -58,6 +59,10 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 		if (!$relMeta->class)
 		{
 			$relMeta->class = $this->_meta->type()->name;
+		}
+		if (empty($relMeta->join))
+		{
+			throw new UnexpectedValueException(sprintf('Parameter `join` is required for `%s`, model `%s`, field `%s`', static::class, $this->_meta->type()->name, $this->_entity->name));
 		}
 		if (empty($relMeta->sort))
 		{

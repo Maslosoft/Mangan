@@ -6,15 +6,20 @@
  * and open the template in the editor.
  */
 
-namespace Maslosoft\Mangan\Decorators;
+namespace Maslosoft\Mangan\Traits\Model;
 
 /**
- * Actually related arrays are handled by RelatedDecorators,
- * this is alias for consistence only.
+ * DbRef Tree Trait
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class RelatedArrayDecorator extends RelatedDecorator
+trait DbRefTreeTrait
 {
+
+	/**
+	 * @DbRefArray
+	 * @var AnnotatedInterface[]
+	 */
+	public $children = [];
 
 }

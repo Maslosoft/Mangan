@@ -9,11 +9,11 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "4.0.7",
+            "version": "4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "888c2d201874f0eadb3b02d1b70255d0579984b2",
+                "reference": "a414f301d6b38a085d7c8233801d3fa6d8918fde",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -23,8 +23,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/888c2d201874f0eadb3b02d1b70255d0579984b2",
-                "reference": "888c2d201874f0eadb3b02d1b70255d0579984b2",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/a414f301d6b38a085d7c8233801d3fa6d8918fde",
+                "reference": "a414f301d6b38a085d7c8233801d3fa6d8918fde",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -75,7 +75,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2015-12-28 21:07:17"
+            "time": "2016-01-07 10:17:13"
         },
         {
             "name": "maslosoft/cache",
@@ -237,11 +237,11 @@
         },
         {
             "name": "maslosoft/gazebo",
-            "version": "1.1.6",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Gazebo.git",
-                "reference": "729f61d4d5e3a1153191eb94d8ae9cab2688cf4a",
+                "reference": "8132126a58e8669b6c6604dd371123438dc4a5f7",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -251,8 +251,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/729f61d4d5e3a1153191eb94d8ae9cab2688cf4a",
-                "reference": "729f61d4d5e3a1153191eb94d8ae9cab2688cf4a",
+                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/8132126a58e8669b6c6604dd371123438dc4a5f7",
+                "reference": "8132126a58e8669b6c6604dd371123438dc4a5f7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -287,7 +287,7 @@
                 }
             ],
             "description": "Plugin container",
-            "time": "2015-07-09 13:26:23"
+            "time": "2016-01-06 12:23:59"
         },
         {
             "name": "maslosoft/miniview",
@@ -1170,11 +1170,11 @@
         },
         {
             "name": "facebook/webdriver",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-webdriver.git",
-                "reference": "518a9e0635e69777f07e41619cdf5d82fae284b6",
+                "reference": "1c98108ba3eb435b681655764de11502a0653705",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1184,8 +1184,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/518a9e0635e69777f07e41619cdf5d82fae284b6",
-                "reference": "518a9e0635e69777f07e41619cdf5d82fae284b6",
+                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/1c98108ba3eb435b681655764de11502a0653705",
+                "reference": "1c98108ba3eb435b681655764de11502a0653705",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1221,7 +1221,7 @@
                 "selenium",
                 "webdriver"
             ],
-            "time": "2015-12-08 17:04:30"
+            "time": "2015-12-31 15:58:49"
         },
         {
             "name": "fzaninotto/faker",
@@ -1553,11 +1553,11 @@
         },
         {
             "name": "maslosoft/mangan-examples",
-            "version": "1.0.2",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganExamples.git",
-                "reference": "afe9f8f019346bac3d5fb90b9a9cf5103ecfe54a",
+                "reference": "067c010da849e5d4d70de6205b13a37c1a1d8a95",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1567,8 +1567,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganExamples/zipball/afe9f8f019346bac3d5fb90b9a9cf5103ecfe54a",
-                "reference": "afe9f8f019346bac3d5fb90b9a9cf5103ecfe54a",
+                "url": "https://api.github.com/repos/Maslosoft/ManganExamples/zipball/067c010da849e5d4d70de6205b13a37c1a1d8a95",
+                "reference": "067c010da849e5d4d70de6205b13a37c1a1d8a95",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1598,7 +1598,7 @@
                 }
             ],
             "description": "Examples for Mangan project",
-            "time": "2015-11-05 15:59:30"
+            "time": "2015-12-30 11:34:42"
         },
         {
             "name": "maslosoft/mangantest",
@@ -1606,7 +1606,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "de8263ddaa61b07c09eb408a37e94848ead4e23a",
+                "reference": "a4199b8c18693b856c52af11d60283a2d5f14fc8",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1616,8 +1616,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/de8263ddaa61b07c09eb408a37e94848ead4e23a",
-                "reference": "de8263ddaa61b07c09eb408a37e94848ead4e23a",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/a4199b8c18693b856c52af11d60283a2d5f14fc8",
+                "reference": "a4199b8c18693b856c52af11d60283a2d5f14fc8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1650,7 +1650,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2015-12-29 08:49:46"
+            "time": "2016-01-07 10:15:47"
         },
         {
             "name": "maslosoft/zamm",
@@ -1658,7 +1658,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Zamm.git",
-                "reference": "aa3db86d5262a66f48604fa7b0ecc60acd990b83",
+                "reference": "f5319a94346ce0d8fb1325462db06486d51e0b95",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1668,8 +1668,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Zamm/zipball/aa3db86d5262a66f48604fa7b0ecc60acd990b83",
-                "reference": "aa3db86d5262a66f48604fa7b0ecc60acd990b83",
+                "url": "https://api.github.com/repos/Maslosoft/Zamm/zipball/f5319a94346ce0d8fb1325462db06486d51e0b95",
+                "reference": "f5319a94346ce0d8fb1325462db06486d51e0b95",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1709,7 +1709,7 @@
                 }
             ],
             "description": "Zamm is a documentation tool",
-            "time": "2015-08-24 20:59:57"
+            "time": "2015-12-30 11:45:44"
         },
         {
             "name": "myclabs/deep-copy",
