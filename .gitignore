@@ -1,8 +1,5 @@
 nbproject/
-/extensions
 /vendor
-/models
-/unit
 /api
 npm-debug.log
 page.html

@@ -75,6 +75,7 @@ class RelatedDecorator implements DecoratorInterface
 			{
 				$models = $model->$name;
 			}
+			$order = 0;
 			foreach ($models as $relModel)
 			{
 				$fields = [];
@@ -83,6 +84,13 @@ class RelatedDecorator implements DecoratorInterface
 					$fields[] = $rel;
 					assert(isset($model->$source));
 					$relModel->$rel = $model->$source;
+				}
+				if (!empty($relMeta->orderField))
+				{
+					$fields[] = $relMeta->orderField;
+					$fields = array_unique($fields);
+					$relModel->order = $order;
+					$order++;
 				}
 				$em = new EntityManager($relModel);
 				if ($relMeta->updatable)
