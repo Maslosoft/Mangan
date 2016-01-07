@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Meta;
 
+use Maslosoft\Mangan\Annotations\RelatedOrderingAnnotation;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 
 /**
@@ -73,10 +74,18 @@ class RelatedMeta extends BaseMeta
 	/**
 	 * Default order of related entities.
 	 * Key is sort field, value is direction, one of SortInterface constants.
-	 * 
+	 *
 	 * @see SortInterface
 	 * @var int[]
 	 */
 	public $sort = [];
+
+	/**
+	 * Field for storing order
+	 * 
+	 * @see RelatedOrderingAnnotation
+	 * @var string
+	 */
+	public $orderField = '';
 
 }

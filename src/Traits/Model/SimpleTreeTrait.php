@@ -33,7 +33,8 @@ trait SimpleTreeTrait
 	use WithParentTrait;
 
 	/**
-	 * @RelatedArray(join = {'_id' = 'parentId'}, sort = {'order' = 1}, updatable = true)
+	 * @RelatedArray(join = {'_id' = 'parentId'}, updatable = true)
+	 * @RelatedOrdering('order')
 	 * @var AnnotatedInterface[]
 	 */
 	public $children = [];
@@ -42,7 +43,7 @@ trait SimpleTreeTrait
 	 * @Label('Manual sort')
 	 * @var int
 	 */
-	public $order = 1000000;
+	public $order = 0;
 
 	/**
 	 * NOTE: This must be called by class using this trait

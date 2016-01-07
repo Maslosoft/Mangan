@@ -60,7 +60,18 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 	protected function _getMeta()
 	{
 		$data = ParamsExpander::expand($this, ['class', 'join', 'sort', 'updatable']);
-		$relMeta = new RelatedMeta($data);
+		if (empty($this->_entity->related))
+		{
+			$relMeta = new RelatedMeta();
+		}
+		else
+		{
+			$relMeta = $this->_entity->related;
+		}
+		foreach ($data as $key => $val)
+		{
+			$relMeta->$key = $val;
+		}
 		if (!$relMeta->class)
 		{
 			$relMeta->class = $this->_meta->type()->name;
