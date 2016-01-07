@@ -27,7 +27,8 @@ trait OnScenario
 	 * Scenario on which validator should be used.
 	 *
 	 * If empty, validator will be used on every scenario.
-	 *
+	 * 
+	 * @Sanitizer('None')
 	 * @var string|string[]
 	 */
 	public $on = '';
@@ -37,6 +38,7 @@ trait OnScenario
 	 *
 	 * If empty, validator will be used on every scenario.
 	 *
+	 * @Sanitizer('None')
 	 * @var string|string[]
 	 */
 	public $except = '';

@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Interfaces;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Modifier;
 use MongoCollection;
 use MongoException;
