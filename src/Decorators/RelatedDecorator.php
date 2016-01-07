@@ -8,14 +8,14 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
-use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use InvalidArgumentException;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
-use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Sort;
 
 /**
  * RelatedRecorator
@@ -31,16 +31,24 @@ class RelatedDecorator implements DecoratorInterface
 		$relMeta = $fieldMeta->related;
 		$relModel = new $relMeta->class;
 		$criteria = new Criteria(null, $relModel);
+		if (empty($relMeta->join))
+		{
+			throw new InvalidArgumentException(sprintf('Parameter `join` is required for Related annotation, model `%s`, field `%s`', get_class($model), $name));
+		}
 		foreach ($relMeta->join as $source => $rel)
 		{
+			assert($model->$source !== null);
 			$criteria->addCond($rel, '==', $model->$source);
 		}
-		$model->$name = $this->find($relModel, $criteria);
-	}
-
-	protected function find(AnnotatedInterface $relModel, CriteriaInterface $criteria)
-	{
-		return (new Finder($relModel))->find($criteria);
+		$criteria->setSort(new Sort($relMeta->sort));
+		if ($relMeta->single)
+		{
+			$model->$name = (new Finder($relModel))->find($criteria);
+		}
+		else
+		{
+			$model->$name = (new Finder($relModel))->findAll($criteria);
+		}
 	}
 
 	public function write($model, $name, &$dbValues, $transformatorClass = TransformatorInterface::class)
@@ -68,6 +76,7 @@ class RelatedDecorator implements DecoratorInterface
 				foreach ($relMeta->join as $source => $rel)
 				{
 					$fields[] = $rel;
+					assert(isset($model->$source));
 					$relModel->$rel = $model->$source;
 				}
 				$em = new EntityManager($relModel);
