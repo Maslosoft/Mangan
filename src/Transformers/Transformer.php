@@ -65,7 +65,7 @@ abstract class Transformer
 
 	/**
 	 * Create document from array
-	 * 
+	 *
 	 * @param mixed[] $data
 	 * @param string|object $className
 	 * @param AnnotatedInterface $instance
@@ -90,12 +90,6 @@ abstract class Transformer
 				throw new TransformatorException('Could not determine document type');
 			}
 		}
-		$model = self::_toDocument($className, $data, $instance);
-		return FinalizingManager::toModel(static::class, $model);
-	}
-
-	private static function _toDocument($className, $data, $instance)
-	{
 		if ($instance)
 		{
 			$model = $instance;
@@ -126,7 +120,8 @@ abstract class Transformer
 			$model->$name = $sanitizer->read($name, $model->$name);
 		}
 		$md->read($data);
-		return $model;
+
+		return FinalizingManager::toModel(static::class, $model);
 	}
 
 }
