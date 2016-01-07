@@ -13,11 +13,9 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
-use Maslosoft\Mangan\Criteria;
-
 /**
  * Use this interface to associate Criteria with model
- * @see Criteria
+ * @see CriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface WithCriteriaInterface

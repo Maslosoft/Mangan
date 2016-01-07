@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 
 /**
@@ -26,14 +27,14 @@ trait WithCriteriaTrait
 
 	/**
 	 * Criteria
-	 * @var Criteria
+	 * @var CriteriaInterface
 	 */
 	private $_criteria = null;
 
 	/**
 	 * Returns the mongo criteria associated with this model.
 	 * @param boolean $createIfNull whether to create a criteria instance if it does not exist. Defaults to true.
-	 * @return Criteria the query criteria that is associated with this model.
+	 * @return CriteriaInterface the query criteria that is associated with this model.
 	 * This criteria is mainly used by {@link scopes named scope} feature to accumulate
 	 * different criteria specifications.
 	 * @since v1.0
@@ -64,7 +65,7 @@ trait WithCriteriaTrait
 		{
 			$this->_criteria = new Criteria($criteria);
 		}
-		else if ($criteria instanceof Criteria)
+		else if ($criteria instanceof CriteriaInterface)
 		{
 			$this->_criteria = $criteria;
 		}

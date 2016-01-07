@@ -52,6 +52,9 @@ class UniqueValidator implements ValidatorInterface
 	 * look for the attribute value being validated. Defaults to null, meaning using
 	 * the class of the object currently being validated.
 	 * You may use path alias to reference a class name here.
+	 *
+	 * TODO Not implemented
+	 * 
 	 * @see attributeName
 	 * @since 1.0.8
 	 */
@@ -61,6 +64,9 @@ class UniqueValidator implements ValidatorInterface
 	 * @var string the ActiveRecord class attribute name that should be
 	 * used to look for the attribute value being validated. Defaults to null,
 	 * meaning using the name of the attribute being validated.
+	 *
+	 * TODO Not implemented
+	 *
 	 * @see className
 	 * @since 1.0.8
 	 */

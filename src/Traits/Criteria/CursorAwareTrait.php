@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Traits\Criteria;
 
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Interfaces\Criteria\CursorAwareInterface;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 
 /**
  * CursorAwareTrait
@@ -38,7 +38,7 @@ trait CursorAwareTrait
 	/**
 	 * Use cursor for fetching data
 	 * @param bool $useCursor Whenever to use cursor
-	 * @return Criteria
+	 * @return CriteriaInterface
 	 */
 	public function setUseCursor($useCursor)
 	{

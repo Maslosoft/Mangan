@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 
 /**
@@ -25,13 +26,13 @@ class ScopeManager
 
 	/**
 	 * Model instance
-	 * @var IModel
+	 * @var AnnotatedInterface
 	 */
 	private $_model = null;
 
 	/**
 	 *
-	 * @var Criteria
+	 * @var CriteriaInterface
 	 */
 	private $_criteria = null;
 

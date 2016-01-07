@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Traits\Criteria;
 
 use Exception;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
@@ -35,7 +34,7 @@ trait SortableTrait
 	 * Each call will be groupped with previous calls
 	 * @param string $fieldName
 	 * @param integer $order
-	 * @return Criteria
+	 * @return CriteriaInterface
 	 * @since v1.0
 	 */
 	public function sort($fieldName, $order)
