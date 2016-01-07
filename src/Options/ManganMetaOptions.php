@@ -14,7 +14,9 @@
 namespace Maslosoft\Mangan\Options;
 
 use Maslosoft\Addendum\Options\MetaOptions;
+use Maslosoft\Mangan\Annotations\Indexes\IndexAnnotation;
 use Maslosoft\Mangan\Annotations\MetaOptionsHelper;
+use Maslosoft\Mangan\Annotations\Validators\ValidatorAnnotation;
 use Maslosoft\Mangan\Meta\DocumentMethodMeta;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -47,10 +49,12 @@ class ManganMetaOptions extends MetaOptions
 
 	/**
 	 * Namespaces for annotations
-	 * @var string
+	 * @var string[]
 	 */
 	public $namespaces = [
-		MetaOptionsHelper::Ns
+		MetaOptionsHelper::Ns,
+		ValidatorAnnotation::Ns,
+		IndexAnnotation::Ns
 	];
 
 }
