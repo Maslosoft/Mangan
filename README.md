@@ -83,11 +83,13 @@ Use composer to install extension:
 In your protected/config/main.php config file. Add `mongodb` array
 for your database in the components section, and add the following to the file:
 
+```php
 	'mongodb' => [
 		'connectionString' => 'mongodb://user:password@mongo-db-host.example.com',
 		'dbName' => 'db_name',
 		'class' => Maslosoft\Mangan\Mangan::class
 	],
+```
 
 - ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example
   if connecting to a server it might be `'connectionString' => 'mongodb://username@xxx.xx.xx.xx'` where xx.xx.xx.xx is
@@ -99,18 +101,18 @@ for your database in the components section, and add the following to the file:
 
 That's all you have to do for setup. You can use it very much like the active record.
 For example:
+```php
 
-	<?php
     $client = new Client();
     $client->first_name='something';
     $client->save();
     $clients = Client::model()->findAll();
-
+```
 ## Basic Usage
 
 Just define following model:
+```php
 
-	<?php
 	use Maslosoft\Mangan\Document;
 	
     class User extends Document
@@ -134,7 +136,7 @@ Just define following model:
        */
       public $password;
     }
-
+```
 
 And that's it! Now start using this User model class like standard Yii AR model.
 
@@ -147,9 +149,9 @@ and adds to it the DB connection and related functions.
 
 So if you have a User.php model, and an UserAddress.php model which is the embedded document.
 Lest assume we have following embedded document:
+```php
 
-	<?php
-	use Maslosoft\Mangan\EmbeddedDocument;
+    use Maslosoft\Mangan\EmbeddedDocument;
 	
     class UserAddress extends EmbeddedDocument
     {
@@ -183,10 +185,10 @@ Lest assume we have following embedded document:
        */
       public $zip;
     }
-
+```
 Now we can add this document to our User model from previous section:
+```php
 
-	<?php
 	use Maslosoft\Mangan\Document;
 	
     class User extends Document {
@@ -199,14 +201,14 @@ Now we can add this document to our User model from previous section:
 
       ...
     }
-
+```
 And using it is as easy as π!
-
+```php
 	<?php
     $client = new Client;
     $client->address->city='New York';
     $client->save();
-
+```
 This will automatically call validation for the model and all its embedded documents.
 You can even nest embedded documents in embedded documents and array of embbedded document, also mix any embedded document types!
 *IMPORTANT*: This mechanism uses recurrency, and **will not handle circular nesting**, so use this feature with care.
@@ -216,7 +218,7 @@ You can even nest embedded documents in embedded documents and array of embbedde
 **Simple arrays**
 
 - Just define a property for an array, and store an array in it.
-
+```php
 	<?php
 	...
 	/**
@@ -224,12 +226,12 @@ You can even nest embedded documents in embedded documents and array of embbedde
 	 * @var string[]
 	 */
 	public $addresses = [];
-
+```
 **Arrays of embedded documents**
 
 - Just need to add @EmbeddedArray annotation
 
-
+```php
 	<?php
 	...
     /**
@@ -237,48 +239,51 @@ You can even nest embedded documents in embedded documents and array of embbedde
 	 * @var UserAddress[]
      */
     public $addresses = [];
-    
+```
 
 So for the user, if you want them to be able to save multiple addresses, you can do this:
-
+```php
 	<?php
     $c = new Client;
     $c->addresses[0] = new ClientAddress;
     $c->addresses[0]->city='NY';
     $c->save(); // will handle validation of array too
-
+```
 
 Then you can loop addresses:
 
+```php
 	<?php
     $c = Client::model()->find();
     foreach($c->addresses as $addr)
     {
         echo $addr->city;
     }
+```
 
 ## Querying
 
 This is one of the things that makes this extension great. It's very easy to query for the objects you want.
-
+```php
 	<?php
     // simple find first. just like normal AR.
     $object = ModelClass::model()->find()
-
+```
 
 Now suppose you want to only retrieve users, that have a status of 1 (active). There is an object just for that, making queries easy.
-
+```php
 	<?php
 	use Maslosoft\Mangan\Criteria;
 	
     $c = new Criteria;
     $c->status('==', 1);
     $users = ModelClass::model->findAll($c);
-
+```
 
 and now $users will be an array of all users with the status key in their document set to 1. This is a good way to list only active users.
 What's that? You only want to show the 10 most recent activated users? Thats easy too.
 
+```php
 	<?php
     use Maslosoft\Mangan\Criteria;
 	
@@ -286,6 +291,7 @@ What's that? You only want to show the 10 most recent activated users? Thats eas
     $c->active('==', 1)->limit(10);
 
     $users = ModelClass::model->findAll($c);
+```
 
 
 It's that easy. In place of the 'equals' key, you can use any of the following operators:
@@ -312,6 +318,7 @@ For examples and use for how to use these operators effectively, use the [MongoD
 
 Here are a few more examples for using criteria:
 
+```php
 	<?php
 	use Maslosoft\Mangan\Criteria;
 	
@@ -346,13 +353,14 @@ Here are a few more examples for using criteria:
     // You can even use the where operator with javascript like so:
     $criteria->fieldName('where', ' expression in javascript ie: this.field > this.field2');
     // but remember that this kind of query is a bit slower than normal finds.
-
+```
 
 
 ### Regexp / SQL LIKE Replacemt
 
 You can use native PHP Mongo driver class MongoRegex, to query:
 
+```php
 	<?php
 	use Maslosoft\Mangan\Criteria;
     
@@ -362,12 +370,12 @@ You can use native PHP Mongo driver class MongoRegex, to query:
     $criteria->first_name = new MongoRegex('/[abc].*/i');
     $clients = Client::model()->findAll($criteria);
     // see phpdoc for MongoRegex class for more examples
-
+```
 
 for reference on how to use query array see: http://www.php.net/manual/en/mongocollection.find.php
 
 ### Creating Criteria Objects From Arrays
-
+```php
 	<?php
 	use Maslosoft\Mangan\Criteria;
 	
@@ -386,12 +394,12 @@ for reference on how to use query array see: http://www.php.net/manual/en/mongoc
     $criteria = new Criteria($array);
     // or
     $clients = ClientModel::model()->findAll($array);
-
+```
 
 ## Known bugs
 
 - Remember, this is not complete yet. So at this stage, it can have some
-- If you find any [please let me know](https://github.com/Maslosoft/YiiMangan/issues).
+- If you find any [please let me know](https://github.com/Maslosoft/Mangan/issues).
 - As said before, it does not work with the OR operators.
 
 
