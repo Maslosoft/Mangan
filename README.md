@@ -28,34 +28,33 @@ YiiMongoDbSuite originally started as a fork of [MongoRecord](www.yiiframework.c
 extension written by [tyohan](http://www.yiiframework.com/user/31/ "tyohan"),
 to fix some major bugs, and add full featured suite for [MongoDB](http://www.mongodb.org "MongoDB") developers.
 
-The current version is 3.0.0-beta.1
+## This file is very outdated, however contains some usefull information about what it is.
 
 ## The Key Feature List:
 
 ### Features Covered From Standard Yii Implementations
 
-- Support of using Class::model()->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax.
-- Named scopes, along with default scope and parameterized scopes, just like in AR.
+- Support of using $model->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax.
+- <s>Named scopes, along with default scope and parameterized scopes, just like in AR.</s>
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
-- Model classes and embedded documents inherit from CModel, so you can use every class witch can handle of CModel (ie: Gii form generator)
-- Relations support *idea/concept/example*.
-- **Support for generating CRUD for Document models, with Gii!**.
-- **Support for generating mongo document models from existing SQL tables!**.
-- Use MongoDB for LogRoute and HttpSession.
+- Model classes and embedded documents can use plain php (only implement empty interface AnnotattedInterface)
+- Relations support
 - Easy to use criteria object, you don't have to create complex MongoDB query arrays.
-- **Fixtures manager, that can replace the Yii default one, and work with Mongo model.**
 
 ### MongoDB Related Feature List
 
-- Support of schema-less documents with Yii standard rules and validation features
+- Support of schema-less documents defined just by classes
 - Embedded document and arrays of embedded documents support
+- DbRefs and DbRefs arrays (cross db too)
+- Related and related arrays  (cross db too)
 - Ability to set FSync and/or Safe flag of DB write operations on different scopes, globally, on model level, and on single model object
 - **Ability to use efficient MongoDB Cursors instead of raw arrays of results, returned by the findAll* methods**
 - MongoDB GridFS feature support, thanks to work of Jose Martinez and Philippe Gaultier
-- Support for using any other than _id field as a Primary Key, for a collection
-- Automated efficient index definition for collections, per model
-- Support "Soft" documents, documents that do not have fixed list of attributes
+- Support for using any other than _id field(s) as a Primary Key, for a collection
+- <s>Automated efficient index definition for collections, per model</s>
+- Automatic partial documents based on class hierarchy
 - **Ability to do *Extreme Efficent* document partial updates, that make use of MongoDB `$set` operator/feature**
+- Multi db connections
 
 ### Yii Addendum Related Feature List
 
@@ -70,7 +69,7 @@ The current version is 3.0.0-beta.1
 ## Requirements
 
 - Yii 1.1.14+ is recommended.
-- MongoDB 2.4.0+ is recommended. Untested with older versions.
+- MongoDB 2.4.0+ is recommended. Percona DB recommended.
 - Mongo PHP Driver 1.4.5+
 - PHP 5.5+
 - composer
@@ -81,13 +80,13 @@ Use composer to install extension:
 
 	composer require maslosoft/mangan <version>
 
-In your protected/config/main.php config file. Add `mongoDB` array
+In your protected/config/main.php config file. Add `mongodb` array
 for your database in the components section, and add the following to the file:
 
 	'mongodb' => [
 		'connectionString' => 'mongodb://user:password@mongo-db-host.example.com',
 		'dbName' => 'db_name',
-		'class' => 'Maslosoft\Mangan\MongoDB'
+		'class' => Maslosoft\Mangan\Mangan::class
 	],
 
 - ConnectionString: 'localhost' should be changed to the ip or hostname of your host being connected to. For example
