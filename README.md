@@ -37,7 +37,7 @@ to fix some major bugs, and add full featured suite for [MongoDB](http://www.mon
 - Support of using $model->find / findAll / count / countByAttributes and other Yii ActiveRecord syntax.
 - <s>Named scopes, along with default scope and parameterized scopes, just like in AR.</s>
 - Ready to go out-of-box *EFFICIENT* DataProvider, witch use native php db driver sort, limit and offset features for returning results!
-- Model classes and embedded documents can use plain php (only implement empty interface AnnotattedInterface)
+- Model classes and embedded documents can use plain php objects (only need to implement empty interface AnnotattedInterface)
 - Relations support
 - Easy to use criteria object, you don't have to create complex MongoDB query arrays.
 
