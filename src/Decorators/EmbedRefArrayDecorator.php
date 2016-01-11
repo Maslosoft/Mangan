@@ -13,6 +13,9 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
+use Maslosoft\Mangan\Meta\ManganMeta;
+
 /**
  * Embed Ref Array Decorator is alias for embedded array decorator
  * for converting arrays of Db Refs into JSON arrays, Document arrays etc.
@@ -21,5 +24,13 @@ namespace Maslosoft\Mangan\Decorators;
  */
 class EmbedRefArrayDecorator extends EmbeddedArrayDecorator
 {
+
+	protected static function getClassName($model, $name)
+	{
+		$fieldMeta = ManganMeta::create($model)->$name;
+
+		/* @var $fieldMeta DocumentPropertyMeta */
+		return $fieldMeta->dbRef->class;
+	}
 
 }

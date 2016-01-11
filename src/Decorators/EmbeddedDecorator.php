@@ -33,7 +33,7 @@ class EmbeddedDecorator implements DecoratorInterface
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		self::ensureClass($model, $name, $dbValue);
+		static::ensureClass($model, $name, $dbValue);
 		$embedded = $transformatorClass::toModel($dbValue, $model->$name, $model->$name);
 		$model->$name = $embedded;
 	}
@@ -57,12 +57,9 @@ class EmbeddedDecorator implements DecoratorInterface
 
 	public static function ensureClass($model, $name, &$dbValue)
 	{
-		if (!is_array($dbValue) || !array_key_exists('_class', $dbValue))
+		if (!is_array($dbValue) || !array_key_exists('_class', $dbValue) || empty($dbValue['_class']))
 		{
-			$fieldMeta = ManganMeta::create($model)->$name;
-			/* @var $fieldMeta DocumentPropertyMeta */
-
-			$class = $fieldMeta->embedded->class;
+			$class = static::getClassName($model, $name);
 		}
 		else
 		{
@@ -82,6 +79,14 @@ class EmbeddedDecorator implements DecoratorInterface
 			}
 		}
 		$dbValue['_class'] = $class;
+	}
+
+	protected static function getClassName($model, $name)
+	{
+		$fieldMeta = ManganMeta::create($model)->$name;
+
+		/* @var $fieldMeta DocumentPropertyMeta */
+		return $fieldMeta->embedded->class;
 	}
 
 }

@@ -72,7 +72,7 @@
 	},
 	"suggest": {
 		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
-		"mongofill/mongofill": "Polyfill of PECL Mongo extension"
+		"mongofill/mongofill": "Polyfill of PECL Mongo extension. Required for PHP7"
 	},
 	"autoload": {
 		"psr-4": {
