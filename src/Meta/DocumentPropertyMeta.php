@@ -78,8 +78,30 @@ class DocumentPropertyMeta extends MetaProperty
 	public $decorators = [];
 
 	/**
-	 * Sanitizer short name or class name
-	 * @var string
+	 * Sanitizer short name or class name or configuration.
+	 *
+	 * Example will resolve to `\Maslosoft\Mangan\Sanitizers\MongoObjectId`:
+	 *
+	 * ```php
+	 * $sanitizer = 'MongoObjectId';
+	 * ```
+	 *
+	 * Or use full class name:
+	 *
+	 * ```php
+	 * $sanitizer = \Maslosoft\Mangan\Sanitizers\MongoObjectId::class;
+	 * ```
+	 *
+	 * Or configuration:
+	 *
+	 * ```php
+	 * $sanitizer = [
+	 * 		\Maslosoft\Mangan\Sanitizers\MongoObjectId::class,
+	 * 		'nullable' => true
+	 * ];
+	 * ```
+	 *
+	 * @var string|mixed[]
 	 */
 	public $sanitizer = null;
 

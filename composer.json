@@ -53,20 +53,22 @@
 	"require": {
 		"maslosoft/addendum": "*",
 		"maslosoft/signals": "*",
-		"masterexploder/phpthumb": "2.0",
+		"masterexploder/phpthumb": "^2",
 		"maslosoft/embedi": "*",
 		"maslosoft/miniview": "*",
 		"maslosoft/gazebo": "*",
 		"psr/log": "^1",
 		"symfony/yaml": "^3",
 		"ptachoire/php-dmtx": "^1",
-		"mongofill/mongofill": "@dev"
+		"mongofill/mongofill": "@dev",
+		"ext-gd": "*"
 	},
 	"require-dev": {
 		"maslosoft/mangantest": "dev-master",
 		"maslosoft/hedron": "*",
 		"maslosoft/zamm": "@dev",
-		"maslosoft/mangan-examples": "*"
+		"maslosoft/mangan-examples": "*",
+		"ext-curl": "*"
 	},
 	"suggest": {
 		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
