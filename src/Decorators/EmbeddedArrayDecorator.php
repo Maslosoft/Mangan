@@ -22,7 +22,7 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class EmbeddedArrayDecorator implements DecoratorInterface
+class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInterface
 {
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
@@ -32,8 +32,7 @@ class EmbeddedArrayDecorator implements DecoratorInterface
 			$docs = [];
 			foreach ($dbValue as $key => $data)
 			{
-				EmbeddedDecorator::ensureClass($model, $name, $data);
-
+				static::ensureClass($model, $name, $data);
 				// Set ensured class to $dbValue
 				$instance = $this->_getInstance($model->$name, $dbValue, $data);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance);
