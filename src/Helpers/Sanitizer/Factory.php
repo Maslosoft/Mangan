@@ -34,9 +34,6 @@ use Maslosoft\Mangan\Sanitizers\StringSanitizer;
 class Factory
 {
 
-	private static $sanitizers = [];
-	private static $arraySanitizers = [];
-
 	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta, $transformatorClass)
 	{
 		$sanitizerClass = self::_resolve($meta, $modelMeta);
@@ -87,23 +84,6 @@ class Factory
 		$sanitizer = PluginFactory::fly($modelMeta->connectionId)->instance($config, $transformatorClass)[0];
 
 		return $sanitizer;
-
-		// Sanitize as array
-		if ($meta->sanitizeArray)
-		{
-			if (!isset(self::$arraySanitizers[$sanitizer]))
-			{
-				self::$arraySanitizers[$sanitizer] = new ArraySanitizer(new $sanitizer);
-			}
-			return self::$arraySanitizers[$sanitizer];
-		}
-
-		// Sanitize scalar/single value
-		if (!isset(self::$sanitizers[$sanitizer]))
-		{
-			self::$sanitizers[$sanitizer] = new $sanitizer;
-		}
-		return self::$sanitizers[$sanitizer];
 	}
 
 	private static function _resolve(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta)

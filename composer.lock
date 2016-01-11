@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "85f81170632f5b0a04c0d629c7ed19ba",
-    "content-hash": "e3f82ba72ece4c162cd43a599fe87681",
+    "hash": "71f3deb38603b5593167dc8fb8fc9ebf",
+    "content-hash": "3c2a6fb2e1389408e61f75ceb068343c",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -237,11 +237,11 @@
         },
         {
             "name": "maslosoft/gazebo",
-            "version": "1.1.7",
+            "version": "1.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Gazebo.git",
-                "reference": "8132126a58e8669b6c6604dd371123438dc4a5f7",
+                "reference": "3951a688d57e2845729450b6f5a9104157e2744e",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -251,12 +251,12 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/8132126a58e8669b6c6604dd371123438dc4a5f7",
-                "reference": "8132126a58e8669b6c6604dd371123438dc4a5f7",
+                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/3951a688d57e2845729450b6f5a9104157e2744e",
+                "reference": "3951a688d57e2845729450b6f5a9104157e2744e",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "url": "http://pkg.home/repo/packagist/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
@@ -287,7 +287,7 @@
                 }
             ],
             "description": "Plugin container",
-            "time": "2016-01-06 12:23:59"
+            "time": "2016-01-09 09:30:55"
         },
         {
             "name": "maslosoft/miniview",
@@ -410,11 +410,11 @@
         },
         {
             "name": "masterexploder/phpthumb",
-            "version": "v2.0",
+            "version": "2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/masterexploder/PHPThumb.git",
-                "reference": "69fe4dbef9c70915ee16652339395deadb1509cb",
+                "reference": "01f6aa65aa3d136e175f67da2b4ea3e316770d02",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -424,19 +424,18 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/masterexploder/PHPThumb/zipball/69fe4dbef9c70915ee16652339395deadb1509cb",
-                "reference": "69fe4dbef9c70915ee16652339395deadb1509cb",
+                "url": "https://api.github.com/repos/masterexploder/PHPThumb/zipball/01f6aa65aa3d136e175f67da2b4ea3e316770d02",
+                "reference": "01f6aa65aa3d136e175f67da2b4ea3e316770d02",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "url": "http://pkg.home/repo/packagist/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
             },
             "require": {
-                "php": ">=5.3.0",
-                "symfony/filesystem": "2.2.*"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "autoload": {
@@ -451,14 +450,12 @@
             ],
             "authors": [
                 {
-                    "name": "Ian Selby",
-                    "email": "ian@gxdlabs.com",
-                    "homepage": "http://www.gen-x-design.com/",
-                    "role": "Developer"
-                },
-                {
                     "name": "Jarrod Nettles",
                     "email": "jarrod.nettles@icloud.com"
+                },
+                {
+                    "name": "Ian Selby",
+                    "email": "ian@gxdlabs.com"
                 }
             ],
             "description": "A library for manipulating images in PHP.",
@@ -468,7 +465,7 @@
                 "resize",
                 "rotate"
             ],
-            "time": "2013-07-12 17:57:58"
+            "time": "2015-09-08 22:55:44"
         },
         {
             "name": "mongofill/mongofill",
@@ -491,7 +488,7 @@
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "url": "http://pkg.home/repo/packagist/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
@@ -711,65 +708,6 @@
             ],
             "description": "Datamatrix r/w based on libdmtx <http://www.libdmtx.org/>",
             "time": "2015-07-15 10:49:04"
-        },
-        {
-            "name": "symfony/filesystem",
-            "version": "v2.2.11",
-            "target-dir": "Symfony/Component/Filesystem",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/filesystem.git",
-                "reference": "dffe0df31d16718f36ef40e7441f5a8d3e31625a",
-                "mirrors": [
-                    {
-                        "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/dffe0df31d16718f36ef40e7441f5a8d3e31625a",
-                "reference": "dffe0df31d16718f36ef40e7441f5a8d3e31625a",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.2-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Filesystem\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony Filesystem Component",
-            "homepage": "http://symfony.com",
-            "time": "2013-09-18 07:27:26"
         },
         {
             "name": "symfony/options-resolver",
