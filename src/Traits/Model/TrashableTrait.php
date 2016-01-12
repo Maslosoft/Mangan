@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Traits\Model;
 
 use Exception;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
@@ -23,7 +22,6 @@ use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Models\Trash;
-use MongoId;
 
 /**
  * Uswe this trait to make model trashable
@@ -62,11 +60,9 @@ trait TrashableTrait
 		// Use deleteOne, to avoid beforeDelete event,
 		// which should be raised only when really removing document:
 		// when emtying trash
-		$criteria = new Criteria();
-		$criteria->addCond('_id', '==', new MongoId($this->id));
 
 		$em = new EntityManager($this);
-		$em->deleteOne($criteria);
+		$em->deleteOne(PkManager::prepareFromModel($this));
 	}
 
 	/**
