@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Validators\BuiltIn;
 
+use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
+
 /**
  * This validator forwards validation to specified class.
  *
@@ -28,5 +30,10 @@ class ClassValidator implements ValidatorInterface
 	  \Maslosoft\Mangan\Validators\Traits\Safe;
 
 	public $class = '';
+
+	public function isValid(\Maslosoft\Addendum\Interfaces\AnnotatedInterface $model, $attribute)
+	{
+
+	}
 
 }
