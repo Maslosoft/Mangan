@@ -24,5 +24,6 @@ interface TrashInterface
 	const EventAfterTrash = 'afterTrash';
 	const EventBeforeRestore = 'beforeRestore';
 	const EventAfterRestore = 'afterRestore';
+	const ScenarioTrash = 'trash';
 
 }

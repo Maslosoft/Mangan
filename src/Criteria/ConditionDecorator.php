@@ -45,7 +45,8 @@ class ConditionDecorator implements ConditionDecoratorInterface
 
 	public function decorate($field, $value = null)
 	{
-		if (!$this->model)
+		// Do not decorate if empty model or dot notation
+		if (!$this->model || strstr($field, '.'))
 		{
 			return [
 				$field => $value
