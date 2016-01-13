@@ -67,6 +67,9 @@ class ModelEvent
 
 	/**
 	 * Event constructor
+	 *
+	 * NOTE: Ensure that `handled` and `isValid` is properly set on event handler.
+	 *
 	 * @param AnnotatedInterface $sender
 	 * @param mixed[] $params
 	 */

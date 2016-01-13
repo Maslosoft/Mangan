@@ -21,6 +21,8 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\ScenarioManager;
+use Maslosoft\Mangan\Validator;
 use Maslosoft\Models\Trash;
 
 /**
@@ -32,37 +34,51 @@ trait TrashableTrait
 {
 
 	/**
-	 * Move to trash
+	 * Move to trash. Validation will be performed
+	 * before trashing with `trash` (TrashInterface::ScenarioTrash) scenario.
+	 *
+	 *
+	 * @see TrashInterface::ScenarioTrash
+	 * @param boolean $runValidation whether to perform validation before saving the record.
+	 * If the validation fails, the record will not be saved to database.
+	 *
 	 * @return boolean
 	 * @Ignored
 	 */
-	public function trash()
+	public function trash($runValidation = true)
 	{
-		if (Event::hasHandler($this, TrashInterface::EventBeforeTrash))
+		ScenarioManager::setScenario($this, TrashInterface::ScenarioTrash);
+		$validator = new Validator($this);
+		if (!$runValidation || $validator->validate())
 		{
-			$event = new ModelEvent($this);
-			Event::trigger($this, TrashInterface::EventBeforeTrash, $event);
-			if (!$event->handled)
+			if (Event::hasHandler($this, TrashInterface::EventBeforeTrash))
 			{
-				return false;
+				$event = new ModelEvent($this);
+				Event::trigger($this, TrashInterface::EventBeforeTrash, $event);
+				if (!$event->handled)
+				{
+					return false;
+				}
 			}
+			$meta = ManganMeta::create($this);
+
+			$trash = new Trash();
+			$trash->name = (string) $this;
+			$trash->data = $this;
+			$trash->type = isset($meta->type()->label) ? $meta->type()->label : get_class($this);
+			$trash->save();
+
+			Event::trigger($this, TrashInterface::EventAfterTrash);
+
+			// Use deleteOne, to avoid beforeDelete event,
+			// which should be raised only when really removing document:
+			// when emtying trash
+
+			$em = new EntityManager($this);
+			$em->deleteOne(PkManager::prepareFromModel($this));
+			return true;
 		}
-		$meta = ManganMeta::create($this);
-
-		$trash = new Trash();
-		$trash->name = (string) $this;
-		$trash->data = $this;
-		$trash->type = isset($meta->type()->label) ? $meta->type()->label : get_class($this);
-		$trash->save();
-
-		Event::trigger($this, TrashInterface::EventAfterTrash);
-
-		// Use deleteOne, to avoid beforeDelete event,
-		// which should be raised only when really removing document:
-		// when emtying trash
-
-		$em = new EntityManager($this);
-		$em->deleteOne(PkManager::prepareFromModel($this));
+		return false;
 	}
 
 	/**
