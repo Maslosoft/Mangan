@@ -117,7 +117,7 @@ trait EntityManagerTrait
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, $attributes = [])
+	public function updateOne($criteria = null, array $attributes = null)
 	{
 		return $this->_getEm()->updateOne($criteria, $attributes);
 	}
