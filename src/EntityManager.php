@@ -192,31 +192,8 @@ class EntityManager implements EntityManagerInterface
 	{
 		if ($this->_beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
 		{
-			$rawData = RawArray::fromModel($this->model);
-
-			// filter attributes if set in param
-			$modify = false;
-			if ($attributes !== null)
-			{
-				$modify = true;
-				foreach ($rawData as $key => $value)
-				{
-					if (!in_array($key, $attributes))
-					{
-						unset($rawData[$key]);
-					}
-				}
-			}
-			if ($modify)
-			{
-				$criteria = PkManager::prepareFromModel($this->model);
-				$result = $this->getCollection()->update($criteria->getConditions(), ['$set' => $rawData], $this->options->getSaveOptions(['multiple' => false]));
-			}
-			else
-			{
-				$result = $this->getCollection()->save($rawData, $this->options->getSaveOptions());
-			}
-			$result = $this->_result($result);
+			$criteria = PkManager::prepareFromModel($this->model);
+			$result = $this->updateOne($criteria, $attributes);
 			if ($result)
 			{
 				$this->_afterSave($this->model, EntityManagerInterface::EventAfterUpdate);
@@ -225,6 +202,48 @@ class EntityManager implements EntityManagerInterface
 			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
 		return false;
+	}
+
+	/**
+	 * Updates one document with the specified criteria and attributes
+	 *
+	 * This is more *raw* update:
+	 *
+	 * * Does not raise any events or signals
+	 * * Does not perform any validation
+	 *
+	 * @param array|CriteriaInterface $criteria query criteria.
+	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
+	 * meaning all attributes that are loaded from DB will be saved.
+	 * @since v1.0
+	 */
+	public function updateOne($criteria = null, $attributes = [])
+	{
+		$criteria = $this->sm->apply($criteria);
+		$rawData = RawArray::fromModel($this->model);
+
+		// filter attributes if set in param
+		$modify = false;
+		if ($attributes !== null)
+		{
+			$modify = true;
+			foreach ($rawData as $key => $value)
+			{
+				if (!in_array($key, $attributes))
+				{
+					unset($rawData[$key]);
+				}
+			}
+		}
+		if ($modify)
+		{
+			$result = $this->getCollection()->update($criteria->getConditions(), ['$set' => $rawData], $this->options->getSaveOptions(['multiple' => false]));
+		}
+		else
+		{
+			$result = $this->getCollection()->save($rawData, $this->options->getSaveOptions());
+		}
+		return $this->_result($result);
 	}
 
 	/**
