@@ -66,6 +66,21 @@ interface EntityManagerInterface
 	public function update(array $attributes = null);
 
 	/**
+	 * Updates one document with the specified criteria and attributes
+	 *
+	 * This is more *raw* update:
+	 *
+	 * * Does not raise any events or signals
+	 * * Does not perform any validation
+	 *
+	 * @param array|CriteriaInterface $criteria query criteria.
+	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
+	 * meaning all attributes that are loaded from DB will be saved.
+	 * @since v1.0
+	 */
+	public function updateOne($criteria = null, $attributes = []);
+
+	/**
 	 * Atomic, in-place update method.
 	 *
 	 * @since v1.3.6
