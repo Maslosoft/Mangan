@@ -42,9 +42,7 @@ class EmbeddedDecorator implements DecoratorInterface
 	{
 		if (null === $model->$name)
 		{
-			$fieldMeta = ManganMeta::create($model)->$name;
-			/* @var $fieldMeta DocumentPropertyMeta */
-			$className = $fieldMeta->embedded->class;
+			$className = static::getClassName($model, $name);
 			if (!is_string($className))
 			{
 				return null;
