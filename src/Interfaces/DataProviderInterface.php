@@ -13,11 +13,18 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface DataProviderInterface
 {
-	//put your code here
+
+	/**
+	 * Get model used by data provider
+	 * @return AnnotatedInterface
+	 */
+	public function getModel();
 }

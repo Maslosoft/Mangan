@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\ConditionDecoratorInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 
 /**
@@ -33,20 +34,28 @@ class ConditionDecorator implements ConditionDecoratorInterface
 	 */
 	private $model = null;
 
+	/**
+	 * Metadata
+	 * @var ManganMeta
+	 */
+	private $meta = null;
+
 	public function __construct(AnnotatedInterface $model = null)
 	{
 		if (!$model || !$model instanceof AnnotatedInterface)
 		{
 			return;
 		}
-		$className = get_class($model);
-		$this->model = new $className;
+		// Clone is to prevent possible required constructor params issues
+		$this->model = clone $model;
+		$this->meta = ManganMeta::create($this->model);
 	}
 
 	public function decorate($field, $value = null)
 	{
-		// Do not decorate if empty model or dot notation
-		if (!$this->model || strstr($field, '.'))
+		// 1. Do not decorate if empty model or dot notation
+		// 2. Ignore non existing fields
+		if (!$this->model || strstr($field, '.') || $this->meta->$field === false)
 		{
 			return [
 				$field => $value
