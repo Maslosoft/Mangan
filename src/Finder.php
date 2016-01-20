@@ -93,7 +93,7 @@ class Finder implements FinderInterface
 	 */
 	public static function create(AnnotatedInterface $model)
 	{
-		$finderClass = ManganMeta::create($model)->type()->finder ? : Finder::class;
+		$finderClass = ManganMeta::create($model)->type()->finder ? : static::class;
 		return new $finderClass($model);
 	}
 

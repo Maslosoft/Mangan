@@ -13,12 +13,15 @@
 
 namespace Maslosoft\Mangan;
 
+use CPagination;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
  * Mongo document data provider
@@ -125,7 +128,7 @@ class DataProvider implements DataProviderInterface
 
 		if (!$this->_criteria->getSelect())
 		{
-			$fields = array_keys($this->model->meta->fields());
+			$fields = array_keys(ManganMeta::create($this->model)->fields());
 			$fields = array_fill_keys($fields, true);
 			$this->_criteria->setSelect($fields);
 		}
@@ -146,6 +149,15 @@ class DataProvider implements DataProviderInterface
 		{
 			$this->keyField = '_id';
 		}
+	}
+
+	/**
+	 * Get model used by this dataprovider
+	 * @return AnnotatedInterface
+	 */
+	public function getModel()
+	{
+		return $this->model;
 	}
 
 	/**

@@ -121,7 +121,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public static function create($model)
 	{
-		$emClass = ManganMeta::create($model)->type()->entityManager ? : EntityManager::class;
+		$emClass = ManganMeta::create($model)->type()->entityManager ? : static::class;
 		return new $emClass($model);
 	}
 
