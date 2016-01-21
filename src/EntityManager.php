@@ -94,9 +94,10 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Create entity manager
 	 * @param AnnotatedInterface $model
+	 * @param Mangan $mangan
 	 * @throws ManganException
 	 */
-	public function __construct(AnnotatedInterface $model)
+	public function __construct(AnnotatedInterface $model, Mangan $mangan = null)
 	{
 		$this->model = $model;
 		$this->sm = new ScopeManager($model);
@@ -104,7 +105,10 @@ class EntityManager implements EntityManagerInterface
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
 		$this->validator = new Validator($model);
-		$mangan = Mangan::fromModel($model);
+		if (null === $mangan)
+		{
+			$mangan = Mangan::fromModel($model);
+		}
 		if (!$this->collectionName)
 		{
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
@@ -117,12 +121,13 @@ class EntityManager implements EntityManagerInterface
 	 * This will create customized entity manger if defined in model with EntityManager annotation.
 	 * If no custom entity manager is defined this will return default EntityManager.
 	 * @param AnnotatedInterface $model
+	 * @param Mangan $mangan
 	 * @return EntityManagerInterface
 	 */
-	public static function create($model)
+	public static function create($model, Mangan $mangan = null)
 	{
 		$emClass = ManganMeta::create($model)->type()->entityManager ? : static::class;
-		return new $emClass($model);
+		return new $emClass($model, $mangan);
 	}
 
 	/**
@@ -214,16 +219,16 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
+	 * @param bool Whether tu force update/upsert document
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, array $attributes = null)
+	public function updateOne($criteria = null, array $attributes = null, $modify = false)
 	{
 		$criteria = $this->sm->apply($criteria);
 		$rawData = RawArray::fromModel($this->model);
 
 		// filter attributes if set in param
-		$modify = false;
 		if ($attributes !== null)
 		{
 			$modify = true;
@@ -237,7 +242,7 @@ class EntityManager implements EntityManagerInterface
 		}
 		if ($modify)
 		{
-			$result = $this->getCollection()->update($criteria->getConditions(), ['$set' => $rawData], $this->options->getSaveOptions(['multiple' => false]));
+			$result = $this->getCollection()->update($criteria->getConditions(), ['$set' => $rawData], $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]));
 		}
 		else
 		{

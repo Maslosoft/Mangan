@@ -73,13 +73,18 @@ class Finder implements FinderInterface
 	 *
 	 * @param object $model Model instance
 	 * @param EntityManagerInterface $em
+	 * @param Mangan $mangan
 	 */
-	public function __construct($model, $em = null)
+	public function __construct($model, $em = null, $mangan = null)
 	{
 		$this->model = $model;
-		$this->em = $em ? : EntityManager::create($model);
 		$this->sm = new ScopeManager($model);
-		$this->mn = Mangan::fromModel($model);
+		if (null === $mangan)
+		{
+			$mangan = Mangan::fromModel($model);
+		}
+		$this->em = $em ? : EntityManager::create($model, $mangan);
+		$this->mn = $mangan;
 		$this->withCursor($this->mn->useCursor);
 	}
 
@@ -89,12 +94,14 @@ class Finder implements FinderInterface
 	 * If no custom finder is defined this will return default Finder.
 	 *
 	 * @param AnnotatedInterface $model
+	 * @param EntityManagerInterface $em
+	 * @param Mangan $mangan
 	 * @return FinderInterface
 	 */
-	public static function create(AnnotatedInterface $model)
+	public static function create(AnnotatedInterface $model, $em = null, Mangan $mangan = null)
 	{
 		$finderClass = ManganMeta::create($model)->type()->finder ? : static::class;
-		return new $finderClass($model);
+		return new $finderClass($model, $em, $mangan);
 	}
 
 	/**

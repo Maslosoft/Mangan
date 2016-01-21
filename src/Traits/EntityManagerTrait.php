@@ -31,7 +31,7 @@ trait EntityManagerTrait
 
 	/**
 	 * Entity manager
-	 * @var EntityManager
+	 * @var EntityManagerInterface
 	 */
 	private $_em = null;
 
@@ -115,11 +115,12 @@ trait EntityManagerTrait
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
+	 * @param bool Whether tu force update/upsert document
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, array $attributes = null)
+	public function updateOne($criteria = null, array $attributes = null, $modify = false)
 	{
-		return $this->_getEm()->updateOne($criteria, $attributes);
+		return $this->_getEm()->updateOne($criteria, $attributes, $modify);
 	}
 
 	/**
@@ -224,7 +225,7 @@ trait EntityManagerTrait
 	{
 		if (null === $this->_em)
 		{
-			$this->_em = new EntityManager($this);
+			$this->_em = EntityManager::create($this);
 		}
 		return $this->_em;
 	}

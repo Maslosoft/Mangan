@@ -404,6 +404,10 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public static function fly($connectionId = self::DefaultConnectionId)
 	{
+		if (empty($connectionId))
+		{
+			$connectionId = self::DefaultConnectionId;
+		}
 		if (empty(self::$_mn[$connectionId]))
 		{
 			self::$_mn[$connectionId] = new static($connectionId);
