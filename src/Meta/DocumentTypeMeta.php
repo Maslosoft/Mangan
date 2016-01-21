@@ -123,6 +123,8 @@ class DocumentTypeMeta extends MetaType
 	 * @var mixed
 	 */
 	private $_values = [];
+	
+	private $_defaults = [];
 
 	public function __construct(ReflectionClass $info = null)
 	{
@@ -130,7 +132,8 @@ class DocumentTypeMeta extends MetaType
 		parent::__construct($info);
 		foreach ($this->_getOptionNames() as $name)
 		{
-			PropertyMaker::defineProperty($this, $name);
+			PropertyMaker::defineProperty($this, $name, $this->_values);
+			$this->_defaults[$name] = true;
 		}
 	}
 
@@ -154,11 +157,12 @@ class DocumentTypeMeta extends MetaType
 			return parent::__set($name);
 		}
 		$this->_values[$name] = $value;
+		$this->_defaults[$name] = false;
 	}
 
 	public function __isset($name)
 	{
-		return array_key_exists($name, $this->_values);
+		return array_key_exists($name, $this->_defaults) && $this->_defaults[$name] === false;
 	}
 
 }

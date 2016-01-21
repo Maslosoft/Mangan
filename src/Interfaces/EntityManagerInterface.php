@@ -76,9 +76,10 @@ interface EntityManagerInterface
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
+	 * @param bool Whether tu force update/upsert document
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, array $attributes = null);
+	public function updateOne($criteria = null, array $attributes = null, $modify = false);
 
 	/**
 	 * Atomic, in-place update method.
