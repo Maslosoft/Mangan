@@ -242,12 +242,14 @@ class EntityManager implements EntityManagerInterface
 		}
 		if ($modify)
 		{
-			$result = $this->getCollection()->update($criteria->getConditions(), ['$set' => $rawData], $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]));
+			$data = ['$set' => $rawData];
 		}
 		else
 		{
-			$result = $this->getCollection()->save($rawData, $this->options->getSaveOptions());
+			$data = $rawData;
 		}
+		$cond = $criteria->getConditions();
+		$result = $this->getCollection()->update($criteria->getConditions(), $data, $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]));
 		return $this->_result($result);
 	}
 
@@ -427,8 +429,11 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 * Deletes documents with the specified primary keys.
-	 * <b>Does not raise beforeDelete</b>
+	 *
+	 * **Does not raise beforeDelete event and does not emit signals**
+	 *
 	 * See {@link find()} for detailed explanation about $condition and $params.
+	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
 	 */
