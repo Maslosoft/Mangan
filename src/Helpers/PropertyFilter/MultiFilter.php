@@ -25,23 +25,23 @@ class MultiFilter implements TransformatorFilterInterface
 {
 
 	/**
-	 * Decorators
+	 * Filters
 	 * @var TransformatorFilterInterface[]
 	 */
-	private $_filters = [];
+	private $filters = [];
 
 	/**
 	 *
-	 * @param TransformatorFilterInterface[] $decorators
+	 * @param TransformatorFilterInterface[] $filters
 	 */
-	public function __construct($decorators)
+	public function __construct($filters)
 	{
-		$this->_filters = $decorators;
+		$this->filters = $filters;
 	}
 
 	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		foreach ($this->_filters as $filter)
+		foreach ($this->filters as $filter)
 		{
 			/* @var $filter TransformatorFilterInterface */
 			if (!$filter->fromModel($model, $fieldMeta))
@@ -54,7 +54,7 @@ class MultiFilter implements TransformatorFilterInterface
 
 	public function toModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		foreach ($this->_filters as $filter)
+		foreach ($this->filters as $filter)
 		{
 			/* @var $filter TransformatorFilterInterface */
 			if (!$filter->toModel($model, $fieldMeta))

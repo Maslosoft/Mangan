@@ -33,10 +33,10 @@ class Filter extends Transformator implements TransformatorFilterInterface
 
 	public function toModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		return $this->getFor($fieldMeta->name)->fromModel($model, $fieldMeta);
+		return $this->getFor($fieldMeta->name)->toModel($model, $fieldMeta);
 	}
 
-		/**
+	/**
 	 * Get transformer
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
