@@ -351,7 +351,15 @@ class EntityManager implements EntityManagerInterface
 			$model = $this->model;
 			if ($this->_beforeSave($model))
 			{
-				$result = $this->updateOne(null);
+				$criteria = PkManager::prepareFromModel($this->model);
+				foreach ($criteria->getConditions() as $field => $value)
+				{
+					if (empty($this->model->$field))
+					{
+						$this->model->$field = $value;
+					}
+				}
+				$result = $this->updateOne($criteria);
 
 				if ($result)
 				{

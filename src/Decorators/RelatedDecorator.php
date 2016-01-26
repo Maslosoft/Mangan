@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -96,12 +97,13 @@ class RelatedDecorator implements DecoratorInterface
 				if ($relMeta->updatable)
 				{
 					// Update whole model
-					$em->update();
+					$em->upsert();
 				}
 				else
 				{
 					// Update only relation info
-					$em->update($fields);
+					$criteria = PkManager::prepareFromModel($relModel);
+					$em->updateOne($criteria, $fields);
 				}
 			}
 		}
