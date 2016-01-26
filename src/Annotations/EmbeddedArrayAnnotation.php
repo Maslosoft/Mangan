@@ -25,12 +25,20 @@ use Maslosoft\Mangan\Meta\EmbeddedMeta;
  * This can be ovverriden with `key` property.
  * Examples:
  * <ul>
- *		<li>&commat;EmbeddedArray() - Embedded array with any model</li>
- *		<li>&commat;EmbeddedArray(Company\ClassName) - Embedded array with default class</li>
- *		<li>&commat;EmbeddedArray(Company\ClassName, '_id') - Embedded array with default class and compare key `_id`</li>
+ * 		<li>&commat;EmbeddedArray() - Embedded array with any model</li>
+ * 		<li>&commat;EmbeddedArray(Company\ClassName) - Embedded array with default class</li>
+ * 		<li>&commat;EmbeddedArray(Company\ClassName, '_id') - Embedded array with default class and compare key `_id`</li>
  * 	<li>&commat;EmbeddedArray(Company\ClassName, {'login', 'email'}) - Embedded array with default class and composite compare key `_id`</li>
  * </ul>
  * @Target('property')
+ *
+ * @Conflicts('Embedded')
+ * @Conflicts('DbRef')
+ * @Conflicts('DbRefArray')
+ * @Conflicts('Related')
+ * @Conflicts('RelatedArray')
+ *
+ *
  * @template EmbeddedArray('${defaultClassName}')
  * @author Piotr
  */

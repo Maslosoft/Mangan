@@ -22,6 +22,13 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 /**
  * DB reference annotation
  * @template DbRef(${class}, ${updatable})
+ *
+ * @Conflicts('Embedded')
+ * @Conflicts('EmbeddedArray')
+ * @Conflicts('DbRefArray')
+ * @Conflicts('Related')
+ * @Conflicts('RelatedArray')
+ *
  * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

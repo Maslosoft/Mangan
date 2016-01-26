@@ -30,6 +30,12 @@ use Maslosoft\Mangan\Meta\RelatedMeta;
  *
  * RelatedOrdering(orderField = 'order')
  *
+ *
+ * @Conflicts('Embedded')
+ * @Conflicts('EmbeddedArray')
+ * @Conflicts('DbRef')
+ * @Conflicts('DbRefArray')
+ *
  * @template RelatedOrdering('${orderField}')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

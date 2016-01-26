@@ -27,6 +27,13 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
  * 		<li><b>Embedded(Company\Product\EmbeddedClassName)</b>: Embed with namespaced class literal</li>
  * 		<li><b>Embedded(EmbeddedClassName)</b>: Embed with default class</li>
  * </ul>
+ *
+ * @Conflicts('EmbeddedArray')
+ * @Conflicts('DbRef')
+ * @Conflicts('DbRefArray')
+ * @Conflicts('Related')
+ * @Conflicts('RelatedArray')
+ *
  * @Target('property')
  * @template Embedded(${defaultClassName})
  * @author Piotr

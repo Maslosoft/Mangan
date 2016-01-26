@@ -19,6 +19,13 @@ use Maslosoft\Mangan\Decorators\EmbedRefArrayDecorator;
 /**
  * DB reference array annotation
  * @template DbRefArray(${class}, ${updatable})
+ *
+ * @Conflicts('Embedded')
+ * @Conflicts('EmbeddedArray')
+ * @Conflicts('DbRef')
+ * @Conflicts('Related')
+ * @Conflicts('RelatedArray')
+ *
  * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

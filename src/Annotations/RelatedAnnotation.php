@@ -31,6 +31,14 @@ use UnexpectedValueException;
  *
  * Related(class = Company\Project\Projects, join = {'_id' => 'entity_id'}, sort = {'_id' = 1}, updatable = true)
  *
+ *
+ * @Conflicts('Embedded')
+ * @Conflicts('EmbeddedArray')
+ * @Conflicts('DbRef')
+ * @Conflicts('DbRefArray')
+ * @Conflicts('RelatedArray')
+ *
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class RelatedAnnotation extends ManganPropertyAnnotation
