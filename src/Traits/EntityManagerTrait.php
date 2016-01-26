@@ -54,15 +54,14 @@ trait EntityManagerTrait
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
+	 * 
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function save($runValidation = true, $attributes = null)
+	public function save($runValidation = true)
 	{
-		return $this->_getEm()->save($runValidation, $attributes);
+		return $this->_getEm()->save($runValidation);
 	}
 
 	/**
