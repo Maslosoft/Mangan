@@ -117,6 +117,18 @@ interface EntityManagerInterface
 	public function save($runValidation = true);
 
 	/**
+	 * Updates or inserts the current document. This will try to update existing fields.
+	 * Will keep already stored data if present in document.
+	 *
+	 * If document does not exist, a new one will be inserted.
+	 *
+	 * @param boolean $runValidation
+	 * @return boolean
+	 * @throws MongoException
+	 */
+	public function upsert($runValidation = true);
+
+	/**
 	 * Deletes the row corresponding to this Document.
 	 * @return boolean whether the deletion is successful.
 	 * @throws MongoException if the record is new

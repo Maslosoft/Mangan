@@ -15,7 +15,6 @@ namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Cursor;
-use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
