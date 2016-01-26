@@ -25,6 +25,7 @@ use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
 use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
 use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
 use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
+use Maslosoft\Mangan\Decorators\Property\SecretDecorator;
 use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
 use Maslosoft\Mangan\Decorators\RelatedDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
@@ -44,6 +45,7 @@ use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
 use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
 use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
+use Maslosoft\Mangan\Transformers\Filters\SecretFilter;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
@@ -143,6 +145,7 @@ class Mangan implements LoggerAwareInterface
 			DbRefDecorator::class,
 			RelatedDecorator::class,
 			RelatedArrayDecorator::class,
+			SecretDecorator::class,
 			I18NDecorator::class,
 			ClassNameDecorator::class,
 		]
@@ -171,7 +174,8 @@ class Mangan implements LoggerAwareInterface
 			JsonFilter::class,
 		],
 		RawArray::class => [
-			PersistentFilter::class
+			PersistentFilter::class,
+			SecretFilter::class
 		],
 		SafeArray::class => [
 		],

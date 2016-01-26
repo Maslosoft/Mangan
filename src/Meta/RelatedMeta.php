@@ -25,13 +25,13 @@ class RelatedMeta extends BaseMeta
 {
 
 	/**
-	 * Whenever treat field as single related document
+	 * Whether treat field as single related document
 	 * @var bool
 	 */
 	public $single = false;
 
 	/**
-	 * Whenever field should contain array of related documents.
+	 * Whether field should contain array of related documents.
 	 * @var bool
 	 */
 	public $isArray = false;
@@ -43,7 +43,7 @@ class RelatedMeta extends BaseMeta
 	public $class = '';
 
 	/**
-	 * Whenever related objects should be updated on save of main document
+	 * Whether related objects should be updated on save of main document
 	 * @var bool
 	 */
 	public $updatable = true;
@@ -82,7 +82,7 @@ class RelatedMeta extends BaseMeta
 
 	/**
 	 * Field for storing order
-	 * 
+	 *
 	 * @see RelatedOrderingAnnotation
 	 * @var string
 	 */

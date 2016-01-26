@@ -106,7 +106,7 @@ class DocumentPropertyMeta extends MetaProperty
 	public $sanitizer = null;
 
 	/**
-	 * Whenever sanitization should be performed for array of elements
+	 * Whether sanitization should be performed for array of elements
 	 * @var bool
 	 */
 	public $sanitizeArray = false;
@@ -118,48 +118,54 @@ class DocumentPropertyMeta extends MetaProperty
 	public $persistent = true;
 
 	/**
-	 * Whenever attribute is safe for mass assignement
+	 * Whether attribute is safe for mass assignement
 	 * @see EntityManager::setAttributes()
 	 * @var boolean|null
 	 */
 	public $safe = null;
 
 	/**
-	 * Whenever property is read only
+	 * Whether property is read only
 	 * @var bool
 	 */
 	public $readonly = false;
 
 	/**
-	 * Whenever property should be included when converting to Json
+	 * Whether property should be included when converting to Json
 	 * @see JsonArray
 	 * @var bool
 	 */
 	public $toJson = true;
 
 	/**
-	 * Whenever property should be included when converting from Json
+	 * Whether property should be included when converting from Json
 	 * @see JsonArray
 	 * @var bool
 	 */
 	public $fromJson = true;
 
 	/**
-	 * Whenever property should be included when converting to document array
+	 * Whether property should be included when converting to document array
 	 * @see DocumentArray
 	 * @var bool
 	 */
 	public $toArray = true;
 
 	/**
-	 * Whenever property should be included when converting from document array
+	 * Whether property should be included when converting from document array
 	 * @see DocumentArray
 	 * @var bool
 	 */
 	public $fromArray = true;
 
 	/**
-	 * Whenever events should be propagated to this property sub objects
+	 * Whether property is secret
+	 * @var bool|SecretMeta
+	 */
+	public $secret = false;
+
+	/**
+	 * Whether events should be propagated to this property sub objects
 	 * @var bool
 	 */
 	public $propagateEvents = false;
