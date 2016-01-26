@@ -110,12 +110,11 @@ interface EntityManagerInterface
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
+
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
-	public function save($runValidation = true, $attributes = null);
+	public function save($runValidation = true);
 
 	/**
 	 * Deletes the row corresponding to this Document.
