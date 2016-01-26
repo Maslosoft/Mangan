@@ -240,15 +240,28 @@ class EntityManager implements EntityManagerInterface
 				}
 			}
 		}
+		else
+		{
+			$fields = array_keys(ManganMeta::create($this->model)->fields());
+			$setFields = array_keys($rawData);
+			$diff = array_diff($fields, $setFields);
+
+			if (!empty($diff))
+			{
+				$modify = true;
+			}
+		}
 		if ($modify)
 		{
+			// Id could be altered, so skip it as it cannot be changed
+			unset($rawData['_id']);
 			$data = ['$set' => $rawData];
 		}
 		else
 		{
 			$data = $rawData;
 		}
-		$cond = $criteria->getConditions();
+
 		$result = $this->getCollection()->update($criteria->getConditions(), $data, $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]));
 		return $this->_result($result);
 	}
@@ -279,7 +292,9 @@ class EntityManager implements EntityManagerInterface
 	}
 
 	/**
-	 * Saves the current record.
+	 * Saves the current document.
+	 *
+	 * **NOTE: This will overwrite entire document.**
 	 *
 	 * The record is inserted as a row into the database collection or updated if exists.
 	 *
@@ -293,16 +308,50 @@ class EntityManager implements EntityManagerInterface
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
-	public function save($runValidation = true, $model = null)
+	public function save($runValidation = true)
 	{
 		if (!$runValidation || $this->validator->validate())
 		{
-			$model = $model ? : $this->model;
+			$model = $this->model;
 			if ($this->_beforeSave($model))
 			{
 				$data = RawArray::fromModel($model);
 				$rawResult = $this->_collection->save($data, $this->options->getSaveOptions());
 				$result = $this->_result($rawResult, true);
+
+				if ($result)
+				{
+					$this->_afterSave($model);
+					return true;
+				}
+				throw new MongoException("Can't save the document to disk, or attempting to save an empty document");
+			}
+			return false;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Updates or inserts the current document. This will try to update existing fields.
+	 * Will keep already stored data if present in document.
+	 *
+	 * If document does not exist, a new one will be inserted.
+	 *
+	 * @param boolean $runValidation
+	 * @return boolean
+	 * @throws MongoException
+	 */
+	public function upsert($runValidation = true)
+	{
+		if (!$runValidation || $this->validator->validate())
+		{
+			$model = $this->model;
+			if ($this->_beforeSave($model))
+			{
+				$result = $this->updateOne(null);
 
 				if ($result)
 				{
