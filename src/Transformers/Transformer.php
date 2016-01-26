@@ -104,13 +104,16 @@ abstract class Transformer
 		$md = new ModelDecorator($model, $calledClass);
 		$sanitizer = new Sanitizer($model, $calledClass);
 		$filter = new Filter($model, $calledClass);
-		foreach ($data as $name => $value)
+		foreach ($meta->fields() as $name => $fieldMeta)
 		{
-			$fieldMeta = $meta->$name;
 			/* @var $fieldMeta DocumentPropertyMeta */
-			if (!$fieldMeta)
+			if (isset($data[$name]))
 			{
-				continue;
+				$value = $data[$name];
+			}
+			else
+			{
+				$value = $fieldMeta->default;
 			}
 			if (!$filter->toModel($model, $fieldMeta))
 			{

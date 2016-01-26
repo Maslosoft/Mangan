@@ -144,7 +144,7 @@ class Finder implements FinderInterface
 	 * ];
 	 * ```
 	 *
-	 * @param mixed $pk primary key value. Use array for composite key.
+	 * @param mixed $pkValue primary key value. Use array for composite key.
 	 * @param array|CriteriaInterface $criteria
 	 * @return AnnotatedInterface|null
 	 * @Ignored
@@ -155,7 +155,6 @@ class Finder implements FinderInterface
 		$pkCriteria = new Criteria($criteria);
 		$pkCriteria->decorateWith($this->model);
 		$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
-
 		return $this->find($pkCriteria);
 	}
 

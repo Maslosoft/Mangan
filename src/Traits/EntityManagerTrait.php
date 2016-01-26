@@ -54,7 +54,7 @@ trait EntityManagerTrait
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * 
+	 *
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 * @Ignored
@@ -62,6 +62,21 @@ trait EntityManagerTrait
 	public function save($runValidation = true)
 	{
 		return $this->_getEm()->save($runValidation);
+	}
+
+	/**
+	 * Updates or inserts the current document. This will try to update existing fields.
+	 * Will keep already stored data if present in document.
+	 *
+	 * If document does not exist, a new one will be inserted.
+	 *
+	 * @param boolean $runValidation
+	 * @return boolean
+	 * @throws MongoException
+	 */
+	public function upsert($runValidation = true)
+	{
+		return $this->_getEm()->upsert($runValidation);
 	}
 
 	/**
