@@ -26,6 +26,12 @@ use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
  *
  * RelatedArray(class = Company\Project\Projects, join = {'_id' => 'entity_id'}, sort = {'_id' = 1}, updatable = true)
  *
+ * @Conflicts('Embedded')
+ * @Conflicts('EmbeddedArray')
+ * @Conflicts('DbRef')
+ * @Conflicts('DbRefArray')
+ * @Conflicts('Related')
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class RelatedArrayAnnotation extends RelatedAnnotation
