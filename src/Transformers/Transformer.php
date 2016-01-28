@@ -87,7 +87,14 @@ abstract class Transformer
 			}
 			else
 			{
-				throw new TransformatorException('Could not determine document type');
+				if (null !== $instance)
+				{
+					$className = get_class($instance);
+				}
+				else
+				{
+					throw new TransformatorException('Could not determine document type');
+				}
 			}
 		}
 		if ($instance)

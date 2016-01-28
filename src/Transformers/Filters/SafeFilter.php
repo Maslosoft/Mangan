@@ -32,7 +32,7 @@ class SafeFilter implements TransformatorFilterInterface
 
 	public function toModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		if($fieldMeta->safe === null)
+		if ($fieldMeta->safe === null)
 		{
 			return true;
 		}
