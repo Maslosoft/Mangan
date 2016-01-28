@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf runtime/*
 if [ "$TRAVIS_PHP_VERSION" == "hhvm" ] || [ "$TRAVIS_PHP_VERSION" == "nightly" ]; then
 	vendor/bin/codecept run unit
 	status=$?

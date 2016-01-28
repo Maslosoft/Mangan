@@ -45,6 +45,7 @@ use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
 use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
 use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
+use Maslosoft\Mangan\Transformers\Filters\SafeFilter;
 use Maslosoft\Mangan\Transformers\Filters\SecretFilter;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
@@ -178,6 +179,7 @@ class Mangan implements LoggerAwareInterface
 			SecretFilter::class
 		],
 		SafeArray::class => [
+			SafeFilter::class
 		],
 	];
 

@@ -54,7 +54,7 @@ class UniqueValidator implements ValidatorInterface
 	 * You may use path alias to reference a class name here.
 	 *
 	 * TODO Not implemented
-	 * 
+	 *
 	 * @see attributeName
 	 * @since 1.0.8
 	 */
