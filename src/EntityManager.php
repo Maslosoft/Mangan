@@ -33,11 +33,10 @@ use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Signals\Signal;
 use MongoCollection;
-use MongoException;
 
 /**
  * EntityManager
- *
+ * 
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class EntityManager implements EntityManagerInterface
@@ -154,10 +153,10 @@ class EntityManager implements EntityManagerInterface
 	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
 	 *
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws MongoException if the record is not new
-	 * @throws MongoException on fail of insert or insert of empty document
-	 * @throws MongoException on fail of insert, when safe flag is set to true
-	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @throws ManganException if the record is not new
+	 * @throws ManganException on fail of insert or insert of empty document
+	 * @throws ManganException on fail of insert, when safe flag is set to true
+	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function insert(AnnotatedInterface $model = null)
@@ -174,7 +173,7 @@ class EntityManager implements EntityManagerInterface
 				$this->_afterSave($model, EntityManagerInterface::EventAfterInsert);
 				return true;
 			}
-			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
+			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
 		return false;
 	}
@@ -188,9 +187,9 @@ class EntityManager implements EntityManagerInterface
 	 * meaning all attributes that are loaded from DB will be saved.
 
 	 * @return boolean whether the update is successful
-	 * @throws MongoException if the record is new
-	 * @throws MongoException on fail of update
-	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @throws ManganException if the record is new
+	 * @throws ManganException on fail of update
+	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
 	public function update(array $attributes = null)
@@ -204,7 +203,7 @@ class EntityManager implements EntityManagerInterface
 				$this->_afterSave($this->model, EntityManagerInterface::EventAfterUpdate);
 				return true;
 			}
-			throw new MongoException('Can\t save the document to disk, or attempting to save an empty document.');
+			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
 		return false;
 	}
@@ -324,7 +323,7 @@ class EntityManager implements EntityManagerInterface
 					$this->_afterSave($model);
 					return true;
 				}
-				throw new MongoException("Can't save the document to disk, or attempting to save an empty document");
+				throw new ManganException("Can't save the document to disk, or attempting to save an empty document");
 			}
 			return false;
 		}
@@ -342,7 +341,7 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @param boolean $runValidation
 	 * @return boolean
-	 * @throws MongoException
+	 * @throws ManganException
 	 */
 	public function upsert($runValidation = true)
 	{
@@ -366,7 +365,7 @@ class EntityManager implements EntityManagerInterface
 					$this->_afterSave($model);
 					return true;
 				}
-				throw new MongoException("Can't save the document to disk, or attempting to save an empty document");
+				throw new ManganException("Can't save the document to disk, or attempting to save an empty document");
 			}
 			return false;
 		}
@@ -400,7 +399,7 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Deletes the document from database.
 	 * @return boolean whether the deletion is successful.
-	 * @throws MongoException if the record is new
+	 * @throws ManganException if the record is new
 	 */
 	public function delete()
 	{

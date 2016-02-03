@@ -73,7 +73,7 @@ use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
 use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
 use MongoClient;
 use MongoDB;
-use MongoException;
+use Exception;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -516,7 +516,7 @@ class Mangan implements LoggerAwareInterface
 			{
 				$db = $this->getConnection()->selectDB($this->dbName);
 			}
-			catch (MongoException $e)
+			catch (Exception $e)
 			{
 				throw new ManganException(sprintf('Could not select db name: `%s`, for connectionId: `%s` - %s', $this->dbName, $this->connectionId, $e->getMessage()), ExceptionCodeInterface::CouldNotSelect, $e);
 			}
