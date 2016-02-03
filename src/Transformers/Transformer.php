@@ -116,10 +116,18 @@ abstract class Transformer
 			/* @var $fieldMeta DocumentPropertyMeta */
 			if (isset($data[$name]))
 			{
+				// Value is available in passed data
 				$value = $data[$name];
+			}
+			elseif (!empty($instance))
+			{
+				// Take value from existing instance
+				// NOTE: We could `continue` here but value should be sanitized anyway
+				$value = $model->$name;
 			}
 			else
 			{
+				// As a last resort set to default
 				$value = $fieldMeta->default;
 			}
 			if (!$filter->toModel($model, $fieldMeta))
