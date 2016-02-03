@@ -22,6 +22,12 @@ composer require maslosoft/mangan:"*"
 
 <!--/header-->
 
+### Install mongofill if no ext-mongo available (for hhvm, php7 too):
+
+```bash
+composer require mongofill/mongofill:"@dev"
+```
+
 This extension originally started as a fork of [YiiMongoDbSuite](canni.github.com/YiiMongoDbSuite "YiiMongoDbSuite"),
 written by [canni](https://github.com/canni "canni") and further improved by several developers ([mintao](https://github.com/mintao "mintao"), et al).
 YiiMongoDbSuite originally started as a fork of [MongoRecord](www.yiiframework.com/extension/mongorecord "MongoRecord")
