@@ -15,11 +15,11 @@ namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Modifier;
 use MongoCollection;
-use MongoException;
 
 /**
  * EntityManagerTrait
@@ -72,7 +72,7 @@ trait EntityManagerTrait
 	 *
 	 * @param boolean $runValidation
 	 * @return boolean
-	 * @throws MongoException
+	 * @throws ManganException
 	 */
 	public function upsert($runValidation = true)
 	{
@@ -88,10 +88,10 @@ trait EntityManagerTrait
 	 * and its {@link scenario} property will be set to be 'update'.
 	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
-	 * @throws MongoException if the record is not new
-	 * @throws MongoException on fail of insert or insert of empty document
-	 * @throws MongoException on fail of insert, when safe flag is set to true
-	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @throws ManganException if the record is not new
+	 * @throws ManganException on fail of insert or insert of empty document
+	 * @throws ManganException on fail of insert, when safe flag is set to true
+	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 * @Ignored
 	 */
@@ -107,9 +107,9 @@ trait EntityManagerTrait
 	 * @param array $attributes list of attributes that need to be updated. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
-	 * @throws MongoException if the record is new
-	 * @throws MongoException on fail of update
-	 * @throws MongoException on timeout of db operation , when safe flag is set to true
+	 * @throws ManganException if the record is new
+	 * @throws ManganException on fail of update
+	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 * @Ignored
 	 */
@@ -154,7 +154,7 @@ trait EntityManagerTrait
 	/**
 	 * Deletes the row corresponding to this Document.
 	 * @return boolean whether the deletion is successful.
-	 * @throws MongoException if the record is new
+	 * @throws ManganException if the record is new
 	 * @since v1.0
 	 * @Ignored
 	 */
