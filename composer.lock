@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cde0288d1d89fec41ee806c145e139eb",
-    "content-hash": "12f14cdca1b127b08e1a2cc1965f577f",
+    "hash": "e8f554977f5ead520eea3007658bbb62",
+    "content-hash": "efc5b72acef6f6608e1c63aff844dfea",
     "packages": [
         {
             "name": "maslosoft/addendum",
@@ -341,11 +341,11 @@
         },
         {
             "name": "maslosoft/mongofill",
-            "version": "0.0.1",
+            "version": "0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/mongofill.git",
-                "reference": "c63860b64e4f8cf135e5a50623e1c0f1db7d6ee9",
+                "reference": "ec3dd2301cc9e25a72faf2576c2aeeb94e8bfb1b",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -355,8 +355,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/mongofill/zipball/c63860b64e4f8cf135e5a50623e1c0f1db7d6ee9",
-                "reference": "c63860b64e4f8cf135e5a50623e1c0f1db7d6ee9",
+                "url": "https://api.github.com/repos/Maslosoft/mongofill/zipball/ec3dd2301cc9e25a72faf2576c2aeeb94e8bfb1b",
+                "reference": "ec3dd2301cc9e25a72faf2576c2aeeb94e8bfb1b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -480,7 +480,7 @@
                 }
             ],
             "description": "Polyfill of PECL Mongo extension",
-            "time": "2016-02-04 08:38:39"
+            "time": "2016-02-04 10:08:44"
         },
         {
             "name": "maslosoft/signals",
@@ -1544,7 +1544,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "da81894b9a13846413f7fcdc9d65c37ac5243c30",
+                "reference": "cd7ece6e7ba1965c9d3b6b3ed943d2e9abfdc000",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1554,8 +1554,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/da81894b9a13846413f7fcdc9d65c37ac5243c30",
-                "reference": "da81894b9a13846413f7fcdc9d65c37ac5243c30",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/cd7ece6e7ba1965c9d3b6b3ed943d2e9abfdc000",
+                "reference": "cd7ece6e7ba1965c9d3b6b3ed943d2e9abfdc000",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1588,11 +1588,11 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2016-02-04 08:47:13"
+            "time": "2016-02-04 09:05:36"
         },
         {
             "name": "maslosoft/zamm",
-            "version": "dev-master",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Zamm.git",
@@ -3345,8 +3345,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "maslosoft/mangantest": 20,
-        "maslosoft/zamm": 20
+        "maslosoft/mangantest": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
