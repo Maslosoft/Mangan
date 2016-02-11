@@ -291,11 +291,11 @@
         },
         {
             "name": "maslosoft/miniview",
-            "version": "1.0.11",
+            "version": "1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/MiniView.git",
-                "reference": "c5b22e07ae26e52aef145ff249b39402d4ab25a1",
+                "reference": "2fbc6672b022096683fa4f2aaed2e62bb3c4c631",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -305,8 +305,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/c5b22e07ae26e52aef145ff249b39402d4ab25a1",
-                "reference": "c5b22e07ae26e52aef145ff249b39402d4ab25a1",
+                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/2fbc6672b022096683fa4f2aaed2e62bb3c4c631",
+                "reference": "2fbc6672b022096683fa4f2aaed2e62bb3c4c631",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -337,7 +337,7 @@
             ],
             "description": "Mini view is minimal template rendering library based on Yii controller renderer",
             "homepage": "http://maslosoft.com/miniview/",
-            "time": "2015-08-24 18:09:00"
+            "time": "2016-02-11 08:49:41"
         },
         {
             "name": "maslosoft/mongofill",
@@ -484,11 +484,11 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.1.14",
+            "version": "1.1.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "5a3b367f38ce2a05a32ac8b2ac9a1295a204df43",
+                "reference": "664b2a1c10293592876ba6e89020c8f8c0d143a8",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -498,8 +498,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/5a3b367f38ce2a05a32ac8b2ac9a1295a204df43",
-                "reference": "5a3b367f38ce2a05a32ac8b2ac9a1295a204df43",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/664b2a1c10293592876ba6e89020c8f8c0d143a8",
+                "reference": "664b2a1c10293592876ba6e89020c8f8c0d143a8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -549,7 +549,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2015-12-22 11:34:20"
+            "time": "2016-02-10 10:59:57"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -901,11 +901,11 @@
     "packages-dev": [
         {
             "name": "codeception/codeception",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "4ee562f421fd404139dd7b73ae46d075396a4baf",
+                "reference": "b199941f5e59d1e7fd32d78296c8ab98db873d89",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -915,8 +915,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/4ee562f421fd404139dd7b73ae46d075396a4baf",
-                "reference": "4ee562f421fd404139dd7b73ae46d075396a4baf",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/b199941f5e59d1e7fd32d78296c8ab98db873d89",
+                "reference": "b199941f5e59d1e7fd32d78296c8ab98db873d89",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -989,7 +989,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2015-12-20 12:11:42"
+            "time": "2016-02-09 22:27:48"
         },
         {
             "name": "codeception/specify",
