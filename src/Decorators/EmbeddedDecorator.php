@@ -34,7 +34,12 @@ class EmbeddedDecorator implements DecoratorInterface
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
 		static::ensureClass($model, $name, $dbValue);
-		$embedded = $transformatorClass::toModel($dbValue, $model->$name, $model->$name);
+		$instance = null;
+		if($model->$name instanceof $dbValue['_class'])
+		{
+			$instance = $model->$name;
+		}
+		$embedded = $transformatorClass::toModel($dbValue, $instance, $instance);
 		$model->$name = $embedded;
 	}
 
