@@ -109,15 +109,25 @@ class Validator implements ValidatableInterface
 			{
 				continue;
 			}
-			$valid[] = (int) $this->validateField($name, $fieldMeta);
+			$valid[] = (int) $this->validateEntity($name, $fieldMeta->validators);
+		}
+		
+		// Model validators
+		$typeValidators = $this->meta->type()->validators;
+		if(!empty($typeValidators))
+		{
+			$typeName = $this->meta->type()->name;
+			// Reset errors
+			$this->errors[$typeName] = [];
+			$valid[] = (int) $this->validateEntity($typeName, $typeValidators);
 		}
 		return count($valid) === array_sum($valid);
 	}
 
-	private function validateField($name, Meta\DocumentPropertyMeta $meta)
+	private function validateEntity($name, $validators)
 	{
 		$valid = [];
-		foreach ($meta->validators as $validatorMeta)
+		foreach ($validators as $validatorMeta)
 		{
 			// Filter out validators based on scenarios
 			if (!empty($validatorMeta->on))
