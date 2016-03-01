@@ -119,11 +119,16 @@ class DocumentTypeMeta extends MetaType
 	public $aliases = [];
 
 	/**
+	 * Validators configuration
+	 * @var ValidatorMeta[]
+	 */
+	public $validators = [];
+
+	/**
 	 * Values of properties
 	 * @var mixed
 	 */
 	private $_values = [];
-	
 	private $_defaults = [];
 
 	public function __construct(ReflectionClass $info = null)
