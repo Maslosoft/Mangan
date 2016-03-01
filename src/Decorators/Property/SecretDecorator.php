@@ -9,9 +9,7 @@
 namespace Maslosoft\Mangan\Decorators\Property;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
-use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -56,9 +54,11 @@ class SecretDecorator implements DecoratorInterface
 		{
 			return true;
 		}
-		$converted = call_user_func($secretMeta->callback, $model->$name);
-		$dbValue[$name] = $converted;
-
+		if(!empty($model->$name))
+		{
+			$converted = call_user_func($secretMeta->callback, $model->$name);
+			$dbValue[$name] = $converted;
+		}
 		return true;
 	}
 
