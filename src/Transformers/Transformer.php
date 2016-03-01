@@ -114,7 +114,7 @@ abstract class Transformer
 		foreach ($meta->fields() as $name => $fieldMeta)
 		{
 			/* @var $fieldMeta DocumentPropertyMeta */
-			if (isset($data[$name]))
+			if (array_key_exists($name, $data))
 			{
 				// Value is available in passed data
 				$value = $data[$name];
