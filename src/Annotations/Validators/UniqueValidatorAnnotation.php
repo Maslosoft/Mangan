@@ -22,7 +22,7 @@ use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class MongoUniqueValidatorAnnotation extends ValidatorAnnotation
+class UniqueValidatorAnnotation extends ValidatorAnnotation
 {
 
 	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
