@@ -111,21 +111,22 @@ trait I18NAbleTrait
 	{
 		if ($this->_lang === $code)
 		{
-			return;
+			return false;
 		}
 		if (!in_array($code, $this->getLanguages()))
 		{
-			return;
+			return false;
 		}
 		$event = new ModelEvent($this);
 		$event->data = $code;
 		if (!Event::valid($this, InternationalInterface::EventBeforeLangChange, $event))
 		{
-			return;
+			return false;
 		}
 		$this->_changeAttributesLang($this->_lang, $code);
 		$this->_lang = $code;
 		Event::trigger($this, InternationalInterface::EventAfterLangChange, $event);
+		return true;
 	}
 
 	/**
