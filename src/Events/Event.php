@@ -83,18 +83,16 @@ class Event implements EventInterface
 	 * When a class-level event is triggered, event handlers attached
 	 * to that class and all parent classes will be invoked.
 	 *
-	 * For example, the following code attaches an event handler to `ActiveRecord`'s
+	 * For example, the following code attaches an event handler to document's
 	 * `afterInsert` event:
 	 *
 	 * ~~~
-	 * Event::on($model, EntityManaget::EventAfterInsert, function ($event) {
+	 * Event::on($model, EntityManager::EventAfterInsert, function ($event) {
 	 * 		var_dump(get_class($event->sender) . ' is inserted.');
 	 * });
 	 * ~~~
 	 *
-	 * The handler will be invoked for EVERY successful ActiveRecord insertion.
-	 *
-	 * For more details about how to declare an event handler, please refer to [[Component::on()]].
+	 * The handler will be invoked for every successful document insertion.
 	 *
 	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
