@@ -37,7 +37,7 @@ class SanitizerAnnotation extends ManganPropertyAnnotation
 		{
 			$this->class = $this->value;
 		}
-		else
+		elseif (is_array($this->value))
 		{
 			foreach (array_keys($this->value) as $key)
 			{
