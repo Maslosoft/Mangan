@@ -30,7 +30,11 @@ class DateSanitizer implements SanitizerInterface
 		{
 			return $dbValue;
 		}
-		return new MongoDate((int) $dbValue);
+		if ((int) $dbValue === 0)
+		{
+			$dbValue = time();
+		}
+		return new MongoDate($dbValue);
 	}
 
 	public function write($model, $phpValue)
@@ -39,7 +43,11 @@ class DateSanitizer implements SanitizerInterface
 		{
 			return $phpValue;
 		}
-		return new MongoDate((int) $phpValue);
+		if ((int) $phpValue === 0)
+		{
+			$phpValue = time();
+		}
+		return new MongoDate($phpValue);
 	}
 
 }
