@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Interfaces;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Modifier;
 use MongoCollection;
@@ -48,7 +49,7 @@ interface EntityManagerInterface
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
+	 *
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
@@ -61,6 +62,7 @@ interface EntityManagerInterface
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 * After the record is inserted to DB successfully, its {@link isNewRecord} property will be set false,
 	 * and its {@link scenario} property will be set to be 'update'.
+	 * 
 	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
 	 * @return boolean whether the attributes are valid and the record is inserted successfully.
 	 * @throws ManganException if the record is not new
@@ -72,9 +74,11 @@ interface EntityManagerInterface
 	public function insert(AnnotatedInterface $model = null);
 
 	/**
-	 * Updates the row represented by this active record.
+	 * Updates the document represented by this active record.
 	 * All loaded attributes will be saved to the database.
+	 *
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
+	 *
 	 * @param array $attributes list of attributes that need to be updated. Defaults to null,
 	 * meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
@@ -112,21 +116,11 @@ interface EntityManagerInterface
 	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null);
 
 	/**
-	 * Saves the current record.
+	 * Saves the current record. Will insert new document, or update if exists.
 	 *
-	 * The record is inserted as a row into the database table if its {@link isNewRecord}
-	 * property is true (usually the case when the record is created using the 'new'
-	 * operator). Otherwise, it will be used to update the corresponding row in the table
-	 * (usually the case if the record is obtained using one of those 'find' methods.)
-	 *
-	 * Validation will be performed before saving the record. If the validation fails,
+	 * Validation will be performed before saving the document. If the validation fails,
 	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
 	 * validation errors.
-	 *
-	 * If the record is saved via insertion, its {@link isNewRecord} property will be
-	 * set false, and its {@link scenario} property will be set to be 'update'.
-	 * And if its primary key is auto-incremental and is not set before insertion,
-	 * the primary key will be populated with the automatically generated key value.
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
@@ -150,6 +144,7 @@ interface EntityManagerInterface
 
 	/**
 	 * Deletes the row corresponding to this Document.
+	 * 
 	 * @return boolean whether the deletion is successful.
 	 * @throws ManganException if the record is new
 	 * @since v1.0
@@ -157,42 +152,62 @@ interface EntityManagerInterface
 	public function delete();
 
 	/**
-	 * Deletes one document with the specified primary keys.
-	 * <b>Does not raise beforeDelete</b>
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * Deletes one document with the specified primary key or by passed criteria.
+	 * 
+	 * This is more *raw* method than delete:
+	 *
+	 * * Does not raise events
+	 * * Does not emit signals
+	 *
+	 * See `Criteria` class for detailed explanation about $criteria param.
 	 * @param array|CriteriaInterface $criteria query criteria.
+	 * @see Criteria
+	 * @see CriteriaInterface
 	 * @since v1.0
 	 */
 	public function deleteOne($criteria = null);
 
 	/**
-	 * Deletes document with the specified primary key.
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * Deletes document with the specified primary key with optional criteria.
+	 *
+	 * See `Criteria` class for detailed explanation about $criteria param.
+	 *
 	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|CriteriaInterface $criteria query criteria.
+	 * @see Criteria
+	 * @see CriteriaInterface
 	 * @since v1.0
 	 */
 	public function deleteByPk($pkValue, $criteria = null);
 
 	/**
 	 * Deletes documents with the specified primary keys.
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * 
+	 * See `Criteria` class for detailed explanation about $criteria param.
+	 * 
 	 * @param mixed[] $pkValues Primary keys array
 	 * @param array|CriteriaInterface $criteria query criteria.
+	 * @see Criteria
+	 * @see CriteriaInterface
 	 * @since v1.0
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null);
 
 	/**
-	 * Deletes documents with the specified primary keys.
-	 * See {@link find()} for detailed explanation about $condition and $params.
+	 * Deletes all documents specified by criteria.
+	 *
+	 * See `Criteria` class for detailed explanation about $criteria param.
+	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
+	 * @see Criteria
+	 * @see CriteriaInterface
 	 * @since v1.0
 	 */
 	public function deleteAll($criteria = null);
 
 	/**
 	 * Repopulates this active record with the latest data.
+	 *
 	 * @return boolean whether the row still exists in the database. If true, the latest data will be populated to this active record.
 	 * @since v1.0
 	 */

@@ -49,7 +49,7 @@ trait EntityManagerTrait
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
 	 * If the validation fails, the record will not be saved to database.
-	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
+	 *
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
