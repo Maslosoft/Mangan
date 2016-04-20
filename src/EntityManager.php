@@ -614,7 +614,8 @@ class EntityManager implements EntityManagerInterface
 	 */
 	private function _afterDelete()
 	{
-		Event::trigger($this->model, EntityManagerInterface::EventAfterDelete, new ModelEvent($this->model));
+		$event = new ModelEvent($this->model);
+		Event::trigger($this->model, EntityManagerInterface::EventAfterDelete, $event);
 		(new Signal)->emit(new AfterDelete($this->model));
 	}
 
