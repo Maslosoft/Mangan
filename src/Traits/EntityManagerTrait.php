@@ -36,6 +36,29 @@ trait EntityManagerTrait
 	private $_em = null;
 
 	/**
+	 * Replaces the current document.
+	 *
+	 * **NOTE: This will overwrite entire document.**
+	 * Any filtered out properties will be removed as well.
+	 *
+	 * The record is inserted as a documnent into the database collection, if exists it will be replaced.
+	 *
+	 * Validation will be performed before saving the record. If the validation fails,
+	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
+	 * validation errors.
+	 *
+	 * @param boolean $runValidation whether to perform validation before saving the record.
+	 * If the validation fails, the record will not be saved to database.
+	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
+	 * @return boolean whether the saving succeeds
+	 * @since v1.0
+	 */
+	public function replace($runValidation = true)
+	{
+		return $this->_getEm()->replace($runValidation);
+	}
+
+	/**
 	 * Saves the current record.
 	 *
 	 * The record is inserted as a row into the database table if its {@link isNewRecord}
