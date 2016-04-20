@@ -291,11 +291,12 @@ class EntityManager implements EntityManagerInterface
 	}
 
 	/**
-	 * Saves the current document.
+	 * Replaces the current document.
 	 *
 	 * **NOTE: This will overwrite entire document.**
+	 * Any filtered out properties will be removed as well.
 	 *
-	 * The record is inserted as a row into the database collection or updated if exists.
+	 * The record is inserted as a documnent into the database collection, if exists it will be replaced.
 	 *
 	 * Validation will be performed before saving the record. If the validation fails,
 	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
@@ -307,7 +308,7 @@ class EntityManager implements EntityManagerInterface
 	 * @return boolean whether the saving succeeds
 	 * @since v1.0
 	 */
-	public function save($runValidation = true)
+	public function replace($runValidation = true)
 	{
 		if (!$runValidation || $this->validator->validate())
 		{
@@ -331,6 +332,28 @@ class EntityManager implements EntityManagerInterface
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Saves the current document.
+	 *
+	 * The record is inserted as a document into the database collection or updated if exists.
+	 *
+	 * Filtered out properties will remain in database - it is partial safe.
+	 *
+	 * Validation will be performed before saving the record. If the validation fails,
+	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
+	 * validation errors.
+	 *
+	 * @param boolean $runValidation whether to perform validation before saving the record.
+	 * If the validation fails, the record will not be saved to database.
+	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
+	 * @return boolean whether the saving succeeds
+	 * @since v1.0
+	 */
+	public function save($runValidation = true)
+	{
+		return $this->upsert($runValidation);
 	}
 
 	/**

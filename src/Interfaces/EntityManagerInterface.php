@@ -35,6 +35,26 @@ interface EntityManagerInterface
 	const EventAfterDelete = 'afterDelete';
 
 	/**
+	 * Replaces the current document.
+	 *
+	 * **NOTE: This will overwrite entire document.**
+	 * Any filtered out properties will be removed as well.
+	 *
+	 * The record is inserted as a documnent into the database collection, if exists it will be replaced.
+	 *
+	 * Validation will be performed before saving the record. If the validation fails,
+	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
+	 * validation errors.
+	 *
+	 * @param boolean $runValidation whether to perform validation before saving the record.
+	 * If the validation fails, the record will not be saved to database.
+	 * @param AnnotatedInterface $model if want to insert different model than set in constructor
+	 * @return boolean whether the saving succeeds
+	 * @since v1.0
+	 */
+	public function replace($runValidation = true);
+
+	/**
 	 * Inserts a row into the table based on this active record attributes.
 	 * If the table's primary key is auto-incremental and is null before insertion,
 	 * it will be populated with the actual value after insertion.
