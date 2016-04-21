@@ -79,7 +79,7 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 		{
 			$this->class = $this->value;
 		}
-		else
+		elseif (is_array($this->value))
 		{
 			foreach (array_keys($this->value) as $key)
 			{
@@ -89,6 +89,12 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 				}
 			}
 		}
+		else
+		{
+			throw new \UnexpectedValueException(sprintf("Expected class name (for @Validator) for field `%s` of model `%s`, got: `%s`", $this->_entity->name, $this->_meta->type()->name, $this->value));
+		}
+
+
 		$this->proxy = ClassValidatorProxy::class;
 		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, $params));
 	}
