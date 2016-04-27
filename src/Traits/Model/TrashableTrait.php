@@ -21,9 +21,9 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Model\Trash;
 use Maslosoft\Mangan\ScenarioManager;
 use Maslosoft\Mangan\Validator;
-use Maslosoft\Models\Trash;
 
 /**
  * Uswe this trait to make model trashable
@@ -89,16 +89,20 @@ trait TrashableTrait
 	 */
 	public function restore()
 	{
-		if (!$this instanceof Trash)
+		if (!$this instanceof TrashInterface)
 		{
 			// When trying to restore normal document instead of trash item
-			throw new Exception('Restore can be performed only on Trash instance');
+			throw new Exception('Restore can be performed only on `%s` instance', TrashInterface::class);
 		}
 		$em = new EntityManager($this->data);
-		//$this->data->init();
+
 		Event::trigger($this->data, TrashInterface::EventBeforeRestore);
 
-		$em->save();
+		$saved = $em->save();
+		if (!$saved)
+		{
+			return false;
+		}
 		$finder = new Finder($this->data);
 		$model = $finder->find(PkManager::prepareFromModel($this->data));
 		if (!$model)
@@ -108,7 +112,7 @@ trait TrashableTrait
 		Event::trigger($model, TrashInterface::EventAfterRestore);
 
 		$trashEm = new EntityManager($this);
-		// $this->delete();
+
 		// Use deleteOne, to avoid beforeDelete event,
 		// which should be raised only when really removing document:
 		// when emtying trash
