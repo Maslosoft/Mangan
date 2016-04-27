@@ -9,11 +9,11 @@
     "packages": [
         {
             "name": "maslosoft/addendum",
-            "version": "4.0.12",
+            "version": "4.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "999113b9cbb2422cdf76d26ed3e3c37d24049074",
+                "reference": "a2516e08f8df760850b337715766a7fca23f89e7",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -23,8 +23,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/999113b9cbb2422cdf76d26ed3e3c37d24049074",
-                "reference": "999113b9cbb2422cdf76d26ed3e3c37d24049074",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/a2516e08f8df760850b337715766a7fca23f89e7",
+                "reference": "a2516e08f8df760850b337715766a7fca23f89e7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -75,7 +75,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2016-03-10 10:30:05"
+            "time": "2016-04-26 12:59:08"
         },
         {
             "name": "maslosoft/cache",
@@ -484,11 +484,11 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.1.15",
+            "version": "1.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "664b2a1c10293592876ba6e89020c8f8c0d143a8",
+                "reference": "0f253bdeb78f5eb9a79da941a163dea78a0f72e1",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -498,12 +498,12 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/664b2a1c10293592876ba6e89020c8f8c0d143a8",
-                "reference": "664b2a1c10293592876ba6e89020c8f8c0d143a8",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/0f253bdeb78f5eb9a79da941a163dea78a0f72e1",
+                "reference": "0f253bdeb78f5eb9a79da941a163dea78a0f72e1",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "http://pkg.home/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
@@ -549,7 +549,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2016-02-10 10:59:57"
+            "time": "2016-04-26 13:24:38"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -1545,7 +1545,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "640df92b7a14bfc861f9bf53f73f34ce3ccfef8a",
+                "reference": "80f50ada43e65105cdbc5177b9ce6c1f33ebffc3",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1555,8 +1555,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/640df92b7a14bfc861f9bf53f73f34ce3ccfef8a",
-                "reference": "640df92b7a14bfc861f9bf53f73f34ce3ccfef8a",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/80f50ada43e65105cdbc5177b9ce6c1f33ebffc3",
+                "reference": "80f50ada43e65105cdbc5177b9ce6c1f33ebffc3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1589,7 +1589,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2016-04-20 10:33:04"
+            "time": "2016-04-20 10:46:50"
         },
         {
             "name": "maslosoft/zamm",
