@@ -87,15 +87,12 @@ class Validator implements ValidatableInterface
 			}
 
 			// Validate sub documents
-			if ($fieldMeta->owned)
+			// Skip fields that are not updatable
+			if ($fieldMeta->owned && $fieldMeta->updatable)
 			{
-				// Skip fields that are not updatable
-				if (!$fieldMeta->updatable)
-				{
-					continue;
-				}
 				if (is_array($this->model->$name))
 				{
+					// Handle arrays of documents
 					foreach ($this->model->$name as $model)
 					{
 						$validator = new Validator($model);
@@ -110,6 +107,7 @@ class Validator implements ValidatableInterface
 				}
 				elseif (!empty($this->model->$name))
 				{
+					// Handle single documents
 					$validator = new Validator($this->model->$name);
 					$isValid = $validator->validate();
 					$valid[] = (int) $isValid;
