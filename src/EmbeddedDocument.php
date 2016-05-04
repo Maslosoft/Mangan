@@ -67,16 +67,6 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	public $_class = null;
 
 	/**
-	 * Model metadata
-	 * NOTE: Use ManganMeta or other meta class instead
-	 * @Ignored
-	 * @Persistent(false)
-	 * @deprecated since version 4.0.18
-	 * @var ManganMeta
-	 */
-	public $meta = null;
-
-	/**
 	 * Constructor.
 	 * @param string $scenario name of the scenario that this model is used in.
 	 * See {@link Model::scenario} on how scenario is used by models.
@@ -86,8 +76,6 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		$this->_class = get_class($this);
-
-		$this->meta = ManganMeta::create($this);
 
 		$this->setLang($lang);
 		$this->setScenario($scenario);
@@ -99,11 +87,12 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	 * This method is invoked in the constructor right after {@link scenario} is set.
 	 * You may override this method to provide code that is needed to initialize the model (e.g. setting
 	 * initial property values.)
+	 * @deprecated since version number
 	 * @since 1.0.8
 	 */
 	public function init()
 	{
-
+		
 	}
 
 }
