@@ -42,15 +42,16 @@ class DbRefArrayAnnotation extends DbRefAnnotation
 
 	public function init()
 	{
-		$refMeta = $this->_getMeta();
+		$refMeta = $this->getDbRefMeta();
 		$refMeta->key = $this->key;
 		$refMeta->single = false;
 		$refMeta->isArray = true;
-		$this->_entity->dbRef = $refMeta;
-		$this->_entity->propagateEvents = true;
-		$this->_entity->owned = true;
-		$this->_entity->decorators[] = DbRefArrayDecorator::class;
-		$this->_entity->decorators[] = EmbedRefArrayDecorator::class;
+		$this->getEntity()->dbRef = $refMeta;
+		$this->getEntity()->propagateEvents = true;
+		$this->getEntity()->owned = true;
+		$this->getEntity()->decorators[] = DbRefArrayDecorator::class;
+		$this->getEntity()->decorators[] = EmbedRefArrayDecorator::class;
+		// Do not call parent init
 	}
 
 }

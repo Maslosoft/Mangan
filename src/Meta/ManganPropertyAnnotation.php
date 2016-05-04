@@ -28,4 +28,13 @@ abstract class ManganPropertyAnnotation extends ManganAnnotation
 	 */
 	protected $_entity = null;
 
+	/**
+	 * 
+	 * @return DocumentPropertyMeta
+	 */
+	public function getEntity()
+	{
+		return parent::getEntity();
+	}
+
 }

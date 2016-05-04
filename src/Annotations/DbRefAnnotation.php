@@ -21,6 +21,22 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 
 /**
  * DB reference annotation
+ *
+ * Most simple usage:
+ * ```
+ * @DbRef(Vendor\Package\ClassLiteral)
+ * ```
+ *
+ * Disable updates, long notation:
+ * ```
+ * @DbRef(Vendor\Package\ClassLiteral, updatable = false)
+ * ```
+ *
+ * Disable updates, short notation:
+ * ```
+ * @DbRef(Vendor\Package\ClassLiteral, false)
+ * ```
+ *
  * @template DbRef(${class}, ${updatable})
  *
  * @Conflicts('Embedded')
@@ -41,23 +57,23 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$refMeta = $this->_getMeta();
+		$refMeta = $this->getDbRefMeta();
 		$refMeta->single = true;
 		$refMeta->isArray = false;
-		$this->_entity->dbRef = $refMeta;
-		$this->_entity->propagateEvents = true;
-		$this->_entity->owned = true;
-		$this->_entity->decorators[] = DbRefDecorator::class;
-		$this->_entity->decorators[] = EmbedRefDecorator::class;
+		$this->getEntity()->dbRef = $refMeta;
+		$this->getEntity()->propagateEvents = true;
+		$this->getEntity()->owned = true;
+		$this->getEntity()->decorators[] = DbRefDecorator::class;
+		$this->getEntity()->decorators[] = EmbedRefDecorator::class;
 	}
 
-	protected function _getMeta()
+	protected function getDbRefMeta()
 	{
 		$data = ParamsExpander::expand($this, ['class', 'updatable']);
 		$refMeta = new DbRefMeta($data);
 		if (!$refMeta->class)
 		{
-			$refMeta->class = $this->_meta->type()->name;
+			$refMeta->class = $this->getMeta()->type()->name;
 		}
 		$this->getEntity()->updatable = $refMeta->updatable;
 		return $refMeta;
