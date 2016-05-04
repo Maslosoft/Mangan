@@ -68,7 +68,6 @@ abstract class Document extends EmbeddedDocument implements ActiveRecordInterfac
 	{
 		$this->_key = (string) new MongoId();
 		$this->_class = get_class($this);
-		$this->meta = ManganMeta::create($this);
 		$this->setLang($lang);
 
 		$this->setScenario($scenario);
