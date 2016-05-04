@@ -90,7 +90,7 @@ class Validator implements ValidatableInterface
 			if ($fieldMeta->owned)
 			{
 				// Skip fields that are not updatable
-				if (!$fieldMeta->updatable === false)
+				if (!$fieldMeta->updatable)
 				{
 					continue;
 				}
