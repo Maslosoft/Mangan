@@ -89,18 +89,35 @@ class Validator implements ValidatableInterface
 			// Validate sub documents
 			if ($fieldMeta->owned)
 			{
+				// Skip fields that are not updatable
+				if (!$fieldMeta->updatable === false)
+				{
+					continue;
+				}
 				if (is_array($this->model->$name))
 				{
 					foreach ($this->model->$name as $model)
 					{
 						$validator = new Validator($model);
-						$valid[] = (int) $validator->validate();
+						$isValid = $validator->validate();
+						$valid[] = (int) $isValid;
+						if (!$isValid)
+						{
+							$errors = $validator->getErrors();
+							$this->setErrors($errors);
+						}
 					}
 				}
 				elseif (!empty($this->model->$name))
 				{
 					$validator = new Validator($this->model->$name);
-					$valid[] = (int) $validator->validate();
+					$isValid = $validator->validate();
+					$valid[] = (int) $isValid;
+					if (!$isValid)
+					{
+						$errors = $validator->getErrors();
+						$this->setErrors($errors);
+					}
 				}
 			}
 
@@ -111,10 +128,10 @@ class Validator implements ValidatableInterface
 			}
 			$valid[] = (int) $this->validateEntity($name, $fieldMeta->validators);
 		}
-		
+
 		// Model validators
 		$typeValidators = $this->meta->type()->validators;
-		if(!empty($typeValidators))
+		if (!empty($typeValidators))
 		{
 			$typeName = $this->meta->type()->name;
 			// Reset errors
