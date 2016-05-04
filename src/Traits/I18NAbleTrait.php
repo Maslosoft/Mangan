@@ -76,8 +76,11 @@ trait I18NAbleTrait
 	{
 		$meta = ManganMeta::create($this);
 		$fields = $meta->properties('i18n');
+
+		// Set current model value for current language for each property
 		foreach ($fields as $name => $i18n)
 		{
+			// This is to keep rawi18n value in sync with current model value.
 			$this->_rawI18N[$name][$this->getLang()] = $this->$name;
 		}
 		return $this->_rawI18N;
