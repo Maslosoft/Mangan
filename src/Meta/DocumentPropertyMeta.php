@@ -66,6 +66,15 @@ class DocumentPropertyMeta extends MetaProperty
 	public $owned = false;
 
 	/**
+	 * When ownered decide if should be updatable
+	 *
+	 * **NOTE**: This should not be set directly, but rather by annotations.
+	 *
+	 * @var bool
+	 */
+	public $updatable = true;
+
+	/**
 	 * I18N metadata
 	 * @var I18NMeta
 	 */

@@ -59,6 +59,7 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 		{
 			$refMeta->class = $this->_meta->type()->name;
 		}
+		$this->getEntity()->updatable = $refMeta->updatable;
 		return $refMeta;
 	}
 
