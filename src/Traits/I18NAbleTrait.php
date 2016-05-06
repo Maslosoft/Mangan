@@ -118,7 +118,7 @@ trait I18NAbleTrait
 		}
 		if (!in_array($code, $this->getLanguages()))
 		{
-			return false;
+			$this->_languages[] = $code;
 		}
 		$event = new ModelEvent($this);
 		$event->data = $code;
