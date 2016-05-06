@@ -64,6 +64,7 @@ class ConditionDecorator implements ConditionDecoratorInterface
 
 		$this->model->$field = $value;
 		$data = CriteriaArray::fromModel($this->model, [$field]);
+
 		return $this->_flatten($field, $this->model->$field, $data[$field]);
 	}
 
@@ -72,6 +73,18 @@ class ConditionDecorator implements ConditionDecoratorInterface
 		$value = $data;
 		while (is_array($value))
 		{
+			// Flat value traverse
+			foreach ($value as $key => $val)
+			{
+				if ($srcValue === $val)
+				{
+					$value = $value[$key];
+					$field = "$field.$key";
+					break 2;
+				}
+			}
+
+			// Nested value
 			$key = key($value);
 			$value = $value[$key];
 			$field = "$field.$key";
