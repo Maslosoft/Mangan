@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use CPagination;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\ManganException;
+use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
@@ -162,11 +163,16 @@ class DataProvider implements DataProviderInterface
 
 	/**
 	 * Returns the criteria.
-	 * @return array the query criteria
+	 * @return Criteria the query criteria
 	 * @since v1.0
 	 */
 	public function getCriteria()
 	{
+		// Initialise empty criteria, so it's always available via this method call.
+		if (empty($this->_criteria))
+		{
+			$this->_criteria = new Criteria;
+		}
 		return $this->_criteria;
 	}
 
@@ -184,6 +190,10 @@ class DataProvider implements DataProviderInterface
 		elseif ($criteria instanceof CriteriaInterface)
 		{
 			$this->_criteria = $criteria;
+		}
+		if ($this->_criteria instanceof DecoratableInterface)
+		{
+			$this->_criteria->decorateWith($this->getModel());
 		}
 	}
 
