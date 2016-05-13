@@ -4,15 +4,21 @@ php:
   - 5.5
   - nightly
   - hhvm
+matrix:
+  allow_failures:
+    - php: nightly
 before_install:
   - sudo apt-key adv --keyserver keys.gnupg.net --recv-keys 1C4CBDCDCD2EFD2A
   - echo "deb http://repo.percona.com/apt "$(lsb_release -sc)" main" | sudo tee /etc/apt/sources.list.d/percona.list
   - sudo apt-get update
-  - sudo apt-get install -y tokumx-enterprise
-  - sudo apt-get install -y libdmtx-utils
+  - sudo apt-get install -y percona-server-mongodb
+  - sudo service mongod stop
+  - sudo rm -rf /var/lib/mongodb/*
+  - sudo sed -i '/engine: \*PerconaFT/s/#//g' /etc/mongod.conf
+  - sudo service mongod start
 install:
   - composer install --prefer-dist --dev --no-interaction
-  - pushd vendor/maslosoft/mangantest && git reset --hard && git pull && popd
+  - composer update
 before_script:
 # Wait for mongodb
   - sleep 5
