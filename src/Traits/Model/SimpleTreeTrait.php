@@ -47,6 +47,7 @@ trait SimpleTreeTrait
 
 	/**
 	 * NOTE: This must be called by class using this trait
+	 * TODO Move event initializer to some other global event init, as events now handle traits too.
 	 * @Ignored
 	 */
 	public function initTree()
@@ -56,9 +57,8 @@ trait SimpleTreeTrait
 			// Trash related events
 			$onBeforeTrash = function(ModelEvent $event)
 			{
-				$event->handled = true;
+				$event->isValid = true;
 			};
-			$onBeforeTrash->bindTo($this);
 			Event::on($this, TrashInterface::EventBeforeTrash, $onBeforeTrash);
 
 
@@ -69,7 +69,7 @@ trait SimpleTreeTrait
 					$child->trash();
 				}
 			};
-			$onAfterTrash->bindTo($this);
+
 			Event::on($this, TrashInterface::EventAfterTrash, $onAfterTrash);
 
 
@@ -80,6 +80,7 @@ trait SimpleTreeTrait
 				{
 					// Put node to root if parent does not exists
 					/**
+					 * TODO Similar mechanism should be used to detect orphaned tree items.
 					 * TODO Use exists here instead of raw finder.
 					 * TODO investigate why rawfinder was used here.
 					 */
