@@ -54,8 +54,7 @@ trait TrashableTrait
 			if (Event::hasHandler($this, TrashInterface::EventBeforeTrash))
 			{
 				$event = new ModelEvent($this);
-				Event::trigger($this, TrashInterface::EventBeforeTrash, $event);
-				if (!$event->handled)
+				if (!Event::valid($this, TrashInterface::EventBeforeTrash, $event))
 				{
 					return false;
 				}
