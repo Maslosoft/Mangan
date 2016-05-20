@@ -190,24 +190,31 @@ class Event implements EventInterface
 			$event->sender = $model;
 		}
 		$className = self::_getName($model);
+
+		// Iterate over parent classes and trigger events
 		do
 		{
 			if (empty(self::$_events[$name][$className]))
 			{
 				continue;
 			}
+
 			foreach (self::$_events[$name][$className] as $handler)
 			{
 				$event->data = $handler[1];
 				call_user_func($handler[0], $event);
 				$wasTriggered = true;
-				if ($event->handled)
+
+				// Some event was not handled, return false
+				if (!$event->handled)
 				{
-					return true;
+					return false;
 				}
 			}
 		}
 		while (($className = get_parent_class($className)) !== false);
+
+		// Propagate events to sub objects
 		return self::_propagate($model, $name, $event) || $wasTriggered;
 	}
 
