@@ -15,6 +15,8 @@ namespace Maslosoft\Mangan\Model;
 
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
+use Maslosoft\Mangan\Sanitizers\DateSanitizer;
+use MongoDate;
 
 /**
  * TrashItem
@@ -24,6 +26,8 @@ use Maslosoft\Mangan\Interfaces\TrashInterface;
  */
 class TrashItem extends Document implements TrashInterface
 {
+
+	use \Maslosoft\Mangan\Traits\Model\TrashableTrait;
 
 	/**
 	 * Element name
@@ -38,6 +42,14 @@ class TrashItem extends Document implements TrashInterface
 	 * @var string
 	 */
 	public $type = '';
+
+	/**
+	 * When it was trashed.
+	 * @Sanitizer(DateSanitizer)
+	 * @see DateSanitizer
+	 * @var MongoDate
+	 */
+	public $createDate = '';
 
 	public function getCollectionName()
 	{
