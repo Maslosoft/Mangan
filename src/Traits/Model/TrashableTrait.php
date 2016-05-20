@@ -17,6 +17,8 @@ use Exception;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Events\RestoreEvent;
+use Maslosoft\Mangan\Events\TrashEvent;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
@@ -51,23 +53,29 @@ trait TrashableTrait
 		$validator = new Validator($this);
 		if (!$runValidation || $validator->validate())
 		{
+			$eventBefore = new TrashEvent($this);
 			if (Event::hasHandler($this, TrashInterface::EventBeforeTrash))
 			{
-				$event = new ModelEvent($this);
-				if (!Event::valid($this, TrashInterface::EventBeforeTrash, $event))
+				if (!Event::valid($this, TrashInterface::EventBeforeTrash, $eventBefore))
 				{
 					return false;
 				}
 			}
 			$meta = ManganMeta::create($this);
 
-			$trash = new Trash();
+			$trash = $eventBefore->getTrash();
+			if (empty($trash))
+			{
+				$trash = new Trash();
+			}
 			$trash->name = (string) $this;
 			$trash->data = $this;
 			$trash->type = isset($meta->type()->label) ? $meta->type()->label : get_class($this);
 			$trash->save();
 
-			Event::trigger($this, TrashInterface::EventAfterTrash);
+			$eventAfter = new TrashEvent($this);
+
+			Event::trigger($this, TrashInterface::EventAfterTrash, $eventAfter);
 
 			// Use deleteOne, to avoid beforeDelete event,
 			// which should be raised only when really removing document:
@@ -108,7 +116,9 @@ trait TrashableTrait
 		{
 			return false;
 		}
-		Event::trigger($model, TrashInterface::EventAfterRestore);
+		$eventAfter = new RestoreEvent();
+		$eventAfter->setTrashed($this);
+		Event::trigger($model, TrashInterface::EventAfterRestore, $eventAfter);
 
 		$trashEm = new EntityManager($this);
 
