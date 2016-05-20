@@ -101,7 +101,7 @@ class Event implements EventInterface
 	 * initialization in class constructors etc. ensure that it is evaluated once,
 	 * or it might trigger same event handler multiple times.
 	 *
-	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|object|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
 	 * @param mixed $data the data to be passed to the event handler when the event is triggered.
@@ -129,7 +129,7 @@ class Event implements EventInterface
 	 *
 	 * This method is the opposite of [[on()]].
 	 *
-	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|object|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler to be removed.
 	 * If it is null, all handlers attached to the named event will be removed.
@@ -309,7 +309,7 @@ class Event implements EventInterface
 
 	/**
 	 * Get class name
-	 * @param AnnotatedInterface|string $class
+	 * @param AnnotatedInterface|object|string $class
 	 * @return string
 	 */
 	private static function _getName($class)
