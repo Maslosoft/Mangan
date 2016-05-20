@@ -14,8 +14,10 @@
 namespace Maslosoft\Mangan\Events;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Interfaces\Events\EventInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use UnexpectedValueException;
 
 /**
  * This is based on Yii 2 Events
@@ -94,7 +96,7 @@ class Event implements EventInterface
 	 *
 	 * The handler will be invoked for every successful document insertion.
 	 *
-	 * @param AnnotatedInterface $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
 	 * @param mixed $data the data to be passed to the event handler when the event is triggered.
@@ -104,7 +106,7 @@ class Event implements EventInterface
 	 * handler list.
 	 * @see off()
 	 */
-	public static function on(AnnotatedInterface $model, $name, $handler, $data = null, $append = true)
+	public static function on($model, $name, $handler, $data = null, $append = true)
 	{
 		$class = self::_getName($model);
 		if ($append || empty(self::$_events[$name][$class]))
@@ -277,9 +279,20 @@ class Event implements EventInterface
 	 * @param AnnotatedInterface $class
 	 * @return string
 	 */
-	private static function _getName(AnnotatedInterface $class)
+	private static function _getName($class)
 	{
-		return ltrim(get_class($class), '\\');
+		if (is_object($class))
+		{
+			$class = get_class($class);
+		}
+		else
+		{
+			if (!ClassChecker::exists($class))
+			{
+				throw new UnexpectedValueException(sprintf("Class `%s` not found", $class));
+			}
+		}
+		return ltrim($class, '\\');
 	}
 
 	/**
