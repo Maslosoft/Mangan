@@ -97,6 +97,10 @@ class Event implements EventInterface
 	 *
 	 * The handler will be invoked for every successful document insertion.
 	 *
+	 * **NOTE:** Each call will attach new event handler. When placing event
+	 * initialization in class constructors etc. ensure that it is evaluated once,
+	 * or it might trigger same event handler multiple times.
+	 *
 	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler.
@@ -125,14 +129,14 @@ class Event implements EventInterface
 	 *
 	 * This method is the opposite of [[on()]].
 	 *
-	 * @param AnnotatedInterface $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param callable $handler the event handler to be removed.
 	 * If it is null, all handlers attached to the named event will be removed.
 	 * @return boolean whether a handler is found and detached.
 	 * @see on()
 	 */
-	public static function off(AnnotatedInterface $model, $name, $handler = null)
+	public static function off($model, $name, $handler = null)
 	{
 		$class = self::_getName($model);
 		if (empty(self::$_events[$name][$class]))
@@ -192,29 +196,29 @@ class Event implements EventInterface
 		}
 		$className = self::_getName($model);
 
-		// Iterate and trigger events over traits
+		// Partials holds parts of class, this include interfaces and traits
+		$partials = [];
+		// Iterate over traits
 		foreach ((new ReflectionClass($className))->getTraitNames() as $trait)
 		{
-			if (empty(self::$_events[$name][$trait]))
-			{
-				continue;
-			}
-			foreach (self::$_events[$name][$trait] as $handler)
-			{
-				$event->data = $handler[1];
-				call_user_func($handler[0], $event);
-				$wasTriggered = true;
-
-				// Event was handled, return true
-				if ($event->handled)
-				{
-					return true;
-				}
-			}
+			$partials[] = $trait;
 		}
 
-		// Iterate over parent classes and trigger events
+		// Iterate over interfaces to get partials
+		foreach ((new ReflectionClass($className))->getInterfaceNames() as $interface)
+		{
+			$partials[] = $interface;
+		}
+
+		// Iterate over parent classes
 		do
+		{
+			$partials[] = $className;
+		}
+		while (($className = get_parent_class($className)) !== false);
+
+		// Trigger all partial events if applicable
+		foreach ($partials as $className)
 		{
 			if (empty(self::$_events[$name][$className]))
 			{
@@ -234,8 +238,6 @@ class Event implements EventInterface
 				}
 			}
 		}
-		while (($className = get_parent_class($className)) !== false);
-
 
 		// Propagate events to sub objects
 		return self::_propagate($model, $name, $event) || $wasTriggered;
@@ -285,13 +287,14 @@ class Event implements EventInterface
 	/**
 	 * Check if model has event handler.
 	 * **IMPORTANT**: It does not check for propagated events
-	 * @param AnnotatedInterface $model the object specifying the class-level event
+	 * 
+	 * @param AnnotatedInterface|string $class the object specifying the class-level event
 	 * @param string $name the event name.
 	 * @return bool True if has handler
 	 */
-	public static function hasHandler(AnnotatedInterface $model, $name)
+	public static function hasHandler($class, $name)
 	{
-		$className = self::_getName($model);
+		$className = self::_getName($class);
 
 		do
 		{
@@ -306,7 +309,7 @@ class Event implements EventInterface
 
 	/**
 	 * Get class name
-	 * @param AnnotatedInterface $class
+	 * @param AnnotatedInterface|string $class
 	 * @return string
 	 */
 	private static function _getName($class)
@@ -327,39 +330,39 @@ class Event implements EventInterface
 
 	/**
 	 * Propagate event
-	 * @param AnnotatedInterface $class
+	 * @param AnnotatedInterface $model
 	 * @param string $name
 	 * @param ModelEvent|null $event
 	 */
-	private static function _propagate(AnnotatedInterface $class, $name, &$event = null)
+	private static function _propagate(AnnotatedInterface $model, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if ($event && !$event->propagate())
 		{
 			return false;
 		}
-		$meta = ManganMeta::create($class);
+		$meta = ManganMeta::create($model);
 		foreach ($meta->properties('propagateEvents') as $property => $propagate)
 		{
 			if (!$propagate)
 			{
 				continue;
 			}
-			if (!$class->$property)
+			if (!$model->$property)
 			{
 				continue;
 			}
 			// Trigger for arrays
-			if (is_array($class->$property))
+			if (is_array($model->$property))
 			{
-				foreach ($class->$property as $object)
+				foreach ($model->$property as $object)
 				{
 					$wasTriggered = self::trigger($object, $name, $event);
 				}
 				continue;
 			}
 			// Trigger for single value
-			$wasTriggered = self::trigger($class->$property, $name, $event);
+			$wasTriggered = self::trigger($model->$property, $name, $event);
 		}
 		return $wasTriggered;
 	}
