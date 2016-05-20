@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Interfaces\Events\EventInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use ReflectionClass;
 use UnexpectedValueException;
 
 /**
@@ -191,6 +192,27 @@ class Event implements EventInterface
 		}
 		$className = self::_getName($model);
 
+		// Iterate and trigger events over traits
+		foreach ((new ReflectionClass($className))->getTraitNames() as $trait)
+		{
+			if (empty(self::$_events[$name][$trait]))
+			{
+				continue;
+			}
+			foreach (self::$_events[$name][$trait] as $handler)
+			{
+				$event->data = $handler[1];
+				call_user_func($handler[0], $event);
+				$wasTriggered = true;
+
+				// Event was handled, return true
+				if ($event->handled)
+				{
+					return true;
+				}
+			}
+		}
+
 		// Iterate over parent classes and trigger events
 		do
 		{
@@ -205,14 +227,15 @@ class Event implements EventInterface
 				call_user_func($handler[0], $event);
 				$wasTriggered = true;
 
-				// Some event was not handled, return false
-				if (!$event->handled)
+				// Event was handled, return true
+				if ($event->handled)
 				{
-					return false;
+					return true;
 				}
 			}
 		}
 		while (($className = get_parent_class($className)) !== false);
+
 
 		// Propagate events to sub objects
 		return self::_propagate($model, $name, $event) || $wasTriggered;
