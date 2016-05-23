@@ -53,6 +53,7 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	/**
 	 * This holds key for document order
 	 * TODO Is this even nessesary?
+	 * @deprecated This is unused
 	 * @SafeValidator
 	 * @var string
 	 */
@@ -75,6 +76,7 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	 */
 	public function __construct($scenario = 'insert', $lang = '')
 	{
+		$this->_id = new MongoId;
 		$this->_class = get_class($this);
 
 		$this->setLang($lang);
