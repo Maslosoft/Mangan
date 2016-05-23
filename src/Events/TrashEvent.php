@@ -8,6 +8,8 @@
 
 namespace Maslosoft\Mangan\Events;
 
+use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Events\TrashEvent;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 
 /**
@@ -36,7 +38,7 @@ class TrashEvent extends ModelEvent
 	/**
 	 * Set trash model used to store trashed data.
 	 * @param TrashInterface $trash
-	 * @return \Maslosoft\Mangan\Events\TrashEvent
+	 * @return TrashEvent
 	 */
 	public function setTrash(TrashInterface $trash)
 	{
