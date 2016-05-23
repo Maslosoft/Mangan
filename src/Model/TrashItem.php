@@ -56,4 +56,22 @@ class TrashItem extends Document implements TrashInterface
 		return 'Mangan.Trash';
 	}
 
+	/**
+	 * Purge all items from trash. Returns number of removed items.
+	 * @return int
+	 */
+	public function purge()
+	{
+		$removed = 0;
+		// Remove with loop to fire before/afterDelete events
+		foreach ($this->findAll() as $trash)
+		{
+			if ($trash->delete())
+			{
+				$removed++;
+			}
+		}
+		return $removed;
+	}
+
 }
