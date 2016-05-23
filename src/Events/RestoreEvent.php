@@ -16,7 +16,7 @@ use Maslosoft\Mangan\Model\Trash;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class RestoreEvent extends ModelEvent
+class RestoreEvent extends TrashEvent
 {
 
 	/**
