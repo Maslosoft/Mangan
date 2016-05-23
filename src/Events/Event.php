@@ -78,7 +78,13 @@ class Event implements EventInterface
 	 * Array of events
 	 * @var EventInterface[]
 	 */
-	private static $_events = [];
+	private static $events = [];
+
+	/**
+	 * Array containing partial classes for class
+	 * @var string[]
+	 */
+	private static $partials = [];
 
 	/**
 	 * Attaches an event handler to a class-level event.
@@ -113,14 +119,14 @@ class Event implements EventInterface
 	 */
 	public static function on($model, $name, $handler, $data = null, $append = true)
 	{
-		$class = self::_getName($model);
-		if ($append || empty(self::$_events[$name][$class]))
+		$class = self::getName($model);
+		if ($append || empty(self::$events[$name][$class]))
 		{
-			self::$_events[$name][$class][] = [$handler, $data];
+			self::$events[$name][$class][] = [$handler, $data];
 		}
 		else
 		{
-			array_unshift(self::$_events[$name][$class], [$handler, $data]);
+			array_unshift(self::$events[$name][$class], [$handler, $data]);
 		}
 	}
 
@@ -138,30 +144,30 @@ class Event implements EventInterface
 	 */
 	public static function off($model, $name, $handler = null)
 	{
-		$class = self::_getName($model);
-		if (empty(self::$_events[$name][$class]))
+		$class = self::getName($model);
+		if (empty(self::$events[$name][$class]))
 		{
 			return false;
 		}
 		if ($handler === null)
 		{
-			unset(self::$_events[$name][$class]);
+			unset(self::$events[$name][$class]);
 			return true;
 		}
 		else
 		{
 			$removed = false;
-			foreach (self::$_events[$name][$class] as $i => $event)
+			foreach (self::$events[$name][$class] as $i => $event)
 			{
 				if ($event[0] === $handler)
 				{
-					unset(self::$_events[$name][$class][$i]);
+					unset(self::$events[$name][$class][$i]);
 					$removed = true;
 				}
 			}
 			if ($removed)
 			{
-				self::$_events[$name][$class] = array_values(self::$_events[$name][$class]);
+				self::$events[$name][$class] = array_values(self::$events[$name][$class]);
 			}
 			return $removed;
 		}
@@ -173,15 +179,15 @@ class Event implements EventInterface
 	 * for the specified class and all its parent classes.
 	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
-	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
+	 * @param ModelEvent $event the event parameter. If not set, a default `ModelEvent` object will be created.
 	 * @return bool True if event was triggered.
 	 */
 	public static function trigger(AnnotatedInterface $model, $name, &$event = null)
 	{
 		$wasTriggered = false;
-		if (empty(self::$_events[$name]))
+		if (empty(self::$events[$name]))
 		{
-			return self::_propagate($model, $name, $event);
+			return self::propagate($model, $name, $event);
 		}
 		if ($event === null)
 		{
@@ -194,38 +200,20 @@ class Event implements EventInterface
 		{
 			$event->sender = $model;
 		}
-		$className = self::_getName($model);
+		$className = self::getName($model);
 
 		// Partials holds parts of class, this include interfaces and traits
-		$partials = [];
-		// Iterate over traits
-		foreach ((new ReflectionClass($className))->getTraitNames() as $trait)
-		{
-			$partials[] = $trait;
-		}
-
-		// Iterate over interfaces to get partials
-		foreach ((new ReflectionClass($className))->getInterfaceNames() as $interface)
-		{
-			$partials[] = $interface;
-		}
-
-		// Iterate over parent classes
-		do
-		{
-			$partials[] = $className;
-		}
-		while (($className = get_parent_class($className)) !== false);
+		$partials = self::getPartials($className);
 
 		// Trigger all partial events if applicable
 		foreach ($partials as $className)
 		{
-			if (empty(self::$_events[$name][$className]))
+			if (empty(self::$events[$name][$className]))
 			{
 				continue;
 			}
 
-			foreach (self::$_events[$name][$className] as $handler)
+			foreach (self::$events[$name][$className] as $handler)
 			{
 				$event->data = $handler[1];
 				call_user_func($handler[0], $event);
@@ -240,7 +228,7 @@ class Event implements EventInterface
 		}
 
 		// Propagate events to sub objects
-		return self::_propagate($model, $name, $event) || $wasTriggered;
+		return self::propagate($model, $name, $event) || $wasTriggered;
 	}
 
 	/**
@@ -294,16 +282,15 @@ class Event implements EventInterface
 	 */
 	public static function hasHandler($class, $name)
 	{
-		$className = self::_getName($class);
-
-		do
+		// Partials holds parts of class, this include interfaces and traits
+		$partials = self::getPartials(self::getName($class));
+		foreach ($partials as $className)
 		{
-			if (!empty(self::$_events[$name][$className]))
+			if (!empty(self::$events[$name][$className]))
 			{
 				return true;
 			}
 		}
-		while (($className = get_parent_class($className)) !== false);
 		return false;
 	}
 
@@ -312,7 +299,7 @@ class Event implements EventInterface
 	 * @param AnnotatedInterface|object|string $class
 	 * @return string
 	 */
-	private static function _getName($class)
+	private static function getName($class)
 	{
 		if (is_object($class))
 		{
@@ -334,7 +321,7 @@ class Event implements EventInterface
 	 * @param string $name
 	 * @param ModelEvent|null $event
 	 */
-	private static function _propagate(AnnotatedInterface $model, $name, &$event = null)
+	private static function propagate(AnnotatedInterface $model, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if ($event && !$event->propagate())
@@ -368,6 +355,34 @@ class Event implements EventInterface
 			$wasTriggered = self::trigger($model->$property, $name, $event) || $wasTriggered;
 		}
 		return $wasTriggered;
+	}
+
+	public static function getPartials($className)
+	{
+		if (!empty(self::$partials[$className]))
+		{
+			return self::$partials[$className];
+		}
+		// Iterate over traits
+		foreach ((new ReflectionClass($className))->getTraitNames() as $trait)
+		{
+			$partials[] = $trait;
+		}
+
+		// Iterate over interfaces to get partials
+		foreach ((new ReflectionClass($className))->getInterfaceNames() as $interface)
+		{
+			$partials[] = $interface;
+		}
+
+		// Iterate over parent classes
+		do
+		{
+			$partials[] = $className;
+		}
+		while (($className = get_parent_class($className)) !== false);
+		self::$partials[$className] = $partials;
+		return $partials;
 	}
 
 }
