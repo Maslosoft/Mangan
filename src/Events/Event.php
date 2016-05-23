@@ -346,10 +346,13 @@ class Event implements EventInterface
 		{
 			if (!$propagate)
 			{
+				// Do not propagate, skip
 				continue;
 			}
-			if (!$model->$property)
+
+			if (empty($model->$property))
 			{
+				// Property is empty, skip
 				continue;
 			}
 			// Trigger for arrays
@@ -357,12 +360,12 @@ class Event implements EventInterface
 			{
 				foreach ($model->$property as $object)
 				{
-					$wasTriggered = self::trigger($object, $name, $event);
+					$wasTriggered = self::trigger($object, $name, $event) || $wasTriggered;
 				}
 				continue;
 			}
 			// Trigger for single value
-			$wasTriggered = self::trigger($model->$property, $name, $event);
+			$wasTriggered = self::trigger($model->$property, $name, $event) || $wasTriggered;
 		}
 		return $wasTriggered;
 	}
