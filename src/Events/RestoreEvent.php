@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan\Events;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Model\Trash;
 
 /**
@@ -18,6 +19,10 @@ use Maslosoft\Mangan\Model\Trash;
 class RestoreEvent extends ModelEvent
 {
 
+	/**
+	 * Trashed item instance
+	 * @var AnnotatedInterface
+	 */
 	private $trashed = null;
 
 	/**
@@ -31,10 +36,10 @@ class RestoreEvent extends ModelEvent
 
 	/**
 	 *
-	 * @param type $trashed
+	 * @param AnnotatedInterface $trashed
 	 * @return RestoreEvent
 	 */
-	public function setTrashed($trashed)
+	public function setTrashed(AnnotatedInterface $trashed)
 	{
 		$this->trashed = $trashed;
 		return $this;
