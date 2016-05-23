@@ -25,6 +25,7 @@ use UnexpectedValueException;
  *
  * This class provides event handlers to properly manage trash, however it is
  * optional, so ownered and trashable can be handled by some custom methods.
+ * These handles are not automatically registered.
  *
  * NOTE: Register **only once per type**, or it will not work properly.
  *
@@ -53,7 +54,7 @@ class ParentChildTrashHandlers
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
-				$criteria->parentId = $model->id;
+				$criteria->parentId = $model->_id;
 				$child->deleteAll($criteria);
 			}
 			$event->isValid = true;
@@ -68,7 +69,7 @@ class ParentChildTrashHandlers
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
-				$criteria->parentId = $model->id;
+				$criteria->parentId = $model->_id;
 
 				$items = $child->findAll($criteria);
 
@@ -103,7 +104,7 @@ class ParentChildTrashHandlers
 
 				// Conditions decorator do not work with dots so sanitize manually.
 				$s = new Sanitizer($child);
-				$id = $s->write('parentId', $model->id);
+				$id = $s->write('parentId', $model->_id);
 				$criteria->addCond('data.parentId', '==', $id);
 
 				// Restore only child items trashed when blog was trashed - skip earlier
