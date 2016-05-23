@@ -9,6 +9,15 @@
 namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Events\RestoreEvent;
+use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
+use Maslosoft\Mangan\Interfaces\TrashInterface;
+use UnexpectedValueException;
 
 /**
  * OwneredTrashHandlers
@@ -21,47 +30,47 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class OwneredTrashHandlers
+class ParentChildTrashHandlers
 {
-
-	private $parent = null;
-	private $child = null;
-
-	public function __construct(AnnotatedInterface $parentModel, AnnotatedInterface $childModel)
-	{
-		$this->parent = $parentModel;
-		$this->child = $childModel;
-	}
 
 	/**
 	 * Register event handlers for parent of parent-child relation.
+	 *
+	 * @param AnnotatedInterface $parent
+	 * @param string $childClass
 	 */
-	public function registerParent()
+	public function registerParent(AnnotatedInterface $parent, $childClass)
 	{
+		if (!ClassChecker::exists($childClass))
+		{
+			throw new UnexpectedValueException(sprintf('Class `%s` not found', $childClass));
+		}
 		// Delete all of this child items after removing from trash
-		$beforeDelete = function(ModelEvent $event)
+		$beforeDelete = function(ModelEvent $event) use($parent, $childClass)
 		{
 			$model = $event->sender;
-			if ($model instanceof $this->parent)
+			if ($model instanceof $parent)
 			{
-				$criteria = new Criteria(null, $this->child);
+				$child = new $childClass;
+				$criteria = new Criteria(null, $child);
 				$criteria->parentId = $model->id;
-				$this->child->deleteAll($criteria);
+				$child->deleteAll($criteria);
 			}
 			$event->isValid = true;
 		};
-		Event::on($this->parent, EntityManagerInterface::EventBeforeDelete, $beforeDelete);
+		Event::on($parent, EntityManagerInterface::EventBeforeDelete, $beforeDelete);
 
 		// Trash all child items from parent item
-		$afterTrash = function(ModelEvent $event)
+		$afterTrash = function(ModelEvent $event)use($parent, $childClass)
 		{
 			$model = $event->sender;
-			if ($model instanceof $this->parent)
+			if ($model instanceof $parent)
 			{
-				$criteria = new Criteria(null, $this->child);
+				$child = new $childClass;
+				$criteria = new Criteria(null, $child);
 				$criteria->parentId = $model->id;
 
-				$items = $this->child->findAll($criteria);
+				$items = $child->findAll($criteria);
 
 				// No items found, so skip
 				if (empty($items))
@@ -79,20 +88,21 @@ class OwneredTrashHandlers
 			$event->isValid = true;
 		};
 
-		Event::on($this->parent, TrashInterface::EventAfterTrash, $afterTrash);
+		Event::on($parent, TrashInterface::EventAfterTrash, $afterTrash);
 
 		// Restore all child items from parent, but only those after it was trashed.
 		// This will keep previously trashed items in trash
-		$afterRestore = function(RestoreEvent $event)
+		$afterRestore = function(RestoreEvent $event)use($parent, $childClass)
 		{
 			$model = $event->sender;
-			if ($model instanceof $this->parent)
+			if ($model instanceof $parent)
 			{
+				$child = new $childClass;
 				$trash = $event->getTrashed();
 				$criteria = new Criteria(null, $trash);
 
 				// Conditions decorator do not work with dots so sanitize manually.
-				$s = new Sanitizer($this->child);
+				$s = new Sanitizer($child);
 				$id = $s->write('parentId', $model->id);
 				$criteria->addCond('data.parentId', '==', $id);
 
@@ -115,24 +125,33 @@ class OwneredTrashHandlers
 			$event->isValid = true;
 		};
 
-		Event::on($this->parent, TrashInterface::EventAfterRestore, $afterRestore);
+		Event::on($parent, TrashInterface::EventAfterRestore, $afterRestore);
 	}
 
 	/**
 	 * Register event handlers for child item of parent-child relation.
+	 *
+	 * @param AnnotatedInterface $child
+	 * @param string $parentClass
+	 * @throws UnexpectedValueException
 	 */
-	public function registerChild()
+	public function registerChild(AnnotatedInterface $child, $parentClass)
 	{
+		if (!ClassChecker::exists($parentClass))
+		{
+			throw new UnexpectedValueException(sprintf('Class `%s` not found', $parentClass));
+		}
 		// Prevent restoring item if parent does not exists
-		$beforeRestore = function(ModelEvent $event)
+		$beforeRestore = function(ModelEvent $event)use($child, $parentClass)
 		{
 			$model = $event->sender;
 
-			if ($model instanceof $this->child)
+			if ($model instanceof $child)
 			{
-				$criteria = new Criteria(null, $this->parent);
+				$parent = new $parentClass;
+				$criteria = new Criteria(null, $parent);
 				$criteria->_id = $model->parentId;
-				if (!$this->parent->exists($criteria))
+				if (!$parent->exists($criteria))
 				{
 					$event->isValid = false;
 					return false;
@@ -140,7 +159,7 @@ class OwneredTrashHandlers
 			}
 			$event->isValid = true;
 		};
-		Event::on($this->child, TrashInterface::EventBeforeRestore, $beforeRestore);
+		Event::on($child, TrashInterface::EventBeforeRestore, $beforeRestore);
 	}
 
 }
