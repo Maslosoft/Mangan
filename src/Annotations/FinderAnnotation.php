@@ -13,7 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
+use UnexpectedValueException;
 
 /**
  * FinderAnnotation
@@ -29,6 +31,10 @@ class FinderAnnotation extends ManganTypeAnnotation
 
 	public function init()
 	{
+		if (!ClassChecker::exists($this->value))
+		{
+			throw new UnexpectedValueException(sprintf('Class `%s` not found on @Finder annotation, on model `%s`', $this->value, $this->name));
+		}
 		$this->_entity->finder = $this->value;
 	}
 

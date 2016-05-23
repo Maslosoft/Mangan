@@ -13,7 +13,9 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
+use UnexpectedValueException;
 
 /**
  * Set custom entity manager class
@@ -28,6 +30,10 @@ class EntityManagerAnnotation extends ManganTypeAnnotation
 
 	public function init()
 	{
+		if (!ClassChecker::exists($this->value))
+		{
+			throw new UnexpectedValueException(sprintf('Class `%s` not found on @EntityManager annotation, on model `%s`', $this->value, $this->name));
+		}
 		$this->_entity->entityManager = $this->value;
 	}
 
