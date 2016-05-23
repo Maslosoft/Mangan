@@ -103,7 +103,13 @@ trait TrashableTrait
 		}
 		$em = new EntityManager($this->data);
 
-		Event::trigger($this->data, TrashInterface::EventBeforeRestore);
+		// Set scenario to `restore` for model, which is just about to be restored
+		ScenarioManager::setScenario($this->data, TrashInterface::ScenarioRestore);
+
+		if (!Event::valid($this->data, TrashInterface::EventBeforeRestore))
+		{
+			return false;
+		}
 
 		$saved = $em->save();
 		if (!$saved)
@@ -122,13 +128,12 @@ trait TrashableTrait
 
 		$trashEm = new EntityManager($this);
 
+		$this->data = null;
+
 		// Use deleteOne, to avoid beforeDelete event,
 		// which should be raised only when really removing document:
 		// when emtying trash
-		$this->data = null;
-
-		$trashEm->deleteOne(PkManager::prepareFromModel($this));
-		return true;
+		return $trashEm->deleteOne(PkManager::prepareFromModel($this));
 	}
 
 }
