@@ -50,14 +50,14 @@ class ParentChildTrashHandlers
 		$beforeDelete = function(ModelEvent $event) use($parent, $childClass)
 		{
 			$model = $event->sender;
+			$event->isValid = true;
 			if ($model instanceof $parent)
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
 				$criteria->parentId = $model->_id;
-				$child->deleteAll($criteria);
+				$event->isValid = $child->deleteAll($criteria);
 			}
-			$event->isValid = true;
 		};
 		Event::on($parent, EntityManagerInterface::EventBeforeDelete, $beforeDelete);
 
@@ -65,6 +65,7 @@ class ParentChildTrashHandlers
 		$afterTrash = function(ModelEvent $event)use($parent, $childClass)
 		{
 			$model = $event->sender;
+			$event->isValid = true;
 			if ($model instanceof $parent)
 			{
 				$child = new $childClass;
@@ -83,10 +84,13 @@ class ParentChildTrashHandlers
 				// Trash in loop all items
 				foreach ($items as $item)
 				{
-					$item->trash();
+					if (!$item->trash())
+					{
+						$event->isValid = false;
+						return false;
+					}
 				}
 			}
-			$event->isValid = true;
 		};
 
 		Event::on($parent, TrashInterface::EventAfterTrash, $afterTrash);
@@ -99,7 +103,7 @@ class ParentChildTrashHandlers
 			if ($model instanceof $parent)
 			{
 				$child = new $childClass;
-				$trash = $event->getTrashed();
+				$trash = $event->getTrash();
 				$criteria = new Criteria(null, $trash);
 
 				// Conditions decorator do not work with dots so sanitize manually.

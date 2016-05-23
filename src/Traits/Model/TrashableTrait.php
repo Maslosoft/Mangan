@@ -77,8 +77,12 @@ trait TrashableTrait
 			}
 
 			$eventAfter = new TrashEvent($this);
+			$eventAfter->setTrash($trash);
 
-			Event::trigger($this, TrashInterface::EventAfterTrash, $eventAfter);
+			if (!Event::valid($this, TrashInterface::EventAfterTrash, $eventAfter))
+			{
+				return false;
+			}
 
 			// Use deleteOne, to avoid beforeDelete event,
 			// which should be raised only when really removing document:
@@ -125,8 +129,12 @@ trait TrashableTrait
 			return false;
 		}
 		$eventAfter = new RestoreEvent();
-		$eventAfter->setTrashed($this);
-		Event::trigger($model, TrashInterface::EventAfterRestore, $eventAfter);
+		$eventAfter->setTrashed($this->data);
+		$eventAfter->setTrash($this);
+		if (!Event::valid($model, TrashInterface::EventAfterRestore, $eventAfter))
+		{
+			return false;
+		}
 
 		$trashEm = new EntityManager($this);
 
