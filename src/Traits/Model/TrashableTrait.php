@@ -71,7 +71,10 @@ trait TrashableTrait
 			$trash->name = (string) $this;
 			$trash->data = $this;
 			$trash->type = isset($meta->type()->label) ? $meta->type()->label : get_class($this);
-			$trash->save();
+			if (!$trash->save())
+			{
+				return false;
+			}
 
 			$eventAfter = new TrashEvent($this);
 
@@ -82,8 +85,7 @@ trait TrashableTrait
 			// when emtying trash
 
 			$em = new EntityManager($this);
-			$em->deleteOne(PkManager::prepareFromModel($this));
-			return true;
+			return $em->deleteOne(PkManager::prepareFromModel($this));
 		}
 		return false;
 	}
@@ -99,7 +101,7 @@ trait TrashableTrait
 		if (!$this instanceof TrashInterface)
 		{
 			// When trying to restore normal document instead of trash item
-			throw new Exception('Restore can be performed only on `%s` instance', TrashInterface::class);
+			throw new Exception(sprintf('Restore can be performed only on `%s` instance', TrashInterface::class));
 		}
 		$em = new EntityManager($this->data);
 
