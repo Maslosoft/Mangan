@@ -52,7 +52,8 @@ class MongoObjectId implements SanitizerInterface
 			{
 				$value = $value->{'$id'};
 			}
-			if (!preg_match('~^[a-z0-9]{24}$~', $value))
+
+			if (!preg_match('~^[a-z0-9]{24}$~', (string) $value))
 			{
 				$value = null;
 			}
