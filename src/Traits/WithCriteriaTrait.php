@@ -18,7 +18,8 @@ use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 
 /**
- * WithCriteriaTrait
+ * **Experimental, do not use**
+ * 
  * @see WithCriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

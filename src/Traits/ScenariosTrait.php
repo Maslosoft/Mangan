@@ -16,7 +16,14 @@ namespace Maslosoft\Mangan\Traits;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 
 /**
- * ScenariosTrait
+ * This trait provides implementation of scenarios feature. It works with
+ * `ScenarioManager`, but only if class using it
+ * also implements `ScenariosInterface`.
+ *
+ * Use this to enchance models with scenarios, this allows triggering different
+ * validators depending on scenario, or to be used with any custom feature.
+ *
+ *
  * @see ScenariosInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

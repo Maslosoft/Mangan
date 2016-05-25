@@ -17,7 +17,15 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\OwneredInterface;
 
 /**
- * OwneredTrait
+ * This trait provides basic implemention on ownering of documents. This allows
+ * sub-document to get it's parent or root document.
+ *
+ * When using this trait, it is recommended that all classes in composition to
+ * implement `OwneredInterface` or use this trait.
+ *
+ * **NOTE:** Currently it's implementation does **not work instantly**. Owner is
+ * set when transforming objects, which include save/load.
+ *
  * @see OwneredInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

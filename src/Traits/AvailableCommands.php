@@ -14,14 +14,18 @@
 namespace Maslosoft\Mangan\Traits;
 
 /**
- * AvailableCommands
+ * This trait is generated via AvailableCommandsGenerator, and it contains
+ * php wrapper for every MongoDB command.
+ *
+ * Use this for classes implementing MongoDB commands calls.
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait AvailableCommands
 {
+
 	abstract public function call($command, $arguments = []);
-	
+
 	/**
 	 * returns the hash of the first BSONElement val in a BSONObj
 	 */

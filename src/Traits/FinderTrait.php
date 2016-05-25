@@ -20,7 +20,12 @@ use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 
 /**
- * FinderTrait
+ * Finder trait contains implementation of `FinderInterface`, and it forwards
+ * them to concrete Finder class. Finder used by this trait
+ * can be defined via Finder annotation.
+ *
+ * This trait could be used as a part of active document class.
+ *
  * @see FinderInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
