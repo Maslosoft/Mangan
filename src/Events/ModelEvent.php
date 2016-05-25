@@ -60,6 +60,12 @@ class ModelEvent
 	public $data = [];
 
 	/**
+	 * Name of class to which event was attached
+	 * @var string
+	 */
+	public $source = '';
+
+	/**
 	 * Whenever to propagate event
 	 * @var bool
 	 */
