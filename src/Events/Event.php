@@ -219,6 +219,9 @@ class Event implements EventInterface
 				call_user_func($handler[0], $event);
 				$wasTriggered = true;
 
+				// Assign source for easier debugging
+				$event->source = $className;
+
 				// Event was handled, return true
 				if ($event->handled)
 				{
