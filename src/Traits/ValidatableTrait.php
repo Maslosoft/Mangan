@@ -17,7 +17,11 @@ use Maslosoft\Mangan\Interfaces\ValidatableInterface;
 use Maslosoft\Mangan\Validator;
 
 /**
- * ValidatableTrait
+ * Validatable trait adds methods for validating model. These are not nessesary
+ * to validate, but might be more convenient to validate model by it's own method.
+ *
+ * Class using this trait should implement `ValidatableInterface`.
+ *
  * @see ValidatableInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

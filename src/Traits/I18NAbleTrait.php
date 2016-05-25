@@ -19,7 +19,11 @@ use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
- * I18NableTrait
+ * I18N-able trait contains basic implementation of I18N feature. This covers
+ * methods from `InternationalInterface`.
+ *
+ * Use this trait to provide internationalized columns for models.
+ *
  * @see InternationalInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

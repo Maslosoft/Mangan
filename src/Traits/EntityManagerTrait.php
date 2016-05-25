@@ -22,7 +22,13 @@ use Maslosoft\Mangan\Modifier;
 use MongoCollection;
 
 /**
- * EntityManagerTrait
+ * This trait contains same methods as `EntityManagerInterface`, and it forwards
+ * them to concrete Entity Manager class. Entity manager used by this trait
+ * can be defined via EntityManager annotation.
+ *
+ * This is usefull to create Active Document
+ * pattern classes.
+ *
  * @see EntityManagerInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

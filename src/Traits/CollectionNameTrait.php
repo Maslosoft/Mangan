@@ -17,7 +17,16 @@ use Maslosoft\Mangan\Interfaces\CollectionNameInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
- * CollectionNameTrait
+ * This trait contains default `getCollectionName` implementation. It will first
+ * try to get collection name from annotations, then it will fall back to
+ * current class name with slashes renamed to dots.
+ *
+ * Example auto generated collection name for class `\ManganExamples\Model\User`:
+ * 
+ * ```
+ * ManganExamples.Model.User
+ * ```
+ *
  * @see CollectionNameInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
