@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces\Criteria;
 
+use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 
@@ -31,7 +32,7 @@ interface SortableInterface
 	 * @return Criteria
 	 * @since v1.0
 	 */
-	public function sort($fieldName, $order);
+	public function sort($fieldName, $order = SortInterface::SortAsc);
 
 	/**
 	 * @since v1.0

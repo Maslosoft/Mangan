@@ -37,7 +37,7 @@ trait SortableTrait
 	 * @return CriteriaInterface
 	 * @since v1.0
 	 */
-	public function sort($fieldName, $order)
+	public function sort($fieldName, $order = SortInterface::SortAsc)
 	{
 		if ($this instanceof DecoratableInterface)
 		{
