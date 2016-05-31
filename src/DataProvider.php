@@ -106,10 +106,30 @@ class DataProvider implements DataProviderInterface
 		{
 			$this->criteria = new Criteria();
 		}
+
+		// Merge criteria from configuration
 		if (isset($config['criteria']))
 		{
 			$this->criteria->mergeWith($config['criteria']);
 			unset($config['criteria']);
+		}
+
+		// Merge limit from configuration
+		if (isset($config['limit']) && $config['limit'] > 0)
+		{
+			$this->criteria->setLimit($config['limit']);
+			unset($config['limit']);
+		}
+
+		// Merge sorting from configuration
+		if (isset($config['sort']))
+		{
+			// Apply default sorting if criteria does not have sort configured
+			if (isset($config['sort']['defaultOrder']) && empty($this->criteria->getSort()))
+			{
+				$this->criteria->setSort($config['sort']['defaultOrder']);
+			}
+			unset($config['sort']);
 		}
 
 		if (!$this->criteria->getSelect())
