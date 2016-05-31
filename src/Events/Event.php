@@ -87,6 +87,12 @@ class Event implements EventInterface
 	private static $partials = [];
 
 	/**
+	 * Propagated properties cache
+	 * @var bool[]
+	 */
+	private static $propagated = [];
+
+	/**
 	 * Attaches an event handler to a class-level event.
 	 *
 	 * When a class-level event is triggered, event handlers attached
@@ -331,15 +337,9 @@ class Event implements EventInterface
 		{
 			return false;
 		}
-		$meta = ManganMeta::create($model);
-		foreach ($meta->properties('propagateEvents') as $property => $propagate)
-		{
-			if (!$propagate)
-			{
-				// Do not propagate, skip
-				continue;
-			}
 
+		foreach (self::getPropagatedProperties($model) as $property => $propagate)
+		{
 			if (empty($model->$property))
 			{
 				// Property is empty, skip
@@ -358,6 +358,31 @@ class Event implements EventInterface
 			$wasTriggered = self::trigger($model->$property, $name, $event) || $wasTriggered;
 		}
 		return $wasTriggered;
+	}
+
+	/**
+	 * Get properties which should be propagated.
+	 * NOTE: This is cached, as it might be called numerous times
+	 * @param object $model
+	 * @return bool[]
+	 */
+	private static function getPropagatedProperties($model)
+	{
+		$key = get_class($model);
+		if (empty(self::$propagated[$key]))
+		{
+			$propageted = [];
+			foreach (ManganMeta::create($model)->properties('propagateEvents') as $name => $isPropagated)
+			{
+				if (!$isPropagated)
+				{
+					continue;
+				}
+				$propageted[$name] = true;
+			}
+			self::$propagated[$key] = $propageted;
+		}
+		return self::$propagated[$key];
 	}
 
 	public static function getPartials($className)
