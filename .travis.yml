@@ -9,8 +9,8 @@ matrix:
   allow_failures:
     - php: nightly
 before_install:
-  - wget https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
-  - sudo dpkg -i percona-release_0.1-3.$(lsb_release -sc)_all.deb
+  - sudo apt-key adv --keyserver keys.gnupg.net --recv-keys 1C4CBDCDCD2EFD2A
+  - echo "deb http://repo.percona.com/apt "$(lsb_release -sc)" main" | sudo tee /etc/apt/sources.list.d/percona.list
   - sudo apt-get update
   - sudo apt-get install -y percona-server-mongodb
   - sudo service mongod stop
