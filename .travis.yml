@@ -19,7 +19,9 @@ before_install:
   - sudo service mongod start
 install:
   - composer install --prefer-dist --dev --no-interaction
-  - composer update
+# Get fresh tests
+  - rm -rf vendor/maslosoft/mangantest
+  - git clone https://github.com/Maslosoft/ManganTest.git vendor/maslosoft/mangantest
 before_script:
 # Wait for mongodb
   - sleep 5
