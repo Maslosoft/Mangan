@@ -75,19 +75,55 @@ class Event implements EventInterface
 	public $data;
 
 	/**
-	 * Array of events
+	 * Array of events. This contains all event registered for application.
 	 * @var EventInterface[]
 	 */
 	private static $events = [];
 
 	/**
-	 * Array containing partial classes for class
+	 * Array containing partial classes for class. This holds traits, interfaces,
+	 * parent classes names for class.
+	 * 
+	 * Structure is like below:
+	 * ```
+	 * $partials = [
+	 * 		'\Vendor\Package\ClassOne' => [
+	 * 			'\Vendor\Package\TraitOne',
+	 * 			'\Vendor\Package\TraitTwo',
+	 * 			'\Vendor\Package\InterfaceX',
+	 * 			'\Vendor\Package\AbstractSix'
+	 * 		],
+	 * 		'\Vendor\Package\ClassTwo' => [
+	 * 			'\Vendor\Package\TraitBig',
+	 * 			'\Vendor\Package\TraitSmall',
+	 * 			'\Vendor\Package\InterfaceY',
+	 * 			'\Vendor\Package\AbstractGuy'
+	 * 		],
+	 * ];
+	 * ```
+	 * 
 	 * @var string[]
 	 */
 	private static $partials = [];
 
 	/**
-	 * Propagated properties cache
+	 * Propagated properties cache. It contains only properties which should
+	 * propagate, others are skipped, thus value is always true.
+	 * 
+	 * Structure is like follow:
+	 * ```
+	 * $propagated = [
+	 * 		'\Vendor\Package\ClassOne' => [
+	 * 			'fieldOne' => true,
+	 * 			'fieldTwo' => true
+	 * 		],
+	 * 		'\Vendor\Package\ClassTwo' => [
+	 * 			'otherFieldOne' => true,
+	 * 			'otherFieldTwo' => true
+	 * 		],
+	 * 
+	 * ];
+	 * ```
 	 * @var bool[]
 	 */
 	private static $propagated = [];
