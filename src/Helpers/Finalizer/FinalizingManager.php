@@ -29,11 +29,16 @@ class FinalizingManager
 
 	public static function fromModel($data, $transformerClass, AnnotatedInterface $model)
 	{
-		$plugins = PluginFactory::fly()->instance(Mangan::fromModel($model)->finalizers, $transformerClass, ModelFinalizerInterface::class);
-		foreach ($plugins as $finalizer)
+		$finalizers = Mangan::fromModel($model)->finalizers;
+
+		if (!empty($finalizers))
 		{
-			/* @var $finalizer ModelFinalizerInterface */
-			$finalizer->fromModel($data);
+			$plugins = PluginFactory::fly()->instance($finalizers, $transformerClass, ModelFinalizerInterface::class);
+			foreach ($plugins as $finalizer)
+			{
+				/* @var $finalizer ModelFinalizerInterface */
+				$finalizer->fromModel($data);
+			}
 		}
 		return $data;
 	}
