@@ -299,6 +299,12 @@ class Mangan implements LoggerAwareInterface
 	 */
 	private static $_mn = [];
 
+	/**
+	 * Hash map of class name to id. This is to reduce overhead of Mangan::fromModel()
+	 * @var string[]
+	 */
+	private static $classToId = [];
+
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
 		$this->_di = EmbeDi::fly($connectionId);
@@ -428,7 +434,16 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public static function fromModel(AnnotatedInterface $model)
 	{
-		$connectionId = ManganMeta::create($model)->type()->connectionId;
+		$key = get_class($model);
+		if (isset(self::$classToId[$key]))
+		{
+			$connectionId = self::$classToId[$key];
+		}
+		else
+		{
+			$connectionId = ManganMeta::create($model)->type()->connectionId;
+			self::$classToId[$key] = $connectionId;
+		}
 		return self::fly($connectionId);
 	}
 
