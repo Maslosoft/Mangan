@@ -14,7 +14,23 @@
 namespace Maslosoft\Mangan\Interfaces;
 
 /**
- * Use this interface to associate Criteria with model
+ * Use this interface to associate Criteria with model. This could be used
+ * together with DataProvider, or finders with custom methods setting criteria.
+ * 
+ * Example usage. Define `published` method:
+ * ```
+ * public function published()
+ * {
+ * 		$this->getDbCriteria()->published = true;
+ * 		return $this;
+ * }
+ * ```
+ * 
+ * Then this could be used with dataprovider:
+ * ```
+ * new DataProvider((new Page)->published());
+ * ```
+ * 
  * @see CriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
