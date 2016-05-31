@@ -13,13 +13,14 @@
 
 namespace Maslosoft\Mangan;
 
-use CPagination;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
+use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
+use Maslosoft\Mangan\Interfaces\PaginationInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -44,28 +45,8 @@ class DataProvider implements DataProviderInterface
 {
 
 	/**
-	 * @deprecated since version number
-	 * @var string
-	 */
-	public static $CLS = __CLASS__;
-
-	/**
-	 * @var string the name of key field. Defaults to '_id', as a mongo default document primary key.
-	 * @since v1.0
-	 */
-	public $keyField;
-
-	/**
-	 * @var string the primary ActiveRecord class name. The {@link getData()} method
-	 * will return a list of objects of this class.
-	 * @since v1.0
-	 */
-	public $modelClass;
-
-	/**
-	 * @var Document the AR finder instance (e.g. <code>Post::model()</code>).
-	 * This property can be set by passing the finder instance as the first parameter
-	 * to the constructor.
+	 * Instance of model
+	 * @var Document
 	 * @since v1.0
 	 */
 	public $model;
@@ -74,19 +55,25 @@ class DataProvider implements DataProviderInterface
 	 * Finder instance
 	 * @var FinderInterface
 	 */
-	private $_finder = null;
+	private $finder = null;
 
 	/**
 	 * @var CriteriaInterface
 	 */
-	private $_criteria;
+	private $criteria;
 
 	/**
 	 * @var SortInterface
 	 */
-	private $_sort;
-	private $_data = null;
-	private $_totalItemCount = null;
+	private $sort;
+	private $data = null;
+	private $totalItemCount = null;
+
+	/**
+	 * Pagination instance
+	 * @var PaginationInterface
+	 */
+	private $pagination = null;
 
 	/**
 	 * Constructor.
@@ -99,12 +86,10 @@ class DataProvider implements DataProviderInterface
 	{
 		if (is_string($modelClass))
 		{
-			$this->modelClass = $modelClass;
 			$this->model = new $modelClass;
 		}
 		elseif (is_object($modelClass))
 		{
-			$this->modelClass = get_class($modelClass);
 			$this->model = $modelClass;
 		}
 		else
@@ -112,43 +97,31 @@ class DataProvider implements DataProviderInterface
 			throw new ManganException('Invalid model type for ' . __CLASS__);
 		}
 
-		$this->_finder = Finder::create($this->model);
+		$this->finder = Finder::create($this->model);
 		if ($this->model instanceof WithCriteriaInterface)
 		{
-			$this->_criteria = $this->model->getDbCriteria();
+			$this->criteria = $this->model->getDbCriteria();
 		}
 		else
 		{
-			$this->_criteria = new Criteria();
+			$this->criteria = new Criteria();
 		}
 		if (isset($config['criteria']))
 		{
-			$this->_criteria->mergeWith($config['criteria']);
+			$this->criteria->mergeWith($config['criteria']);
 			unset($config['criteria']);
 		}
 
-		if (!$this->_criteria->getSelect())
+		if (!$this->criteria->getSelect())
 		{
 			$fields = array_keys(ManganMeta::create($this->model)->fields());
 			$fields = array_fill_keys($fields, true);
-			$this->_criteria->setSelect($fields);
+			$this->criteria->setSelect($fields);
 		}
 
 		foreach ($config as $key => $value)
 		{
 			$this->$key = $value;
-		}
-
-		if ($this->keyField !== null)
-		{
-			if (is_array($this->keyField))
-			{
-				throw new ManganException('This DataProvider cannot handle multi-field primary key.');
-			}
-		}
-		else
-		{
-			$this->keyField = '_id';
 		}
 	}
 
@@ -169,11 +142,11 @@ class DataProvider implements DataProviderInterface
 	public function getCriteria()
 	{
 		// Initialise empty criteria, so it's always available via this method call.
-		if (empty($this->_criteria))
+		if (empty($this->criteria))
 		{
-			$this->_criteria = new Criteria;
+			$this->criteria = new Criteria;
 		}
-		return $this->_criteria;
+		return $this->criteria;
 	}
 
 	/**
@@ -185,15 +158,15 @@ class DataProvider implements DataProviderInterface
 	{
 		if (is_array($criteria))
 		{
-			$this->_criteria = new Criteria($criteria);
+			$this->criteria = new Criteria($criteria);
 		}
 		elseif ($criteria instanceof CriteriaInterface)
 		{
-			$this->_criteria = $criteria;
+			$this->criteria = $criteria;
 		}
-		if ($this->_criteria instanceof DecoratableInterface)
+		if ($this->criteria instanceof DecoratableInterface)
 		{
-			$this->_criteria->decorateWith($this->getModel());
+			$this->criteria->decorateWith($this->getModel());
 		}
 	}
 
@@ -203,12 +176,12 @@ class DataProvider implements DataProviderInterface
 	 */
 	public function getSort()
 	{
-		if ($this->_sort === null)
+		if ($this->sort === null)
 		{
-			$this->_sort = new Sort;
-			$this->_sort->setModel($this->model);
+			$this->sort = new Sort;
+			$this->sort->setModel($this->model);
 		}
-		return $this->_sort;
+		return $this->sort;
 	}
 
 	/**
@@ -218,26 +191,27 @@ class DataProvider implements DataProviderInterface
 	 */
 	public function setSort(SortInterface $sort)
 	{
-		$this->_sort = $sort;
-		$this->_sort->setModel($this->model);
+		$this->sort = $sort;
+		$this->sort->setModel($this->model);
 		return $this;
 	}
 
 	/**
 	 * Returns the pagination object.
-	 * @param string $className the pagination object class name. Parameter is available since version 1.1.13.
-	 * @return CPagination|false the pagination object. If this is false, it means the pagination is disabled.
+	 * @param string $className the pagination object class name, use this param to override default pagination class.
+	 * @return Pagination|false the pagination object. If this is false, it means the pagination is disabled.
 	 */
-	public function getPagination($className = 'CPagination')
+	public function getPagination($className = Pagination::class)
 	{
-		return false;
-//		if($this->_pagination===null)
-//		{
-//			$this->_pagination=new $className;
-//			if(($id=$this->getId())!='')
-//				$this->_pagination->pageVar=$id.'_page';
-//		}
-//		return $this->_pagination;
+		if ($this->pagination === false)
+		{
+			return false;
+		}
+		if ($this->pagination === null)
+		{
+			$this->pagination = new $className;
+		}
+		return $this->pagination;
 	}
 
 	/**
@@ -259,11 +233,11 @@ class DataProvider implements DataProviderInterface
 	 */
 	public function getTotalItemCount()
 	{
-		if ($this->_totalItemCount === null)
+		if ($this->totalItemCount === null)
 		{
-			$this->_totalItemCount = $this->_finder->count($this->_criteria);
+			$this->totalItemCount = $this->finder->count($this->criteria);
 		}
-		return $this->_totalItemCount;
+		return $this->totalItemCount;
 	}
 
 	/**
@@ -273,21 +247,20 @@ class DataProvider implements DataProviderInterface
 	 */
 	protected function fetchData()
 	{
-		if (($pagination = $this->getPagination()) !== false)
+		$pagination = $this->getPagination();
+		if ($pagination !== false && $this->criteria instanceof LimitableInterface)
 		{
-			$pagination->setItemCount($this->getTotalItemCount());
-
-			$this->_criteria->setLimit($pagination->getLimit());
-			$this->_criteria->setOffset($pagination->getOffset());
+			$pagination->setCount($this->getTotalItemCount());
+			$pagination->apply($this->criteria);
 		}
 
 		$sort = $this->getSort();
 		if ($sort->isSorted())
 		{
-			$this->_criteria->setSort($sort);
+			$this->criteria->setSort($sort);
 		}
 
-		return $this->_finder->findAll($this->_criteria);
+		return $this->finder->findAll($this->criteria);
 	}
 
 	/**
@@ -297,15 +270,15 @@ class DataProvider implements DataProviderInterface
 	 */
 	public function getData($refresh = false)
 	{
-		if ($this->_data === null || $refresh)
+		if ($this->data === null || $refresh)
 		{
-			$this->_data = $this->fetchData();
+			$this->data = $this->fetchData();
 		}
-		if ($this->_data === null)
+		if ($this->data === null)
 		{
 			return [];
 		}
-		return $this->_data;
+		return $this->data;
 	}
 
 }
