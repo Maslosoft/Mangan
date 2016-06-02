@@ -18,15 +18,15 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
 
 /**
- * CNumberValidator validates that the attribute value is a number.
+ * NumberValidator validates that the attribute value is a number.
  *
  * In addition to the {@link message} property for setting a custom error message,
- * CNumberValidator has a couple custom error messages you can set that correspond to different
+ * NumberValidator has a couple custom error messages you can set that correspond to different
  * validation scenarios. To specify a custom message when the numeric value is too big,
  * you may use the {@link tooBig} property. Similarly with {@link tooSmall}.
  * The messages may contain additional placeholders that will be replaced
  * with the actual content. In addition to the "{attribute}" placeholder, recognized by all
- * validators (see {@link CValidator}), CNumberValidator allows for the following placeholders
+ * validators (see {@link Validator}), NumberValidator allows for the following placeholders
  * to be specified:
  * <ul>
  * <li>{min}: when using {@link tooSmall}, replaced with the lower limit of the number {@link min}.</li>

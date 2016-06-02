@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
 
 /**
- * CCompareValidator compares the specified attribute value with another value and validates if they are equal.
+ * CompareValidator compares the specified attribute value with another value and validates if they are equal.
  *
  * The value being compared with can be another attribute value
  * (specified via {@link compareAttribute}) or a constant (specified via
@@ -29,13 +29,13 @@ use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
  *
  * The comparison can be either {@link strict} or not.
  *
- * CCompareValidator supports different comparison operators.
+ * CompareValidator supports different comparison operators.
  * Previously, it only compares to see if two values are equal or not.
  *
  * When using the {@link message} property to define a custom error message, the message
  * may contain additional placeholders that will be replaced with the actual content. In addition
- * to the "{attribute}" placeholder, recognized by all validators (see {@link CValidator}),
- * CCompareValidator allows for the following placeholders to be specified:
+ * to the "{attribute}" placeholder, recognized by all validators (see {@link Validator}),
+ * CompareValidator allows for the following placeholders to be specified:
  * <ul>
  * <li>{compareValue}: replaced with the constant value being compared with {@link compareValue}.</li>
  * </ul>

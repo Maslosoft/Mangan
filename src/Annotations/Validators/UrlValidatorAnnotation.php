@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
 
 /**
- * CUrlValidator validates that the attribute value is a valid http or https URL.
+ * UrlValidator validates that the attribute value is a valid http or https URL.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$

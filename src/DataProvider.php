@@ -31,7 +31,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  * Implements a data provider based on Document.
  *
  * DataProvider provides data in terms of Document objects which are
- * of class {@link modelClass}. It uses the AR {@link CActiveRecord::findAll} method
+ * of class {@link modelClass}. It uses the AR {@link EntityManager::findAll} method
  * to retrieve the data from database. The {@link query} property can be used to
  * specify various query options, such as conditions, sorting, pagination, etc.
  *

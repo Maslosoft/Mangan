@@ -18,16 +18,16 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\StringProxy;
 
 /**
- * CStringValidator validates that the attribute value is of certain length.
+ * StringValidator validates that the attribute value is of certain length.
  *
  * Note, this validator should only be used with string-typed attributes.
  *
  * In addition to the {@link message} property for setting a custom error message,
- * CStringValidator has a couple custom error messages you can set that correspond to different
+ * StringValidator has a couple custom error messages you can set that correspond to different
  * validation scenarios. For defining a custom message when the string is too short,
  * you may use the {@link tooShort} property. Similarly with {@link tooLong}. The messages may contain
  * placeholders that will be replaced with the actual content. In addition to the "{attribute}"
- * placeholder, recognized by all validators (see {@link CValidator}), CStringValidator allows for the following
+ * placeholder, recognized by all validators (see {@link Validator}), StringValidator allows for the following
  * placeholders to be specified:
  * <ul>
  * <li>{min}: when using {@link tooShort}, replaced with minimum length, {@link min}, if set.</li>
