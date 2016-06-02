@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
 
 /**
- * CRegularExpressionValidator validates that the attribute value matches to the specified {@link pattern regular expression}.
+ * RegularExpressionValidator validates that the attribute value matches to the specified {@link pattern regular expression}.
  * You may invert the validation logic with help of the {@link not} property (available since 1.1.5).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>

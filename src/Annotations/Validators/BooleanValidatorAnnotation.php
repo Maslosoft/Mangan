@@ -19,12 +19,12 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
 
 /**
- * CBooleanValidator validates that the attribute value is either {@link trueValue}  or {@link falseValue}.
+ * BooleanValidator validates that the attribute value is either {@link trueValue}  or {@link falseValue}.
  *
  * When using the {@link message} property to define a custom error message, the message
  * may contain additional placeholders that will be replaced with the actual content. In addition
- * to the "{attribute}" placeholder, recognized by all validators (see {@link CValidator}),
- * CBooleanValidator allows for the following placeholders to be specified:
+ * to the "{attribute}" placeholder, recognized by all validators (see {@link Validator}),
+ * BooleanValidator allows for the following placeholders to be specified:
  * <ul>
  * <li>{true}: replaced with value representing the true status {@link trueValue}.</li>
  * <li>{false}: replaced with value representing the false status {@link falseValue}.</li>

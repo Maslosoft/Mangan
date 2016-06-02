@@ -18,12 +18,12 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
 
 /**
- * CRequiredValidator validates that the specified attribute does not have null or empty value.
+ * RequiredValidator validates that the specified attribute does not have null or empty value.
  *
  * When using the {@link message} property to define a custom error message, the message
  * may contain additional placeholders that will be replaced with the actual content. In addition
- * to the "{attribute}" placeholder, recognized by all validators (see {@link CValidator}),
- * CRequiredValidator allows for the following placeholders to be specified:
+ * to the "{attribute}" placeholder, recognized by all validators (see {@link Validator}),
+ * RequiredValidator allows for the following placeholders to be specified:
  * <ul>
  * <li>{value}: replaced with the desired value {@link requiredValue}.</li>
  * </ul>

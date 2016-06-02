@@ -21,7 +21,7 @@ use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
- * CUniqueValidator class file.
+ * UniqueValidator class file.
  *
  * @author Ianaré Sévi
  * @author Florian Fackler <florian.fackler@mintao.com>
@@ -31,7 +31,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  */
 
 /**
- * CUniqueValidator validates that the attribute value is unique in the corresponding database table.
+ * UniqueValidator validates that the attribute value is unique in the corresponding database table.
  *
  * @author Florian Fackler <florian.fackler@mintao.com>
  * @version $Id$
@@ -75,7 +75,7 @@ class UniqueValidator implements ValidatorInterface
 	/**
 	 * @var array additional query criteria. This will be combined with the condition
 	 * that checks if the attribute value exists in the corresponding table column.
-	 * This array will be used to instantiate a {@link CDbCriteria} object.
+	 * This array will be used to instantiate a {@link Criteria} object.
 	 * @since 1.0.8
 	 */
 	public $criteria = [];

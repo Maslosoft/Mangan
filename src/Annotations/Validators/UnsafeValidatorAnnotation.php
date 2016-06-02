@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Annotations\Validators;
 
 /**
- * CUnsafeValidator marks the associated attributes to be unsafe so that they cannot be massively assigned.
+ * UnsafeValidator marks the associated attributes to be unsafe so that they cannot be massively assigned.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$

@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\RangeProxy;
 
 /**
- * CRangeValidator validates that the attribute value is among the list (specified via {@link range}).
+ * RangeValidator validates that the attribute value is among the list (specified via {@link range}).
  * You may invert the validation logic with help of the {@link not} property (available since 1.1.5).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>

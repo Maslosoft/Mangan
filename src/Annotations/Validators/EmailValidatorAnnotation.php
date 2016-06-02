@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
 
 /**
- * CEmailValidator validates that the attribute value is a valid email address.
+ * EmailValidator validates that the attribute value is a valid email address.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$
