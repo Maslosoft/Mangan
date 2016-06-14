@@ -13,67 +13,19 @@
 
 namespace Maslosoft\Mangan;
 
+use Exception;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\EmbeDi\EmbeDi;
-use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
-use Maslosoft\Mangan\Decorators\DbRefDecorator;
-use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
-use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
-use Maslosoft\Mangan\Decorators\EmbedRefArrayDecorator;
-use Maslosoft\Mangan\Decorators\EmbedRefDecorator;
-use Maslosoft\Mangan\Decorators\Model\AliasDecorator;
-use Maslosoft\Mangan\Decorators\Model\ClassNameDecorator;
-use Maslosoft\Mangan\Decorators\Model\OwnerDecorator;
-use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
-use Maslosoft\Mangan\Decorators\Property\SecretDecorator;
-use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
-use Maslosoft\Mangan\Decorators\RelatedDecorator;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
 use Maslosoft\Mangan\Interfaces\ProfilerInterface;
-use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Profillers\NullProfiler;
-use Maslosoft\Mangan\Sanitizers\DateSanitizer;
-use Maslosoft\Mangan\Sanitizers\DateWriteUnixSanitizer;
-use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use Maslosoft\Mangan\Sanitizers\MongoWriteStringId;
-use Maslosoft\Mangan\Transformers\CriteriaArray;
-use Maslosoft\Mangan\Transformers\DocumentArray;
-use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
-use Maslosoft\Mangan\Transformers\Filters\JsonFilter;
-use Maslosoft\Mangan\Transformers\Filters\PersistentFilter;
-use Maslosoft\Mangan\Transformers\Filters\SafeFilter;
-use Maslosoft\Mangan\Transformers\Filters\SecretFilter;
-use Maslosoft\Mangan\Transformers\JsonArray;
-use Maslosoft\Mangan\Transformers\RawArray;
-use Maslosoft\Mangan\Transformers\SafeArray;
-use Maslosoft\Mangan\Transformers\YamlArray;
-use Maslosoft\Mangan\Validators\BuiltIn\CompareValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\NumberValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\RangeValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\RegexValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\RequiredValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\StringValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\UniqueValidator;
-use Maslosoft\Mangan\Validators\BuiltIn\UrlValidator;
-use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
-use Maslosoft\Mangan\Validators\Proxy\BooleanValidator;
-use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
-use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
-use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
-use Maslosoft\Mangan\Validators\Proxy\RangeProxy;
-use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
-use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
-use Maslosoft\Mangan\Validators\Proxy\StringProxy;
-use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
-use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
+use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
 use MongoClient;
 use MongoDB;
-use Exception;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -95,7 +47,7 @@ class Mangan implements LoggerAwareInterface
 
 	const DefaultConnectionId = 'mongodb';
 
-	use Traits\Defaults\MongoClientOptions;
+	use MongoClientOptions;
 
 	/**
 	 * Correct syntax is:
@@ -111,110 +63,33 @@ class Mangan implements LoggerAwareInterface
 	 * Array key is decorator class name or interface, values are decorator class names.
 	 * @var string[][]
 	 */
-	public $decorators = [
-		TransformatorInterface::class => [
-			EmbeddedArrayDecorator::class,
-			EmbeddedDecorator::class,
-			AliasDecorator::class,
-			OwnerDecorator::class,
-		],
-		CriteriaArray::class => [
-			I18NDecorator::class,
-		],
-		DocumentArray::class => [
-			ClassNameDecorator::class,
-			EmbedRefDecorator::class,
-			EmbedRefArrayDecorator::class,
-		],
-		SafeArray::class => [
-			ClassNameDecorator::class,
-			EmbedRefDecorator::class,
-			EmbedRefArrayDecorator::class,
-		],
-		JsonArray::class => [
-			ClassNameDecorator::class,
-			EmbedRefDecorator::class,
-			EmbedRefArrayDecorator::class,
-		],
-		YamlArray::class => [
-			ClassNameDecorator::class,
-			EmbedRefDecorator::class,
-			EmbedRefArrayDecorator::class,
-		],
-		RawArray::class => [
-			DbRefArrayDecorator::class,
-			DbRefDecorator::class,
-			RelatedDecorator::class,
-			RelatedArrayDecorator::class,
-			SecretDecorator::class,
-			I18NDecorator::class,
-			ClassNameDecorator::class,
-		]
-	];
+	public $decorators = [];
 
 	/**
 	 * Configuration for finalizers.
 	 * @see https://github.com/Maslosoft/Mangan/issues/36
 	 * @var string[][]
 	 */
-	public $finalizers = [
-	];
+	public $finalizers = [];
 
 	/**
 	 * Configuration of property filters for transformers
 	 * Array key is decorator class name or interface, values are filter class names.
 	 * @var string[][]
 	 */
-	public $filters = [
-		TransformatorInterface::class => [
-		],
-		DocumentArray::class => [
-			DocumentArrayFilter::class,
-		],
-		JsonArray::class => [
-			JsonFilter::class,
-		],
-		RawArray::class => [
-			PersistentFilter::class,
-			SecretFilter::class
-		],
-		SafeArray::class => [
-			SafeFilter::class
-		],
-	];
+	public $filters = [];
 
 	/**
 	 * Mapping for validators. Key is validator proxy class name, value is concrete validator implementation
 	 * @var string[]
 	 */
-	public $validators = [
-		BooleanProxy::class => BooleanValidator::class,
-		CompareProxy::class => CompareValidator::class,
-		UniqueProxy::class => UniqueValidator::class,
-		EmailProxy::class => EmailValidator::class,
-		NumberProxy::class => NumberValidator::class,
-		RangeProxy::class => RangeValidator::class,
-		RegexProxy::class => RegexValidator::class,
-		RequiredProxy::class => RequiredValidator::class,
-		StringProxy::class => StringValidator::class,
-		UniqueProxy::class => UniqueValidator::class,
-		UrlProxy::class => UrlValidator::class
-	];
+	public $validators = [];
 
 	/**
 	 * Sanitizers ramapping for common scenarios.
 	 * @var string[][]
 	 */
-	public $sanitizersMap = [
-		JsonArray::class => [
-			MongoObjectId::class => MongoWriteStringId::class,
-			DateSanitizer::class => DateWriteUnixSanitizer::class
-		],
-		YamlArray::class => [
-			MongoObjectId::class => MongoWriteStringId::class,
-			DateSanitizer::class => DateWriteUnixSanitizer::class
-		],
-	];
+	public $sanitizersMap = [];
 
 	/**
 	 * Connection ID
@@ -267,13 +142,13 @@ class Mangan implements LoggerAwareInterface
 	 * Connection storage
 	 * @var ConnectionStorage
 	 */
-	private $_cs = null;
+	private $cs = null;
 
 	/**
 	 * Embedi instance
 	 * @var EmbeDi
 	 */
-	private $_di = null;
+	private $di = null;
 
 	/**
 	 * Logger
@@ -297,7 +172,7 @@ class Mangan implements LoggerAwareInterface
 	 * Instances of mangan
 	 * @var Mangan[]
 	 */
-	private static $_mn = [];
+	private static $mn = [];
 
 	/**
 	 * Hash map of class name to id. This is to reduce overhead of Mangan::fromModel()
@@ -305,19 +180,33 @@ class Mangan implements LoggerAwareInterface
 	 */
 	private static $classToId = [];
 
+	/**
+	 * Create new mangan instance.
+	 *
+	 * **NOTE: While it's ok to use this method, it is recommended to use
+	 * Mangan::fly() to create/get instance**
+	 * 
+	 * @param string $connectionId
+	 */
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
-		$this->_di = EmbeDi::fly($connectionId);
-		if (!$connectionId)
+		$this->di = EmbeDi::fly($connectionId);
+
+		// Apply built-in configuration, as other configurations might not exists
+		$this->di->apply(ConfigManager::getDefault(), $this);
+
+		if (empty($connectionId))
 		{
 			$connectionId = self::DefaultConnectionId;
 		}
 		$this->connectionId = $connectionId;
-		$this->_di->configure($this);
-		$this->_cs = new ConnectionStorage($this, $connectionId);
-		if (empty(self::$_mn[$connectionId]))
+
+		// Apply any configurations loaded
+		$this->di->configure($this);
+		$this->cs = new ConnectionStorage($this, $connectionId);
+		if (empty(self::$mn[$connectionId]))
 		{
-			self::$_mn[$connectionId] = $this;
+			self::$mn[$connectionId] = $this;
 		}
 	}
 
@@ -403,7 +292,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function getDi()
 	{
-		return $this->_di;
+		return $this->di;
 	}
 
 	/**
@@ -420,11 +309,11 @@ class Mangan implements LoggerAwareInterface
 		{
 			$connectionId = self::DefaultConnectionId;
 		}
-		if (empty(self::$_mn[$connectionId]))
+		if (empty(self::$mn[$connectionId]))
 		{
-			self::$_mn[$connectionId] = new static($connectionId);
+			self::$mn[$connectionId] = new static($connectionId);
 		}
-		return self::$_mn[$connectionId];
+		return self::$mn[$connectionId];
 	}
 
 	/**
@@ -449,7 +338,7 @@ class Mangan implements LoggerAwareInterface
 
 	public function init()
 	{
-		$this->_di->store($this);
+		$this->di->store($this);
 	}
 
 	/**
@@ -475,7 +364,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function getConnection()
 	{
-		if ($this->_cs->mongoClient === null)
+		if ($this->cs->mongoClient === null)
 		{
 			if (!$this->connectionString)
 			{
@@ -491,13 +380,13 @@ class Mangan implements LoggerAwareInterface
 				}
 			}
 
-			$this->_cs->mongoClient = new MongoClient($this->connectionString, $options);
+			$this->cs->mongoClient = new MongoClient($this->connectionString, $options);
 
-			return $this->_cs->mongoClient;
+			return $this->cs->mongoClient;
 		}
 		else
 		{
-			return $this->_cs->mongoClient;
+			return $this->cs->mongoClient;
 		}
 	}
 
@@ -511,7 +400,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function setConnection(MongoClient $connection)
 	{
-		$this->_cs->mongoClient = $connection;
+		$this->cs->mongoClient = $connection;
 	}
 
 	/**
@@ -521,7 +410,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function getDbInstance()
 	{
-		if ($this->_cs->mongoDB === null)
+		if ($this->cs->mongoDB === null)
 		{
 			if (!$this->dbName)
 			{
@@ -535,11 +424,11 @@ class Mangan implements LoggerAwareInterface
 			{
 				throw new ManganException(sprintf('Could not select db name: `%s`, for connectionId: `%s` - %s', $this->dbName, $this->connectionId, $e->getMessage()), ExceptionCodeInterface::CouldNotSelect, $e);
 			}
-			return $this->_cs->mongoDB = $db;
+			return $this->cs->mongoDB = $db;
 		}
 		else
 		{
-			return $this->_cs->mongoDB;
+			return $this->cs->mongoDB;
 		}
 	}
 
@@ -553,7 +442,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function setDbInstance($name)
 	{
-		$this->_cs->mongoDB = $this->getConnection()->selectDb($name);
+		$this->cs->mongoDB = $this->getConnection()->selectDb($name);
 	}
 
 	/**
@@ -562,11 +451,11 @@ class Mangan implements LoggerAwareInterface
 	 */
 	protected function close()
 	{
-		if ($this->_cs->mongoClient !== null)
+		if ($this->cs->mongoClient !== null)
 		{
-			$this->_cs->mongoClient->close();
-			$this->_cs->mongoClient = null;
-			$this->_cs->mongoDB = null;
+			$this->cs->mongoClient->close();
+			$this->cs->mongoClient = null;
+			$this->cs->mongoDB = null;
 		}
 	}
 
