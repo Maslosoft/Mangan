@@ -8,6 +8,8 @@
 
 namespace Maslosoft\Mangan;
 
+use Maslosoft\Mangan\Signals\ConfigInit;
+
 /**
  * Config Manager can be used to customize configuration of mangan without copying
  * whole configuration file. This allows to merge user defined parts with original
@@ -34,6 +36,9 @@ namespace Maslosoft\Mangan;
  * and remap one sanitizer also for RawArray, while keeping all other configuration
  * as it should be.
  *
+ * See also `ConfigInit` signal.
+ *
+ * @see ConfigInit
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class ConfigManager
