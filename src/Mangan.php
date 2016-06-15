@@ -198,7 +198,7 @@ class Mangan implements LoggerAwareInterface
 		$config = ConfigManager::getDefault();
 
 		// Gather additional config options via signals
-		(new Signal)->emit(new ConfigInit($config));
+		(new Signal)->emit(new ConfigInit($config, $connectionId));
 
 		// Apply built-in configuration, as other configurations might not exists
 		$this->di->apply($config, $this);

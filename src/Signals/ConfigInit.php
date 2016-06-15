@@ -8,6 +8,7 @@
 
 namespace Maslosoft\Mangan\Signals;
 
+use Maslosoft\Mangan\Mangan;
 use Maslosoft\Signals\Interfaces\SignalInterface;
 
 /**
@@ -19,15 +20,32 @@ class ConfigInit implements SignalInterface
 {
 
 	private $config = [];
+	private $connectionId = '';
 
-	public function __construct(&$config)
+	public function __construct(&$config, $connectionId = Mangan::DefaultConnectionId)
 	{
 		$this->config = &$config;
+		$this->connectionId = $connectionId;
 	}
 
+	/**
+	 * Get connection id for which current signal is emitted
+	 * @return string
+	 */
+	public function getConnectionId()
+	{
+		return $this->connectionId;
+	}
+
+	/**
+	 * Merge supplied configuration with Mangan configuration.
+	 * @param array $configuration
+	 * @return
+	 */
 	public function apply($configuration)
 	{
 		$this->config = array_replace_recursive($this->config, $configuration);
+		return $this;
 	}
 
 }
