@@ -34,13 +34,13 @@ class Factory
 	 * Decorator class names
 	 * @var bool[][][]
 	 */
-	private static $_configs = [];
+	private static $configs = [];
 
 	/**
 	 * Model decorators
 	 * @var ModelDecoratorInterface[]
 	 */
-	private static $_modelDecorators = [];
+	private static $modelDecorators = [];
 
 	/**
 	 * Create decorator
@@ -87,7 +87,7 @@ class Factory
 	 */
 	public static function createForModel($transformatorClass, DocumentTypeMeta $modelMeta)
 	{
-		if (!isset(self::$_modelDecorators[$modelMeta->connectionId]) || !isset(self::$_modelDecorators[$modelMeta->connectionId][$transformatorClass]))
+		if (!isset(self::$modelDecorators[$modelMeta->connectionId]) || !isset(self::$modelDecorators[$modelMeta->connectionId][$transformatorClass]))
 		{
 
 			$decorators = [];
@@ -98,9 +98,9 @@ class Factory
 					$decorators[] = new $decoratorName;
 				}
 			}
-			self::$_modelDecorators[$modelMeta->connectionId][$transformatorClass] = new CompoundModelDecorator($decorators);
+			self::$modelDecorators[$modelMeta->connectionId][$transformatorClass] = new CompoundModelDecorator($decorators);
 		}
-		return self::$_modelDecorators[$modelMeta->connectionId][$transformatorClass];
+		return self::$modelDecorators[$modelMeta->connectionId][$transformatorClass];
 	}
 
 	/**
@@ -111,14 +111,14 @@ class Factory
 	 */
 	private static function getManganDecorators($connectionId, $transformatorClass)
 	{
-		if (!isset(self::$_configs[$connectionId]))
+		if (!isset(self::$configs[$connectionId]))
 		{
-			self::$_configs[$connectionId] = [];
+			self::$configs[$connectionId] = [];
 		}
-		if (!isset(self::$_configs[$connectionId][$transformatorClass]))
+		if (!isset(self::$configs[$connectionId][$transformatorClass]))
 		{
-			self::$_configs[$connectionId] = [];
-			self::$_configs[$connectionId][$transformatorClass] = [];
+			self::$configs[$connectionId] = [];
+			self::$configs[$connectionId][$transformatorClass] = [];
 			$mangan = Mangan::fly($connectionId);
 			$transformator = new $transformatorClass;
 			foreach ($mangan->decorators as $implementer => $decoratorClasses)
@@ -127,12 +127,12 @@ class Factory
 				{
 					if ($transformator instanceof $implementer)
 					{
-						self::$_configs[$connectionId][$transformatorClass][$decoratorClass] = true;
+						self::$configs[$connectionId][$transformatorClass][$decoratorClass] = true;
 					}
 				}
 			}
 		}
-		return self::$_configs[$connectionId][$transformatorClass];
+		return self::$configs[$connectionId][$transformatorClass];
 	}
 
 }
