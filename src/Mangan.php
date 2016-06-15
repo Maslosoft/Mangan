@@ -23,7 +23,9 @@ use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
 use Maslosoft\Mangan\Interfaces\ProfilerInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Profillers\NullProfiler;
+use Maslosoft\Mangan\Signals\ConfigInit;
 use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
+use Maslosoft\Signals\Signal;
 use MongoClient;
 use MongoDB;
 use Psr\Log\LoggerAwareInterface;
@@ -183,8 +185,8 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Create new mangan instance.
 	 *
-	 * **NOTE: While it's ok to use this method, it is recommended to use
-	 * Mangan::fly() to create/get instance**
+	 * **NOTE: While it's ok to use constructor to create Mangan, it is recommended to use
+	 * Mangan::fly() to create/get instance, as creating new instance has some overhead.**
 	 * 
 	 * @param string $connectionId
 	 */
@@ -192,8 +194,14 @@ class Mangan implements LoggerAwareInterface
 	{
 		$this->di = EmbeDi::fly($connectionId);
 
+		// Load built-in config
+		$config = ConfigManager::getDefault();
+
+		// Gather additional config options via signals
+		(new Signal)->emit(new ConfigInit($config));
+
 		// Apply built-in configuration, as other configurations might not exists
-		$this->di->apply(ConfigManager::getDefault(), $this);
+		$this->di->apply($config, $this);
 
 		if (empty($connectionId))
 		{
