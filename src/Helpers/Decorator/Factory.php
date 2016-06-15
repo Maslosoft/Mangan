@@ -119,7 +119,7 @@ class Factory
 		{
 			self::$_configs[$connectionId] = [];
 			self::$_configs[$connectionId][$transformatorClass] = [];
-			$mangan = new Mangan($connectionId);
+			$mangan = Mangan::fly($connectionId);
 			$transformator = new $transformatorClass;
 			foreach ($mangan->decorators as $implementer => $decoratorClasses)
 			{
