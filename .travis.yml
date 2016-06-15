@@ -22,8 +22,6 @@ before_script:
   # Wait for mongodb
   - sleep 5
   - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then printf "extension=mongo.so\n" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi;'
-  - echo `pwd`
-  - cd $TRAVIS_BUILD_DIR
 script:
-  - echo `pwd`
+  - cd $TRAVIS_BUILD_DIR
   - bash run-travis
