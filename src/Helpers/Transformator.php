@@ -74,7 +74,7 @@ abstract class Transformator
 	}
 
 	/**
-	 * Get model isntance
+	 * Get model instance
 	 * @return AnnotatedInterface
 	 */
 	public function getModel()
@@ -83,7 +83,7 @@ abstract class Transformator
 	}
 
 	/**
-	 * Get mangan metadata
+	 * Get Mangan meta data
 	 * @return ManganMeta
 	 */
 	public function getMeta()

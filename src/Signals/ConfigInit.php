@@ -24,7 +24,16 @@ use Maslosoft\Signals\Interfaces\SignalInterface;
 class ConfigInit implements SignalInterface
 {
 
+	/**
+	 * Entire configuration of mangan
+	 * @var array
+	 */
 	private $config = [];
+
+	/**
+	 * Mangan instance/connection ID
+	 * @var string
+	 */
 	private $connectionId = '';
 
 	public function __construct(&$config, $connectionId = Mangan::DefaultConnectionId)
