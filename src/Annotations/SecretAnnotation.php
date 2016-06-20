@@ -26,7 +26,7 @@ use Maslosoft\Mangan\Meta\SecretMeta;
  * Optional callback can be used to transform value before save, ie hash function:
  *
  * ```php
- * Secret('sha1')
+ * @Secret('sha1')
  * ```
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
@@ -42,9 +42,9 @@ class SecretAnnotation extends ManganPropertyAnnotation
 		if ($this->value)
 		{
 			$data['callback'] = $this->value;
-			$this->_entity->decorators[] = SecretDecorator::class;
+			$this->getEntity()->decorators[] = SecretDecorator::class;
 		}
-		$this->_entity->secret = new SecretMeta($data);
+		$this->getEntity()->secret = new SecretMeta($data);
 	}
 
 }
