@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Traits\Criteria;
 
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
-use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 
 /**
  * LimitableTrait
@@ -32,7 +31,7 @@ trait LimitableTrait
 	 * Multiple calls will overrride previous value of limit
 	 *
 	 * @param integer $limit limit
-	 * @return CriteriaInterface
+	 * @return static
 	 */
 	public function limit($limit)
 	{
@@ -44,7 +43,7 @@ trait LimitableTrait
 	 * Set offset
 	 * Multiple calls will override previous value
 	 *
-	 * @return CriteriaInterface
+	 * @return static
 	 */
 	public function offset($offset)
 	{
@@ -62,7 +61,7 @@ trait LimitableTrait
 
 	/**
 
-	 * @return CriteriaInterface
+	 * @return static
 	 */
 	public function setLimit($limit)
 	{
@@ -71,7 +70,7 @@ trait LimitableTrait
 	}
 
 	/**
-	 * @return CriteriaInterface
+	 * @return static
 	 */
 	public function getOffset()
 	{
