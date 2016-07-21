@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
@@ -230,6 +231,17 @@ class DataProvider implements DataProviderInterface
 		if ($this->pagination === null)
 		{
 			$this->pagination = new $className;
+		}
+
+		// FIXME: Attach pagination options if it's array.
+		// It might be array, when configured via constructor
+		if (is_array($this->pagination))
+		{
+			if (empty($this->pagination['class']))
+			{
+				$this->pagination['class'] = $className;
+			}
+			$this->pagination = EmbeDi::fly()->apply($this->pagination);
 		}
 		return $this->pagination;
 	}
