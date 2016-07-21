@@ -449,4 +449,9 @@ class Event implements EventInterface
 		return $partials;
 	}
 
+	protected static function destroyEvents()
+	{
+		self::$events = [];
+	}
+
 }
