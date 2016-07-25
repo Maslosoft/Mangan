@@ -220,7 +220,7 @@ class DataProvider implements DataProviderInterface
 	/**
 	 * Returns the pagination object.
 	 * @param string $className the pagination object class name, use this param to override default pagination class.
-	 * @return Pagination|false the pagination object. If this is false, it means the pagination is disabled.
+	 * @return PaginationInterface|Pagination|false the pagination object. If this is false, it means the pagination is disabled.
 	 */
 	public function getPagination($className = Pagination::class)
 	{
