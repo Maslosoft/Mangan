@@ -125,7 +125,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public static function create($model, Mangan $mangan = null)
 	{
-		$emClass = ManganMeta::create($model)->type()->entityManager ? : static::class;
+		$emClass = ManganMeta::create($model)->type()->entityManager ?: static::class;
 		return new $emClass($model, $mangan);
 	}
 
@@ -161,7 +161,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function insert(AnnotatedInterface $model = null)
 	{
-		$model = $model ? : $this->model;
+		$model = $model ?: $this->model;
 		if ($this->_beforeSave($model, EntityManagerInterface::EventBeforeInsert))
 		{
 			$rawData = RawArray::fromModel($model);
