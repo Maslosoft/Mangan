@@ -28,17 +28,17 @@ class ScopeManager
 	 * Model instance
 	 * @var AnnotatedInterface
 	 */
-	private $_model = null;
+	private $model = null;
 
 	/**
 	 *
 	 * @var CriteriaInterface
 	 */
-	private $_criteria = null;
+	private $criteria = null;
 
 	public function __construct($model)
 	{
-		$this->_model = $model;
+		$this->model = $model;
 	}
 
 	/**
@@ -101,7 +101,7 @@ class ScopeManager
 	 */
 	public function resetScope()
 	{
-		$this->_criteria = new Criteria();
+		$this->criteria = new Criteria();
 		return $this;
 	}
 
@@ -120,13 +120,13 @@ class ScopeManager
 		{
 			$criteria = new Criteria($criteria);
 		}
-		$criteria->mergeWith($this->_criteria);
+		$criteria->mergeWith($this->criteria);
 		return $criteria;
 	}
 
 	public function reset()
 	{
-		$this->_criteria = new Criteria();
+		$this->criteria = new Criteria();
 		return $this;
 	}
 
