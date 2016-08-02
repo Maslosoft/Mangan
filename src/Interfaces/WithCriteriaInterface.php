@@ -30,7 +30,9 @@ namespace Maslosoft\Mangan\Interfaces;
  * ```
  * new DataProvider((new Page)->published());
  * ```
- * 
+ *
+ * NOTE: It is recommended to use CriteriaAwareInterface
+ *
  * @see CriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */

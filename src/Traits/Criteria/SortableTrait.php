@@ -30,8 +30,8 @@ trait SortableTrait
 	private $_sort = [];
 
 	/**
-	 * Add sorting, avaliabe orders are: Criteria::SortAsc and Criteria::SortDesc
-	 * Each call will be groupped with previous calls
+	 * Add sorting, available orders are: Criteria::SortAsc and Criteria::SortDesc
+	 * Each call will be grouped with previous calls
 	 * @param string $fieldName
 	 * @param integer $order
 	 * @return CriteriaInterface
@@ -65,7 +65,7 @@ trait SortableTrait
 	/**
 	 * Set sorting of results. Use model field names as keys and Criteria's sort consntants.
 	 *
-	 * Afields will be automatically decorated according to model.
+	 * All fields will be automatically decorated according to model.
 	 * For instance, when sorting on i18n field simply use field name, without language prefix.
 	 *
 	 * Sort by title example:
