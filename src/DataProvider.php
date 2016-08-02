@@ -18,6 +18,7 @@ use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
+use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
@@ -25,6 +26,7 @@ use Maslosoft\Mangan\Interfaces\PaginationInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use UnexpectedValueException;
 
 /**
  * Mongo document data provider
@@ -95,13 +97,17 @@ class DataProvider implements DataProviderInterface
 		}
 		else
 		{
-			throw new ManganException('Invalid model type for ' . __CLASS__);
+			throw new ManganException('Invalid model type for ' . static::class);
 		}
 
 		$this->finder = Finder::create($this->model);
 		if ($this->model instanceof WithCriteriaInterface)
 		{
 			$this->criteria = $this->model->getDbCriteria();
+		}
+		elseif ($this->model instanceof CriteriaAwareInterface)
+		{
+			$this->criteria = $this->model->getCriteria();
 		}
 		else
 		{
@@ -147,12 +153,21 @@ class DataProvider implements DataProviderInterface
 	}
 
 	/**
-	 * Get model used by this dataprovider
+	 * Get model used by this data provider
 	 * @return AnnotatedInterface
 	 */
 	public function getModel()
 	{
 		return $this->model;
+	}
+
+	/**
+	 * Set model
+	 * @param AnnotatedInterface $model
+	 */
+	public function setModel(AnnotatedInterface $model)
+	{
+		$this->model = $model;
 	}
 
 	/**
@@ -244,6 +259,40 @@ class DataProvider implements DataProviderInterface
 			$this->pagination = EmbeDi::fly()->apply($this->pagination);
 		}
 		return $this->pagination;
+	}
+
+	/**
+	 * Set pagination
+	 * @param type $pagination
+	 */
+	public function setPagination($pagination)
+	{
+		// Disable pagination completely
+		if (false === $pagination)
+		{
+			$this->pagination = false;
+			return $this;
+		}
+
+		// Configure from array
+		if (is_array($pagination))
+		{
+			if (empty($pagination['class']))
+			{
+				$pagination['class'] = Pagination::class;
+			}
+			$this->pagination = EmbeDi::fly()->apply($pagination);
+			return $this;
+		}
+
+		// Set object instance
+		if ($pagination instanceof PaginationInterface)
+		{
+			$this->pagination = $pagination;
+			return $this;
+		}
+
+		throw new UnexpectedValueException(sprintf('Expected `false` or `array` or `%s`, got %s', PaginationInterface::class, is_object($pagination) ? get_class($pagination) : gettype($pagination)));
 	}
 
 	/**
