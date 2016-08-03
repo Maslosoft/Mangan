@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
+use Maslosoft\Mangan\Interfaces\NameAwareInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
@@ -32,25 +33,25 @@ abstract class Transformator
 	 * Metadata for document
 	 * @var ManganMeta
 	 */
-	private $_meta = null;
+	private $meta = null;
 
 	/**
 	 * Hash map of sanitizers
 	 * @var object[]
 	 */
-	private $_transformators = [];
+	private $transformators = [];
 
 	/**
 	 * Model
 	 * @var object
 	 */
-	private $_model = null;
+	private $model = null;
 
 	/**
 	 * Transormator class name
 	 * @var string
 	 */
-	private $_transformatorClass = TransformatorInterface::class;
+	private $transformatorClass = TransformatorInterface::class;
 
 	/**
 	 * Class constructor
@@ -59,9 +60,9 @@ abstract class Transformator
 	 */
 	public function __construct(AnnotatedInterface $model, $transformatorClass = TransformatorInterface::class)
 	{
-		$this->_meta = ManganMeta::create($model);
-		$this->_transformatorClass = $transformatorClass;
-		$this->_model = $model;
+		$this->meta = ManganMeta::create($model);
+		$this->transformatorClass = $transformatorClass;
+		$this->model = $model;
 	}
 
 	/**
@@ -70,7 +71,7 @@ abstract class Transformator
 	 */
 	public function getTransformatorClass()
 	{
-		return $this->_transformatorClass;
+		return $this->transformatorClass;
 	}
 
 	/**
@@ -79,7 +80,7 @@ abstract class Transformator
 	 */
 	public function getModel()
 	{
-		return $this->_model;
+		return $this->model;
 	}
 
 	/**
@@ -88,7 +89,7 @@ abstract class Transformator
 	 */
 	public function getMeta()
 	{
-		return $this->_meta;
+		return $this->meta;
 	}
 
 	/**
@@ -98,15 +99,21 @@ abstract class Transformator
 	 */
 	public function getFor($name)
 	{
-		if (!array_key_exists($name, $this->_transformators))
+		if (!array_key_exists($name, $this->transformators))
 		{
-			if (!$this->_meta->$name)
+			if (!$this->meta->$name)
 			{
 				throw new TransformatorException(sprintf('There is not metadata for field `%s` of model `%s`, have you declared this field?', $name, get_class($this->getModel())));
 			}
-			$this->_transformators[$name] = $this->_getTransformer($this->_transformatorClass, $this->_meta->type(), $this->_meta->$name);
+			$this->transformators[$name] = $this->_getTransformer($this->transformatorClass, $this->meta->type(), $this->meta->$name);
 		}
-		return $this->_transformators[$name];
+
+		// Support for setting name in sanitizers etc.
+		if ($this->transformators[$name] instanceof NameAwareInterface)
+		{
+			$this->transformators[$name]->setName($name);
+		}
+		return $this->transformators[$name];
 	}
 
 	public function __get($name)
