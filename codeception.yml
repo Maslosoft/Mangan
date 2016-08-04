@@ -25,10 +25,3 @@ coverage:
     html: true
     include:
         - src/*
-modules:
-   enabled: [MongoDb]
-   config:
-      MongoDb:
-         dsn: 'mongodb://localhost:27017/ManganTest'
-         user: ''
-         password: ''
