@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
+use Maslosoft\Mangan\Interfaces\Criteria\MergeableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
@@ -70,29 +71,10 @@ class DataProvider implements DataProviderInterface
 	 */
 	public function __construct($modelClass, $config = [])
 	{
-		if (is_string($modelClass))
-		{
-			$this->model = new $modelClass;
-		}
-		elseif (is_object($modelClass))
-		{
-			$this->model = $modelClass;
-		}
-		else
-		{
-			throw new ManganException('Invalid model type for ' . static::class);
-		}
+
+		$this->configure($modelClass, $config);
 
 		$this->finder = Finder::create($this->model);
-		if ($this->model instanceof WithCriteriaInterface)
-		{
-			$this->setCriteria($this->model->getDbCriteria());
-		}
-		elseif ($this->model instanceof CriteriaAwareInterface)
-		{
-			$this->setCriteria($this->model->getCriteria());
-		}
-		$this->configure($config);
 	}
 
 	/**
