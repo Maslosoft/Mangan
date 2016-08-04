@@ -71,10 +71,7 @@ class DataProvider implements DataProviderInterface
 	 */
 	public function __construct($modelClass, $config = [])
 	{
-
 		$this->configure($modelClass, $config);
-
-		$this->finder = Finder::create($this->model);
 	}
 
 	/**
@@ -110,20 +107,26 @@ class DataProvider implements DataProviderInterface
 	 */
 	protected function fetchData()
 	{
+		// Setup required objects
+		$sort = $this->getSort();
+		$criteria = $this->getCriteria();
 		$pagination = $this->getPagination();
-		if ($pagination !== false && $this->getCriteria() instanceof LimitableInterface)
+
+		// Apply limits if required
+		if ($pagination !== false && $criteria instanceof LimitableInterface)
 		{
 			$pagination->setCount($this->getTotalItemCount());
-			$pagination->apply($this->getCriteria());
+			$pagination->apply($criteria);
 		}
 
-		$sort = $this->getSort();
+		// Apply sort if required
 		if ($sort->isSorted())
 		{
-			$this->getCriteria()->setSort($sort);
+			$criteria->setSort($sort);
 		}
 
-		return $this->finder->findAll($this->getCriteria());
+		// Finally apply all to finder
+		return Finder::create($this->getModel())->findAll($criteria);
 	}
 
 }
