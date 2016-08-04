@@ -72,6 +72,7 @@ class DataProvider implements DataProviderInterface
 	public function __construct($modelClass, $config = [])
 	{
 		$this->configure($modelClass, $config);
+		$this->finder = Finder::create($this->getModel());
 	}
 
 	/**
@@ -126,7 +127,7 @@ class DataProvider implements DataProviderInterface
 		}
 
 		// Finally apply all to finder
-		return Finder::create($this->getModel())->findAll($criteria);
+		return $this->finder->findAll($criteria);
 	}
 
 }
