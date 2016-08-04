@@ -58,9 +58,16 @@ abstract class Transformator
 	 * @param AnnotatedInterface $model
 	 * @param string $transformatorClass
 	 */
-	public function __construct(AnnotatedInterface $model, $transformatorClass = TransformatorInterface::class)
+	public function __construct(AnnotatedInterface $model, $transformatorClass = TransformatorInterface::class, $meta = null)
 	{
-		$this->meta = ManganMeta::create($model);
+		if (null === $meta)
+		{
+			$this->meta = ManganMeta::create($model);
+		}
+		else
+		{
+			$this->meta = $meta;
+		}
 		$this->transformatorClass = $transformatorClass;
 		$this->model = $model;
 	}
