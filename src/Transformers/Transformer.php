@@ -39,12 +39,12 @@ abstract class Transformer
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [])
 	{
-		$meta = ManganMeta::create($model);
+		$meta = static::getMeta($model);
 		$calledClass = get_called_class();
-		$decorator = new Decorator($model, $calledClass);
-		$md = new ModelDecorator($model, $calledClass);
-		$sanitizer = new Sanitizer($model, $calledClass);
-		$filter = new Filter($model, $calledClass);
+		$decorator = new Decorator($model, $calledClass, $meta);
+		$md = new ModelDecorator($model, $calledClass, $meta);
+		$sanitizer = new Sanitizer($model, $calledClass, $meta);
+		$filter = new Filter($model, $calledClass, $meta);
 		$arr = [];
 		foreach ($meta->fields() as $name => $fieldMeta)
 		{
@@ -105,12 +105,12 @@ abstract class Transformer
 		{
 			$model = new $className;
 		}
-		$meta = ManganMeta::create($model);
+		$meta = static::getMeta($model);
 		$calledClass = get_called_class();
-		$decorator = new Decorator($model, $calledClass);
-		$md = new ModelDecorator($model, $calledClass);
-		$sanitizer = new Sanitizer($model, $calledClass);
-		$filter = new Filter($model, $calledClass);
+		$decorator = new Decorator($model, $calledClass, $meta);
+		$md = new ModelDecorator($model, $calledClass, $meta);
+		$sanitizer = new Sanitizer($model, $calledClass, $meta);
+		$filter = new Filter($model, $calledClass, $meta);
 		foreach ($meta->fields() as $name => $fieldMeta)
 		{
 			/* @var $fieldMeta DocumentPropertyMeta */
@@ -140,6 +140,11 @@ abstract class Transformer
 		$md->read($data);
 
 		return FinalizingManager::toModel(static::class, $model);
+	}
+
+	protected static function getMeta(AnnotatedInterface $model)
+	{
+		return ManganMeta::create($model);
 	}
 
 }
