@@ -23,7 +23,7 @@ trait PaginationTrait
 
 	/**
 	 * Pagination instance
-	 * @var PaginationInterface
+	 * @var boolean|array|PaginationInterface
 	 */
 	private $pagination = null;
 

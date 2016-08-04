@@ -20,13 +20,13 @@ trait CriteriaAwareTrait
 
 	/**
 	 * Criteria instance holder.
-	 * @var CriteriaInterface
+	 * @var array|CriteriaInterface
 	 */
 	private $criteria = null;
 
 	/**
 	 * Get criteria
-	 * @return CriteriaInterface
+	 * @return array|CriteriaInterface
 	 */
 	public function getCriteria()
 	{

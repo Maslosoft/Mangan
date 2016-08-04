@@ -64,4 +64,8 @@ trait CriteriaTrait
 		return $this;
 	}
 
+	/**
+	 * @return AnnotatedInterface
+	 */
+	abstract public function getModel();
 }
