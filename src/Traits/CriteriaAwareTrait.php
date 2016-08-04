@@ -35,10 +35,10 @@ trait CriteriaAwareTrait
 
 	/**
 	 * Set criteria
-	 * @param CriteriaInterface $criteria
+	 * @param CriteriaInterface|array $criteria
 	 * @return static
 	 */
-	public function setCriteria(CriteriaInterface $criteria)
+	public function setCriteria($criteria)
 	{
 		$this->criteria = $criteria;
 		return $this;
