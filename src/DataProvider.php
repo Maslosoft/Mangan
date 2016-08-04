@@ -108,23 +108,7 @@ class DataProvider implements DataProviderInterface
 	 */
 	protected function fetchData()
 	{
-		// Setup required objects
-		$sort = $this->getSort();
-		$criteria = $this->getCriteria();
-		$pagination = $this->getPagination();
-
-		// Apply limits if required
-		if ($pagination !== false && $criteria instanceof LimitableInterface)
-		{
-			$pagination->setCount($this->getTotalItemCount());
-			$pagination->apply($criteria);
-		}
-
-		// Apply sort if required
-		if ($sort->isSorted())
-		{
-			$criteria->setSort($sort);
-		}
+		$criteria = $this->configureFetch();
 
 		// Finally apply all to finder
 		return $this->finder->findAll($criteria);
