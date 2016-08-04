@@ -13,20 +13,18 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
-use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
-use Maslosoft\Mangan\Interfaces\PaginationInterface;
-use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
-use Maslosoft\Mangan\Meta\ManganMeta;
-use UnexpectedValueException;
+use Maslosoft\Mangan\Traits\DataProvider\ConfigureTrait;
+use Maslosoft\Mangan\Traits\DataProvider\CriteriaTrait;
+use Maslosoft\Mangan\Traits\DataProvider\DataTrait;
+use Maslosoft\Mangan\Traits\DataProvider\PaginationTrait;
+use Maslosoft\Mangan\Traits\ModelAwareTrait;
+use Maslosoft\Mangan\Traits\SortAwareTrait;
 
 /**
  * Mongo document data provider
@@ -47,36 +45,21 @@ use UnexpectedValueException;
 class DataProvider implements DataProviderInterface
 {
 
-	/**
-	 * Instance of model
-	 * @var Document
-	 * @since v1.0
-	 */
-	public $model;
+	use ConfigureTrait,
+	  CriteriaTrait,
+	  DataTrait,
+	  ModelAwareTrait,
+	  PaginationTrait,
+	  SortAwareTrait;
+
+	const CriteriaClass = Criteria::class;
 
 	/**
 	 * Finder instance
 	 * @var FinderInterface
 	 */
 	private $finder = null;
-
-	/**
-	 * @var CriteriaInterface
-	 */
-	private $criteria;
-
-	/**
-	 * @var SortInterface
-	 */
-	private $sort;
-	private $data = null;
 	private $totalItemCount = null;
-
-	/**
-	 * Pagination instance
-	 * @var PaginationInterface
-	 */
-	private $pagination = null;
 
 	/**
 	 * Constructor.
@@ -103,196 +86,13 @@ class DataProvider implements DataProviderInterface
 		$this->finder = Finder::create($this->model);
 		if ($this->model instanceof WithCriteriaInterface)
 		{
-			$this->criteria = $this->model->getDbCriteria();
+			$this->setCriteria($this->model->getDbCriteria());
 		}
 		elseif ($this->model instanceof CriteriaAwareInterface)
 		{
-			$this->criteria = $this->model->getCriteria();
+			$this->setCriteria($this->model->getCriteria());
 		}
-		else
-		{
-			$this->criteria = new Criteria();
-		}
-
-		// Merge criteria from configuration
-		if (isset($config['criteria']))
-		{
-			$this->criteria->mergeWith($config['criteria']);
-			unset($config['criteria']);
-		}
-
-		// Merge limit from configuration
-		if (isset($config['limit']) && $config['limit'] > 0)
-		{
-			$this->criteria->setLimit($config['limit']);
-			unset($config['limit']);
-		}
-
-		// Merge sorting from configuration
-		if (isset($config['sort']))
-		{
-			// Apply default sorting if criteria does not have sort configured
-			if (isset($config['sort']['defaultOrder']) && empty($this->criteria->getSort()))
-			{
-				$this->criteria->setSort($config['sort']['defaultOrder']);
-			}
-			unset($config['sort']);
-		}
-
-		if (!$this->criteria->getSelect())
-		{
-			$fields = array_keys(ManganMeta::create($this->model)->fields());
-			$fields = array_fill_keys($fields, true);
-			$this->criteria->setSelect($fields);
-		}
-
-		foreach ($config as $key => $value)
-		{
-			$this->$key = $value;
-		}
-	}
-
-	/**
-	 * Get model used by this data provider
-	 * @return AnnotatedInterface
-	 */
-	public function getModel()
-	{
-		return $this->model;
-	}
-
-	/**
-	 * Set model
-	 * @param AnnotatedInterface $model
-	 */
-	public function setModel(AnnotatedInterface $model)
-	{
-		$this->model = $model;
-	}
-
-	/**
-	 * Returns the criteria.
-	 * @return Criteria the query criteria
-	 * @since v1.0
-	 */
-	public function getCriteria()
-	{
-		// Initialise empty criteria, so it's always available via this method call.
-		if (empty($this->criteria))
-		{
-			$this->criteria = new Criteria;
-		}
-		return $this->criteria;
-	}
-
-	/**
-	 * Sets the query criteria.
-	 * @param CriteriaInterface|array $criteria the query criteria. Array representing the MongoDB query criteria.
-	 * @since v1.0
-	 */
-	public function setCriteria($criteria)
-	{
-		if (is_array($criteria))
-		{
-			$this->criteria = new Criteria($criteria);
-		}
-		elseif ($criteria instanceof CriteriaInterface)
-		{
-			$this->criteria = $criteria;
-		}
-		if ($this->criteria instanceof DecoratableInterface)
-		{
-			$this->criteria->decorateWith($this->getModel());
-		}
-	}
-
-	/**
-	 * Returns the sort object.
-	 * @return Sort the sorting object. If this is false, it means the sorting is disabled.
-	 */
-	public function getSort()
-	{
-		if ($this->sort === null)
-		{
-			$this->sort = new Sort;
-			$this->sort->setModel($this->model);
-		}
-		return $this->sort;
-	}
-
-	/**
-	 * Set sort
-	 * @param SortInterface $sort
-	 * @return DataProvider
-	 */
-	public function setSort(SortInterface $sort)
-	{
-		$this->sort = $sort;
-		$this->sort->setModel($this->model);
-		return $this;
-	}
-
-	/**
-	 * Returns the pagination object.
-	 * @param string $className the pagination object class name, use this param to override default pagination class.
-	 * @return PaginationInterface|Pagination|false the pagination object. If this is false, it means the pagination is disabled.
-	 */
-	public function getPagination($className = Pagination::class)
-	{
-		if ($this->pagination === false)
-		{
-			return false;
-		}
-		if ($this->pagination === null)
-		{
-			$this->pagination = new $className;
-		}
-
-		// FIXME: Attach pagination options if it's array.
-		// It might be array, when configured via constructor
-		if (is_array($this->pagination))
-		{
-			if (empty($this->pagination['class']))
-			{
-				$this->pagination['class'] = $className;
-			}
-			$this->pagination = EmbeDi::fly()->apply($this->pagination);
-		}
-		return $this->pagination;
-	}
-
-	/**
-	 * Set pagination
-	 * @param type $pagination
-	 */
-	public function setPagination($pagination)
-	{
-		// Disable pagination completely
-		if (false === $pagination)
-		{
-			$this->pagination = false;
-			return $this;
-		}
-
-		// Configure from array
-		if (is_array($pagination))
-		{
-			if (empty($pagination['class']))
-			{
-				$pagination['class'] = Pagination::class;
-			}
-			$this->pagination = EmbeDi::fly()->apply($pagination);
-			return $this;
-		}
-
-		// Set object instance
-		if ($pagination instanceof PaginationInterface)
-		{
-			$this->pagination = $pagination;
-			return $this;
-		}
-
-		throw new UnexpectedValueException(sprintf('Expected `false` or `array` or `%s`, got %s', PaginationInterface::class, is_object($pagination) ? get_class($pagination) : gettype($pagination)));
+		$this->configure($config);
 	}
 
 	/**
@@ -316,7 +116,7 @@ class DataProvider implements DataProviderInterface
 	{
 		if ($this->totalItemCount === null)
 		{
-			$this->totalItemCount = $this->finder->count($this->criteria);
+			$this->totalItemCount = $this->finder->count($this->getCriteria());
 		}
 		return $this->totalItemCount;
 	}
@@ -329,37 +129,19 @@ class DataProvider implements DataProviderInterface
 	protected function fetchData()
 	{
 		$pagination = $this->getPagination();
-		if ($pagination !== false && $this->criteria instanceof LimitableInterface)
+		if ($pagination !== false && $this->getCriteria() instanceof LimitableInterface)
 		{
 			$pagination->setCount($this->getTotalItemCount());
-			$pagination->apply($this->criteria);
+			$pagination->apply($this->getCriteria());
 		}
 
 		$sort = $this->getSort();
 		if ($sort->isSorted())
 		{
-			$this->criteria->setSort($sort);
+			$this->getCriteria()->setSort($sort);
 		}
 
-		return $this->finder->findAll($this->criteria);
-	}
-
-	/**
-	 * Returns the data items currently available, ensures that result is at leas empty array
-	 * @param boolean $refresh whether the data should be re-fetched from persistent storage.
-	 * @return array the list of data items currently available in this data provider.
-	 */
-	public function getData($refresh = false)
-	{
-		if ($this->data === null || $refresh)
-		{
-			$this->data = $this->fetchData();
-		}
-		if ($this->data === null)
-		{
-			return [];
-		}
-		return $this->data;
+		return $this->finder->findAll($this->getCriteria());
 	}
 
 }
