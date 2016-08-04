@@ -1070,11 +1070,11 @@
         },
         {
             "name": "maslosoft/signals",
-            "version": "1.1.17",
+            "version": "1.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Signals.git",
-                "reference": "7f35a082f32578313b057f5a66266bbfb866cbb1",
+                "reference": "19d6247ba2b8b5c68740220fc82b9e71d8e01307",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -1084,8 +1084,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/7f35a082f32578313b057f5a66266bbfb866cbb1",
-                "reference": "7f35a082f32578313b057f5a66266bbfb866cbb1",
+                "url": "https://api.github.com/repos/Maslosoft/Signals/zipball/19d6247ba2b8b5c68740220fc82b9e71d8e01307",
+                "reference": "19d6247ba2b8b5c68740220fc82b9e71d8e01307",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1135,7 +1135,7 @@
                 "slot",
                 "slots"
             ],
-            "time": "2016-06-15 14:06:27"
+            "time": "2016-08-04 09:10:00"
         },
         {
             "name": "masterexploder/phpthumb",
@@ -3547,7 +3547,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "3d7dcf92da3c36ff4063bb617baf61e6ecd8bf33",
+                "reference": "be8000b33a9975472e804cdc9b1ccb8ea1bebc82",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -3557,8 +3557,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/3d7dcf92da3c36ff4063bb617baf61e6ecd8bf33",
-                "reference": "3d7dcf92da3c36ff4063bb617baf61e6ecd8bf33",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/be8000b33a9975472e804cdc9b1ccb8ea1bebc82",
+                "reference": "be8000b33a9975472e804cdc9b1ccb8ea1bebc82",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -3591,7 +3591,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2016-08-02 07:29:54"
+            "time": "2016-08-04 06:54:58"
         },
         {
             "name": "maslosoft/zamm",
