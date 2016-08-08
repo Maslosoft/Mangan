@@ -14,8 +14,12 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Mangan\Interfaces\ActiveRecordInterface;
-use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
+use Maslosoft\Mangan\Sanitizers\MongoStringId;
+use Maslosoft\Mangan\Traits\CollectionNameTrait;
+use Maslosoft\Mangan\Traits\EntityManagerTrait;
+use Maslosoft\Mangan\Traits\FinderTrait;
+use Maslosoft\Mangan\Traits\WithCriteriaTrait;
 use MongoDB;
 use MongoId;
 
@@ -32,10 +36,10 @@ use MongoId;
 abstract class Document extends EmbeddedDocument implements ActiveRecordInterface
 {
 
-	use \Maslosoft\Mangan\Traits\EntityManagerTrait,
-	  \Maslosoft\Mangan\Traits\FinderTrait,
-	  \Maslosoft\Mangan\Traits\CollectionNameTrait,
-	  \Maslosoft\Mangan\Traits\WithCriteriaTrait;
+	use EntityManagerTrait,
+	  FinderTrait,
+	  CollectionNameTrait,
+	  WithCriteriaTrait;
 
 	/**
 	 * Mongo id field

@@ -146,4 +146,5 @@ trait TrashableTrait
 		return $trashEm->deleteOne(PkManager::prepareFromModel($this));
 	}
 
+	abstract public function __toString();
 }
