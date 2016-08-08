@@ -58,6 +58,7 @@ abstract class Transformer
 			}
 			$model->$name = $sanitizer->write($name, $model->$name);
 			$decorator->write($name, $arr);
+			$model->$name = $sanitizer->read($name, $model->$name);
 		}
 		$md->write($arr);
 		return FinalizingManager::fromModel($arr, static::class, $model);

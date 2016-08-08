@@ -74,4 +74,9 @@ class TrashItem extends Document implements TrashInterface
 		return $removed;
 	}
 
+	public function __toString()
+	{
+		return 'Trashed';
+	}
+
 }
