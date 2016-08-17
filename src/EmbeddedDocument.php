@@ -60,12 +60,13 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	public $_key = '';
 
 	/**
-	 * This holds type of this embedded document
-	 * TODO Is this even nessesary?
+	 * This holds type of this embedded document.
+	 * While this field is not required, it is usefull in some scenarios,
+	 * for example to generate JavaScript model classes from PHP classes.
 	 * @SafeValidator
 	 * @var string
 	 */
-	public $_class = null;
+	public $_class = '';
 
 	/**
 	 * Constructor.
@@ -77,7 +78,8 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		$this->_id = new MongoId;
-		$this->_class = get_class($this);
+
+		$this->_class = static::class;
 
 		$this->setLang($lang);
 		$this->setScenario($scenario);
