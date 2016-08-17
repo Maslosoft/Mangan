@@ -48,7 +48,7 @@ class SanitizerAnnotation extends ManganPropertyAnnotation
 			}
 		}
 		$config = ParamsExpander::expand($this, $params);
-		$this->_entity->sanitizer = $config;
+		$this->getEntity()->sanitizer = $config;
 	}
 
 }
