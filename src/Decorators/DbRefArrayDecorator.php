@@ -65,6 +65,10 @@ class DbRefArrayDecorator implements DecoratorInterface
 		$unsortedPks = [];
 		foreach ($pks as $referenced => $pkValues)
 		{
+			if (empty($referenced))
+			{
+				continue;
+			}
 			// Find all referenced documents
 			$refModel = new $referenced;
 			$found = (new RawFinder($refModel))->findAllByPk($pkValues);
