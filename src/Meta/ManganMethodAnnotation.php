@@ -22,10 +22,13 @@ abstract class ManganMethodAnnotation extends ManganAnnotation
 {
 
 	/**
-	 * Annotatins entity, it can be either class, property, or method
-	 * Its conrete annotation implementation responsibility to decide what to do with it.
-	 * @var DocumentMethodMeta
+	 * Annotations entity, it can be either class, property, or method
+	 * Its concrete annotation implementation responsibility to decide what to do with it.
+	 * @return DocumentMethodMeta
 	 */
-	protected $_entity = null;
+	public function getEntity()
+	{
+		return parent::getEntity();
+	}
 
 }

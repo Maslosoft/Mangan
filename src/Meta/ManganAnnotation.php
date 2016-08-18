@@ -25,8 +25,11 @@ abstract class ManganAnnotation extends MetaAnnotation
 
 	/**
 	 * Model metadata object
-	 * @var ManganMeta
+	 * @return ManganMeta
 	 */
-	protected $_meta = null;
+	public function getMeta()
+	{
+		return parent::getMeta();
+	}
 
 }
