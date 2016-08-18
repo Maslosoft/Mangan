@@ -59,4 +59,14 @@ class ManganMeta extends Meta
 		return parent::field($name);
 	}
 
+	/**
+	 * Get method meta data
+	 * @param type $name
+	 * @return DocumentMethodMeta
+	 */
+	public function method($name)
+	{
+		return parent::method($name);
+	}
+
 }
