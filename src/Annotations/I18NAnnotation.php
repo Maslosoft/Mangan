@@ -41,9 +41,9 @@ class I18NAnnotation extends ManganPropertyAnnotation
 		$i18n->enabled = (bool) $this->value;
 		$i18n->allowDefault = $this->allowDefault;
 		$i18n->allowAny = $this->allowAny;
-		$this->_entity->i18n = $i18n;
+		$this->getEntity()->i18n = $i18n;
 
-		$this->_entity->decorators[] = I18NDecorator::class;
+		$this->getEntity()->decorators[] = I18NDecorator::class;
 	}
 
 }

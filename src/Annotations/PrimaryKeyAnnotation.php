@@ -58,7 +58,7 @@ class PrimaryKeyAnnotation extends ManganPropertyAnnotation
 		// Set primaryKey value on type
 		$type = $this->_meta->type();
 		/* @var $type DocumentTypeMeta */
-		$name = $this->_entity->name;
+		$name = $this->getEntity()->name;
 		// If key is already defined it means that it is composite
 		if ($type->primaryKey)
 		{

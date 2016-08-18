@@ -47,11 +47,11 @@ class RelatedArrayAnnotation extends RelatedAnnotation
 		$relMeta = $this->_getMeta();
 		$relMeta->single = false;
 		$relMeta->isArray = true;
-		$this->_entity->related = $relMeta;
-		$this->_entity->propagateEvents = true;
-		$this->_entity->owned = true;
-		$this->_entity->decorators[] = RelatedArrayDecorator::class;
-		$this->_entity->decorators[] = EmbedRefArrayDecorator::class;
+		$this->getEntity()->related = $relMeta;
+		$this->getEntity()->propagateEvents = true;
+		$this->getEntity()->owned = true;
+		$this->getEntity()->decorators[] = RelatedArrayDecorator::class;
+		$this->getEntity()->decorators[] = EmbedRefArrayDecorator::class;
 	}
 
 }

@@ -34,7 +34,7 @@ class EntityManagerAnnotation extends ManganTypeAnnotation
 		{
 			throw new UnexpectedValueException(sprintf('Class `%s` not found on @EntityManager annotation, on model `%s`', $this->value, $this->name));
 		}
-		$this->_entity->entityManager = $this->value;
+		$this->getEntity()->entityManager = $this->value;
 	}
 
 }

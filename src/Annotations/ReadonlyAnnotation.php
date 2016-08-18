@@ -27,8 +27,8 @@ class ReadonlyAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->direct = false;
-		$this->_entity->readonly = (bool) $this->value;
+		$this->getEntity()->direct = false;
+		$this->getEntity()->readonly = (bool) $this->value;
 	}
 
 	public function __toString()

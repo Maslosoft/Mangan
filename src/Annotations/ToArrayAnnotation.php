@@ -29,7 +29,7 @@ class ToArrayAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->toArray = (bool) $this->value;
+		$this->getEntity()->toArray = (bool) $this->value;
 	}
 
 }

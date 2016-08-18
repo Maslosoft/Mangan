@@ -58,10 +58,10 @@ class EmbeddedArrayAnnotation extends EmbeddedAnnotation
 		$data = ParamsExpander::expand($this, ['class', 'key']);
 		$meta = new EmbeddedMeta($data);
 		$meta->isArray = true;
-		$this->_entity->embedded = $meta;
-		$this->_entity->propagateEvents = true;
-		$this->_entity->owned = true;
-		$this->_entity->decorators[] = EmbeddedArrayDecorator::class;
+		$this->getEntity()->embedded = $meta;
+		$this->getEntity()->propagateEvents = true;
+		$this->getEntity()->owned = true;
+		$this->getEntity()->decorators[] = EmbeddedArrayDecorator::class;
 	}
 
 }

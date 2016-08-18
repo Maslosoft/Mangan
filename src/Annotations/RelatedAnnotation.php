@@ -54,11 +54,11 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 		$relMeta = $this->_getMeta();
 		$relMeta->single = true;
 		$relMeta->isArray = false;
-		$this->_entity->related = $relMeta;
-		$this->_entity->propagateEvents = true;
-		$this->_entity->owned = true;
-		$this->_entity->decorators[] = RelatedDecorator::class;
-		$this->_entity->decorators[] = EmbedRefDecorator::class;
+		$this->getEntity()->related = $relMeta;
+		$this->getEntity()->propagateEvents = true;
+		$this->getEntity()->owned = true;
+		$this->getEntity()->decorators[] = RelatedDecorator::class;
+		$this->getEntity()->decorators[] = EmbedRefDecorator::class;
 	}
 
 	/**
@@ -68,13 +68,13 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 	protected function _getMeta()
 	{
 		$data = ParamsExpander::expand($this, ['class', 'join', 'sort', 'updatable']);
-		if (empty($this->_entity->related))
+		if (empty($this->getEntity()->related))
 		{
 			$relMeta = new RelatedMeta();
 		}
 		else
 		{
-			$relMeta = $this->_entity->related;
+			$relMeta = $this->getEntity()->related;
 		}
 		foreach ($data as $key => $val)
 		{
@@ -86,7 +86,7 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 		}
 		if (empty($relMeta->join))
 		{
-			throw new UnexpectedValueException(sprintf('Parameter `join` is required for `%s`, model `%s`, field `%s`', static::class, $this->_meta->type()->name, $this->_entity->name));
+			throw new UnexpectedValueException(sprintf('Parameter `join` is required for `%s`, model `%s`, field `%s`', static::class, $this->_meta->type()->name, $this->getEntity()->name));
 		}
 		if (empty($relMeta->sort))
 		{

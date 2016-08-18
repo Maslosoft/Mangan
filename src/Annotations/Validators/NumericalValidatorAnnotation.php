@@ -71,7 +71,7 @@ class NumericalValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->proxy = NumberProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'integerOnly',
 					'allowEmpty',
 					'max',

@@ -29,7 +29,7 @@ class HomogenousAnnotation extends ManganTypeAnnotation
 
 	public function init()
 	{
-		$this->_entity->homogenous = $this->value;
+		$this->getEntity()->homogenous = $this->value;
 	}
 
 }

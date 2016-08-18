@@ -29,7 +29,7 @@ class CollectionNameAnnotation extends ManganTypeAnnotation
 
 	public function init()
 	{
-		$this->_entity->collectionName = $this->value;
+		$this->getEntity()->collectionName = $this->value;
 	}
 
 }

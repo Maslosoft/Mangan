@@ -32,7 +32,7 @@ class SafeValidatorAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->safe = (bool) $this->value;
+		$this->getEntity()->safe = (bool) $this->value;
 	}
 
 }

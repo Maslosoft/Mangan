@@ -53,7 +53,7 @@ class BooleanValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->proxy = BooleanProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'trueValue',
 					'falseValue',
 					'strict',
