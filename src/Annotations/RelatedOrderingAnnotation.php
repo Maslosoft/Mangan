@@ -53,13 +53,13 @@ class RelatedOrderingAnnotation extends ManganPropertyAnnotation
 	public function init()
 	{
 		$data = ParamsExpander::expand($this, ['orderField']);
-		if (empty($this->_entity->related))
+		if (empty($this->getEntity()->related))
 		{
 			$relMeta = new RelatedMeta();
 		}
 		else
 		{
-			$relMeta = $this->_entity->related;
+			$relMeta = $this->getEntity()->related;
 		}
 		foreach ($data as $key => $val)
 		{
@@ -71,7 +71,7 @@ class RelatedOrderingAnnotation extends ManganPropertyAnnotation
 				$relMeta->orderField => SortInterface::SortAsc
 			];
 		}
-		$this->_entity->related = $relMeta;
+		$this->getEntity()->related = $relMeta;
 	}
 
 }

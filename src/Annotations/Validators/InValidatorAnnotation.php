@@ -47,7 +47,7 @@ class InValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->proxy = RangeProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'range',
 					'strict',
 					'allowEmpty',

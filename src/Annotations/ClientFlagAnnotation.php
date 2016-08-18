@@ -35,7 +35,7 @@ class ClientFlagAnnotation extends ManganTypeAnnotation
 	{
 		foreach ($this->value as $name => $value)
 		{
-			$this->_entity->clientFlags[$name] = $value;
+			$this->getEntity()->clientFlags[$name] = $value;
 		}
 	}
 

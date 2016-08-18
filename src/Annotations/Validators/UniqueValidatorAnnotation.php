@@ -63,7 +63,7 @@ class UniqueValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->proxy = UniqueProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'allowEmpty',
 					'className',
 					'attributeName',

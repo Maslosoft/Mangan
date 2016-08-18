@@ -91,12 +91,12 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 		}
 		else
 		{
-			throw new \UnexpectedValueException(sprintf("Expected class name (for @Validator) for field `%s` of model `%s`, got: `%s`", $this->_entity->name, $this->_meta->type()->name, $this->value));
+			throw new \UnexpectedValueException(sprintf("Expected class name (for @Validator) for field `%s` of model `%s`, got: `%s`", $this->getEntity()->name, $this->_meta->type()->name, $this->value));
 		}
 
 
 		$this->proxy = ClassValidatorProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, $params));
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, $params));
 	}
 
 }

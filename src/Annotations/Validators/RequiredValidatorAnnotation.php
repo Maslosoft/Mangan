@@ -50,7 +50,7 @@ class RequiredValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->proxy = RequiredProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'requiredValue',
 					'strict',
 					'message',

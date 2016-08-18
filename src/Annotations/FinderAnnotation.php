@@ -35,7 +35,7 @@ class FinderAnnotation extends ManganTypeAnnotation
 		{
 			throw new UnexpectedValueException(sprintf('Class `%s` not found on @Finder annotation, on model `%s`', $this->value, $this->name));
 		}
-		$this->_entity->finder = $this->value;
+		$this->getEntity()->finder = $this->value;
 	}
 
 }

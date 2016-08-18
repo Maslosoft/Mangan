@@ -27,7 +27,7 @@ class SanitizerArrayAnnotation extends SanitizerAnnotation
 	public function init()
 	{
 		parent::init();
-		$this->_entity->sanitizeArray = true;
+		$this->getEntity()->sanitizeArray = true;
 	}
 
 }

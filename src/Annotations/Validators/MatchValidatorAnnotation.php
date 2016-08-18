@@ -46,7 +46,7 @@ class MatchValidatorAnnotation extends ValidatorAnnotation
 	public function init()
 	{
 		$this->proxy = RegexProxy::class;
-		$this->_entity->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
+		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'pattern',
 					'allowEmpty',
 					'not',

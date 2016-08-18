@@ -29,7 +29,7 @@ class FromJsonAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->fromJson = (bool)$this->value;
+		$this->getEntity()->fromJson = (bool)$this->value;
 	}
 
 }

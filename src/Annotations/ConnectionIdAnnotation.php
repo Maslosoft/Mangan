@@ -28,7 +28,7 @@ class ConnectionIdAnnotation extends ManganTypeAnnotation
 
 	public function init()
 	{
-		$this->_entity->connectionId = $this->value;
+		$this->getEntity()->connectionId = $this->value;
 	}
 
 }

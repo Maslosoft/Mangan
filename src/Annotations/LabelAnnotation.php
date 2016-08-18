@@ -27,7 +27,7 @@ class LabelAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$this->_entity->label = $this->value;
+		$this->getEntity()->label = $this->value;
 	}
 
 	public function __toString()
