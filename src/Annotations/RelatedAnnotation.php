@@ -82,11 +82,11 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 		}
 		if (!$relMeta->class)
 		{
-			$relMeta->class = $this->_meta->type()->name;
+			$relMeta->class = $this->getMeta()->type()->name;
 		}
 		if (empty($relMeta->join))
 		{
-			throw new UnexpectedValueException(sprintf('Parameter `join` is required for `%s`, model `%s`, field `%s`', static::class, $this->_meta->type()->name, $this->getEntity()->name));
+			throw new UnexpectedValueException(sprintf('Parameter `join` is required for `%s`, model `%s`, field `%s`', static::class, $this->getMeta()->type()->name, $this->getEntity()->name));
 		}
 		if (empty($relMeta->sort))
 		{
