@@ -591,11 +591,11 @@
         },
         {
             "name": "maslosoft/addendum",
-            "version": "4.0.20",
+            "version": "4.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "5a235b044f839459c104f600fd072be3421c8a03",
+                "reference": "fbd4acc7f6a1a3be70511415dd0a50921368339d",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -605,8 +605,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/5a235b044f839459c104f600fd072be3421c8a03",
-                "reference": "5a235b044f839459c104f600fd072be3421c8a03",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/fbd4acc7f6a1a3be70511415dd0a50921368339d",
+                "reference": "fbd4acc7f6a1a3be70511415dd0a50921368339d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -657,7 +657,7 @@
                 "annotations",
                 "metadata"
             ],
-            "time": "2016-07-12 15:33:01"
+            "time": "2016-08-18 10:06:57"
         },
         {
             "name": "maslosoft/cache",
@@ -2212,11 +2212,11 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "1.3.7",
+            "version": "1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716",
+                "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -2226,21 +2226,21 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/4e8f0da10ac5802913afc151413bc8c53b6c2716",
-                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/be2c607e43ce4c89ecd60e75c6a85c126e754aea",
+                "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "url": "https://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.4"
+                "phpunit/phpunit": "^4.8 || ^5.0"
             },
             "type": "library",
             "extra": {
@@ -2270,7 +2270,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-05-17 03:18:57"
+            "time": "2016-08-18 05:49:44"
         },
         {
             "name": "sebastian/exporter",
@@ -3551,7 +3551,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "4f0fbf2149012b6b2c5e1ab8155c636c1b2758b1",
+                "reference": "b594a60eebb116e66b70d599cd5af331585f2022",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -3561,8 +3561,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/4f0fbf2149012b6b2c5e1ab8155c636c1b2758b1",
-                "reference": "4f0fbf2149012b6b2c5e1ab8155c636c1b2758b1",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/b594a60eebb116e66b70d599cd5af331585f2022",
+                "reference": "b594a60eebb116e66b70d599cd5af331585f2022",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -3595,7 +3595,7 @@
                 }
             ],
             "description": "Tests for mangan",
-            "time": "2016-08-08 14:43:42"
+            "time": "2016-08-18 05:43:26"
         },
         {
             "name": "maslosoft/zamm",
