@@ -27,17 +27,17 @@ class ManganMeta extends Meta
 
 	/**
 	 * Create instance of Metadata specifically designed for Mangan
-	 * @param AnnotatedInterface $component
+	 * @param string|object|AnnotatedInterface $model
 	 * @param MetaOptions $options
 	 * @return ManganMeta
 	 */
-	public static function create(AnnotatedInterface $component, MetaOptions $options = null)
+	public static function create($model, MetaOptions $options = null)
 	{
 		if (null === $options)
 		{
 			$options = new ManganMetaOptions();
 		}
-		return parent::create($component, $options);
+		return parent::create($model, $options);
 	}
 
 	/**

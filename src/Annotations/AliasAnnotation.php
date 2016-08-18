@@ -33,7 +33,7 @@ class AliasAnnotation extends ManganTypeAnnotation
 	public function init()
 	{
 		// Set aliases value on type
-		$type = $this->_meta->type();
+		$type = $this->getMeta()->type();
 		/* @var $type DocumentTypeMeta */
 		$name = $this->getEntity()->name;
 		$type->aliases[$name] = $this->value;

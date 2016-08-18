@@ -35,7 +35,7 @@ class I18NAnnotation extends ManganPropertyAnnotation
 	{
 		if ($this->allowDefault && $this->allowAny)
 		{
-			throw new InvalidArgumentException(sprintf('Arguments "allowDefault" and "allowAny" for element "%s" in class "%s" cannot be both set true', $this->name, $this->_meta->type()->name));
+			throw new InvalidArgumentException(sprintf('Arguments "allowDefault" and "allowAny" for element "%s" in class "%s" cannot be both set true', $this->name, $this->getMeta()->type()->name));
 		}
 		$i18n = new I18NMeta();
 		$i18n->enabled = (bool) $this->value;
