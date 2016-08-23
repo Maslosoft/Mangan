@@ -36,6 +36,13 @@ class DbRefDecorator implements DecoratorInterface
 			$model->$name = $fieldMeta->default;
 			return;
 		}
+
+		// Assume that ref is already provided
+		if (!empty($dbValue['_class']) && $dbValue['_class'] !== DbRef::class)
+		{
+			$model->$name = $transformatorClass::toModel($dbValue);
+			return;
+		}
 		$dbValue['_class'] = DbRef::class;
 		$dbRef = $transformatorClass::toModel($dbValue);
 		/* @var $dbRef DbRef */
@@ -45,7 +52,7 @@ class DbRefDecorator implements DecoratorInterface
 
 	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		if(!$model->$name)
+		if (!$model->$name)
 		{
 			return;
 		}
