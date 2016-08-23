@@ -30,24 +30,27 @@ trait ConfigureTrait
 
 	protected function configure($modelClass, $config)
 	{
-		if (is_string($modelClass))
+		if (!empty($modelClass))
 		{
-			$this->setModel(new $modelClass);
-		}
-		elseif (is_object($modelClass))
-		{
-			$this->setModel($modelClass);
-		}
-		else
-		{
-			throw new ManganException('Invalid model type for ' . static::class);
+			if (is_string($modelClass))
+			{
+				$this->setModel(new $modelClass);
+			}
+			elseif (is_object($modelClass))
+			{
+				$this->setModel($modelClass);
+			}
+			else
+			{
+				throw new ManganException('Invalid model type for ' . static::class);
+			}
 		}
 
 		$model = $this->getModel();
 
 		// Set criteria from model
 		$criteria = $this->getCriteria();
-		if ($criteria instanceof MergeableInterface)
+		if (!empty($model) && $criteria instanceof MergeableInterface)
 		{
 			// NOTE: WithCriteria and CriteriaAware have just slightly different method names
 			if ($model instanceof WithCriteriaInterface)
@@ -86,7 +89,7 @@ trait ConfigureTrait
 			unset($config['sort']);
 		}
 
-		if (!$criteria->getSelect())
+		if (!empty($model) && !$criteria->getSelect())
 		{
 			$fields = array_keys(ManganMeta::create($model)->fields());
 			$selected = array_fill_keys($fields, true);
