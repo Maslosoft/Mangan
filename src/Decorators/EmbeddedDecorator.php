@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
@@ -33,9 +34,14 @@ class EmbeddedDecorator implements DecoratorInterface
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
+		if (is_object($dbValue) && $dbValue instanceof AnnotatedInterface)
+		{
+			$model->$name = $dbValue;
+			return;
+		}
 		static::ensureClass($model, $name, $dbValue);
 		$instance = null;
-		if($model->$name instanceof $dbValue['_class'])
+		if ($model->$name instanceof $dbValue['_class'])
 		{
 			$instance = $model->$name;
 		}
