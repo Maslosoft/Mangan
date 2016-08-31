@@ -21,14 +21,32 @@ use Maslosoft\Mangan\Meta\EmbeddedMeta;
  * Annotation for array of embedded documents in mongo
  * defaultClassName will be used for getting empty properties,
  * but any type of embedded document can be stored within this field.
+ *
  * By default, when updating from external source, documents are compared by pk.
- * This can be ovverriden with `key` property.
+ * This can be overridden with `key` property.
+ * 
  * Examples:
- * <ul>
- * 		<li>&commat;EmbeddedArray() - Embedded array with any model</li>
- * 		<li>&commat;EmbeddedArray(Company\ClassName) - Embedded array with default class</li>
- * 		<li>&commat;EmbeddedArray(Company\ClassName, '_id') - Embedded array with default class and compare key `_id`</li>
- * 	<li>&commat;EmbeddedArray(Company\ClassName, {'login', 'email'}) - Embedded array with default class and composite compare key `_id`</li>
+ *
+ * Embedded array with any model:
+ * ```
+ * @EmbeddedArray
+ * ```
+ *
+ * Embedded array with default class:
+ * ```
+ * @EmbeddedArray(Company\ClassName)
+ * ```
+ *
+ * Embedded array with default class and compare key `_id`
+ * ```
+ * @EmbeddedArray(Company\ClassName, '_id')
+ * ```
+ *
+ * Embedded array with default class and composite compare key of `login` and `email`:
+ * ```
+ * @EmbeddedArray(Company\ClassName, {'login', 'email'})
+ * ```
+ *
  * </ul>
  * @Target('property')
  *
