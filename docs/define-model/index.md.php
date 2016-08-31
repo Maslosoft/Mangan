@@ -12,6 +12,7 @@ use Maslosoft\Ilmatar\Components\Controller;
 #Define Model
 
 All model properties can be defined with [annotations](../annotations/) implemented by [addendum project](/addendum/).
-This concept was chosen to allow storing arbitrary PHP object without the need of extending
+
+Using annotations, allows storing arbitrary PHP object without the need of extending
 from any base class or implementing any methods.
 
