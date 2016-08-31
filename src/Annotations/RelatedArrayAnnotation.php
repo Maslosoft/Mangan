@@ -17,14 +17,20 @@ use Maslosoft\Mangan\Decorators\EmbedRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
 
 /**
- * RelatedAnnotation
+ * This type of nesting objects works similarly to SQL joins.
+ *
+ * 
  * Shorthand notation:
  *
- * RelatedArray(Company\Project\Projects, join = {'_id' = 'entity_id'}, sort = {'_id' = 1}, true)
+ * ```
+ * @RelatedArray(Company\Project\Projects, join = {'_id' = 'entity_id'}, sort = {'_id' = 1}, true)
+ * ```
  *
  * Expanded notation:
  *
- * RelatedArray(class = Company\Project\Projects, join = {'_id' => 'entity_id'}, sort = {'_id' = 1}, updatable = true)
+ * ```
+ * @RelatedArray(class = Company\Project\Projects, join = {'_id' => 'entity_id'}, sort = {'_id' = 1}, updatable = true)
+ * ```
  *
  * @Conflicts('Embedded')
  * @Conflicts('EmbeddedArray')
