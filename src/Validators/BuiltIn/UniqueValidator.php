@@ -19,6 +19,12 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\ScenarioManager;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
 
 /**
  * UniqueValidator class file.
@@ -41,17 +47,16 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class UniqueValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\SkipOnError,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use AllowEmpty,
+	  SkipOnError,
+	  Messages,
+	  OnScenario,
+	  Safe;
 
 	/**
 	 * @var string the document class name that should be used to
 	 * look for the attribute value being validated. Defaults to null, meaning using
 	 * the class of the object currently being validated.
-	 * You may use path alias to reference a class name here.
 	 *
 	 * TODO Not implemented
 	 *
@@ -64,8 +69,6 @@ class UniqueValidator implements ValidatorInterface
 	 * @var string the ActiveRecord class attribute name that should be
 	 * used to look for the attribute value being validated. Defaults to null,
 	 * meaning using the name of the attribute being validated.
-	 *
-	 * TODO Not implemented
 	 *
 	 * @see className
 	 * @since 1.0.8
@@ -100,15 +103,19 @@ class UniqueValidator implements ValidatorInterface
 			return true;
 		}
 
-		$criteria = (new Criteria)->decorateWith($model);
+		$className = empty($this->className) ? get_class($model) : $this->className;
+
+		$compareModel = new $className;
+
+		$criteria = (new Criteria)->decorateWith($compareModel);
 		$criteria->addCond($attribute, '==', $value);
 
 		if ($this->criteria !== [])
 		{
 			$criteria->mergeWith($this->criteria);
 		}
-
-		$finder = new Finder($model);
+		ScenarioManager::setScenario($compareModel, ValidatorInterface::ScenarioValidate);
+		$finder = new Finder($compareModel);
 
 		$found = $finder->find($criteria);
 
