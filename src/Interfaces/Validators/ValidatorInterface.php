@@ -22,6 +22,11 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 interface ValidatorInterface extends AnnotatedInterface
 {
 
+	/**
+	 * Scenario used in validators
+	 */
+	const ScenarioValidate = 'validate';
+
 	public function isValid(AnnotatedInterface $model, $attribute);
 
 	public function addError($message);
