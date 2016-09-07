@@ -32,11 +32,31 @@ interface FinderInterface
 	const EventBeforeFind = 'beforeFind';
 
 	/**
+	 * This event is triggered before count methods
+	 */
+	const EventBeforeCount = 'beforeCount';
+
+	/**
+	 * This event is triggered before exists methods
+	 */
+	const EventBeforeExists = 'beforeExists';
+
+	/**
 	 * This event is trigerred after each record is instantiated by a find method.
 	 * The find calls include {@link find}, {@link findAll}, {@link findByPk},
 	 * {@link findAllByPk}, {@link findByAttributes} and {@link findAllByAttributes}.
 	 */
 	const EventAfterFind = 'afterFind';
+
+	/**
+	 * This event is triggered after count methods
+	 */
+	const EventAfterCount = 'afterCount';
+
+	/**
+	 * This event is triggered after exists methods
+	 */
+	const EventAfterExists = 'afterExists';
 
 	/**
 	 * Finds a single Document with the specified condition.
@@ -69,7 +89,7 @@ interface FinderInterface
 	 * ```
 	 *
 	 * @param mixed $pk primary key value. Use array for composite key.
-	 * @param array|CriteriaInterface $criteria
+	 * @param array|CriteriaInterface|Criteria $criteria
 	 * @return AnnotatedInterface|null
 	 * @Ignored
 	 */
