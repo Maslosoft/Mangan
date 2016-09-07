@@ -17,7 +17,7 @@ namespace Maslosoft\Mangan\Interfaces;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface ActiveRecordInterface extends ActiveDocumentInterface, FinderInterface, EntityManagerInterface, CollectionNameInterface
+interface ActiveRecordInterface extends ActiveDocumentInterface, FinderInterface, EntityManagerInterface, CollectionNameInterface, WithCriteriaInterface
 {
-	
+
 }
