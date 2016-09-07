@@ -57,7 +57,7 @@ class DataProvider implements DataProviderInterface
 
 	/**
 	 * Finder instance
-	 * @var FinderInterface
+	 * @var FinderInterface|Finder
 	 */
 	private $finder = null;
 	private $totalItemCount = null;
