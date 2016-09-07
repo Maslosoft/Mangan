@@ -14,7 +14,9 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 
 /**
  * ScopeManager
@@ -114,13 +116,14 @@ class ScopeManager
 	{
 		if (null === $criteria)
 		{
-			return new Criteria();
+			return $this->getModelCriteria();
 		}
 		elseif (is_array($criteria))
 		{
 			$criteria = new Criteria($criteria);
 		}
 		$criteria->mergeWith($this->criteria);
+		$criteria->mergeWith($this->getModelCriteria());
 		return $criteria;
 	}
 
@@ -128,6 +131,24 @@ class ScopeManager
 	{
 		$this->criteria = new Criteria();
 		return $this;
+	}
+
+	private function getModelCriteria()
+	{
+		$criteria = null;
+		if ($this->model instanceof WithCriteriaInterface)
+		{
+			$criteria = $this->model->getDbCriteria();
+		}
+		elseif ($this->model instanceof CriteriaAwareInterface)
+		{
+			$criteria = $this->model->getCriteria();
+		}
+		if (empty($criteria))
+		{
+			return new Criteria;
+		}
+		return $criteria;
 	}
 
 }
