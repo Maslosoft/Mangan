@@ -18,8 +18,8 @@ use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 
 /**
- * **Experimental, do not use**
- * 
+ * Attach criteria to model
+ *
  * @see WithCriteriaInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
@@ -28,16 +28,14 @@ trait WithCriteriaTrait
 
 	/**
 	 * Criteria
-	 * @var CriteriaInterface
+	 * @var CriteriaInterface|Criteria
 	 */
 	private $_criteria = null;
 
 	/**
-	 * Returns the mongo criteria associated with this model.
+	 * Returns the Criteria associated with this model.
 	 * @param boolean $createIfNull whether to create a criteria instance if it does not exist. Defaults to true.
-	 * @return CriteriaInterface the query criteria that is associated with this model.
-	 * This criteria is mainly used by {@link scopes named scope} feature to accumulate
-	 * different criteria specifications.
+	 * @return CriteriaInterface|Criteria the query criteria that is associated with this model.
 	 * @since v1.0
 	 * @Ignored
 	 */
@@ -45,18 +43,19 @@ trait WithCriteriaTrait
 	{
 		if ($this->_criteria === null)
 		{
-			if (($c = $this->defaultScope()) !== [] || $createIfNull)
+			if ($createIfNull)
 			{
-				$this->_criteria = new Criteria($c);
+				$this->_criteria = new Criteria;
 			}
 		}
 		return $this->_criteria;
 	}
 
 	/**
-	 * Set girrent object, this will override previous criteria
+	 * Set new criteria, previous criteria will be destroyed.
 	 *
-	 * @param CriteriaInterface|array $criteria
+	 * @param CriteriaInterface|Criteria|array $criteria
+	 * @return static
 	 * @since v1.0
 	 * @Ignored
 	 */
@@ -74,6 +73,7 @@ trait WithCriteriaTrait
 		{
 			$this->_criteria = new Criteria();
 		}
+		return $this;
 	}
 
 }
