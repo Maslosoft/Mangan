@@ -83,7 +83,7 @@ class Finder implements FinderInterface
 		{
 			$mangan = Mangan::fromModel($model);
 		}
-		$this->em = $em ? : EntityManager::create($model, $mangan);
+		$this->em = $em ?: EntityManager::create($model, $mangan);
 		$this->mn = $mangan;
 		$this->withCursor($this->mn->useCursor);
 	}
@@ -100,7 +100,7 @@ class Finder implements FinderInterface
 	 */
 	public static function create(AnnotatedInterface $model, $em = null, Mangan $mangan = null)
 	{
-		$finderClass = ManganMeta::create($model)->type()->finder ? : static::class;
+		$finderClass = ManganMeta::create($model)->type()->finder ?: static::class;
 		return new $finderClass($model, $em, $mangan);
 	}
 
@@ -277,9 +277,15 @@ class Finder implements FinderInterface
 	 */
 	public function count($criteria = null)
 	{
-		$criteria = $this->sm->apply($criteria);
-		$criteria->decorateWith($this->model);
-		return $this->em->getCollection()->count($criteria->getConditions());
+		if ($this->_beforeCount())
+		{
+			$criteria = $this->sm->apply($criteria);
+			$criteria->decorateWith($this->model);
+			$count = $this->em->getCollection()->count($criteria->getConditions());
+			Event::trigger($this->model, FinderInterface::EventAfterCount);
+			return $count;
+		}
+		return 0;
 	}
 
 	/**
@@ -300,16 +306,22 @@ class Finder implements FinderInterface
 	 */
 	public function countByAttributes(array $attributes)
 	{
-		$criteria = new Criteria;
-		$criteria->decorateWith($this->model);
-		foreach ($attributes as $name => $value)
+		if ($this->_beforeCount())
 		{
-			$criteria->$name = $value;
+			$criteria = new Criteria;
+			$criteria->decorateWith($this->model);
+			foreach ($attributes as $name => $value)
+			{
+				$criteria->$name = $value;
+			}
+
+			$criteria = $this->sm->apply($criteria);
+
+			$count = $this->em->getCollection()->count($criteria->getConditions());
+			Event::trigger($this->model, FinderInterface::EventAfterCount);
+			return $count;
 		}
-
-		$criteria = $this->sm->apply($criteria);
-
-		return $this->em->getCollection()->count($criteria->getConditions());
+		return 0;
 	}
 
 	/**
@@ -320,18 +332,24 @@ class Finder implements FinderInterface
 	 */
 	public function exists(CriteriaInterface $criteria = null)
 	{
-		$criteria = $this->sm->apply($criteria);
-		$criteria->decorateWith($this->model);
-		/**
-		 * TODO Use as limited fields set as possible here:
-		 * Pk Fields, or only id, or fields used as query, still need to investigate
-		 */
-		$cursor = $this->em->getCollection()->find($criteria->getConditions());
-		$cursor->limit(1);
+		if ($this->_beforeExists())
+		{
+			$criteria = $this->sm->apply($criteria);
+			$criteria->decorateWith($this->model);
+			/**
+			 * TODO Use as limited fields set as possible here:
+			 * Pk Fields, or only id, or fields used as query, still need to investigate
+			 */
+			$cursor = $this->em->getCollection()->find($criteria->getConditions());
+			$cursor->limit(1);
 
-		// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
-		// https://github.com/mongofill/mongofill/issues/86
-		return ($cursor->count() !== 0);
+			// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
+			// https://github.com/mongofill/mongofill/issues/86
+			$exists = ($cursor->count() !== 0);
+			Event::trigger($this->model, FinderInterface::EventAfterExists);
+			return $exists;
+		}
+		return false;
 	}
 
 	/**
@@ -409,6 +427,32 @@ class Finder implements FinderInterface
 			return true;
 		}
 		return Event::handled($this->model, FinderInterface::EventBeforeFind);
+	}
+
+	/**
+	 * Trigger before count event
+	 * @return boolean
+	 */
+	private function _beforeCount()
+	{
+		if (!Event::hasHandler($this->model, FinderInterface::EventBeforeCount))
+		{
+			return true;
+		}
+		return Event::handled($this->model, FinderInterface::EventBeforeCount);
+	}
+
+	/**
+	 * Trigger before exists event
+	 * @return boolean
+	 */
+	private function _beforeExists()
+	{
+		if (!Event::hasHandler($this->model, FinderInterface::EventBeforeExists))
+		{
+			return true;
+		}
+		return Event::handled($this->model, FinderInterface::EventBeforeExists);
 	}
 
 }
