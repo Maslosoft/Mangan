@@ -83,7 +83,7 @@ class Event implements EventInterface
 	/**
 	 * Array containing partial classes for class. This holds traits, interfaces,
 	 * parent classes names for class.
-	 * 
+	 *
 	 * Structure is like below:
 	 * ```
 	 * $partials = [
@@ -101,7 +101,7 @@ class Event implements EventInterface
 	 * 		],
 	 * ];
 	 * ```
-	 * 
+	 *
 	 * @var string[]
 	 */
 	private static $partials = [];
@@ -109,7 +109,7 @@ class Event implements EventInterface
 	/**
 	 * Propagated properties cache. It contains only properties which should
 	 * propagate, others are skipped, thus value is always true.
-	 * 
+	 *
 	 * Structure is like follow:
 	 * ```
 	 * $propagated = [
@@ -121,7 +121,7 @@ class Event implements EventInterface
 	 * 			'otherFieldOne' => true,
 	 * 			'otherFieldTwo' => true
 	 * 		],
-	 * 
+	 *
 	 * ];
 	 * ```
 	 * @var bool[]
@@ -245,16 +245,22 @@ class Event implements EventInterface
 		$className = self::getName($model);
 
 		// Partials holds parts of class, this include interfaces and traits
-		$partials = self::getPartials($className);
+		$allPartials = self::getPartials($className);
+
+		// Filter out empty partials
+		$cb = function($className)use($name)
+		{
+			if (empty(self::$events[$name][$className]))
+			{
+				return false;
+			}
+			return true;
+		};
+		$partials = array_filter($allPartials, $cb);
 
 		// Trigger all partial events if applicable
 		foreach ($partials as $className)
 		{
-			if (empty(self::$events[$name][$className]))
-			{
-				continue;
-			}
-
 			foreach (self::$events[$name][$className] as $handler)
 			{
 				$event->data = $handler[1];
@@ -320,7 +326,7 @@ class Event implements EventInterface
 	/**
 	 * Check if model has event handler.
 	 * **IMPORTANT**: It does not check for propagated events
-	 * 
+	 *
 	 * @param AnnotatedInterface|string $class the object specifying the class-level event
 	 * @param string $name the event name.
 	 * @return bool True if has handler
