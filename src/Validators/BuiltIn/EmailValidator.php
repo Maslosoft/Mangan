@@ -16,6 +16,10 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
 
 /**
  * EmailValidator
@@ -25,16 +29,16 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class EmailValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use AllowEmpty,
+	  Messages,
+	  OnScenario,
+	  Safe;
 
 	/**
 	 * @var string the regular expression used to validate the attribute value.
 	 * @see http://www.regular-expressions.info/email.html
 	 */
-	public $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
+	public $pattern = '/^[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?\.)+[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?$/u';
 
 	/**
 	 * @var boolean whether to check the MX record for the email address.
@@ -79,12 +83,6 @@ class EmailValidator implements ValidatorInterface
 		$label = ManganMeta::create($model)->field($attribute)->label;
 
 		if (!is_scalar($model->$attribute))
-		{
-			$this->addError('msgValid', ['{attribute}' => $label]);
-			return false;
-		}
-		$valid = filter_var($model->$attribute, FILTER_VALIDATE_EMAIL);
-		if (!$valid)
 		{
 			$this->addError('msgValid', ['{attribute}' => $label]);
 			return false;
