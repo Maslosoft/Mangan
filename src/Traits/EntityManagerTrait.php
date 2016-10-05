@@ -37,7 +37,7 @@ trait EntityManagerTrait
 
 	/**
 	 * Entity manager
-	 * @var EntityManagerInterface
+	 * @var EntityManagerInterface|EntityManager
 	 */
 	private $_em = null;
 
@@ -264,6 +264,10 @@ trait EntityManagerTrait
 		return $this->_getEm()->getCollection();
 	}
 
+	/**
+	 * Get entity manager instance
+	 * @return EntityManagerInterface|EntityManager
+	 */
 	private function _getEm()
 	{
 		if (null === $this->_em)
