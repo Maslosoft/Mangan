@@ -34,11 +34,14 @@ class EmailValidator implements ValidatorInterface
 	  OnScenario,
 	  Safe;
 
+	const EmailPattern = '/^[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?\.)+[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?$/u';
+	const FullEmailPattern = '/^[^@]*<[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\\.[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?\\.)+[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?>$/u';
+
 	/**
 	 * @var string the regular expression used to validate the attribute value.
 	 * @see http://www.regular-expressions.info/email.html
 	 */
-	public $pattern = '/^[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?\.)+[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?$/u';
+	public $pattern = self::EmailPattern;
 
 	/**
 	 * @var boolean whether to check the MX record for the email address.
