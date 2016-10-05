@@ -16,6 +16,10 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
 
 /**
  * StringValidator
@@ -25,10 +29,10 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class StringValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use AllowEmpty,
+	  Messages,
+	  OnScenario,
+	  Safe;
 
 	/**
 	 * @var integer maximum length. Defaults to null, meaning no maximum limit.
