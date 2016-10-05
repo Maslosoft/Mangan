@@ -15,7 +15,9 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
+use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
 use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
@@ -28,20 +30,20 @@ use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
 class EmailValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use AllowEmpty;
 
 	/**
 	 * @var string the regular expression used to validate the attribute value.
 	 * @see http://www.regular-expressions.info/email.html
 	 */
-	public $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
+	public $pattern = EmailValidator::EmailPattern;
 
 	/**
 	 * @var string the regular expression used to validate email addresses with the name part.
 	 * This property is used only when {@link allowName} is true.
 	 * @see allowName
 	 */
-	public $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/';
+	public $fullPattern = EmailValidator::FullEmailPattern;
 
 	/**
 	 * @var boolean whether to allow name in the email address (e.g. "Qiang Xue <qiang.xue@gmail.com>"). Defaults to false.
