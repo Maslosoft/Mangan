@@ -16,6 +16,8 @@ namespace Maslosoft\Mangan\Decorators\Model;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Transformers\RawArray;
 
 /**
  * ClassNameDecorator
@@ -48,6 +50,18 @@ class ClassNameDecorator implements ModelDecoratorInterface
 	 */
 	public function write($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
+		// Do not store class names for homogenous collections
+		/**
+		 * TODO Below code conflicts with some features
+		 */
+//		if ($transformatorClass === RawArray::class)
+//		{
+//			$isHomogenous = ManganMeta::create($model)->type()->homogenous;
+//			if ($isHomogenous)
+//			{
+//				return;
+//			}
+//		}
 		$dbValues['_class'] = get_class($model);
 	}
 

@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
 
 /**
  * HomogenousAnnotation
- * Default to true, set this to false to allow stoging arbitrary models types in collection
+ * Default to true, set this to false to allow storing arbitrary models types in collection
  * @template Homogenous(${isHomogenous})
  * @Target('class')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
