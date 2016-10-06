@@ -24,7 +24,7 @@ use Maslosoft\Mangan\Meta\EmbeddedMeta;
  *
  * By default, when updating from external source, documents are compared by pk.
  * This can be overridden with `key` property.
- * 
+ *
  * Examples:
  *
  * Embedded array with any model:
@@ -47,7 +47,6 @@ use Maslosoft\Mangan\Meta\EmbeddedMeta;
  * @EmbeddedArray(Company\ClassName, {'login', 'email'})
  * ```
  *
- * </ul>
  * @Target('property')
  *
  * @Conflicts('Embedded')
