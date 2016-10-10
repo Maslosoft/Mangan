@@ -14,7 +14,10 @@
 namespace Maslosoft\Mangan\Annotations;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
+use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+use Maslosoft\Mangan\Sanitizers\PassThrough;
+use UnexpectedValueException;
 
 /**
  * Sanitizer. There can be only one sanitizer per field.
@@ -48,6 +51,14 @@ class SanitizerAnnotation extends ManganPropertyAnnotation
 			}
 		}
 		$config = ParamsExpander::expand($this, $params);
+		if (empty($config['class']))
+		{
+			throw new UnexpectedValueException(sprintf('@Sanitizer expects class name for model `%s` field `%s`', $this->getMeta()->type()->name, $this->getEntity()->name));
+		}
+		elseif ($config['class'] !== 'None' && !ClassChecker::exists($config['class']) && !ClassChecker::exists(sprintf('%s\\%s', PassThrough::Ns, $config['class'])))
+		{
+			throw new UnexpectedValueException(sprintf('Class `%s` for @Sanitizer not found on model `%s` field `%s`', $config['class'], $this->getMeta()->type()->name, $this->getEntity()->name));
+		}
 		$this->getEntity()->sanitizer = $config;
 	}
 
