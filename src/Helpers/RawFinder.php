@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Finder;
 
 /**
@@ -33,6 +34,10 @@ class RawFinder extends Finder
 
 	protected function populateRecord($data)
 	{
+		if (!empty($data['$err']))
+		{
+			throw new ManganException(sprintf("There is an error in query: %s", $data['$err']));
+		}
 		return $data;
 	}
 
