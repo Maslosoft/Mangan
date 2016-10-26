@@ -16,8 +16,11 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Interfaces\ActiveDocumentInterface;
 use Maslosoft\Mangan\Interfaces\InitInterface;
-use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
+use Maslosoft\Mangan\Traits\I18NAbleTrait;
+use Maslosoft\Mangan\Traits\OwneredTrait;
+use Maslosoft\Mangan\Traits\ScenariosTrait;
+use Maslosoft\Mangan\Traits\ValidatableTrait;
 use MongoId;
 
 /**
@@ -35,10 +38,10 @@ use MongoId;
 abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterface
 {
 
-	use \Maslosoft\Mangan\Traits\I18NAbleTrait,
-	  \Maslosoft\Mangan\Traits\OwneredTrait,
-	  \Maslosoft\Mangan\Traits\ScenariosTrait,
-	  \Maslosoft\Mangan\Traits\ValidatableTrait;
+	use I18NAbleTrait,
+	  OwneredTrait,
+	  ScenariosTrait,
+	  ValidatableTrait;
 
 	/**
 	 * Mongo id field
@@ -96,7 +99,7 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	 */
 	public function init()
 	{
-		
+
 	}
 
 }
