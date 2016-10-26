@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
@@ -388,6 +389,10 @@ class Finder implements FinderInterface
 	{
 		if ($data !== null)
 		{
+			if (!empty($data['$err']))
+			{
+				throw new ManganException(sprintf("There is an error in query: %s", $data['$err']));
+			}
 			$model = RawArray::toModel($data, $this->model);
 			ScenarioManager::setScenario($model, ScenariosInterface::Update);
 			Event::trigger($model, FinderInterface::EventAfterFind);
