@@ -36,5 +36,16 @@ trait DataTrait
 		return $this->data;
 	}
 
+	/**
+	 * Manually set data. This is for special cases only,
+	 * usually should not be used.
+	 * 
+	 * @param array $data
+	 */
+	public function setData($data)
+	{
+		$this->data = $data;
+	}
+
 	abstract protected function fetchData();
 }
