@@ -22,6 +22,11 @@ use Maslosoft\Mangan\Interfaces\Criteria\SelectableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
+use Maslosoft\Mangan\Traits\Criteria\CursorAwareTrait;
+use Maslosoft\Mangan\Traits\Criteria\DecoratableTrait;
+use Maslosoft\Mangan\Traits\Criteria\LimitableTrait;
+use Maslosoft\Mangan\Traits\Criteria\SelectableTrait;
+use Maslosoft\Mangan\Traits\Criteria\SortableTrait;
 
 /**
  * Criteria
@@ -46,18 +51,17 @@ use Maslosoft\Mangan\Interfaces\SortInterface;
 class Criteria implements CriteriaInterface
 {
 
-	use Traits\Criteria\CursorAwareTrait,
-	  Traits\Criteria\DecoratableTrait,
-	  Traits\Criteria\LimitableTrait,
-	  Traits\Criteria\SelectableTrait,
-	  Traits\Criteria\SortableTrait;
+	use CursorAwareTrait,
+	  DecoratableTrait,
+	  LimitableTrait,
+	  SelectableTrait,
+	  SortableTrait;
 
 	/**
 	 * @since v1.0
 	 * @var array $operators supported operators lists
 	 */
 	public static $operators = [
-
 		// Comparison
 		// Matches values that are equal to a specified value.
 		'eq' => '$eq',

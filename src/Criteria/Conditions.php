@@ -25,6 +25,7 @@ use Maslosoft\Mangan\Criteria;
  * This class is meant to overcome this issue, by providing fluid, cascading interface.
  *
  * Example for simple query, let's find `visits` larger than 30 and lesser than 100:
+ * 
  * ```php
  * $conditions = new Conditions($model)
  * $conditions->visits->gt(30)->lt(100);
@@ -33,6 +34,7 @@ use Maslosoft\Mangan\Criteria;
  * However real improvement comes when used with more complex query. In this example we
  * search for `visits` greater than 10 and lesser than 200 or greater than 100 and
  * lesser than 200, where `active` is true:
+ *
  * ```php
  * $c1 = new Conditions($model);
  * $c1->visits->gt(10)->lt(20);
