@@ -13,13 +13,8 @@
 
 namespace Maslosoft\Mangan;
 
-use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
-use Maslosoft\Mangan\Interfaces\Criteria\MergeableInterface;
-use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
 use Maslosoft\Mangan\Interfaces\DataProviderInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
-use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
 use Maslosoft\Mangan\Traits\DataProvider\ConfigureTrait;
 use Maslosoft\Mangan\Traits\DataProvider\CriteriaTrait;
 use Maslosoft\Mangan\Traits\DataProvider\DataTrait;
