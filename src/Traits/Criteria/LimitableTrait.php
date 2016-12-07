@@ -27,14 +27,21 @@ trait LimitableTrait
 	private $_offset = null;
 
 	/**
-	 * Set linit
-	 * Multiple calls will overrride previous value of limit
+	 * Set limit
+	 * Multiple calls will overrride previous value of limit.
 	 *
-	 * @param integer $limit limit
+	 * Pass `false` to disable limit.
+	 *
+	 * @param integer|bool $limit limit
 	 * @return static
 	 */
 	public function limit($limit)
 	{
+		if (false === $limit)
+		{
+			$this->_limit = null;
+			return $this;
+		}
 		$this->_limit = intval($limit);
 		return $this;
 	}
@@ -43,10 +50,17 @@ trait LimitableTrait
 	 * Set offset
 	 * Multiple calls will override previous value
 	 *
+	 * Pass `false` to disable offset.
+	 *
 	 * @return static
 	 */
 	public function offset($offset)
 	{
+		if (false === $offset)
+		{
+			$this->_offset = null;
+			return $this;
+		}
 		$this->_offset = intval($offset);
 		return $this;
 	}
