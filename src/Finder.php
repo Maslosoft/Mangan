@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
+use Maslosoft\Mangan\Helpers\FinderEvents;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
@@ -114,7 +115,7 @@ class Finder implements FinderInterface
 	 */
 	public function find($criteria = null)
 	{
-		if ($this->_beforeFind())
+		if (FinderEvents::beforeFind($this->model))
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
@@ -195,7 +196,7 @@ class Finder implements FinderInterface
 	 */
 	public function findAll($criteria = null)
 	{
-		if ($this->_beforeFind())
+		if (FinderEvents::beforeFind($this->model))
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
@@ -278,7 +279,7 @@ class Finder implements FinderInterface
 	 */
 	public function count($criteria = null)
 	{
-		if ($this->_beforeCount())
+		if (FinderEvents::beforeCount($this->model))
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
@@ -307,16 +308,16 @@ class Finder implements FinderInterface
 	 */
 	public function countByAttributes(array $attributes)
 	{
-		if ($this->_beforeCount())
+		if (FinderEvents::beforeCount($this->model))
 		{
 			$criteria = new Criteria;
-			$criteria->decorateWith($this->model);
 			foreach ($attributes as $name => $value)
 			{
 				$criteria->$name = $value;
 			}
 
 			$criteria = $this->sm->apply($criteria);
+			$criteria->decorateWith($this->model);
 
 			$count = $this->em->getCollection()->count($criteria->getConditions());
 			Event::trigger($this->model, FinderInterface::EventAfterCount);
@@ -333,7 +334,7 @@ class Finder implements FinderInterface
 	 */
 	public function exists(CriteriaInterface $criteria = null)
 	{
-		if ($this->_beforeExists())
+		if (FinderEvents::beforeExists($this->model))
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
@@ -422,45 +423,6 @@ class Finder implements FinderInterface
 			$records[] = $this->populateRecord($data);
 		}
 		return $records;
-	}
-
-	/**
-	 * Trigger before find event
-	 * @return boolean
-	 */
-	private function _beforeFind()
-	{
-		if (!Event::hasHandler($this->model, FinderInterface::EventBeforeFind))
-		{
-			return true;
-		}
-		return Event::handled($this->model, FinderInterface::EventBeforeFind);
-	}
-
-	/**
-	 * Trigger before count event
-	 * @return boolean
-	 */
-	private function _beforeCount()
-	{
-		if (!Event::hasHandler($this->model, FinderInterface::EventBeforeCount))
-		{
-			return true;
-		}
-		return Event::handled($this->model, FinderInterface::EventBeforeCount);
-	}
-
-	/**
-	 * Trigger before exists event
-	 * @return boolean
-	 */
-	private function _beforeExists()
-	{
-		if (!Event::hasHandler($this->model, FinderInterface::EventBeforeExists))
-		{
-			return true;
-		}
-		return Event::handled($this->model, FinderInterface::EventBeforeExists);
 	}
 
 }
