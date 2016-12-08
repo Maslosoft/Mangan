@@ -13,6 +13,21 @@ use Maslosoft\Mangan\Interfaces\FinderInterface;
 class FinderEvents
 {
 
+	public static function afterCount($model)
+	{
+		Event::trigger($model, FinderInterface::EventAfterCount);
+	}
+
+	public static function afterExists($model)
+	{
+		Event::trigger($model, FinderInterface::EventAfterExists);
+	}
+
+	public static function afterFind($model)
+	{
+		Event::trigger($model, FinderInterface::EventAfterFind);
+	}
+
 	/**
 	 * Trigger before count event
 	 * @return boolean

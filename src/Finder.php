@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\FinderEvents;
 use Maslosoft\Mangan\Helpers\PkManager;
@@ -284,7 +283,7 @@ class Finder implements FinderInterface
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
 			$count = $this->em->getCollection()->count($criteria->getConditions());
-			Event::trigger($this->model, FinderInterface::EventAfterCount);
+			FinderEvents::afterCount($this->model);
 			return $count;
 		}
 		return 0;
@@ -320,7 +319,7 @@ class Finder implements FinderInterface
 			$criteria->decorateWith($this->model);
 
 			$count = $this->em->getCollection()->count($criteria->getConditions());
-			Event::trigger($this->model, FinderInterface::EventAfterCount);
+			FinderEvents::afterCount($this->model);
 			return $count;
 		}
 		return 0;
@@ -351,7 +350,7 @@ class Finder implements FinderInterface
 			// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
 			// https://github.com/mongofill/mongofill/issues/86
 			$exists = ($cursor->count() !== 0);
-			Event::trigger($this->model, FinderInterface::EventAfterExists);
+			FinderEvents::afterExists($this->model);
 			return $exists;
 		}
 		return false;
@@ -399,7 +398,7 @@ class Finder implements FinderInterface
 			}
 			$model = RawArray::toModel($data, $this->model);
 			ScenarioManager::setScenario($model, ScenariosInterface::Update);
-			Event::trigger($model, FinderInterface::EventAfterFind);
+			FinderEvents::afterFind($model);
 			return $model;
 		}
 		else
