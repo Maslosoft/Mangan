@@ -71,7 +71,7 @@ class PkManager
 	 */
 	public static function prepare(AnnotatedInterface $model, $pkValue)
 	{
-		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
+		$pkField = self::getPkKeys($model);
 		$criteria = new Criteria();
 
 		if (is_array($pkField))
@@ -109,7 +109,7 @@ class PkManager
 	 */
 	public static function getFromModel(AnnotatedInterface $model)
 	{
-		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
+		$pkField = self::getPkKeys($model);
 		$pkValue = [];
 		$sanitizer = new Sanitizer($model);
 		if (is_array($pkField))
@@ -127,6 +127,21 @@ class PkManager
 	}
 
 	/**
+	 * Get primary key(s).
+	 *
+	 * Might return single string value for one primary key, or array
+	 * for composite keys.
+	 *
+	 *
+	 * @param AnnotatedInterface $model
+	 * @return string|string[]
+	 */
+	public static function getPkKeys(AnnotatedInterface $model)
+	{
+		return ManganMeta::create($model)->type()->primaryKey ?: '_id';
+	}
+
+	/**
 	 * Get pk criteria from raw array
 	 * @param mixed[] $data
 	 * @param AnnotatedInterface $model
@@ -134,7 +149,7 @@ class PkManager
 	 */
 	public static function getFromArray($data, AnnotatedInterface $model)
 	{
-		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
+		$pkField = ManganMeta::create($model)->type()->primaryKey ?: '_id';
 		$pkValue = [];
 		$sanitizer = new Sanitizer($model);
 		if (is_array($pkField))
@@ -160,7 +175,8 @@ class PkManager
 	 */
 	public static function applyToModel(AnnotatedInterface $model, $pkValue)
 	{
-		$pkField = ManganMeta::create($model)->type()->primaryKey? : '_id';
+		$pkField = self::getPkKeys($model);
+
 		$sanitizer = new Sanitizer($model);
 		if (is_array($pkField))
 		{
