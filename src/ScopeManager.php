@@ -26,7 +26,7 @@ class ScopeManager extends AbstractScopeManager implements ScopeManagerInterface
 
 	public function __construct($model)
 	{
-		$this->model = $model;
+		$this->setModel($model);
 	}
 
 	protected function getNewCriteria($criteria = null)

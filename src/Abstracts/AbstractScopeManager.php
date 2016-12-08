@@ -2,7 +2,13 @@
 
 namespace Maslosoft\Mangan\Abstracts;
 
+use Maslosoft\Mangan\Document;
+use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
+use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
 use Maslosoft\Mangan\Interfaces\ScopeManagerInterface;
+use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
+use Maslosoft\Mangan\Traits\ModelAwareTrait;
 
 /**
  * Base class for implementing scope managers
@@ -10,14 +16,10 @@ use Maslosoft\Mangan\Interfaces\ScopeManagerInterface;
  * @see ScopeManagerInterface
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-abstract class AbstractScopeManager
+abstract class AbstractScopeManager implements ModelAwareInterface
 {
 
-	/**
-	 * Model instance
-	 * @var AnnotatedInterface
-	 */
-	private $model = null;
+	use ModelAwareTrait;
 
 	/**
 	 *

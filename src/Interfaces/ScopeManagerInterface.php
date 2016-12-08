@@ -2,6 +2,8 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Mangan\Document;
+
 /**
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
