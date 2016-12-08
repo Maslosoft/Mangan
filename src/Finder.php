@@ -337,11 +337,14 @@ class Finder implements FinderInterface
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
-			/**
-			 * TODO Use as limited fields set as possible here:
-			 * Pk Fields, or only id, or fields used as query, still need to investigate
-			 */
-			$cursor = $this->em->getCollection()->find($criteria->getConditions());
+
+			//Select only Pk Fields to not fetch possibly large document
+			$pkKeys = PkManager::getPkKeys($this->model);
+			if (is_string($pkKeys))
+			{
+				$pkKeys = [$pkKeys];
+			}
+			$cursor = $this->em->getCollection()->find($criteria->getConditions(), $pkKeys);
 			$cursor->limit(1);
 
 			// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
