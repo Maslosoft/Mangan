@@ -1,6 +1,7 @@
 {
 	"name": "maslosoft/mangan",
 	"description": "MongoDB Object Persister",
+	"homepage": "https://maslosoft.com/mangan/",
 	"license": [
 		"AGPL",
 		"Commercial"
@@ -9,7 +10,7 @@
 		{
 			"name": "Peter Maselkowski",
 			"email": "pmaselkowski@gmail.com",
-			"homepage": "http://maslosoft.com",
+			"homepage": "https://maslosoft.com",
 			"role": "Developer"
 		},
 		{
