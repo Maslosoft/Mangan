@@ -34,7 +34,7 @@ class Cursor implements Iterator, Countable
 {
 
 	/**
-	 * @var MongoCursor $_cursor the MongoCursor returned by the query
+	 * @var MongoCursor|Iterator|Countable $_cursor the MongoCursor returned by the query
 	 * @since v1.3.4
 	 */
 	protected $_cursor;

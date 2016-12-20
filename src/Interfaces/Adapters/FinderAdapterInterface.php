@@ -21,14 +21,13 @@ interface FinderAdapterInterface
 
 	/**
 	 * @param CriteriaInterface $criteria
-	 * @param string[] $fields
+	 * @param bool[] $fields
 	 * @return array
 	 */
 	public function findOne(CriteriaInterface $criteria, $fields = []);
 
 	/**
 	 * @param CriteriaInterface $criteria
-	 * @param string[] $fields
 	 * @return int
 	 */
 	public function count(CriteriaInterface $criteria);
