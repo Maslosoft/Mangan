@@ -48,11 +48,11 @@ class Cursor implements Iterator, Countable
 	/**
 	 * Construct a new Cursor
 	 *
-	 * @param MongoCursor $cursor the cursor returned by the query
+	 * @param MongoCursor|Iterator|Countable $cursor the cursor returned by the query
 	 * @param AnnotatedInterface $model the model for instantiating objects
 	 * @since v1.3.4
 	 */
-	public function __construct(MongoCursor $cursor, AnnotatedInterface $model)
+	public function __construct(Iterator $cursor, AnnotatedInterface $model)
 	{
 		$this->_cursor = $cursor;
 		$this->_model = $model;

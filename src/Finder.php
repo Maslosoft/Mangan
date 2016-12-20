@@ -14,13 +14,16 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Adapters\Finder\MongoAdapter;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\FinderEvents;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\Adapters\FinderAdapterInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
+use Maslosoft\Mangan\Interfaces\ScopeManagerInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\RawArray;
 use MongoCursor;
@@ -40,20 +43,20 @@ class Finder implements FinderInterface
 	public $model = null;
 
 	/**
+	 *
+	 * @var MongoAdapter|FinderAdapterInterface
+	 */
+	private $adapter = null;
+
+	/**
 	 * Mangan instance
 	 * @var Mangan
 	 */
 	private $mn = null;
 
 	/**
-	 * Entity manager instance
-	 * @var EntityManagerInterface
-	 */
-	private $em = null;
-
-	/**
 	 * Scope manager instance
-	 * @var ScopeManager
+	 * @var ScopeManagerInterface
 	 */
 	private $sm = null;
 
@@ -84,7 +87,7 @@ class Finder implements FinderInterface
 		{
 			$mangan = Mangan::fromModel($model);
 		}
-		$this->em = $em ?: EntityManager::create($model, $mangan);
+		$this->adapter = new MongoAdapter($model, $mangan, $em);
 		$this->mn = $mangan;
 		$this->withCursor($this->mn->useCursor);
 	}
@@ -118,7 +121,7 @@ class Finder implements FinderInterface
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
-			$data = $this->em->getCollection()->findOne($criteria->getConditions(), $criteria->getSelect());
+			$data = $this->adapter->findOne($criteria, $criteria->getSelect());
 			return $this->populateRecord($data);
 		}
 		return null;
@@ -199,7 +202,7 @@ class Finder implements FinderInterface
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
-			$cursor = $this->em->getCollection()->find($criteria->getConditions());
+			$cursor = $this->adapter->findMany($criteria);
 
 			if ($criteria->getSort() !== null)
 			{
@@ -282,7 +285,7 @@ class Finder implements FinderInterface
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
-			$count = $this->em->getCollection()->count($criteria->getConditions());
+			$count = $this->adapter->count($criteria);
 			FinderEvents::afterCount($this->model);
 			return $count;
 		}
@@ -318,7 +321,7 @@ class Finder implements FinderInterface
 			$criteria = $this->sm->apply($criteria);
 			$criteria->decorateWith($this->model);
 
-			$count = $this->em->getCollection()->count($criteria->getConditions());
+			$count = $this->adapter->count($criteria);
 			FinderEvents::afterCount($this->model);
 			return $count;
 		}
@@ -344,7 +347,7 @@ class Finder implements FinderInterface
 			{
 				$pkKeys = [$pkKeys];
 			}
-			$cursor = $this->em->getCollection()->find($criteria->getConditions(), $pkKeys);
+			$cursor = $this->adapter->findMany($criteria, $pkKeys);
 			$cursor->limit(1);
 
 			// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
