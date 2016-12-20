@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Abstracts\AbstractFinder;
 use Maslosoft\Mangan\Adapters\Finder\MongoAdapter;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\FinderEvents;
@@ -30,10 +31,13 @@ use MongoCursor;
 
 /**
  * Finder
- *
+ * TODO Further refactor to split to abstract finder with:
+ * * get/setAdapter method
+ * * get/setScopeManager method
+ * * get/setProfiler method
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Finder implements FinderInterface
+class Finder extends AbstractFinder implements FinderInterface
 {
 
 	/**
