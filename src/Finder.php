@@ -413,11 +413,11 @@ class Finder extends AbstractFinder implements FinderInterface
 	/**
 	 * Creates a list of documents based on the input data.
 	 * This method is internally used by the find methods.
-	 * @param MongoCursor $cursor Results found to populate active records.
+	 * @param Iterator|array $cursor Results found to populate active records.
 	 * @return AnnotatedInterface[] array list of active records.
 	 * @since v1.0
 	 */
-	protected function populateRecords(MongoCursor $cursor)
+	protected function populateRecords($cursor)
 	{
 		$records = array();
 		foreach ($cursor as $data)
