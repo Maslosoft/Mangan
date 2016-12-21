@@ -48,7 +48,7 @@ class Finder extends AbstractFinder implements FinderInterface
 
 	/**
 	 *
-	 * @var MongoAdapter|FinderAdapterInterface
+	 * @var FinderAdapterInterface
 	 */
 	private $adapter = null;
 
