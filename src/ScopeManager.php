@@ -29,9 +29,11 @@ class ScopeManager extends AbstractScopeManager implements ScopeManagerInterface
 		$this->setModel($model);
 	}
 
-	protected function getNewCriteria($criteria = null)
+	public function getNewCriteria($criteria = null)
 	{
-		return new Criteria($criteria);
+		$newCriteria = new Criteria($criteria);
+		$newCriteria->decorateWith($this->getModel());
+		return $newCriteria;
 	}
 
 }

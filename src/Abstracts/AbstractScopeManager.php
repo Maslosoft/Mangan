@@ -3,6 +3,7 @@
 namespace Maslosoft\Mangan\Abstracts;
 
 use Maslosoft\Mangan\Document;
+use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
@@ -108,6 +109,10 @@ abstract class AbstractScopeManager implements ModelAwareInterface
 		}
 		$criteria->mergeWith($this->criteria);
 		$criteria->mergeWith($this->getModelCriteria());
+		if ($criteria instanceof DecoratableInterface)
+		{
+			$criteria->decorateWith($this->getModel());
+		}
 		return $criteria;
 	}
 
@@ -135,5 +140,5 @@ abstract class AbstractScopeManager implements ModelAwareInterface
 		return $criteria;
 	}
 
-	abstract protected function getNewCriteria($criteria = null);
+	abstract public function getNewCriteria($criteria = null);
 }

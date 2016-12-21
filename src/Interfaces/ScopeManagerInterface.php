@@ -72,4 +72,6 @@ interface ScopeManagerInterface
 	public function apply(&$criteria = null);
 
 	public function reset();
+
+	public function getNewCriteria($criteria = null);
 }
