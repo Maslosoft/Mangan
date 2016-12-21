@@ -3,6 +3,7 @@
 namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Interfaces\FinderEventsInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 
 /**
@@ -10,20 +11,20 @@ use Maslosoft\Mangan\Interfaces\FinderInterface;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class FinderEvents
+class FinderEvents implements FinderEventsInterface
 {
 
-	public static function afterCount($model)
+	public function afterCount($model)
 	{
 		Event::trigger($model, FinderInterface::EventAfterCount);
 	}
 
-	public static function afterExists($model)
+	public function afterExists($model)
 	{
 		Event::trigger($model, FinderInterface::EventAfterExists);
 	}
 
-	public static function afterFind($model)
+	public function afterFind($model)
 	{
 		Event::trigger($model, FinderInterface::EventAfterFind);
 	}
@@ -32,7 +33,7 @@ class FinderEvents
 	 * Trigger before count event
 	 * @return boolean
 	 */
-	public static function beforeCount($model)
+	public function beforeCount($model)
 	{
 		if (!Event::hasHandler($model, FinderInterface::EventBeforeCount))
 		{
@@ -45,7 +46,7 @@ class FinderEvents
 	 * Trigger before exists event
 	 * @return boolean
 	 */
-	public static function beforeExists($model)
+	public function beforeExists($model)
 	{
 		if (!Event::hasHandler($model, FinderInterface::EventBeforeExists))
 		{
@@ -58,7 +59,7 @@ class FinderEvents
 	 * Trigger before find event
 	 * @return boolean
 	 */
-	public static function beforeFind($model)
+	public function beforeFind($model)
 	{
 		if (!Event::hasHandler($model, FinderInterface::EventBeforeFind))
 		{
