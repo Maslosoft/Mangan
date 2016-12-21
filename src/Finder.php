@@ -399,7 +399,7 @@ class Finder extends AbstractFinder implements FinderInterface
 			{
 				throw new ManganException(sprintf("There is an error in query: %s", $data['$err']));
 			}
-			$model = RawArray::toModel($data, $this->model);
+			$model = $this->createModel($data);
 			ScenarioManager::setScenario($model, ScenariosInterface::Update);
 			$this->fe->afterFind($model);
 			return $model;
@@ -408,6 +408,11 @@ class Finder extends AbstractFinder implements FinderInterface
 		{
 			return null;
 		}
+	}
+
+	protected function createModel($data)
+	{
+		return RawArray::toModel($data, $this->model);
 	}
 
 	/**
