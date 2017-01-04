@@ -13,8 +13,12 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
+use Maslosoft\Mangan\Interfaces\FinderInterface;
+use Maslosoft\Mangan\Mangan;
 
 /**
  * Finder variant which returns raw arrays.
@@ -32,7 +36,25 @@ class RawFinder extends Finder
 		$this->withCursor(false);
 	}
 
+	/**
+	 * Create raw finder instance.
+	 *
+	 * @param AnnotatedInterface $model
+	 * @param EntityManagerInterface $em
+	 * @param Mangan $mangan
+	 * @return FinderInterface
+	 */
+	public static function create(AnnotatedInterface $model, $em = null, Mangan $mangan = null)
+	{
+		return new static($model, $em, $mangan);
+	}
+
 	protected function populateRecord($data)
+	{
+		return $this->createModel($data);
+	}
+
+	protected function createModel($data)
 	{
 		if (!empty($data['$err']))
 		{
