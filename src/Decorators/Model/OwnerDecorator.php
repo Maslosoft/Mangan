@@ -40,6 +40,10 @@ class OwnerDecorator implements ModelDecoratorInterface
 	{
 		foreach (ManganMeta::create($model)->properties('owned') as $name => $metaProperty)
 		{
+			if (!$metaProperty)
+			{
+				continue;
+			}
 			/* @var $metaProperty DocumentPropertyMeta */
 			if (!isset($model->$name))
 			{
