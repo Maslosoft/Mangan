@@ -29,23 +29,14 @@ use Maslosoft\Mangan\Traits\Finder\FinderHelpers;
 use Maslosoft\Mangan\Transformers\RawArray;
 
 /**
- * Finder
- * TODO Further refactor to split to abstract finder with:
- * * get/setAdapter method
- * * get/setScopeManager method
- * * get/setProfiler method
+ * Basic Finder implementation
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class Finder extends AbstractFinder implements FinderInterface
 {
 
 	use FinderHelpers;
-
-	/**
-	 * Model
-	 * @var AnnotatedInterface
-	 */
-	public $model = null;
 
 	/**
 	 * Constructor
@@ -56,7 +47,7 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function __construct($model, $em = null, $mangan = null)
 	{
-		$this->model = $model;
+		$this->setModel($model);
 		$this->setScopeManager(new ScopeManager($model));
 		if (null === $mangan)
 		{
@@ -94,7 +85,7 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function find($criteria = null)
 	{
-		if ($this->getFinderEvents()->beforeFind($this->model))
+		if ($this->getFinderEvents()->beforeFind($this))
 		{
 			$criteria = $this->getScopeManager()->apply($criteria);
 			$data = $this->getAdapter()->findOne($criteria, $criteria->getSelect());
@@ -132,7 +123,7 @@ class Finder extends AbstractFinder implements FinderInterface
 	public function findByPk($pkValue, $criteria = null)
 	{
 		$pkCriteria = $this->getScopeManager()->getNewCriteria($criteria);
-		$pkCriteria->mergeWith(PkManager::prepare($this->model, $pkValue));
+		$pkCriteria->mergeWith(PkManager::prepare($this->getModel(), $pkValue));
 		return $this->find($pkCriteria);
 	}
 
@@ -171,7 +162,7 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function findAll($criteria = null)
 	{
-		if ($this->getFinderEvents()->beforeFind($this->model))
+		if ($this->getFinderEvents()->beforeFind($this))
 		{
 			$criteria = $this->getScopeManager()->apply($criteria);
 			$cursor = $this->getAdapter()->findMany($criteria);
@@ -195,7 +186,7 @@ class Finder extends AbstractFinder implements FinderInterface
 			$this->getProfiler()->cursor($cursor);
 			if ($this->isWithCursor())
 			{
-				return new Cursor($cursor, $this->model);
+				return new Cursor($cursor, $this->getModel());
 			}
 			else
 			{
@@ -237,7 +228,7 @@ class Finder extends AbstractFinder implements FinderInterface
 	public function findAllByPk($pkValues, $criteria = null)
 	{
 		$pkCriteria = $this->getScopeManager()->getNewCriteria($criteria);
-		PkManager::prepareAll($this->model, $pkValues, $pkCriteria);
+		PkManager::prepareAll($this->getModel(), $pkValues, $pkCriteria);
 
 		return $this->findAll($pkCriteria);
 	}
@@ -251,11 +242,11 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function count($criteria = null)
 	{
-		if ($this->getFinderEvents()->beforeCount($this->model))
+		if ($this->getFinderEvents()->beforeCount($this))
 		{
 			$criteria = $this->getScopeManager()->apply($criteria);
 			$count = $this->getAdapter()->count($criteria);
-			$this->getFinderEvents()->afterCount($this->model);
+			$this->getFinderEvents()->afterCount($this);
 			return $count;
 		}
 		return 0;
@@ -279,7 +270,7 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function countByAttributes(array $attributes)
 	{
-		if ($this->getFinderEvents()->beforeCount($this->model))
+		if ($this->getFinderEvents()->beforeCount($this))
 		{
 			$criteria = $this->getScopeManager()->getNewCriteria();
 			foreach ($attributes as $name => $value)
@@ -287,10 +278,10 @@ class Finder extends AbstractFinder implements FinderInterface
 				$criteria->$name = $value;
 			}
 
-			$criteria = $this->getScopeManager()->apply($criteria);
+			$scopedCriteria = $this->getScopeManager()->apply($criteria);
 
-			$count = $this->getAdapter()->count($criteria);
-			$this->getFinderEvents()->afterCount($this->model);
+			$count = $this->getAdapter()->count($scopedCriteria);
+			$this->getFinderEvents()->afterCount($this);
 			return $count;
 		}
 		return 0;
@@ -304,12 +295,12 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function exists(CriteriaInterface $criteria = null)
 	{
-		if ($this->getFinderEvents()->beforeExists($this->model))
+		if ($this->getFinderEvents()->beforeExists($this))
 		{
 			$criteria = $this->getScopeManager()->apply($criteria);
 
 			//Select only Pk Fields to not fetch possibly large document
-			$pkKeys = PkManager::getPkKeys($this->model);
+			$pkKeys = PkManager::getPkKeys($this->getModel());
 			if (is_string($pkKeys))
 			{
 				$pkKeys = [$pkKeys];
@@ -320,7 +311,7 @@ class Finder extends AbstractFinder implements FinderInterface
 			// NOTE: Cannot use count(true) here because of hhvm mongofill compatibility, see:
 			// https://github.com/mongofill/mongofill/issues/86
 			$exists = ($cursor->count() !== 0);
-			$this->getFinderEvents()->afterExists($this->model);
+			$this->getFinderEvents()->afterExists($this);
 			return $exists;
 		}
 		return false;
@@ -352,7 +343,7 @@ class Finder extends AbstractFinder implements FinderInterface
 		{
 			$model = $this->createModel($data);
 			ScenarioManager::setScenario($model, ScenariosInterface::Update);
-			$this->getFinderEvents()->afterFind($model);
+			$this->getFinderEvents()->afterFind($this, $model);
 			return $model;
 		}
 		else
@@ -367,7 +358,7 @@ class Finder extends AbstractFinder implements FinderInterface
 		{
 			throw new ManganException(sprintf("There is an error in query: %s", $data['$err']));
 		}
-		return RawArray::toModel($data, $this->model);
+		return RawArray::toModel($data, $this->getModel());
 	}
 
 	/**

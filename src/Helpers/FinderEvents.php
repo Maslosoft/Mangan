@@ -2,9 +2,11 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Interfaces\FinderEventsInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
+use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
 
 /**
  * FinderEvents
@@ -14,17 +16,19 @@ use Maslosoft\Mangan\Interfaces\FinderInterface;
 class FinderEvents implements FinderEventsInterface
 {
 
-	public function afterCount($model)
+	public function afterCount(FinderInterface $finder)
 	{
-		Event::trigger($model, FinderInterface::EventAfterCount);
+		assert($finder instanceof ModelAwareInterface);
+		Event::trigger($finder->getModel(), FinderInterface::EventAfterCount);
 	}
 
-	public function afterExists($model)
+	public function afterExists(FinderInterface $finder)
 	{
-		Event::trigger($model, FinderInterface::EventAfterExists);
+		assert($finder instanceof ModelAwareInterface);
+		Event::trigger($finder->getModel(), FinderInterface::EventAfterExists);
 	}
 
-	public function afterFind($model)
+	public function afterFind(FinderInterface $finder, AnnotatedInterface $model)
 	{
 		Event::trigger($model, FinderInterface::EventAfterFind);
 	}
@@ -33,39 +37,42 @@ class FinderEvents implements FinderEventsInterface
 	 * Trigger before count event
 	 * @return boolean
 	 */
-	public function beforeCount($model)
+	public function beforeCount(FinderInterface $finder)
 	{
-		if (!Event::hasHandler($model, FinderInterface::EventBeforeCount))
+		assert($finder instanceof ModelAwareInterface);
+		if (!Event::hasHandler($finder->getModel(), FinderInterface::EventBeforeCount))
 		{
 			return true;
 		}
-		return Event::handled($model, FinderInterface::EventBeforeCount);
+		return Event::handled($finder->getModel(), FinderInterface::EventBeforeCount);
 	}
 
 	/**
 	 * Trigger before exists event
 	 * @return boolean
 	 */
-	public function beforeExists($model)
+	public function beforeExists(FinderInterface $finder)
 	{
-		if (!Event::hasHandler($model, FinderInterface::EventBeforeExists))
+		assert($finder instanceof ModelAwareInterface);
+		if (!Event::hasHandler($finder->getModel(), FinderInterface::EventBeforeExists))
 		{
 			return true;
 		}
-		return Event::handled($model, FinderInterface::EventBeforeExists);
+		return Event::handled($finder->getModel(), FinderInterface::EventBeforeExists);
 	}
 
 	/**
 	 * Trigger before find event
 	 * @return boolean
 	 */
-	public function beforeFind($model)
+	public function beforeFind(FinderInterface $finder)
 	{
-		if (!Event::hasHandler($model, FinderInterface::EventBeforeFind))
+		assert($finder instanceof ModelAwareInterface);
+		if (!Event::hasHandler($finder->getModel(), FinderInterface::EventBeforeFind))
 		{
 			return true;
 		}
-		return Event::handled($model, FinderInterface::EventBeforeFind);
+		return Event::handled($finder->getModel(), FinderInterface::EventBeforeFind);
 	}
 
 }
