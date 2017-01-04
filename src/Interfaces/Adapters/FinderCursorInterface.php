@@ -12,5 +12,5 @@ use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
 interface FinderCursorInterface extends Iterator, Countable, LimitableInterface
 {
 
-	public function limit();
+	public function limit($limit);
 }
