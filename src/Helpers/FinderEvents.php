@@ -18,14 +18,12 @@ class FinderEvents implements FinderEventsInterface
 
 	public function afterCount(FinderInterface $finder)
 	{
-		assert($finder instanceof ModelAwareInterface);
-		Event::trigger($finder->getModel(), FinderInterface::EventAfterCount);
+		$this->trigger($finder, FinderInterface::EventAfterCount);
 	}
 
 	public function afterExists(FinderInterface $finder)
 	{
-		assert($finder instanceof ModelAwareInterface);
-		Event::trigger($finder->getModel(), FinderInterface::EventAfterExists);
+		$this->trigger($finder, FinderInterface::EventAfterExists);
 	}
 
 	public function afterFind(FinderInterface $finder, AnnotatedInterface $model)
@@ -39,12 +37,7 @@ class FinderEvents implements FinderEventsInterface
 	 */
 	public function beforeCount(FinderInterface $finder)
 	{
-		assert($finder instanceof ModelAwareInterface);
-		if (!Event::hasHandler($finder->getModel(), FinderInterface::EventBeforeCount))
-		{
-			return true;
-		}
-		return Event::handled($finder->getModel(), FinderInterface::EventBeforeCount);
+		return $this->handle($finder, FinderInterface::EventBeforeCount);
 	}
 
 	/**
@@ -53,12 +46,7 @@ class FinderEvents implements FinderEventsInterface
 	 */
 	public function beforeExists(FinderInterface $finder)
 	{
-		assert($finder instanceof ModelAwareInterface);
-		if (!Event::hasHandler($finder->getModel(), FinderInterface::EventBeforeExists))
-		{
-			return true;
-		}
-		return Event::handled($finder->getModel(), FinderInterface::EventBeforeExists);
+		return $this->handle($finder, FinderInterface::EventBeforeExists);
 	}
 
 	/**
@@ -67,12 +55,23 @@ class FinderEvents implements FinderEventsInterface
 	 */
 	public function beforeFind(FinderInterface $finder)
 	{
+		return $this->handle($finder, FinderInterface::EventBeforeFind);
+	}
+
+	protected function trigger($finder, $event)
+	{
 		assert($finder instanceof ModelAwareInterface);
-		if (!Event::hasHandler($finder->getModel(), FinderInterface::EventBeforeFind))
+		Event::trigger($finder->getModel(), $event);
+	}
+
+	protected function handle($finder, $event)
+	{
+		assert($finder instanceof ModelAwareInterface);
+		if (!Event::hasHandler($finder->getModel(), $event))
 		{
 			return true;
 		}
-		return Event::handled($finder->getModel(), FinderInterface::EventBeforeFind);
+		return Event::handled($finder->getModel(), $event);
 	}
 
 }

@@ -43,12 +43,12 @@ class Finder extends AbstractFinder implements FinderInterface
 	 */
 	public function __construct($model, $em = null, $mangan = null)
 	{
-		$this->setModel($model);
-		$this->setScopeManager(new ScopeManager($model));
 		if (null === $mangan)
 		{
 			$mangan = Mangan::fromModel($model);
 		}
+		$this->setModel($model);
+		$this->setScopeManager(new ScopeManager($model));
 		$this->setAdapter(new MongoAdapter($model, $mangan, $em));
 
 		$this->setProfiler($mangan->getProfiler());
