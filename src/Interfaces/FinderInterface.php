@@ -14,8 +14,8 @@
 namespace Maslosoft\Mangan\Interfaces;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Cursor;
-use Maslosoft\Mangan\Document;
 
 /**
  *
