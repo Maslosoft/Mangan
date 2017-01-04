@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Mangan\Interfaces\Adapters\FinderCursorInterface;
 use MongoCursor;
 
 /**
@@ -30,7 +31,7 @@ interface ProfilerInterface
 
 	/**
 	 * Profile cursor
-	 * @param MongoCursor $cursor
+	 * @param MongoCursor|FinderCursorInterface $cursor
 	 */
-	public function cursor(MongoCursor $cursor);
+	public function cursor($cursor);
 }

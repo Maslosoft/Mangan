@@ -29,7 +29,7 @@ class NullProfiler implements ProfilerInterface
 		// Do nothing
 	}
 
-	public function cursor(MongoCursor $cursor)
+	public function cursor($cursor)
 	{
 		// Do nothing
 	}

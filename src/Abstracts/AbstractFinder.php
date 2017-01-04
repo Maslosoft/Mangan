@@ -7,12 +7,15 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\Adapters\FinderCursorInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\ScenarioManager;
 use Maslosoft\Mangan\Traits\ModelAwareTrait;
+use MongoCursor;
+use UnexpectedValueException;
 
 /**
  * AbstractFinder
@@ -120,6 +123,9 @@ class AbstractFinder implements ModelAwareInterface
 		{
 			$criteria = $this->getScopeManager()->apply($criteria);
 			$cursor = $this->getAdapter()->findMany($criteria);
+
+			assert(is_object($cursor), sprintf('Expected cursor to be compatible object, got %s', gettype($cursor)));
+			assert($cursor instanceof FinderCursorInterface || $cursor instanceof MongoCursor, new UnexpectedValueException(sprintf('Expected `%s` or `%s` got `%s`', FinderCursorInterface::class, MongoCursor::class, get_class($cursor))));
 
 			if ($criteria->getSort() !== null)
 			{
