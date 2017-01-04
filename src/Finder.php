@@ -20,14 +20,12 @@ use Maslosoft\Mangan\Adapters\Finder\MongoAdapter;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\FinderEvents;
 use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\Adapters\FinderAdapterInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
-use Maslosoft\Mangan\Interfaces\FinderEventsInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
-use Maslosoft\Mangan\Interfaces\ScopeManagerInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Traits\Finder\FinderHelpers;
 use Maslosoft\Mangan\Transformers\RawArray;
 
 /**
@@ -41,17 +39,13 @@ use Maslosoft\Mangan\Transformers\RawArray;
 class Finder extends AbstractFinder implements FinderInterface
 {
 
+	use FinderHelpers;
+
 	/**
 	 * Model
 	 * @var AnnotatedInterface
 	 */
 	public $model = null;
-
-	/**
-	 *
-	 * @var FinderAdapterInterface
-	 */
-	private $adapter = null;
 
 	/**
 	 * Mangan instance
@@ -60,28 +54,10 @@ class Finder extends AbstractFinder implements FinderInterface
 	private $mn = null;
 
 	/**
-	 * Scope manager instance
-	 * @var ScopeManagerInterface
-	 */
-	private $sm = null;
-
-	/**
-	 * Finder events instance
-	 * @var FinderEventsInterface
-	 */
-	private $fe = null;
-
-	/**
 	 * Finder criteria
 	 * @var Criteria
 	 */
 	private $_criteria = null;
-
-	/**
-	 * Whenever to use corsors
-	 * @var bool
-	 */
-	private $_useCursor = false;
 
 	/**
 	 * Constructor
@@ -228,7 +204,7 @@ class Finder extends AbstractFinder implements FinderInterface
 				$cursor->fields($criteria->getSelect());
 			}
 			$this->mn->getProfiler()->cursor($cursor);
-			if ($this->_useCursor)
+			if ($this->isWithCursor())
 			{
 				return new Cursor($cursor, $this->model);
 			}
@@ -359,17 +335,6 @@ class Finder extends AbstractFinder implements FinderInterface
 			return $exists;
 		}
 		return false;
-	}
-
-	/**
-	 * Whenever to use cursor
-	 * @param bool $useCursor
-	 * @return FinderInterface
-	 */
-	public function withCursor($useCursor = true)
-	{
-		$this->_useCursor = $useCursor;
-		return $this;
 	}
 
 	/**
