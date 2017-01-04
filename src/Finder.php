@@ -13,17 +13,13 @@
 
 namespace Maslosoft\Mangan;
 
-use Iterator;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Abstracts\AbstractFinder;
 use Maslosoft\Mangan\Adapters\Finder\MongoAdapter;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\FinderEvents;
-use Maslosoft\Mangan\Helpers\PkManager;
-use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
-use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Traits\Finder\FinderHelpers;
 use Maslosoft\Mangan\Transformers\RawArray;
