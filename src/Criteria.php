@@ -217,9 +217,9 @@ class Criteria implements CriteriaInterface
 						$fieldName = array_pop($fieldNameArray);
 					}
 
+					$this->_workingFields = $fieldNameArray;
 					foreach ($conditions as $operator => $value)
 					{
-						$this->setWorkingFields($fieldNameArray);
 						$operator = strtolower($operator);
 						$this->addCond($fieldName, $operator, $value);
 					}
@@ -458,27 +458,9 @@ class Criteria implements CriteriaInterface
 	}
 
 	/**
-	 * @since v1.3.1
-	 * @deprecated since version number
-	 */
-	protected function getWorkingFields()
-	{
-		return $this->_workingFields;
-	}
-
-	/**
-	 * @since v1.3.1
-	 * @deprecated since version number
-	 */
-	protected function setWorkingFields(array $select)
-	{
-		$this->_workingFields = $select;
-	}
-
-	/**
 	 * Get condition
 	 * If specified field already has a condition, values will be merged
-	 * duplicates will be overriden by new values!
+	 * duplicates will be overridden by new values!
 	 * @see getConditions
 	 * @param string $fieldName
 	 * @param string $op operator
