@@ -267,7 +267,7 @@ class Criteria implements CriteriaInterface
 	 * - Limit and offet will be overriden
 	 * - Select fields list will be merged
 	 * - Sort fields list will be merged
-	 * @param array|CriteriaInterface $criteria
+	 * @param null|array|CriteriaInterface $criteria
 	 * @return CriteriaInterface
 	 * @since v1.0
 	 */
