@@ -16,8 +16,10 @@ namespace Maslosoft\Mangan;
 use Countable;
 use Iterator;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Interfaces\Adapters\FinderCursorInterface;
 use Maslosoft\Mangan\Transformers\RawArray;
 use MongoCursor;
+use UnexpectedValueException;
 
 /**
  * Cursor
@@ -34,55 +36,58 @@ class Cursor implements Iterator, Countable
 {
 
 	/**
-	 * @var MongoCursor|Iterator|Countable $_cursor the MongoCursor returned by the query
+	 * MongoCursor returned by the query
+	 * @var FinderCursorInterface|MongoCursor
 	 * @since v1.3.4
 	 */
-	protected $_cursor;
+	private $cursor;
 
 	/**
-	 * @var AnnotatedInterface $_model the model used for instantiating objects
+	 * Model used for instantiating objects
+	 * @var AnnotatedInterface
 	 * @since v1.3.4
 	 */
-	protected $_model;
+	private $model;
 
 	/**
 	 * Construct a new Cursor
 	 *
-	 * @param MongoCursor|Iterator|Countable $cursor the cursor returned by the query
+	 * @param FinderCursorInterface|MongoCursor $cursor the cursor returned by the query
 	 * @param AnnotatedInterface $model the model for instantiating objects
 	 * @since v1.3.4
 	 */
 	public function __construct(Iterator $cursor, AnnotatedInterface $model)
 	{
-		$this->_cursor = $cursor;
-		$this->_model = $model;
+		assert($cursor instanceof FinderCursorInterface || $cursor instanceof MongoCursor, new UnexpectedValueException(sprintf('Expected `%s` or `%s` got `%s`', FinderCursorInterface::class, MongoCursor::class, get_class($cursor))));
+		$this->cursor = $cursor;
+		$this->model = $model;
 	}
 
 	/**
 	 * Return MongoCursor for additional tuning
 	 *
-	 * @return MongoCursor the cursor used for this query
+	 * @return FinderCursorInterface|MongoCursor the cursor used for this query
 	 * @since v1.3.4
 	 */
 	public function getCursor()
 	{
-		return $this->_cursor;
+		return $this->cursor;
 	}
 
 	/**
 	 * Return the current element
-	 * @return Document|null
+	 * @return AnnotatedInterface|Document|null
 	 * @since v1.3.4
 	 */
 	public function current()
 	{
-		$document = $this->_cursor->current();
+		$document = $this->cursor->current();
 		if (empty($document))
 		{
 			return null;
 		}
 
-		return RawArray::toModel($document, $this->_model);
+		return RawArray::toModel($document, $this->model);
 	}
 
 	/**
@@ -92,7 +97,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function key()
 	{
-		return $this->_cursor->key();
+		return $this->cursor->key();
 	}
 
 	/**
@@ -102,7 +107,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function next()
 	{
-		$this->_cursor->next();
+		$this->cursor->next();
 	}
 
 	/**
@@ -112,7 +117,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function rewind()
 	{
-		$this->_cursor->rewind();
+		$this->cursor->rewind();
 	}
 
 	/**
@@ -122,7 +127,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function valid()
 	{
-		return $this->_cursor->valid();
+		return $this->cursor->valid();
 	}
 
 	/**
@@ -134,7 +139,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function count($foundOnly = false)
 	{
-		return $this->_cursor->count($foundOnly);
+		return $this->cursor->count($foundOnly);
 	}
 
 	/**
@@ -145,7 +150,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function limit($limit)
 	{
-		$this->_cursor->limit($limit);
+		$this->cursor->limit($limit);
 	}
 
 	/**
@@ -156,7 +161,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function offset($offset)
 	{
-		$this->_cursor->skip($offset);
+		$this->cursor->skip($offset);
 	}
 
 	/**
@@ -167,7 +172,7 @@ class Cursor implements Iterator, Countable
 	 */
 	public function sort(array $fields)
 	{
-		$this->_cursor->sort($fields);
+		$this->cursor->sort($fields);
 	}
 
 }

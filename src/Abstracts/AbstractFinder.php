@@ -38,7 +38,7 @@ use UnexpectedValueException;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-abstract class AbstractFinder implements ModelAwareInterface
+abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 {
 
 	use ModelAwareTrait;

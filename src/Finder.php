@@ -29,7 +29,7 @@ use Maslosoft\Mangan\Transformers\RawArray;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class Finder extends AbstractFinder implements FinderInterface
+class Finder extends AbstractFinder
 {
 
 	use FinderHelpers;
