@@ -413,20 +413,26 @@ class Event implements EventInterface
 		$key = get_class($model);
 		if (empty(self::$propagated[$key]))
 		{
-			$propageted = [];
+			$propagated = [];
 			foreach (ManganMeta::create($model)->properties('propagateEvents') as $name => $isPropagated)
 			{
 				if (!$isPropagated)
 				{
 					continue;
 				}
-				$propageted[$name] = true;
+				$propagated[$name] = true;
 			}
-			self::$propagated[$key] = $propageted;
+			self::$propagated[$key] = $propagated;
 		}
 		return self::$propagated[$key];
 	}
 
+	/**
+	 * Get class/interface/trait names from which class is composed.
+	 *
+	 * @param string $className
+	 * @return array
+	 */
 	public static function getPartials($className)
 	{
 		if (!empty(self::$partials[$className]))
