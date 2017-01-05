@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * This software package is licensed under AGPL or Commercial license.
+ *
+ * @package maslosoft/mangan
+ * @licence AGPL or Commercial
+ * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
+ * @copyright Copyright (c) Maslosoft
+ * @copyright Copyright (c) Others as mentioned in code
+ * @link http://maslosoft.com/mangan/
+ */
+
 namespace Maslosoft\Mangan\Abstracts;
 
 use Iterator;
@@ -7,12 +18,17 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
+use Maslosoft\Mangan\Interfaces\Adapters\FinderAdapterInterface;
 use Maslosoft\Mangan\Interfaces\Adapters\FinderCursorInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\FinderEventsInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
+use Maslosoft\Mangan\Interfaces\ProfilerInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
+use Maslosoft\Mangan\Interfaces\ScopeManagerInterface;
 use Maslosoft\Mangan\ScenarioManager;
+use Maslosoft\Mangan\Traits\Finder\FinderHelpers;
 use Maslosoft\Mangan\Traits\ModelAwareTrait;
 use MongoCursor;
 use UnexpectedValueException;
@@ -22,7 +38,7 @@ use UnexpectedValueException;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class AbstractFinder implements ModelAwareInterface
+abstract class AbstractFinder implements ModelAwareInterface
 {
 
 	use ModelAwareTrait;
@@ -32,6 +48,56 @@ class AbstractFinder implements ModelAwareInterface
 	 * @var bool
 	 */
 	private $useCursor = false;
+
+// <editor-fold defaultstate="collapsed" desc="Required getters/setters">
+	/**
+	 * @see FinderHelpers
+	 * @return FinderAdapterInterface
+	 */
+	abstract public function getAdapter();
+
+	/**
+	 * @see FinderHelpers
+	 * @return ScopeManagerInterface
+	 */
+	abstract public function getScopeManager();
+
+	/**
+	 * @see FinderHelpers
+	 * @return FinderEventsInterface
+	 */
+	abstract public function getFinderEvents();
+
+	/**
+	 * @see FinderHelpers
+	 * @return ProfilerInterface
+	 */
+	abstract public function getProfiler();
+
+	/**
+	 * @see FinderHelpers
+	 * @return static
+	 */
+	abstract public function setAdapter(FinderAdapterInterface $adapter);
+
+	/**
+	 * @see FinderHelpers
+	 * @return static
+	 */
+	abstract public function setScopeManager(ScopeManagerInterface $scopeManager);
+
+	/**
+	 * @see FinderHelpers
+	 * @return static
+	 */
+	abstract public function setFinderEvents(FinderEventsInterface $finderEvents);
+
+	/**
+	 * @see FinderHelpers
+	 * @return static
+	 */
+	abstract public function setProfiler(ProfilerInterface $profiler);
+// </editor-fold>
 
 	/**
 	 * Finds a single Document with the specified condition.
