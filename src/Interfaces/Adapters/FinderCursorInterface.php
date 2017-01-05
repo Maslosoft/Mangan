@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Interfaces\Adapters;
 
 use Countable;
 use Iterator;
-use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\SortInterface;
 
 /**
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
@@ -43,8 +43,35 @@ interface FinderCursorInterface extends Iterator, Countable
 
 	/**
 	 * Sort by fields
+	 *
+	 * Keys are field names, values are sort directions.
+	 *
+	 * Example:
+	 * ```
+	 * $fields = [
+	 * 		'username' => SortInterface::Asc
+	 * ];
+	 * ```
+	 *
+	 * @see SortInterface
 	 * @param array $fields
 	 * @return static
 	 */
 	public function sort(array $fields);
+
+	/**
+	 * Select fields, this accepts array with field names and boolean values
+	 * indicating whether to return those fields.
+	 *
+	 * Example:
+	 * ```
+	 * $fields = [
+	 * 		'username' => true
+	 * ];
+	 * ```
+	 *
+	 * @param array $fields
+	 * @return static
+	 */
+	public function fields(array $fields);
 }
