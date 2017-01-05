@@ -71,12 +71,10 @@ abstract class Document extends EmbeddedDocument implements ActiveRecordInterfac
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		$this->_id = new MongoId;
-		$this->_key = (string) new MongoId();
 		$this->_class = get_class($this);
 		$this->setLang($lang);
 
 		$this->setScenario($scenario);
-		$this->init();
 	}
 
 	/**
