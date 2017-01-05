@@ -433,6 +433,7 @@ class Event implements EventInterface
 		{
 			return self::$partials[$className];
 		}
+		$partials = [];
 		// Iterate over traits
 		foreach ((new ReflectionClass($className))->getTraitNames() as $trait)
 		{
