@@ -15,7 +15,6 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Interfaces\ActiveDocumentInterface;
-use Maslosoft\Mangan\Interfaces\InitInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use Maslosoft\Mangan\Traits\I18NAbleTrait;
 use Maslosoft\Mangan\Traits\OwneredTrait;
@@ -35,7 +34,7 @@ use MongoId;
  * @since v1.0.8
  * @property Meta $meta Model metadata
  */
-abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterface
+abstract class EmbeddedDocument implements ActiveDocumentInterface
 {
 
 	use I18NAbleTrait,
@@ -52,15 +51,6 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 	 * @var MongoId|null
 	 */
 	public $_id = null;
-
-	/**
-	 * This holds key for document order
-	 * TODO Is this even nessesary?
-	 * @deprecated This is unused
-	 * @SafeValidator
-	 * @var string
-	 */
-	public $_key = '';
 
 	/**
 	 * This holds type of this embedded document.
@@ -86,20 +76,6 @@ abstract class EmbeddedDocument implements ActiveDocumentInterface, InitInterfac
 
 		$this->setLang($lang);
 		$this->setScenario($scenario);
-		$this->init();
-	}
-
-	/**
-	 * Initializes this model.
-	 * This method is invoked in the constructor right after {@link scenario} is set.
-	 * You may override this method to provide code that is needed to initialize the model (e.g. setting
-	 * initial property values.)
-	 * @deprecated since version number
-	 * @since 1.0.8
-	 */
-	public function init()
-	{
-
 	}
 
 }

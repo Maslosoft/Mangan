@@ -14,10 +14,11 @@
 namespace Maslosoft\Mangan\Interfaces;
 
 /**
- *
+ * @deprecated This interface will be removed in future versions and is unused
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface InitInterface
 {
+
 	public function init();
 }
