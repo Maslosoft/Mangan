@@ -16,7 +16,6 @@ namespace Maslosoft\Mangan\Traits\Model;
 use Exception;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
-use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Events\RestoreEvent;
 use Maslosoft\Mangan\Events\TrashEvent;
 use Maslosoft\Mangan\Finder;

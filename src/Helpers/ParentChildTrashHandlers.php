@@ -165,6 +165,7 @@ class ParentChildTrashHandlers
 			{
 				$parent = new $parentClass;
 				$criteria = new Criteria(null, $parent);
+				assert(isset($model->parentId));
 				$criteria->_id = $model->parentId;
 				if (!$parent->exists($criteria))
 				{
