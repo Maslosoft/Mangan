@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Model\Trash;
 use Maslosoft\Mangan\Model\TrashItem;
 
@@ -23,7 +24,7 @@ use Maslosoft\Mangan\Model\TrashItem;
  * @see Trash
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-interface TrashInterface
+interface TrashInterface extends AnnotatedInterface
 {
 
 	const EventBeforeTrash = 'beforeTrash';
