@@ -44,7 +44,7 @@ class Command
 	public function __construct(AnnotatedInterface $model = null)
 	{
 		$this->model = $model;
-		if (!$model)
+		if (empty($model))
 		{
 			$this->mn = Mangan::fly();
 			return;

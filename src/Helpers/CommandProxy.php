@@ -37,7 +37,15 @@ class CommandProxy extends Command
 	public function __construct(AnnotatedInterface $model = null)
 	{
 		parent::__construct($model);
-		$this->available = new CommandProxyStorage($this, Mangan::fromModel($model)->connectionId);
+		if (empty($model))
+		{
+			$mangan = Mangan::fly();
+		}
+		else
+		{
+			$mangan = Mangan::fromModel($model);
+		}
+		$this->available = new CommandProxyStorage($this, $mangan->connectionId);
 	}
 
 	public function isAvailable($command)
