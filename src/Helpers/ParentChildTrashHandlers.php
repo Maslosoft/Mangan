@@ -60,10 +60,12 @@ class ParentChildTrashHandlers
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
-				$criteria->parentId = $model->_id;
+				$criteria->parentId = $this->getPk($model);
+
 				$event->isValid = $child->deleteAll($criteria);
 			}
 		};
+		$beforeDelete->bindTo($this);
 		Event::on($parent, EntityManagerInterface::EventBeforeDelete, $beforeDelete);
 
 		// Trash all child items from parent item
@@ -75,7 +77,7 @@ class ParentChildTrashHandlers
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
-				$criteria->parentId = $model->_id;
+				$criteria->parentId = $this->getPk($model);
 
 				$items = $child->findAll($criteria);
 
@@ -97,7 +99,7 @@ class ParentChildTrashHandlers
 				}
 			}
 		};
-
+		$afterTrash->bindTo($this);
 		Event::on($parent, TrashInterface::EventAfterTrash, $afterTrash);
 
 		// Restore all child items from parent, but only those after it was trashed.
@@ -113,10 +115,13 @@ class ParentChildTrashHandlers
 
 				// Conditions decorator do not work with dots so sanitize manually.
 				$s = new Sanitizer($child);
-				$id = $s->write('parentId', $model->_id);
+
+				$id = $s->write('parentId', $this->getPk($model));
 				$criteria->addCond('data.parentId', '==', $id);
 
-				// Restore only child items trashed when blog was trashed - skip earlier
+				// Restore only child items trashed when parent was trashed.
+				// Skip earlier items
+				assert(isset($trash->createDate), sprintf('When implementing `%s`, `createDate` field is required and must be set to date of deletion', TrashInterface::class));
 				$criteria->addCond('createDate', 'gte', $trash->createDate);
 
 				$trashedItems = $trash->findAll($criteria);
@@ -134,7 +139,7 @@ class ParentChildTrashHandlers
 			}
 			$event->isValid = true;
 		};
-
+		$afterRestore->bindTo($this);
 		Event::on($parent, TrashInterface::EventAfterRestore, $afterRestore);
 	}
 
@@ -170,6 +175,13 @@ class ParentChildTrashHandlers
 			$event->isValid = true;
 		};
 		Event::on($child, TrashInterface::EventBeforeRestore, $beforeRestore);
+	}
+
+	private function getPk(AnnotatedInterface $model)
+	{
+		$pk = PkManager::getFromModel($model);
+		assert(!is_array($pk), 'Composite PK of `%s` not allowed for parentId');
+		return $pk;
 	}
 
 }

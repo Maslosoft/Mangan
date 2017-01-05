@@ -13,8 +13,14 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Mangan\Model\Trash;
+use Maslosoft\Mangan\Model\TrashItem;
+
 /**
+ * NOTE: When implementing this interface, some class properties are required.
  *
+ * @see TrashItem
+ * @see Trash
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface TrashInterface
