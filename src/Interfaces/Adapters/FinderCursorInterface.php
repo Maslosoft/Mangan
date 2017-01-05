@@ -24,13 +24,27 @@ interface FinderCursorInterface extends Iterator, Countable
 {
 
 	/**
+	 * Limit to `$num` results
+	 *
 	 * Note that cursor must have only limit method,
 	 * do not use LimitableInterface etc.
 	 *
-	 * @param integer $limit limit
-	 * @return CriteriaInterface
+	 * @param integer $num
+	 * @return static
 	 */
-	public function limit($limit);
+	public function limit($num);
 
-	public function sort($sort);
+	/**
+	 * Skip `$num` number of results
+	 * @param int $num
+	 * @return static
+	 */
+	public function skip($num);
+
+	/**
+	 * Sort by fields
+	 * @param array $fields
+	 * @return static
+	 */
+	public function sort(array $fields);
 }
