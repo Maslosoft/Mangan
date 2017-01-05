@@ -8,7 +8,7 @@
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link http://maslosoft.com/mangan/
+ * @link https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan\Helpers\Sanitizer;
