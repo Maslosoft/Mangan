@@ -1,5 +1,5 @@
 filter:
-    excluded_paths: [vendor/*, tests/*]
+    excluded_paths: [vendor/*, tests/*, docs/*]
 before_commands:
     - 'composer install --dev --prefer-dist'
 tools:
