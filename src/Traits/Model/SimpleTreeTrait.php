@@ -113,6 +113,7 @@ trait SimpleTreeTrait
 		$em = new EntityManager($node);
 		foreach ((array) $order as $id)
 		{
+			assert(property_exists($node, '_id'), sprintf('Propert `_id` is required to use with `%s`', SimpleTreeTrait::class));
 			$node->_id = $id;
 			$node->order = $i++;
 			$em->update(['order']);
