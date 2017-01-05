@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Model;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
+use Maslosoft\Mangan\Traits\Model\TrashableTrait;
 use MongoDate;
 
 /**
@@ -27,7 +28,7 @@ use MongoDate;
 class TrashItem extends Document implements TrashInterface
 {
 
-	use \Maslosoft\Mangan\Traits\Model\TrashableTrait;
+	use TrashableTrait;
 
 	/**
 	 * Element name
