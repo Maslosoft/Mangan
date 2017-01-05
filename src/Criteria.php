@@ -252,6 +252,7 @@ class Criteria implements CriteriaInterface
 		// Future plan: Use CriteriaInterface here, and drop `$criteria instanceof Conditions` if clause. Conditions should implement CriteriaInterface too.
 		elseif ($criteria instanceof MergeableInterface)
 		{
+			assert($criteria instanceof CriteriaInterface);
 			$this->mergeWith($criteria);
 		}
 		elseif ($criteria instanceof Conditions)
