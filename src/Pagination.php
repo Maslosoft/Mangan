@@ -24,9 +24,9 @@ use Maslosoft\Mangan\Interfaces\PaginationInterface;
 class Pagination implements PaginationInterface
 {
 
-	private $size = PaginationInterface::DefaultPageSize;
-	private $page = PaginationInterface::FirstPageId;
-	private $total = 0;
+	public $size = PaginationInterface::DefaultPageSize;
+	public $page = PaginationInterface::FirstPageId;
+	public $total = 0;
 
 	public function apply(LimitableInterface $criteria)
 	{
