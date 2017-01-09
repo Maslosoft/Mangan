@@ -30,7 +30,15 @@ class Pagination implements PaginationInterface
 
 	public function apply(LimitableInterface $criteria)
 	{
-		$criteria->setLimit($this->getLimit());
+		$limit = $criteria->getLimit();
+		if (empty($limit))
+		{
+			$criteria->setLimit($this->getLimit());
+		}
+		else
+		{
+			$this->setSize($limit);
+		}
 		$criteria->setOffset($this->getOffset());
 	}
 
