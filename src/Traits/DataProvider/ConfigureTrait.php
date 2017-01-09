@@ -108,7 +108,7 @@ trait ConfigureTrait
 	}
 
 	/**
-	 * Configure limits, sorti for fetching data
+	 * Configure limits, sorting for fetching data
 	 * @return CriteriaInterface
 	 */
 	protected function configureFetch()
