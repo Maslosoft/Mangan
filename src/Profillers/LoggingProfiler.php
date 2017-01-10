@@ -45,7 +45,7 @@ class LoggingProfiler implements ProfilerInterface, ManganAwareInterface
 	 * Profile cursor
 	 * @param MongoCursor $cursor
 	 */
-	public function cursor(MongoCursor $cursor)
+	public function cursor($cursor)
 	{
 		$this->mangan->getLogger()->info(var_export($cursor->explain(), true));
 	}
