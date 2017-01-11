@@ -18,12 +18,9 @@ use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
 use Maslosoft\Mangan\Meta\EmbeddedMeta;
 
 /**
- * Annotation for array of embedded documents in mongo
- * defaultClassName will be used for getting empty properties,
+ * Annotation for array of embedded documents in MongoDB
+ * default class name will be used for getting empty properties,
  * but any type of embedded document can be stored within this field.
- *
- * By default, when updating from external source, documents are compared by pk.
- * This can be overridden with `key` property.
  *
  * Examples:
  *
