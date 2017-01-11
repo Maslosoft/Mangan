@@ -34,7 +34,7 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 			{
 				static::ensureClass($model, $name, $data);
 				// Set ensured class to $dbValue
-				$instance = $this->_getInstance($model->$name, $dbValue, $data);
+				$instance = $this->_getInstance($model->$name, $dbValue, $data, $transformatorClass);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance);
 				$docs[] = $embedded;
 			}
@@ -71,15 +71,30 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 	 * @param mixed[] $data
 	 * @return AnnotatedInterface|null
 	 */
-	private function _getInstance($instances, $dbValue, $data)
+	private function _getInstance($instances, $dbValue, $data, $transformatorClass)
 	{
 		if (!count($instances))
 		{
 			return null;
 		}
 		$map = [];
+		/**
+		 * TODO Workaround for manganel not having _id
+		 */
+		if (!isset($data['_id']) && isset($data['id']))
+		{
+			$data['_id'] = $data['id'];
+		}
 		foreach ($dbValue as $val)
 		{
+			/**
+			 * TODO Workaround for manganel not having _id
+			 */
+			if (!isset($val['_id']) && isset($val['id']))
+			{
+				$val['_id'] = $val['id'];
+			}
+			assert(array_key_exists('_id', $val), sprintf('_id not defined for %s', $val['_class']));
 			$id = (string) $val['_id'];
 			$map[$id] = true;
 		}
