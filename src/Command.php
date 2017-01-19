@@ -72,6 +72,10 @@ class Command
 					throw new CommandNotFoundException(sprintf('Command `%s` not found', $command));
 				}
 			}
+			elseif (strpos($result['errmsg'], 'no such command') !== false)
+			{
+				throw new CommandNotFoundException(sprintf('Command `%s` not found', $command));
+			}
 			throw new CommandException(sprintf('Could not execute command `%s`, mongo returned: "%s"', $command, $result['errmsg']));
 		}
 		return $result;
