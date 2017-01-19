@@ -52,7 +52,6 @@
 		"issues": "https://github.com/Maslosoft/Mangan/issues"
 	},
 	"require": {
-		"php": "^7",
 		"maslosoft/addendum": "*",
 		"maslosoft/signals": "*",
 		"masterexploder/phpthumb": "^2",

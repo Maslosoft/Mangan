@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9cc60243ea1f95bb69f95b602b9fbbbe",
-    "content-hash": "efc5b72acef6f6608e1c63aff844dfea",
+    "hash": "a6eb161a55c473e44816197fddd3c291",
+    "content-hash": "4e136542bafede8db72d8d6f72adc8a1",
     "packages": [
         {
             "name": "behat/gherkin",
@@ -517,84 +517,6 @@
             "time": "2016-06-24 23:00:38"
         },
         {
-            "name": "latte/latte",
-            "version": "v2.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/latte.git",
-                "reference": "7d30f7bfd58cb017c47d7e14ed93286ce2ca1bc9",
-                "mirrors": [
-                    {
-                        "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/7d30f7bfd58cb017c47d7e14ed93286ce2ca1bc9",
-                "reference": "7d30f7bfd58cb017c47d7e14ed93286ce2ca1bc9",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-tokenizer": "*",
-                "php": ">=5.4.4"
-            },
-            "conflict": {
-                "nette/application": "<2.4.1"
-            },
-            "require-dev": {
-                "nette/tester": "~2.0",
-                "tracy/tracy": "^2.3"
-            },
-            "suggest": {
-                "ext-fileinfo": "to use filter |datastream",
-                "ext-mbstring": "to use filters like lower, upper, capitalize, ...",
-                "ext-xml": "to use filters like length, substring, ..."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.4-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "Latte: the amazing template engine for PHP",
-            "homepage": "https://latte.nette.org",
-            "keywords": [
-                "templating",
-                "twig"
-            ],
-            "time": "2016-09-27 13:10:19"
-        },
-        {
             "name": "maslosoft/addendum",
             "version": "5.0.4",
             "source": {
@@ -879,11 +801,11 @@
         },
         {
             "name": "maslosoft/miniview",
-            "version": "1.0.15",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/MiniView.git",
-                "reference": "bdac4a565de9138da0ae93a21e1a4797412d54dd",
+                "reference": "73ee7696b32db8afe6eb79f040b0f712a2827e52",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -893,8 +815,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/bdac4a565de9138da0ae93a21e1a4797412d54dd",
-                "reference": "bdac4a565de9138da0ae93a21e1a4797412d54dd",
+                "url": "https://api.github.com/repos/Maslosoft/MiniView/zipball/73ee7696b32db8afe6eb79f040b0f712a2827e52",
+                "reference": "73ee7696b32db8afe6eb79f040b0f712a2827e52",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -904,12 +826,14 @@
                 ]
             },
             "require": {
-                "codeception/codeception": "*",
-                "latte/latte": "^2",
-                "twig/twig": "*"
+                "codeception/codeception": "*"
             },
             "require-dev": {
                 "maslosoft/hedron": "~1"
+            },
+            "suggest": {
+                "latte/latte": "Use tatte templates",
+                "twig/twig": "Use twig templates"
             },
             "type": "library",
             "autoload": {
@@ -930,7 +854,7 @@
             ],
             "description": "Mini view is minimal template rendering library based on Yii controller renderer",
             "homepage": "http://maslosoft.com/miniview/",
-            "time": "2016-05-30 17:10:26"
+            "time": "2017-01-19 10:58:24"
         },
         {
             "name": "maslosoft/mongofill",
@@ -3286,80 +3210,6 @@
             "time": "2017-01-03 13:51:32"
         },
         {
-            "name": "twig/twig",
-            "version": "v2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "9062992538bc5855a683c6737257bfa18d25a4b8",
-                "mirrors": [
-                    {
-                        "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9062992538bc5855a683c6737257bfa18d25a4b8",
-                "reference": "9062992538bc5855a683c6737257bfa18d25a4b8",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": "^7.0",
-                "symfony/polyfill-mbstring": "~1.0"
-            },
-            "require-dev": {
-                "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~3.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Twig_": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com",
-                    "role": "Project Founder"
-                },
-                {
-                    "name": "Twig Team",
-                    "homepage": "http://twig.sensiolabs.org/contributors",
-                    "role": "Contributors"
-                }
-            ],
-            "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "http://twig.sensiolabs.org",
-            "keywords": [
-                "templating"
-            ],
-            "time": "2017-01-11 19:39:01"
-        },
-        {
             "name": "webmozart/assert",
             "version": "1.2.0",
             "source": {
@@ -3645,7 +3495,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/ManganTest.git",
-                "reference": "01263ccd45f44261d3f8ea3654be2a9c5164c0c4",
+                "reference": "09a6a3ec062e6b458cc69c6720168cabe6ea60f2",
                 "mirrors": [
                     {
                         "url": "peter@pkg.maslosoft.com/%package%/%normalizedUrl%.%type%",
@@ -3655,12 +3505,12 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/01263ccd45f44261d3f8ea3654be2a9c5164c0c4",
-                "reference": "01263ccd45f44261d3f8ea3654be2a9c5164c0c4",
+                "url": "https://api.github.com/repos/Maslosoft/ManganTest/zipball/09a6a3ec062e6b458cc69c6720168cabe6ea60f2",
+                "reference": "09a6a3ec062e6b458cc69c6720168cabe6ea60f2",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "http://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "url": "https://pkg.maslosoft.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
@@ -3690,7 +3540,7 @@
             ],
             "description": "Tests for mangan",
             "homepage": "https://maslosoft.com/mangan/",
-            "time": "2017-01-19 08:18:18"
+            "time": "2017-01-19 09:39:49"
         },
         {
             "name": "maslosoft/zamm",
@@ -3879,6 +3729,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
+        "php": "^7",
         "ext-gd": "*"
     },
     "platform-dev": {
