@@ -53,13 +53,11 @@ class Pagination implements PaginationInterface
 
 	public function setCount($total)
 	{
-		$this->total = $total;
+		// Ensure positive total
+		$this->total = max($total, 0);
 		// Recalculate max page, as order of setting
 		// count or page might be different
-		if ($this->total > 0)
-		{
-			$this->page = min($this->getPages(), $this->page);
-		}
+		$this->page = max(min($this->getPages(), $this->page), 1);
 		return $this;
 	}
 
@@ -81,15 +79,8 @@ class Pagination implements PaginationInterface
 
 	public function setPage($page)
 	{
-		if ($page < 1)
-		{
-			$page = 1;
-		}
 		// See also setCount method
-		if ($this->total > 0)
-		{
-			$page = min($this->getPages(), $page);
-		}
+		$page = max(min($this->getPages(), $page), 1);
 		$this->page = $page;
 		return $this;
 	}
