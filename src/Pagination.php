@@ -27,6 +27,7 @@ class Pagination implements PaginationInterface
 	public $size = PaginationInterface::DefaultPageSize;
 	public $page = PaginationInterface::FirstPageId;
 	public $total = 0;
+	private $wasCount = false;
 
 	public function apply(LimitableInterface $criteria)
 	{
@@ -55,6 +56,7 @@ class Pagination implements PaginationInterface
 	{
 		// Ensure positive total
 		$this->total = max($total, 0);
+		$this->wasCount = true;
 		// Recalculate max page, as order of setting
 		// count or page might be different
 		$this->page = max(min($this->getPages(), $this->page), 1);
@@ -80,7 +82,11 @@ class Pagination implements PaginationInterface
 	public function setPage($page)
 	{
 		// See also setCount method
-		$page = max(min($this->getPages(), $page), 1);
+		if ($this->wasCount)
+		{
+			$page = min($this->getPages(), $page);
+		}
+		$page = max($page, 1);
 		$this->page = $page;
 		return $this;
 	}
