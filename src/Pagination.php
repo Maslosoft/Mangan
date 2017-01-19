@@ -39,6 +39,10 @@ class Pagination implements PaginationInterface
 		{
 			$this->setSize($limit);
 		}
+		/**
+		 * TODO Pagination should revert to max or min page if value if out of range #78
+		 * @see https://github.com/Maslosoft/Mangan/issues/78
+		 */
 		$criteria->setOffset($this->getOffset());
 	}
 
@@ -50,6 +54,12 @@ class Pagination implements PaginationInterface
 	public function setCount($total)
 	{
 		$this->total = $total;
+		// Recalculate max page, as order of setting
+		// count or page might be different
+		if ($this->total > 0)
+		{
+			$this->page = min($this->getPages(), $this->page);
+		}
 		return $this;
 	}
 
@@ -71,6 +81,15 @@ class Pagination implements PaginationInterface
 
 	public function setPage($page)
 	{
+		if ($page < 1)
+		{
+			$page = 1;
+		}
+		// See also setCount method
+		if ($this->total > 0)
+		{
+			$page = min($this->getPages(), $page);
+		}
 		$this->page = $page;
 		return $this;
 	}
