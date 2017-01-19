@@ -93,14 +93,18 @@ class Validator implements ValidatableInterface
 				if (is_array($this->model->$name))
 				{
 					// Handle arrays of documents
-					foreach ($this->model->$name as $model)
+					foreach ($this->model->$name as $fieldIndex => $model)
 					{
 						$validator = new Validator($model);
 						$isValid = $validator->validate();
 						$valid[] = (int) $isValid;
 						if (!$isValid)
 						{
-							$errors = $validator->getErrors();
+							$errors = [
+								$name => [
+									$fieldIndex => $validator->getErrors()
+								]
+							];
 							$this->setErrors($errors);
 						}
 					}
@@ -113,7 +117,9 @@ class Validator implements ValidatableInterface
 					$valid[] = (int) $isValid;
 					if (!$isValid)
 					{
-						$errors = $validator->getErrors();
+						$errors = [
+							$name => $validator->getErrors()
+						];
 						$this->setErrors($errors);
 					}
 				}
