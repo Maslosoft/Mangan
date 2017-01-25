@@ -24,12 +24,14 @@ interface ModelAwareInterface
 
 	/**
 	 * Get currently used model
+	 * @Ignored
 	 * @return AnnotatedInterface
 	 */
 	public function getModel();
 
 	/**
 	 * Set model for further use
+	 * @Ignored
 	 * @param AnnotatedInterface $model
 	 */
 	public function setModel(AnnotatedInterface $model);
