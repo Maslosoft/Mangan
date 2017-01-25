@@ -25,6 +25,8 @@ trait ModelAwareTrait
 
 	/**
 	 * Instance of model
+	 * @Ignored
+	 * @Persistent(false)
 	 * @var AnnotatedInterface
 	 * @since v1.0
 	 */
@@ -32,6 +34,7 @@ trait ModelAwareTrait
 
 	/**
 	 * Get model used by this data provider
+	 * @Ignored
 	 * @return AnnotatedInterface
 	 */
 	public function getModel()
@@ -41,6 +44,7 @@ trait ModelAwareTrait
 
 	/**
 	 * Set model
+	 * @Ignored
 	 * @param AnnotatedInterface $model
 	 * @return static
 	 */
