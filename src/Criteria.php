@@ -21,12 +21,14 @@ use Maslosoft\Mangan\Interfaces\Criteria\MergeableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SelectableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SortableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Traits\Criteria\CursorAwareTrait;
 use Maslosoft\Mangan\Traits\Criteria\DecoratableTrait;
 use Maslosoft\Mangan\Traits\Criteria\LimitableTrait;
 use Maslosoft\Mangan\Traits\Criteria\SelectableTrait;
 use Maslosoft\Mangan\Traits\Criteria\SortableTrait;
+use Maslosoft\Mangan\Traits\ModelAwareTrait;
 
 /**
  * Criteria
@@ -48,12 +50,13 @@ use Maslosoft\Mangan\Traits\Criteria\SortableTrait;
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @license New BSD license
  */
-class Criteria implements CriteriaInterface
+class Criteria implements CriteriaInterface, ModelAwareInterface
 {
 
 	use CursorAwareTrait,
 	  DecoratableTrait,
 	  LimitableTrait,
+	  ModelAwareTrait,
 	  SelectableTrait,
 	  SortableTrait;
 
@@ -201,9 +204,16 @@ class Criteria implements CriteriaInterface
 	 */
 	public function __construct($criteria = null, AnnotatedInterface $model = null)
 	{
+		if (!empty($model))
+		{
+			$this->setModel($model);
+		}
 		$this->setCd(new ConditionDecorator($model));
 		if (is_array($criteria))
 		{
+			/**
+			 * TODO Throw exception if unexpected array keys found will silently fail
+			 */
 			if (isset($criteria['conditions']))
 				foreach ($criteria['conditions'] as $fieldName => $conditions)
 				{
@@ -218,6 +228,7 @@ class Criteria implements CriteriaInterface
 					}
 
 					$this->_workingFields = $fieldNameArray;
+					assert(is_array($conditions), 'Each condition must be array with operator as key and value');
 					foreach ($conditions as $operator => $value)
 					{
 						$operator = strtolower($operator);
@@ -275,7 +286,7 @@ class Criteria implements CriteriaInterface
 	{
 		if (is_array($criteria))
 		{
-			$criteria = new static($criteria);
+			$criteria = new static($criteria, $this->getModel());
 		}
 		elseif (empty($criteria))
 		{

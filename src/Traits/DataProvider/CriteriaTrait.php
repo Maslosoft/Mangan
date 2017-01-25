@@ -13,9 +13,10 @@
 
 namespace Maslosoft\Mangan\Traits\DataProvider;
 
-use Maslosoft\Mangan\Criteria;
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
 
 /**
  * CriteriaTrait
@@ -41,7 +42,15 @@ trait CriteriaTrait
 		if (empty($this->criteria))
 		{
 			$className = static::CriteriaClass;
-			$this->criteria = new $className;
+			if ($this instanceof ModelAwareInterface)
+			{
+				$model = $this->getModel();
+			}
+			else
+			{
+				$model = null;
+			}
+			$this->criteria = new $className(null, $model);
 		}
 		return $this->criteria;
 	}
