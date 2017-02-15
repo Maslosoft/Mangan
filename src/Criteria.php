@@ -29,6 +29,7 @@ use Maslosoft\Mangan\Traits\Criteria\LimitableTrait;
 use Maslosoft\Mangan\Traits\Criteria\SelectableTrait;
 use Maslosoft\Mangan\Traits\Criteria\SortableTrait;
 use Maslosoft\Mangan\Traits\ModelAwareTrait;
+use UnexpectedValueException;
 
 /**
  * Criteria
@@ -50,7 +51,8 @@ use Maslosoft\Mangan\Traits\ModelAwareTrait;
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
  * @license New BSD license
  */
-class Criteria implements CriteriaInterface, ModelAwareInterface
+class Criteria implements CriteriaInterface,
+		ModelAwareInterface
 {
 
 	use CursorAwareTrait,
@@ -211,9 +213,19 @@ class Criteria implements CriteriaInterface, ModelAwareInterface
 		$this->setCd(new ConditionDecorator($model));
 		if (is_array($criteria))
 		{
-			/**
-			 * TODO Throw exception if unexpected array keys found will silently fail
-			 */
+			$available = ['conditions', 'select', 'limit', 'offset', 'sort', 'useCursor'];
+
+			$diff = array_diff_key($criteria, array_flip($available));
+			if (!empty($diff))
+			{
+				$params = [
+					'[' . implode(', ', $available) . ']',
+					'[' . implode(', ', array_keys($criteria)) . ']'
+				];
+				$msg = vsprintf('Allowed criteria keys are: %s, however was provided: %s', $params);
+				throw new UnexpectedValueException($msg);
+			}
+
 			if (isset($criteria['conditions']))
 				foreach ($criteria['conditions'] as $fieldName => $conditions)
 				{
@@ -228,7 +240,7 @@ class Criteria implements CriteriaInterface, ModelAwareInterface
 					}
 
 					$this->_workingFields = $fieldNameArray;
-					assert(is_array($conditions), 'Each condition must be array with operator as key and value');
+					assert(is_array($conditions), 'Each condition must be array with operator as key and value, ie: ["_id" => ["==" => "123"]]');
 					foreach ($conditions as $operator => $value)
 					{
 						$operator = strtolower($operator);
