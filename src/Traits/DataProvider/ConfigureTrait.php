@@ -94,13 +94,19 @@ trait ConfigureTrait
 			unset($config['sort']);
 		}
 
+		if (isset($config['pagination']))
+		{
+			$this->setPagination($config['pagination']);
+			unset($config['pagination']);
+		}
+
 		if (!empty($model) && !$criteria->getSelect())
 		{
 			$fields = array_keys(ManganMeta::create($model)->fields());
 			$selected = array_fill_keys($fields, true);
 			$criteria->setSelect($selected);
 		}
-
+		
 		foreach ($config as $key => $value)
 		{
 			$this->$key = $value;

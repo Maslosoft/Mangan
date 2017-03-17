@@ -56,6 +56,11 @@ trait PaginationTrait
 			{
 				$this->pagination['class'] = $className;
 			}
+			if(isset($this->pagination['pageSize']))
+			{
+				$this->pagination['size'] = $this->pagination['pageSize'];
+				unset($this->pagination['pageSize']);
+			}
 			$this->pagination = EmbeDi::fly()->apply($this->pagination);
 		}
 		return $this->pagination;
@@ -81,6 +86,11 @@ trait PaginationTrait
 			if (empty($pagination['class']))
 			{
 				$pagination['class'] = Pagination::class;
+			}
+			if(isset($pagination['pageSize']))
+			{
+				$pagination['size'] = $pagination['pageSize'];
+				unset($pagination['pageSize']);
 			}
 			$this->pagination = EmbeDi::fly()->apply($pagination);
 			return $this;
