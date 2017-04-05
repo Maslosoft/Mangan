@@ -53,6 +53,8 @@ abstract class Transformator
 	 */
 	private $transformatorClass = TransformatorInterface::class;
 
+	private static $c = [];
+
 	/**
 	 * Class constructor
 	 * @param AnnotatedInterface $model
@@ -106,6 +108,13 @@ abstract class Transformator
 	 */
 	public function getFor($name)
 	{
+		$key = static::class . get_class($this->model) . $name . $this->transformatorClass;
+
+		if(isset(self::$c[$key]))
+		{
+			return self::$c[$key];
+		}
+
 		if (!array_key_exists($name, $this->transformators))
 		{
 			if (!$this->meta->$name)
@@ -120,6 +129,7 @@ abstract class Transformator
 		{
 			$this->transformators[$name]->setName($name);
 		}
+		self::$c[$key] = $this->transformators[$name];
 		return $this->transformators[$name];
 	}
 

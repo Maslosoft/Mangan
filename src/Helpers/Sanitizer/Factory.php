@@ -33,9 +33,16 @@ use Maslosoft\Mangan\Sanitizers\StringSanitizer;
  */
 class Factory
 {
-
+	private static $c = [];
 	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta, $transformatorClass)
 	{
+		$key = $modelMeta->name . $modelMeta->connectionId . $meta->name . $transformatorClass;
+
+		if(isset(self::$c[$key]))
+		{
+			return self::$c[$key];
+		}
+
 		$sanitizerClass = self::_resolve($meta, $modelMeta);
 
 
@@ -82,7 +89,7 @@ class Factory
 			]
 		];
 		$sanitizer = PluginFactory::fly($modelMeta->connectionId)->instance($config, $transformatorClass)[0];
-
+		self::$c[$key] = $sanitizer;
 		return $sanitizer;
 	}
 

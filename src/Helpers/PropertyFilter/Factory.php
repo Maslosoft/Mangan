@@ -33,6 +33,8 @@ class Factory
 	 */
 	private static $_configs = [];
 
+	private static $c = [];
+
 	/**
 	 * Create filter
 	 * @param string $transformatorClass
@@ -42,16 +44,29 @@ class Factory
 	 */
 	public static function create($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta)
 	{
+		$key = $documentMeta->name . $documentMeta->connectionId . $fieldMeta->name . $transformatorClass;
+
+		if(isset(self::$c[$key]))
+		{
+			return self::$c[$key];
+		}
+
 		$filterNames = self::getManganFilters($documentMeta->connectionId, $transformatorClass);
 		if (count($filterNames) > 0)
 		{
 			if (count($filterNames) > 1)
 			{
-				return new MultiFilter($filterNames);
+				$filter = new MultiFilter($filterNames);
+				self::$c[$key] = $filter;
+				return $filter;
 			}
-			return current($filterNames);
+			$filter = current($filterNames);
+			self::$c[$key] = $filter;
+			return $filter;
 		}
-		return new Unfiltered();
+		$filter = new Unfiltered();
+		self::$c[$key] = $filter;
+		return $filter;
 	}
 
 	/**
