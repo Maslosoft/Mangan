@@ -42,6 +42,8 @@ class Factory
 	 */
 	private static $modelDecorators = [];
 
+	private static $c = [];
+
 	/**
 	 * Create decorator
 	 * @param string $transformatorClass
@@ -51,6 +53,13 @@ class Factory
 	 */
 	public static function createForField($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
+		$key = $modelMeta->name . $modelMeta->connectionId . $meta->name . $transformatorClass;
+
+		if(isset(self::$c[$key]))
+		{
+			return self::$c[$key];
+		}
+
 		if ($meta->decorators)
 		{
 			$activeDecorators = self::getManganDecorators($modelMeta->connectionId, $transformatorClass);
@@ -73,10 +82,14 @@ class Factory
 			}
 			if ($decorators)
 			{
-				return new CompoundDecorator($decorators);
+				$decorator = new CompoundDecorator($decorators);
+				self::$c[$key] = $decorator;
+				return $decorator;
 			}
 		}
-		return new Undecorated();
+		$decorator = new Undecorated();
+		self::$c[$key] = $decorator;
+		return $decorator;
 	}
 
 	/**
