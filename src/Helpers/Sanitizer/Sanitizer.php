@@ -27,12 +27,22 @@ class Sanitizer extends Transformator
 
 	public function read($name, $dbValue)
 	{
-		return $this->getFor($name)->read($this->getModel(), $dbValue);
+		$sanitizer = $this->getFor($name);
+		if(empty($sanitizer))
+		{
+			return $dbValue;
+		}
+		return $sanitizer->read($this->getModel(), $dbValue);
 	}
 
 	public function write($name, $phpValue)
 	{
-		return $this->getFor($name)->write($this->getModel(), $phpValue);
+		$sanitizer = $this->getFor($name);
+		if(empty($sanitizer))
+		{
+			return $phpValue;
+		}
+		return $sanitizer->write($this->getModel(), $phpValue);
 	}
 
 	protected function _getTransformer($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)

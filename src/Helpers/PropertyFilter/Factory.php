@@ -61,12 +61,12 @@ class Factory
 				return $filter;
 			}
 			$filter = current($filterNames);
+			
 			self::$c[$key] = $filter;
 			return $filter;
 		}
-		$filter = new Unfiltered();
-		self::$c[$key] = $filter;
-		return $filter;
+		self::$c[$key] = false;
+		return false;
 	}
 
 	/**

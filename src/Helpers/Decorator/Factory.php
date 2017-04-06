@@ -49,7 +49,7 @@ class Factory
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $meta
-	 * @return Undecorated|CompoundDecorator|DecoratorInterface
+	 * @return bool|CompoundDecorator|DecoratorInterface
 	 */
 	public static function createForField($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
@@ -87,9 +87,8 @@ class Factory
 				return $decorator;
 			}
 		}
-		$decorator = new Undecorated();
-		self::$c[$key] = $decorator;
-		return $decorator;
+		self::$c[$key] = false;
+		return false;
 	}
 
 	/**
