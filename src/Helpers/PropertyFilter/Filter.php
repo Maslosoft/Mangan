@@ -28,12 +28,22 @@ class Filter extends Transformator implements TransformatorFilterInterface
 
 	public function fromModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		return $this->getFor($fieldMeta->name)->fromModel($model, $fieldMeta);
+		$filter = $this->getFor($fieldMeta->name);
+		if(empty($filter))
+		{
+			return true;
+		}
+		return $filter->fromModel($model, $fieldMeta);
 	}
 
 	public function toModel($model, DocumentPropertyMeta $fieldMeta)
 	{
-		return $this->getFor($fieldMeta->name)->toModel($model, $fieldMeta);
+		$filter = $this->getFor($fieldMeta->name);
+		if(empty($filter))
+		{
+			return true;
+		}
+		return $filter->toModel($model, $fieldMeta);
 	}
 
 	/**

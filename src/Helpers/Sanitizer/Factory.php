@@ -44,6 +44,11 @@ class Factory
 		}
 
 		$sanitizerClass = self::_resolve($meta, $modelMeta);
+		if(false === $sanitizerClass)
+		{
+			self::$c[$key] = false;
+			return false;
+		}
 
 
 		// Remap sanitizer if needed
@@ -135,8 +140,8 @@ class Factory
 				return StringSanitizer::class;
 		}
 
-		// Fallback to passthrough
-		return PassThrough::class;
+		// None
+		return false;
 	}
 
 }
