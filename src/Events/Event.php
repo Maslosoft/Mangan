@@ -248,15 +248,15 @@ class Event implements EventInterface
 		$allPartials = self::getPartials($className);
 
 		// Filter out empty partials
-		$cb = function($className)use($name)
+		$partials = [];
+		foreach($allPartials as $className)
 		{
 			if (empty(self::$events[$name][$className]))
 			{
-				return false;
+				continue;
 			}
-			return true;
-		};
-		$partials = array_filter($allPartials, $cb);
+			$partials[] = $className;
+		}
 
 		// Trigger all partial events if applicable
 		foreach ($partials as $className)
