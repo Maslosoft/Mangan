@@ -36,7 +36,7 @@ class DateSanitizer implements SanitizerInterface
 
 	private function sanitize($value)
 	{
-		$sec = 0;
+		$sec = $value;
 		$usec = 0;
 		if ($value instanceof MongoDate)
 		{
