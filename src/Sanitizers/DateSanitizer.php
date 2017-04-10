@@ -26,28 +26,38 @@ class DateSanitizer implements SanitizerInterface
 
 	public function read($model, $dbValue)
 	{
-		if ($dbValue instanceof MongoDate)
-		{
-			return $dbValue;
-		}
-		if ((int) $dbValue === 0)
-		{
-			$dbValue = time();
-		}
-		return new MongoDate($dbValue);
+		return $this->sanitize($dbValue);
 	}
 
 	public function write($model, $phpValue)
 	{
-		if ($phpValue instanceof MongoDate)
+		return $this->sanitize($phpValue);
+	}
+
+	private function sanitize($value)
+	{
+		$sec = 0;
+		$usec = 0;
+		if ($value instanceof MongoDate)
 		{
-			return $phpValue;
+			return $value;
 		}
-		if ((int) $phpValue === 0)
+		if (is_array($value))
 		{
-			$phpValue = time();
+			if (isset($value['sec']))
+			{
+				$sec = (int) $value['sec'];
+			}
+			if (isset($value['usec']))
+			{
+				$usec = (int) $value['usec'];
+			}
 		}
-		return new MongoDate($phpValue);
+		if ((int) $value === 0)
+		{
+			$sec = time();
+		}
+		return new MongoDate($sec, $usec);
 	}
 
 }
