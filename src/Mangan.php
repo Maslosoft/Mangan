@@ -18,6 +18,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
+use Maslosoft\Mangan\Interfaces\EventHandlersInterface;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
 use Maslosoft\Mangan\Interfaces\ProfilerInterface;
@@ -92,6 +93,18 @@ class Mangan implements LoggerAwareInterface
 	 * @var string[][]
 	 */
 	public $sanitizersMap = [];
+
+	/**
+	 * Event handlers to attach on initialization.
+	 *
+	 * This should be list of class names implementing `EventHandlersInterface`
+	 * or optionally list of arrays with configuration for `EventHandlersInterface`
+	 * derived classes.
+	 *
+	 * @see EventHandlersInterface
+	 * @var mixed[]
+	 */
+	public $eventHandlers = [];
 
 	/**
 	 * Connection ID
@@ -187,7 +200,7 @@ class Mangan implements LoggerAwareInterface
 	 *
 	 * **NOTE: While it's ok to use constructor to create Mangan, it is recommended to use
 	 * Mangan::fly() to create/get instance, as creating new instance has some overhead.**
-	 * 
+	 *
 	 * @param string $connectionId
 	 */
 	public function __construct($connectionId = self::DefaultConnectionId)
@@ -215,6 +228,19 @@ class Mangan implements LoggerAwareInterface
 		if (empty(self::$mn[$connectionId]))
 		{
 			self::$mn[$connectionId] = $this;
+		}
+
+		// Initialize vent handlers once
+		static $once = true;
+		if ($once)
+		{
+			foreach ($this->eventHandlers as $config)
+			{
+				$eh = $this->di->apply($config);
+				assert($eh instanceof EventHandlersInterface);
+				$eh->setupHandlers();
+			}
+			$once = false;
 		}
 	}
 
