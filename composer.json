@@ -73,7 +73,9 @@
 	},
 	"suggest": {
 		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
-		"mongofill/mongofill": "Polyfill of PECL Mongo extension. Required for PHP7"
+		"mongofill/mongofill": "Polyfill of PECL Mongo extension. Required for PHP7",
+		"endroid/qrcode": "Generate QR Codes",
+		"khanamiryan/qrcode-detector-decoder": "Decode QR Codes"
 	},
 	"autoload": {
 		"psr-4": {
