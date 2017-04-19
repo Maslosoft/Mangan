@@ -22,15 +22,9 @@ composer require maslosoft/mangan
 
 <!--/header-->
 
-### Install mongofill if no ext-mongo available (for hhvm, php7 too):
-
-```bash
-composer require mongofill/mongofill:"@dev"
-```
-
 ### More details
 
-[Visit Project Website](https://maslosoft.com/mangan/)
+[Visit Project Website](https://maslosoft.com/mangan/) or [Quick Start Guide](https://maslosoft.com/mangan/docs/)
 
 ## Resources
 
