@@ -17,7 +17,8 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\CommandException;
 use Maslosoft\Mangan\Exceptions\CommandNotFoundException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
-use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Model\Command\User;
+use Maslosoft\Mangan\Traits\AvailableCommands;
 
 /**
  * Command
@@ -27,7 +28,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class Command
 {
 
-	use Traits\AvailableCommands;
+	use AvailableCommands;
 
 	/**
 	 *
@@ -41,9 +42,13 @@ class Command
 	 */
 	private $mn = null;
 
-	public function __construct(AnnotatedInterface $model = null)
+	public function __construct(AnnotatedInterface $model = null, Mangan $mangan = null)
 	{
 		$this->model = $model;
+		if (!empty($mangan))
+		{
+			$this->mn = $mangan;
+		}
 		if (empty($model))
 		{
 			$this->mn = Mangan::fly();
@@ -106,6 +111,33 @@ class Command
 			'create' => $collectionName
 		];
 		return $this->mn->getDbInstance()->command(array_merge($cmd, $params));
+	}
+
+	public function createUser(User $user, $writeConcerns = [])
+	{
+		$cmd = [
+			'createUser' => $user->user,
+			'pwd' => $user->pwd,
+		];
+		if (!empty($user->customData))
+		{
+			assert(is_object($user->customData));
+			$cmd['customData'] = $user->customData;
+		}
+		$cmd = array_merge($cmd, $user->toArray(['user', 'customData']));
+		return $this->mn->getDbInstance()->command($cmd);
+	}
+
+	public function dropUser($username, $writeConcerns = [])
+	{
+		if ($username instanceof User)
+		{
+			$username = $username->user;
+		}
+		$cmd = [
+			'dropUser' => $username
+		];
+		return $this->mn->getDbInstance()->command(array_merge($cmd, $writeConcerns));
 	}
 
 	/**
