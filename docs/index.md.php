@@ -28,18 +28,18 @@ composer require maslosoft/mangan
 
 ### Configuration
 
-It is recommended to use [EmbeDi](/embedi/) to configure Mangan. This allow
+It is recommended to use [EmbeDi](/embedi/) to [configure Mangan](configuration/). This allow
 separation configuration from actual usage. Minimum configuration required
 is database name, using property `dbName`. Default configuration ID is `mongodb`.
 
 *Use statements omitted*
 ```
 $config = [
-	'mongodb' => [
-		'class' => Mangan::class,
-		// Database name
-		'dbName' => 'quick-start',
-	]
+'mongodb' => [
+'class' => Mangan::class,
+// Database name
+'dbName' => 'quick-start',
+]
 ];
 EmbeDi::fly()->addAdapter(new ArrayAdapter($config));
 ```
