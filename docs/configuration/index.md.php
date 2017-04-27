@@ -36,23 +36,27 @@ are not specified, they will be substituted with default values:
 To connect Mangan [to replica set][replica-set] separate multiple servers
 with coma:
 
-> mongodb://root:admin123@example.com:27018,root:admin123@example.com:27018
+> mongodb://localhost,root:admin123@example.com:27018,user:123HHx@maslosoft.com
 
 This is minimal configuration for replication.
 
 #### Checking connection
 
-To test if Mangan can connect to any of the servers, <?= $command->ping(); ?>
-command can be used, this will return array containing success or error message:
+To test if Mangan can connect to any of the servers,
+<?= $command->ping(); ?> command can be used,
+this will return array containing success or error message as an array:
 
 ```
 ['ok' => 1]
 ```
 
-This result is equivalent of calling native [MongoDB ping command][ping]
+This result is equivalent of calling native [MongoDB ping command][ping].
 
-Note that <?= $command->ping(); ?> will not authenticate, but will indicate
-whether it is possible to connect.
+Note that <?= $command->ping(); ?> will not check authentication, but will
+indicate whether it is possible to connect.
+
+To check if user is properly authenticated, use any command that interacts with
+collection, for example <?= $command->collStats(); ?>.
 
 
 [replica-set]: https://docs.mongodb.com/manual/replication/
