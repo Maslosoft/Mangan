@@ -90,4 +90,40 @@ class Command
 		return $this->call($name);
 	}
 
+	/**
+	 * Explicitly creates a collection or view.
+	 *
+	 * Parameter `$params` depends on MongoDB version,
+	 * see (official documentation)[https://docs.mongodb.com/manual/reference/command/create/] for details
+	 *
+	 * @param string $collectionName The name of the new collection
+	 * @param array $params
+	 * @return array
+	 */
+	public function create($collectionName, $params = [])
+	{
+		$cmd = [
+			'create' => $collectionName
+		];
+		return $this->mn->getDbInstance()->command(array_merge($cmd, $params));
+	}
+
+	/**
+	 * The `collStats` command returns a variety of storage statistics for a given collection.
+	 *
+	 * @param string $collectionName The name of the target collection. If the collection does not exist, collStats returns an error message.
+	 * @param int $scale Optional. The scale used in the output to display the sizes of items. By default, output displays sizes in bytes. To display kilobytes rather than bytes, specify a scale value of 1024. The scale factor rounds values to whole numbers.
+	 * @param boolean $verbose Optional. When true, collStats increases reporting for the MMAPv1 Storage Engine. Defaults to false.
+	 * @return array
+	 */
+	public function collStats($collectionName, $scale = 1, $verbose = false)
+	{
+		$cmd = [
+			'collStats' => $collectionName,
+			'scale' => $scale,
+			'verbose' => $verbose
+		];
+		return $this->mn->getDbInstance()->command($cmd);
+	}
+
 }
