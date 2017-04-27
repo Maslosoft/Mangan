@@ -8,7 +8,7 @@ use Maslosoft\Zamm\ShortNamer;
 ShortNamer::defaults()->md();
 $none = new ShortNamer(None::class);
 ?>
-<title>Data sanitization</title>
+<title>3. Data sanitization</title>
 
 #Data sanitization
 

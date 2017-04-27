@@ -9,7 +9,7 @@ use Maslosoft\Staple\Widgets\SubNavRecursive;
 /* @var $this Controller */
 /* @var $form ActiveForm */
 ?>
-<title>Annotations</title>
+<title>4. Annotations</title>
 #Annotations
 
 Annotations are used to define model behaviors and to add extra parameters

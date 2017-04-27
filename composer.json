@@ -1,6 +1,6 @@
 {
 	"name": "maslosoft/mangan",
-	"description": "MongoDB Object Persister",
+	"description": "MongoDB Object Persister/Document Mapper",
 	"homepage": "https://maslosoft.com/mangan/",
 	"license": [
 		"AGPL",

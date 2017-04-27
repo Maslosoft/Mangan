@@ -13,7 +13,7 @@ ShortNamer::defaults()->md();
 $ann = new ShortNamer(AnnotatedInterface::class);
 ?>
 <template>docs</template>
-<title>Define Model</title>
+<title>2. Define Model</title>
 #Define Model
 
 In many cases, model can be defined as a plain PHP class, with all public
