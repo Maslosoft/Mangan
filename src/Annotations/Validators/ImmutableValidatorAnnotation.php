@@ -20,11 +20,11 @@ use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
- * UniqueValidator
+ * Immutable Validator
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class UniqueValidatorAnnotation extends ValidatorAnnotation
+class ImmutableValidatorAnnotation extends ValidatorAnnotation
 {
 
 	use AllowEmpty,
