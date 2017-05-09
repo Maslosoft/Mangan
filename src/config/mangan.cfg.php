@@ -32,6 +32,7 @@ use Maslosoft\Mangan\Transformers\YamlArray;
 use Maslosoft\Mangan\Validators\BuiltIn\CompareValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\CountValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
+use Maslosoft\Mangan\Validators\BuiltIn\ImmutableValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\NumberValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\RangeValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\RegexValidator;
@@ -44,6 +45,7 @@ use Maslosoft\Mangan\Validators\Proxy\BooleanValidator;
 use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
 use Maslosoft\Mangan\Validators\Proxy\CountProxy;
 use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
+use Maslosoft\Mangan\Validators\Proxy\ImmutableProxy;
 use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
 use Maslosoft\Mangan\Validators\Proxy\RangeProxy;
 use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
@@ -143,6 +145,7 @@ return [
 		BooleanProxy::class => BooleanValidator::class,
 		CompareProxy::class => CompareValidator::class,
 		CountProxy::class => CountValidator::class,
+		ImmutableProxy::class => ImmutableValidator::class,
 		UniqueProxy::class => UniqueValidator::class,
 		EmailProxy::class => EmailValidator::class,
 		NumberProxy::class => NumberValidator::class,
