@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Exceptions\BadAttributeException;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
@@ -36,7 +37,7 @@ use MongoCollection;
 
 /**
  * EntityManager
- * 
+ *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class EntityManager implements EntityManagerInterface
@@ -230,6 +231,14 @@ class EntityManager implements EntityManagerInterface
 		// filter attributes if set in param
 		if ($attributes !== null)
 		{
+			$meta = ManganMeta::create($this->model);
+			foreach ($attributes as $key)
+			{
+				if ($meta->$key === false)
+				{
+					throw new BadAttributeException(sprintf("Unknown attribute `%s` on model `%s`", $key, get_class($this->model)));
+				}
+			}
 			$modify = true;
 			foreach ($rawData as $key => $value)
 			{
