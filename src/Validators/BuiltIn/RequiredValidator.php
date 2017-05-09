@@ -16,6 +16,12 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
+use Maslosoft\Mangan\Validators\Traits\Strict;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
  * RequiredValidator
@@ -25,11 +31,12 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class RequiredValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\Strict,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\SkipOnError,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use Strict,
+	  Messages,
+	  SkipOnError,
+	  OnScenario,
+	  Safe,
+	  When;
 
 	/**
 	 * @var mixed the desired value that the attribute must have.
@@ -62,6 +69,10 @@ class RequiredValidator implements ValidatorInterface
 
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
+		if (!$this->whenValidate($model))
+		{
+			return true;
+		}
 		$value = $model->$attribute;
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		if (!empty($this->requiredValue))

@@ -16,6 +16,8 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
+use Maslosoft\Mangan\Validators\Traits\Strict;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
@@ -36,7 +38,8 @@ use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
 class RequiredValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\Strict;
+	use Strict,
+	  When;
 
 	/**
 	 * @var mixed the desired value that the attribute must have.
@@ -52,6 +55,7 @@ class RequiredValidatorAnnotation extends ValidatorAnnotation
 		$this->proxy = RequiredProxy::class;
 		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'requiredValue',
+					'when',
 					'strict',
 					'message',
 					'skipOnError',
