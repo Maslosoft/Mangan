@@ -19,6 +19,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Validators\BuiltIn\Base\SizeValidator;
 use Maslosoft\Mangan\Validators\Traits\OnScenario;
 use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
  * StringValidator
@@ -29,7 +30,8 @@ class StringValidator extends SizeValidator implements ValidatorInterface
 {
 
 	use OnScenario,
-	  Safe;
+	  Safe,
+	  When;
 
 	/**
 	 * @Label('{attribute} is too short (minimum is {min} characters)')
@@ -51,6 +53,10 @@ class StringValidator extends SizeValidator implements ValidatorInterface
 
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
+		if (!$this->whenValidate($model))
+		{
+			return true;
+		}
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		$value = $model->$attribute;
 		if (!is_string($value))

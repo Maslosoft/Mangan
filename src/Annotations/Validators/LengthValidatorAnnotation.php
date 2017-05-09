@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\StringProxy;
 use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
  * StringValidator validates that the attribute value is of certain length.
@@ -44,7 +45,8 @@ use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 class LengthValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use AllowEmpty;
+	use AllowEmpty,
+	  When;
 
 	/**
 	 * @var integer maximum length. Defaults to null, meaning no maximum limit.
@@ -109,6 +111,7 @@ class LengthValidatorAnnotation extends ValidatorAnnotation
 					'max',
 					'min',
 					'is',
+					'when',
 					'tooShort',
 					'tooLong',
 					'msgInvalid',

@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\CountProxy;
 use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
  * CountValidator validates that the attribute array elements count is of certain length.
@@ -45,7 +46,8 @@ use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 class CountValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use AllowEmpty;
+	use AllowEmpty,
+	  When;
 
 	/**
 	 * @var integer maximum length. Defaults to null, meaning no maximum limit.
@@ -99,6 +101,7 @@ class CountValidatorAnnotation extends ValidatorAnnotation
 					'max',
 					'min',
 					'is',
+					'when',
 					'tooShort',
 					'tooLong',
 					'msgInvalid',

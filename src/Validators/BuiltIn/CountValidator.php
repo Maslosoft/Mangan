@@ -9,6 +9,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Validators\BuiltIn\Base\SizeValidator;
 use Maslosoft\Mangan\Validators\Traits\OnScenario;
 use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
  * CountValidator
@@ -19,7 +20,8 @@ class CountValidator extends SizeValidator implements ValidatorInterface
 {
 
 	use OnScenario,
-	  Safe;
+	  Safe,
+	  When;
 
 	/**
 	 * @Label('There are not enough of {attribute} (minimum is {min})')
@@ -41,6 +43,10 @@ class CountValidator extends SizeValidator implements ValidatorInterface
 
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
+		if (!$this->whenValidate($model))
+		{
+			return true;
+		}
 		$label = ManganMeta::create($model)->field($attribute)->label;
 		if (!is_array($model->$attribute))
 		{
