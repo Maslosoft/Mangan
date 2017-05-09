@@ -15,16 +15,17 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
-use Maslosoft\Mangan\Validators\Proxy\StringProxy;
+use Maslosoft\Mangan\Validators\Proxy\CountProxy;
 use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 /**
- * StringValidator validates that the attribute value is of certain length.
+ * CountValidator validates that the attribute array elements count is of certain length.
  *
- * Note, this validator should only be used with string-typed attributes.
+ * Note, this validator should only be used with array type attributes or
+ * `Countable` interface instance object.
  *
  * In addition to the {@link message} property for setting a custom error message,
- * StringValidator has a couple custom error messages you can set that correspond to different
+ * CountValidator has a couple custom error messages you can set that correspond to different
  * validation scenarios. For defining a custom message when the string is too short,
  * you may use the {@link tooShort} property. Similarly with {@link tooLong}. The messages may contain
  * placeholders that will be replaced with the actual content. In addition to the "{attribute}"
@@ -91,20 +92,9 @@ class LengthValidatorAnnotation extends ValidatorAnnotation
 	 */
 	public $msgLength = '';
 
-	/**
-	 * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
-	 * This property is used only when mbstring PHP extension is enabled.
-	 * The value of this property will be used as the 2nd parameter of the
-	 * mb_strlen() function. If this property is not set, the application charset
-	 * will be used.
-	 * If this property is set false, then strlen() will be used even if mbstring is enabled.
-	 * @since 1.1.1
-	 */
-	public $encoding = null;
-
 	public function init()
 	{
-		$this->proxy = StringProxy::class;
+		$this->proxy = CountProxy::class;
 		$this->getEntity()->validators[] = new ValidatorMeta(ParamsExpander::expand($this, [
 					'max',
 					'min',
@@ -116,7 +106,6 @@ class LengthValidatorAnnotation extends ValidatorAnnotation
 					'msgTooLong',
 					'msgLength',
 					'allowEmpty',
-					'encoding',
 					'message',
 					'skipOnError',
 					'on',

@@ -18,6 +18,14 @@ Mangan has facility to store objects compositions. Most simple solution for
 this is to embed sub object in the same document, just like it is created
 at runtime.
 
-To store sub object in database, use [@Embedded](../../annotations/embedded/)
+To store sub object in database, use [@Embedded][annotation]
 annotation on one of object property:
 
+```
+/**
+* @Embedded(Address)
+*/
+public $address = null;
+```
+
+[annotation]: ../../annotations/embedded/
