@@ -13,12 +13,14 @@
 
 namespace Maslosoft\Mangan\Traits\Model;
 
+use Maslosoft\Mangan\Events\Handlers\ParentIdHandler;
 use Maslosoft\Mangan\Sanitizers\MongoStringId;
 use MongoId;
 
 /**
  * This is trait for models having parent element
  *
+ * @see ParentIdHandler
  * @author Piotr
  */
 trait WithParentTrait

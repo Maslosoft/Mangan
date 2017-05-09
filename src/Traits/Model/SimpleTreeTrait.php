@@ -79,10 +79,12 @@ trait SimpleTreeTrait
 				if ($this->parentId)
 				{
 					// Put node to root if parent does not exists
+					// RawFinder is used for performance reasons here
+					// and to skip filters
 					/**
 					 * TODO Similar mechanism should be used to detect orphaned tree items.
 					 * TODO Use exists here instead of raw finder.
-					 * TODO investigate why rawfinder was used here.
+					 *
 					 */
 					if (!(new RawFinder($this))->findByPk(new MongoId($this->parentId)))
 					{

@@ -249,7 +249,7 @@ class Event implements EventInterface
 
 		// Filter out empty partials
 		$partials = [];
-		foreach($allPartials as $className)
+		foreach ($allPartials as $className)
 		{
 			if (empty(self::$events[$name][$className]))
 			{
@@ -263,12 +263,13 @@ class Event implements EventInterface
 		{
 			foreach (self::$events[$name][$className] as $handler)
 			{
+				// Assign source for easier debugging or other uses
+				$event->source = $className;
+
 				$event->data = $handler[1];
 				call_user_func($handler[0], $event);
 				$wasTriggered = true;
 
-				// Assign source for easier debugging
-				$event->source = $className;
 
 				// Event was handled, return true
 				if ($event->handled)

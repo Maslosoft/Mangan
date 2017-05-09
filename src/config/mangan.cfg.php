@@ -13,11 +13,13 @@ use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Decorators\Property\SecretDecorator;
 use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
 use Maslosoft\Mangan\Decorators\RelatedDecorator;
+use Maslosoft\Mangan\Events\Handlers\ParentIdHandler;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
 use Maslosoft\Mangan\Sanitizers\DateWriteUnixSanitizer;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use Maslosoft\Mangan\Sanitizers\MongoWriteStringId;
+use Maslosoft\Mangan\Traits\Model\WithParentTrait;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\Filters\DocumentArrayFilter;
@@ -136,6 +138,9 @@ return [
 		SafeArray::class => [
 			SafeFilter::class
 		],
+	],
+	'eventHandlers' => [
+		WithParentTrait::class => ParentIdHandler::class
 	],
 	/**
 	 * Mapping for validators. Key is validator proxy class name, value is concrete validator implementation
