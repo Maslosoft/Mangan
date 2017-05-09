@@ -59,8 +59,6 @@ class ImmutableValidator implements ValidatorInterface
 	 * look for the attribute value being validated. Defaults to null, meaning using
 	 * the class of the object currently being validated.
 	 *
-	 * TODO Not implemented
-	 *
 	 * @see attributeName
 	 * @since 1.0.8
 	 */
@@ -148,7 +146,7 @@ class ImmutableValidator implements ValidatorInterface
 		}
 
 		// Stored in DB, but value is same
-		if ($found->$against === $model->$against)
+		if ($found->$attribute === $model->$attribute)
 		{
 			return true;
 		}
