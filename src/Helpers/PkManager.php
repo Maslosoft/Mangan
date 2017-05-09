@@ -170,7 +170,7 @@ class PkManager
 	 * Apply pk value to model
 	 * @param AnnotatedInterface $model
 	 * @param MongoId|mixed|mixed[] $pkValue
-	 * @return type
+	 * @return mixed Primary key value
 	 * @throws CriteriaException
 	 */
 	public static function applyToModel(AnnotatedInterface $model, $pkValue)
