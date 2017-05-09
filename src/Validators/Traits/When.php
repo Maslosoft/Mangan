@@ -59,9 +59,9 @@ trait When
 		elseif (is_array($this->when))
 		{
 			$conditions = [];
-			foreach ($conditions as $name => $value)
+			foreach ($this->when as $name => $value)
 			{
-				$conditions[] = (int) $model->$name === $value;
+				$conditions[] = $model->$name === $value;
 			}
 			return count($conditions) === array_sum($conditions);
 		}
