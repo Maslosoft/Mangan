@@ -25,38 +25,41 @@ use Maslosoft\Mangan\Validators\Traits\Messages;
 use Maslosoft\Mangan\Validators\Traits\OnScenario;
 use Maslosoft\Mangan\Validators\Traits\Safe;
 use Maslosoft\Mangan\Validators\Traits\SkipOnError;
+use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
- * UniqueValidator class file.
- *
- * @author Ianaré Sévi
- * @author Florian Fackler <florian.fackler@mintao.com>
- * @link http://mintao.com
- * @copyright Copyright (c) 2008-2010 Yii Software LLC
- * @license New BSD license
- */
-
-/**
- * UniqueValidator validates that the attribute value is unique in the corresponding database table.
+ * ImmutableValidator validates that the attribute value
+ * is same as in the stored in database, if it was stored already.
  *
  * @author Florian Fackler <florian.fackler@mintao.com>
  * @version $Id$
  * @package system.validators
  * @since 1.0
  */
-class UniqueValidator implements ValidatorInterface
+class ImmutableValidator implements ValidatorInterface
 {
 
 	use AllowEmpty,
 	  SkipOnError,
 	  Messages,
 	  OnScenario,
-	  Safe;
+	  Safe,
+	  When;
+
+	/**
+	 * Set this value to check against trueish value stored in database.
+	 * If empty this will check for validated attribute.
+	 *
+	 * @var string
+	 */
+	public $against = '';
 
 	/**
 	 * @var string the document class name that should be used to
 	 * look for the attribute value being validated. Defaults to null, meaning using
 	 * the class of the object currently being validated.
+	 *
+	 * TODO Not implemented
 	 *
 	 * @see attributeName
 	 * @since 1.0.8
@@ -82,10 +85,10 @@ class UniqueValidator implements ValidatorInterface
 	public $criteria = [];
 
 	/**
-	 * @Label('{attribute} "{value}" has already been taken')
+	 * @Label('{attribute} cannot be changed once set')
 	 * @var string
 	 */
-	public $msgTaken = '';
+	public $msgImmutable = '';
 
 	/**
 	 * Validates the attribute of the object.
@@ -95,6 +98,10 @@ class UniqueValidator implements ValidatorInterface
 	 */
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
+		if (!$this->whenValidate($model))
+		{
+			return true;
+		}
 		$value = $model->$attribute;
 		if ($this->allowEmpty && empty($value))
 		{
@@ -105,8 +112,9 @@ class UniqueValidator implements ValidatorInterface
 
 		$compareModel = new $className;
 
-		$criteria = (new Criteria)->decorateWith($compareModel);
-		$criteria->addCond($attribute, '==', $value);
+		$pk = PkManager::getFromModel($model);
+		PkManager::applyToModel($compareModel, $pk);
+		$criteria = PkManager::prepareFromModel($compareModel);
 
 		if ($this->criteria !== [])
 		{
@@ -123,13 +131,30 @@ class UniqueValidator implements ValidatorInterface
 			return true;
 		}
 
-		// Same pk
-		if (PkManager::compare($found, $model))
+		// Decide against which field to check
+		if (empty($this->against))
+		{
+			$against = $attribute;
+		}
+		else
+		{
+			$against = $this->against;
+		}
+
+		// Not stored in DB
+		if (empty($found->$against))
 		{
 			return true;
 		}
+
+		// Stored in DB, but value is same
+		if ($found->$against === $model->$against)
+		{
+			return true;
+		}
+
 		$label = ManganMeta::create($model)->field($attribute)->label;
-		$this->addError('msgTaken', ['{attribute}' => $label, '{value}' => $value]);
+		$this->addError('msgImmutable', ['{attribute}' => $label, '{value}' => $value]);
 		return false;
 	}
 
