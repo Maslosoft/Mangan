@@ -42,7 +42,7 @@ use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
  * @package system.validators
  * @since 1.0
  */
-class LengthValidatorAnnotation extends ValidatorAnnotation
+class CountValidatorAnnotation extends ValidatorAnnotation
 {
 
 	use AllowEmpty;
