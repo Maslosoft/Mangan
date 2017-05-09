@@ -39,6 +39,10 @@ class ParentIdHandler implements EventHandlersInterface
 	public function handle(ModelEvent $e)
 	{
 		$e->isValid = true;
+		/**
+		 * TODO This breaks Event/ParentChildTrashable
+		 */
+		return;
 		$model = $e->sender;
 		$meta = ManganMeta::create($model);
 		foreach ($meta->fields() as $name => $fieldMeta)
