@@ -45,7 +45,7 @@ EmbeDi::fly()->addAdapter(new ArrayAdapter($config));
 ```
 
 Now, assuming that we have some models ready, Mangan is ready to do it's duty.
-When using built-in base documents classes, Active Document (derived from active record)
+When using built-in base documents classes, [active document][ad] (derived from active record)
 pattern can be used, for instance:
 
 ```
@@ -55,3 +55,4 @@ $plant->save();
 ```
 
 Check [this repository for working example of Mangan](https://github.com/MaslosoftGuides/mangan.quick-start)
+[ad]: define-model/active-document/
