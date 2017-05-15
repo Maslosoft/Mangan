@@ -19,6 +19,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Validators\BuiltIn\Base\SizeValidator;
 use Maslosoft\Mangan\Validators\Traits\OnScenario;
 use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
 use Maslosoft\Mangan\Validators\Traits\When;
 
 /**
@@ -31,6 +32,7 @@ class StringValidator extends SizeValidator implements ValidatorInterface
 
 	use OnScenario,
 	  Safe,
+	  SkipOnError,
 	  When;
 
 	/**

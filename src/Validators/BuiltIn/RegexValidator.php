@@ -21,6 +21,7 @@ use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 use Maslosoft\Mangan\Validators\Traits\Messages;
 use Maslosoft\Mangan\Validators\Traits\OnScenario;
 use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
 
 /**
  * RegexValidator
@@ -33,7 +34,8 @@ class RegexValidator implements ValidatorInterface
 	use AllowEmpty,
 	  Messages,
 	  OnScenario,
-	  Safe;
+	  Safe,
+	  SkipOnError;
 
 	/**
 	 * @var string the regular expression to be matched with

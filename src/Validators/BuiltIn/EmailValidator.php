@@ -20,6 +20,7 @@ use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 use Maslosoft\Mangan\Validators\Traits\Messages;
 use Maslosoft\Mangan\Validators\Traits\OnScenario;
 use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
 
 /**
  * EmailValidator
@@ -32,7 +33,8 @@ class EmailValidator implements ValidatorInterface
 	use AllowEmpty,
 	  Messages,
 	  OnScenario,
-	  Safe;
+	  Safe,
+	  SkipOnError;
 
 	const EmailPattern = '/^[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?\.)+[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?$/u';
 	const FullEmailPattern = '/^[^@]*<[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\\.[\p{L}0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?\\.)+[\p{L}0-9](?:[\p{L}0-9-]*[\p{L}0-9])?>$/u';
