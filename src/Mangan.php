@@ -230,7 +230,7 @@ class Mangan implements LoggerAwareInterface
 			self::$mn[$connectionId] = $this;
 		}
 
-		// Initialize vent handlers once
+		// Initialize event handlers once
 		static $once = true;
 		if ($once)
 		{

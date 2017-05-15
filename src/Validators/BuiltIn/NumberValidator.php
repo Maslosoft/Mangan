@@ -16,6 +16,11 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
 
 /**
  * NumberValidator
@@ -25,10 +30,11 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class NumberValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use AllowEmpty,
+	  Messages,
+	  OnScenario,
+	  Safe,
+	  SkipOnError;
 
 	/**
 	 * @var boolean whether the attribute value can only be an integer. Defaults to false.

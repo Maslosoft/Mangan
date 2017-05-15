@@ -15,6 +15,10 @@ namespace Maslosoft\Mangan\Validators\BuiltIn;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
 
 /**
  * BooleanValidator
@@ -24,9 +28,10 @@ use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 class BooleanValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use Messages,
+	  OnScenario,
+	  Safe,
+	  SkipOnError;
 
 	/**
 	 * @Label('Attribute must be either true or false')

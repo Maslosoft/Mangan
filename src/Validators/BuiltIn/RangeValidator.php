@@ -17,6 +17,12 @@ use InvalidArgumentException;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Messages;
+use Maslosoft\Mangan\Validators\Traits\OnScenario;
+use Maslosoft\Mangan\Validators\Traits\Safe;
+use Maslosoft\Mangan\Validators\Traits\SkipOnError;
+use Maslosoft\Mangan\Validators\Traits\Strict;
 
 /**
  * RangeValidator
@@ -26,11 +32,12 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class RangeValidator implements ValidatorInterface
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Messages,
-	  \Maslosoft\Mangan\Validators\Traits\Strict,
-	  \Maslosoft\Mangan\Validators\Traits\OnScenario,
-	  \Maslosoft\Mangan\Validators\Traits\Safe;
+	use AllowEmpty,
+	  Messages,
+	  Strict,
+	  OnScenario,
+	  Safe,
+	  SkipOnError;
 
 	/**
 	 * @var array list of valid values that the attribute value should be among
