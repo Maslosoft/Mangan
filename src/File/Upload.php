@@ -50,7 +50,7 @@ class Upload implements FileInterface
 		$upload = (object) $_FILES[$inputName];
 		if ($upload->error)
 		{
-			throw new RuntimeException(sprintf("Upload failed for input name `%s`, error: `%s`", $inputName, $upload->error));
+			throw new RuntimeException(sprintf("Upload failed for input name `%s`, error code: `%s`", $inputName, $upload->error), $upload->error);
 		}
 		$this->fileName = $upload->name;
 		$this->tempName = $upload->tmp_name;
