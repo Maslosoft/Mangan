@@ -15,7 +15,7 @@ $document = new ShortNamer(Document::class);
 $finder = new ShortNamer(Finder::class);
 $em = new ShortNamer(EntityManager::class);
 ?>
-<title>Embedding Objects</title>
+<title>4. Embedding Objects</title>
 
 # Embedding Objects
 

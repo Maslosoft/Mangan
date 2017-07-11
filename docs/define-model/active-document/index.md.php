@@ -21,7 +21,7 @@ $finder = new ShortNamer(Finder::class);
 $em = new ShortNamer(EntityManager::class);
 $validator = new ShortNamer(Validator::class);
 ?>
-<title>Active Document</title>
+<title>1. Active Document</title>
 
 # Active Document
 
