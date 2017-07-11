@@ -51,7 +51,9 @@ class MongoAdapter implements FinderAdapterInterface
 
 	public function findOne(CriteriaInterface $criteria, $fields = [])
 	{
-		return $this->em->getCollection()->findOne($criteria->getConditions(), $fields);
+		// Use find instead of findOne here so sort can be applied
+		$cursor = $this->em->getCollection()->find($criteria->getConditions(), $fields);
+		return $cursor->limit(1)->sort($criteria->getSort())->getNext();
 	}
 
 }

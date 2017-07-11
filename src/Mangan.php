@@ -448,7 +448,7 @@ class Mangan implements LoggerAwareInterface
 		{
 			if (!$this->dbName)
 			{
-				throw new ManganException(sprintf("Database name is required for connectionId: `%s`", $this->connectionId), ExceptionCodeInterface::RequireDbName);
+				throw new ManganException(sprintf("Database name (`dbName`) is required for connectionId: `%s`", $this->connectionId), ExceptionCodeInterface::RequireDbName);
 			}
 			try
 			{

@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Abstracts;
 
 use Iterator;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Adapters\Finder\MongoAdapter;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
@@ -52,7 +53,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 // <editor-fold defaultstate="collapsed" desc="Required getters/setters">
 	/**
 	 * @see FinderHelpers
-	 * @return FinderAdapterInterface
+	 * @return FinderAdapterInterface|MongoAdapter
 	 */
 	abstract public function getAdapter();
 
