@@ -19,7 +19,7 @@ $finder = new ShortNamer(Finder::class);
 $em = new ShortNamer(EntityManager::class);
 $validator = new ShortNamer(Validator::class);
 ?>
-<title>Composing Models</title>
+<title>3. Composing Models</title>
 
 # Composing Models
 

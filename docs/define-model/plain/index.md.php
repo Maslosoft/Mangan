@@ -19,7 +19,7 @@ $finder = new ShortNamer(Finder::class);
 $em = new ShortNamer(EntityManager::class);
 $validator = new ShortNamer(Validator::class);
 ?>
-<title>Plain PHP Object</title>
+<title>2. Plain PHP Object</title>
 
 # Plain PHP Object
 
@@ -44,7 +44,7 @@ In contrast to this, [pre-composed][composing] <?= $document; ?> class have all 
 methods built-in.
 
 It is sole model developer whether he want to use [active document][ad] approach
-or if he decides to use [entity manager/finder/validator][plain] or any mix of those.
+or if he decides to use [entity manager/finder/validator][composing] or any mix of those.
 
 [annotation]: ../../annotations/embedded/
 [repo]: https://github.com/MaslosoftGuides/mangan.embedding
