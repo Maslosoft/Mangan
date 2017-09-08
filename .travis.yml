@@ -18,6 +18,8 @@ cache:
     - vendor
 install:
   - sudo apt-get install -y libdmtx-utils
+  # Ensure that tests project is empty or update might fail
+  - rm -rf vendor/maslosoft/mangantest
   # Required for php 5
   - composer update
   - composer install --prefer-dist --dev --no-interaction
