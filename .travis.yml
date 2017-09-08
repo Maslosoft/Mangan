@@ -5,6 +5,7 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
   - nightly
   - hhvm
 services:
@@ -17,6 +18,8 @@ cache:
     - vendor
 install:
   - sudo apt-get install -y libdmtx-utils
+  # Required for php 5
+  - composer update
   - composer install --prefer-dist --dev --no-interaction
   # Get fresh tests
   - rm -rf vendor/maslosoft/mangantest
