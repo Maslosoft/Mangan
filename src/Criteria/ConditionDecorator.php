@@ -73,6 +73,10 @@ class ConditionDecorator implements ConditionDecoratorInterface
 		$value = $data;
 		while (is_array($value))
 		{
+			if(empty($value))
+			{
+				break;
+			}
 			// Flat value traverse
 			foreach ($value as $key => $val)
 			{
