@@ -52,7 +52,6 @@ abstract class Transformator
 	 * @var string
 	 */
 	private $transformatorClass = TransformatorInterface::class;
-
 	private static $c = [];
 
 	/**
@@ -110,7 +109,7 @@ abstract class Transformator
 	{
 		$key = static::class . get_class($this->model) . $name . $this->transformatorClass;
 
-		if(isset(self::$c[$key]))
+		if (isset(self::$c[$key]))
 		{
 			return self::$c[$key];
 		}
@@ -131,16 +130,6 @@ abstract class Transformator
 		}
 		self::$c[$key] = $this->transformators[$name];
 		return $this->transformators[$name];
-	}
-
-	public function __get($name)
-	{
-		return $this->getList($name);
-	}
-
-	public function __set($name, $value)
-	{
-		throw new TransformatorException(sprintf('Cannot set field `%s` of `%s` (tried to set with value of type `%s`)', $name, __CLASS__, gettype($value)));
 	}
 
 	/**
