@@ -22,8 +22,9 @@ trait SkipOnError
 {
 
 	/**
-	 * @var boolean whether this validation rule should be skipped if when there is already a validation
+	 * Whether this validation rule should be skipped if when there is already a validation
 	 * error for the current attribute. Defaults to true.
+	 * @var boolean
 	 * @since 1.1.1
 	 */
 	public $skipOnError = true;
