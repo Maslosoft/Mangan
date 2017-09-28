@@ -37,51 +37,61 @@ class NumberValidator implements ValidatorInterface
 	  SkipOnError;
 
 	/**
-	 * @var boolean whether the attribute value can only be an integer. Defaults to false.
+	 * Whether the attribute value can only be an integer. Defaults to false.
+	 * @var boolean
 	 */
 	public $integerOnly = false;
 
 	/**
-	 * @var integer|float upper limit of the number. Defaults to null, meaning no upper limit.
+	 * Upper limit of the number. Defaults to null, meaning no upper limit.
+	 * @var integer|float
 	 */
 	public $max = NULL;
 
 	/**
-	 * @var integer|float lower limit of the number. Defaults to null, meaning no lower limit.
+	 * Lower limit of the number. Defaults to null, meaning no lower limit.
+	 * @var integer|float
 	 */
 	public $min = NULL;
 
 	/**
+	 * Deprecated: Use `msgTooSmall` instead
 	 * @var string user-defined error message used when the value is too big.
 	 * @deprecated Use `msgTooSmall` instead
 	 */
 	public $tooBig = NULL;
 
 	/**
+	 * Deprecated: Use `msgTooBig` instead
 	 * @var string user-defined error message used when the value is too small.
 	 * @deprecated Use `msgTooBig` instead
 	 */
 	public $tooSmall = NULL;
 
 	/**
+	 * Custom message to show if value is not number
 	 * @Label('{attribute} must be a number')
 	 * @var string
 	 */
 	public $msgNumber = '';
 
 	/**
+	 * Custom message to show if value is not integer when integer checking is
+	 * enabled
 	 * @Label('{attribute} must be an integer')
 	 * @var string
 	 */
 	public $msgInteger = '';
 
 	/**
+	 * Custom message to show if value is over maximum
 	 * @Label('{attribute} is too small (minimum is {min})')
 	 * @var string
 	 */
 	public $msgTooSmall = '';
 
 	/**
+	 * Custom message to show if value is under minimum
 	 * @Label('{attribute} is too big (maximum is {max})')
 	 * @var string
 	 */

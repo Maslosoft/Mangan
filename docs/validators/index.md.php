@@ -6,6 +6,7 @@ use Maslosoft\Mangan\Interfaces\Validators\ValidatorInterface;
 use Maslosoft\Mangan\Traits\ValidatableTrait;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\Zamm\ShortNamer;
+use Maslosoft\Zamm\Widgets\DocNavRecursive;
 ?>
 <?php
 ShortNamer::defaults()->md();
@@ -77,6 +78,8 @@ Example of using document <?= $document->save(); ?>:
 $saved = $model->save(); // Will return false if not valid
 $errors = $model->getErrors(); // Will contain error messages if not valid
 ```
+
+<?= new DocNavRecursive(); ?>
 
 [sanitizers]: ../sanitizers/
 [annotation]: ../annotations/validator/

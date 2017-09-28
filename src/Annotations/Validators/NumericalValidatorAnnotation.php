@@ -18,7 +18,7 @@ use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
 
 /**
- * NumberValidator validates that the attribute value is a number.
+ * Validator validates that the attribute value is a number.
  *
  * In addition to the {@link message} property for setting a custom error message,
  * NumberValidator has a couple custom error messages you can set that correspond to different
