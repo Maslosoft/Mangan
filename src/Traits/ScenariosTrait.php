@@ -33,7 +33,7 @@ trait ScenariosTrait
 	private $_scenario = ScenariosInterface::Insert;
 
 	/**
-	 *
+	 * Get current scenario
 	 * @return string
 	 * @Ignored
 	 */
@@ -43,7 +43,7 @@ trait ScenariosTrait
 	}
 
 	/**
-	 *
+	 * Set current scenario
 	 * @param string $scenario
 	 * @Ignored
 	 */
