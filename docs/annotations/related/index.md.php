@@ -25,6 +25,10 @@ compared to [related array annotions][ra].
 
 Loaded document will be attached to property of owner document.
 
+<p class="alert alert-warning">
+	Related document must have primary key
+</p>
+
 ### Syntax
 
 This annotation requires related document class name, prefably in form of
