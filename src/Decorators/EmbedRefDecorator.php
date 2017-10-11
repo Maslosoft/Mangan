@@ -30,6 +30,14 @@ class EmbedRefDecorator extends EmbeddedDecorator
 		$fieldMeta = ManganMeta::create($model)->$name;
 
 		/* @var $fieldMeta DocumentPropertyMeta */
+		if(!empty($fieldMeta->related))
+		{
+			return $fieldMeta->related->class;
+		}
+		if(!empty($fieldMeta->embedded))
+		{
+			return $fieldMeta->embedded->class;
+		}
 		return $fieldMeta->dbRef->class;
 	}
 
