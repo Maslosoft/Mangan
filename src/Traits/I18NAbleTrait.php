@@ -36,7 +36,7 @@ trait I18NAbleTrait
 	private $_defaultLanguage = 'en';
 
 	/**
-	 * Get language code
+	 * Get current working language code
 	 * @return string Language code
 	 * @Ignored
 	 */
@@ -46,7 +46,7 @@ trait I18NAbleTrait
 	}
 
 	/**
-	 *
+	 * Get available languages
 	 * @return string[]
 	 * @Ignored
 	 */
@@ -172,6 +172,9 @@ trait I18NAbleTrait
 	}
 
 	/**
+	 * Get default language used for I18N operations.
+	 *
+	 * If not previously set, will fall back to `en`.
 	 *
 	 * @return string
 	 * @Ignored
@@ -182,6 +185,10 @@ trait I18NAbleTrait
 	}
 
 	/**
+	 * Set default language used for I18N operations. This language
+	 * will be used if the `setLang` method was not called.
+	 *
+	 * The value should be language code, for example `en`
 	 *
 	 * @param string $language
 	 * @Ignored

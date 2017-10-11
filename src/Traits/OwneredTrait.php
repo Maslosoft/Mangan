@@ -39,8 +39,10 @@ trait OwneredTrait
 	private $_owner = null;
 
 	/**
-	 * Set class owner
-
+	 * Get document owner.
+	 *
+	 * This might return `null` if there is no owner.
+	 *
 	 * @return AnnotatedInterface Owner
 	 * @Ignored
 	 */
@@ -50,7 +52,15 @@ trait OwneredTrait
 	}
 
 	/**
-	 * Get document root
+	 * Get document root. This will traverse through objects
+	 * hierarchy, untill owner-less document is found.
+	 *
+	 * This might return same object instance if there is no owner.
+	 * 
+	 * The return value is *guaranteed* to be document instance.
+	 *
+	 *
+	 *
 	 * @return AnnotatedInterface Root document
 	 * @Ignored
 	 */
@@ -67,7 +77,8 @@ trait OwneredTrait
 	}
 
 	/**
-	 * Get class owner
+	 * Set class owner
+	 *
 	 * @param AnnotatedInterface|null $owner
 	 * @Ignored
 	 */

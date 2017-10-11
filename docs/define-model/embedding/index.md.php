@@ -19,14 +19,17 @@ $em = new ShortNamer(EntityManager::class);
 
 # Embedding Objects
 
-[TLDR repository][repo]
+<p class="alert alert-success">
+	See <a href="https://github.com/MaslosoftGuides/mangan.embedding">example repository</a>
+	for working example
+</p>
 
 As MongoDB comes with storage engine capable of storing nested structures,
 Mangan has facility to store objects compositions. Most simple solution for
 this is to embed sub object in the same document, just like it is created
 at runtime.
 
-To store sub object in database, use [@Embedded][annotation]
+To store sub object in database, use [`@Embedded`][annotation]
 annotation on one of object property:
 
 ```
@@ -73,8 +76,10 @@ The same result might be achieved with <?= $em; ?> to save and <?= $finder; ?> t
 $found = (new Finder(new Company))->find() // Company instance;
 ```
 
-Above technique is required when using [plain PHP objects][plain].
+The technique with <?= $em; ?> and <?= $finder; ?> is required when using
+[plain PHP objects][plain] or optional when using [active documents][ad].
 
 [annotation]: ../../annotations/embedded/
+[ad]: ../active-document/
 [repo]: https://github.com/MaslosoftGuides/mangan.embedding
 [plain]: ../plain/

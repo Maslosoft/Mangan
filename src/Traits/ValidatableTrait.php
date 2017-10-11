@@ -35,7 +35,8 @@ trait ValidatableTrait
 	private $_validator = null;
 
 	/**
-	 *
+	 * Get validation errors. To obtain results, first `validate()` method
+	 * must be called.
 	 * @return string[]
 	 * @Ignored
 	 */
@@ -44,12 +45,19 @@ trait ValidatableTrait
 		return $this->_getValidator()->getErrors();
 	}
 
+	/**
+	 * Set errors. Usually should not be called manually.
+	 * @param string[] $errors
+	 */
 	public function setErrors($errors)
 	{
 		$this->_getValidator()->setErrors($errors);
 	}
 
 	/**
+	 * Validate model attributes according to current scenario (if applicable)
+	 *
+	 * The `getErrors()` method can be used to obtains validation messages.
 	 *
 	 * @return bool
 	 * @Ignored

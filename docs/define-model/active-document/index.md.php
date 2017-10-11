@@ -9,6 +9,7 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\Zamm\ShortNamer;
+use Maslosoft\Zamm\Widgets\MethodsDocs;
 ?>
 <?php
 /* @var $this MsWidget */
@@ -31,6 +32,10 @@ operations directly on it's instance.
 Mangan has [pre-composed][composing] class, which have all
 required active document methods: <?= $document; ?> along
 with it's a bit lighter counterpart for embedded documents: <?= $edocument; ?>
+
+### The methods available in <?= $document; ?>
+
+<?= new MethodsDocs(Document::class); ?>
 
 [annotation]: ../../annotations/embedded/
 [repo]: https://github.com/MaslosoftGuides/mangan.embedding
