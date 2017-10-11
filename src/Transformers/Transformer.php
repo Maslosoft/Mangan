@@ -18,6 +18,7 @@ use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
 use Maslosoft\Mangan\Helpers\Finalizer\FinalizingManager;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
@@ -112,7 +113,24 @@ abstract class Transformer
 		$md = new ModelDecorator($model, $calledClass, $meta);
 		$sanitizer = new Sanitizer($model, $calledClass, $meta);
 		$filter = new Filter($model, $calledClass, $meta);
-		foreach ($meta->fields() as $name => $fieldMeta)
+
+		// Ensure that primary keys are processed first,
+		// as in some cases those could be processed *after* related
+		// document(s), which results in wrong _id (or pk) being passed.
+		$fieldsMeta = (array) $meta->fields();
+		$pks = (array)PkManager::getPkKeys($model);
+		foreach($pks as $key)
+		{
+			if(!array_key_exists($key, $fieldsMeta))
+			{
+				continue;
+			}
+			$pkMeta = $fieldsMeta[$key];
+			unset($fieldsMeta[$key]);
+			$fieldsMeta = array_merge([$key => $pkMeta], $fieldsMeta);
+		}
+
+		foreach ($fieldsMeta as $name => $fieldMeta)
 		{
 			/* @var $fieldMeta DocumentPropertyMeta */
 			if (array_key_exists($name, $data))
