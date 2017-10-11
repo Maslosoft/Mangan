@@ -14,6 +14,11 @@ $doc = new DocBlock(RelatedArrayAnnotation::class);
 <title>Related</title>
 #Related Annotation
 
+<p class="alert alert-success">
+	See <a href="https://github.com/MaslosoftGuides/mangan.related">example repository</a>
+	for working example
+</p>
+
 The `@Related` annotion allow to load document from other (or same) collection
 based on owner model value relating the same value of related document with `join`
 parameter.
@@ -192,3 +197,4 @@ public $subDocument = null;
 [ms]: https://en.wikipedia.org/wiki/Magic_number_(programming)
 [mn]: https://en.wikipedia.org/wiki/Magic_number_(programming)
 [ci]: /addendum/docs/data-types/class-literals/
+[repo]: https://github.com/MaslosoftGuides/mangan.related
