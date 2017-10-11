@@ -37,14 +37,24 @@ class RelatedDecorator implements DecoratorInterface
 		$relMeta = $fieldMeta->related;
 		$relModel = new $relMeta->class;
 		$criteria = new Criteria(null, $relModel);
-		if (empty($relMeta->join))
+		if (empty($relMeta->join) && empty($relMeta->condition))
 		{
-			throw new InvalidArgumentException(sprintf('Parameter `join` is required for Related annotation, model `%s`, field `%s`', get_class($model), $name));
+			throw new InvalidArgumentException(sprintf('Parameter `join` or `condition` is required for Related annotation, model `%s`, field `%s`', get_class($model), $name));
 		}
-		foreach ($relMeta->join as $source => $rel)
+		if (!empty($relMeta->join))
 		{
-			assert($model->$source !== null);
-			$criteria->addCond($rel, '==', $model->$source);
+			foreach ($relMeta->join as $source => $rel)
+			{
+				assert($model->$source !== null);
+				$criteria->addCond($rel, '==', $model->$source);
+			}
+		}
+		if (!empty($relMeta->condition))
+		{
+			foreach ($relMeta->condition as $field => $value)
+			{
+				$criteria->addCond($field, '==', $value);
+			}
 		}
 		$criteria->setSort(new Sort($relMeta->sort));
 		if ($relMeta->single)
@@ -80,11 +90,22 @@ class RelatedDecorator implements DecoratorInterface
 			foreach ($models as $relModel)
 			{
 				$fields = [];
-				foreach ($relMeta->join as $source => $rel)
+				if (!empty($relMeta->join))
 				{
-					$fields[] = $rel;
-					assert(isset($model->$source));
-					$relModel->$rel = $model->$source;
+					foreach ($relMeta->join as $source => $rel)
+					{
+						$fields[] = $rel;
+						assert(isset($model->$source));
+						$relModel->$rel = $model->$source;
+					}
+				}
+				if (!empty($relMeta->condition))
+				{
+					foreach ($relMeta->condition as $field => $value)
+					{
+						$fields[] = $field;
+						$relModel->$field = $value;
+					}
 				}
 				if (!empty($relMeta->orderField))
 				{

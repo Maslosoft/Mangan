@@ -46,6 +46,7 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 
 	public $class;
 	public $join;
+	public $condition;
 	public $updatable;
 	public $value;
 
@@ -68,6 +69,12 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 	protected function _getMeta()
 	{
 		$data = ParamsExpander::expand($this, ['class', 'join', 'sort', 'updatable']);
+		
+		// Do not expand `condition` with params expander for backward compat.
+		if(isset($this->value['condition']))
+		{
+			$data['condition'] = $this->value['condition'];
+		}
 		if (empty($this->getEntity()->related))
 		{
 			$relMeta = new RelatedMeta();
@@ -84,9 +91,9 @@ class RelatedAnnotation extends ManganPropertyAnnotation
 		{
 			$relMeta->class = $this->getMeta()->type()->name;
 		}
-		if (empty($relMeta->join))
+		if (empty($relMeta->join) && empty($relMeta->condition))
 		{
-			throw new UnexpectedValueException(sprintf('Parameter `join` is required for `%s`, model `%s`, field `%s`', static::class, $this->getMeta()->type()->name, $this->getEntity()->name));
+			throw new UnexpectedValueException(sprintf('Parameter `join` or `condition` is required for `%s`, model `%s`, field `%s`', static::class, $this->getMeta()->type()->name, $this->getEntity()->name));
 		}
 		if (empty($relMeta->sort))
 		{
