@@ -81,6 +81,12 @@ class RelatedMeta extends BaseMeta
 	public $sort = [];
 
 	/**
+	 * Extra static condition for related entities.
+	 * @var mixed[]
+	 */
+	public $condition = [];
+
+	/**
 	 * Field for storing order
 	 *
 	 * @see RelatedOrderingAnnotation
