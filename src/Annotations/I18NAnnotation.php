@@ -13,13 +13,16 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
+use function codecept_debug;
 use InvalidArgumentException;
+use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Meta\I18NMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+use Maslosoft\ManganTest\Models\ModelWithI18NAllowAnyAndDefault;
 
 /**
- * This annotation indicates internationallized fields
+ * This annotation indicates internationalized fields
  * @template I18N
  * @Target('property')
  * @author Piotr
@@ -27,20 +30,24 @@ use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 class I18NAnnotation extends ManganPropertyAnnotation
 {
 
-	public $value = true;
-	public $allowDefault = false;
-	public $allowAny = false;
+	public $value = [];
+
+	public $allowDefault = null;
+
+	public $allowAny = null;
 
 	public function init()
 	{
-		if ($this->allowDefault && $this->allowAny)
+		$data = ParamsExpander::expand($this, ['allowDefault', 'allowAny']);
+		foreach ($data as $name => $value)
 		{
-			throw new InvalidArgumentException(sprintf('Arguments "allowDefault" and "allowAny" for element "%s" in class "%s" cannot be both set true', $this->name, $this->getMeta()->type()->name));
+			$this->$name = $value;
 		}
+
 		$i18n = new I18NMeta();
-		$i18n->enabled = (bool) $this->value;
-		$i18n->allowDefault = $this->allowDefault;
-		$i18n->allowAny = $this->allowAny;
+		$i18n->enabled = true;
+		$i18n->allowDefault = (bool)$this->allowDefault;
+		$i18n->allowAny = (bool)$this->allowAny;
 		$this->getEntity()->i18n = $i18n;
 
 		$this->getEntity()->decorators[] = I18NDecorator::class;
