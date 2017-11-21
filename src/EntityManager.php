@@ -166,7 +166,12 @@ class EntityManager implements EntityManagerInterface
 		if ($this->_beforeSave($model, EntityManagerInterface::EventBeforeInsert))
 		{
 			$rawData = RawArray::fromModel($model);
-			$rawResult = $this->_collection->insert($rawData, $this->options->getSaveOptions());
+			/**
+			 * TODO Save options ara failing with message:
+			 * Unrecognized write concern field: authMechanism
+			 * $this->options->getSaveOptions()
+			 */
+			$rawResult = $this->_collection->insert($rawData);
 			$result = $this->_result($rawResult, true);
 
 			if ($result)
