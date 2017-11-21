@@ -8,10 +8,6 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-
-use function array_key_exists;
-use function get_class;
-use function is_array;
 use Maslosoft\Addendum\Interfaces\AnnotationInterface;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\ManganAnnotation;

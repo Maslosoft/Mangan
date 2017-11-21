@@ -13,7 +13,6 @@
 
 namespace Maslosoft\Mangan\Annotations;
 
-use function codecept_debug;
 use InvalidArgumentException;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
