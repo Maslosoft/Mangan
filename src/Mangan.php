@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan;
 
 use Exception;
-use function is_object;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;

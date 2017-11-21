@@ -16,7 +16,6 @@ namespace Maslosoft\Mangan\Meta;
 use Exception;
 use Maslosoft\Addendum\Collections\MetaAnnotation;
 use Maslosoft\Mangan\Helpers\AnnotationDefaults;
-use function var_dump;
 
 /**
  * ManganAnnotation
