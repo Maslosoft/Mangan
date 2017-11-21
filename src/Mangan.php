@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan;
 
 use Exception;
+use function is_object;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
@@ -60,6 +61,24 @@ class Mangan implements LoggerAwareInterface
 	 * @since v1.0
 	 */
 	public $connectionString = 'mongodb://localhost:27017';
+
+	/**
+	 * Default annotations values configuration. This should contain
+	 * array with keys same as annotation class name, and key-value
+	 * pairs corresponing to annotation properties.
+	 *
+	 * Example:
+	 * ```
+	 * $annotationsDefaults = [
+	 * 		I18NAnnotation::class => [
+	 * 			'allowAny' => true,
+	 * 			'allowDefault' => true
+	 * 		]
+	 * ];
+	 * ```
+	 *
+	 */
+	public $annotationsDefaults = [];
 
 	/**
 	 * Configuration of decorators for transformers
@@ -352,12 +371,19 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Get instance of Mangan configured for particular model
-	 * @param AnnotatedInterface $model
+	 * @param AnnotatedInterface|string $model
 	 * @return static
 	 */
-	public static function fromModel(AnnotatedInterface $model)
+	public static function fromModel($model)
 	{
-		$key = get_class($model);
+		if(is_object($model))
+		{
+			$key = get_class($model);
+		}
+		else
+		{
+			$key = $model;
+		}
 		if (isset(self::$classToId[$key]))
 		{
 			$connectionId = self::$classToId[$key];
