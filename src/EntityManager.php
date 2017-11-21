@@ -179,7 +179,8 @@ class EntityManager implements EntityManagerInterface
 				$this->_afterSave($model, EntityManagerInterface::EventAfterInsert);
 				return true;
 			}
-			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document.');
+			codecept_debug($rawResult);
+			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document. ' . ucfirst($rawResult['errmsg']), $rawResult['code']);
 		}
 		return false;
 	}
