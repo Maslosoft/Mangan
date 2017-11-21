@@ -13,7 +13,10 @@
 
 namespace Maslosoft\Mangan\Meta;
 
+use Exception;
 use Maslosoft\Addendum\Collections\MetaAnnotation;
+use Maslosoft\Mangan\Helpers\AnnotationDefaults;
+use function var_dump;
 
 /**
  * ManganAnnotation
@@ -22,6 +25,11 @@ use Maslosoft\Addendum\Collections\MetaAnnotation;
  */
 abstract class ManganAnnotation extends MetaAnnotation
 {
+	public function __construct($data = [], $target = false)
+	{
+		parent::__construct($data, $target);
+		AnnotationDefaults::apply($this, $data);
+	}
 
 	/**
 	 * Model metadata object
