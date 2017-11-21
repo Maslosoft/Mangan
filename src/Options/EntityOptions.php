@@ -17,6 +17,7 @@ use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
 
 /**
  * EntityOptions
@@ -26,7 +27,7 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class EntityOptions
 {
 
-	use \Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
+	use MongoClientOptions;
 
 	/**
 	 *
