@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c4ae644-ece7-464f-9a55-3d2d517d49e0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/configuration/annotations/index.md.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Annotations/I18NAnnotation.php" afterPath="$PROJECT_DIR$/src/Annotations/I18NAnnotation.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/EntityManager.php" afterPath="$PROJECT_DIR$/src/EntityManager.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Meta/ManganAnnotation.php" afterPath="$PROJECT_DIR$/src/Meta/ManganAnnotation.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Options/EntityOptions.php" afterPath="$PROJECT_DIR$/src/Options/EntityOptions.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Traits/I18NAbleTrait.php" afterPath="$PROJECT_DIR$/src/Traits/I18NAbleTrait.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,24 +21,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.md.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/docs/configuration/users/index.md.php">
+      <file leaf-file-name="EntityManager.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/EntityManager.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="20" selection-end-column="17" />
+            <state relative-caret-position="316">
+              <caret line="169" column="20" lean-forward="true" selection-start-line="169" selection-start-column="20" selection-end-line="169" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.md.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/docs/configuration/annotations/index.md.php">
+      <file leaf-file-name="EntityOptions.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Options/EntityOptions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="34" column="60" lean-forward="true" selection-start-line="34" selection-start-column="60" selection-end-line="34" selection-end-column="60" />
-              <folding>
-                <element signature="e#7#55#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="220">
+              <caret line="29" column="21" lean-forward="true" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LimitTest.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/unit/DataProvider/LimitTest.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="25" column="44" lean-forward="true" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -44,6 +56,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>mangan</find>
+      <find>$this-&gt;options-&gt;</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -54,12 +67,20 @@
       <list>
         <option value="$PROJECT_DIR$/src/Decorators/EmbeddedArrayDecorator.php" />
         <option value="$PROJECT_DIR$/src/Mangan.php" />
-        <option value="$PROJECT_DIR$/src/Meta/ManganAnnotation.php" />
         <option value="$PROJECT_DIR$/models/ModelWithI18N.php" />
         <option value="$PROJECT_DIR$/src/Helpers/AnnotationDefaults.php" />
         <option value="$PROJECT_DIR$/unit/Meta/AnnotationDefaultsTest.php" />
         <option value="$PROJECT_DIR$/docs/configuration/annotations/index.php" />
         <option value="$PROJECT_DIR$/docs/configuration/annotations/index.md.php" />
+        <option value="$PROJECT_DIR$/models/ModelWithI18NAllowAnyAndDefault.php" />
+        <option value="$PROJECT_DIR$/src/Annotations/I18NAnnotation.php" />
+        <option value="$PROJECT_DIR$/src/Meta/ManganAnnotation.php" />
+        <option value="$PROJECT_DIR$/unit/Decorators/I18NTest.php" />
+        <option value="$PROJECT_DIR$/models/WithBaseAttributes.php" />
+        <option value="$PROJECT_DIR$/src/Traits/Defaults/MongoClientOptions.php" />
+        <option value="$PROJECT_DIR$/src/Traits/I18NAbleTrait.php" />
+        <option value="$PROJECT_DIR$/src/Options/EntityOptions.php" />
+        <option value="$PROJECT_DIR$/src/EntityManager.php" />
       </list>
     </option>
   </component>
@@ -68,6 +89,16 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpDebugGeneral" listening_started="true" />
+  <component name="PhpServers">
+    <servers>
+      <server host="dev.maslosoft.com" id="fc8a5e1d-348d-4de7-9c20-aae04945e1c2" name="dev.maslosoft.com" port="443" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/vendor/codeception/codeception/tests/data/app" remote-root="/www/meno/www" />
+        </path_mappings>
+      </server>
+    </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7.1">
     <include_path>
@@ -135,10 +166,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="64" />
-    <option name="y" value="-11" />
-    <option name="width" value="1857" />
-    <option name="height" value="1092" />
+    <option name="x" value="67" />
+    <option name="y" value="27" />
+    <option name="width" value="1847" />
+    <option name="height" value="1053" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -197,9 +228,7 @@
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
               <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="docs" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="configuration" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="users" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="models" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
@@ -216,13 +245,63 @@
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
               <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Decorators" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Decorators" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Property" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Exceptions" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Helpers" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
               <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Interfaces" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Meta" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Options" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Traits" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Traits" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Defaults" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Transformers" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
@@ -233,7 +312,19 @@
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
               <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="unit" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="Meta" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="DataProvider" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="unit" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Decorators" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="unit" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Transformator" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
@@ -260,6 +351,15 @@
               <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="addendum" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="addendum" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Builder" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
@@ -277,7 +377,100 @@
               <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="addendum" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Helpers" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="addendum" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Reflection" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="addendum" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Utilities" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mangantest" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mangantest" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="models" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mongofill" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="maslosoft" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mongofill" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ptachoire" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ptachoire" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="php-dmtx" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ptachoire" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="php-dmtx" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vendor" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ptachoire" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="php-dmtx" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Dmtx" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="bcb0276e:PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="bcb0276e:PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+              <item name="PHP Runtime" type="20ee2d1f:SyntheticLibraryElementNode" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="bcb0276e:PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+              <item name="PHP Runtime" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="Core" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -290,7 +483,12 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/vendor/maslosoft/mangantest/tests/unit/Meta/AnnotationDefaultsTest.php" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../addendum" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/models" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -304,13 +502,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Codeception.Meta/AnnotationDefaults">
+  <component name="RunManager" selected="Codeception.Decorators/I18N">
+    <configuration name="Decorators/I18N" type="CodeceptionConfigurationType" factoryName="Codeception">
+      <PhpTestRunnerSettings file="$PROJECT_DIR$/vendor/maslosoft/mangantest/tests/unit/Decorators/I18NTest.php" method="" scope="File" options="--debug" />
+    </configuration>
     <configuration name="Meta/AnnotationDefaults" type="CodeceptionConfigurationType" factoryName="Codeception">
       <PhpTestRunnerSettings file="$PROJECT_DIR$/vendor/maslosoft/mangantest/tests/unit/Meta/AnnotationDefaultsTest.php" method="" scope="File" options="--debug" />
     </configuration>
     <configuration default="true" type="CodeceptionConfigurationType" factoryName="Codeception">
       <PhpTestRunnerSettings method="" />
     </configuration>
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="Codeception.Meta/AnnotationDefaults" />
+      <item index="1" class="java.lang.String" itemvalue="Codeception.Decorators/I18N" />
+    </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -326,35 +531,44 @@
       <workItem from="1505767729186" duration="357000" />
       <workItem from="1505808664437" duration="19000" />
       <workItem from="1511266324741" duration="1676000" />
-      <workItem from="1511280509781" duration="3116000" />
+      <workItem from="1511280509781" duration="9689000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 13h 30m 33s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 11m 48s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 17h 21m 06s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 12m 29s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 17h 24m 12s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 13m 46s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 17h 24m 37s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 15m 17s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 17h 25m 42s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 15m 28s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 17h 26m 05s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 16m 22s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Meta_AnnotationDefaults - 2017.11.21 at 17h 34m 54s.xml">
-      <configuration name="Meta/AnnotationDefaults" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 18m 59s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
+    </history-entry>
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 19m 30s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
+    </history-entry>
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 19m 44s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
+    </history-entry>
+    <history-entry file="Decorators_I18N - 2017.11.21 at 20h 22m 01s.xml">
+      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5200000" />
+    <option name="totallyTimeSpent" value="11773000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -364,7 +578,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925472" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -387,37 +601,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="21" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Mangan.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8008">
-          <caret line="392" column="44" lean-forward="false" selection-start-line="392" selection-start-column="44" selection-end-line="392" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Meta/ManganMeta.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="30" column="27" lean-forward="false" selection-start-line="30" selection-start-column="27" selection-end-line="30" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Helpers/AnnotationDefaults.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="20" column="31" lean-forward="false" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
-          <folding>
-            <element signature="e#125#155#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Annotations/I18NAnnotation.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
@@ -488,45 +676,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Collections/Meta.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="258" column="37" lean-forward="true" selection-start-line="258" selection-start-column="37" selection-end-line="258" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/ModelWithI18N.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="24" column="16" lean-forward="true" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Utilities/TargetChecker.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
           <caret line="39" column="51" lean-forward="false" selection-start-line="39" selection-start-column="51" selection-end-line="39" selection-end-column="51" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Annotation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="752">
-          <caret line="78" column="30" lean-forward="false" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Helpers/AnnotationDefaults.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="28" column="42" lean-forward="true" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-          <folding>
-            <element signature="e#125#155#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -546,46 +700,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Annotations/I18NAnnotation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="26" column="47" lean-forward="false" selection-start-line="26" selection-start-column="47" selection-end-line="26" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Meta/ManganPropertyAnnotation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="20" column="58" lean-forward="true" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Meta/ManganAnnotation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="e#388#402#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Collections/MetaAnnotation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="24" column="44" lean-forward="false" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/unit/Meta/AnnotationDefaultsTest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="708">
           <caret line="53" column="112" lean-forward="false" selection-start-line="53" selection-start-column="112" selection-end-line="53" selection-end-column="112" />
           <folding>
-            <element signature="e#25#53#0#PHP" expanded="true" />
+            <element signature="e#25#53#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -606,13 +726,293 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/mangantest/models/ModelWithI18NAllowAnyAndDefault.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/ModelWithI18N.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-308">
+          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/docs/configuration/annotations/index.md.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="34" column="60" lean-forward="true" selection-start-line="34" selection-start-column="60" selection-end-line="34" selection-end-column="60" />
+        <state relative-caret-position="400">
+          <caret line="39" column="61" lean-forward="false" selection-start-line="39" selection-start-column="61" selection-end-line="39" selection-end-column="61" />
           <folding>
-            <element signature="e#7#55#0#PHP" expanded="true" />
+            <element signature="e#7#55#0#PHP" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/ModelWithI18NAllowAnyAndDefault.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="40" column="23" lean-forward="false" selection-start-line="40" selection-start-column="23" selection-end-line="40" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Collections/MetaAnnotation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="24" column="41" lean-forward="true" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Meta/ManganPropertyAnnotation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="20" column="54" lean-forward="false" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Annotation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Helpers/ParamsExpander.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Collections/Meta.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="225" column="0" lean-forward="false" selection-start-line="225" selection-start-column="0" selection-end-line="225" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Reflection/ReflectionAnnotatedClass.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Reflection/ReflectionAnnotatedProperty.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Collections/AnnotationsCollection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/src/Builder/Builder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Meta/ManganAnnotation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="32" column="5" lean-forward="true" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Helpers/AnnotationDefaults.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///tmp/ide-codeception.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/addendum/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-132">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="23" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../addendum/vendor/codeception/codeception/codecept">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/Decorators/I18NTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="104" column="41" lean-forward="false" selection-start-line="104" selection-start-column="41" selection-end-line="104" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Decorators/Property/I18NDecorator.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="64" column="55" lean-forward="true" selection-start-line="64" selection-start-column="55" selection-end-line="64" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Annotations/I18NAnnotation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="36" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Interfaces/ModelInterface.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="21" column="10" lean-forward="false" selection-start-line="21" selection-start-column="10" selection-end-line="21" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/WithBaseAttributes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="19" column="45" lean-forward="true" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/Core/Core_c.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-93">
+          <caret line="258" column="6" lean-forward="false" selection-start-line="258" selection-start-column="6" selection-end-line="258" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Exceptions/ManganException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="26" column="34" lean-forward="false" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/ptachoire/php-dmtx/src/Dmtx/AbstractDmtx.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="103" column="23" lean-forward="false" selection-start-line="103" selection-start-column="23" selection-end-line="103" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/ptachoire/php-dmtx/src/Dmtx/Writer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="81" column="24" lean-forward="true" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Transformers/Datamatrix.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="38" column="48" lean-forward="true" selection-start-line="38" selection-start-column="48" selection-end-line="38" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/Transformator/DmtxTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="26" column="33" lean-forward="true" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Traits/I18NAbleTrait.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="239" column="53" lean-forward="false" selection-start-line="239" selection-start-column="53" selection-end-line="239" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/mongofill/src/MongoCollection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="39">
+          <caret line="242" column="20" lean-forward="false" selection-start-line="242" selection-start-column="20" selection-end-line="242" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Traits/Defaults/MongoClientOptions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3063">
+          <caret line="25" column="6" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Options/EntityOptions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="29" column="21" lean-forward="true" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/DataProvider/LimitTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="25" column="44" lean-forward="true" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EntityManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="169" column="20" lean-forward="true" selection-start-line="169" selection-start-column="20" selection-end-line="169" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>

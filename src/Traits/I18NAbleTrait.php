@@ -199,7 +199,7 @@ trait I18NAbleTrait
 	}
 
 	/**
-	 * Change i18n attributes values to apropriate language
+	 * Change i18n attributes values to appropriate language
 	 * @param string $fromCode
 	 * @param string $toCode
 	 */
@@ -207,6 +207,7 @@ trait I18NAbleTrait
 	{
 		$meta = ManganMeta::create($this);
 		$fields = $meta->properties('i18n');
+		$defaultLang = $this->getDefaultLanguage();
 		foreach ($fields as $name => $i18n)
 		{
 			$current = $this->$name;
@@ -216,7 +217,33 @@ trait I18NAbleTrait
 			}
 			else
 			{
-				$new = $meta->$name->default;
+				$i18n = $meta->field($name)->i18n;
+
+				if($i18n->allowDefault && isset($this->_rawI18N[$name]) && array_key_exists($defaultLang, $this->_rawI18N[$name]))
+				{
+					$new = $this->_rawI18N[$name][$defaultLang];
+				}
+				elseif($i18n->allowAny && !empty($this->_rawI18N[$name]))
+				{
+					$wasFound = false;
+					foreach($this->getLanguages() as $code)
+					{
+						if(!empty($this->_rawI18N[$name][$code]))
+						{
+							$new = $this->_rawI18N[$name][$code];
+							$wasFound = true;
+							break;
+						}
+					}
+					if(!$wasFound)
+					{
+						$new = $meta->$name->default;
+					}
+				}
+				else
+				{
+					$new = $meta->$name->default;
+				}
 			}
 			$this->_rawI18N[$name][$fromCode] = $current;
 			$this->$name = $new;
