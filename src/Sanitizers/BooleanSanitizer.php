@@ -13,7 +13,6 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use function codecept_debug;
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
