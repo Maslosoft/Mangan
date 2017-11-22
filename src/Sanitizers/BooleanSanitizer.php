@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use function codecept_debug;
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 
 /**
@@ -22,15 +23,28 @@ use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
  */
 class BooleanSanitizer implements SanitizerInterface
 {
+	/**
+	 * Whether to allow null values
+	 * @var bool
+	 */
+	public $nullable = false;
 
 	public function read($model, $dbValue)
 	{
-		return (bool) $dbValue;
+		if(null === $dbValue && $this->nullable)
+		{
+			return $dbValue;
+		}
+		return (bool)$dbValue;
 	}
 
 	public function write($model, $phpValue)
 	{
-		return (bool) $phpValue;
+		if(null === $phpValue && $this->nullable)
+		{
+			return $phpValue;
+		}
+		return (bool)$phpValue;
 	}
 
 }
