@@ -107,7 +107,7 @@ class Mangan implements LoggerAwareInterface
 	public $validators = [];
 
 	/**
-	 * Sanitizers ramapping for common scenarios.
+	 * Sanitizers remapping for common scenarios.
 	 * @var string[][]
 	 */
 	public $sanitizersMap = [];
