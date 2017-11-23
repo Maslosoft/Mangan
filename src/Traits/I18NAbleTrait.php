@@ -111,10 +111,15 @@ trait I18NAbleTrait
 	 * // Will ignore as ru is not available
 	 * $model->setLang('ru')
 	 * ```
+	 *
+	 * For initial call, when there are no data set yet, `$triggetEvents`
+	 * can be set to false to improve performance.
+	 *
 	 * @param string $code
+	 * @param boolean $triggerEvents
 	 * @Ignored
 	 */
-	public function setLang($code)
+	public function setLang($code, $triggerEvents = true)
 	{
 		if ($this->_lang === $code)
 		{
@@ -124,6 +129,11 @@ trait I18NAbleTrait
 		{
 			$this->_languages[] = $code;
 		}
+		if(!$triggerEvents)
+		{
+			return true;
+		}
+
 		$event = new ModelEvent($this);
 		$event->data = $code;
 		if (!Event::valid($this, InternationalInterface::EventBeforeLangChange, $event))
@@ -139,25 +149,38 @@ trait I18NAbleTrait
 	/**
 	 * Set available languages. This method accepts one parameter,
 	 * array contaning language codes prefably in short ISO form.
+	 *
 	 * Example valid array and method calls:
+	 *
 	 * ```php
 	 * $languages = ['en', 'pl', 'ru'];
 	 * $model->setLanguages($languages);
 	 * $model2->setLanguages(['en']);
 	 * ```
+	 *
+	 * For initial call, when there are no data set yet, `$triggetEvents`
+	 * can be set to false to improve performance.
+	 *
 	 * @param string[] $languages
+	 * @param boolean $triggerEvents
 	 * @Ignored
 	 */
-	public function setLanguages($languages)
+	public function setLanguages($languages, $triggerEvents = true)
 	{
-		$event = new ModelEvent($this);
-		$event->data = $languages;
-		if (!Event::valid($this, InternationalInterface::EventBeforeLanguagesSet, $event))
+		if($triggerEvents)
 		{
-			return;
+			$event = new ModelEvent($this);
+			$event->data = $languages;
+			if (!Event::valid($this, InternationalInterface::EventBeforeLanguagesSet, $event))
+			{
+				return;
+			}
 		}
 		$this->_languages = $languages;
-		Event::trigger($this, InternationalInterface::EventAfterLanguagesSet, $event);
+		if($triggerEvents)
+		{
+			Event::trigger($this, InternationalInterface::EventAfterLanguagesSet, $event);
+		}
 	}
 
 	/**
