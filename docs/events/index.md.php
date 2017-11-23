@@ -18,7 +18,11 @@ $n = (new ShortNamer(Event::class));
 
 # Events
 
-Events can be attached to model instance, or by class name.
+Events can be attached to model instance, class name, interface name or even trait name.
+
+<p class="alert alert-success">
+    When using class names, it is recommended to use <code>::class</code> magic constant.
+</p>
 
 ## Function <?= $n->on()->md ?>
 <?= $doc->method('on'); ?>
