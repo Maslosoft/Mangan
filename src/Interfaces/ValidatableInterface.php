@@ -19,6 +19,8 @@ namespace Maslosoft\Mangan\Interfaces;
  */
 interface ValidatableInterface
 {
+	const EventBeforeValidate = 'beforeValidate';
+	const EventAfterValidate = 'afterValidate';
 
 	public function validate();
 

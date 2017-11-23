@@ -27,9 +27,6 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 class Validator implements ValidatableInterface
 {
 
-	const EventBeforeValidate = 'beforeValidate';
-	const EventAfterValidate = 'afterValidate';
-
 	/**
 	 * Model instance
 	 * @var AnnotatedInterface
@@ -97,7 +94,7 @@ class Validator implements ValidatableInterface
 					{
 						$validator = new Validator($model);
 						$isValid = $validator->validate();
-						$valid[] = (int) $isValid;
+						$valid[] = (int)$isValid;
 						if (!$isValid)
 						{
 							$errors = [
@@ -108,13 +105,12 @@ class Validator implements ValidatableInterface
 							$this->setErrors($errors);
 						}
 					}
-				}
-				elseif (!empty($this->model->$name))
+				} elseif (!empty($this->model->$name))
 				{
 					// Handle single documents
 					$validator = new Validator($this->model->$name);
 					$isValid = $validator->validate();
-					$valid[] = (int) $isValid;
+					$valid[] = (int)$isValid;
 					if (!$isValid)
 					{
 						$errors = [
@@ -130,7 +126,7 @@ class Validator implements ValidatableInterface
 			{
 				continue;
 			}
-			$valid[] = (int) $this->validateEntity($name, $fieldMeta->validators);
+			$valid[] = (int)$this->validateEntity($name, $fieldMeta->validators);
 		}
 
 		// Model validators
@@ -140,7 +136,7 @@ class Validator implements ValidatableInterface
 			$typeName = $this->meta->type()->name;
 			// Reset errors
 			$this->errors[$typeName] = [];
-			$valid[] = (int) $this->validateEntity($typeName, $typeValidators);
+			$valid[] = (int)$this->validateEntity($typeName, $typeValidators);
 		}
 		return count($valid) === array_sum($valid);
 	}
@@ -153,7 +149,7 @@ class Validator implements ValidatableInterface
 			// Filter out validators based on scenarios
 			if (!empty($validatorMeta->on))
 			{
-				$on = (array) $validatorMeta->on;
+				$on = (array)$validatorMeta->on;
 				$enabled = false;
 				foreach ($on as $scenario)
 				{
@@ -170,7 +166,7 @@ class Validator implements ValidatableInterface
 			}
 			if (!empty($validatorMeta->except))
 			{
-				$except = (array) $validatorMeta->except;
+				$except = (array)$validatorMeta->except;
 				$enabled = true;
 				foreach ($except as $scenario)
 				{
@@ -192,8 +188,7 @@ class Validator implements ValidatableInterface
 			if ($validator->isValid($this->model, $name))
 			{
 				$valid[] = true;
-			}
-			else
+			} else
 			{
 				$valid[] = false;
 				$this->errors[$name] = array_merge($this->errors[$name], $validator->getErrors());
