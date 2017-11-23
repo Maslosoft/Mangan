@@ -42,6 +42,12 @@ class ModelEvent
 	public $sender = null;
 
 	/**
+	 * Current target for Event
+	 * @var AnnotatedInterface
+	 */
+	public $currentTarget = null;
+
+	/**
 	 * Whenever event is handled
 	 * @var bool
 	 */

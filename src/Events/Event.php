@@ -15,6 +15,8 @@ namespace Maslosoft\Mangan\Events;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Hi5Edit\Models\Href;
+use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\Events\EventInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use ReflectionClass;
@@ -242,6 +244,7 @@ class Event implements EventInterface
 		{
 			$event->sender = $model;
 		}
+		$event->currentTarget = $model;
 		$className = self::getName($model);
 
 		// Partials holds parts of class, this include interfaces and traits
@@ -397,7 +400,6 @@ class Event implements EventInterface
 				}
 				continue;
 			}
-			// Trigger for single value
 			$wasTriggered = self::trigger($model->$property, $name, $event) || $wasTriggered;
 		}
 		return $wasTriggered;
