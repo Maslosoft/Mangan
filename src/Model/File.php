@@ -13,12 +13,12 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use Exception;
 use finfo;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Exceptions\FileNotFoundException;
 use Maslosoft\Mangan\Helpers\IdHelper;
 use Maslosoft\Mangan\Interfaces\FileInterface;
 use Maslosoft\Mangan\Mangan;
@@ -175,7 +175,7 @@ class File extends EmbeddedDocument
 	{
 		if (null === $file)
 		{
-			throw new Exception('File not found');
+			throw new FileNotFoundException('File not found');
 		}
 		$meta = (object) $file->file;
 		header(sprintf('Content-Length: %d', $file->getSize()));

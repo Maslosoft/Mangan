@@ -13,10 +13,9 @@
 
 namespace Maslosoft\Mangan\Model;
 
-use Exception;
+use Maslosoft\Mangan\Exceptions\FileNotFoundException;
 use Maslosoft\Mangan\Helpers\ImageThumb;
 use MongoGridFSFile;
-use PHPThumb\GD;
 
 /**
  * Class for storing embedded images
@@ -61,7 +60,7 @@ class Image extends File
 			$result = $this->_get();
 			if (!$result)
 			{
-				throw new Exception('File not found');
+				throw new FileNotFoundException('File not found');
 			}
 
 			$originalFilename = $result->file['filename'];
