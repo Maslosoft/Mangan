@@ -94,6 +94,7 @@ class I18NDecorator implements DecoratorInterface
 		{
 			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), InternationalInterface::class));
 		}
+		$languages = $model->getLanguages();
 		foreach ($model->getRawI18N() as $field => $value)
 		{
 			// Skip non-18n field
@@ -103,7 +104,11 @@ class I18NDecorator implements DecoratorInterface
 			}
 			foreach ($value as $code => $string)
 			{
-				$dbValue[$name][$code] = $string;
+				// Don't set values not available in all languages
+				if(in_array($code, $languages))
+				{
+					$dbValue[$name][$code] = $string;
+				}
 			}
 		}
 		$dbValue[$name][$model->getLang()] = $model->$name;

@@ -121,6 +121,12 @@ trait I18NAbleTrait
 	 */
 	public function setLang($code, $triggerEvents = true)
 	{
+		// Ensure that calling with empty code will not set language
+		// to empty value
+		if(empty($code))
+		{
+			return false;
+		}
 		if ($this->_lang === $code)
 		{
 			return false;
@@ -131,6 +137,7 @@ trait I18NAbleTrait
 		}
 		if(!$triggerEvents)
 		{
+			$this->_lang = $code;
 			return true;
 		}
 

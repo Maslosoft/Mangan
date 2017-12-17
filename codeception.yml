@@ -8,6 +8,7 @@ extensions:
     enabled:
         - Maslosoft\ManganTest\Extensions\MongoWipe
         - Maslosoft\ManganTest\Extensions\EventDestroyer
+        - Maslosoft\ManganTest\Extensions\IndexMetaCleaner
     config:
         Maslosoft\ManganTest\Extensions\MongoWipe:
             connectionIds:

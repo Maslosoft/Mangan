@@ -1,39 +1,27 @@
 <?php
 
 /**
- * This software package is licensed under AGPL or Commercial license.
+ * This software package is licensed under New BSD license.
  *
  * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @licence New BSD
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link http://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan\Traits;
 
 /**
- * This trait is generated via AvailableCommandsGenerator, and it contains
- * php wrapper for every MongoDB command.
- *
- * Use this for classes implementing MongoDB commands calls.
+ * AvailableCommands
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 trait AvailableCommands
 {
-
 	abstract public function call($command, $arguments = []);
-
-	/**
-	 * returns the hash of the first BSONElement val in a BSONObj
-	 */
-	public function _hashBSONElement()
-	{
-		return $this->call('_hashBSONElement', func_get_args());
-	}
-
+	
 	/**
 	 * { _isSelf : 1 } INTERNAL ONLY
 	 */
@@ -43,7 +31,8 @@ trait AvailableCommands
 	}
 
 	/**
-	 * { pipeline : [ { <data-pipe-op>: {...}}, ... ] }
+	 * { pipeline: [ { $operator: {...}}, ... ], explain: <bool>, allowDiskUse: <bool>, cursor: {batchSize: <number>} }
+	 * See http://dochub.mongodb.org/core/aggregation for more details.
 	 */
 	public function aggregate()
 	{
@@ -85,14 +74,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
-	 */
-	public function captrunc()
-	{
-		return $this->call('captrunc', func_get_args());
-	}
-
-	/**
 	 * Internal command.
 	 * 
 	 */
@@ -102,16 +83,8 @@ trait AvailableCommands
 	}
 
 	/**
-	 * internal
-	 */
-	public function clean()
-	{
-		return $this->call('clean', func_get_args());
-	}
-
-	/**
 	 * clone this database from an instance of the db on another host
-	 * { clone : "host13" }
+	 * {clone: "host13"[, slaveOk: <bool>]}
 	 */
 	public function cloneDb()
 	{
@@ -139,6 +112,8 @@ trait AvailableCommands
 	/**
 	 * Sets collection options.
 	 * Example: { collMod: 'foo', usePowerOf2Sizes:true }
+	 * Example: { collMod: 'foo', index: {keyPattern: {a: 1}, expireAfterSeconds: 600} Example: { collMod: 'foo', index: {name: 'bar', expireAfterSeconds: 600} }
+	 * 
 	 */
 	public function collMod()
 	{
@@ -156,7 +131,7 @@ trait AvailableCommands
 
 	/**
 	 * compact collection
-	 * warning: this operation blocks the server and is slow. you can cancel with cancelOp()
+	 * warning: this operation locks the database and is slow. you can cancel with killOp()
 	 * { compact : <collection_name>, [force:<bool>], [validate:<bool>],
 	 *   [paddingFactor:<num>], [paddingBytes:<num>] }
 	 *   force - allows to run on a replica set primary
@@ -169,7 +144,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * stats about connection pool
+	 * stats about connections between servers in a replica set or sharded cluster.
 	 */
 	public function connPoolStats()
 	{
@@ -182,6 +157,14 @@ trait AvailableCommands
 	public function connPoolSync()
 	{
 		return $this->call('connPoolSync', func_get_args());
+	}
+
+	/**
+	 * Returns connection-specific information such as logged-in users and their roles
+	 */
+	public function connectionStatus()
+	{
+		return $this->call('connectionStatus', func_get_args());
 	}
 
 	/**
@@ -210,11 +193,37 @@ trait AvailableCommands
 	}
 
 	/**
-	 *  example: { cursorInfo : 1 }
+	 * no help defined
 	 */
-	public function cursorInfo()
+	public function createIndexes()
 	{
-		return $this->call('cursorInfo', func_get_args());
+		return $this->call('createIndexes', func_get_args());
+	}
+
+	/**
+	 * Adds a role to the system
+	 * 
+	 */
+	public function createRole()
+	{
+		return $this->call('createRole', func_get_args());
+	}
+
+	/**
+	 * Adds a user to the system
+	 * 
+	 */
+	public function createUser()
+	{
+		return $this->call('createUser', func_get_args());
+	}
+
+	/**
+	 * no help defined
+	 */
+	public function currentOpCtx()
+	{
+		return $this->call('currentOpCtx', func_get_args());
 	}
 
 	/**
@@ -247,6 +256,14 @@ trait AvailableCommands
 	}
 
 	/**
+	 * delete documents
+	 */
+	public function delete()
+	{
+		return $this->call('delete', func_get_args());
+	}
+
+	/**
 	 * { distinct : 'collection name' , key : 'a.b' , query : {} }
 	 */
 	public function distinct()
@@ -272,6 +289,24 @@ trait AvailableCommands
 	}
 
 	/**
+	 * Drops all roles from the given database.  Before deleting the roles completely it must remove them from any users or other roles that reference them.  If any errors occur in the middle of that process it's possible to be left in a state where the roles have been removed from some user/roles but otherwise still exist.
+	 * 
+	 */
+	public function dropAllRolesFromDatabase()
+	{
+		return $this->call('dropAllRolesFromDatabase', func_get_args());
+	}
+
+	/**
+	 * Drops all users for a single database.
+	 * 
+	 */
+	public function dropAllUsersFromDatabase()
+	{
+		return $this->call('dropAllUsersFromDatabase', func_get_args());
+	}
+
+	/**
 	 * drop (delete) this database
 	 */
 	public function dropDatabase()
@@ -288,20 +323,39 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
+	 * Drops a single role.  Before deleting the role completely it must remove it from any users or roles that reference it.  If any errors occur in the middle of that process it's possible to be left in a state where the role has been removed from some user/roles but otherwise still exists.
+	 * 
 	 */
-	public function emptycapped()
+	public function dropRole()
 	{
-		return $this->call('emptycapped', func_get_args());
+		return $this->call('dropRole', func_get_args());
 	}
 
 	/**
+	 * Drops a single user.
+	 * 
+	 */
+	public function dropUser()
+	{
+		return $this->call('dropUser', func_get_args());
+	}
+
+	/**
+	 * DEPRECATED
 	 * Evaluate javascript at the server.
 	 * http://dochub.mongodb.org/core/serversidecodeexecution
 	 */
 	public function evalJs()
 	{
 		return $this->call('eval', func_get_args());
+	}
+
+	/**
+	 * explain database reads and writes
+	 */
+	public function explain()
+	{
+		return $this->call('explain', func_get_args());
 	}
 
 	/**
@@ -318,6 +372,14 @@ trait AvailableCommands
 	public function filemd5()
 	{
 		return $this->call('filemd5', func_get_args());
+	}
+
+	/**
+	 * query for documents
+	 */
+	public function find()
+	{
+		return $this->call('find', func_get_args());
 	}
 
 	/**
@@ -357,24 +419,25 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
-	 */
-	public function geoWalk()
-	{
-		return $this->call('geoWalk', func_get_args());
-	}
-
-	/**
 	 * return error status of the last operation on this connection
 	 * options:
 	 *   { fsync:true } - fsync before returning, or wait for journal commit if running with --journal
 	 *   { j:true } - wait for journal commit if running with --journal
 	 *   { w:n } - await replication to n servers (including self) before returning
+	 *   { w:'majority' } - await replication to majority of set
 	 *   { wtimeout:m} - timeout for w in m milliseconds
 	 */
 	public function getLastError()
 	{
 		return $this->call('getLastError', func_get_args());
+	}
+
+	/**
+	 * retrieve more results from an existing cursor
+	 */
+	public function getMore()
+	{
+		return $this->call('getMore', func_get_args());
 	}
 
 	/**
@@ -394,19 +457,30 @@ trait AvailableCommands
 	}
 
 	/**
-	 * internal
+	 * Grants privileges to a role
+	 * 
 	 */
-	public function getoptime()
+	public function grantPrivilegesToRole()
 	{
-		return $this->call('getoptime', func_get_args());
+		return $this->call('grantPrivilegesToRole', func_get_args());
 	}
 
 	/**
-	 * internal. for testing only.
+	 * Grants roles to another role.
+	 * 
 	 */
-	public function godinsert()
+	public function grantRolesToRole()
 	{
-		return $this->call('godinsert', func_get_args());
+		return $this->call('grantRolesToRole', func_get_args());
+	}
+
+	/**
+	 * Grants roles to a user.
+	 * 
+	 */
+	public function grantRolesToUser()
+	{
+		return $this->call('grantRolesToUser', func_get_args());
 	}
 
 	/**
@@ -434,6 +508,14 @@ trait AvailableCommands
 	}
 
 	/**
+	 * insert documents
+	 */
+	public function insert()
+	{
+		return $this->call('insert', func_get_args());
+	}
+
+	/**
 	 * Check if this server is primary for a replica pair/set; also if it is --master or --slave in simple master/slave setups.
 	 * { isMaster : 1 }
 	 */
@@ -443,11 +525,35 @@ trait AvailableCommands
 	}
 
 	/**
+	 * kill a list of cursor ids
+	 */
+	public function killCursors()
+	{
+		return $this->call('killCursors', func_get_args());
+	}
+
+	/**
+	 * list collections for this db
+	 */
+	public function listCollections()
+	{
+		return $this->call('listCollections', func_get_args());
+	}
+
+	/**
 	 * get a list of all db commands
 	 */
 	public function listCommands()
 	{
 		return $this->call('listCommands', func_get_args());
+	}
+
+	/**
+	 * list indexes for a collection
+	 */
+	public function listIndexes()
+	{
+		return $this->call('listIndexes', func_get_args());
 	}
 
 	/**
@@ -469,7 +575,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
+	 * internal
 	 */
 	public function mapReduceShardedFinish()
 	{
@@ -477,12 +583,11 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Deprecated internal command. Use splitVector command instead. 
-	 * 
+	 * no help defined
 	 */
-	public function medianKey()
+	public function parallelCollectionScan()
 	{
-		return $this->call('medianKey', func_get_args());
+		return $this->call('parallelCollectionScan', func_get_args());
 	}
 
 	/**
@@ -494,11 +599,59 @@ trait AvailableCommands
 	}
 
 	/**
+	 * Drops one or all cached queries in a collection.
+	 */
+	public function planCacheClear()
+	{
+		return $this->call('planCacheClear', func_get_args());
+	}
+
+	/**
+	 * Clears index filter for a single query shape or, if the query shape is omitted, all filters for the collection.
+	 */
+	public function planCacheClearFilters()
+	{
+		return $this->call('planCacheClearFilters', func_get_args());
+	}
+
+	/**
+	 * Displays index filters for all query shapes in a collection.
+	 */
+	public function planCacheListFilters()
+	{
+		return $this->call('planCacheListFilters', func_get_args());
+	}
+
+	/**
+	 * Displays the cached plans for a query shape.
+	 */
+	public function planCacheListPlans()
+	{
+		return $this->call('planCacheListPlans', func_get_args());
+	}
+
+	/**
+	 * Displays all query shapes in a collection.
+	 */
+	public function planCacheListQueryShapes()
+	{
+		return $this->call('planCacheListQueryShapes', func_get_args());
+	}
+
+	/**
+	 * Sets index filter for a query shape. Overrides existing filter.
+	 */
+	public function planCacheSetFilter()
+	{
+		return $this->call('planCacheSetFilter', func_get_args());
+	}
+
+	/**
 	 * enable or disable performance profiling
 	 * { profile : <n> }
 	 * 0=off 1=log slow ops 2=log all
 	 * -1 to get current values
-	 * http://dochub.mongodb.org/core/databaseprofiler
+	 * http://docs.mongodb.org/manual/reference/command/profile/#dbcmd.profile
 	 */
 	public function profile()
 	{
@@ -511,6 +664,14 @@ trait AvailableCommands
 	public function reIndex()
 	{
 		return $this->call('reIndex', func_get_args());
+	}
+
+	/**
+	 * no help defined
+	 */
+	public function repairCursor()
+	{
+		return $this->call('repairCursor', func_get_args());
 	}
 
 	/**
@@ -530,11 +691,71 @@ trait AvailableCommands
 	}
 
 	/**
+	 * Revokes privileges from a role
+	 * 
+	 */
+	public function revokePrivilegesFromRole()
+	{
+		return $this->call('revokePrivilegesFromRole', func_get_args());
+	}
+
+	/**
+	 * Revokes roles from another role.
+	 * 
+	 */
+	public function revokeRolesFromRole()
+	{
+		return $this->call('revokeRolesFromRole', func_get_args());
+	}
+
+	/**
+	 * Revokes roles from a user.
+	 * 
+	 */
+	public function revokeRolesFromUser()
+	{
+		return $this->call('revokeRolesFromUser', func_get_args());
+	}
+
+	/**
+	 * Returns information about roles.
+	 * 
+	 */
+	public function rolesInfo()
+	{
+		return $this->call('rolesInfo', func_get_args());
+	}
+
+	/**
+	 * Subsequent steps in a SASL authentication conversation.
+	 */
+	public function saslContinue()
+	{
+		return $this->call('saslContinue', func_get_args());
+	}
+
+	/**
+	 * First step in a SASL authentication conversation.
+	 */
+	public function saslStart()
+	{
+		return $this->call('saslStart', func_get_args());
+	}
+
+	/**
 	 * returns lots of administrative server statistics
 	 */
 	public function serverStatus()
 	{
 		return $this->call('serverStatus', func_get_args());
+	}
+
+	/**
+	 * stats about the shard connection pool
+	 */
+	public function shardConnPoolStats()
+	{
+		return $this->call('shardConnPoolStats', func_get_args());
 	}
 
 	/**
@@ -563,6 +784,41 @@ trait AvailableCommands
 	public function touch()
 	{
 		return $this->call('touch', func_get_args());
+	}
+
+	/**
+	 * update documents
+	 */
+	public function update()
+	{
+		return $this->call('update', func_get_args());
+	}
+
+	/**
+	 * Used to update a role
+	 * 
+	 */
+	public function updateRole()
+	{
+		return $this->call('updateRole', func_get_args());
+	}
+
+	/**
+	 * Used to update a user, for example to change its password
+	 * 
+	 */
+	public function updateUser()
+	{
+		return $this->call('updateUser', func_get_args());
+	}
+
+	/**
+	 * Returns information about users.
+	 * 
+	 */
+	public function usersInfo()
+	{
+		return $this->call('usersInfo', func_get_args());
 	}
 
 	/**

@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Tools;
 
 use Maslosoft\Mangan\Command;
+use Maslosoft\Mangan\Traits\AvailableCommands;
 use Maslosoft\MiniView\MiniView;
 use ReflectionClass;
 
@@ -27,7 +28,7 @@ class AvailableCommandsGenerator
 
 	public function generate()
 	{
-		$destName = (new ReflectionClass(\Maslosoft\Mangan\Traits\AvailableCommands::class))->getFileName();
+		$destName = (new ReflectionClass(AvailableCommands::class))->getFileName();
 		$srcName = $destName . 's';
 
 		$view = new MiniView($this);

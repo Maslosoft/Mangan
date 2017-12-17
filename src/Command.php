@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan;
 
+use function iterator_to_array;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\CommandException;
 use Maslosoft\Mangan\Exceptions\CommandNotFoundException;
@@ -42,6 +43,8 @@ class Command
 	 */
 	private $mn = null;
 
+	private $collection = '';
+
 	public function __construct(AnnotatedInterface $model = null, Mangan $mangan = null)
 	{
 		$this->model = $model;
@@ -55,6 +58,7 @@ class Command
 			return;
 		}
 		$this->mn = Mangan::fromModel($model);
+		$this->collection = CollectionNamer::nameCollection($model);
 	}
 
 	public function call($command, $arguments = [])
@@ -138,6 +142,25 @@ class Command
 			'dropUser' => $username
 		];
 		return $this->mn->getDbInstance()->command(array_merge($cmd, $writeConcerns));
+	}
+
+	public function createIndex($keys, $options = [])
+	{
+		// Ensure array
+		if(empty($options))
+		{
+			$options = [];
+		}
+		return $this->mn->getDbInstance()->selectCollection($this->collection)->createIndex($keys, $options);
+	}
+
+	public function getIndexes()
+	{
+		$cmd = [
+			'getIndexes' => true
+		];
+		return $this->mn->getDbInstance()->command($cmd);
+		return $this->mn->getDbInstance()->selectCollection($this->collection)->getIndexInfo();
 	}
 
 	/**
