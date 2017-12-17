@@ -51,6 +51,14 @@ class ConditionDecorator implements ConditionDecoratorInterface
 		$this->meta = ManganMeta::create($this->model);
 	}
 
+	/**
+	 * @return AnnotatedInterface
+	 */
+	public function getModel()
+	{
+		return $this->model;
+	}
+
 	public function decorate($field, $value = null)
 	{
 		// 1. Do not decorate if empty model or dot notation

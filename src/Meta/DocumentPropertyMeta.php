@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Sort;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\JsonArray;
 
@@ -185,4 +186,10 @@ class DocumentPropertyMeta extends MetaProperty
 	 */
 	public $validators = [];
 
+	/**
+	 * Index specification.
+	 *
+	 * @var IndexMeta[]
+	 */
+	public $index = null;
 }
