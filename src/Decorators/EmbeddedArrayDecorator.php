@@ -34,7 +34,7 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 			{
 				static::ensureClass($model, $name, $data);
 				// Set ensured class to $dbValue
-				$instance = $this->_getInstance($model->$name, $dbValue, $data, $transformatorClass);
+				$instance = $this->_getInstance($model->$name, $dbValue, $data);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance);
 				$docs[] = $embedded;
 			}
@@ -71,7 +71,7 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 	 * @param mixed[] $data
 	 * @return AnnotatedInterface|null
 	 */
-	private function _getInstance($instances, $dbValue, $data, $transformatorClass)
+	private function _getInstance($instances, $dbValue, $data)
 	{
 		if (!count($instances))
 		{

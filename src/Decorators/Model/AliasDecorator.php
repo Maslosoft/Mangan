@@ -44,8 +44,8 @@ class AliasDecorator implements ModelDecoratorInterface
 		/* @var $typeMeta DocumentTypeMeta */
 		foreach ($typeMeta->aliases as $from => $to)
 		{
-			$this->_readValue($meta, $from, $to, $dbValues, $model);
-			$this->_readValue($meta, $to, $from, $dbValues, $model);
+			$this->_readValue($meta, $from, $to, $model);
+			$this->_readValue($meta, $to, $from, $model);
 		}
 	}
 
@@ -70,7 +70,7 @@ class AliasDecorator implements ModelDecoratorInterface
 		}
 	}
 
-	private function _readValue($meta, $from, $to, &$dbValues, $model)
+	private function _readValue($meta, $from, $to, $model)
 	{
 		$fieldMeta = $meta->$from;
 		if (!$fieldMeta)
