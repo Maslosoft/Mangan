@@ -153,6 +153,13 @@ trait ConfigureTrait
 	abstract public function getPagination($className = Pagination::class);
 
 	/**
+	 * Set pagination
+	 * @param boolean|array|PaginationInterface $pagination
+	 * @return static
+	 */
+	abstract public function setPagination($pagination);
+
+	/**
 	 * Returns the total number of data items.
 	 * When {@link pagination} is set false, this returns the same value as {@link itemCount}.
 	 * @return integer total number of possible data items.
