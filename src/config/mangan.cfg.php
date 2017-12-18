@@ -1,5 +1,6 @@
 <?php
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Decorators\DbRefArrayDecorator;
 use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Decorators\EmbeddedArrayDecorator;
@@ -13,6 +14,7 @@ use Maslosoft\Mangan\Decorators\Property\I18NDecorator;
 use Maslosoft\Mangan\Decorators\Property\SecretDecorator;
 use Maslosoft\Mangan\Decorators\RelatedArrayDecorator;
 use Maslosoft\Mangan\Decorators\RelatedDecorator;
+use Maslosoft\Mangan\Events\Handlers\IndexManagerHandler;
 use Maslosoft\Mangan\Events\Handlers\ParentIdHandler;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
@@ -31,6 +33,7 @@ use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Mangan\Transformers\YamlArray;
+use Maslosoft\Mangan\Validators\BuiltIn\BooleanValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\CompareValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\CountValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\EmailValidator;
@@ -43,7 +46,6 @@ use Maslosoft\Mangan\Validators\BuiltIn\StringValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\UniqueValidator;
 use Maslosoft\Mangan\Validators\BuiltIn\UrlValidator;
 use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
-use Maslosoft\Mangan\Validators\Proxy\BooleanValidator;
 use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
 use Maslosoft\Mangan\Validators\Proxy\CountProxy;
 use Maslosoft\Mangan\Validators\Proxy\EmailProxy;
@@ -140,7 +142,8 @@ return [
 		],
 	],
 	'eventHandlers' => [
-		WithParentTrait::class => ParentIdHandler::class
+		WithParentTrait::class => ParentIdHandler::class,
+		AnnotatedInterface::class => IndexManagerHandler::class
 	],
 	/**
 	 * Mapping for validators. Key is validator proxy class name, value is concrete validator implementation
