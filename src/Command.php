@@ -13,7 +13,6 @@
 
 namespace Maslosoft\Mangan;
 
-use function iterator_to_array;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\CommandException;
 use Maslosoft\Mangan\Exceptions\CommandNotFoundException;
@@ -154,12 +153,13 @@ class Command
 		return $this->mn->getDbInstance()->selectCollection($this->collection)->createIndex($keys, $options);
 	}
 
+	/**
+	 * NOTE: This is broken
+	 * @return array
+	 * @throws Exceptions\ManganException
+	 */
 	public function getIndexes()
 	{
-		$cmd = [
-			'getIndexes' => true
-		];
-		return $this->mn->getDbInstance()->command($cmd);
 		return $this->mn->getDbInstance()->selectCollection($this->collection)->getIndexInfo();
 	}
 
