@@ -34,10 +34,21 @@ class IndexManager
 
 	private static $paths = [];
 
-	private static $haveIndex = [];
+	/**
+	 * NOTE: This is public because of IndexMetaCleaner testing extension
+	 *
+	 * DO NOT TOUCH!
+	 *
+	 * @see IndexMetaCleaner
+	 * @internal
+	 * @var array
+	 */
+	public static $haveIndex = [];
 
 	/**
 	 * NOTE: This is public because of IndexMetaCleaner testing extension
+	 *
+	 * DO NOT TOUCH!
 	 *
 	 * @see IndexMetaCleaner
 	 * @internal
@@ -69,7 +80,16 @@ class IndexManager
 			return self::$haveIndex[$className];
 		}
 
-		$fieldMetas = ManganMeta::create($model)->fields('index');
+		$fieldMetas = ManganMeta::create($model)->fields();
+
+		// Filter out fields without index
+		foreach($fieldMetas as $key => $metaProperty)
+		{
+			if(empty($metaProperty->index))
+			{
+				unset($fieldMetas[$key]);
+			}
+		}
 
 		// Does not have indexes, mark as index-less
 		if(empty($fieldMetas))
