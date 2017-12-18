@@ -49,6 +49,7 @@ class IndexAnnotation extends ManganPropertyAnnotation
 
 		$entity = $this->getEntity();
 		$name = $entity->name;
+		$keys = [];
 		if(empty($data->keys))
 		{
 			$keys[$name] = Sort::SortAsc;
