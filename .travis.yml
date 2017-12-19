@@ -18,6 +18,7 @@ cache:
     - vendor
 install:
   - sudo apt-get install -y libdmtx-utils
+  - rm composer.lock
   - composer require "ptachoire/php-dmtx:^1"
   # Required for php 5
   - composer update

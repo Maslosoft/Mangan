@@ -3,11 +3,13 @@
 namespace Transformator;
 
 use Codeception\TestCase\Test;
+use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Transformers\Datamatrix;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use MongoId;
+use PHPUnit\Framework\SkippedTestError;
 use UnitTester;
 
 class DmtxTest extends Test
@@ -21,6 +23,10 @@ class DmtxTest extends Test
 	// tests
 	public function testIfWillConvertToDatamatrixAndViceVerse()
 	{
+		if(!ClassChecker::exists(Dmtx\Reader::class))
+		{
+			throw new SkippedTestError("PHP DMTX not available");
+		}
 		$model = new ModelWithI18N();
 		$model->_id = new MongoId;
 		$model->title = 'DMTX';
@@ -40,6 +46,10 @@ class DmtxTest extends Test
 
 	public function testIfWillConvertToDatamatrixAndViceVerseModelWithEmbeddedDocument()
 	{
+		if(!ClassChecker::exists(Dmtx\Reader::class))
+		{
+			throw new SkippedTestError("PHP DMTX not available");
+		}
 		$model = new WithPlainEmbedded();
 		$model->_id = new MongoId;
 		$stats = new SimplePlainEmbedded();

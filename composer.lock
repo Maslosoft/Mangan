@@ -110,16 +110,16 @@
         },
         {
             "name": "maslosoft/cli-shared",
-            "version": "0.0.20",
+            "version": "0.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/CLIShared.git",
-                "reference": "88b9a89eb551537c2123784d4bac5364dff8ec57"
+                "reference": "1bc79e118eba4366470fa25479041626cdf5858f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/CLIShared/zipball/88b9a89eb551537c2123784d4bac5364dff8ec57",
-                "reference": "88b9a89eb551537c2123784d4bac5364dff8ec57",
+                "url": "https://api.github.com/repos/Maslosoft/CLIShared/zipball/1bc79e118eba4366470fa25479041626cdf5858f",
+                "reference": "1bc79e118eba4366470fa25479041626cdf5858f",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
                 }
             ],
             "description": "Shared CLI application components",
-            "time": "2017-12-19T10:35:15+00:00"
+            "time": "2017-12-19T18:17:37+00:00"
         },
         {
             "name": "maslosoft/embedi",
