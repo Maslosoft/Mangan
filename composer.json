@@ -59,12 +59,11 @@
 		"maslosoft/miniview": "*",
 		"maslosoft/gazebo": "*",
 		"psr/log": "^1",
-		"symfony/yaml": "^3",
+		"symfony/yaml": ">=2.7 <5.0",
 		"maslosoft/mongofill": "*",
 		"ext-gd": "*"
 	},
 	"require-dev": {
-		"ptachoire/php-dmtx": "^1",
 		"codeception/codeception": "*",
 		"codeception/specify": "*",
 		"maslosoft/hedron": "*",
