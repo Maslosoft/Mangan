@@ -31,6 +31,7 @@ class ConditionDecoratorTest extends Test
 	public function testIfWillDecorateModelWithEmptyArray()
 	{
 		$model = new ModelWithArrayField();
+		$model->setLanguages(['ru', 'en', 'de', 'es']);
 		$model->setLang('en');
 		$cd = new ConditionDecorator($model);
 
@@ -44,6 +45,7 @@ class ConditionDecoratorTest extends Test
 	public function testIfWillDecorateI18NFields()
 	{
 		$model = new ModelWithI18N();
+		$model->setLanguages(['ru', 'en', 'de', 'es']);
 		$model->setLang('en');
 		$cd = new ConditionDecorator($model);
 
@@ -60,6 +62,7 @@ class ConditionDecoratorTest extends Test
 	public function testIfWillDecorateI18NFieldsOnSecondLanguageSet()
 	{
 		$model = new ModelWithI18N();
+		$model->setLanguages(['ru', 'en', 'de', 'es']);
 		$model->setLang('en');
 		$model->setLang('pl');
 		$cd = new ConditionDecorator($model);
@@ -74,4 +77,19 @@ class ConditionDecoratorTest extends Test
 		$this->assertSame(true, $active['active.pl']);
 	}
 
+	public function testIfWillDecorateI18NFieldsOnSecondLanguageSetWithEmptyFieldValue()
+	{
+		// See https://github.com/Maslosoft/Mangan/issues/82
+		$model = new ModelWithI18N();
+		$model->setLanguages(['ru', 'en', 'de', 'es']);
+		$model->setLang('en');
+		$model->setLang('pl');
+		$cd = new ConditionDecorator($model);
+
+		$title = $cd->decorate('title');
+		$active = $cd->decorate('active');
+
+		$this->assertSame('title.pl', key($title));
+		$this->assertSame('active.pl', key($active));
+	}
 }
