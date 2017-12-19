@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\ConditionDecoratorInterface;
+use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
 
@@ -49,6 +50,18 @@ class ConditionDecorator implements ConditionDecoratorInterface
 		// Clone is to prevent possible required constructor params issues
 		$this->model = clone $model;
 		$this->meta = ManganMeta::create($this->model);
+
+		/**
+		 * NOTE: This is a workaround for:
+		 * https://github.com/Maslosoft/Mangan/issues/82
+		 * Condition decorator possibly fails on non-first language decoration of I18N field. #82
+		 *
+		 * TODO Should not depend on I18N here.
+		 */
+		if($this->model instanceof InternationalInterface)
+		{
+			$this->model->setLanguages([$this->model->getLang()]);
+		}
 	}
 
 	/**

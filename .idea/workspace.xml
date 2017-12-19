@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c4ae644-ece7-464f-9a55-3d2d517d49e0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/mangan.iml" afterPath="$PROJECT_DIR$/.idea/mangan.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/tests/unit/Helpers/IndexManangerTest.php" afterPath="$PROJECT_DIR$/tests/unit/Helpers/IndexManangerTest.php" />
+      <change beforePath="$PROJECT_DIR$/src/Criteria/ConditionDecorator.php" afterPath="$PROJECT_DIR$/src/Criteria/ConditionDecorator.php" />
+      <change beforePath="$PROJECT_DIR$/tests/unit/Criteria/ConditionDecoratorTest.php" afterPath="$PROJECT_DIR$/tests/unit/Criteria/ConditionDecoratorTest.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,11 +33,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IndexManangerTest.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="IndexManangerTest.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/unit/Helpers/IndexManangerTest.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="88">
               <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConditionDecoratorTest.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/unit/Criteria/ConditionDecoratorTest.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="81" column="60" lean-forward="false" selection-start-line="81" selection-start-column="60" selection-end-line="81" selection-end-column="60" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConditionDecorator.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Criteria/ConditionDecorator.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1184">
+              <caret line="58" column="47" lean-forward="false" selection-start-line="58" selection-start-column="47" selection-end-line="58" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -69,7 +88,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Options/EntityOptions.php" />
         <option value="$PROJECT_DIR$/src/EntityManager.php" />
         <option value="$PROJECT_DIR$/unit/Sanitizers/NullableMongoIdTest.php" />
         <option value="$PROJECT_DIR$/vendor/maslosoft/mangantest/models/Sanitizers/ModelWithNullableBoolean.php" />
@@ -96,7 +114,6 @@
         <option value="$PROJECT_DIR$/models/Indexes/ModelWithI18NIndex.php" />
         <option value="$PROJECT_DIR$/models/Indexes/ModelWithCompoundI18NIndex.php" />
         <option value="$PROJECT_DIR$/src/Decorators/Property/I18NDecorator.php" />
-        <option value="$PROJECT_DIR$/src/Criteria/ConditionDecorator.php" />
         <option value="$PROJECT_DIR$/models/Indexes/ModelWithHashedIndex.php" />
         <option value="$PROJECT_DIR$/src/Helpers/Index/IndexModel.php" />
         <option value="$PROJECT_DIR$/codeception.yml" />
@@ -120,6 +137,8 @@
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/tests/_bootstrap.php" />
         <option value="$PROJECT_DIR$/tests/unit/Helpers/IndexManangerTest.php" />
+        <option value="$PROJECT_DIR$/src/Criteria/ConditionDecorator.php" />
+        <option value="$PROJECT_DIR$/tests/unit/Criteria/ConditionDecoratorTest.php" />
       </list>
     </option>
   </component>
@@ -252,6 +271,12 @@
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
               <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Criteria" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Helpers" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -270,7 +295,7 @@
               <item name="mangan" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="tests" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="unit" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="Helpers" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Criteria" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="mangan" type="b2602c69:ProjectViewProjectNode" />
@@ -322,7 +347,10 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Codeception.Helpers/IndexMananger">
+  <component name="RunManager" selected="Codeception.ConditionDecoratorTest.php">
+    <configuration name="ConditionDecoratorTest.php" type="CodeceptionConfigurationType" factoryName="Codeception" temporary="true">
+      <PhpTestRunnerSettings file="$PROJECT_DIR$/tests/unit/Criteria/ConditionDecoratorTest.php" method="" scope="File" />
+    </configuration>
     <configuration name="Decorators/I18N" type="CodeceptionConfigurationType" factoryName="Codeception">
       <PhpTestRunnerSettings file="$PROJECT_DIR$/vendor/maslosoft/mangantest/tests/unit/Decorators/I18NTest.php" method="" scope="File" options="--debug" />
     </configuration>
@@ -335,11 +363,17 @@
     <configuration default="true" type="CodeceptionConfigurationType" factoryName="Codeception">
       <PhpTestRunnerSettings method="" />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Codeception.Meta/AnnotationDefaults" />
       <item index="1" class="java.lang.String" itemvalue="Codeception.Decorators/I18N" />
       <item index="2" class="java.lang.String" itemvalue="Codeception.Helpers/IndexMananger" />
+      <item index="3" class="java.lang.String" itemvalue="Codeception.ConditionDecoratorTest.php" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Codeception.ConditionDecoratorTest.php" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -369,25 +403,25 @@
       <workItem from="1513517499817" duration="18115000" />
       <workItem from="1513582123898" duration="7206000" />
       <workItem from="1513617293676" duration="68000" />
-      <workItem from="1513665373144" duration="3025000" />
+      <workItem from="1513665373144" duration="3635000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Decorators_I18N - 2017.12.18 at 08h 46m 16s.xml">
-      <configuration name="Decorators/I18N" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="ConditionDecoratorTest_php - 2017.12.19 at 08h 31m 18s.xml">
+      <configuration name="ConditionDecoratorTest.php" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Helpers_IndexMananger - 2017.12.18 at 09h 02m 09s.xml">
-      <configuration name="Helpers/IndexMananger" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="ConditionDecoratorTest_php - 2017.12.19 at 08h 31m 56s.xml">
+      <configuration name="ConditionDecoratorTest.php" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Helpers_IndexMananger - 2017.12.18 at 09h 02m 28s.xml">
-      <configuration name="Helpers/IndexMananger" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="ConditionDecoratorTest_php - 2017.12.19 at 08h 32m 38s.xml">
+      <configuration name="ConditionDecoratorTest.php" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Helpers_IndexMananger - 2017.12.18 at 09h 04m 38s.xml">
-      <configuration name="Helpers/IndexMananger" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="ConditionDecoratorTest_php - 2017.12.19 at 08h 34m 23s.xml">
+      <configuration name="ConditionDecoratorTest.php" configurationId="CodeceptionConfigurationType" />
     </history-entry>
-    <history-entry file="Helpers_IndexMananger - 2017.12.18 at 09h 05m 58s.xml">
-      <configuration name="Helpers/IndexMananger" configurationId="CodeceptionConfigurationType" />
+    <history-entry file="ConditionDecoratorTest_php - 2017.12.19 at 08h 34m 49s.xml">
+      <configuration name="ConditionDecoratorTest.php" configurationId="CodeceptionConfigurationType" />
     </history-entry>
     <history-entry file="Helpers_IndexMananger - 2017.12.18 at 09h 06m 56s.xml">
       <configuration name="Helpers/IndexMananger" configurationId="CodeceptionConfigurationType" />
@@ -406,7 +440,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48145000" />
+    <option name="totallyTimeSpent" value="48755000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -421,7 +455,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24958494" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39933258" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39933258" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -440,18 +474,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="62" />
+      <option name="time" value="63" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/maslosoft/mongofill/src/MongoClient.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="751" column="20" lean-forward="false" selection-start-line="751" selection-start-column="20" selection-end-line="751" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Mangan.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -527,13 +554,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="337">
           <caret line="107" column="57" lean-forward="false" selection-start-line="107" selection-start-column="57" selection-end-line="107" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Criteria/ConditionDecorator.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="54" column="33" lean-forward="false" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -811,6 +831,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Criteria/ConditionDecorator.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1184">
+          <caret line="58" column="47" lean-forward="false" selection-start-line="58" selection-start-column="47" selection-end-line="58" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/unit/Criteria/ConditionDecoratorTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="81" column="60" lean-forward="false" selection-start-line="81" selection-start-column="60" selection-end-line="81" selection-end-column="60" />
           <folding />
         </state>
       </provider>
