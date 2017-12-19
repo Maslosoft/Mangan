@@ -132,6 +132,7 @@ class IndexManager
 		}
 
 		file_put_contents($path, PhpExporter::export($indexes, 'Auto generated, do not modify'));
+		@chmod($path, 0666);
 
 		return array_sum($results) === count($results);
 	}
