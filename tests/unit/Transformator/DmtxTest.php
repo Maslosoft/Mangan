@@ -25,7 +25,7 @@ class DmtxTest extends Test
 	{
 		if(!ClassChecker::exists(Dmtx\Reader::class))
 		{
-			throw new SkippedTestError("PHP DMTX not available");
+			$this->markTestSkipped("PHP DMTX not available");
 		}
 		$model = new ModelWithI18N();
 		$model->_id = new MongoId;
@@ -48,7 +48,7 @@ class DmtxTest extends Test
 	{
 		if(!ClassChecker::exists(Dmtx\Reader::class))
 		{
-			throw new SkippedTestError("PHP DMTX not available");
+			$this->markTestSkipped("PHP DMTX not available");
 		}
 		$model = new WithPlainEmbedded();
 		$model->_id = new MongoId;
