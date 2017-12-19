@@ -11,6 +11,10 @@ fi
 if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then
 	coverage=false
 fi;
+# Coverage is broken on 7.2
+if [ "$TRAVIS_PHP_VERSION" == "7.2" ]; then
+	coverage=false
+fi;
 
 
 if $coverage; then

@@ -18,14 +18,9 @@ cache:
     - vendor
 install:
   - sudo apt-get install -y libdmtx-utils
-  # Ensure that tests project is empty or update might fail
-  - rm -rf vendor/maslosoft/mangantest
   # Required for php 5
   - composer update
   - composer install --prefer-dist --dev --no-interaction
-  # Get fresh tests
-  - rm -rf vendor/maslosoft/mangantest
-  - git clone https://github.com/Maslosoft/ManganTest.git vendor/maslosoft/mangantest
   # Ensure that test script is executable
   - chmod +x run-travis
 before_script:
