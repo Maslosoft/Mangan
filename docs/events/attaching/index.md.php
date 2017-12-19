@@ -37,6 +37,12 @@ $t = (new ShortNamer(TrashInterface::class));
 
 # Attaching Events
 
+<p class="alert alert-warning">
+    Events <i>might</i> dramatically change execution of various
+    actions, like finding, inserting - including skipping of this actions
+    too!
+</p>
+
 ## Attaching Events Basics
 
 To attach event to model, call <?= $n->on(); ?> method with
@@ -63,6 +69,17 @@ can be found on interfaces regarding particular functionality, for example:
 
 Custom event types can be defined too. The best way is to create class constant
 with event name.
+
+<p class="alert alert-warning">
+    <b>Always</b> set <code>isValid</code> property of event if you wan't to continue
+    program after event. Setting <code>isValid</code> to false or not setting it <i>might</i>
+    stop action after event - it depends on action logic.
+</p>
+
+<p class="alert alert-warning">
+    Set <code>handled</code> property to true, to stop
+    further events processing.
+</p>
 
 <p class="alert alert-danger">
     Make sure that the event handlers are not bound multiple times as this might

@@ -42,7 +42,7 @@ trait FinderTrait
 	 * Finds a single Document with the specified condition.
 	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return static|null
+	 * @return AnnotatedInterface|static|null
 	 * @Ignored
 	 */
 	public function find($criteria = null)
@@ -73,7 +73,7 @@ trait FinderTrait
 	 *
 	 * @param mixed $pk primary key value. Use array for composite key.
 	 * @param array|CriteriaInterface $criteria
-	 * @return static|null
+	 * @return AnnotatedInterface|static|null
 	 * @Ignored
 	 */
 	public function findByPk($pk, $criteria = null)
@@ -95,7 +95,7 @@ trait FinderTrait
 	 * ```
 	 *
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return static|null
+	 * @return AnnotatedInterface|static|null
 	 * @Ignored
 	 */
 	public function findByAttributes(array $attributes)
@@ -107,7 +107,7 @@ trait FinderTrait
 	 * Finds all documents satisfying the specified condition.
 	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return static[]|Cursor
+	 * @return AnnotatedInterface[]|static[]|Cursor
 	 * @Ignored
 	 */
 	public function findAll($criteria = null)
@@ -119,7 +119,7 @@ trait FinderTrait
 	 * Finds all documents with the specified attributes.
 	 *
 	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
-	 * @return static[]|Cursor
+	 * @return AnnotatedInterface[]|static[]|Cursor
 	 * @Ignored
 	 */
 	public function findAllByAttributes(array $attributes)
@@ -135,7 +135,7 @@ trait FinderTrait
 	 *
 	 * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @return static[]|Cursor
+	 * @return AnnotatedInterface[]|static[]|Cursor
 	 * @Ignored
 	 */
 	public function findAllByPk($pk, $criteria = null)
@@ -190,7 +190,7 @@ trait FinderTrait
 	/**
 	 * Whenever to use cursor
 	 *
-	 * @param type $useCursor
+	 * @param boolean $useCursor
 	 * @return FinderInterface
 	 * @Ignored
 	 */
@@ -207,6 +207,7 @@ trait FinderTrait
 	{
 		if (null === $this->_finder)
 		{
+			assert($this instanceof AnnotatedInterface, sprintf('Trait `%s` can be used only on `%s` instances', __CLASS__, AnnotatedInterface::class));
 			$this->_finder = Finder::create($this);
 		}
 		return $this->_finder;

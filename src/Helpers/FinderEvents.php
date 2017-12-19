@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\FinderEventsInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
@@ -69,20 +70,22 @@ class FinderEvents implements FinderEventsInterface
 		return $this->handle($finder, FinderInterface::EventBeforeFind);
 	}
 
-	protected function trigger($finder, $event)
+	protected function trigger($finder, $eventName)
 	{
 		assert($finder instanceof ModelAwareInterface);
-		Event::trigger($finder->getModel(), $event);
+		Event::trigger($finder->getModel(), $eventName);
 	}
 
-	protected function handle($finder, $event)
+	protected function handle($finder, $eventName)
 	{
 		assert($finder instanceof ModelAwareInterface);
-		if (!Event::hasHandler($finder->getModel(), $event))
+		if (!Event::hasHandler($finder->getModel(), $eventName))
 		{
 			return true;
 		}
-		return Event::handled($finder->getModel(), $event);
+		$event = new ModelEvent;
+		Event::trigger($finder->getModel(), $eventName, $event);
+		return $event->isValid || $event->handled;
 	}
 
 }

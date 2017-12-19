@@ -43,20 +43,6 @@ class IndexManagerHandler implements EventHandlersInterface
 	public function handle(ModelEvent $e)
 	{
 		$e->isValid = true;
-		// Fast and ugly
-		if($e->name === FinderInterface::EventBeforeFind)
-		{
-			$e->handled = true;
-		}
-		if($e->name === FinderInterface::EventBeforeExists)
-		{
-			$e->handled = true;
-		}
-		if($e->name === FinderInterface::EventBeforeCount)
-		{
-			$e->handled = true;
-		}
-		
 		IndexManager::fly()->create($e->sender);
 		return true;
 	}
