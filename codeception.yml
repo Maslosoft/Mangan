@@ -1,9 +1,9 @@
 actor: Tester
 paths:
-    tests: vendor/maslosoft/mangantest/tests
+    tests: tests
     log: tests/_output
-    data: vendor/maslosoft/mangantest/tests/_data
-    helpers: vendor/maslosoft/mangantest/tests/_support
+    data: tests/_data
+    helpers: tests/_support
 extensions:
     enabled:
         - Maslosoft\ManganTest\Extensions\MongoWipe

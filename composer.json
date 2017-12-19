@@ -65,7 +65,8 @@
 		"ext-gd": "*"
 	},
 	"require-dev": {
-		"maslosoft/mangantest": "dev-master",
+		"codeception/codeception": "*",
+		"codeception/specify": "*",
 		"maslosoft/hedron": "*",
 		"maslosoft/zamm": "*",
 		"maslosoft/mangan-examples": "*",
@@ -80,6 +81,12 @@
 	"autoload": {
 		"psr-4": {
 			"Maslosoft\\Mangan\\": "src/"
+		}
+	},
+	"autoload-dev":{
+		"psr-4": {
+			"Maslosoft\\ManganTest\\Models\\": "tests/models/",
+			"Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
 		}
 	}
 }
