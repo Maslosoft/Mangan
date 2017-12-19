@@ -10,6 +10,7 @@ namespace Maslosoft\ManganTest\Extensions;
 
 use Codeception\Event\TestEvent;
 use Codeception\Extension;
+use Exception;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Mangan;
@@ -29,6 +30,14 @@ class MongoWipe extends Extension
 
 	public function testBefore(TestEvent $e)
 	{
+		if(!defined('MANGAN_TEST_ENV'))
+		{
+			throw new Exception('This extension requires test environment. Constant `MANGAN_TEST_ENV` needs to be true.');
+		}
+		if(!MANGAN_TEST_ENV)
+		{
+			throw new Exception('This extension requires test environment. Constant `MANGAN_TEST_ENV` needs to be true.');
+		}
 		if (isset($this->config['connectionIds']))
 		{
 			foreach ((array) $this->config['connectionIds'] as $connectionId)

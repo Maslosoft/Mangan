@@ -19,6 +19,11 @@ if (defined('PHP_WINDOWS_VERSION_MAJOR'))
 	require __DIR__ . '/../misc/Invoker.php';
 }
 
+if (!defined('MANGAN_TEST_ENV'))
+{
+	define('MANGAN_TEST_ENV', true);
+}
+
 $config = require __DIR__ . '/config.php';
 
 $addendum = new Addendum();
@@ -26,10 +31,10 @@ $addendum->namespaces[] = MetaOptionsHelper::Ns;
 $addendum->namespaces[] = ValidatorAnnotation::Ns;
 $addendum->init();
 
-		const ManganFirstDbName = 'ManganTest';
-		const ManganSecondDbName = 'ManganTestSecond';
-		const ManganThirdDbName = 'ManganTestThird';
-		const ManganCustomValidatorsDbName = 'ManganTestCustomValidators';
+const ManganFirstDbName = 'ManganTest';
+const ManganSecondDbName = 'ManganTestSecond';
+const ManganThirdDbName = 'ManganTestThird';
+const ManganCustomValidatorsDbName = 'ManganTestCustomValidators';
 
 $mangan = new Mangan();
 $mangan->connectionString = 'mongodb://localhost:27017';
