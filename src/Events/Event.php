@@ -316,7 +316,7 @@ class Event implements EventInterface
 	 * @param AnnotatedInterface $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
-	 * @return bool|null True if handled, false otherway, null if not triggered
+	 * @return bool|null True if handled, false otherways, null if not triggered
 	 */
 	public static function handled(AnnotatedInterface $model, $name, $event = null)
 	{
