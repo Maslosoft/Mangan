@@ -10,6 +10,7 @@ namespace Maslosoft\ManganTest\Extensions;
 
 use Codeception\Event\TestEvent;
 use Codeception\Extension;
+use Exception;
 use Maslosoft\Mangan\Helpers\IndexManager;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithCompoundI18NIndex;
 
@@ -22,6 +23,14 @@ class IndexMetaCleaner extends Extension
 
 	public function testBefore(TestEvent $e)
 	{
+		if(!defined('MANGAN_TEST_ENV'))
+		{
+			throw new Exception('This extension requires test environment. Constant `MANGAN_TEST_ENV` needs to be true.');
+		}
+		if(!MANGAN_TEST_ENV)
+		{
+			throw new Exception('This extension requires test environment. Constant `MANGAN_TEST_ENV` needs to be true.');
+		}
 		$path = IndexManager::fly()->getStoragePath(new ModelWithCompoundI18NIndex, ModelWithCompoundI18NIndex::class);
 		$dir = realpath(dirname($path));
 		IndexManager::$haveDir = false;

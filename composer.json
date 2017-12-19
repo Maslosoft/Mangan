@@ -80,13 +80,13 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Maslosoft\\Mangan\\": "src/"
+			"Maslosoft\\Mangan\\": "src/",
+			"Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
 		}
 	},
 	"autoload-dev":{
 		"psr-4": {
-			"Maslosoft\\ManganTest\\Models\\": "tests/models/",
-			"Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
+			"Maslosoft\\ManganTest\\Models\\": "tests/models/"
 		}
 	}
 }
