@@ -60,11 +60,11 @@
 		"maslosoft/gazebo": "*",
 		"psr/log": "^1",
 		"symfony/yaml": "^3",
-		"ptachoire/php-dmtx": "^1",
 		"maslosoft/mongofill": "*",
 		"ext-gd": "*"
 	},
 	"require-dev": {
+		"ptachoire/php-dmtx": "^1",
 		"codeception/codeception": "*",
 		"codeception/specify": "*",
 		"maslosoft/hedron": "*",
@@ -75,6 +75,7 @@
 	"suggest": {
 		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
 		"mongofill/mongofill": "Polyfill of PECL Mongo extension. Required for PHP7",
+		"ptachoire/php-dmtx": "Generate DataMatrix Codes",
 		"endroid/qrcode": "Generate QR Codes",
 		"khanamiryan/qrcode-detector-decoder": "Decode QR Codes"
 	},
