@@ -1,20 +1,16 @@
 <?php
 
-use Maslosoft\Ilmatar\Components\Controller;
-use Maslosoft\Ilmatar\Widgets\Form\ActiveForm;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Zamm\DocBlock;
 use Maslosoft\Zamm\ShortNamer;
-?>
-<?php
-/* @var $this Controller */
-/* @var $form ActiveForm */
+use Maslosoft\Zamm\Widgets\DocNavRecursive;
+
 ?>
 <?php
 $doc = (new DocBlock(Event::class));
 $n = (new ShortNamer(Event::class));
 ?>
-<title>Events</title>
+<title>6. Events</title>
 
 # Events
 
@@ -24,11 +20,15 @@ Events can be attached to model instance, class name, interface name or even tra
     When using class names, it is recommended to use <code>::class</code> magic constant.
 </p>
 
-## Function <?= $n->on()->md ?>
+### Function <?= $n->on()->md ?>
 <?= $doc->method('on'); ?>
 
-## Function <?= $n->off()->md ?>
+### Function <?= $n->off()->md ?>
 <?= $doc->method('off'); ?>
 
-## Function <?= $n->trigger()->md ?>
+### Function <?= $n->trigger()->md ?>
 <?= $doc->method('trigger'); ?>
+
+## More on events:
+
+<?= new DocNavRecursive; ?>

@@ -33,7 +33,7 @@ $t = (new ShortNamer(TrashInterface::class));
 
 /* @var Mangan $m */
 ?>
-<title>Attaching Events</title>
+<title>1. Attaching Events</title>
 
 # Attaching Events
 
