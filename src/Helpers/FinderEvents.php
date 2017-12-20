@@ -85,7 +85,7 @@ class FinderEvents implements FinderEventsInterface
 		}
 		$event = new ModelEvent;
 		Event::trigger($finder->getModel(), $eventName, $event);
-		return $event->isValid || $event->handled;
+		return $event->isValid;
 	}
 
 }
