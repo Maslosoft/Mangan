@@ -39,7 +39,7 @@ class DbRefArrayDecorator implements DecoratorInterface
 		}
 		/**
 		 * NOTE: Documents must be sorted as $dbRefs,
-		 * however mongo does not guarantiee sorting by list of id's.
+		 * however mongo does not guarantee sorting by list of id's.
 		 * This require sorting in php.
 		 * If document has composite key this must be taken care too
 		 * while comparision for sorting is made.
@@ -55,7 +55,7 @@ class DbRefArrayDecorator implements DecoratorInterface
 			$dbValue['_class'] = DbRef::class;
 			$dbRef = $transformatorClass::toModel($dbValue);
 
-			// Collect keys separatelly for each type
+			// Collect keys separately for each type
 			$pks[$dbRef->class][$key] = $dbRef->pk;
 			$sort[$key] = $dbRef->pk;
 		}
