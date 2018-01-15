@@ -11,4 +11,4 @@ $doc = new DocBlock(SanitizerAnnotation::class);
 
 <?= $doc; ?>
 
-[Read more about data sanitization](../../sanitizers/)
+[Read more about data sanitization](/mangan/docs/sanitizers/)

@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Model;
 
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\ImageEvent;
 use Maslosoft\Mangan\Exceptions\FileNotFoundException;
 use Maslosoft\Mangan\Helpers\ImageThumb;
 use MongoGridFSFile;
@@ -24,6 +26,9 @@ use MongoGridFSFile;
  */
 class Image extends File
 {
+	const EventBeforeResize = 'beforeResize';
+
+	const EventAfterResize = 'afterResize';
 
 	/**
 	 * Image width
@@ -64,9 +69,15 @@ class Image extends File
 			}
 
 			$originalFilename = $result->file['filename'];
-			$fileName = tempnam('/tmp/', __CLASS__);
+			$fileName = tempnam('/tmp/', str_replace('\\', '.', __CLASS__));
 			$result->write($fileName);
 
+			$ie = new ImageEvent;
+			$ie->sender = $this;
+			$ie->source = $this;
+			$ie->path = $fileName;
+
+			Event::trigger($this, self::EventBeforeResize, $ie);
 
 			$image = new ImageThumb($fileName);
 			if ($params->adaptive)
@@ -77,6 +88,13 @@ class Image extends File
 			{
 				$image->resize($params->width, $params->height)->save($fileName);
 			}
+
+			$ie = new ImageEvent;
+			$ie->sender = $this;
+			$ie->source = $this;
+			$ie->path = $fileName;
+
+			Event::trigger($this, self::EventAfterResize, $ie);
 
 			$this->_set($fileName, $originalFilename, $params->toArray());
 			unlink($fileName);
