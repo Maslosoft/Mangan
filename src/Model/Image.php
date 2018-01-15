@@ -74,7 +74,6 @@ class Image extends File
 
 			$ie = new ImageEvent;
 			$ie->sender = $this;
-			$ie->source = $this;
 			$ie->path = $fileName;
 
 			Event::trigger($this, self::EventBeforeResize, $ie);
@@ -91,7 +90,6 @@ class Image extends File
 
 			$ie = new ImageEvent;
 			$ie->sender = $this;
-			$ie->source = $this;
 			$ie->path = $fileName;
 
 			Event::trigger($this, self::EventAfterResize, $ie);
