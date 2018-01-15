@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Model\DbRef;
 
@@ -42,6 +43,20 @@ class DbRefManager
 		$dbRef = new DbRef();
 		$dbRef->pk = PkManager::getFromModel($referenced);
 		$dbRef->class = get_class($referenced);
+		return $dbRef;
+	}
+
+	public static function createInstanceFrom(DbRef $dbRef)
+	{
+		return (new Finder($dbRef->class))->findByPk($dbRef->pk);
+	}
+
+	public static function maybeCreateInstanceFrom($dbRef)
+	{
+		if($dbRef instanceof DbRef)
+		{
+			return (new Finder(new $dbRef->class))->findByPk($dbRef->pk);
+		}
 		return $dbRef;
 	}
 

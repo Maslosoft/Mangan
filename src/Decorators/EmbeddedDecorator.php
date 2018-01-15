@@ -18,6 +18,7 @@ use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
+use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
@@ -46,6 +47,10 @@ class EmbeddedDecorator implements DecoratorInterface
 			$instance = $model->$name;
 		}
 		$embedded = $transformatorClass::toModel($dbValue, $instance, $instance);
+
+		// Field was transformed from DB Ref
+		$embedded = DbRefManager::maybeCreateInstanceFrom($embedded);
+
 		$model->$name = $embedded;
 	}
 

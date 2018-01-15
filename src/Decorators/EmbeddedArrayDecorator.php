@@ -14,8 +14,10 @@
 namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
+use Maslosoft\Mangan\Model\DbRef;
 
 /**
  * EmbeddedArrayDecorator
@@ -36,6 +38,10 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 				// Set ensured class to $dbValue
 				$instance = $this->_getInstance($model->$name, $dbValue, $data);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance);
+
+				// Field was transformed from DB Ref
+				$embedded = DbRefManager::maybeCreateInstanceFrom($embedded);
+
 				$docs[] = $embedded;
 			}
 			$model->$name = $docs;
