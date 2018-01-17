@@ -16,6 +16,8 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\RangeProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Strict;
 
 /**
  * RangeValidator validates that the attribute value is among the list (specified via {@link range}).
@@ -29,8 +31,8 @@ use Maslosoft\Mangan\Validators\Proxy\RangeProxy;
 class InValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Strict;
+	use AllowEmpty,
+	  Strict;
 
 	/**
 	 * @var array list of valid values that the attribute value should be among

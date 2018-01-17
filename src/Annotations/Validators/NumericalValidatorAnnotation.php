@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 /**
  * Validator validates that the attribute value is a number.
@@ -41,7 +42,7 @@ use Maslosoft\Mangan\Validators\Proxy\NumberProxy;
 class NumericalValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use AllowEmpty;
 
 	/**
 	 * @var boolean whether the attribute value can only be an integer. Defaults to false.

@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches to the specified {@link pattern regular expression}.
@@ -29,7 +30,7 @@ use Maslosoft\Mangan\Validators\Proxy\RegexProxy;
 class MatchValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use AllowEmpty;
 
 	/**
 	 * @var string the regular expression to be matched with

@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\ClassValidatorProxy;
+use UnexpectedValueException;
 
 /**
  * Base class for validator annotations
@@ -91,7 +92,7 @@ class ValidatorAnnotation extends ManganPropertyAnnotation
 		}
 		else
 		{
-			throw new \UnexpectedValueException(sprintf("Expected class name (for @Validator) for field `%s` of model `%s`, got: `%s`", $this->getEntity()->name, $this->getMeta()->type()->name, $this->value));
+			throw new UnexpectedValueException(sprintf("Expected class name (for @Validator) for field `%s` of model `%s`, got: `%s`", $this->getEntity()->name, $this->getMeta()->type()->name, $this->value));
 		}
 
 

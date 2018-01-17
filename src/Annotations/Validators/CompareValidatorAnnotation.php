@@ -16,6 +16,8 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Strict;
 
 /**
  * CompareValidator compares the specified attribute value with another value and validates if they are equal.
@@ -48,8 +50,8 @@ use Maslosoft\Mangan\Validators\Proxy\CompareProxy;
 class CompareValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty,
-	  \Maslosoft\Mangan\Validators\Traits\Strict;
+	use AllowEmpty,
+	  Strict;
 
 	/**
 	 * @var string the name of the attribute to be compared with

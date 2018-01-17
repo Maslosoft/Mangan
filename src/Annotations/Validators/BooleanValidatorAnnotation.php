@@ -17,6 +17,8 @@ use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Annotations\Validators\ValidatorAnnotation;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+use Maslosoft\Mangan\Validators\Traits\Strict;
 
 /**
  * BooleanValidator validates that the attribute value is either {@link trueValue}  or {@link falseValue}.
@@ -37,8 +39,8 @@ use Maslosoft\Mangan\Validators\Proxy\BooleanProxy;
 class BooleanValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\Strict,
-	  \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use Strict,
+	  AllowEmpty;
 
 	/**
 	 * @var mixed the value representing true status. Defaults to '1'.

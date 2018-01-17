@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
@@ -28,7 +29,7 @@ use Maslosoft\Mangan\Validators\Proxy\UrlProxy;
 class UrlValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use AllowEmpty;
 
 	public function init()
 	{

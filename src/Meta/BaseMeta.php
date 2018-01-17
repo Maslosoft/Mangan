@@ -23,6 +23,10 @@ abstract class BaseMeta
 
 	use \Maslosoft\Addendum\Traits\MetaState;
 
+	/**
+	 * BaseMeta constructor.
+	 * @param array|null $data
+	 */
 	public function __construct($data = null)
 	{
 		// For internal use
@@ -30,6 +34,7 @@ abstract class BaseMeta
 		{
 			return;
 		}
+
 		if (is_array($data))
 		{
 			foreach ($data as $key => $value)
