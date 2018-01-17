@@ -438,9 +438,14 @@ class Event implements EventInterface
 	 */
 	public static function getPartials($className)
 	{
-		if (!empty(self::$partials[$className]))
+		if (array_key_exists($className, self::$partials))
 		{
 			return self::$partials[$className];
+		}
+		if(!ClassChecker::exists($className))
+		{
+			self::$partials[$className] = [];
+			return [];
 		}
 		$partials = [];
 		// Iterate over traits
