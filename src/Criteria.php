@@ -244,6 +244,15 @@ class Criteria implements CriteriaInterface,
 					foreach ($conditions as $operator => $value)
 					{
 						$operator = strtolower($operator);
+						if(!isset(self::$operators[$operator]))
+						{
+							$params = [
+								$operator,
+								$fieldName
+							];
+							$msg = vsprintf('Unknown Criteria operator `%s` for `%s`', $params);
+							throw new UnexpectedValueException($msg);
+						}
 						$this->addCond($fieldName, $operator, $value);
 					}
 				}
