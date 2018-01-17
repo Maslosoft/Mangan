@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan\Annotations\Validators;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\ValidatorMeta;
 use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
+use Maslosoft\Mangan\Validators\Traits\AllowEmpty;
 
 /**
  * UniqueValidator
@@ -25,7 +26,7 @@ use Maslosoft\Mangan\Validators\Proxy\UniqueProxy;
 class UniqueValidatorAnnotation extends ValidatorAnnotation
 {
 
-	use \Maslosoft\Mangan\Validators\Traits\AllowEmpty;
+	use AllowEmpty;
 
 	/**
 	 * @var string the ActiveRecord class name that should be used to
@@ -52,7 +53,7 @@ class UniqueValidatorAnnotation extends ValidatorAnnotation
 	 * This array will be used to instantiate a {@link Criteria} object.
 	 * @since 1.0.8
 	 */
-	public $criteria = [];
+	public $criteria;
 
 	/**
 	 * @var string the user-defined error message. The placeholders "{attribute}" and "{value}"
