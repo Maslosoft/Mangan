@@ -2,6 +2,10 @@
   "name": "maslosoft/mangan",
   "description": "MongoDB Object Document Mapper (ODM)",
   "homepage": "https://maslosoft.com/mangan/",
+  "license": [
+    "AGPL",
+    "Commercial"
+  ],
   "keywords": [
     "php",
     "mongodb",
