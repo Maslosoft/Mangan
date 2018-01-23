@@ -17,7 +17,6 @@
 <img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master" alt="Code Coverage" />
 </a>
 <img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
-<img src="http://hhvm.h4cc.de/badge/maslosoft/mangan.svg?style=flat"/>
 
 ### Quick Install
 ```bash
