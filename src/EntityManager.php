@@ -15,11 +15,9 @@ namespace Maslosoft\Mangan;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Events\Event;
-use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Exceptions\BadAttributeException;
 use Maslosoft\Mangan\Exceptions\ManganException;
-use Maslosoft\Mangan\Exceptions\PkException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
@@ -49,12 +47,6 @@ class EntityManager implements EntityManagerInterface
 	 * @var AnnotatedInterface
 	 */
 	public $model = null;
-
-	/**
-	 *
-	 * @var EventDispatcher
-	 */
-	public $ed = null;
 
 	/**
 	 *
@@ -512,6 +504,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param mixed[] $pkValues Primary keys array
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
+	 * @return bool
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null)
 	{
@@ -536,6 +529,7 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @since v1.0
+	 * @return bool
 	 */
 	public function deleteAll($criteria = null)
 	{

@@ -18,6 +18,8 @@ use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\Mangan\Interfaces\ConditionDecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
+use Maslosoft\Mangan\Interfaces\Decorators\ConditionDecoratorTypeAwareInterface;
+use Maslosoft\Mangan\Interfaces\Decorators\ConditionDecoratorTypeInterface;
 
 /**
  * DecoratableTrait
@@ -40,6 +42,10 @@ trait DecoratableTrait
 	 */
 	public function getCd()
 	{
+		if($this instanceof ConditionDecoratorTypeAwareInterface && $this->cd instanceof ConditionDecoratorTypeInterface)
+		{
+			$this->cd->setDecoratorType($this->getDecoratorType());
+		}
 		return $this->cd;
 	}
 
@@ -50,6 +56,10 @@ trait DecoratableTrait
 	 */
 	public function setCd(ConditionDecoratorInterface $cd)
 	{
+		if($this instanceof ConditionDecoratorTypeAwareInterface && $cd instanceof ConditionDecoratorTypeInterface)
+		{
+			$cd->setDecoratorType($this->getDecoratorType());
+		}
 		$this->cd = $cd;
 		return $this;
 	}
@@ -69,6 +79,10 @@ trait DecoratableTrait
 		else
 		{
 			$this->cd = new ConditionDecorator($model);
+		}
+		if($this instanceof ConditionDecoratorTypeAwareInterface && $this->cd instanceof ConditionDecoratorTypeInterface)
+		{
+			$this->cd->setDecoratorType($this->getDecoratorType());
 		}
 		return $this;
 	}

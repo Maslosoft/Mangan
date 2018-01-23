@@ -15,6 +15,8 @@ namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\ConditionDecoratorInterface;
+use Maslosoft\Mangan\Interfaces\Decorators\ConditionDecoratorTypeAwareInterface;
+use Maslosoft\Mangan\Interfaces\Decorators\ConditionDecoratorTypeInterface;
 use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Transformers\CriteriaArray;
@@ -26,7 +28,7 @@ use Maslosoft\Mangan\Transformers\CriteriaArray;
  * @internal Criteria sub component
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ConditionDecorator implements ConditionDecoratorInterface
+class ConditionDecorator implements ConditionDecoratorInterface, ConditionDecoratorTypeInterface
 {
 
 	/**
@@ -40,6 +42,8 @@ class ConditionDecorator implements ConditionDecoratorInterface
 	 * @var ManganMeta
 	 */
 	private $meta = null;
+
+	private $decoratorType = CriteriaArray::class;
 
 	public function __construct(AnnotatedInterface $model = null)
 	{
@@ -72,6 +76,18 @@ class ConditionDecorator implements ConditionDecoratorInterface
 		return $this->model;
 	}
 
+	/**
+	 * @param string $decoratorType
+	 * @return string
+	 */
+	public function setDecoratorType($decoratorType = CriteriaArray::class)
+	{
+		$this->decoratorType = $decoratorType;
+		return $this;
+	}
+
+
+
 	public function decorate($field, $value = null)
 	{
 		// 1. Do not decorate if empty model or dot notation
@@ -84,7 +100,10 @@ class ConditionDecorator implements ConditionDecoratorInterface
 		}
 
 		$this->model->$field = $value;
-		$data = CriteriaArray::fromModel($this->model, [$field]);
+
+		$dt = $this->decoratorType;
+
+		$data = $dt::fromModel($this->model, [$field]);
 
 		return $this->_flatten($field, $this->model->$field, $data[$field]);
 	}
