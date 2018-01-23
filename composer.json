@@ -1,92 +1,102 @@
 {
-	"name": "maslosoft/mangan",
-	"description": "MongoDB Object Persister/Document Mapper",
-	"homepage": "https://maslosoft.com/mangan/",
-	"license": [
-		"AGPL",
-		"Commercial"
-	],
-	"authors": [
-		{
-			"name": "Peter Maselkowski",
-			"email": "pmaselkowski@gmail.com",
-			"homepage": "https://maslosoft.com",
-			"role": "Developer"
-		},
-		{
-			"name": "Ianar\u00e9 S\u00e9vi",
-			"role": "Developer"
-		},
-		{
-			"name": "Dariusz G\u00f3recki",
-			"email": "darek.krk@gmail.com",
-			"role": "Developer"
-		},
-		{
-			"name": "Invenzzia Group",
-			"homepage": "http://www.invenzzia.org",
-			"role": "Developer"
-		},
-		{
-			"name": "Philippe Gaultier",
-			"email": "pgaultier@ibitux.com",
-			"role": "Developer"
-		},
-		{
-			"name": "Ibitux",
-			"homepage": "http://www.ibitux.com",
-			"role": "Developer"
-		},
-		{
-			"name": "CleverIT",
-			"homepage": "http://www.cleverit.com.pl",
-			"role": "Developrt"
-		},
-		{
-			"name": "Florian Fackler",
-			"email": "florian.fackler@mintao.com",
-			"homepage": "http://mintao.com"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/Maslosoft/Mangan/issues"
-	},
-	"require": {
-		"maslosoft/addendum": "*",
-		"maslosoft/signals": "*",
-		"masterexploder/phpthumb": "^2",
-		"maslosoft/embedi": "*",
-		"maslosoft/miniview": "*",
-		"maslosoft/gazebo": "*",
-		"psr/log": "^1",
-		"symfony/yaml": ">=2.7 <5.0",
-		"maslosoft/mongofill": "*",
-		"ext-gd": "*"
-	},
-	"require-dev": {
-		"codeception/codeception": "*",
-		"codeception/specify": "*",
-		"maslosoft/hedron": "*",
-		"maslosoft/zamm": "*",
-		"maslosoft/mangan-examples": "*",
-		"ext-curl": "*"
-	},
-	"suggest": {
-		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
-		"mongofill/mongofill": "Polyfill of PECL Mongo extension. Required for PHP7",
-		"ptachoire/php-dmtx": "Generate DataMatrix Codes",
-		"endroid/qrcode": "Generate QR Codes",
-		"khanamiryan/qrcode-detector-decoder": "Decode QR Codes"
-	},
-	"autoload": {
-		"psr-4": {
-			"Maslosoft\\Mangan\\": "src/",
-			"Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
-		}
-	},
-	"autoload-dev":{
-		"psr-4": {
-			"Maslosoft\\ManganTest\\Models\\": "tests/models/"
-		}
-	}
+  "name": "maslosoft/mangan",
+  "description": "MongoDB Object Document Mapper",
+  "homepage": "https://maslosoft.com/mangan/",
+  "license": [
+    "AGPL",
+    "Commercial"
+  ],
+  "keywords": [
+    "php",
+    "mongodb",
+    "orm",
+    "odm",
+    "document-mapper",
+    "mangan",
+    "persister"
+  ],
+  "authors": [
+    {
+      "name": "Peter Maselkowski",
+      "email": "peter@maslosoft.com",
+      "homepage": "https://maslosoft.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Ianar\u00e9 S\u00e9vi",
+      "role": "Developer"
+    },
+    {
+      "name": "Dariusz G\u00f3recki",
+      "email": "darek.krk@gmail.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Invenzzia Group",
+      "homepage": "http://www.invenzzia.org",
+      "role": "Developer"
+    },
+    {
+      "name": "Philippe Gaultier",
+      "email": "pgaultier@ibitux.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Ibitux",
+      "homepage": "http://www.ibitux.com",
+      "role": "Developer"
+    },
+    {
+      "name": "CleverIT",
+      "homepage": "http://www.cleverit.com.pl",
+      "role": "Developrt"
+    },
+    {
+      "name": "Florian Fackler",
+      "email": "florian.fackler@mintao.com",
+      "homepage": "http://mintao.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/Maslosoft/Mangan/issues",
+    "docs": "https://maslosoft.com/mangan/docs/"
+  },
+  "require": {
+    "maslosoft/addendum": "*",
+    "maslosoft/signals": "*",
+    "masterexploder/phpthumb": "^2",
+    "maslosoft/embedi": "*",
+    "maslosoft/miniview": "*",
+    "maslosoft/gazebo": "*",
+    "psr/log": "^1",
+    "symfony/yaml": ">=2.7 <5.0",
+    "maslosoft/mongofill": "*",
+    "ext-gd": "*"
+  },
+  "require-dev": {
+    "codeception/codeception": "*",
+    "codeception/specify": "*",
+    "maslosoft/hedron": "*",
+    "maslosoft/zamm": "*",
+    "maslosoft/mangan-examples": "*",
+    "ext-curl": "*"
+  },
+  "suggest": {
+    "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
+    "mongofill/mongofill": "Polyfill of PECL Mongo extension. Required for PHP7",
+    "ptachoire/php-dmtx": "Generate DataMatrix Codes",
+    "endroid/qrcode": "Generate QR Codes",
+    "khanamiryan/qrcode-detector-decoder": "Decode QR Codes"
+  },
+  "autoload": {
+    "psr-4": {
+      "Maslosoft\\Mangan\\": "src/",
+      "Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Maslosoft\\ManganTest\\Models\\": "tests/models/"
+    }
+  }
 }
