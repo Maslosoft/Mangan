@@ -2,17 +2,20 @@
 namespace Helpers;
 
 
+use function codecept_debug;
 use Maslosoft\Mangan\Command;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\IndexManager;
 use Maslosoft\ManganTest\Models\Indexes\ModelWith2dSphere;
+use Maslosoft\ManganTest\Models\Indexes\ModelWith2dSphereExtendedNotation;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithCompoundI18NIndex;
+use Maslosoft\ManganTest\Models\Indexes\ModelWithCompoundI18NIndexShortNotation;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithHashedIndex;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithI18NIndex;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithSimpleIndex;
 
-class IndexManangerTest extends \Codeception\Test\Unit
+class IndexManagerTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
@@ -85,6 +88,27 @@ class IndexManangerTest extends \Codeception\Test\Unit
 		$this->assertTrue($success, 'That index was created');
 	}
 
+	public function testCompoundI18NShortNotationIndexCreation()
+	{
+		$model = new ModelWithCompoundI18NIndexShortNotation;
+		$model->setLanguages(['en', 'pl', 'es']);
+		$success = IndexManager::fly()->create($model);
+
+		$indexes = $this->showIndexes($model);
+
+		codecept_debug($indexes);
+
+		$this->assertArrayHasKey('username_en_1_email_1', $indexes);
+		$this->assertArrayHasKey('username_pl_1_email_1', $indexes);
+		$this->assertArrayHasKey('username_en_1_email_1', $indexes);
+		$this->assertArrayHasKey('username_en_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username_pl_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username_en_-1_email_-1', $indexes);
+
+
+		$this->assertTrue($success, 'That index was created');
+	}
+
 	public function testHashedIndexCreation()
 	{
 		$model = new ModelWithHashedIndex;
@@ -101,6 +125,18 @@ class IndexManangerTest extends \Codeception\Test\Unit
 	public function test2dSphereIndexCreation()
 	{
 		$model = new ModelWith2dSphere;
+		$success = IndexManager::fly()->create($model);
+
+		$indexes = $this->showIndexes($model);
+
+		$this->assertArrayHasKey('loc_type_2dsphere', $indexes);
+
+		$this->assertTrue($success, 'That index was created');
+	}
+
+	public function test2dSphereIndexExtentedNotationCreation()
+	{
+		$model = new ModelWith2dSphereExtendedNotation;
 		$success = IndexManager::fly()->create($model);
 
 		$indexes = $this->showIndexes($model);

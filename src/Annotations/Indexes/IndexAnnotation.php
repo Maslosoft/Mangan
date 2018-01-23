@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Annotations\Indexes;
 
+use function is_array;
+use function is_string;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\IndexMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
@@ -21,6 +23,7 @@ use Maslosoft\Mangan\Sort;
 /**
  * IndexAnnotation
  *
+ * @Target('property')
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class IndexAnnotation extends ManganPropertyAnnotation
@@ -45,7 +48,23 @@ class IndexAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
+		if(isset($this->value['username']))
+		{
+			echo '';
+		}
 		$data = (object)ParamsExpander::expand($this, ['keys', 'options']);
+
+		// Seems short notation for keys only
+		if(empty($data->keys) && is_array($this->value))
+		{
+			foreach($this->value as $key => $sort)
+			{
+				if(is_string($key))
+				{
+					$data->keys[$key] = $sort;
+				}
+			}
+		}
 
 		$entity = $this->getEntity();
 		$name = $entity->name;

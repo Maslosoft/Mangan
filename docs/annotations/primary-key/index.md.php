@@ -20,6 +20,12 @@ $md = new ShortNamer(Document::class);
 
 <?= $doc; ?>
 
+<p class="alert alert-danger">
+    When defining custom primary key it is highly recommended
+    to <i>not</i> define <code>_id</code> field.
+    See <a href="https://github.com/Maslosoft/Mangan/issues/63">this issue</a>.
+</p>
+
 When inheriting from <?= $md; ?>, primary key is set to be `_id` field, but it
 is not defined explicitly. Field `_id` is default primary key in MongoDB, and
 it is fallback primary key in mangan if there are no other keys are defined.

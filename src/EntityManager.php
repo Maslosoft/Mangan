@@ -19,6 +19,7 @@ use Maslosoft\Mangan\Events\EventDispatcher;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Exceptions\BadAttributeException;
 use Maslosoft\Mangan\Exceptions\ManganException;
+use Maslosoft\Mangan\Exceptions\PkException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
@@ -339,7 +340,12 @@ class EntityManager implements EntityManagerInterface
 					$this->_afterSave($model);
 					return true;
 				}
-				throw new ManganException("Can't save the document to disk, or attempting to save an empty document");
+				$msg = '';
+				if(!empty($rawResult['errmsg']))
+				{
+					$msg = $rawResult['errmsg'];
+				}
+				throw new ManganException("Can't save the document to disk, or attempting to save an empty document. $msg");
 			}
 			return false;
 		}
