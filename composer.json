@@ -6,13 +6,15 @@
     "AGPL",
     "Commercial"
   ],
+  "type": "library",
   "keywords": [
     "php",
     "mongodb",
     "orm",
     "odm",
     "mangan",
-    "persister"
+    "persister",
+    "database"
   ],
   "authors": [
     {
