@@ -137,11 +137,22 @@ class IndexManager
 		return array_sum($results) === count($results);
 	}
 
-	public function getStoragePath(AnnotatedInterface $model, $className)
+	public function getStoragePath(AnnotatedInterface $model = null, $className = null)
 	{
+		if(empty($className))
+		{
+			$className = __CLASS__;
+		}
 		if(empty(self::$paths[$className]))
 		{
-			$mn = Mangan::fromModel($model);
+			if(empty($model))
+			{
+				$mn = Mangan::fly();
+			}
+			else
+			{
+				$mn = Mangan::fromModel($model);
+			}
 
 			$params = [
 				Addendum::fly()->runtimePath,
