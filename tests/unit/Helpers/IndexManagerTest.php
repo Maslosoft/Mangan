@@ -1,8 +1,6 @@
 <?php
 namespace Helpers;
 
-
-use function codecept_debug;
 use Maslosoft\Mangan\Command;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\CollectionNamer;

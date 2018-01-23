@@ -13,8 +13,6 @@
 
 namespace Maslosoft\Mangan\Annotations\Indexes;
 
-use function is_array;
-use function is_string;
 use Maslosoft\Addendum\Helpers\ParamsExpander;
 use Maslosoft\Mangan\Meta\IndexMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;

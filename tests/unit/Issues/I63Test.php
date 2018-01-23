@@ -1,8 +1,6 @@
 <?php
 namespace Issues;
 
-
-use function codecept_debug;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Issues\Model63;
