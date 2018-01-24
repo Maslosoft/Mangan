@@ -55,6 +55,8 @@ class DbRefArrayDecorator implements DecoratorInterface
 			$dbValue['_class'] = DbRef::class;
 			$dbRef = $transformatorClass::toModel($dbValue);
 
+			DbRefDecorator::ensureClass($model, $name, $dbRef);
+
 			// Collect keys separately for each type
 			$pks[$dbRef->class][$key] = $dbRef->pk;
 			$sort[$key] = $dbRef->pk;

@@ -13,8 +13,13 @@
 
 namespace Maslosoft\Mangan\Decorators;
 
+use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\Events\ClassNotFound;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
+use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -45,6 +50,7 @@ class DbRefDecorator implements DecoratorInterface
 		}
 		$dbValue['_class'] = DbRef::class;
 		$dbRef = $transformatorClass::toModel($dbValue);
+		self::ensureClass($model, $name, $dbRef);
 		/* @var $dbRef DbRef */
 		$referenced = new $dbRef->class;
 		$model->$name = (new Finder($referenced))->findByPk($dbRef->pk);
@@ -66,4 +72,20 @@ class DbRefDecorator implements DecoratorInterface
 		$dbValue[$name] = $transformatorClass::fromModel($dbRef, false);
 	}
 
+	public static function ensureClass($model, $name, DbRef $dbRef)
+	{
+		if (!ClassChecker::exists($dbRef->class))
+		{
+			$event = new ClassNotFound($model);
+			$event->notFound = $dbRef->class;
+			if (Event::hasHandler($model, NotFoundResolver::EventClassNotFound) && Event::handled($model, NotFoundResolver::EventClassNotFound, $event))
+			{
+				$dbRef->class = $event->replacement;
+			}
+			else
+			{
+				throw new ManganException(sprintf("Referenced model class `%s` not found in model `%s` field `%s`", $dbRef->class, get_class($model), $name));
+			}
+		}
+	}
 }
