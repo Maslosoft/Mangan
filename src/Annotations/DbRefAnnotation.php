@@ -18,6 +18,7 @@ use Maslosoft\Mangan\Decorators\DbRefDecorator;
 use Maslosoft\Mangan\Decorators\EmbedRefDecorator;
 use Maslosoft\Mangan\Meta\DbRefMeta;
 use Maslosoft\Mangan\Meta\ManganPropertyAnnotation;
+use UnexpectedValueException;
 
 /**
  * DB reference annotation
@@ -70,6 +71,16 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 	protected function getDbRefMeta()
 	{
 		$data = ParamsExpander::expand($this, ['class', 'updatable']);
+
+		$params = [
+			$this->getMeta()->type()->name,
+			$this->getEntity()->name
+		];
+
+		$msg = vsprintf("Parameter `updatable' must be of type `boolean` (or be omitted) on %s:%s", $params);
+
+		assert(empty($data['updatable']) || is_bool($data['updatable']), new UnexpectedValueException($msg));
+
 		$refMeta = new DbRefMeta($data);
 		if (!$refMeta->class)
 		{
