@@ -67,7 +67,6 @@
     "maslosoft/signals": "*",
     "masterexploder/phpthumb": "^2",
     "maslosoft/embedi": "*",
-    "maslosoft/miniview": "*",
     "maslosoft/gazebo": "*",
     "psr/log": "^1",
     "symfony/yaml": ">=2.7 <5.0",
@@ -79,6 +78,7 @@
     "codeception/specify": "*",
     "maslosoft/hedron": "*",
     "maslosoft/zamm": "*",
+    "maslosoft/miniview": "*",
     "maslosoft/mangan-examples": "*",
     "ext-curl": "*"
   },
