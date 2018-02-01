@@ -339,7 +339,7 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Get dependecy injector.
+	 * Get dependency injector.
 	 * @return EmbeDi
 	 */
 	public function getDi()
@@ -404,6 +404,7 @@ class Mangan implements LoggerAwareInterface
 	 * Connect to DB if connection is already connected this method return connection status.
 	 *
 	 * @return bool Returns true if connected
+	 * @throws ManganException
 	 */
 	public function connect()
 	{
@@ -450,7 +451,7 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Set the connection by suppling `MongoClient` instance.
+	 * Set the connection by supplying `MongoClient` instance.
 	 *
 	 * Use this to set connection from external source.
 	 * In most scenarios this does not need to be called.
@@ -466,6 +467,7 @@ class Mangan implements LoggerAwareInterface
 	 * Get MongoDB instance
 	 *
 	 * @return MongoDB Mongo DB instance
+	 * @throws ManganException
 	 */
 	public function getDbInstance()
 	{
@@ -492,12 +494,13 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Set MongoDB instance by suppling database name.
+	 * Set MongoDB instance by supplying database name.
 	 *
 	 * Use this to select db from external source.
 	 * In most scenarios this does not need to be called.
 	 *
 	 * @param string $name
+	 * @throws ManganException
 	 */
 	public function setDbInstance($name)
 	{
@@ -516,6 +519,15 @@ class Mangan implements LoggerAwareInterface
 			$this->cs->mongoClient = null;
 			$this->cs->mongoDB = null;
 		}
+	}
+
+	/**
+	 * Change working database
+	 * @param $name
+	 */
+	public function selectDb($name)
+	{
+		$this->setDbInstance($name);
 	}
 
 	/**

@@ -22,7 +22,6 @@ class AssetCollection extends Document
 	 * @Label('Collection title')
 	 * @I18N
 	 * @SafeValidator
-	 * @Decorator({'Action', 'module.content.assetCollection.update'})
 	 * @var string
 	 */
 	public $title = '';
@@ -31,8 +30,7 @@ class AssetCollection extends Document
 	 * @Label('Collection description')
 	 * @I18N
 	 * @SafeValidator
-	 * @Renderer('TextArea')
-	 * @var type
+	 * @var string
 	 */
 	public $description = '';
 

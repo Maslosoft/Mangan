@@ -34,6 +34,7 @@ $addendum->init();
 const ManganFirstDbName = 'ManganTest';
 const ManganSecondDbName = 'ManganTestSecond';
 const ManganThirdDbName = 'ManganTestThird';
+const ManganForthDbName = 'ManganTestFour';
 const ManganCustomValidatorsDbName = 'ManganTestCustomValidators';
 
 $mangan = new Mangan();
@@ -50,6 +51,12 @@ $mangan3 = new Mangan('tokumx');
 $mangan3->connectionString = 'mongodb://localhost:27017';
 $mangan3->dbName = ManganThirdDbName;
 $mangan3->init();
+
+$mangan3 = new Mangan('four');
+$mangan3->connectionString = 'mongodb://localhost:27017';
+$mangan3->dbName = ManganForthDbName;
+$mangan3->init();
+
 
 $mangan4 = new Mangan('custom-validators');
 $mangan4->connectionString = 'mongodb://localhost:27017';

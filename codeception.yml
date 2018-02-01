@@ -15,6 +15,7 @@ extensions:
                 - mongodb
                 - second
                 - tokumx
+                - four
 settings:
     bootstrap: _bootstrap.php
     colors: true

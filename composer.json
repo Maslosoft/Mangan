@@ -3,8 +3,8 @@
   "description": "MongoDB Object Document Mapper (ODM)",
   "homepage": "https://maslosoft.com/mangan/",
   "license": [
-    "AGPL",
-    "Commercial"
+    "AGPL-3.0-only",
+    "proprietary"
   ],
   "type": "library",
   "keywords": [

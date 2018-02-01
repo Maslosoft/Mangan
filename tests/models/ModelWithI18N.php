@@ -51,7 +51,7 @@ class ModelWithI18N implements ModelInterface, InternationalInterface
 
 	/**
 	 * Not i18n
-	 * @var type
+	 * @var string
 	 */
 	public $layout = 'default';
 }

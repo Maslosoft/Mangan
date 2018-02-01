@@ -10,6 +10,7 @@ namespace Maslosoft\ManganTest\Models\DbRef;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
+use MongoId;
 
 /**
  * WithPlainDbRef

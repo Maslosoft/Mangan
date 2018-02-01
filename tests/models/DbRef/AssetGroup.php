@@ -9,6 +9,7 @@
 namespace Maslosoft\ManganTest\Models\DbRef;
 
 use Maslosoft\Mangan\Document;
+use Maslosoft\Mangan\Traits\Model\WithParentTrait;
 
 /**
  * AssetGroup
@@ -18,7 +19,7 @@ use Maslosoft\Mangan\Document;
 class AssetGroup extends Document
 {
 
-	use \Maslosoft\Mangan\Traits\Model\WithParentTrait;
+	use WithParentTrait;
 
 	/**
 	 * @Label('Group title')
@@ -32,22 +33,20 @@ class AssetGroup extends Document
 	 * @Label('Group description')
 	 * @I18N
 	 * @SafeValidator
-	 * @Renderer('TextArea')
-	 * @var type
+	 * @var string
 	 */
 	public $description = '';
 
 	/**
 	 * Whenever group has text enabled
 	 * @SafeValidator
-	 * @Renderer('Bool')
 	 * @var bool
 	 */
 	public $hasText = false;
 
 	/**
 	 * Assets list
-	 * @DbRefArray(PageAsset, '_id', updatable = true)
+	 * @DbRefArray(PageAsset, updatable = true)
 	 * @SafeValidator
 	 * @var PageAsset[]
 	 */
