@@ -78,7 +78,19 @@ class Finder extends AbstractFinder
 		{
 			throw new ManganException(sprintf("There is an error in query: %s", $data['$err']));
 		}
-		return RawArray::toModel($data, $this->getModel());
+
+		// By default create instances of same
+		// type as provided model
+		$model = $this->getModel();
+
+		// For non homogeneous collections class
+		// need to be taken from data, not defined
+		// by model
+		if(ManganMeta::create($model)->type()->homogenous === false)
+		{
+			$model = null;
+		}
+		return RawArray::toModel($data, $model);
 	}
 
 }

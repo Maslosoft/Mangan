@@ -4,6 +4,8 @@ namespace UseCases;
 
 use Codeception\TestCase\Test;
 use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\DataProvider;
+use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\NonHomogenous\ModelOne;
 use Maslosoft\ManganTest\Models\NonHomogenous\ModelTwo;
 use MongoId;
@@ -42,7 +44,7 @@ class NonHomogenousCollectionTest extends Test
 		$model1 = $this->model1;
 		$id1 = $model1->_id;
 		$model2 = $this->model2;
-		$id2 = $model1->_id;
+		$id2 = $model2->_id;
 
 		$count = $model1->count();
 
@@ -59,4 +61,48 @@ class NonHomogenousCollectionTest extends Test
 		$this->assertTrue($found2 instanceof ModelTwo);
 	}
 
+	public function testFindAll()
+	{
+		$finder = new Finder($this->model1);
+
+		$data = $finder->findAll();
+
+		$this->checkItems($data);
+	}
+
+	public function testDataProvider()
+	{
+		$dp = new DataProvider($this->model1);
+
+		$count = $dp->getTotalItemCount();
+
+		$this->assertSame(2, $count, 'There are 2 items - count');
+
+		$data = $dp->getData();
+
+		$this->checkItems($data);
+	}
+
+	private function checkItems($data)
+	{
+		$this->assertCount(2, $data, 'There are 2 items');
+
+		$types = [];
+		foreach($data as $item)
+		{
+			$key = get_class($item);
+			if($item instanceof ModelOne)
+			{
+				$types[$key] = $item;
+			}
+			if($item instanceof ModelTwo)
+			{
+				$types[$key] = $item;
+			}
+		}
+
+		codecept_debug(array_keys($types));
+
+		$this->assertCount(2, $types, 'There are 2 different item types');
+	}
 }
