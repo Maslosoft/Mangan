@@ -21,6 +21,7 @@ use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use MongoId;
+use UnexpectedValueException;
 
 /**
  * Primary key manager
@@ -42,10 +43,7 @@ class PkManager
 		{
 			$criteria = new Criteria();
 		}
-		if (!$criteria instanceof Criteria)
-		{
-			throw new Exception(sprintf("Unsupported criteria class, currently only `%s` is supported, `%s` given", Criteria::class, get_class($criteria)));
-		}
+		assert($criteria instanceof Criteria, new UnexpectedValueException(sprintf("Unsupported criteria class, currently only `%s` is supported, `%s` given", Criteria::class, get_class($criteria))));
 		$conditions = [];
 		foreach ($pkValues as $pkValue)
 		{

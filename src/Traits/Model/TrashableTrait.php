@@ -123,7 +123,7 @@ trait TrashableTrait
 		}
 		$finder = new Finder($this->data);
 		$model = $finder->find(PkManager::prepareFromModel($this->data));
-		if (!$model)
+		if (empty($model))
 		{
 			return false;
 		}
@@ -141,7 +141,7 @@ trait TrashableTrait
 
 		// Use deleteOne, to avoid beforeDelete event,
 		// which should be raised only when really removing document:
-		// when emtying trash
+		// when emptying trash
 		return $trashEm->deleteOne(PkManager::prepareFromModel($this));
 	}
 

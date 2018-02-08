@@ -85,6 +85,12 @@ class EntityManager implements EntityManagerInterface
 	private $_collection = null;
 
 	/**
+	 * Result of last operation
+	 * @var array
+	 */
+	private $lastResult = [];
+
+	/**
 	 * Create entity manager
 	 * @param AnnotatedInterface $model
 	 * @param Mangan $mangan
@@ -401,7 +407,12 @@ class EntityManager implements EntityManagerInterface
 					$this->_afterSave($model);
 					return true;
 				}
-				throw new ManganException("Can't save the document to disk, or attempting to save an empty document");
+				$errmsg = '';
+				if(!empty($this->lastResult['errmsg']))
+				{
+					$errmsg = ucfirst($this->lastResult['errmsg']) . '.';
+				}
+				throw new ManganException("Can't save the document to disk, or attempting to save an empty document. $errmsg");
 			}
 			return false;
 		}
@@ -535,9 +546,8 @@ class EntityManager implements EntityManagerInterface
 	{
 		$criteria = $this->sm->apply($criteria);
 
-		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-					'justOne' => false
-		]));
+		// NOTE: Do not use [justOne => false] here
+		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions());
 		return $this->_result($result);
 	}
 
@@ -550,10 +560,11 @@ class EntityManager implements EntityManagerInterface
 	 * Make status uniform
 	 * @param bool|array $result
 	 * @param bool $insert Set to true for inserts
-	 * @return bool Return true if secceed
+	 * @return bool Return true if succeed
 	 */
 	private function _result($result, $insert = false)
 	{
+		$this->lastResult = $result;
 		if (is_array($result))
 		{
 			if ($insert)

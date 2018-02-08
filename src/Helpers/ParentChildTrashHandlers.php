@@ -26,10 +26,10 @@ use UnexpectedValueException;
 
 /**
  * OwneredTrashHandlers
- * Use this class to create trash handlers for ownered items.
+ * Use this class to create trash handlers for owned items.
  *
  * This class provides event handlers to properly manage trash, however it is
- * optional, so ownered and trashable can be handled by some custom methods.
+ * optional, so owned and trashable can be handled by some custom methods.
  * These handles are not automatically registered.
  *
  * NOTE: Register **only once per type**, or it will not work properly.
@@ -42,10 +42,10 @@ class ParentChildTrashHandlers
 	/**
 	 * Register event handlers for parent of parent-child relation.
 	 *
-	 * @param AnnotatedInterface $parent
+	 * @param AnnotatedInterface|string $parent
 	 * @param string $childClass
 	 */
-	public function registerParent(AnnotatedInterface $parent, $childClass)
+	public function registerParent($parent, $childClass)
 	{
 		if (!ClassChecker::exists($childClass))
 		{
@@ -56,7 +56,8 @@ class ParentChildTrashHandlers
 		{
 			$model = $event->sender;
 			$event->isValid = true;
-			if ($model instanceof $parent)
+
+			if (is_a($model, $parent))
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
@@ -64,6 +65,7 @@ class ParentChildTrashHandlers
 
 				$event->isValid = $child->deleteAll($criteria);
 			}
+			return $event->isValid;
 		};
 		$beforeDelete->bindTo($this);
 		Event::on($parent, EntityManagerInterface::EventBeforeDelete, $beforeDelete);
@@ -73,7 +75,7 @@ class ParentChildTrashHandlers
 		{
 			$model = $event->sender;
 			$event->isValid = true;
-			if ($model instanceof $parent)
+			if (is_a($model, $parent))
 			{
 				$child = new $childClass;
 				$criteria = new Criteria(null, $child);
@@ -85,7 +87,7 @@ class ParentChildTrashHandlers
 				if (empty($items))
 				{
 					$event->isValid = true;
-					return true;
+					return $event->isValid;
 				}
 
 				// Trash in loop all items
@@ -94,10 +96,11 @@ class ParentChildTrashHandlers
 					if (!$item->trash())
 					{
 						$event->isValid = false;
-						return false;
+						return $event->isValid;
 					}
 				}
 			}
+			return $event->isValid;
 		};
 		$afterTrash->bindTo($this);
 		Event::on($parent, TrashInterface::EventAfterTrash, $afterTrash);
@@ -107,7 +110,7 @@ class ParentChildTrashHandlers
 		$afterRestore = function(RestoreEvent $event)use($parent, $childClass)
 		{
 			$model = $event->sender;
-			if ($model instanceof $parent)
+			if (is_a($model, $parent))
 			{
 				$child = new $childClass;
 				$trash = $event->getTrash();
@@ -128,16 +131,23 @@ class ParentChildTrashHandlers
 				if (empty($trashedItems))
 				{
 					$event->isValid = true;
-					return true;
+					return $event->isValid;
 				}
 
 				// Restore all items
+				$restored = [];
 				foreach ($trashedItems as $trashedItem)
 				{
-					$trashedItem->restore();
+					$restored[] = (int) $trashedItem->restore();
+				}
+				if(array_sum($restored) !== count($restored))
+				{
+					$event->isValid = false;
+					return $event->isValid;
 				}
 			}
 			$event->isValid = true;
+			return $event->isValid;
 		};
 		$afterRestore->bindTo($this);
 		Event::on($parent, TrashInterface::EventAfterRestore, $afterRestore);
@@ -146,22 +156,20 @@ class ParentChildTrashHandlers
 	/**
 	 * Register event handlers for child item of parent-child relation.
 	 *
-	 * @param AnnotatedInterface $child
+	 * @param AnnotatedInterface|string $child
 	 * @param string $parentClass
 	 * @throws UnexpectedValueException
 	 */
-	public function registerChild(AnnotatedInterface $child, $parentClass)
+	public function registerChild($child, $parentClass)
 	{
-		if (!ClassChecker::exists($parentClass))
-		{
-			throw new UnexpectedValueException(sprintf('Class `%s` not found', $parentClass));
-		}
+		assert(ClassChecker::exists($parentClass), new UnexpectedValueException(sprintf('Class `%s` not found', $parentClass)));
+
 		// Prevent restoring item if parent does not exists
 		$beforeRestore = function(ModelEvent $event)use($child, $parentClass)
 		{
 			$model = $event->sender;
 
-			if ($model instanceof $child)
+			if (is_a($model, $child))
 			{
 				$parent = new $parentClass;
 				$criteria = new Criteria(null, $parent);
@@ -170,10 +178,11 @@ class ParentChildTrashHandlers
 				if (!$parent->exists($criteria))
 				{
 					$event->isValid = false;
-					return false;
+					return $event->isValid;
 				}
 			}
 			$event->isValid = true;
+			return $event->isValid;
 		};
 		Event::on($child, TrashInterface::EventBeforeRestore, $beforeRestore);
 	}
