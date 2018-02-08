@@ -4,6 +4,7 @@ namespace Event;
 
 use Codeception\TestCase\Test;
 use Maslosoft\Mangan\Criteria;
+use Maslosoft\Mangan\Events\Handlers\ParentChildTrashHandler;
 use Maslosoft\Mangan\Model\Trash;
 use Maslosoft\ManganTest\Models\Event\ChildDocument;
 use Maslosoft\ManganTest\Models\Event\ParentDocument;
@@ -19,6 +20,10 @@ class ParentChildTrashableTest extends Test
 
 	protected function _before()
 	{
+		$h = new ParentChildTrashHandler;
+		$h->parentClass = ParentDocument::class;
+		$h->childClass = ChildDocument::class;
+		$h->setupHandlers();
 		// Ensure that trash is empty
 		(new Trash)->deleteAll();
 	}
