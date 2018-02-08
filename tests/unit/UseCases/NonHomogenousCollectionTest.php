@@ -17,16 +17,32 @@ class NonHomogenousCollectionTest extends Test
 	 */
 	protected $tester;
 
+	private $model1;
+	private $model2;
+
+	protected function _before()
+	{
+		$model1 = new ModelOne();
+		$model1->_id = new MongoId();
+		$saved = $model1->save();
+		$this->assertTrue($saved);
+
+		$model2 = new ModelTwo();
+		$model2->_id = new MongoId();
+		$saved = $model2->save();
+		$this->assertTrue($saved);
+
+		$this->model1 = $model1;
+		$this->model2 = $model2;
+	}
+
 	// tests
 	public function testIfWillProperlyStoreAndRetrieveNonHomogenousModels()
 	{
-		$model1 = new ModelOne();
-		$id1 = $model1->_id = new MongoId();
-		$model1->save();
-
-		$model2 = new ModelTwo();
-		$id2 = $model2->_id = new MongoId();
-		$model2->save();
+		$model1 = $this->model1;
+		$id1 = $model1->_id;
+		$model2 = $this->model2;
+		$id2 = $model1->_id;
 
 		$count = $model1->count();
 
