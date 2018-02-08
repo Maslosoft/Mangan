@@ -138,7 +138,14 @@ class Validator implements ValidatableInterface
 			$this->errors[$typeName] = [];
 			$valid[] = (int)$this->validateEntity($typeName, $typeValidators);
 		}
-		return count($valid) === array_sum($valid);
+		$areAllValid = count($valid) === array_sum($valid);
+
+		// For easier debug
+		if($areAllValid)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	private function validateEntity($name, $validators)

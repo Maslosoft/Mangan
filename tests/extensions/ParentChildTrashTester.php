@@ -55,7 +55,7 @@ class ParentChildTrashTester
 				codecept_debug($name);
 				// Ensure that trash is empty
 				$trash = $this->newTrash();
-				$trash->deleteAll();
+				$trash->purge();
 
 				$this->parent->deleteAll();
 				$this->child->deleteAll();
@@ -105,7 +105,11 @@ class ParentChildTrashTester
 
 		$this->getTrashed($parent, $trashed);
 
-		$this->tester->assertTrue($trashed->restore(), "That parent was restored");
+		$restored =  $trashed->restore();
+
+		$err = $trashed->getErrors();
+
+		$this->tester->assertTrue($restored, "That parent was restored");
 
 		$this->tester->assertSame($this->newTrash()->count(), 0, 'That there are no items in trash');
 
