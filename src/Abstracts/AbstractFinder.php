@@ -208,7 +208,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 			}
 			if ($criteria->getSelect())
 			{
-				$cursor->fields($criteria->getSelect());
+				$cursor->fields(array_merge($criteria->getSelect(), ['_class' => true]));
 			}
 			$this->getProfiler()->cursor($cursor);
 			if ($this->isWithCursor())
