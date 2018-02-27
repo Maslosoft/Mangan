@@ -1,7 +1,7 @@
 <?php
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Models\BaseAttributesNoAnnotations;
 
@@ -16,7 +16,7 @@ use Maslosoft\ManganTest\Models\BaseAttributesNoAnnotations;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ToArray_BaseAttributesNoAnnotationsTest extends Test
+class ToArray_BaseAttributesNoAnnotationsTest extends Unit
 {
 
 	public function testToArray()

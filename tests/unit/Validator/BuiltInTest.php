@@ -2,14 +2,14 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\ManganTest\Models\Validator\DocumentWithRequiredValidator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithRequiredValidator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithRequiredValueValidator;
 use UnitTester;
 
-class BuiltInTest extends Test
+class BuiltInTest extends Unit
 {
 
 	/**

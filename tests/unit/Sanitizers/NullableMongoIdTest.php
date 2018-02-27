@@ -2,13 +2,13 @@
 
 namespace Sanitizers;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\ManganTest\Models\Sanitizers\ModelWithNullableMongoId;
 use MongoId;
 use UnitTester;
 
-class NullableMongoIdTest extends Test
+class NullableMongoIdTest extends Unit
 {
 
 	/**

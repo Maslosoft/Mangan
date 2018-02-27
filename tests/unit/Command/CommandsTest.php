@@ -2,14 +2,14 @@
 
 namespace Command;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Command;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Model\Command\Roles;
 use Maslosoft\Mangan\Model\Command\User;
 use UnitTester;
 
-class CommandsTest extends Test
+class CommandsTest extends Unit
 {
 
 	/**

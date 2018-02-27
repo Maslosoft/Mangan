@@ -2,14 +2,14 @@
 
 namespace DbRef;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\ManganTest\Models\DbRef\WithPlainDbRef;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
 use MongoId;
 use UnitTester;
 
-class RefManagerTest extends Test
+class RefManagerTest extends Unit
 {
 
 	/**

@@ -2,10 +2,10 @@
 
 namespace Options;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Signals\ConfigInit;
 
-class ConfigInitSignalTest extends Test
+class ConfigInitSignalTest extends Unit
 {
 
 	public function testIfWillProperlyModifyConfigByReference()

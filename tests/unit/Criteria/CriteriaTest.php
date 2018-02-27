@@ -1,12 +1,12 @@
 <?php
 namespace Criteria;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use UnitTester;
 
 
-class CriteriaTest extends Test
+class CriteriaTest extends Unit
 {
     /**
      * @var UnitTester

@@ -2,7 +2,7 @@
 
 namespace UseCases;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Extensions\ModelComparator;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\ModelWithI18NSecond;
 use UnitTester;
 
-class EmbeddedI18NArraySortTest extends Test
+class EmbeddedI18NArraySortTest extends Unit
 {
 
 	use \Codeception\Specify;

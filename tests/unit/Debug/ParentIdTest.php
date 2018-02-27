@@ -2,13 +2,12 @@
 
 namespace Debug;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\ModelWithEmbeddedModelWithParentId;
 use Maslosoft\ManganTest\Models\ModelWithParentId;
-use PHPUnit_Framework_IncompleteTestError;
 use UnitTester;
 
-class ParentIdTest extends Test
+class ParentIdTest extends Unit
 {
 
 	/**
@@ -21,7 +20,7 @@ class ParentIdTest extends Test
 	 */
 	public function testIfWillProperlySetParentIdOnSave()
 	{
-		throw new PHPUnit_Framework_IncompleteTestError('This test has incomplete feature');
+		$this->markTestIncomplete('This test has incomplete feature');
 		$model = new ModelWithEmbeddedModelWithParentId;
 		$sub = new ModelWithParentId();
 		$model->sub = $sub;

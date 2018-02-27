@@ -2,13 +2,13 @@
 
 namespace Meta;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
 use Maslosoft\ManganTest\Models\Plain\PlainModelWithLabel;
 use UnitTester;
 
-class LabelTest extends Test
+class LabelTest extends Unit
 {
 
 	/**

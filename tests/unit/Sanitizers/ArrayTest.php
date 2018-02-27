@@ -2,12 +2,12 @@
 
 namespace Sanitizers;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\ManganTest\Models\WithSanitizedArrayValues;
 use UnitTester;
 
-class ArrayTest extends Test
+class ArrayTest extends Unit
 {
 
 	/**

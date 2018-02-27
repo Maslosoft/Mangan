@@ -2,7 +2,7 @@
 
 namespace EntityManager;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
@@ -10,7 +10,7 @@ use Maslosoft\Mangan\Modifier;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use UnitTester;
 
-class ModifierTest extends Test
+class ModifierTest extends Unit
 {
 
 	/**

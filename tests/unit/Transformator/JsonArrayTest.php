@@ -2,7 +2,7 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use MongoId;
 use UnitTester;
 
-class JsonArrayTest extends Test
+class JsonArrayTest extends Unit
 {
 
 	/**

@@ -2,12 +2,12 @@
 
 namespace Connections;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Mangan;
 use MongoDB;
 use UnitTester;
 
-class TwoInstancesTest extends Test
+class TwoInstancesTest extends Unit
 {
 
 	/**

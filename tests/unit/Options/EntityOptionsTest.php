@@ -2,14 +2,14 @@
 
 namespace Options;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Options\EntityOptions;
 use Maslosoft\ManganTest\Models\ModelWithClientFlags;
 use Maslosoft\ManganTest\Models\VoidModel;
 
-class EntityOptionsTest extends Test
+class EntityOptionsTest extends Unit
 {
 
 	public function testCanReadGlobal()

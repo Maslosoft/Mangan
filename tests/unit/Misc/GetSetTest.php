@@ -2,11 +2,11 @@
 
 namespace Misc;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\GetSetComponent;
 use UnitTester;
 
-class GetSetTest extends Test
+class GetSetTest extends Unit
 {
 
 	/**

@@ -2,12 +2,12 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validators\BuiltIn\StringValidator;
 use Maslosoft\ManganTest\Models\BaseAttributesAnnotations;
 use UnitTester;
 
-class StringTest extends Test
+class StringTest extends Unit
 {
 
 	/**

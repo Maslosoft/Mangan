@@ -2,7 +2,7 @@
 
 namespace Embedded;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbeddedArray;
@@ -12,7 +12,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbeddedSecond;
 use MongoId;
 use UnitTester;
 
-class ArrayTest extends Test
+class ArrayTest extends Unit
 {
 
 	/**

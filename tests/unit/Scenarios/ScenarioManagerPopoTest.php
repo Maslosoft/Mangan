@@ -2,7 +2,7 @@
 
 namespace Scenarios;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
@@ -10,7 +10,7 @@ use Maslosoft\Mangan\ScenarioManager;
 use Maslosoft\ManganTest\Models\ScenarioManager\BaseAttributesScenario;
 use UnitTester;
 
-class ScenarioManagerPopoTest extends Test
+class ScenarioManagerPopoTest extends Unit
 {
 
 	/**

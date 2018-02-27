@@ -1,14 +1,14 @@
 <?php
 namespace Finder;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\WithBaseAttributes;
 use UnitTester;
 
 
-class FindByTest extends Test
+class FindByTest extends Unit
 {
     /**
      * @var UnitTester

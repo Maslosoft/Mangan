@@ -2,13 +2,13 @@
 
 namespace Filters;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\ModelWithSecretField;
 use UnitTester;
 
-class SecretTest extends Test
+class SecretTest extends Unit
 {
 
 	/**

@@ -2,13 +2,13 @@
 
 namespace Criteria;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\DataProvider;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\ManganTest\Models\WithBaseAttributes;
 use UnitTester;
 
-class LimitTest extends Test
+class LimitTest extends Unit
 {
 
 	/**

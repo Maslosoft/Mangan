@@ -2,14 +2,14 @@
 
 namespace Meta;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\ManganTest\Models\Meta\WithAnnotatedCollectionName;
 use Maslosoft\ManganTest\Models\Meta\WithMethodCollectionName;
 use Maslosoft\ManganTest\Models\VoidModel;
 use UnitTester;
 
-class CollectionNameTest extends Test
+class CollectionNameTest extends Unit
 {
 
 	/**

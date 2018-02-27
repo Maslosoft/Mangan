@@ -2,14 +2,14 @@
 
 namespace Event;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use UnitTester;
 
-class EntityManagerTest extends Test
+class EntityManagerTest extends Unit
 {
 
 	/**

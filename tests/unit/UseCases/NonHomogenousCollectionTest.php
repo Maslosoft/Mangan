@@ -2,7 +2,7 @@
 
 namespace UseCases;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\DataProvider;
 use Maslosoft\Mangan\Finder;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\NonHomogenous\ModelTwo;
 use MongoId;
 use UnitTester;
 
-class NonHomogenousCollectionTest extends Test
+class NonHomogenousCollectionTest extends Unit
 {
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace Sanitizers;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Sanitizers\BooleanSanitizer;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
 use Maslosoft\Mangan\Sanitizers\DoubleSanitizer;
@@ -17,7 +17,7 @@ use MongoDate;
 use MongoId;
 use UnitTester;
 
-class SimpleSanitizersTest extends Test
+class SimpleSanitizersTest extends Unit
 {
 
 	/**

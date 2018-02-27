@@ -2,7 +2,7 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\ManganTest\Models\Embedded\PlainDeepEmbedded;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
@@ -13,7 +13,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use MongoId;
 use UnitTester;
 
-class DocumentArrayTest extends Test
+class DocumentArrayTest extends Unit
 {
 
 	/**

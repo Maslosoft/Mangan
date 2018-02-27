@@ -1,13 +1,13 @@
 <?php
 namespace Document;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use MongoId;
 use UnitTester;
 
 
-class ActiveDocumentTest extends Test
+class ActiveDocumentTest extends Unit
 {
     /**
      * @var UnitTester

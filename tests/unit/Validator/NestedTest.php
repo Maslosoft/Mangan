@@ -2,13 +2,13 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\Validator\UserEmail;
 use Maslosoft\ManganTest\Models\Validator\UserWithEmail;
 use Maslosoft\ManganTest\Models\Validator\UserWithEmails;
 use UnitTester;
 
-class NestedTest extends Test
+class NestedTest extends Unit
 {
 
 	/**

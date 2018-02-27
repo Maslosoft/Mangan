@@ -2,11 +2,11 @@
 
 namespace Debug;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\Debug\UserGroup;
 use UnitTester;
 
-class UserGroupTest extends Test
+class UserGroupTest extends Unit
 {
 
 	/**

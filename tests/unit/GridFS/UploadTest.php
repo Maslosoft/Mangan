@@ -2,7 +2,7 @@
 
 namespace GridFS;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\File\Upload;
 use Maslosoft\Mangan\Finder;
@@ -10,7 +10,7 @@ use Maslosoft\Mangan\Model\File;
 use Maslosoft\ManganTest\Models\GridFS\ModelWithEmbeddedFile;
 use UnitTester;
 
-class UploadTest extends Test
+class UploadTest extends Unit
 {
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace GridFS;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Mangan;
@@ -13,7 +13,7 @@ use Maslosoft\ManganTest\Models\GridFS\ModelWithEmbeddedFile;
 use Maslosoft\ManganTest\Models\GridFS\ModelWithEmbeddedImage;
 use UnitTester;
 
-class EmbeddedFileTest extends Test
+class EmbeddedFileTest extends Unit
 {
 
 	/**

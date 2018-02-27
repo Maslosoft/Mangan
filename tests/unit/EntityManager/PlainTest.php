@@ -2,7 +2,7 @@
 
 namespace EntityManager;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use MongoId;
 use UnitTester;
 
-class PlainTest extends Test
+class PlainTest extends Unit
 {
 
 	/**

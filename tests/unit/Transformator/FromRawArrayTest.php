@@ -2,12 +2,12 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use UnitTester;
 
-class RawArrayTest extends Test
+class RawArrayTest extends Unit
 {
 
 	/**

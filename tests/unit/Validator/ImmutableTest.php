@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validators\BuiltIn\ImmutableValidator;
 use Maslosoft\ManganTest\Models\ModelWithImmutableAgainstValidator;
 use Maslosoft\ManganTest\Models\ModelWithImmutableValidator;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\ModelWithLabel;
 use MongoId;
 use UnitTester;
 
-class ImmutableTest extends Test
+class ImmutableTest extends Unit
 {
 
 	use \Codeception\Specify;

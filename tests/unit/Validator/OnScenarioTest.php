@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\ScenarioManager;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithValidationExceptInsertAndRegister;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Validator\ModelWithValidationOnInsert;
 use Maslosoft\ManganTest\Models\Validator\ModelWithValidationOnInsertAndRegister;
 use UnitTester;
 
-class OnScenarioTest extends Test
+class OnScenarioTest extends Unit
 {
 
 	/**

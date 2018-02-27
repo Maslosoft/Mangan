@@ -2,14 +2,14 @@
 
 namespace Tree;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Tree\ModelWithDbRefTree;
 use MongoId;
 use UnitTester;
 
-class DbRefTest extends Test
+class DbRefTest extends Unit
 {
 
 	/**

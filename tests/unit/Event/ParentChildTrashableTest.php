@@ -2,7 +2,7 @@
 
 namespace Event;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Events\Handlers\ParentChildTrashHandler;
 use Maslosoft\Mangan\Model\Trash;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\Event\ChildDocument;
 use Maslosoft\ManganTest\Models\Event\ParentDocument;
 use UnitTester;
 
-class ParentChildTrashableTest extends Test
+class ParentChildTrashableTest extends Unit
 {
 
 	/**

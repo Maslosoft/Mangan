@@ -2,7 +2,7 @@
 
 namespace Connections;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Mangan;
@@ -12,7 +12,7 @@ use MongoDB;
 use MongoId;
 use UnitTester;
 
-class SelectDbTest extends Test
+class SelectDbTest extends Unit
 {
 
 	/**

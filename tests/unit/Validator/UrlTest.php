@@ -2,12 +2,12 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validators\BuiltIn\UrlValidator;
 use Maslosoft\ManganTest\Models\BaseAttributesAnnotations;
 use UnitTester;
 
-class UrlTest extends Test
+class UrlTest extends Unit
 {
 
 	/**

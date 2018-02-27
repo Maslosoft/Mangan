@@ -2,7 +2,7 @@
 
 namespace DbRef;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transformers\JsonArray;
@@ -13,7 +13,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRefSecond;
 use MongoId;
 use UnitTester;
 
-class ConvertArrayTest extends Test
+class ConvertArrayTest extends Unit
 {
 
 	/**

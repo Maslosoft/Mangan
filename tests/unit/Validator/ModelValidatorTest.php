@@ -8,7 +8,7 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithModelValidator;
 use UnitTester;
@@ -18,7 +18,7 @@ use UnitTester;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class ModelValidatorTest extends Test
+class ModelValidatorTest extends Unit
 {
 
 	/**

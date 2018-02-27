@@ -2,7 +2,7 @@
 
 namespace EntityManager;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Exceptions\BadAttributeException;
@@ -12,7 +12,7 @@ use Maslosoft\ManganTest\Models\ModelWithI18N;
 use MongoId;
 use UnitTester;
 
-class DeleteTest extends Test
+class DeleteTest extends Unit
 {
 
 	/**

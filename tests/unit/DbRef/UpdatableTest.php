@@ -2,7 +2,7 @@
 
 namespace DbRef;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithNotUpdatableDbRef;
@@ -15,7 +15,7 @@ use MongoId;
 use UnexpectedValueException;
 use UnitTester;
 
-class UpdatableTest extends Test
+class UpdatableTest extends Unit
 {
 
 	/**

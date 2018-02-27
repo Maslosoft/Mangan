@@ -2,7 +2,7 @@
 
 namespace Embedded;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transformers\JsonArray;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use MongoId;
 use UnitTester;
 
-class ConvertTest extends Test
+class ConvertTest extends Unit
 {
 
 	/**

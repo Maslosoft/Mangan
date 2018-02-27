@@ -2,7 +2,7 @@
 
 namespace Decorators;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Decorators\EmbeddedDecorator;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Transformers\RawArray;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use UnitTester;
 
-class EmbeddedTest extends Test
+class EmbeddedTest extends Unit
 {
 
 	/**

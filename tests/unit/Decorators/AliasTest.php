@@ -2,7 +2,7 @@
 
 namespace Decorators;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Models\ModelWithAlias;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\ModelWithAliasDefault;
 use MongoId;
 use UnitTester;
 
-class AliasTest extends Test
+class AliasTest extends Unit
 {
 
 	/**

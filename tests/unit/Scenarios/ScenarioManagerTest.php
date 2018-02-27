@@ -2,13 +2,13 @@
 
 namespace Scenarios;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\ScenarioManager;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use UnitTester;
 
-class ScenarioManagerTest extends Test
+class ScenarioManagerTest extends Unit
 {
 
 	/**

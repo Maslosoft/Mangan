@@ -2,7 +2,7 @@
 
 namespace Event;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
@@ -13,7 +13,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use MongoId;
 use UnitTester;
 
-class ClassNotFoundTest extends Test
+class ClassNotFoundTest extends Unit
 {
 
 	/**

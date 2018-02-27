@@ -2,13 +2,13 @@
 
 namespace Command;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Command;
 use Maslosoft\ManganTest\Models\Second\ModelWithSecondConnection;
 use Maslosoft\ManganTest\Models\SimplePrimaryKey;
 use UnitTester;
 
-class BuildinfoTest extends Test
+class BuildinfoTest extends Unit
 {
 
 	/**

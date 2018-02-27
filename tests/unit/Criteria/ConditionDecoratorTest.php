@@ -2,13 +2,13 @@
 
 namespace Criteria;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\ManganTest\Models\ModelWithArrayField;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use UnitTester;
 
-class ConditionDecoratorTest extends Test
+class ConditionDecoratorTest extends Unit
 {
 
 	/**

@@ -2,14 +2,14 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\ManganTest\Models\Validator\EmbeddedModelWithValidator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithEmbedArrayWithValidator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithEmbedWithValidator;
 use UnitTester;
 
-class EmbeddedTest extends Test
+class EmbeddedTest extends Unit
 {
 
 	/**

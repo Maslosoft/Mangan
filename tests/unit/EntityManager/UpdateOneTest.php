@@ -2,14 +2,14 @@
 
 namespace EntityManager;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\EntityManager\ModelWithCustomIdAsSecondaryKey;
 use UnitTester;
 
-class UpdateOneTest extends Test
+class UpdateOneTest extends Unit
 {
 
 	/**

@@ -2,14 +2,14 @@
 
 namespace Finder;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Cursor;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\WithBaseAttributes;
 use UnitTester;
 
-class FindCursorTest extends Test
+class FindCursorTest extends Unit
 {
 
 	/**

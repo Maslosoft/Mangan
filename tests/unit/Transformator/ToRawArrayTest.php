@@ -2,14 +2,14 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use UnitTester;
 
-class ToRawArrayTest extends Test
+class ToRawArrayTest extends Unit
 {
 
 	/**

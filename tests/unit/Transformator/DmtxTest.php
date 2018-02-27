@@ -2,7 +2,7 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Transformers\Datamatrix;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
@@ -12,7 +12,7 @@ use MongoId;
 use PHPUnit\Framework\SkippedTestError;
 use UnitTester;
 
-class DmtxTest extends Test
+class DmtxTest extends Unit
 {
 
 	/**

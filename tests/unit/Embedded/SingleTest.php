@@ -2,7 +2,7 @@
 
 namespace Embedded;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Embedded\PlainDeepEmbedded;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use MongoId;
 use UnitTester;
 
-class SingleTest extends Test
+class SingleTest extends Unit
 {
 
 	/**

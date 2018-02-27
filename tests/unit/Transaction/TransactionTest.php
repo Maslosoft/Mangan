@@ -2,7 +2,7 @@
 
 namespace Transaction;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transaction;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\TokuMX\ModelTransactional;
 use MongoId;
 use UnitTester;
 
-class TransactionTest extends Test
+class TransactionTest extends Unit
 {
 
 	use \Codeception\Specify;

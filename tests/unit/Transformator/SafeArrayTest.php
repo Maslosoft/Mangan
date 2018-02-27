@@ -2,14 +2,14 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\ManganTest\Models\ModelWithUnsafeAttribute;
 use UnitTester;
 
-class SafeArrayTest extends Test
+class SafeArrayTest extends Unit
 {
 
 	/**

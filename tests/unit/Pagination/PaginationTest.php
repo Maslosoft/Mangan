@@ -2,14 +2,14 @@
 
 namespace Pagination;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\DataProvider;
 use Maslosoft\Mangan\Interfaces\PaginationInterface;
 use Maslosoft\Mangan\Pagination;
 use Maslosoft\ManganTest\Models\Pagination\ModelForPagination;
 use UnitTester;
 
-class PaginationTest extends Test
+class PaginationTest extends Unit
 {
 
 	/**

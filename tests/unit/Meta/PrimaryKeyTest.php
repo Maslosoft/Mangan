@@ -1,7 +1,7 @@
 <?php
 namespace Meta;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\CompositePrimaryKey;
 use Maslosoft\ManganTest\Models\SimplePrimaryKey;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\SimplePrimaryKey;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class PrimaryKeyTest extends Test
+class PrimaryKeyTest extends Unit
 {
 
 	public function testCanSetSimplePrimaryKey()

@@ -2,7 +2,7 @@
 
 namespace Related;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Related\ModelWithArraySimpleRelation;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Related\RelatedStats;
 use MongoId;
 use UnitTester;
 
-class ManyTest extends Test
+class ManyTest extends Unit
 {
 
 	/**

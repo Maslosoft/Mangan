@@ -2,7 +2,7 @@
 
 namespace Transformator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\YamlString;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use MongoId;
 use UnitTester;
 
-class YamlTest extends Test
+class YamlTest extends Unit
 {
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace Decorators;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\ModelWithI18NAllowAnyAndDefault;
 use MongoId;
 use UnitTester;
 
-class I18NTest extends Test
+class I18NTest extends Unit
 {
 
 	/**

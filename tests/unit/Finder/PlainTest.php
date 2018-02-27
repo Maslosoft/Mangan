@@ -2,7 +2,7 @@
 
 namespace Finder;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\CompositePrimaryKey;
@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\SimplePrimaryKey;
 use MongoId;
 use UnitTester;
 
-class PlainTest extends Test
+class PlainTest extends Unit
 {
 
 	/**

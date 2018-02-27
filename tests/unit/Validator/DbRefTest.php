@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validator;
 use Maslosoft\ManganTest\Models\Validator\EmbeddedModelWithValidator;
 use Maslosoft\ManganTest\Models\Validator\ModelWithDbRefArrayWithValidator;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Validator\ModelWithDbRefArrayWithValidatorNotUpd
 use Maslosoft\ManganTest\Models\Validator\ModelWithDbRefWithValidator;
 use UnitTester;
 
-class DbRefTest extends Test
+class DbRefTest extends Unit
 {
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace UseCases;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
@@ -17,7 +17,7 @@ use Maslosoft\ManganTest\Models\UseCases\SecondWidget;
 use Maslosoft\ManganTest\Models\UseCases\ThirdWidget;
 use UnitTester;
 
-class EmbedRefFromPostDataTest extends Test
+class EmbedRefFromPostDataTest extends Unit
 {
 
 	/**

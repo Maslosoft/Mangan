@@ -8,7 +8,7 @@
 
 namespace Sanitizers;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Addendum\Exceptions\ClassNotFoundException;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\Sanitizers\ModelWithNonExistentSanitizer;
@@ -20,7 +20,7 @@ use UnexpectedValueException;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class NotFoundTest extends Test
+class NotFoundTest extends Unit
 {
 
 	public function testIfWillThrowExceptionOnNonExistentSanitizer()

@@ -2,7 +2,7 @@
 
 namespace DbRef;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\DbRef\WithPlainDbRef;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
 use MongoId;
 use UnitTester;
 
-class SingleTest extends Test
+class SingleTest extends Unit
 {
 
 	/**

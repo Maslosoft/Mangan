@@ -1,7 +1,7 @@
 <?php
 namespace Document;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\BaseAttributesNoAnnotations;
 use MongoId;
 
@@ -10,7 +10,7 @@ use MongoId;
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
-class BaseAttributesNoAnnotationsTest extends Test
+class BaseAttributesNoAnnotationsTest extends Unit
 {
 
 	public function testIfCanReadAttributes()

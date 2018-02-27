@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Helpers\Validator\Factory;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Validator;
@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\ValidatorProxy\ModelWithCustomValidatorProxy;
 use Maslosoft\ManganTest\Models\ValidatorProxy\RequiredValidator;
 use UnitTester;
 
-class ProxyTest extends Test
+class ProxyTest extends Unit
 {
 
 	/**
