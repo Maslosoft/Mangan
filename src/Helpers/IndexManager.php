@@ -126,9 +126,12 @@ class IndexManager
 		self::$haveIndex[$className] = true;
 
 		$dir = dirname($path);
+
 		if(!self::$haveDir && !file_exists($dir))
 		{
-			self::$haveDir = mkdir($dir);
+			$mask = umask(0000);
+			self::$haveDir = mkdir($dir, 0777);
+			umask($mask);
 		}
 
 		file_put_contents($path, PhpExporter::export($indexes, 'Auto generated, do not modify'));
