@@ -14,10 +14,15 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\Events\ClassNotFound;
+use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
 use Maslosoft\Mangan\Helpers\Finalizer\FinalizingManager;
+use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
@@ -105,6 +110,7 @@ abstract class Transformer
 		}
 		else
 		{
+			self::ensureClass($className);
 			$model = new $className;
 		}
 		$meta = static::getMeta($model);
@@ -166,4 +172,27 @@ abstract class Transformer
 		return ManganMeta::create($model);
 	}
 
+	protected static function ensureClass(&$class)
+	{
+		if (!ClassChecker::exists($class))
+		{
+			$event = new ClassNotFound;
+			$event->notFound = $class;
+			if (Event::hasHandler(AnnotatedInterface::class, NotFoundResolver::EventClassNotFound) && Event::handled(AnnotatedInterface::class, NotFoundResolver::EventClassNotFound, $event))
+			{
+				$class = $event->replacement;
+			}
+			else
+			{
+				$params = [
+					$class,
+					NotFoundResolver::class,
+					NotFoundResolver::EventClassNotFound,
+					AnnotatedInterface::class
+				];
+				$msg = vsprintf("Model class `%s` not found. Attach event handler for `%s::%s` event on `%s` if You changed name to handle this case.", $params);
+				throw new ManganException($msg);
+			}
+		}
+	}
 }
