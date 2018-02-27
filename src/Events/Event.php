@@ -221,12 +221,12 @@ class Event implements EventInterface
 	 * Triggers a class-level event.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param AnnotatedInterface $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default `ModelEvent` object will be created.
 	 * @return bool True if event was triggered.
 	 */
-	public static function trigger(AnnotatedInterface $model, $name, &$event = null)
+	public static function trigger($model, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if (empty(self::$events[$name]))
@@ -240,11 +240,14 @@ class Event implements EventInterface
 		$event->handled = false;
 		$event->name = $name;
 
-		if ($event->sender === null)
+		if ($event->sender === null && is_object($model))
 		{
 			$event->sender = $model;
 		}
-		$event->currentTarget = $model;
+		if(is_object($model))
+		{
+			$event->currentTarget = $model;
+		}
 		$className = self::getName($model);
 
 		// Partials holds parts of class, this include interfaces and traits
@@ -291,12 +294,12 @@ class Event implements EventInterface
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::isValid`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param AnnotatedInterface $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[ModelEvent]] object will be created.
 	 * @return bool True if event was triggered and is valid.
 	 */
-	public static function valid(AnnotatedInterface $model, $name, $event = null)
+	public static function valid($model, $name, $event = null)
 	{
 		if (Event::trigger($model, $name, $event))
 		{
@@ -313,12 +316,12 @@ class Event implements EventInterface
 	 * If don't have event handler returns true. If event handler is set, return true if `Event::handled`.
 	 * This method will cause invocation of event handlers that are attached to the named event
 	 * for the specified class and all its parent classes.
-	 * @param AnnotatedInterface $model the object specifying the class-level event.
+	 * @param AnnotatedInterface|string $model the object specifying the class-level event.
 	 * @param string $name the event name.
 	 * @param ModelEvent $event the event parameter. If not set, a default [[Event]] object will be created.
 	 * @return bool|null True if handled, false otherways, null if not triggered
 	 */
-	public static function handled(AnnotatedInterface $model, $name, $event = null)
+	public static function handled($model, $name, $event = null)
 	{
 		if (Event::trigger($model, $name, $event))
 		{
@@ -372,11 +375,11 @@ class Event implements EventInterface
 
 	/**
 	 * Propagate event
-	 * @param AnnotatedInterface $model
+	 * @param AnnotatedInterface|string $model
 	 * @param string $name
 	 * @param ModelEvent|null $event
 	 */
-	private static function propagate(AnnotatedInterface $model, $name, &$event = null)
+	private static function propagate($model, $name, &$event = null)
 	{
 		$wasTriggered = false;
 		if ($event && !$event->propagate())
@@ -386,6 +389,10 @@ class Event implements EventInterface
 
 		foreach (self::getPropagatedProperties($model) as $property => $propagate)
 		{
+			if(!is_object($model))
+			{
+				continue;
+			}
 			if (empty($model->$property))
 			{
 				// Property is empty, skip
@@ -408,7 +415,7 @@ class Event implements EventInterface
 	/**
 	 * Get properties which should be propagated.
 	 * NOTE: This is cached, as it might be called numerous times
-	 * @param object $model
+	 * @param object|string $model
 	 * @return bool[]
 	 */
 	private static function getPropagatedProperties($model)
