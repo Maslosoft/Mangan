@@ -72,6 +72,12 @@ class UpdatableTest extends Test
 
 	public function testValidationOfUpdatableParameter()
 	{
+		$assertionExceptions = ini_get('assert.exception');
+
+		if(!$assertionExceptions)
+		{
+			$this->markTestSkipped("PHP option `assert.exception` must be enabled for this test");
+		}
 		$model = new ModelWithNotUpdatableDbRefWrongAnnotationValue();
 		$this->expectException(UnexpectedValueException::class);
 		$this->subTestIfWillNoUpdateRefObject($model);
