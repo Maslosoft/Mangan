@@ -16,8 +16,6 @@ namespace Maslosoft\Mangan\Decorators\Model;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
-use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\Mangan\Transformers\RawArray;
 
 /**
  * ClassNameDecorator
@@ -33,7 +31,6 @@ class ClassNameDecorator implements ModelDecoratorInterface
 	 * @param AnnotatedInterface $model Document model which will be decorated
 	 * @param mixed $dbValues
 	 * @param string $transformatorClass Transformator class used
-	 * @return bool Return true if value should be assigned to model
 	 */
 	public function read($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
@@ -46,23 +43,18 @@ class ClassNameDecorator implements ModelDecoratorInterface
 	 * @param AnnotatedInterface $model Model which is about to be decorated
 	 * @param mixed[] $dbValues Whole model values from database. This is associative array with keys same as model properties (use $name param to access value). This is passed by reference.
 	 * @param string $transformatorClass Transformator class used
-	 * @return bool Return true to store value to database
 	 */
 	public function write($model, &$dbValues, $transformatorClass = TransformatorInterface::class)
 	{
-		// Do not store class names for homogenous collections
-		/**
-		 * TODO Below code conflicts with some features
-		 */
-//		if ($transformatorClass === RawArray::class)
-//		{
-//			$isHomogenous = ManganMeta::create($model)->type()->homogenous;
-//			if ($isHomogenous)
-//			{
-//				return;
-//			}
-//		}
-		$dbValues['_class'] = get_class($model);
+		// NOTE: Class should also be stored for homogeneous
+		// collections, so that collection could be transformed
+		// to non-homogeneous later.
+		$class = get_class($model);
+		$dbValues['_class'] = $class;
+		if(isset($model->_class))
+		{
+			$model->_class = $class;
+		}
 	}
 
 }

@@ -167,6 +167,10 @@ abstract class Transformer
 		return FinalizingManager::toModel(static::class, $model);
 	}
 
+	/**
+	 * @param AnnotatedInterface $model
+	 * @return ManganMeta
+	 */
 	protected static function getMeta(AnnotatedInterface $model)
 	{
 		return ManganMeta::create($model);

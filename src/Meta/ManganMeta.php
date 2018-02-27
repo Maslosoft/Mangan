@@ -61,7 +61,7 @@ class ManganMeta extends Meta
 
 	/**
 	 * Get method meta data
-	 * @param type $name
+	 * @param string $name
 	 * @return DocumentMethodMeta
 	 */
 	public function method($name)
