@@ -6,6 +6,7 @@ use Codeception\Test\Unit;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Modifier;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use UnitTester;
@@ -85,4 +86,30 @@ class ModifierTest extends Unit
 		$this->assertSame(2, $found->int);
 	}
 
+	public function testIfWillUpdateOne()
+	{
+		$model = new DocumentBaseAttributes();
+		$model->bool = false;
+		$model->string = 'Las Vegas';
+		$saved = $model->save();
+
+		$model->string = 'New';
+
+		$this->assertTrue($saved);
+
+		$em = new EntityManager($model);
+
+		$criteria = PkManager::prepareFromModel($model);
+
+		$updated = $em->updateOne($criteria, ['bool'], true);
+		$this->assertTrue($updated);
+
+		$finder = new Finder($model);
+
+		$found = $finder->findByPk(PkManager::getFromModel($model));
+
+		$this->assertNotEmpty($found);
+
+		$this->assertSame($found->string, 'Las Vegas', 'That `string` attribute was not changed');
+	}
 }
