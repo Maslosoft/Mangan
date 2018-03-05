@@ -23,6 +23,7 @@ use MongoId;
  */
 class MongoObjectId implements SanitizerInterface
 {
+	const IdPattern = '~^[a-f0-9]{24}$~';
 
 	/**
 	 * Whenever allow nulls
@@ -42,6 +43,10 @@ class MongoObjectId implements SanitizerInterface
 
 	protected function _cast($value, $string = false)
 	{
+		if($string && is_string($value) && preg_match(self::IdPattern, $value))
+		{
+			return $value;
+		}
 		if (!$value instanceof MongoId)
 		{
 			if (is_array($value) && isset($value['$id']))
@@ -53,7 +58,7 @@ class MongoObjectId implements SanitizerInterface
 				$value = $value->{'$id'};
 			}
 
-			if (!preg_match('~^[a-z0-9]{24}$~', (string) $value))
+			if (!preg_match(self::IdPattern, (string) $value))
 			{
 				$value = null;
 			}
