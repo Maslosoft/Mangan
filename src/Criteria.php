@@ -296,7 +296,7 @@ class Criteria implements CriteriaInterface,
 	/**
 	 * Merge with other criteria
 	 * - Field list operators will be merged
-	 * - Limit and offet will be overriden
+	 * - Limit and offset will be overridden
 	 * - Select fields list will be merged
 	 * - Sort fields list will be merged
 	 * @param null|array|CriteriaInterface $criteria
@@ -312,6 +312,16 @@ class Criteria implements CriteriaInterface,
 		elseif (empty($criteria))
 		{
 			return $this;
+		}
+
+		// This is ensures that conditions are properly
+		// decorated when used with derived class.
+		if(!$criteria instanceof static && $criteria instanceof Criteria)
+		{
+			$newCriteria = new static(null, $this->getModel());
+			$newCriteria->_rawConds = $criteria->_rawConds;
+			$newCriteria->_sort = $criteria->_sort;
+			$criteria = $newCriteria;
 		}
 
 		if ($this instanceof LimitableInterface && $criteria instanceof LimitableInterface && !empty($criteria->getLimit()))
