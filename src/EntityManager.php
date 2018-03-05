@@ -231,7 +231,7 @@ class EntityManager implements EntityManagerInterface
 	public function updateOne($criteria = null, array $attributes = null, $modify = false)
 	{
 		$criteria = $this->sm->apply($criteria);
-		$rawData = RawArray::fromModel($this->model);
+		$rawData = RawArray::fromModel($this->model, $attributes);
 
 		// filter attributes if set in param
 		if ($attributes !== null)
