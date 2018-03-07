@@ -15,6 +15,7 @@ namespace Maslosoft\Mangan\Traits;
 
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\CompositionIterator;
 use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -139,6 +140,14 @@ trait I18NAbleTrait
 		{
 			$this->_lang = $code;
 			return true;
+		}
+
+		$it = new CompositionIterator($this);
+		$it->ofType(InternationalInterface::class);
+		foreach($it as $model)
+		{
+			/* @var $model InternationalInterface */
+			$model->setLang($code);
 		}
 
 		$event = new ModelEvent($this);
