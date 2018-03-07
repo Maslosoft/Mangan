@@ -23,6 +23,13 @@ class UnexpectedTest extends \Codeception\Test\Unit
 	// tests
 	public function testUnexpectedConstructorParams()
 	{
+		$assertionExceptions = ini_get('assert.exception');
+
+		if(!$assertionExceptions)
+		{
+			$this->markTestSkipped("PHP option `assert.exception` must be enabled for this test");
+		}
+		
 		try
 		{
 			$criteria = new Criteria('string');
