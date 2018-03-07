@@ -95,6 +95,10 @@ class CompositionIterator implements Iterator, Countable
 			{
 				foreach ($model->$name as $child)
 				{
+					if ($this->skip($child))
+					{
+						continue;
+					}
 					if ($this->doInclude($child))
 					{
 						$this->models[] = $child;
