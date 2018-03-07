@@ -244,9 +244,9 @@ class Criteria implements CriteriaInterface,
 		}
 		$this->setCd(new ConditionDecorator($model));
 
-		if (!is_null($criteria) && !is_array($criteria))
+		if (!is_null($criteria) && !is_array($criteria) && !is_object($criteria))
 		{
-			$msg = sprintf('Criteria require array however was provided: %s', $criteria);
+			$msg = sprintf('Criteria require array or another Criteria object however was provided: %s', $criteria);
 			throw new UnexpectedValueException($msg);
 		}
 
