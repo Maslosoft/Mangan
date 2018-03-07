@@ -29,7 +29,7 @@ class UnexpectedTest extends \Codeception\Test\Unit
 		{
 			$this->markTestSkipped("PHP option `assert.exception` must be enabled for this test");
 		}
-		
+
 		try
 		{
 			$criteria = new Criteria('string');
