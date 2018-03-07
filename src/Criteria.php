@@ -3,19 +3,21 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan;
 
+use Exception;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria\ConditionDecorator;
 use Maslosoft\Mangan\Criteria\Conditions;
+use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\LimitableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\MergeableInterface;
 use Maslosoft\Mangan\Interfaces\Criteria\SelectableInterface;
@@ -37,30 +39,31 @@ use UnexpectedValueException;
  * This class is a helper for building MongoDB query arrays, it support three syntaxes for adding conditions:
  *
  * 1. 'equals' syntax:
- * 	$criteriaObject->fieldName = $value; // this will produce fieldName == value query
+ *    $criteriaObject->fieldName = $value; // this will produce fieldName == value query
  * 2. fieldName call syntax
- * 	$criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
+ *    $criteriaObject->fieldName($operator, $value); // this will produce fieldName <operator> value
+ *    $criteriaObject->fieldName($value); // this will produce fieldName == value
  * 3. addCond method
- * 	$criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
+ *    $criteriaObject->addCond($fieldName, $operator, $vale); // this will produce fieldName <operator> value
  *
  * For operators list {@see Criteria::$operators}
  *
- * @author Ianaré Sévi
- * @author Dariusz Górecki <darek.krk@gmail.com>
- * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @author    Ianaré Sévi
+ * @author    Dariusz Górecki <darek.krk@gmail.com>
+ * @author    Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
- * @license New BSD license
+ * @license   New BSD license
  */
 class Criteria implements CriteriaInterface,
-		ModelAwareInterface
+	ModelAwareInterface
 {
 
 	use CursorAwareTrait,
-	  DecoratableTrait,
-	  LimitableTrait,
-	  ModelAwareTrait,
-	  SelectableTrait,
-	  SortableTrait;
+		DecoratableTrait,
+		LimitableTrait,
+		ModelAwareTrait,
+		SelectableTrait,
+		SortableTrait;
 
 	/**
 	 * @since v1.0
@@ -171,38 +174,67 @@ class Criteria implements CriteriaInterface,
 	 * @var mixed[]
 	 */
 	private $_rawConds = [];
+
+	/**
+	 * Currently used fields list. This is
+	 * used to allow chained criteria creation.
+	 *
+	 * Example:
+	 *
+	 * ```
+	 * $criteria->address->city->street->number = 666
+	 * ```
+	 *
+	 * Will result in conditions:
+	 *
+	 * ```
+	 * [
+	 *    'address.city.street.number' = 666
+	 * ]
+	 * ```
+	 *
+	 * @var array
+	 */
 	private $_workingFields = [];
 
 	/**
 	 * Constructor
 	 * Example criteria:
 	 *
-	 * <PRE>
-	 * 'criteria' = array(
-	 * 	'conditions'=>array(
-	 * 		'fieldName1'=>array('greater' => 0),
-	 * 		'fieldName2'=>array('>=' => 10),
-	 * 		'fieldName3'=>array('<' => 10),
-	 * 		'fieldName4'=>array('lessEq' => 10),
-	 * 		'fieldName5'=>array('notEq' => 10),
-	 * 		'fieldName6'=>array('in' => array(10, 9)),
-	 * 		'fieldName7'=>array('notIn' => array(10, 9)),
-	 * 		'fieldName8'=>array('all' => array(10, 9)),
-	 * 		'fieldName9'=>array('size' => 10),
-	 * 		'fieldName10'=>array('exists'),
-	 * 		'fieldName11'=>array('notExists'),
-	 * 		'fieldName12'=>array('mod' => array(10, 9)),
-	 * 		'fieldName13'=>array('==' => 1)
-	 * 	),
-	 * 	'select'=>array('fieldName', 'fieldName2'),
-	 * 	'limit'=>10,
-	 *  'offset'=>20,
-	 *  'sort'=>array('fieldName1'=>Criteria::SortAsc, 'fieldName2'=>Criteria::SortDesc),
+	 * <pre>
+	 * $criteria = new Criteria(
+	 * [
+	 *    'conditions'=> [
+	 *        'fieldName1' => ['greater' => 0],
+	 *        'fieldName2' => ['>=' => 10],
+	 *        'fieldName3' => ['<' => 10],
+	 *        'fieldName4' => ['lessEq' => 10],
+	 *        'fieldName5' => ['notEq' => 10],
+	 *        'fieldName6' => ['in' => [10, 9]],
+	 *        'fieldName7' => ['notIn' => [10, 9]],
+	 *        'fieldName8' => ['all' => [10, 9]],
+	 *        'fieldName9' => ['size' => 10],
+	 *        'fieldName10' => ['exists'],
+	 *        'fieldName11' => ['notExists'],
+	 *        'fieldName12' => ['mod' => [10, 9]],
+	 *        'fieldName13' => ['==' => 1]
+	 *    ],
+	 *    'select' => [
+	 *        'fieldName',
+	 *        'fieldName2'
+	 *    ],
+	 *    'limit' => 10,
+	 *    'offset' => 20,
+	 *    'sort'=>[
+	 *        'fieldName1' => Criteria::SortAsc,
+	 *        'fieldName2' => Criteria::SortDesc,
+	 *    ]
+	 * ]
 	 * );
-	 * </PRE>
+	 * </pre>
 	 * @param mixed|CriteriaInterface|Conditions $criteria
 	 * @param AnnotatedInterface|null Model to use for criteria decoration
-	 * @since v1.0
+	 * @throws Exception
 	 */
 	public function __construct($criteria = null, AnnotatedInterface $model = null)
 	{
@@ -211,6 +243,13 @@ class Criteria implements CriteriaInterface,
 			$this->setModel($model);
 		}
 		$this->setCd(new ConditionDecorator($model));
+
+		if (!is_null($criteria) && !is_array($criteria))
+		{
+			$msg = sprintf('Criteria require array however was provided: %s', $criteria);
+			throw new UnexpectedValueException($msg);
+		}
+
 		if (is_array($criteria))
 		{
 			$available = ['conditions', 'select', 'limit', 'offset', 'sort', 'useCursor'];
@@ -227,24 +266,14 @@ class Criteria implements CriteriaInterface,
 			}
 
 			if (isset($criteria['conditions']))
+			{
 				foreach ($criteria['conditions'] as $fieldName => $conditions)
 				{
-					$fieldNameArray = explode('.', $fieldName);
-					if (count($fieldNameArray) === 1)
-					{
-						$fieldName = array_shift($fieldNameArray);
-					}
-					else
-					{
-						$fieldName = array_pop($fieldNameArray);
-					}
-
-					$this->_workingFields = $fieldNameArray;
-					assert(is_array($conditions), 'Each condition must be array with operator as key and value, ie: ["_id" => ["==" => "123"]]');
+					assert(is_array($conditions), new UnexpectedValueException('Each condition must be array with operator as key and value, ie: ["_id" => ["==" => "123"]]'));
 					foreach ($conditions as $operator => $value)
 					{
 						$operator = strtolower($operator);
-						if(!isset(self::$operators[$operator]))
+						if (!isset(self::$operators[$operator]))
 						{
 							$params = [
 								$operator,
@@ -256,6 +285,7 @@ class Criteria implements CriteriaInterface,
 						$this->addCond($fieldName, $operator, $value);
 					}
 				}
+			}
 
 			if (isset($criteria['select']))
 			{
@@ -279,8 +309,8 @@ class Criteria implements CriteriaInterface,
 			}
 		}
 		// NOTE:
-		//Scrunitizer: $criteria is of type object<Maslosoft\Mangan\...ria\MergeableInterface>, but the function expects a array|object<Maslosoft\M...aces\CriteriaInterface>.
-		// But for now it should be this way to easyli distinguish from Conditions.
+		// Scrunitizer: $criteria is of type object<Maslosoft\Mangan\...ria\MergeableInterface>, but the function expects a array|object<Maslosoft\M...aces\CriteriaInterface>.
+		// But for now it should be this way to easily distinguish from Conditions.
 		// Future plan: Use CriteriaInterface here, and drop `$criteria instanceof Conditions` if clause. Conditions should implement CriteriaInterface too.
 		elseif ($criteria instanceof MergeableInterface)
 		{
@@ -300,8 +330,8 @@ class Criteria implements CriteriaInterface,
 	 * - Select fields list will be merged
 	 * - Sort fields list will be merged
 	 * @param null|array|CriteriaInterface $criteria
-	 * @return CriteriaInterface
-	 * @since v1.0
+	 * @return $this
+	 * @throws Exception
 	 */
 	public function mergeWith($criteria)
 	{
@@ -314,15 +344,44 @@ class Criteria implements CriteriaInterface,
 			return $this;
 		}
 
-		// This is ensures that conditions are properly
-		// decorated when used with derived class.
-		if(!$criteria instanceof static && $criteria instanceof Criteria)
+		// Set current criteria model if available
+		$model = $this->getModel();
+
+		// Fall back to merged criteria model
+		if (empty($model))
 		{
-			$newCriteria = new static(null, $this->getModel());
-			$newCriteria->_rawConds = $criteria->_rawConds;
-			$newCriteria->_sort = $criteria->_sort;
-			$criteria = $newCriteria;
+			$model = $criteria->getModel();
+			if (!empty($model))
+			{
+				$this->setModel($model);
+			}
 		}
+
+		// Use same model for decorating both criteria,
+		// current one and merged one
+		if (!empty($model))
+		{
+			if ($criteria instanceof DecoratableInterface)
+			{
+				$criteria->decorateWith($model);
+			}
+
+			if ($criteria instanceof ModelAwareInterface)
+			{
+				$criteria->setModel($model);
+			}
+
+			if ($this instanceof DecoratableInterface)
+			{
+				$this->decorateWith($model);
+			}
+
+			if ($this instanceof ModelAwareInterface)
+			{
+				$this->setModel($model);
+			}
+		}
+
 
 		if ($this instanceof LimitableInterface && $criteria instanceof LimitableInterface && !empty($criteria->getLimit()))
 		{
@@ -342,20 +401,24 @@ class Criteria implements CriteriaInterface,
 		}
 
 
-
 		$this->_conditions = $this->_mergeConditions($this->_conditions, $criteria->getConditions());
-
 		return $this;
 	}
 
+	/**
+	 * Internal method for merging `_conditions` with `getConditions` call result.
+	 * @param $source
+	 * @param $conditions
+	 * @return mixed Merged conditions array
+	 */
 	private function _mergeConditions($source, $conditions)
 	{
 		$opTable = array_values(self::$operators);
 		foreach ($conditions as $fieldName => $conds)
 		{
 			if (
-					is_array($conds) &&
-					count(array_diff(array_keys($conds), $opTable)) == 0
+				is_array($conds) &&
+				count(array_diff(array_keys($conds), $opTable)) == 0
 			)
 			{
 				if (isset($source[$fieldName]) && is_array($source[$fieldName]))
@@ -387,47 +450,82 @@ class Criteria implements CriteriaInterface,
 	}
 
 	/**
-	 * If we have operator add it otherwise call parent implementation
-	 * @since v1.0
+	 * By-call-syntax criteria handler
+	 *
+	 * @param $fieldName
+	 * @param mixed $parameters
+	 * @return $this
 	 */
 	public function __call($fieldName, $parameters)
 	{
-		if (isset($parameters[0]))
+		$operatorName = self::$operators['eq'];
+
+		// Call with operator and value. Set
+		// first param to be operator.
+		if (array_key_exists(0, $parameters) && array_key_exists(1, $parameters))
 		{
 			$operatorName = strtolower($parameters[0]);
 		}
+
+		// Call without operator, use value only
+		if (array_key_exists(0, $parameters) && !array_key_exists(1, $parameters))
+		{
+			$value = $parameters[0];
+		}
+
+		// Call with operator and value, use second param as value
 		if (array_key_exists(1, $parameters))
 		{
 			$value = $parameters[1];
 		}
+
+		// ???
 		if (is_numeric($operatorName))
 		{
 			$operatorName = strtolower(trim($value));
 			$value = (strtolower(trim($value)) === 'exists') ? true : false;
 		}
 
-		if (in_array($operatorName, array_keys(self::$operators)))
+		if (!in_array($operatorName, array_keys(self::$operators)))
 		{
-			array_push($this->_workingFields, $fieldName);
-			$fieldName = implode('.', $this->_workingFields);
-			$this->_workingFields = [];
-			switch ($operatorName)
-			{
-				case 'exists':
-					$this->addCond($fieldName, $operatorName, true);
-					break;
-				case 'notexists':
-					$this->addCond($fieldName, $operatorName, false);
-					break;
-				default:
-					$this->addCond($fieldName, $operatorName, $value);
-			}
-			return $this;
+			throw new UnexpectedValueException("Unknown operator: `$operatorName` on field `$fieldName`");
 		}
+
+		/**
+		 * Support for syntax:
+		 *
+		 * ```
+		 * $criteria->fieldOne->subField('op', 'value')
+		 * ```
+		 */
+
+		array_push($this->_workingFields, $fieldName);
+		$fieldName = implode('.', $this->_workingFields);
+		$this->_workingFields = [];
+		switch ($operatorName)
+		{
+			case 'exists':
+				$this->addCond($fieldName, $operatorName, true);
+				break;
+			case 'notexists':
+				$this->addCond($fieldName, $operatorName, false);
+				break;
+			default:
+				$this->addCond($fieldName, $operatorName, $value);
+		}
+
+		return $this;
 	}
 
 	/**
-	 * @since v1.0.2
+	 * This is required for chained criteria creating, ie
+	 *
+	 * ```
+	 * $criteria->fieldOne->fieldTwo = 123;
+	 * ```
+	 *
+	 * @param string $name
+	 * @return $this
 	 */
 	public function __get($name)
 	{
@@ -436,7 +534,19 @@ class Criteria implements CriteriaInterface,
 	}
 
 	/**
-	 * @since v1.0.2
+	 * By-set-syntax handler.
+	 *
+	 * This allows adding *equal* conditions by
+	 * using field.
+	 *
+	 * Example:
+	 *
+	 * ```
+	 * $criteria->userId = 1;
+	 * ```
+	 *
+	 * @param string $name
+	 * @param mixed $value
 	 */
 	public function __set($name, $value)
 	{
@@ -448,8 +558,7 @@ class Criteria implements CriteriaInterface,
 
 	/**
 	 * Return query array
-	 * @return array query array
-	 * @since v1.0
+	 * @return array Query array
 	 */
 	public function getConditions()
 	{
@@ -486,8 +595,8 @@ class Criteria implements CriteriaInterface,
 	 *
 	 * @param string $fieldName
 	 * @param string $op operator
-	 * @param mixed $value
-	 * @since v1.0
+	 * @param mixed  $value
+	 * @return $this
 	 */
 	public function addCond($fieldName, $op, $value)
 	{
@@ -503,11 +612,12 @@ class Criteria implements CriteriaInterface,
 	 * Get condition
 	 * If specified field already has a condition, values will be merged
 	 * duplicates will be overridden by new values!
-	 * @see getConditions
+	 * @see   getConditions
 	 * @param string $fieldName
 	 * @param string $op operator
-	 * @param mixed $value
-	 * @since v1.0
+	 * @param mixed  $value
+	 * @param array  $conditions
+	 * @return array
 	 */
 	private function _makeCond($fieldName, $op, $value, $conditions = [])
 	{
@@ -563,8 +673,8 @@ class Criteria implements CriteriaInterface,
 			if ($op != self::$operators['equals'])
 			{
 				if (
-						!is_array($conditions[$fieldName]) ||
-						count(array_diff(array_keys($conditions[$fieldName]), array_values(self::$operators))) > 0
+					!is_array($conditions[$fieldName]) ||
+					count(array_diff(array_keys($conditions[$fieldName]), array_values(self::$operators))) > 0
 				)
 				{
 					$conditions[$fieldName] = [];

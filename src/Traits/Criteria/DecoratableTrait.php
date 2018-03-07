@@ -32,7 +32,7 @@ trait DecoratableTrait
 
 	/**
 	 * Condition decorator instance
-	 * @var ConditionDecoratorInterface
+	 * @var ConditionDecoratorInterface|ConditionDecoratorTypeInterface
 	 */
 	private $cd = null;
 
@@ -52,7 +52,7 @@ trait DecoratableTrait
 	/**
 	 * Set condition decorator interface
 	 * @param ConditionDecoratorInterface $cd
-	 * @return CriteriaInterface
+	 * @return $this
 	 */
 	public function setCd(ConditionDecoratorInterface $cd)
 	{
@@ -68,7 +68,7 @@ trait DecoratableTrait
 	 * Decorate and sanitize criteria with provided model.
 	 * @param AnnotatedInterface $model Model to use for decorators and sanitizer when creating conditions. If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
 	 * @param ConditionDecoratorInterface $decorator
-	 * @return CriteriaInterface
+	 * @return $this
 	 */
 	public function decorateWith($model, ConditionDecoratorInterface $decorator = null)
 	{
