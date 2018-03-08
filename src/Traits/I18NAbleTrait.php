@@ -143,6 +143,12 @@ trait I18NAbleTrait
 		}
 
 		$it = new CompositionIterator($this);
+		// Need a deep scan, as some objects
+		// might have proxy documents that do not
+		// implement InternationalInterface::class,
+		// so those would be omitted. The setLang will
+		// anyway not trigger if language is same as
+		// currently set.
 		$it->ofType(InternationalInterface::class);
 		foreach($it as $model)
 		{
