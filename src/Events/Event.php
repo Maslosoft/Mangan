@@ -104,7 +104,7 @@ class Event implements EventInterface
 	 * ];
 	 * ```
 	 *
-	 * @var string[]
+	 * @var string[][]
 	 */
 	private static $partials = [];
 
@@ -471,8 +471,23 @@ class Event implements EventInterface
 		do
 		{
 			$partials[] = $className;
+
+			// Iterate over traits of parent class
+			foreach ((new ReflectionClass($className))->getTraitNames() as $trait)
+			{
+				$partials[] = $trait;
+			}
+
+			// Iterate over interfaces of parent class
+			foreach ((new ReflectionClass($className))->getInterfaceNames() as $interface)
+			{
+				$partials[] = $interface;
+			}
+
 		}
 		while (($className = get_parent_class($className)) !== false);
+		$partials = array_unique($partials);
+		sort($partials);
 		self::$partials[$className] = $partials;
 		return $partials;
 	}
