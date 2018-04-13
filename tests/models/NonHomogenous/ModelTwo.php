@@ -13,7 +13,7 @@ use Maslosoft\Mangan\Document;
 /**
  * ModelOne
  * @CollectionName('NonHomogenous')
- * @Homogenous(false)
+ * @Homogeneous(false)
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class ModelTwo extends Document
@@ -21,5 +21,5 @@ class ModelTwo extends Document
 
 	public $name = '';
 	public $title = '';
-
+	public $type = 0;
 }

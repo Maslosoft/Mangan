@@ -11,7 +11,7 @@ use Maslosoft\ManganTest\Models\NonHomogenous\ModelTwo;
 use MongoId;
 use UnitTester;
 
-class NonHomogenousCollectionTest extends Unit
+class NonHomogeneousCollectionTest extends Unit
 {
 
 	/**
@@ -21,25 +21,35 @@ class NonHomogenousCollectionTest extends Unit
 
 	private $model1;
 	private $model2;
+	private $model3;
 
 	protected function _before()
 	{
 		$model1 = new ModelOne();
 		$model1->_id = new MongoId();
+		$model1->type = 1;
 		$saved = $model1->save();
 		$this->assertTrue($saved);
 
 		$model2 = new ModelTwo();
 		$model2->_id = new MongoId();
+		$model2->type = 2;
 		$saved = $model2->save();
+		$this->assertTrue($saved);
+
+		$model3 = new ModelTwo();
+		$model3->_id = new MongoId();
+		$model3->type = 3;
+		$saved = $model3->save();
 		$this->assertTrue($saved);
 
 		$this->model1 = $model1;
 		$this->model2 = $model2;
+		$this->model3 = $model3;
 	}
 
 	// tests
-	public function testIfWillProperlyStoreAndRetrieveNonHomogenousModels()
+	public function testStoreAndRetrieve()
 	{
 		$model1 = $this->model1;
 		$id1 = $model1->_id;
@@ -48,17 +58,19 @@ class NonHomogenousCollectionTest extends Unit
 
 		$count = $model1->count();
 
-		$this->assertSame(2, $count);
+		$this->assertSame(3, $count);
 
 		$found1 = $model1->findByPk($id1);
 		$exists1 = $model1->exists(new Criteria(['conditions' => ['_id' => ['==' => $id1]]]));
 		$this->assertTrue($exists1);
 		$this->assertTrue($found1 instanceof ModelOne);
+		$this->assertSame(1, $found1->type);
 
 		$found2 = $model2->findByPk($id2);
 		$exists2 = $model1->exists(new Criteria(['conditions' => ['_id' => ['==' => $id2]]]));
 		$this->assertTrue($exists2);
 		$this->assertTrue($found2 instanceof ModelTwo);
+		$this->assertSame(2, $found2->type);
 	}
 
 	public function testFindAll()
@@ -67,7 +79,24 @@ class NonHomogenousCollectionTest extends Unit
 
 		$data = $finder->findAll();
 
-		$this->checkItems($data);
+		$this->checkItems(3, $data);
+	}
+
+	public function testFindAllWithInOperator()
+	{
+		$finder = new Finder($this->model1);
+
+		$criteria = new Criteria(null, $this->model1);
+
+		$criteria->addCond('type', 'in', [1, 3]);
+
+		$conds = $criteria->getConditions();
+
+		codecept_debug($conds);
+
+		$data = $finder->findAll($criteria);
+
+		$this->checkItems(2, $data);
 	}
 
 	public function testDataProvider()
@@ -76,21 +105,24 @@ class NonHomogenousCollectionTest extends Unit
 
 		$count = $dp->getTotalItemCount();
 
-		$this->assertSame(2, $count, 'There are 2 items - count');
+		$this->assertSame(3, $count, 'There are 2 items - count');
 
 		$data = $dp->getData();
 
-		$this->checkItems($data);
+		$this->checkItems(3, $data);
 	}
 
-	private function checkItems($data)
+	private function checkItems($count, $data)
 	{
-		$this->assertCount(2, $data, 'There are 2 items');
+		$this->assertCount($count, $data, "There are $count items");
 
 		$types = [];
 		foreach($data as $item)
 		{
 			$key = get_class($item);
+
+			$this->assertTrue(in_array($item->type, [1,2,3]), 'Has proper type');
+
 			if($item instanceof ModelOne)
 			{
 				$types[$key] = $item;
