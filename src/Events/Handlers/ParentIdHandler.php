@@ -13,12 +13,12 @@
 
 namespace Maslosoft\Mangan\Events\Handlers;
 
-use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
+use Maslosoft\Mangan\Helpers\CompositionIterator;
 use Maslosoft\Mangan\Interfaces\EventHandlersInterface;
-use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Traits\Model\WithParentTrait;
 
 /**
@@ -37,10 +37,7 @@ class ParentIdHandler implements EventHandlersInterface
 			EntityManager::EventBeforeUpdate,
 		];
 		$handler = [$this, 'handle'];
-//		$handler = function(ModelEvent $e)
-//		{
-//			echo $e;
-//		};
+
 		foreach ($on as $name)
 		{
 			Event::on(WithParentTrait::class, $name, $handler);
@@ -50,35 +47,26 @@ class ParentIdHandler implements EventHandlersInterface
 	public function handle(ModelEvent $e)
 	{
 		$e->isValid = true;
-		/**
-		 * TODO This breaks Event/ParentChildTrashable
-		 */
-		return;
 		$model = $e->sender;
-		$meta = ManganMeta::create($model);
-		foreach ($meta->fields() as $name => $fieldMeta)
+
+		// Don't act on trash, perhaps
+		// should be made in different way
+		if($model instanceof TrashInterface)
 		{
-			if ($model->$name instanceof AnnotatedInterface)
-			{
-				$this->maybeSetValue($model, $model->$name);
-			}
-			elseif (is_array($model->$name))
-			{
-				foreach ($model->$name as $subModel)
-				{
-					$this->maybeSetValue($model, $subModel);
-				}
-			}
+			return $e->isValid;
 		}
+
+		$it = (new CompositionIterator($model))->direct();
+		foreach ($it as $subModel)
+		{
+			$this->maybeSetValue($model, $subModel);
+		}
+		return $e->isValid;
 	}
 
 	private function maybeSetValue($model, $subModel)
 	{
-		/**
-		 * TODO Possibly does not handle recurent traits (deep)
-		 */
-		$traits = class_uses($subModel);
-		if (in_array(WithParentTrait::class, $traits))
+		if (property_exists($subModel, 'parentId'))
 		{
 			$subModel->parentId = $model->_id;
 		}

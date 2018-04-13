@@ -20,7 +20,6 @@ class ParentIdTest extends Unit
 	 */
 	public function testIfWillProperlySetParentIdOnSave()
 	{
-		$this->markTestIncomplete('This test has incomplete feature');
 		$model = new ModelWithEmbeddedModelWithParentId;
 		$sub = new ModelWithParentId();
 		$model->sub = $sub;
@@ -28,7 +27,7 @@ class ParentIdTest extends Unit
 		$saved = $model->save();
 		$this->assertTrue($saved, 'That model was saved');
 
-		$this->assertSame((string) $model->_id, (string) $model->sub->parentId, 'That parent id was set on save');
+		$this->assertSame((string)$model->_id, (string)$model->sub->parentId, 'That parent id was set on save');
 	}
 
 }
