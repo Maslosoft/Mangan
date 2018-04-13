@@ -21,11 +21,12 @@ use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Events\RestoreEvent;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
+use Maslosoft\Mangan\Interfaces\OwneredInterface;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use UnexpectedValueException;
 
 /**
- * OwneredTrashHandlers
+ * ParentChildTrashHandlers
  * Use this class to create trash handlers for owned items.
  *
  * This class provides event handlers to properly manage trash, however it is
@@ -60,6 +61,11 @@ class ParentChildTrashHandlers
 			if (is_a($model, $parent))
 			{
 				$child = new $childClass;
+				// Ensure owner
+				if($child instanceof OwneredInterface)
+				{
+					$child->setOwner($model);
+				}
 				$criteria = new Criteria(null, $child);
 				$criteria->parentId = $this->getPk($model);
 
@@ -78,6 +84,11 @@ class ParentChildTrashHandlers
 			if (is_a($model, $parent))
 			{
 				$child = new $childClass;
+				// Ensure owner
+				if($child instanceof OwneredInterface)
+				{
+					$child->setOwner($model);
+				}
 				$criteria = new Criteria(null, $child);
 				$criteria->parentId = $this->getPk($model);
 
@@ -93,6 +104,11 @@ class ParentChildTrashHandlers
 				// Trash in loop all items
 				foreach ($items as $item)
 				{
+					// Ensure owner
+					if($item instanceof OwneredInterface)
+					{
+						$item->setOwner($model);
+					}
 					if (!$item->trash())
 					{
 						$event->isValid = false;
@@ -113,6 +129,11 @@ class ParentChildTrashHandlers
 			if (is_a($model, $parent))
 			{
 				$child = new $childClass;
+				// Ensure owner
+				if($child instanceof OwneredInterface)
+				{
+					$child->setOwner($model);
+				}
 				$trash = $event->getTrash();
 				$criteria = new Criteria(null, $trash);
 
@@ -138,6 +159,11 @@ class ParentChildTrashHandlers
 				$restored = [];
 				foreach ($trashedItems as $trashedItem)
 				{
+					// Ensure owner
+					if($trashedItem instanceof OwneredInterface)
+					{
+						$trashedItem->setOwner($model);
+					}
 					$restored[] = (int) $trashedItem->restore();
 				}
 				if(array_sum($restored) !== count($restored))
