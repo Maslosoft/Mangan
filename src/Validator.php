@@ -70,6 +70,17 @@ class Validator implements ValidatableInterface
 		{
 			$fields = array_keys($this->meta->fields());
 		}
+
+		// Model validators
+		$typeValidators = $this->meta->type()->validators;
+		if (!empty($typeValidators))
+		{
+			$typeName = $this->meta->type()->name;
+			// Reset errors
+			$this->errors[$typeName] = [];
+			$valid[] = (int)$this->validateEntity($typeName, $typeValidators);
+		}
+
 		foreach ($fields as $name)
 		{
 			$fieldMeta = $this->meta->field($name);
@@ -81,6 +92,12 @@ class Validator implements ValidatableInterface
 			if (empty($fieldMeta))
 			{
 				throw new InvalidArgumentException(sprintf("Unknown field `%s` in model `%s`", $name, get_class($this->model)));
+			}
+
+			// Validate field if has any validator
+			if (!empty($fieldMeta->validators))
+			{
+				$valid[] = (int)$this->validateEntity($name, $fieldMeta->validators);
 			}
 
 			// Validate sub documents
@@ -120,24 +137,8 @@ class Validator implements ValidatableInterface
 					}
 				}
 			}
-
-			// Skip field without validators
-			if (empty($fieldMeta->validators))
-			{
-				continue;
-			}
-			$valid[] = (int)$this->validateEntity($name, $fieldMeta->validators);
 		}
 
-		// Model validators
-		$typeValidators = $this->meta->type()->validators;
-		if (!empty($typeValidators))
-		{
-			$typeName = $this->meta->type()->name;
-			// Reset errors
-			$this->errors[$typeName] = [];
-			$valid[] = (int)$this->validateEntity($typeName, $typeValidators);
-		}
 		$areAllValid = count($valid) === array_sum($valid);
 
 		// For easier debug
