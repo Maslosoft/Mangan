@@ -62,8 +62,20 @@ abstract class Transformer
 			{
 				continue;
 			}
+
+			// NOTE: Sanitizers must be ran for all
+			// fields, as types *might* change between
+			// transformations.
+
+			// Set model value for writing, this might
+			// cause data type to change. This is
+			// required for decorators.
 			$model->$name = $sanitizer->write($name, $model->$name);
 			$decorator->write($name, $arr);
+
+			// Sanitize value again to ensure that model
+			// has value of proper type, defined for
+			// transformer type.
 			$model->$name = $sanitizer->read($name, $model->$name);
 		}
 		$md->write($arr);
