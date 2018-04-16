@@ -45,7 +45,7 @@ abstract class Transformer
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [])
 	{
-		$meta = static::getMeta($model);
+		$meta = ManganMeta::create($model);
 		$calledClass = get_called_class();
 		$decorator = new Decorator($model, $calledClass, $meta);
 		$md = new ModelDecorator($model, $calledClass, $meta);
@@ -85,11 +85,12 @@ abstract class Transformer
 	/**
 	 * Create document from array
 	 *
-	 * @param mixed[] $data
-	 * @param string|object $className
+	 * @param mixed[]            $data
+	 * @param string|object      $className
 	 * @param AnnotatedInterface $instance
 	 * @return AnnotatedInterface
 	 * @throws TransformatorException
+	 * @throws ManganException
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
 	{
@@ -125,7 +126,7 @@ abstract class Transformer
 			self::ensureClass($className);
 			$model = new $className;
 		}
-		$meta = static::getMeta($model);
+		$meta = ManganMeta::create($model);
 		$calledClass = get_called_class();
 		$decorator = new Decorator($model, $calledClass, $meta);
 		$md = new ModelDecorator($model, $calledClass, $meta);
@@ -180,6 +181,8 @@ abstract class Transformer
 	}
 
 	/**
+	 * Get metadata for model
+	 * @deprecated Use ManganMeta::create($model) instead
 	 * @param AnnotatedInterface $model
 	 * @return ManganMeta
 	 */
@@ -188,6 +191,14 @@ abstract class Transformer
 		return ManganMeta::create($model);
 	}
 
+	/**
+	 * Ensure that `$class` exists, will
+	 * try to use class not found resolver
+	 * to find replacements if available.
+	 *
+	 * @param $class
+	 * @throws ManganException
+	 */
 	protected static function ensureClass(&$class)
 	{
 		if (!ClassChecker::exists($class))

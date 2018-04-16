@@ -60,6 +60,15 @@ class ManganMeta extends Meta
 	}
 
 	/**
+	 * Get fields metadata
+	 * @return DocumentPropertyMeta[]
+	 */
+	public function fields()
+	{
+		return parent::fields();
+	}
+
+	/**
 	 * Get method meta data
 	 * @param string $name
 	 * @return DocumentMethodMeta
