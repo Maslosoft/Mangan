@@ -112,6 +112,27 @@ class NonHomogeneousCollectionTest extends Unit
 		$this->checkItems(3, $data);
 	}
 
+	public function testDataProviderWithInOperator()
+	{
+		$criteria = new Criteria(null, $this->model1);
+
+		$criteria->addCond('type', 'in', [1, 3]);
+
+		$conds = $criteria->getConditions();
+
+		codecept_debug($conds);
+
+		$dp = new DataProvider($this->model1);
+		$dp->setCriteria($criteria);
+		$count = $dp->getTotalItemCount();
+
+		$this->assertSame(2, $count, 'There are 2 items - count');
+
+		$data = $dp->getData();
+
+		$this->checkItems(2, $data);
+	}
+
 	private function checkItems($count, $data)
 	{
 		$this->assertCount($count, $data, "There are $count items");
