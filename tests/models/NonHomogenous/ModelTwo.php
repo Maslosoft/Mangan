@@ -12,7 +12,7 @@ use Maslosoft\Mangan\Document;
 
 /**
  * ModelOne
- * @CollectionName('NonHomogenous')
+ * @CollectionName('NonHomogeneous')
  * @Homogeneous(false)
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
