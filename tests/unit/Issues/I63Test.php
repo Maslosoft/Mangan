@@ -65,6 +65,7 @@ class I63Test extends \Codeception\Test\Unit
 
 		// Here issue raised
 		$em = (new EntityManager($model2));
+		$saved3 = false;
 		try
 		{
 			$saved3 = $em->upsert();
@@ -72,10 +73,8 @@ class I63Test extends \Codeception\Test\Unit
 		{
 			// Expected behavior
 			codecept_debug($e->getMessage());
-			$this->assertContains('_id field cannot be changed', $e->getMessage());
-			return;
+			$this->assertContains('_id', $e->getMessage());
 		}
-		$this->assertTrue($saved3, 'Model was saved');
 
 		$count = (new Finder($model))->count();
 

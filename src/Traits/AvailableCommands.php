@@ -31,8 +31,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * { pipeline: [ { $operator: {...}}, ... ], explain: <bool>, allowDiskUse: <bool>, cursor: {batchSize: <number>} }
-	 * See http://dochub.mongodb.org/core/aggregation for more details.
+	 * Runs the aggregation command. See http://dochub.mongodb.org/core/aggregation for more details.
 	 */
 	public function aggregate()
 	{
@@ -219,14 +218,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
-	 */
-	public function currentOpCtx()
-	{
-		return $this->call('currentOpCtx', func_get_args());
-	}
-
-	/**
 	 * determine data size for a set of data in a certain range
 	 * example: { dataSize:"blog.posts", keyPattern:{x:1}, min:{x:10}, max:{x:55} }
 	 * min and max parameters are optional. They must either both be included or both omitted
@@ -338,6 +329,14 @@ trait AvailableCommands
 	public function dropUser()
 	{
 		return $this->call('dropUser', func_get_args());
+	}
+
+	/**
+	 * end a set of logical sessions
+	 */
+	public function endSessions()
+	{
+		return $this->call('endSessions', func_get_args());
 	}
 
 	/**
@@ -525,11 +524,35 @@ trait AvailableCommands
 	}
 
 	/**
+	 * kill all logical sessions, for a user, and their operations
+	 */
+	public function killAllSessions()
+	{
+		return $this->call('killAllSessions', func_get_args());
+	}
+
+	/**
+	 * kill logical sessions by pattern
+	 */
+	public function killAllSessionsByPattern()
+	{
+		return $this->call('killAllSessionsByPattern', func_get_args());
+	}
+
+	/**
 	 * kill a list of cursor ids
 	 */
 	public function killCursors()
 	{
 		return $this->call('killCursors', func_get_args());
+	}
+
+	/**
+	 * kill a logical session and its operations
+	 */
+	public function killSessions()
+	{
+		return $this->call('killSessions', func_get_args());
 	}
 
 	/**
@@ -667,6 +690,22 @@ trait AvailableCommands
 	}
 
 	/**
+	 * renew a set of logical sessions
+	 */
+	public function refreshSessions()
+	{
+		return $this->call('refreshSessions', func_get_args());
+	}
+
+	/**
+	 * renew a set of logical sessions
+	 */
+	public function refreshSessionsInternal()
+	{
+		return $this->call('refreshSessionsInternal', func_get_args());
+	}
+
+	/**
 	 * no help defined
 	 */
 	public function repairCursor()
@@ -775,6 +814,14 @@ trait AvailableCommands
 	}
 
 	/**
+	 * start a logical session
+	 */
+	public function startSession()
+	{
+		return $this->call('startSession', func_get_args());
+	}
+
+	/**
 	 * touch collection
 	 * Page in all pages of memory containing every extent for the given collection
 	 * { touch : <collection_name>, [data : true] , [index : true] }
@@ -824,6 +871,7 @@ trait AvailableCommands
 	/**
 	 * Validate contents of a namespace by scanning its data structures for correctness.  Slow.
 	 * Add full:true option to do a more thorough check
+	 * Add scandata:false to skip the scan of the collection data without skipping scans of any indexes
 	 */
 	public function validate()
 	{
