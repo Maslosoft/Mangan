@@ -25,7 +25,8 @@ use MongoCollection;
  */
 interface EntityManagerInterface
 {
-
+	const AspectSaving = 'saving';
+	const AspectRemoving = 'removing';
 	const EventBeforeSave = 'beforeSave';
 	const EventAfterSave = 'afterSave';
 	const EventBeforeInsert = 'beforeInsert';

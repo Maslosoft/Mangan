@@ -134,11 +134,11 @@ class EntityManager implements EntityManagerInterface
 	 * Attributes will be filtered according to SafeAnnotation.
 	 * Only attributes marked as safe will be set, other will be ignored.
 	 *
-	 * @param mixed[] $atributes
+	 * @param mixed[] $attributes
 	 */
-	public function setAttributes($atributes)
+	public function setAttributes($attributes)
 	{
-		SafeArray::toModel($atributes, $this->model, $this->model);
+		SafeArray::toModel($attributes, $this->model, $this->model);
 	}
 
 	/**
@@ -178,9 +178,9 @@ class EntityManager implements EntityManagerInterface
 				$this->_afterSave($model, EntityManagerInterface::EventAfterInsert);
 				return true;
 			}
-			codecept_debug($rawResult);
 			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document. ' . ucfirst($rawResult['errmsg']), $rawResult['code']);
 		}
+		AspectManager::removeAspect($model, self::AspectSaving);
 		return false;
 	}
 
@@ -211,6 +211,7 @@ class EntityManager implements EntityManagerInterface
 			}
 			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document.');
 		}
+		AspectManager::removeAspect($this->model, self::AspectSaving);
 		return false;
 	}
 
@@ -345,10 +346,12 @@ class EntityManager implements EntityManagerInterface
 				}
 				throw new ManganException("Can't save the document to disk, or attempting to save an empty document. $msg");
 			}
+			AspectManager::removeAspect($model, self::AspectSaving);
 			return false;
 		}
 		else
 		{
+			AspectManager::removeAspect($this->model, self::AspectSaving);
 			return false;
 		}
 	}
@@ -414,10 +417,12 @@ class EntityManager implements EntityManagerInterface
 				}
 				throw new ManganException("Can't save the document to disk, or attempting to save an empty document. $errmsg");
 			}
+			AspectManager::removeAspect($this->model, self::AspectSaving);
 			return false;
 		}
 		else
 		{
+			AspectManager::removeAspect($this->model, self::AspectSaving);
 			return false;
 		}
 	}
@@ -585,6 +590,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	private function _beforeSave($model, $event = null)
 	{
+		AspectManager::addAspect($model, self::AspectSaving);
 		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
 		if ($result)
 		{
@@ -610,6 +616,7 @@ class EntityManager implements EntityManagerInterface
 		}
 		(new Signal)->emit(new AfterSave($model));
 		ScenarioManager::setScenario($model, ScenariosInterface::Update);
+		AspectManager::removeAspect($model, self::AspectSaving);
 	}
 
 	/**
@@ -622,6 +629,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	private function _beforeDelete()
 	{
+		AspectManager::addAspect($this->model, self::AspectRemoving);
 		$result = Event::valid($this->model, EntityManagerInterface::EventBeforeDelete);
 		if ($result)
 		{
@@ -643,6 +651,7 @@ class EntityManager implements EntityManagerInterface
 		$event = new ModelEvent($this->model);
 		Event::trigger($this->model, EntityManagerInterface::EventAfterDelete, $event);
 		(new Signal)->emit(new AfterDelete($this->model));
+		AspectManager::removeAspect($this->model, self::AspectRemoving);
 	}
 
 // </editor-fold>

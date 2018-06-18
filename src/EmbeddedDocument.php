@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Collections\Meta;
 use Maslosoft\Mangan\Interfaces\ActiveDocumentInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
+use Maslosoft\Mangan\Traits\AspectsTrait;
 use Maslosoft\Mangan\Traits\I18NAbleTrait;
 use Maslosoft\Mangan\Traits\OwneredTrait;
 use Maslosoft\Mangan\Traits\ScenariosTrait;
@@ -37,7 +38,8 @@ use MongoId;
 abstract class EmbeddedDocument implements ActiveDocumentInterface
 {
 
-	use I18NAbleTrait,
+	use AspectsTrait,
+		I18NAbleTrait,
 	  OwneredTrait,
 	  ScenariosTrait,
 	  ValidatableTrait;
