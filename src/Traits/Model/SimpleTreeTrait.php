@@ -33,7 +33,7 @@ trait SimpleTreeTrait
 	use WithParentTrait;
 
 	/**
-	 * @RelatedArray(join = {'_id' = 'parentId'}, updatable = true)
+	 * @RelatedArray('join' = {'_id' = 'parentId'}, 'updatable' = true)
 	 * @RelatedOrdering('order')
 	 * @var AnnotatedInterface[]
 	 */

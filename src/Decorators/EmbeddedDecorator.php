@@ -63,6 +63,13 @@ class EmbeddedDecorator implements DecoratorInterface
 			{
 				return null;
 			}
+			// This is to prevent infinite loops
+			// if class name is same as current `$model`, ie not really set.
+			// @link https://github.com/Maslosoft/Mangan/issues/86
+			if(is_a($model, $className))
+			{
+				return null;
+			}
 			$dbValue[$name] = $transformatorClass::fromModel(new $className);
 			return;
 		}

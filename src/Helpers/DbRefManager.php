@@ -31,8 +31,9 @@ class DbRefManager
 	/**
 	 * Extract minimum set of data to create db reference
 	 * @param AnnotatedInterface $model
-	 * @param string $field
+	 * @param string             $field
 	 * @param AnnotatedInterface $referenced
+	 * @return DbRef
 	 */
 	public static function extractRef(AnnotatedInterface $model, $field, AnnotatedInterface $referenced = null)
 	{
