@@ -16,6 +16,7 @@ namespace Maslosoft\Mangan;
 use InvalidArgumentException;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Helpers\Validator\Factory;
+use Maslosoft\Mangan\Interfaces\OwneredInterface;
 use Maslosoft\Mangan\Interfaces\ValidatableInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -109,6 +110,11 @@ class Validator implements ValidatableInterface
 					// Handle arrays of documents
 					foreach ($this->model->$name as $fieldIndex => $model)
 					{
+						// Ensure owner, as validation might rely on it
+						if($model instanceof OwneredInterface)
+						{
+							$model->setOwner($this->model);
+						}
 						$validator = new Validator($model);
 						$isValid = $validator->validate();
 						$valid[] = (int)$isValid;
@@ -124,6 +130,11 @@ class Validator implements ValidatableInterface
 					}
 				} elseif (!empty($this->model->$name))
 				{
+					// Ensure owner, as validation might rely on it
+					if($this->model->$name instanceof OwneredInterface)
+					{
+						$this->model->$name->setOwner($this->model);
+					}
 					// Handle single documents
 					$validator = new Validator($this->model->$name);
 					$isValid = $validator->validate();
