@@ -290,7 +290,7 @@ class EntityManager implements EntityManagerInterface
 		{
 			$criteria = $this->sm->apply($criteria);
 			$conditions = $criteria->getConditions();
-			$mods = $criteria->getConditions();
+			$mods = $modifier->getModifiers();
 			$opts = $this->options->getSaveOptions([
 				'upsert' => false,
 				'multiple' => true
