@@ -57,12 +57,12 @@ class IndexManagerTest extends \Codeception\Test\Unit
 
 		$indexes = $this->showIndexes($model);
 
-		$this->assertArrayHasKey('title_en_1', $indexes);
-		$this->assertArrayHasKey('title_pl_1', $indexes);
-		$this->assertArrayHasKey('title_es_1', $indexes);
-		$this->assertArrayHasKey('title_en_-1', $indexes);
-		$this->assertArrayHasKey('title_pl_-1', $indexes);
-		$this->assertArrayHasKey('title_es_-1', $indexes);
+		$this->assertArrayHasKey('title.en_1', $indexes);
+		$this->assertArrayHasKey('title.pl_1', $indexes);
+		$this->assertArrayHasKey('title.es_1', $indexes);
+		$this->assertArrayHasKey('title.en_-1', $indexes);
+		$this->assertArrayHasKey('title.pl_-1', $indexes);
+		$this->assertArrayHasKey('title.es_-1', $indexes);
 
 		$this->assertTrue($success, 'That index was created');
 	}
@@ -75,12 +75,12 @@ class IndexManagerTest extends \Codeception\Test\Unit
 
 		$indexes = $this->showIndexes($model);
 
-		$this->assertArrayHasKey('username_en_1_email_1', $indexes);
-		$this->assertArrayHasKey('username_pl_1_email_1', $indexes);
-		$this->assertArrayHasKey('username_en_1_email_1', $indexes);
-		$this->assertArrayHasKey('username_en_-1_email_-1', $indexes);
-		$this->assertArrayHasKey('username_pl_-1_email_-1', $indexes);
-		$this->assertArrayHasKey('username_en_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username.en_1_email_1', $indexes);
+		$this->assertArrayHasKey('username.pl_1_email_1', $indexes);
+		$this->assertArrayHasKey('username.en_1_email_1', $indexes);
+		$this->assertArrayHasKey('username.en_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username.pl_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username.en_-1_email_-1', $indexes);
 
 
 		$this->assertTrue($success, 'That index was created');
@@ -96,12 +96,12 @@ class IndexManagerTest extends \Codeception\Test\Unit
 
 		codecept_debug($indexes);
 
-		$this->assertArrayHasKey('username_en_1_email_1', $indexes);
-		$this->assertArrayHasKey('username_pl_1_email_1', $indexes);
-		$this->assertArrayHasKey('username_en_1_email_1', $indexes);
-		$this->assertArrayHasKey('username_en_-1_email_-1', $indexes);
-		$this->assertArrayHasKey('username_pl_-1_email_-1', $indexes);
-		$this->assertArrayHasKey('username_en_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username.en_1_email_1', $indexes);
+		$this->assertArrayHasKey('username.pl_1_email_1', $indexes);
+		$this->assertArrayHasKey('username.en_1_email_1', $indexes);
+		$this->assertArrayHasKey('username.en_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username.pl_-1_email_-1', $indexes);
+		$this->assertArrayHasKey('username.en_-1_email_-1', $indexes);
 
 
 		$this->assertTrue($success, 'That index was created');
@@ -127,7 +127,7 @@ class IndexManagerTest extends \Codeception\Test\Unit
 
 		$indexes = $this->showIndexes($model);
 
-		$this->assertArrayHasKey('loc_type_2dsphere', $indexes);
+		$this->assertArrayHasKey('loc.type_2dsphere', $indexes);
 
 		$this->assertTrue($success, 'That index was created');
 	}
@@ -139,7 +139,7 @@ class IndexManagerTest extends \Codeception\Test\Unit
 
 		$indexes = $this->showIndexes($model);
 
-		$this->assertArrayHasKey('loc_type_2dsphere', $indexes);
+		$this->assertArrayHasKey('loc.type_2dsphere', $indexes);
 
 		$this->assertTrue($success, 'That index was created');
 	}
