@@ -8,6 +8,7 @@ php:
   - hhvm
 services:
   - mongodb
+sudo: false
 matrix:
   fast_finish: true
   allow_failures:
@@ -18,9 +19,9 @@ cache:
     - vendor
 install:
   - pecl install mongodb
-  - sudo apt-get install -y libdmtx-utils
-  - composer require "ptachoire/php-dmtx:^1"
-  - composer install --prefer-dist --dev --no-interaction
+  # Required for older PHP
+  - composer update
+#  - composer install --prefer-dist --dev --no-interaction
   # Ensure that test script is executable
   - chmod +x run-travis
 script:
