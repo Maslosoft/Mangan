@@ -60,14 +60,14 @@ class PlainTest extends Unit
 
 		$deleted = $em->delete();
 
-		$this->assertTrue($deleted);
+		$this->assertTrue($deleted, 'Document was deleted');
 		$notFound = $finder->findByPk($model->_id);
 
-		$this->assertNull($notFound);
+		$this->assertNull($notFound, 'Document was not found');
 
 		$deleted = $em->delete();
 
-		$this->assertFalse($deleted);
+		$this->assertFalse($deleted, 'Removing failed');
 	}
 
 	public function testIfWillDeletePlainDocumentByPk()

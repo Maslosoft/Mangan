@@ -63,15 +63,15 @@
     "docs": "https://maslosoft.com/mangan/docs/"
   },
   "require": {
+    "ext-gd": "*",
+    "alcaeus/mongo-php-adapter": "^1.1",
     "maslosoft/addendum": "*",
-    "maslosoft/signals": "*",
-    "masterexploder/phpthumb": "^2",
     "maslosoft/embedi": "*",
     "maslosoft/gazebo": "*",
+    "maslosoft/signals": "*",
+    "masterexploder/phpthumb": "^2",
     "psr/log": "^1",
-    "symfony/yaml": ">=2.7 <5.0",
-    "maslosoft/mongofill": "*",
-    "ext-gd": "*"
+    "symfony/yaml": ">=2.7 <5.0"
   },
   "require-dev": {
     "codeception/codeception": "*",

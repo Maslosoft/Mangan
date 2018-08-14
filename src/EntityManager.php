@@ -3,12 +3,12 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan;
@@ -93,7 +93,7 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Create entity manager
 	 * @param AnnotatedInterface $model
-	 * @param Mangan $mangan
+	 * @param Mangan             $mangan
 	 * @throws ManganException
 	 */
 	public function __construct(AnnotatedInterface $model, Mangan $mangan = null)
@@ -120,7 +120,7 @@ class EntityManager implements EntityManagerInterface
 	 * This will create customized entity manger if defined in model with EntityManager annotation.
 	 * If no custom entity manager is defined this will return default EntityManager.
 	 * @param AnnotatedInterface $model
-	 * @param Mangan $mangan
+	 * @param Mangan             $mangan
 	 * @return EntityManagerInterface
 	 */
 	public static function create($model, Mangan $mangan = null)
@@ -157,28 +157,24 @@ class EntityManager implements EntityManagerInterface
 	 * @throws ManganException on fail of insert or insert of empty document
 	 * @throws ManganException on fail of insert, when safe flag is set to true
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
-	 * @since v1.0
 	 */
 	public function insert(AnnotatedInterface $model = null)
 	{
 		$model = $model ?: $this->model;
-		if ($this->_beforeSave($model, EntityManagerInterface::EventBeforeInsert))
+		if ($this->beforeSave($model, EntityManagerInterface::EventBeforeInsert))
 		{
 			$rawData = RawArray::fromModel($model);
-			/**
-			 * TODO Save options ara failing with message:
-			 * Unrecognized write concern field: authMechanism
-			 * $this->options->getSaveOptions()
-			 */
-			$rawResult = $this->_collection->insert($rawData);
-			$result = $this->_result($rawResult, true);
+
+			$opts = $this->options->getSaveOptions();
+			$rawResult = $this->_collection->insert($rawData, $opts);
+			$result = $this->insertResult($rawResult);
 
 			if ($result)
 			{
-				$this->_afterSave($model, EntityManagerInterface::EventAfterInsert);
+				$this->afterSave($model, EntityManagerInterface::EventAfterInsert);
 				return true;
 			}
-			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document. ' . ucfirst($rawResult['errmsg']), $rawResult['code']);
+			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document. ' . ucfirst($rawResult['errmsg']));
 		}
 		AspectManager::removeAspect($model, self::AspectSaving);
 		return false;
@@ -190,23 +186,21 @@ class EntityManager implements EntityManagerInterface
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 *
 	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
-
+	 *                          meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
 	 * @throws ManganException if the record is new
 	 * @throws ManganException on fail of update
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
-	 * @since v1.0
 	 */
 	public function update(array $attributes = null)
 	{
-		if ($this->_beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
+		if ($this->beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
 		{
 			$criteria = PkManager::prepareFromModel($this->model);
 			$result = $this->updateOne($criteria, $attributes);
 			if ($result)
 			{
-				$this->_afterSave($this->model, EntityManagerInterface::EventAfterUpdate);
+				$this->afterSave($this->model, EntityManagerInterface::EventAfterUpdate);
 				return true;
 			}
 			throw new ManganException('Can\t save the document to disk, or attempting to save an empty document.');
@@ -223,11 +217,11 @@ class EntityManager implements EntityManagerInterface
 	 * * Does not raise any events or signals
 	 * * Does not perform any validation
 	 *
-	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
+	 * @param array|CriteriaInterface $criteria   query criteria.
+	 * @param array                   $attributes list of attributes that need to be saved. Defaults to null,
 	 * @param bool Whether tu force update/upsert document
-	 * meaning all attributes that are loaded from DB will be saved.
-	 * @since v1.0
+	 *                                            meaning all attributes that are loaded from DB will be saved.
+	 * @return bool
 	 */
 	public function updateOne($criteria = null, array $attributes = null, $modify = false)
 	{
@@ -275,16 +269,18 @@ class EntityManager implements EntityManagerInterface
 		{
 			$data = $rawData;
 		}
+		$conditions = $criteria->getConditions();
+		$opts = $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]);
+		$collection = $this->getCollection();
 
-		$result = $this->getCollection()->update($criteria->getConditions(), $data, $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]));
-		return $this->_result($result);
+		$result = $collection->update($conditions, $data, $opts);
+		return $this->updateResult($result);
 	}
 
 	/**
 	 * Atomic, in-place update method.
 	 *
-	 * @since v1.3.6
-	 * @param Modifier $modifier updating rules to apply
+	 * @param Modifier          $modifier updating rules to apply
 	 * @param CriteriaInterface $criteria condition to limit updating rules
 	 * @return boolean
 	 */
@@ -293,11 +289,14 @@ class EntityManager implements EntityManagerInterface
 		if ($modifier->canApply())
 		{
 			$criteria = $this->sm->apply($criteria);
-			$result = $this->getCollection()->update($criteria->getConditions(), $modifier->getModifiers(), $this->options->getSaveOptions([
-						'upsert' => false,
-						'multiple' => true
-			]));
-			return $this->_result($result);
+			$conditions = $criteria->getConditions();
+			$mods = $criteria->getConditions();
+			$opts = $this->options->getSaveOptions([
+				'upsert' => false,
+				'multiple' => true
+			]);
+			$result = $this->getCollection()->update($conditions, $mods, $opts);
+			return $this->updateResult($result);
 		}
 		else
 		{
@@ -311,36 +310,35 @@ class EntityManager implements EntityManagerInterface
 	 * **NOTE: This will overwrite entire document.**
 	 * Any filtered out properties will be removed as well.
 	 *
-	 * The record is inserted as a documnent into the database collection, if exists it will be replaced.
+	 * The record is inserted as a document into the database collection, if exists it will be replaced.
 	 *
 	 * Validation will be performed before saving the record. If the validation fails,
 	 * the record will not be saved. You can call {@link getErrors()} to retrieve the
 	 * validation errors.
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
-	 * If the validation fails, the record will not be saved to database.
+	 *                               If the validation fails, the record will not be saved to database.
 	 *
 	 * @return boolean whether the saving succeeds
-	 * @since v1.0
 	 */
 	public function replace($runValidation = true)
 	{
 		if (!$runValidation || $this->validator->validate())
 		{
 			$model = $this->model;
-			if ($this->_beforeSave($model))
+			if ($this->beforeSave($model))
 			{
 				$data = RawArray::fromModel($model);
 				$rawResult = $this->_collection->save($data, $this->options->getSaveOptions());
-				$result = $this->_result($rawResult, true);
+				$result = $this->insertResult($rawResult);
 
 				if ($result)
 				{
-					$this->_afterSave($model);
+					$this->afterSave($model);
 					return true;
 				}
 				$msg = '';
-				if(!empty($rawResult['errmsg']))
+				if (!empty($rawResult['errmsg']))
 				{
 					$msg = $rawResult['errmsg'];
 				}
@@ -368,10 +366,9 @@ class EntityManager implements EntityManagerInterface
 	 * validation errors.
 	 *
 	 * @param boolean $runValidation whether to perform validation before saving the record.
-	 * If the validation fails, the record will not be saved to database.
+	 *                               If the validation fails, the record will not be saved to database.
 	 *
 	 * @return boolean whether the saving succeeds
-	 * @since v1.0
 	 */
 	public function save($runValidation = true)
 	{
@@ -393,7 +390,7 @@ class EntityManager implements EntityManagerInterface
 		if (!$runValidation || $this->validator->validate())
 		{
 			$model = $this->model;
-			if ($this->_beforeSave($model))
+			if ($this->beforeSave($model))
 			{
 				$criteria = PkManager::prepareFromModel($this->model);
 				foreach ($criteria->getConditions() as $field => $value)
@@ -407,11 +404,11 @@ class EntityManager implements EntityManagerInterface
 
 				if ($result)
 				{
-					$this->_afterSave($model);
+					$this->afterSave($model);
 					return true;
 				}
 				$errmsg = '';
-				if(!empty($this->lastResult['errmsg']))
+				if (!empty($this->lastResult['errmsg']))
 				{
 					$errmsg = ucfirst($this->lastResult['errmsg']) . '.';
 				}
@@ -451,17 +448,17 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Deletes the document from database.
 	 * @return boolean whether the deletion is successful.
-	 * @throws ManganException if the record is new
 	 */
 	public function delete()
 	{
-		if ($this->_beforeDelete())
+		if ($this->beforeDelete())
 		{
-			$result = $this->deleteOne(PkManager::prepareFromModel($this->model));
+			$conditions = PkManager::prepareFromModel($this->model);
+			$result = $this->deleteOne($conditions);
 
 			if ($result !== false)
 			{
-				$this->_afterDelete();
+				$this->afterDelete();
 				return true;
 			}
 			else
@@ -480,36 +477,39 @@ class EntityManager implements EntityManagerInterface
 	 * <b>Does not raise beforeDelete</b>
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @since v1.0
+	 * @return bool
 	 */
 	public function deleteOne($criteria = null)
 	{
 		$criteria = $this->sm->apply($criteria);
 
 		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-					'justOne' => true
+			'justOne' => true
 		]));
-		return $this->_result($result);
+		return $this->deleteResult($result);
 	}
 
 	/**
 	 * Deletes document with the specified primary key.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed $pkValue primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
+	 * @param mixed                   $pkValue  primary key value(s). Use array for multiple primary keys. For
+	 *                                          composite key, each key value must be an array (column name=>column
+	 *                                          value).
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @since v1.0
+	 *
+	 * @return bool
 	 */
 	public function deleteByPk($pkValue, $criteria = null)
 	{
-		if ($this->_beforeDelete())
+		if ($this->beforeDelete())
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
 			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-						'justOne' => true
+				'justOne' => true
 			]));
-			return $this->_result($result);
+			return $this->deleteResult($result);
 		}
 		return false;
 	}
@@ -517,21 +517,22 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Deletes documents with the specified primary keys.
 	 * See {@link find()} for detailed explanation about $condition and $params.
-	 * @param mixed[] $pkValues Primary keys array
+	 * @param mixed[]                 $pkValues Primary keys array
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @since v1.0
 	 * @return bool
 	 */
 	public function deleteAllByPk($pkValues, $criteria = null)
 	{
-		if ($this->_beforeDelete())
+		if ($this->beforeDelete())
 		{
 			$criteria = $this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepareAll($this->model, $pkValues, $criteria));
-			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-						'justOne' => false
-			]));
-			return $this->_result($result);
+			$conditions = $criteria->getConditions();
+			$opts = $this->options->getSaveOptions([
+				'justOne' => false
+			]);
+			$result = $this->getCollection()->remove($conditions, $opts);
+			return $this->deleteResult($result);
 		}
 		return false;
 	}
@@ -544,16 +545,18 @@ class EntityManager implements EntityManagerInterface
 	 * See {@link find()} for detailed explanation about $condition and $params.
 	 *
 	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @since v1.0
 	 * @return bool
 	 */
 	public function deleteAll($criteria = null)
 	{
 		$criteria = $this->sm->apply($criteria);
 
+		$conditions = $criteria->getConditions();
+
 		// NOTE: Do not use [justOne => false] here
-		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions());
-		return $this->_result($result);
+		$opts = $this->options->getSaveOptions();
+		$result = $this->getCollection()->remove($conditions, $opts);
+		return $this->deleteResult($result);
 	}
 
 	public function getCollection()
@@ -564,19 +567,44 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Make status uniform
 	 * @param bool|array $result
-	 * @param bool $insert Set to true for inserts
 	 * @return bool Return true if succeed
 	 */
-	private function _result($result, $insert = false)
+	private function deleteResult($result)
 	{
 		$this->lastResult = $result;
 		if (is_array($result))
 		{
-			if ($insert)
-			{
-				return (bool) $result['ok'];
-			}
-			return (bool) $result['n'];
+			return $result['n'] > 0;
+		}
+		return $result;
+	}
+
+	/**
+	 * Make status uniform
+	 * @param bool|array $result
+	 * @return bool Return true if succeed
+	 */
+	private function insertResult($result)
+	{
+		$this->lastResult = $result;
+		if (is_array($result))
+		{
+			return $result['ok'] > 0;
+		}
+		return $result;
+	}
+
+	/**
+	 * Make status uniform
+	 * @param bool|array $result
+	 * @return bool Return true if succeed
+	 */
+	private function updateResult($result)
+	{
+		$this->lastResult = $result;
+		if (is_array($result))
+		{
+			return $result['ok'] > 0;
 		}
 		return $result;
 	}
@@ -586,9 +614,11 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Take care of EventBeforeSave
 	 * @see EventBeforeSave
+	 * @param                 $model
+	 * @param null|ModelEvent $event
 	 * @return boolean
 	 */
-	private function _beforeSave($model, $event = null)
+	private function beforeSave($model, $event = null)
 	{
 		AspectManager::addAspect($model, self::AspectSaving);
 		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
@@ -606,8 +636,10 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Take care of EventAfterSave
 	 * @see EventAfterSave
+	 * @param                 $model
+	 * @param null|ModelEvent $event
 	 */
-	private function _afterSave($model, $event = null)
+	private function afterSave($model, $event = null)
 	{
 		Event::trigger($model, EntityManagerInterface::EventAfterSave);
 		if (!empty($event))
@@ -625,9 +657,8 @@ class EntityManager implements EntityManagerInterface
 	 * You may override this method to do any preparation work for record deletion.
 	 * Make sure you call the parent implementation so that the event is raised properly.
 	 * @return boolean whether the record should be deleted. Defaults to true.
-	 * @since v1.0
 	 */
-	private function _beforeDelete()
+	private function beforeDelete()
 	{
 		AspectManager::addAspect($this->model, self::AspectRemoving);
 		$result = Event::valid($this->model, EntityManagerInterface::EventBeforeDelete);
@@ -644,9 +675,8 @@ class EntityManager implements EntityManagerInterface
 	 * The default implementation raises the {@link onAfterDelete} event.
 	 * You may override this method to do postprocessing after the record is deleted.
 	 * Make sure you call the parent implementation so that the event is raised properly.
-	 * @since v1.0
 	 */
-	private function _afterDelete()
+	private function afterDelete()
 	{
 		$event = new ModelEvent($this->model);
 		Event::trigger($this->model, EntityManagerInterface::EventAfterDelete, $event);

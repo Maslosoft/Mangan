@@ -83,6 +83,7 @@ class EntityOptions
 
 	public function getSaveOptions($extraOptions = [])
 	{
+		return $extraOptions;
 		$result = [];
 		foreach ($this->_getOptionNames() as $name)
 		{

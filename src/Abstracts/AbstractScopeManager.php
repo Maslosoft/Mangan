@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Abstracts;
 
+use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
@@ -105,8 +106,8 @@ abstract class AbstractScopeManager implements ModelAwareInterface
 
 	/**
 	 * Apply scopes to criteria, will create criteria object if not provided and pass it by reference
-	 * @param CriteriaInterface|array|null $criteria
-	 * @return CriteriaInterface
+	 * @param CriteriaInterface|Criteria|array|null $criteria
+	 * @return CriteriaInterface|Criteria
 	 */
 	public function apply(&$criteria = null)
 	{

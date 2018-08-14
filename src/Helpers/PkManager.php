@@ -33,9 +33,10 @@ class PkManager
 
 	/**
 	 * Prepare multi pk criteria
-	 * @param AnnotatedInterface $model
-	 * @param mixed[] $pkValues
+	 * @param AnnotatedInterface     $model
+	 * @param mixed[]                $pkValues
 	 * @param CriteriaInterface|null $criteria
+	 * @return Criteria|CriteriaInterface|null
 	 */
 	public static function prepareAll($model, $pkValues, CriteriaInterface $criteria = null)
 	{

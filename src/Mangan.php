@@ -64,7 +64,7 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Default annotations values configuration. This should contain
 	 * array with keys same as annotation class name, and key-value
-	 * pairs corresponing to annotation properties.
+	 * pairs corresponding to annotation properties.
 	 *
 	 * Example:
 	 * ```
@@ -310,7 +310,7 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Get profiler instance. This is guaranted, if not configured will return NullProfiller.
+	 * Get profiler instance. This is guaranteed, if not configured will return NullProfiler.
 	 * @see NullProfiler
 	 * @return ProfilerInterface
 	 */
@@ -329,12 +329,12 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Set profiler instance
-	 * @param ProfilerInterface $profiller
+	 * @param ProfilerInterface $profiler
 	 * @return Mangan
 	 */
-	public function setProfiler(ProfilerInterface $profiller)
+	public function setProfiler(ProfilerInterface $profiler)
 	{
-		$this->_profiler = $profiller;
+		$this->_profiler = $profiler;
 		return $this;
 	}
 
@@ -440,7 +440,7 @@ class Mangan implements LoggerAwareInterface
 				}
 			}
 
-			$this->cs->mongoClient = new MongoClient($this->connectionString, $options);
+			$this->cs->mongoClient = new MongoClient($this->connectionString);
 
 			return $this->cs->mongoClient;
 		}
