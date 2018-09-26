@@ -86,7 +86,7 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 * Result of last operation
-	 * @var array
+	 * @var bool|array
 	 */
 	private $lastResult = [];
 
@@ -615,7 +615,7 @@ class EntityManager implements EntityManagerInterface
 	 * Take care of EventBeforeSave
 	 * @see EventBeforeSave
 	 * @param                 $model
-	 * @param null|ModelEvent $event
+	 * @param string $event
 	 * @return boolean
 	 */
 	private function beforeSave($model, $event = null)
