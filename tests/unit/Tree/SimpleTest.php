@@ -5,6 +5,8 @@ namespace Tree;
 use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
+use Maslosoft\Mangan\Interfaces\SortInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\Tree\ModelWithSimpleTree;
 use MongoId;
 use UnitTester;
@@ -16,6 +18,19 @@ class SimpleTest extends Unit
 	 * @var UnitTester
 	 */
 	protected $tester;
+
+	public function testReadingRelMeta()
+	{
+		$model = new ModelWithSimpleTree();
+
+		$relMeta = ManganMeta::create($model)->children->related;
+
+		$this->assertNotEmpty($relMeta);
+		codecept_debug($relMeta->sort);
+		$this->assertNotEmpty($relMeta->sort);
+		$this->assertArrayHasKey('order', $relMeta->sort);
+		$this->assertSame(SortInterface::SortAsc, $relMeta->sort['order']);
+	}
 
 	// tests
 	public function testIfWillProperlyStoreAndLoadTree()

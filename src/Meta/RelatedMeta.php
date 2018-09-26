@@ -94,4 +94,9 @@ class RelatedMeta extends BaseMeta
 	 */
 	public $orderField = '';
 
+	/**
+	 * Sorting direction for related documents
+	 * @var int
+	 */
+	public $direction = SortInterface::SortAsc;
 }

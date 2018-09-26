@@ -3,12 +3,12 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan\Annotations;
@@ -29,30 +29,43 @@ use Maslosoft\Mangan\Meta\RelatedMeta;
  *
  * Compact notation:
  *
- * RelatedOrdering('order')
+ * ```
+ * @RelatedOrdering('order')
+ * ```
+ *
+ * Compact notation with specified order:
+ *
+ * ```
+ * @RelatedOrdering('order', SortInterface::SortAsc)
+ * ```
  *
  * Extended notation:
  *
- * RelatedOrdering(orderField = 'order')
- *
+ * ```
+ * @RelatedOrdering('orderField' = 'order', 'direction' = SortInterface::SortAsc)
+ * ```
  *
  * @Conflicts('Embedded')
  * @Conflicts('EmbeddedArray')
  * @Conflicts('DbRef')
  * @Conflicts('DbRefArray')
  *
+ * @see      SortInterface
  * @template RelatedOrdering('${orderField}')
- * @author Piotr Maselkowski <pmaselkowski at gmail.com>
+ * @author   Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class RelatedOrderingAnnotation extends ManganPropertyAnnotation
 {
 
 	public $value;
+
 	public $orderField;
+
+	public $direction;
 
 	public function init()
 	{
-		$data = ParamsExpander::expand($this, ['orderField']);
+		$data = ParamsExpander::expand($this, ['orderField', 'direction']);
 		if (empty($this->getEntity()->related))
 		{
 			$relMeta = new RelatedMeta();
@@ -61,16 +74,41 @@ class RelatedOrderingAnnotation extends ManganPropertyAnnotation
 		{
 			$relMeta = $this->getEntity()->related;
 		}
+
 		foreach ($data as $key => $val)
 		{
 			$relMeta->$key = $val;
 		}
-		if (empty($relMeta->sort))
+
+		// Ensure array
+		if (!is_array($relMeta->sort))
 		{
-			$relMeta->sort = [
-				$relMeta->orderField => SortInterface::SortAsc
-			];
+			$relMeta->sort = [];
 		}
+
+		// Sort might be set by @RelatedAnnotation (defaults to _id)
+		// or or by many @RelatedOrdering to sort on multiple fields.
+		// Place current order in front if only sorted by _id
+		// or append, placing _id at the end.
+		if (count($relMeta->sort) === 1 && array_key_exists('_id', $relMeta->sort))
+		{
+			$relMeta->sort = array_merge([$relMeta->orderField => $relMeta->direction], $relMeta->sort);
+		}
+		else
+		{
+			$idSort = null;
+			if (array_key_exists('_id', $relMeta->sort))
+			{
+				$idSort = $relMeta->sort['_id'];
+				unset($relMeta->sort['_id']);
+			}
+			$relMeta->sort = array_merge($relMeta->sort, [$relMeta->orderField => $relMeta->direction]);
+			if (null !== $idSort)
+			{
+				$relMeta->sort = array_merge($relMeta->sort, ['_id' => $idSort]);
+			}
+		}
+
 		$this->getEntity()->related = $relMeta;
 	}
 
