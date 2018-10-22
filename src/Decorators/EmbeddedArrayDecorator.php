@@ -15,9 +15,9 @@ namespace Maslosoft\Mangan\Decorators;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Helpers\DbRefManager;
+use Maslosoft\Mangan\Helpers\UnknownDocumentTypePanicker;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
-use Maslosoft\Mangan\Model\DbRef;
 
 /**
  * EmbeddedArrayDecorator
@@ -36,7 +36,7 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 			{
 				static::ensureClass($model, $name, $data);
 				// Set ensured class to $dbValue
-				$instance = $this->_getInstance($model->$name, $dbValue, $data);
+				$instance = $this->_getInstance($model->$name, $dbValue, $data, $model, $name);
 				$embedded = $transformatorClass::toModel($data, $instance, $instance, $model, $name);
 
 				// Field was transformed from DB Ref
@@ -77,7 +77,7 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 	 * @param mixed[] $data
 	 * @return AnnotatedInterface|null
 	 */
-	private function _getInstance($instances, $dbValue, $data)
+	private function _getInstance($instances, $dbValue, $data, $parent = null, $parentField = '')
 	{
 		if (!count($instances))
 		{
@@ -99,6 +99,10 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 			if (!isset($val['_id']) && isset($val['id']))
 			{
 				$val['_id'] = $val['id'];
+			}
+			if(empty($val['_class']))
+			{
+				UnknownDocumentTypePanicker::tryHandle($val, $parent, $parentField);
 			}
 			assert(array_key_exists('_id', $val), sprintf('_id not defined for %s', $val['_class']));
 			$id = (string) $val['_id'];
