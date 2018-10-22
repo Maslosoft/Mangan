@@ -37,7 +37,7 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 				static::ensureClass($model, $name, $data);
 				// Set ensured class to $dbValue
 				$instance = $this->_getInstance($model->$name, $dbValue, $data);
-				$embedded = $transformatorClass::toModel($data, $instance, $instance);
+				$embedded = $transformatorClass::toModel($data, $instance, $instance, $model, $name);
 
 				// Field was transformed from DB Ref
 				$embedded = DbRefManager::maybeCreateInstanceFrom($embedded);

@@ -17,6 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Events\UnknownDocumentType;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
@@ -26,6 +27,7 @@ use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\PropertyFilter\Filter;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
+use Maslosoft\Mangan\Helpers\UnknownDocumentTypePanicker;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
@@ -92,7 +94,7 @@ abstract class Transformer
 	 * @throws TransformatorException
 	 * @throws ManganException
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
+	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, AnnotatedInterface $parent = null, $parentField = '')
 	{
 		$data = (array) $data;
 		if (is_object($className))
@@ -113,7 +115,7 @@ abstract class Transformer
 				}
 				else
 				{
-					throw new TransformatorException('Could not determine document type');
+					$className = UnknownDocumentTypePanicker::tryHandle($data, $parent, $parentField);
 				}
 			}
 		}

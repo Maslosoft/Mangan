@@ -20,6 +20,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
+use Maslosoft\Mangan\Helpers\UnknownDocumentTypePanicker;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
@@ -98,6 +99,20 @@ class EmbeddedDecorator implements DecoratorInterface
 			{
 				throw new ManganException(sprintf("Embedded model class `%s` not found in model `%s` field `%s`", $class, get_class($model), $name));
 			}
+		}
+
+		// Something is very wrong here.
+		// The `$dbValue` variable must be array for embedded documents
+		// if it is not, it means that we have wrong data type stored in
+		// database. There is last resort handling below this condition
+		// check, however it *might* be risky to use this, as we cannot
+		// be sure that we can reconstruct proper object from some scalar value.
+		if(!is_array($dbValue))
+		{
+			$data = $dbValue;
+			$dbValue = [];
+			$dbValue['data'] = $data;
+			$class = UnknownDocumentTypePanicker::tryHandle($dbValue, $model, $name);
 		}
 		$dbValue['_class'] = $class;
 	}
