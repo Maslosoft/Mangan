@@ -47,7 +47,16 @@ class UnknownDocumentTypePanicker
 		}
 		if(!$handled)
 		{
-			throw new TransformatorException('Could not determine document type');
+			$params = [];
+			if(!empty($parent) && is_object($parent))
+			{
+				$params[] = sprintf('on model `%s`', get_class($parent));
+			}
+			if(!empty($parentField))
+			{
+				$params[] = sprintf('on field `%s`', $parentField);
+			}
+			throw new TransformatorException('Could not determine document type ' . implode(', ', $params));
 		}
 		return $className;
 	}
