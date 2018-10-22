@@ -107,7 +107,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		// database. There is last resort handling below this condition
 		// check, however it *might* be risky to use this, as we cannot
 		// be sure that we can reconstruct proper object from some scalar value.
-		if(!is_array($dbValue))
+		if(!is_array($dbValue) && null !==$dbValue)
 		{
 			$data = $dbValue;
 			$dbValue = [];
