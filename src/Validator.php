@@ -90,10 +90,7 @@ class Validator implements ValidatableInterface
 			$this->errors[$name] = [];
 
 			// Check if meta for field exists
-			if (empty($fieldMeta))
-			{
-				throw new InvalidArgumentException(sprintf("Unknown field `%s` in model `%s`", $name, get_class($this->model)));
-			}
+			assert(!empty($fieldMeta), new InvalidArgumentException(sprintf("Unknown field `%s` in model `%s`", $name, get_class($this->model))));
 
 			// Validate field if has any validator
 			if (!empty($fieldMeta->validators))
