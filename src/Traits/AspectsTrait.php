@@ -9,6 +9,7 @@
 namespace Maslosoft\Mangan\Traits;
 
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\AspectManager;
 use Maslosoft\Mangan\Helpers\CompositionIterator;
 use Maslosoft\Mangan\Interfaces\AspectsInterface;
@@ -31,6 +32,7 @@ trait AspectsTrait
 	public function addAspect($aspect)
 	{
 		$this->aspects[(string)$aspect] = true;
+		assert($this instanceof AnnotatedInterface);
 		$it = new CompositionIterator($this);
 		$it->ofType(AspectsInterface::class);
 		foreach($it as $subDocument)
@@ -46,6 +48,7 @@ trait AspectsTrait
 	public function removeAspect($aspect)
 	{
 		unset($this->aspects[(string)$aspect]);
+		assert($this instanceof AnnotatedInterface);
 		$it = new CompositionIterator($this);
 		$it->ofType(AspectsInterface::class);
 		foreach($it as $subDocument)
