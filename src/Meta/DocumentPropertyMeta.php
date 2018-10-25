@@ -15,7 +15,6 @@ namespace Maslosoft\Mangan\Meta;
 
 use Maslosoft\Addendum\Collections\MetaProperty;
 use Maslosoft\Mangan\EntityManager;
-use Maslosoft\Mangan\Sort;
 use Maslosoft\Mangan\Transformers\DocumentArray;
 use Maslosoft\Mangan\Transformers\JsonArray;
 
@@ -128,7 +127,7 @@ class DocumentPropertyMeta extends MetaProperty
 	public $persistent = true;
 
 	/**
-	 * Whether attribute is safe for mass assignement
+	 * Whether attribute is safe for mass assignment
 	 * @see EntityManager::setAttributes()
 	 * @var boolean|null
 	 */
