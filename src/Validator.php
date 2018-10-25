@@ -226,9 +226,9 @@ class Validator implements ValidatableInterface
 
 	public function setErrors($errors)
 	{
-		foreach ($errors as $field => $errors)
+		foreach ($errors as $field => $fieldErrors)
 		{
-			$this->errors[$field] = $errors;
+			$this->errors[$field] = $fieldErrors;
 		}
 	}
 
