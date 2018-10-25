@@ -323,6 +323,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function replace($runValidation = true)
 	{
+		$this->beforeValidate($this->model);
 		if (!$runValidation || $this->validator->validate())
 		{
 			$model = $this->model;
@@ -387,6 +388,7 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function upsert($runValidation = true)
 	{
+		$this->beforeValidate($this->model);
 		if (!$runValidation || $this->validator->validate())
 		{
 			$model = $this->model;
@@ -610,6 +612,11 @@ class EntityManager implements EntityManagerInterface
 	}
 
 // <editor-fold defaultstate="collapsed" desc="Event and Signal handling">
+
+	private function beforeValidate($model)
+	{
+		AspectManager::addAspect($model, self::AspectSaving);
+	}
 
 	/**
 	 * Take care of EventBeforeSave
