@@ -16,11 +16,19 @@ namespace Maslosoft\Mangan\Helpers;
 use PHPThumb\GD;
 
 /**
- * ImageThumb
+ * Use this class instead of GD to prevent sizeof errors:
+ *
+ * @see https://github.com/masterexploder/PHPThumb/issues/131
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 class ImageThumb extends GD
 {
+	/**
+	 * This is to prevent sizeof error:
+	 *
+	 * @see https://github.com/masterexploder/PHPThumb/issues/131
+	 * @var array
+	 */
 	protected $options = [];
 }
