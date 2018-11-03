@@ -91,6 +91,14 @@ class CompositionIterator implements Iterator, Countable
 	{
 		foreach (ManganMeta::create($model)->fields() as $name => $meta)
 		{
+			// Not one of:
+			// * Embedded(Array)
+			// * DbRef(Array)
+			// * Related(Array)
+			if(!$meta->owned)
+			{
+				continue;
+			}
 			if (is_array($model->$name))
 			{
 				foreach ($model->$name as $child)
