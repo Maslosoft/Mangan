@@ -128,6 +128,7 @@ abstract class Transformer
 			self::ensureClass($className);
 			$model = new $className;
 		}
+		$data['_class'] = get_class($model);
 		$meta = ManganMeta::create($model);
 		$calledClass = get_called_class();
 		$decorator = new Decorator($model, $calledClass, $meta);
