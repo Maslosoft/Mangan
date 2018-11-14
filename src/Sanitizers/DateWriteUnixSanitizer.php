@@ -28,11 +28,7 @@ class DateWriteUnixSanitizer extends DateSanitizer
 
 	public function write($model, $dbValue)
 	{
-		if ($dbValue instanceof MongoDate)
-		{
-			return (int) $dbValue->sec;
-		}
-		return (int) (new MongoDate((int) $dbValue))->sec;
+		return (int) parent::write($model, $dbValue)->sec;
 	}
 
 }

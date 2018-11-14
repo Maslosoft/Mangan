@@ -24,16 +24,30 @@ use MongoDate;
 class DateSanitizer implements SanitizerInterface
 {
 
+	/**
+	 * @param       $model
+	 * @param mixed $dbValue
+	 * @return MongoDate
+	 */
 	public function read($model, $dbValue)
 	{
 		return $this->sanitize($dbValue);
 	}
 
+	/**
+	 * @param       $model
+	 * @param mixed $phpValue
+	 * @return MongoDate
+	 */
 	public function write($model, $phpValue)
 	{
 		return $this->sanitize($phpValue);
 	}
 
+	/**
+	 * @param $value
+	 * @return MongoDate
+	 */
 	private function sanitize($value)
 	{
 		$sec = $value;

@@ -32,7 +32,7 @@ class DateReadUnixSanitizer extends DateSanitizer
 		{
 			return (int) $dbValue->sec;
 		}
-		return (int) (new MongoDate((int) $dbValue))->sec;
+		return (int) parent::read($model, $dbValue)->sec;
 	}
 
 }
