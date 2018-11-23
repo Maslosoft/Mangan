@@ -27,12 +27,20 @@ class StringSanitizer implements SanitizerInterface
 	public function read($model, $dbValue)
 	{
 		$this->check($model, $dbValue);
+		if(empty($dbValue))
+		{
+			return '';
+		}
 		return (string) $dbValue;
 	}
 
 	public function write($model, $phpValue)
 	{
 		$this->check($model, $phpValue);
+		if(empty($phpValue))
+		{
+			return '';
+		}
 		return (string) $phpValue;
 	}
 
