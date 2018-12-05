@@ -39,6 +39,8 @@ class CompositionIterator implements Iterator, Countable
 
 	private $pointer = 0;
 
+	private $fieldNames = [];
+
 	public function __construct(AnnotatedInterface $model)
 	{
 		$this->model = $model;
@@ -78,6 +80,20 @@ class CompositionIterator implements Iterator, Countable
 		return $this;
 	}
 
+	/**
+	 * Get currently iterated over field name,
+	 * which have models
+	 * @return string
+	 */
+	public function getCurrentField()
+	{
+		if(isset($this->fieldNames[$this->pointer]))
+		{
+			return $this->fieldNames[$this->pointer];
+		}
+		return '';
+	}
+
 	private function init()
 	{
 		if (null === $this->models)
@@ -109,6 +125,7 @@ class CompositionIterator implements Iterator, Countable
 					}
 					if ($this->doInclude($child))
 					{
+						$this->fieldNames[] = $name;
 						$this->models[] = $child;
 					}
 					if($this->recurse())
@@ -124,6 +141,7 @@ class CompositionIterator implements Iterator, Countable
 			}
 			if ($this->doInclude($model->$name))
 			{
+				$this->fieldNames[] = $name;
 				$this->models[] = $model->$name;
 			}
 			if($this->recurse())
