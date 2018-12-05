@@ -273,6 +273,7 @@ class Event implements EventInterface
 				$event->source = $className;
 
 				$event->data = $handler[1];
+				$event->usedHandler = $handler[0];
 				call_user_func($handler[0], $event);
 				$wasTriggered = true;
 

@@ -72,6 +72,12 @@ class ModelEvent
 	public $source = '';
 
 	/**
+	 * Handler used by this event
+	 * @var null
+	 */
+	public $usedHandler = null;
+
+	/**
 	 * Whenever to propagate event
 	 * @var bool
 	 */
