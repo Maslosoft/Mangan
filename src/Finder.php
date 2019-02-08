@@ -3,12 +3,12 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan;
@@ -21,6 +21,7 @@ use Maslosoft\Mangan\Helpers\FinderEvents;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use Maslosoft\Mangan\Traits\Finder\CreateModel;
 use Maslosoft\Mangan\Traits\Finder\FinderHelpers;
 use Maslosoft\Mangan\Transformers\RawArray;
 
@@ -32,14 +33,15 @@ use Maslosoft\Mangan\Transformers\RawArray;
 class Finder extends AbstractFinder
 {
 
-	use FinderHelpers;
+	use CreateModel,
+		FinderHelpers;
 
 	/**
 	 * Constructor
 	 *
-	 * @param object $model Model instance
+	 * @param object                 $model Model instance
 	 * @param EntityManagerInterface $em
-	 * @param Mangan $mangan
+	 * @param Mangan                 $mangan
 	 */
 	public function __construct($model, $em = null, $mangan = null)
 	{
@@ -61,36 +63,15 @@ class Finder extends AbstractFinder
 	 * This will create customized finder if defined in model with Finder annotation.
 	 * If no custom finder is defined this will return default Finder.
 	 *
-	 * @param AnnotatedInterface $model
+	 * @param AnnotatedInterface     $model
 	 * @param EntityManagerInterface $em
-	 * @param Mangan $mangan
+	 * @param Mangan                 $mangan
 	 * @return FinderInterface
 	 */
 	public static function create(AnnotatedInterface $model, $em = null, Mangan $mangan = null)
 	{
 		$finderClass = ManganMeta::create($model)->type()->finder ?: static::class;
 		return new $finderClass($model, $em, $mangan);
-	}
-
-	protected function createModel($data)
-	{
-		if (!empty($data['$err']))
-		{
-			throw new ManganException(sprintf("There is an error in query: %s", $data['$err']));
-		}
-
-		// By default create instances of same
-		// type as provided model
-		$model = $this->getModel();
-
-		// For non homogeneous collections class
-		// need to be taken from data, not defined
-		// by model
-		if(ManganMeta::create($model)->type()->homogenous === false)
-		{
-			$model = null;
-		}
-		return RawArray::toModel($data, $model);
 	}
 
 }

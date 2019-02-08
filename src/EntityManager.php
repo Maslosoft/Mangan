@@ -29,6 +29,7 @@ use Maslosoft\Mangan\Signals\AfterDelete;
 use Maslosoft\Mangan\Signals\AfterSave;
 use Maslosoft\Mangan\Signals\BeforeDelete;
 use Maslosoft\Mangan\Signals\BeforeSave;
+use Maslosoft\Mangan\Traits\Finder\CreateModel;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Signals\Signal;
@@ -41,6 +42,8 @@ use MongoCollection;
  */
 class EntityManager implements EntityManagerInterface
 {
+
+	use CreateModel;
 
 	/**
 	 * Model
@@ -113,6 +116,14 @@ class EntityManager implements EntityManagerInterface
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
 		}
 		$this->_collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
+	}
+
+	/**
+	 * @return AnnotatedInterface
+	 */
+	public function getModel(): AnnotatedInterface
+	{
+		return $this->model;
 	}
 
 	/**
@@ -278,7 +289,8 @@ class EntityManager implements EntityManagerInterface
 	}
 
 	/**
-	 * Atomic, in-place update method.
+	 * Atomic, in-place update method. This method does not raise
+	 * events and does not emit signals.
 	 *
 	 * @param Modifier          $modifier updating rules to apply
 	 * @param CriteriaInterface $criteria condition to limit updating rules
@@ -303,6 +315,59 @@ class EntityManager implements EntityManagerInterface
 			return false;
 		}
 	}
+
+	/**
+	 * Find and modify single document atomically.
+	 *
+	 * By default this function will return updated document, ie document
+	 * with applied Modifier operations.
+	 *
+	 * To return document before applied updates, set parameter
+	 * `$returnUpdated` to false.
+	 *
+	 * This function will raise events and signals before operation on
+	 * current model.
+	 *
+	 * The events and signals after operation will be performed
+	 * on the returned model, depending on `$returnUpdated` parameter.
+	 *
+	 * @param array|CriteriaInterface $criteria
+	 * @param Modifier                $modifier
+	 * @param bool                    $returnUpdated
+	 * @return AnnotatedInterface|null
+	 */
+	public function findAndModify($criteria, Modifier $modifier, $returnUpdated = true)
+	{
+		if (!$this->beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
+		{
+			AspectManager::removeAspect($this->model, self::AspectSaving);
+			return null;
+		}
+		if ($modifier->canApply())
+		{
+			$criteria = $this->sm->apply($criteria);
+			$conditions = $criteria->getConditions();
+			$mods = $modifier->getModifiers();
+			$opts = [];
+			if($returnUpdated)
+			{
+				$opts = ['new' => true];
+			}
+			$data = $this->getCollection()->findAndModify($conditions, $mods, null, $opts);
+			if(empty($data))
+			{
+				return null;
+			}
+			$model = $this->createModel($data, $this->model);
+			ScenarioManager::setScenario($model, ScenariosInterface::Update);
+			return $model;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 
 	/**
 	 * Replaces the current document.

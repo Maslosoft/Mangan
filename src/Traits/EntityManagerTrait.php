@@ -26,7 +26,7 @@ use MongoCollection;
  * them to concrete Entity Manager class. Entity manager used by this trait
  * can be defined via EntityManager annotation.
  *
- * This is usefull to create Active Document
+ * This is useful to create Active Document
  * pattern classes.
  *
  * @see EntityManagerInterface
@@ -176,6 +176,31 @@ trait EntityManagerTrait
 	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null)
 	{
 		return $this->_getEm()->updateAll($modifier, $criteria);
+	}
+
+	/**
+	 * Find and modify single document atomically.
+	 *
+	 * By default this function will return updated document, ie document
+	 * with applied Modifier operations.
+	 *
+	 * To return document before applied updates, set parameter
+	 * `$returnUpdated` to false.
+	 *
+	 * This function will raise events and signals before operation on
+	 * current model.
+	 *
+	 * The events and signals after operation will be performed
+	 * on the returned model, depending on `$returnUpdated` parameter.
+	 *
+	 * @param array|CriteriaInterface $criteria
+	 * @param Modifier                $modifier
+	 * @param bool                    $returnUpdated
+	 * @return AnnotatedInterface|null
+	 */
+	public function findAndModify($criteria, Modifier $modifier, $returnUpdated = true)
+	{
+		return $this->_getEm()->findAndModify($criteria, $modifier, $returnUpdated);
 	}
 
 	/**
