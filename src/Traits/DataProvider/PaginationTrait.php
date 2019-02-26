@@ -48,7 +48,7 @@ trait PaginationTrait
 			$this->pagination = new $className;
 		}
 
-		// FIXME: Attach pagination options if it's array.
+		// Attach pagination options if it's array.
 		// It might be array, when configured via constructor
 		if (is_array($this->pagination))
 		{
