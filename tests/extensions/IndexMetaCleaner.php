@@ -17,6 +17,7 @@ use Codeception\Event\TestEvent;
 use Codeception\Extension;
 use Exception;
 use Maslosoft\Mangan\Helpers\IndexManager;
+use Maslosoft\ManganTest\Extensions\Interfaces\TestDoesNotUseMongoDB;
 
 class IndexMetaCleaner extends Extension
 {
@@ -27,6 +28,10 @@ class IndexMetaCleaner extends Extension
 
 	public function testBefore(TestEvent $e)
 	{
+		if($e->getTest() instanceof TestDoesNotUseMongoDB)
+		{
+			return;
+		}
 		if(!defined('MANGAN_TEST_ENV'))
 		{
 			throw new Exception('This extension requires test environment. Constant `MANGAN_TEST_ENV` needs to be true.');

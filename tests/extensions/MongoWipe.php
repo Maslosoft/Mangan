@@ -19,6 +19,7 @@ use Exception;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Mangan;
+use Maslosoft\ManganTest\Extensions\Interfaces\TestDoesNotUseMongoDB;
 
 /**
  * MongoWipe
@@ -35,6 +36,10 @@ class MongoWipe extends Extension
 
 	public function testBefore(TestEvent $e)
 	{
+		if($e->getTest() instanceof TestDoesNotUseMongoDB)
+		{
+			return;
+		}
 		if(!defined('MANGAN_TEST_ENV'))
 		{
 			throw new Exception('This extension requires test environment. Constant `MANGAN_TEST_ENV` needs to be true.');
