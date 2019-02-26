@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use function dirname;
+use function file_exists;
 use Maslosoft\Addendum\Addendum;
 use Maslosoft\Addendum\Helpers\SoftIncluder;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
@@ -22,6 +24,7 @@ use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Extensions\IndexMetaCleaner;
+use function mkdir;
 
 class IndexManager
 {
@@ -130,6 +133,11 @@ class IndexManager
 		if(!self::$haveDir && !file_exists($dir))
 		{
 			$mask = umask(0000);
+			$parentDir = dirname($dir);
+			if(!file_exists($parentDir))
+			{
+				mkdir($parentDir, 0777);
+			}
 			self::$haveDir = mkdir($dir, 0777);
 			umask($mask);
 		}
