@@ -91,6 +91,10 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 		{
 			$data['_id'] = $data['id'];
 		}
+		if(!isset($data['_id']) && isset($data['_mongo_id_']))
+		{
+			$data['_id'] = $data['_mongo_id_'];
+		}
 		foreach ($dbValue as $val)
 		{
 			/**
@@ -99,6 +103,10 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 			if (!isset($val['_id']) && isset($val['id']))
 			{
 				$val['_id'] = $val['id'];
+			}
+			if(!isset($val['_id']) && isset($val['_mongo_id_']))
+			{
+				$val['_id'] = $val['_mongo_id_'];
 			}
 			if(empty($val['_class']))
 			{
