@@ -44,7 +44,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		if($dbValue === null)
 		{
 			$meta = ManganMeta::create($model)->$name;
-			if($meta->embedded->nullable)
+			if($meta->embedded && $meta->embedded->nullable)
 			{
 				$model->$name = null;
 				return null;
@@ -69,7 +69,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		if (null === $model->$name)
 		{
 			$meta = ManganMeta::create($model)->$name;
-			if($meta->embedded->nullable)
+			if($meta->embedded && $meta->embedded->nullable)
 			{
 				$dbValue[$name] = null;
 				return null;
