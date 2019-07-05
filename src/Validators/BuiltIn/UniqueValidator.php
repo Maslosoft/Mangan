@@ -90,8 +90,9 @@ class UniqueValidator implements ValidatorInterface
 	/**
 	 * Validates the attribute of the object.
 	 * If there is any error, the error message is added to the object.
-	 * @param AnnotatedInterface $model the object being validated
-	 * @param string $attribute the attribute being validated
+	 * @param AnnotatedInterface $model     the object being validated
+	 * @param string             $attribute the attribute being validated
+	 * @return bool
 	 */
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
@@ -101,11 +102,20 @@ class UniqueValidator implements ValidatorInterface
 			return true;
 		}
 
-		$className = empty($this->className) ? get_class($model) : $this->className;
+		if(empty($this->className))
+		{
+			// NOTE: Clone model, as it's attribute value might
+			// depend on other attributes and could be
+			// corrupted by condition decorator in criteria.
+			// The clone is needed as scenario is changed later.
+			$compareModel = clone $model;
+		}
+		else
+		{
+			$compareModel = new $this->className;
+		}
 
-		$compareModel = new $className;
-
-		$criteria = (new Criteria)->decorateWith($compareModel);
+		$criteria = new Criteria(null, $compareModel);
 		$criteria->addCond($attribute, '==', $value);
 
 		if ($this->criteria !== [])
