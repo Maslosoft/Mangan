@@ -2,8 +2,11 @@
 
 namespace Transformator;
 
+use function codecept_debug;
 use Codeception\Test\Unit;
+use Maslosoft\Cli\Shared\Os;
 use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Transformers\Datamatrix;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
@@ -21,12 +24,35 @@ class DmtxTest extends Unit
 	protected $tester;
 
 	// tests
+
+	public function testIfDatamatrixIsNotAvailable()
+	{
+		$model = new ModelWithI18N();
+		$model->_id = new MongoId;
+		$model->title = 'DMTX';
+		try
+		{
+			Datamatrix::fromModel($model);
+		}
+		catch (ManganException $e)
+		{
+			codecept_debug($e->getMessage());
+			$this->assertContains('php-dmtx', $e->getMessage());
+			return;
+		}
+		if(!ClassChecker::exists(Dmtx\Reader::class))
+		{
+			$this->fail('Should have thrown exception when dmtx is not available');
+		}
+	}
+
 	public function testIfWillConvertToDatamatrixAndViceVerse()
 	{
 		if(!ClassChecker::exists(Dmtx\Reader::class))
 		{
 			$this->markTestSkipped("PHP DMTX not available");
 		}
+		$this->assertTrue(Os::commandExists('dmtxwrite'));
 		$model = new ModelWithI18N();
 		$model->_id = new MongoId;
 		$model->title = 'DMTX';

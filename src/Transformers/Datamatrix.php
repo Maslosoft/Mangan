@@ -15,7 +15,10 @@ namespace Maslosoft\Mangan\Transformers;
 
 use Dmtx\Reader;
 use Dmtx\Writer;
+use Maslosoft\Cli\Shared\Os;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
@@ -35,6 +38,11 @@ class Datamatrix implements TransformatorInterface
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [])
 	{
+		if(!ClassChecker::exists(Writer::class))
+		{
+			throw new ManganException('Missing php-dmtx library');
+		}
+		assert(Os::commandExists('dmtxwrite'));
 		$data = YamlString::fromModel($model, $fields, 1, 1);
 		return (new Writer())->encode($data)->dump();
 	}
@@ -50,6 +58,11 @@ class Datamatrix implements TransformatorInterface
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
 	{
+		if(!ClassChecker::exists(Reader::class))
+		{
+			throw new ManganException('Missing php-dmtx library');
+		}
+		assert(Os::commandExists('dmtxread'));
 		$data = (new Reader())->decode($data);
 		return YamlString::toModel($data, $className, $instance);
 	}
