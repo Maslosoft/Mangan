@@ -13,14 +13,16 @@
 
 namespace Maslosoft\Mangan\Interfaces;
 
+use Maslosoft\Mangan\Criteria;
+
 /**
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
 interface ScopeInterface
 {
-
+	/**
+	 * @return CriteriaInterface|Criteria
+	 */
 	public function getCriteria();
-
-	public function isDefault();
 }

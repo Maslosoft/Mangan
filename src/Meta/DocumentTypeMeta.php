@@ -26,7 +26,10 @@ use Maslosoft\Mangan\Annotations\PrimaryKeyAnnotation;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\PropertyMaker;
+use Maslosoft\Mangan\Interfaces\ScopeInterface;
 use Maslosoft\Mangan\Mangan;
+use Maslosoft\Mangan\Traits\Access\GetSet;
+use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -38,8 +41,8 @@ use Symfony\Component\Finder\Finder;
 class DocumentTypeMeta extends MetaType
 {
 
-	use \Maslosoft\Mangan\Traits\Defaults\MongoClientOptions,
-	  \Maslosoft\Mangan\Traits\Access\GetSet;
+	use MongoClientOptions,
+	  GetSet;
 
 	/**
 	 * Field label
@@ -124,6 +127,13 @@ class DocumentTypeMeta extends MetaType
 	 */
 	public $validators = [];
 
+
+	/**
+	 * @see ScopeInterface
+	 * @var array
+	 */
+	public $scopes = [];
+
 	/**
 	 * Values of properties
 	 * @var mixed
@@ -163,6 +173,7 @@ class DocumentTypeMeta extends MetaType
 		}
 		$this->_values[$name] = $value;
 		$this->_defaults[$name] = false;
+		return null;
 	}
 
 	public function __isset($name)

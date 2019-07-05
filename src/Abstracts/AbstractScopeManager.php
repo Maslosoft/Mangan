@@ -19,8 +19,10 @@ use Maslosoft\Mangan\Interfaces\Criteria\DecoratableInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaAwareInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\ModelAwareInterface;
+use Maslosoft\Mangan\Interfaces\ScopeInterface;
 use Maslosoft\Mangan\Interfaces\ScopeManagerInterface;
 use Maslosoft\Mangan\Interfaces\WithCriteriaInterface;
+use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Traits\ModelAwareTrait;
 
 /**
@@ -113,7 +115,7 @@ abstract class AbstractScopeManager implements ModelAwareInterface
 	{
 		if (null === $criteria)
 		{
-			return $this->getModelCriteria();
+			$criteria = $this->getModelCriteria();
 		}
 		elseif (is_array($criteria))
 		{
@@ -124,6 +126,19 @@ abstract class AbstractScopeManager implements ModelAwareInterface
 		if ($criteria instanceof DecoratableInterface)
 		{
 			$criteria->decorateWith($this->getModel());
+		}
+		$scopesClasses = ManganMeta::create($this->getModel())->type()->scopes;
+		foreach($scopesClasses as $scopesClass)
+		{
+			$scope = new $scopesClass;
+			if($scope instanceof ModelAwareInterface)
+			{
+				$scope->setModel($this->getModel());
+			}
+			assert($scope instanceof ScopeInterface);
+			$scopeCriteria = $scope->getCriteria();
+			assert($scopeCriteria instanceof CriteriaInterface);
+			$criteria->mergeWith($scopeCriteria);
 		}
 		return $criteria;
 	}
