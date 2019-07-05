@@ -179,16 +179,16 @@
         },
         {
             "name": "maslosoft/cli-shared",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/CLIShared.git",
-                "reference": "1690667e682b1e696eb4ea9f1fbcb450aa5f1621"
+                "reference": "1f9f1ba8c592351de52bee67b3903f73f502d45e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/CLIShared/zipball/1690667e682b1e696eb4ea9f1fbcb450aa5f1621",
-                "reference": "1690667e682b1e696eb4ea9f1fbcb450aa5f1621",
+                "url": "https://api.github.com/repos/Maslosoft/CLIShared/zipball/1f9f1ba8c592351de52bee67b3903f73f502d45e",
+                "reference": "1f9f1ba8c592351de52bee67b3903f73f502d45e",
                 "shasum": ""
             },
             "require": {
@@ -224,7 +224,7 @@
                 "helpers",
                 "php"
             ],
-            "time": "2019-05-05T11:20:03+00:00"
+            "time": "2019-07-05T15:27:26+00:00"
         },
         {
             "name": "maslosoft/embedi",
