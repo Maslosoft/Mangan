@@ -17,7 +17,6 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
 use Maslosoft\Mangan\Events\ClassNotFound;
 use Maslosoft\Mangan\Events\Event;
-use Maslosoft\Mangan\Events\UnknownDocumentType;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Helpers\Debug\StructureChecker;
@@ -90,12 +89,14 @@ abstract class Transformer
 	/**
 	 * Create document from array
 	 *
-	 * @param mixed[]            $data
-	 * @param string|object      $className
-	 * @param AnnotatedInterface $instance
+	 * @param mixed[]                 $data
+	 * @param string|object           $className
+	 * @param AnnotatedInterface      $instance
+	 * @param AnnotatedInterface|null $parent
+	 * @param string                  $parentField
 	 * @return AnnotatedInterface
-	 * @throws TransformatorException
 	 * @throws ManganException
+	 * @throws TransformatorException
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, AnnotatedInterface $parent = null, $parentField = '')
 	{
