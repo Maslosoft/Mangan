@@ -20,6 +20,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\UnknownDocumentType;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
+use Maslosoft\Mangan\Helpers\Debug\StructureChecker;
 use Maslosoft\Mangan\Helpers\Decorator\Decorator;
 use Maslosoft\Mangan\Helpers\Decorator\ModelDecorator;
 use Maslosoft\Mangan\Helpers\Finalizer\FinalizingManager;
@@ -81,7 +82,9 @@ abstract class Transformer
 			$model->$name = $sanitizer->read($name, $model->$name);
 		}
 		$md->write($arr);
-		return FinalizingManager::fromModel($arr, static::class, $model);
+		$data = FinalizingManager::fromModel($arr, static::class, $model);
+		assert((new StructureChecker)->checkEmbeds($data));
+		return $data;
 	}
 
 	/**
