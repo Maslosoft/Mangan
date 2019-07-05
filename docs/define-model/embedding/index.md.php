@@ -39,11 +39,22 @@ annotation on one of object property:
 public $address = null;
 ```
 
-This will instruct Mangan to treat property as an object when it is saved
+The [`@Embedded`][annotation] will instruct Mangan to treat property as an object when it is saved
 or retrieved from MongoDB. Check also [repository for example][repo] for
 this documentation page.
 
-From now on, this property can store and retrieve object, for example:
+By default Mangan will ensure instance when transforming model. To
+allow `null` as value, the `nullable` option can be set to true:
+
+```
+/**
+* @Embedded(Address, 'nullable' = true)
+*/
+public $address = null;
+```
+
+The property marked as [`@Embedded`][annotation] can store and
+retrieve object, for example:
 
 ```
 $address = new Address;

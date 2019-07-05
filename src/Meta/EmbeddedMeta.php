@@ -28,6 +28,17 @@ class EmbeddedMeta extends BaseMeta
 	public $single = false;
 
 	/**
+	 * Whether the field can be nullable. This affects
+	 * only single embedded document.
+	 *
+	 * When field is not nullable, it will create
+	 * empty instance of document when transforming.
+	 *
+	 * @var bool
+	 */
+	public $nullable = false;
+
+	/**
 	 * Whenever field should contain array of referenced documents.
 	 * @var bool
 	 */

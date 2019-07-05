@@ -54,7 +54,7 @@ class EmbeddedAnnotation extends ManganPropertyAnnotation
 
 	public function init()
 	{
-		$data = ParamsExpander::expand($this, ['class']);
+		$data = ParamsExpander::expand($this, ['class', 'nullable']);
 		$meta = new EmbeddedMeta($data);
 		$meta->single = true;
 		$this->getEntity()->embedded = $meta;

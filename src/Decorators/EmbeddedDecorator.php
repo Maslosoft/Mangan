@@ -41,6 +41,15 @@ class EmbeddedDecorator implements DecoratorInterface
 			$model->$name = $dbValue;
 			return;
 		}
+		if($dbValue === null)
+		{
+			$meta = ManganMeta::create($model)->$name;
+			if($meta->embedded->nullable)
+			{
+				$model->$name = null;
+				return null;
+			}
+		}
 		static::ensureClass($model, $name, $dbValue);
 		$instance = null;
 		if ($model->$name instanceof $dbValue['_class'])
@@ -59,6 +68,12 @@ class EmbeddedDecorator implements DecoratorInterface
 	{
 		if (null === $model->$name)
 		{
+			$meta = ManganMeta::create($model)->$name;
+			if($meta->embedded->nullable)
+			{
+				$dbValue[$name] = null;
+				return null;
+			}
 			$className = static::getClassName($model, $name);
 			if (!is_string($className))
 			{
