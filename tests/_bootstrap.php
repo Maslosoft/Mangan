@@ -6,18 +6,16 @@ use Maslosoft\Mangan\Annotations\Validators\ValidatorAnnotation;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
 use Maslosoft\ManganTest\Models\ValidatorProxy\RequiredValidator;
+use Maslosoft\Mangan\Command;
+use Maslosoft\Mangan\Tools\AvailableCommandsGenerator;
+use Maslosoft\Mangan\Transaction;
+use Maslosoft\ManganTest\Models\BaseAttributesAnnotations;
 
 date_default_timezone_set('Europe/Paris');
 
 define('VENDOR_DIR', __DIR__ . '/../vendor');
 define('YII_DIR', VENDOR_DIR . '/yiisoft/yii/framework/');
 require VENDOR_DIR . '/autoload.php';
-
-// Invoker stub for windows
-if (defined('PHP_WINDOWS_VERSION_MAJOR'))
-{
-	require __DIR__ . '/../misc/Invoker.php';
-}
 
 if (!defined('MANGAN_TEST_ENV'))
 {
@@ -63,3 +61,24 @@ $mangan4->connectionString = 'mongodb://localhost:27017';
 $mangan4->dbName = ManganCustomValidatorsDbName;
 $mangan4->validators[RequiredProxy::class] = RequiredValidator::class;
 $mangan4->init();
+
+// Here you can initialize variables that will be available to your tests
+error_reporting(E_ALL);
+
+echo "Mangan: " . (new Mangan())->getVersion() . PHP_EOL;
+echo "MongoDB: " . (new Command())->buildInfo()['version'] . PHP_EOL;
+$transactions = 'false';
+$t = (new Transaction(new BaseAttributesAnnotations));
+$t->commit();
+if ($t->isAvailable())
+{
+	$transactions = 'true';
+}
+(new AvailableCommandsGenerator)->generate();
+echo "Transactions: " . $transactions . PHP_EOL;
+
+foreach(['mongodb', 'second', 'tokumx', 'custom-validators'] as $connectionId)
+{
+	echo "Using DB: " . Mangan::fly($connectionId)->dbName . PHP_EOL;
+}
+ini_set('xdebug.max_nesting_level', 200);

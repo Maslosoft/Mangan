@@ -73,7 +73,7 @@ class I63Test extends \Codeception\Test\Unit
 		{
 			// Expected behavior
 			codecept_debug($e->getMessage());
-			$this->assertContains('_id', $e->getMessage());
+			$this->assertStringContainsString('_id', $e->getMessage());
 		}
 
 		$count = (new Finder($model))->count();

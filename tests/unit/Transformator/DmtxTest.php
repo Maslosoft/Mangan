@@ -37,7 +37,7 @@ class DmtxTest extends Unit
 		catch (ManganException $e)
 		{
 			codecept_debug($e->getMessage());
-			$this->assertContains('php-dmtx', $e->getMessage());
+			$this->assertStringContainsString('php-dmtx', $e->getMessage());
 			return;
 		}
 		if(!ClassChecker::exists(Dmtx\Reader::class))

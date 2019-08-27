@@ -50,7 +50,7 @@ class JsonArrayTest extends Unit
 
 		$json = JsonArray::fromModel($model);
 
-		$this->assertInternalType('string', $json['_id']);
+		$this->assertIsString($json['_id']);
 	}
 
 	public function testIfWillPopulateModelWithI18N()
