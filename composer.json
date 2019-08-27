@@ -72,7 +72,8 @@
     "maslosoft/signals": "*",
     "masterexploder/phpthumb": "^2",
     "psr/log": "^1",
-    "symfony/yaml": ">=2.7 <5.0"
+    "symfony/yaml": ">=2.7 <5.0",
+    "ext-json": "*"
   },
   "require-dev": {
     "codeception/codeception": "^3",
