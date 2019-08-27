@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Transformers;
 
+use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\AspectManager;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
 /**
@@ -22,5 +24,23 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  */
 class JsonArray extends Transformer implements TransformatorInterface
 {
+	const AspectJsonArrayFromModel = 'AspectJsonArrayFromModel';
+	const AspectJsonArrayToModel = 'AspectJsonArrayToModel';
 
+	public static function fromModel(AnnotatedInterface $model, $fields = [])
+	{
+		AspectManager::addAspect($model, self::AspectJsonArrayFromModel);
+		$data = parent::fromModel($model, $fields);
+		AspectManager::removeAspect($model, self::AspectJsonArrayFromModel);
+		return $data;
+	}
+
+	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, AnnotatedInterface $parent = null, $parentField = '')
+	{
+		AspectManager::addAspect($instance, self::AspectJsonArrayToModel);
+		$model = parent::toModel($data, $className, $instance, $parent, $parentField);
+		AspectManager::removeAspect($instance, self::AspectJsonArrayToModel);
+		AspectManager::removeAspect($model, self::AspectJsonArrayToModel);
+		return $model;
+	}
 }

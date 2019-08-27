@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\AspectManager;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 
@@ -24,6 +25,8 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  */
 class JsonString implements TransformatorInterface
 {
+	const AspectJsonStringFromModel = 'AspectJsonStringFromModel';
+	const AspectJsonStringToModel = 'AspectJsonStringToModel';
 
 	/**
 	 * Returns the given object as an associative array
@@ -34,7 +37,10 @@ class JsonString implements TransformatorInterface
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [], $options = null)
 	{
-		return json_encode(JsonArray::fromModel($model, $fields), $options);
+		AspectManager::addAspect($model, self::AspectJsonStringFromModel);
+		$data = json_encode(JsonArray::fromModel($model, $fields), $options);
+		AspectManager::removeAspect($model, self::AspectJsonStringFromModel);
+		return $data;
 	}
 
 	/**
@@ -48,7 +54,11 @@ class JsonString implements TransformatorInterface
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
 	{
-		return JsonArray::toModel(json_decode($data, true), $className, $instance);
+		AspectManager::addAspect($instance, self::AspectJsonStringFromModel);
+		$model = JsonArray::toModel(json_decode($data, true), $className, $instance);
+		AspectManager::removeAspect($instance, self::AspectJsonStringToModel);
+		AspectManager::removeAspect($model, self::AspectJsonStringToModel);
+		return $model;
 	}
 
 }

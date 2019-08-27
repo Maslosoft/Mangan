@@ -18,6 +18,7 @@ use Dmtx\Writer;
 use Maslosoft\Cli\Shared\Os;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
+use Maslosoft\Mangan\AspectManager;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
@@ -29,6 +30,8 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  */
 class Datamatrix implements TransformatorInterface
 {
+	const AspectDatamatrixFromModel = 'AspectDatamatrixFromModel';
+	const AspectDatamatrixToModel = 'AspectDatamatrixToModel';
 
 	/**
 	 * Returns the given object as an associative array
@@ -43,7 +46,9 @@ class Datamatrix implements TransformatorInterface
 			throw new ManganException('Missing php-dmtx library');
 		}
 		assert(Os::commandExists('dmtxwrite'));
+		AspectManager::addAspect($model, self::AspectDatamatrixFromModel);
 		$data = YamlString::fromModel($model, $fields, 1, 1);
+		AspectManager::removeAspect($model, self::AspectDatamatrixFromModel);
 		return (new Writer())->encode($data)->dump();
 	}
 
@@ -64,7 +69,11 @@ class Datamatrix implements TransformatorInterface
 		}
 		assert(Os::commandExists('dmtxread'));
 		$data = (new Reader())->decode($data);
-		return YamlString::toModel($data, $className, $instance);
+		AspectManager::addAspect($instance, self::AspectDatamatrixToModel);
+		$model = YamlString::toModel($data, $className, $instance);
+		AspectManager::removeAspect($instance, self::AspectDatamatrixToModel);
+		AspectManager::removeAspect($model, self::AspectDatamatrixToModel);
+		return $model;
 	}
 
 }

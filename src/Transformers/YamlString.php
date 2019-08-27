@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\AspectManager;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -25,6 +26,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlString implements TransformatorInterface
 {
+	const AspectYamlStringFromModel = 'AspectYamlStringFromModel';
+	const AspectYamlStringToModel = 'AspectYamlStringToModel';
 
 	/**
 	 * Returns the given object as an associative array
@@ -34,11 +37,14 @@ class YamlString implements TransformatorInterface
 	 * @param int   $inline                 The level where you switch to inline YAML
 	 * @param int   $indent                 The amount of spaces to use for indentation of nested nodes.
 	 * @param bool  $exceptionOnInvalidType true if an exception must be thrown on invalid types (a PHP resource or object), false otherwise
-	 * @return array an associative array of the contents of this object
+	 * @return string YAML string with the contents of this object
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [], $inline = 2, $indent = 4, $exceptionOnInvalidType = false)
 	{
-		return Yaml::dump(YamlArray::fromModel($model, $fields), $inline, $indent, $exceptionOnInvalidType);
+		AspectManager::addAspect($model, self::AspectYamlStringFromModel);
+		$data = Yaml::dump(YamlArray::fromModel($model, $fields), $inline, $indent, $exceptionOnInvalidType);
+		AspectManager::removeAspect($model, self::AspectYamlStringFromModel);
+		return $data;
 	}
 
 	/**
@@ -55,7 +61,11 @@ class YamlString implements TransformatorInterface
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, $exceptionOnInvalidType = false)
 	{
-		return YamlArray::toModel(Yaml::parse($data, $exceptionOnInvalidType), $className, $instance);
+		AspectManager::addAspect($instance, self::AspectYamlStringToModel);
+		$model = YamlArray::toModel(Yaml::parse($data, $exceptionOnInvalidType), $className, $instance);
+		AspectManager::removeAspect($instance, self::AspectYamlStringToModel);
+		AspectManager::removeAspect($model, self::AspectYamlStringToModel);
+		return $model;
 	}
 
 }
