@@ -23,8 +23,16 @@ class AspectManager
 	 * @param AnnotatedInterface $model
 	 * @param                    $aspect
 	 */
-	public static function addAspect(AnnotatedInterface $model, $aspect)
+	public static function addAspect(AnnotatedInterface $model = null, $aspect = '')
 	{
+		if(empty($model))
+		{
+			return;
+		}
+		if(empty($aspect))
+		{
+			return;
+		}
 		if($model instanceof AspectsInterface)
 		{
 			$model->addAspect($aspect);
@@ -40,8 +48,16 @@ class AspectManager
 	 * @param AnnotatedInterface $model
 	 * @param                    $aspect
 	 */
-	public static function removeAspect(AnnotatedInterface $model, $aspect)
+	public static function removeAspect(AnnotatedInterface $model = null, $aspect = '')
 	{
+		if(empty($model))
+		{
+			return;
+		}
+		if(empty($aspect))
+		{
+			return;
+		}
 		if($model instanceof AspectsInterface)
 		{
 			$model->removeAspect($aspect);
@@ -58,10 +74,18 @@ class AspectManager
 	 * @see AspectsInterface
 	 * @param AnnotatedInterface $model
 	 * @param                    $aspect
-	 * @return bool|string
+	 * @return bool
 	 */
-	public static function hasAspect(AnnotatedInterface $model, $aspect)
+	public static function hasAspect(AnnotatedInterface $model = null, $aspect = '')
 	{
+		if(empty($model))
+		{
+			return false;
+		}
+		if(empty($aspect))
+		{
+			return false;
+		}
 		if($model instanceof AspectsInterface)
 		{
 			return $model->hasAspect($aspect);
