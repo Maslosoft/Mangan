@@ -46,6 +46,12 @@ class DbRefMeta extends BaseMeta
 	public $updatable = true;
 
 	/**
+	 * Whether referenced object can be nullable
+	 * @var bool
+	 */
+	public $nullable = false;
+
+	/**
 	 * Comparing key. This is used to update db ref instances from external sources.
 	 * This is only usefull in db ref arrays.
 	 * @var string|array

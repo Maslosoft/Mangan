@@ -30,12 +30,23 @@ use UnexpectedValueException;
  *
  * Disable updates, long notation:
  * ```
- * @DbRef(Vendor\Package\ClassLiteral, updatable = false)
+ * @DbRef(Vendor\Package\ClassLiteral, 'updatable' = false)
  * ```
  *
  * Disable updates, short notation:
  * ```
  * @DbRef(Vendor\Package\ClassLiteral, false)
+ * ```
+ *
+ * NOTE: Nullable requires field to be not `updatable`
+ * Nullable, long notation:
+ * ```
+ * @DbRef(Vendor\Package\ClassLiteral, 'updatable' = false)
+ * ```
+ *
+ * Nullable, short notation:
+ * ```
+ * @DbRef(Vendor\Package\ClassLiteral, false, false)
  * ```
  *
  * @template DbRef(${class}, ${updatable})
@@ -54,6 +65,7 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 
 	public $class;
 	public $updatable;
+	public $nullable;
 	public $value;
 
 	public function init()
@@ -70,23 +82,32 @@ class DbRefAnnotation extends ManganPropertyAnnotation
 
 	protected function getDbRefMeta()
 	{
-		$data = ParamsExpander::expand($this, ['class', 'updatable']);
+		$data = ParamsExpander::expand($this, ['class', 'updatable', 'nullable']);
 
 		$params = [
 			$this->getMeta()->type()->name,
 			$this->getEntity()->name
 		];
 
-		$msg = vsprintf("Parameter `updatable' must be of type `boolean` (or be omitted) on %s:%s", $params);
+		$msg = vsprintf("Parameter `updatable` must be of type `boolean` (or be omitted) on %s:%s", $params);
+		$msg2 = vsprintf("Parameter `nullable` must be of type `boolean` (or be omitted) on %s:%s", $params);
 
 		assert(empty($data['updatable']) || is_bool($data['updatable']), new UnexpectedValueException($msg));
+		assert(empty($data['nullable']) || is_bool($data['nullable']), new UnexpectedValueException($msg2));
 
 		$refMeta = new DbRefMeta($data);
 		if (!$refMeta->class)
 		{
 			$refMeta->class = $this->getMeta()->type()->name;
 		}
+		if($refMeta->updatable && $refMeta->nullable)
+		{
+			$msg3 = vsprintf("Both parameter `nullable` and `updatable` cannot be set to `true` on %s:%s.", $params);
+			$msg3 .= 'This feature is not implemented';
+			throw new UnexpectedValueException($msg3);
+		}
 		$this->getEntity()->updatable = $refMeta->updatable;
+		$this->getEntity()->nullable = $refMeta->nullable;
 		return $refMeta;
 	}
 

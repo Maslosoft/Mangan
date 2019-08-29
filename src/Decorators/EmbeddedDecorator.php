@@ -25,6 +25,10 @@ use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use function get_class;
+use function is_string;
+use function strtolower;
+use function var_dump;
 
 /**
  * EmbeddedDecorator
@@ -41,10 +45,18 @@ class EmbeddedDecorator implements DecoratorInterface
 			$model->$name = $dbValue;
 			return;
 		}
+
+		// Workaround for string null value
+		if(is_string($dbValue) && strtolower($dbValue) === 'null')
+		{
+			$dbValue = null;
+		}
+
 		if($dbValue === null)
 		{
 			$meta = ManganMeta::create($model)->$name;
-			if($meta->embedded && $meta->embedded->nullable)
+			assert($meta instanceof DocumentPropertyMeta);
+			if($meta->nullable || $meta->embedded && $meta->embedded->nullable)
 			{
 				$model->$name = null;
 				return null;
@@ -69,7 +81,8 @@ class EmbeddedDecorator implements DecoratorInterface
 		if (null === $model->$name)
 		{
 			$meta = ManganMeta::create($model)->$name;
-			if($meta->embedded && $meta->embedded->nullable)
+			assert($meta instanceof DocumentPropertyMeta);
+			if($meta->nullable || $meta->embedded && $meta->embedded->nullable)
 			{
 				$dbValue[$name] = null;
 				return null;
@@ -116,6 +129,13 @@ class EmbeddedDecorator implements DecoratorInterface
 			}
 		}
 
+		if(is_string($dbValue) && strtolower($dbValue) === 'null')
+		{
+//			var_dump($dbValue);
+//			exit;
+			$dbValue = null;
+		}
+
 		// Something is very wrong here.
 		// The `$dbValue` variable must be array for embedded documents
 		// if it is not, it means that we have wrong data type stored in
@@ -124,6 +144,8 @@ class EmbeddedDecorator implements DecoratorInterface
 		// be sure that we can reconstruct proper object from some scalar value.
 		if(!is_array($dbValue) && null !==$dbValue)
 		{
+//			var_dump(get_class($dbValue));
+//			exit;
 			$data = $dbValue;
 			$dbValue = [];
 			$dbValue['data'] = $data;

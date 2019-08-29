@@ -75,6 +75,15 @@ class DocumentPropertyMeta extends MetaProperty
 	public $updatable = true;
 
 	/**
+	 * When ownered decide if should be nullable
+	 *
+	 * **NOTE**: This should not be set directly, but rather by annotations.
+	 *
+	 * @var bool
+	 */
+	public $nullable = false;
+
+	/**
 	 * I18N metadata
 	 * @var I18NMeta
 	 */
