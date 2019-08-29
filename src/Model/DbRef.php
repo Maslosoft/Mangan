@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use MongoId;
 
 /**
  * DbRef
@@ -31,7 +32,7 @@ class DbRef implements AnnotatedInterface
 
 	/**
 	 * Primary key to retrieve object
-	 * @var ObjectId|mixed|mixed[]
+	 * @var MongoId|mixed|mixed[]
 	 */
 	public $pk = null;
 
