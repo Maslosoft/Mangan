@@ -42,6 +42,8 @@ class DbRefDecorator implements DecoratorInterface
 			return;
 		}
 
+		/* @var $transformatorClass TransformatorInterface */
+
 		// Assume that ref is already provided
 		if (!empty($dbValue['_class']) && $dbValue['_class'] !== DbRef::class)
 		{
@@ -50,6 +52,7 @@ class DbRefDecorator implements DecoratorInterface
 		}
 		$dbValue['_class'] = DbRef::class;
 		$dbRef = $transformatorClass::toModel($dbValue);
+		assert($dbRef instanceof DbRef);
 		self::ensureClass($model, $name, $dbRef);
 		/* @var $dbRef DbRef */
 		$referenced = new $dbRef->class;
@@ -75,6 +78,7 @@ class DbRefDecorator implements DecoratorInterface
 		{
 			DbRefManager::save($referenced, $dbRef);
 		}
+		/* @var $transformatorClass TransformatorInterface */
 		$dbValue[$name] = $transformatorClass::fromModel($dbRef, false);
 	}
 

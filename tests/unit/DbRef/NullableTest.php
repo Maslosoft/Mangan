@@ -1,19 +1,19 @@
 <?php namespace DbRef;
 
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithNullableAndUpdatableDbRef;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithNullableDbRef;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
-use Mongo;
 use MongoId;
-use function var_export;
+use UnitTester;
 
-class NullableTest extends \Codeception\Test\Unit
+class NullableTest extends Unit
 {
 	/**
-	 * @var \UnitTester
+	 * @var UnitTester
 	 */
 	protected $tester;
 
@@ -39,6 +39,7 @@ class NullableTest extends \Codeception\Test\Unit
 		$found = $finder->find();
 		$this->assertNotEmpty($found, 'Found model');
 		$this->assertInstanceOf(ModelWithNullableDbRef::class, $found);
+		assert($found instanceof ModelWithNullableDbRef);
 		$this->assertNull($found->stats);
 	}
 
@@ -61,6 +62,7 @@ class NullableTest extends \Codeception\Test\Unit
 		$found = $finder->find();
 		$this->assertNotEmpty($found, 'Found model');
 		$this->assertInstanceOf(ModelWithNullableDbRef::class, $found);
+		assert($found instanceof ModelWithNullableDbRef);
 		$this->assertInstanceOf(SimplePlainDbRef::class, $found->stats);
 
 		codecept_debug(var_export(JsonArray::fromModel($model), true));
@@ -71,6 +73,7 @@ class NullableTest extends \Codeception\Test\Unit
 		];
 
 		$model3 = JsonArray::toModel($data, null, $found);
+		assert($model3 instanceof ModelWithNullableDbRef);
 		$this->assertNull($model3->stats, 'After setting from JSON field is null');
 
 		$saved3 = (new EntityManager($model3))->save();
@@ -79,6 +82,7 @@ class NullableTest extends \Codeception\Test\Unit
 
 		$found3 = (new Finder($model3))->find();
 		$this->assertNotEmpty($found3);
+		assert($found3 instanceof ModelWithNullableDbRef);
 		$this->assertNull($found3->stats, 'After finding field is still null');
 	}
 
@@ -92,7 +96,6 @@ class NullableTest extends \Codeception\Test\Unit
 		$em = new EntityManager($model);
 		$em2 = new EntityManager($model2);
 		$finder = new Finder($model);
-		$finder2 = new Finder($model2);
 		$saved2 = $em2->save();
 		$this->assertTrue($saved2);
 
@@ -104,6 +107,7 @@ class NullableTest extends \Codeception\Test\Unit
 		$found = $finder->find();
 		$this->assertNotEmpty($found, 'Found model');
 		$this->assertInstanceOf(ModelWithNullableAndUpdatableDbRef::class, $found);
+		assert($found instanceof ModelWithNullableAndUpdatableDbRef);
 		$this->assertInstanceOf(SimplePlainDbRef::class, $found->stats);
 
 		$model->stats = null;
@@ -114,6 +118,7 @@ class NullableTest extends \Codeception\Test\Unit
 
 		$this->assertNotEmpty($found2, 'Found model');
 		$this->assertInstanceOf(ModelWithNullableAndUpdatableDbRef::class, $found2);
+		assert($found2 instanceof ModelWithNullableAndUpdatableDbRef);
 		$this->assertNull($found2->stats);
 	}
 }
