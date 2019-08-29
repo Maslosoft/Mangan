@@ -35,7 +35,7 @@ class DbRefDecorator implements DecoratorInterface
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		if (!$dbValue)
+		if (empty($dbValue))
 		{
 			$fieldMeta = ManganMeta::create($model)->field($name);
 			$model->$name = $fieldMeta->default;
@@ -58,13 +58,19 @@ class DbRefDecorator implements DecoratorInterface
 
 	public function write($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		if (!$model->$name)
+		$fieldMeta = ManganMeta::create($model)->field($name);
+
+		if (empty($model->$name))
 		{
+			if($fieldMeta->nullable)
+			{
+				$dbValue[$name] = null;
+			}
 			return;
 		}
 		$dbRef = DbRefManager::extractRef($model, $name);
 		$referenced = $model->$name;
-		$fieldMeta = ManganMeta::create($model)->field($name);
+
 		if ($fieldMeta->dbRef->updatable)
 		{
 			DbRefManager::save($referenced, $dbRef);
