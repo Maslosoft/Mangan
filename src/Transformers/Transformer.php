@@ -64,7 +64,12 @@ abstract class Transformer
 			{
 				continue;
 			}
-
+			if(empty($model->$name) && $meta->field($name)->nullable)
+			{
+				$model->$name = null;
+				$arr[$name] = null;
+				continue;
+			}
 			// NOTE: Sanitizers must be ran for all
 			// fields, as types *might* change between
 			// transformations.
@@ -103,6 +108,7 @@ abstract class Transformer
 		$data = (array) $data;
 		if (is_object($className))
 		{
+			assert($className !== null);
 			$className = get_class($className);
 		}
 		if (!$className)
@@ -177,6 +183,11 @@ abstract class Transformer
 			}
 			if (!$filter->toModel($model, $fieldMeta))
 			{
+				continue;
+			}
+			if(empty($value) && $meta->field($name)->nullable)
+			{
+				$model->$name = null;
 				continue;
 			}
 			$decorator->read($name, $value);

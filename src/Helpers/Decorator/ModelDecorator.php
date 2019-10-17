@@ -48,7 +48,7 @@ class ModelDecorator extends Transformator
 
 	/**
 	 * Get transformer
-	 * @param type $transformatorClass
+	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
 	 * @param DocumentPropertyMeta $meta
 	 * @return DecoratorInterface
