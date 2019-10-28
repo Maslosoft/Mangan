@@ -6,6 +6,10 @@ use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validators\BuiltIn\NumberValidator;
 use Maslosoft\ManganTest\Models\BaseAttributesAnnotations;
 use UnitTester;
+use function codecept_debug;
+use function implode;
+use function sprintf;
+use const PHP_EOL;
 
 class NumberTest extends Unit
 {
@@ -103,6 +107,130 @@ class NumberTest extends Unit
 		$this->assertFalse($valid);
 
 		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		codecept_debug($msg);
+	}
+
+	public function testGtNotValid()
+	{
+		$validator = new NumberValidator();
+		$validator->gt = 0;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = 0.0;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertFalse($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringContainsString('greater', $msg);
+		codecept_debug($msg);
+
+		$validator = new NumberValidator();
+		$validator->gt = 10;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = 9.99;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertFalse($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringContainsString('greater', $msg);
+		codecept_debug($msg);
+	}
+
+	public function testGtValid()
+	{
+		$validator = new NumberValidator();
+		$validator->gt = 0;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = 0.01;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertTrue($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringNotContainsString('greater', $msg);
+		codecept_debug($msg);
+
+		$validator = new NumberValidator();
+		$validator->gt = 10;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = 90.99;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertTrue($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringNotContainsString('greater', $msg);
+		codecept_debug($msg);
+	}
+
+	public function testLtNotValid()
+	{
+		$validator = new NumberValidator();
+		$validator->lt = 0;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = -0.0;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertFalse($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringContainsString('lesser', $msg);
+		codecept_debug($msg);
+
+		$validator = new NumberValidator();
+		$validator->lt = 10;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = 19.99;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertFalse($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringContainsString('lesser', $msg);
+		codecept_debug($msg);
+	}
+
+	public function testLtValid()
+	{
+		$validator = new NumberValidator();
+		$validator->lt = 0;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = -0.1;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertTrue($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringNotContainsString('lesser', $msg);
+		codecept_debug($msg);
+
+		$validator = new NumberValidator();
+		$validator->lt = 10;
+
+		$model = new BaseAttributesAnnotations();
+		$model->float = 9.99;
+
+		$valid = $validator->isValid($model, 'float');
+
+		$this->assertTrue($valid);
+
+		$msg = sprintf('Validator messages: %s', implode(PHP_EOL, $validator->getErrors()));
+		$this->assertStringNotContainsString('lesser', $msg);
 		codecept_debug($msg);
 	}
 

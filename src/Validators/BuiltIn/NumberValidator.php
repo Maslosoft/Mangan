@@ -55,6 +55,18 @@ class NumberValidator implements ValidatorInterface
 	public $min = NULL;
 
 	/**
+	 * Number must be greater than. Defaults to null, meaning no constraint.
+	 * @var integer|float
+	 */
+	public $gt = null;
+
+	/**
+	 * Number must be lesser than. Defaults to null, meaning no constraint.
+	 * @var integer|float
+	 */
+	public $lt= null;
+
+	/**
 	 * Deprecated: Use `msgTooSmall` instead
 	 * @var string user-defined error message used when the value is too big.
 	 * @deprecated Use `msgTooSmall` instead
@@ -97,8 +109,28 @@ class NumberValidator implements ValidatorInterface
 	 */
 	public $msgTooBig = '';
 
+	/**
+	 * Custom message to show if value must be greater than required
+	 * @Label('{attribute} must be greater than {gt}')
+	 * @var string
+	 */
+	public $msgGt = '';
+
+	/**
+	 * Custom message to show if value is lesser than required
+	 * @Label('{attribute} must be lesser than {lt}')
+	 * @var string
+	 */
+	public $msgLt = '';
+
 	public function isValid(AnnotatedInterface $model, $attribute)
 	{
+		// For lt/gt values exactly zero, the `allowEmpty` **must** be `false`
+		// or validation would not be performed at all.
+		if($this->lt === 0 || $this->gt === 0 || $this->lt === 0.0 || $this->gt === 0.0)
+		{
+			$this->allowEmpty = false;
+		}
 		$value = $model->$attribute;
 		if ($this->allowEmpty && empty($value))
 		{
@@ -119,7 +151,7 @@ class NumberValidator implements ValidatorInterface
 		if ($this->integerOnly)
 		{
 
-			if (!filter_var($value, FILTER_VALIDATE_INT))
+			if (false === filter_var($value, FILTER_VALIDATE_INT))
 			{
 				$this->addError('msgInteger', ['{attribute}' => $label]);
 				return false;
@@ -127,7 +159,7 @@ class NumberValidator implements ValidatorInterface
 		}
 		else
 		{
-			if (!filter_var($value, FILTER_VALIDATE_FLOAT))
+			if (false === filter_var($value, FILTER_VALIDATE_FLOAT))
 			{
 				$this->addError('msgNumber', ['{attribute}' => $label]);
 				return false;
@@ -150,6 +182,16 @@ class NumberValidator implements ValidatorInterface
 				$this->addError($this->tooBig, ['{max}' => $this->max, '{attribute}' => $label]);
 			}
 			$this->addError('msgTooBig', ['{max}' => $this->max, '{attribute}' => $label]);
+			return false;
+		}
+		if ($this->gt !== null && !($value > $this->gt))
+		{
+			$this->addError('msgGt', ['{gt}' => $this->gt, '{attribute}' => $label]);
+			return false;
+		}
+		if ($this->lt !== null && !($value < $this->lt))
+		{
+			$this->addError('msgLt', ['{lt}' => $this->lt, '{attribute}' => $label]);
 			return false;
 		}
 		return true;

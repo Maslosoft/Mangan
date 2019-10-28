@@ -60,6 +60,16 @@ class NumericalValidatorAnnotation extends ValidatorAnnotation
 	public $min = NULL;
 
 	/**
+	 * @var integer|float number must be greater than. Defaults to null, meaning no constraint.
+	 */
+	public $gt = null;
+
+	/**
+	 * @var integer|float number must be lesser than. Defaults to null, meaning no constraint.
+	 */
+	public $lt= null;
+
+	/**
 	 * @var string user-defined error message used when the value is too big.
 	 */
 	public $tooBig = NULL;
@@ -77,6 +87,8 @@ class NumericalValidatorAnnotation extends ValidatorAnnotation
 					'allowEmpty',
 					'max',
 					'min',
+					'gt',
+					'lt',
 					'tooBig',
 					'tooSmall',
 					'message',

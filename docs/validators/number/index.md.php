@@ -37,7 +37,7 @@ with options:
 
 ```
 /**
- * @NumericalValidator(min = 64, max = 1024)
+ * @NumericalValidator('min' = 64, 'max' = 1024)
  */
 public $maxSize = 128;
 ```
