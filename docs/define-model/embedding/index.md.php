@@ -53,6 +53,16 @@ allow `null` as value, the `nullable` option can be set to true:
 public $address = null;
 ```
 
+Alternatively, the `@Nullable` annotation can be used:
+
+```
+/**
+* @Embedded(Address)
+* @Nullable
+*/
+public $address = null;
+```
+
 The property marked as [`@Embedded`][annotation] can store and
 retrieve object, for example:
 
