@@ -29,7 +29,7 @@ interface ValidatorInterface extends AnnotatedInterface
 
 	public function isValid(AnnotatedInterface $model, $attribute);
 
-	public function addError($message, $params = []);
+	public function addError($message);
 
 	public function getErrors();
 }
