@@ -1,5 +1,5 @@
 language: php
-dist: bionic
+dist: trusty
 php:
   - 7.0
   - 7.1
@@ -21,9 +21,7 @@ cache:
     - vendor
 install:
   - pecl install -f mongodb
-  # Required for older PHP
-  - composer update
-#  - composer install --prefer-dist --dev --no-interaction
+  - composer install --prefer-dist --dev --no-interaction
   # Ensure that test script is executable
   - chmod +x run-travis
 script:
