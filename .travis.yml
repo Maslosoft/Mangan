@@ -19,7 +19,6 @@ matrix:
 cache:
   directories:
     - vendor
-before_install: echo "extension = zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 install:
   - pecl install -f mongodb
   # Required for older PHP
