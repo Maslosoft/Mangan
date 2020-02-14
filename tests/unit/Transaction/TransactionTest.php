@@ -52,8 +52,9 @@ class TransactionTest extends Unit
 		}
 		else
 		{
-			codecept_debug('Transactions NOT Available');
+			codecept_debug('Transactions are NOT Available');
 			$this->assertTrue(true, "That transactions are not available");
+			$this->markTestSkipped('Transactions are NOT Available');
 		}
 	}
 
