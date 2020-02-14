@@ -14,7 +14,7 @@ fi;
 
 if $coverage; then
 	echo "Have coverage";
-	vendor/bin/codecept run unit --coverage --html --coverage-html=. --coverage-xml=./coverage.clover
+	vendor/bin/codecept run unit --debug --coverage --html --coverage-html=. --coverage-xml=./coverage.clover
 	status=$?
 	wget --no-check-certificate https://scrutinizer-ci.com/ocular.phar
 	php ocular.phar code-coverage:upload --revision=`git rev-parse HEAD` --format=php-clover ./tests/_output/coverage.clover
