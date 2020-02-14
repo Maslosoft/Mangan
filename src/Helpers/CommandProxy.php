@@ -21,7 +21,7 @@ use Maslosoft\Mangan\Storage\CommandProxyStorage;
 
 /**
  * CommandProxy
- * This evalueates commands only if available
+ * This evaluates commands only if available
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
@@ -32,12 +32,12 @@ class CommandProxy extends Command
 	 * Static store of available commands
 	 * @var CommandProxyStorage
 	 */
-	private $available = null;
+	private $available;
 
 	public function __construct(AnnotatedInterface $model = null)
 	{
 		parent::__construct($model);
-		if (empty($model))
+		if ($model === null)
 		{
 			$mangan = Mangan::fly();
 		}
@@ -57,7 +57,7 @@ class CommandProxy extends Command
 		return $this->available->$command;
 	}
 
-	public function call($command, $arguments = [])
+	public function call($command, $arguments = []): array
 	{
 		if ($this->isAvailable($command))
 		{
@@ -70,6 +70,7 @@ class CommandProxy extends Command
 				$this->available->$command = false;
 			}
 		}
+		return [];
 	}
 
 }
