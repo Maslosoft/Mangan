@@ -3,12 +3,12 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan;
@@ -26,18 +26,18 @@ use Maslosoft\Mangan\Helpers\CommandProxy;
 class Transaction
 {
 
-	const IsolationMVCC = 'mvcc';
-	const IsolationSerializable = 'serializable';
-	const IsolationReadUncommitted = 'readUncommitted';
-	const CommandBegin = 'beginTransaction';
-	const CommandCommit = 'commitTransaction';
-	const CommandRollback = 'rollbackTransaction';
+	public const IsolationMVCC = 'mvcc';
+	public const IsolationSerializable = 'serializable';
+	public const IsolationReadUncommitted = 'readUncommitted';
+	public const CommandBegin = 'beginTransaction';
+	public const CommandCommit = 'commitTransaction';
+	public const CommandRollback = 'rollbackTransaction';
 
 	/**
 	 *
 	 * @var CommandProxy
 	 */
-	private $cmd = null;
+	private $cmd;
 
 	/**
 	 * Whenever transaction is currently active
@@ -49,12 +49,12 @@ class Transaction
 	 * Whenever transactions are available in current database
 	 * @var bool
 	 */
-	private static $isAvailable = null;
+	private static $isAvailable;
 
 	/**
 	 * Begin new transaction
 	 * @param AnnotatedInterface $model
-	 * @param enum $isolation
+	 * @param string             $isolation
 	 */
 	public function __construct(AnnotatedInterface $model, $isolation = self::IsolationMVCC)
 	{
@@ -79,28 +79,27 @@ class Transaction
 		self::$isActive = true;
 	}
 
-	public function isAvailable()
+	public function isAvailable(): bool
 	{
-		return $this->cmd->isAvailable(self::CommandBegin);
+		return $this->cmd->isAvailable(self::CommandBegin) && $this->cmd->isAvailable(self::CommandCommit);
 	}
 
-	public function commit()
+	public function commit(): void
 	{
 		$this->_finish(self::CommandCommit);
 	}
 
-	public function rollback()
+	public function rollback(): void
 	{
 		$this->_finish(self::CommandRollback);
 	}
 
-	private function _finish($command)
+	private function _finish($command): void
 	{
 		try
 		{
 			$this->cmd->call($command);
-		}
-		catch (Exception $e)
+		} catch (Exception $e)
 		{
 			throw $e;
 		} finally
