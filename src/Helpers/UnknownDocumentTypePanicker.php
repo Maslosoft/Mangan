@@ -11,6 +11,7 @@ namespace Maslosoft\Mangan\Helpers;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\UnknownDocumentType;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
+use function array_key_exists;
 use function get_class;
 use function gettype;
 use function is_object;
@@ -61,11 +62,14 @@ class UnknownDocumentTypePanicker
 				$params[] = sprintf('on field `%s`', $parentField);
 			}
 
-			$params[] = sprintf('got type `%s`', gettype($data['data']));
-
-			if(is_object($data['data']))
+			if(array_key_exists('data', $data))
 			{
-				$params[] = sprintf('instance of `%s`', get_class($data['data']));
+				$params[] = sprintf('got type `%s`', gettype($data['data']));
+
+				if (is_object($data['data']))
+				{
+					$params[] = sprintf('instance of `%s`', get_class($data['data']));
+				}
 			}
 			throw new TransformatorException('Could not determine document type ' . implode(', ', $params));
 		}
