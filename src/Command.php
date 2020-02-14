@@ -31,27 +31,28 @@ class Command
 	use AvailableCommands;
 
 	/**
-	 *
 	 * @var AnnotatedInterface
 	 */
-	private $model = null;
+	private $model;
 
 	/**
-	 *
 	 * @var Mangan
 	 */
-	private $mn = null;
+	private $mn;
 
-	private $collection = '';
+	/**
+	 * @var string 
+	 */
+	private $collection;
 
 	public function __construct(AnnotatedInterface $model = null, Mangan $mangan = null)
 	{
 		$this->model = $model;
-		if (!empty($mangan))
+		if ($mangan !== null)
 		{
 			$this->mn = $mangan;
 		}
-		if (empty($model))
+		if ($model === null)
 		{
 			$this->mn = Mangan::fly();
 			return;
