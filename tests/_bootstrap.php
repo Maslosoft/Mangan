@@ -68,11 +68,18 @@ error_reporting(E_ALL);
 echo "Mangan: " . (new Mangan())->getVersion() . PHP_EOL;
 echo "MongoDB: " . (new Command())->buildInfo()['version'] . PHP_EOL;
 $transactions = 'false';
-$t = (new Transaction(new BaseAttributesAnnotations));
-$t->commit();
-if ($t->isAvailable())
+try
 {
-	$transactions = 'true';
+	$t = (new Transaction(new BaseAttributesAnnotations));
+	$t->commit();
+	if ($t->isAvailable())
+	{
+		$transactions = 'true';
+	}
+}
+catch(Exception $e)
+{
+	echo $e->getMessage() . PHP_EOL;
 }
 (new AvailableCommandsGenerator)->generate();
 echo "Transactions: " . $transactions . PHP_EOL;

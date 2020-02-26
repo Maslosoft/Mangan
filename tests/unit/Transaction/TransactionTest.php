@@ -3,6 +3,7 @@
 namespace Transaction;
 
 use Codeception\Test\Unit;
+use Exception;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transaction;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
@@ -23,11 +24,18 @@ class TransactionTest extends Unit
 	// tests
 	public function testTransactions()
 	{
-		$transaction = new Transaction(new ModelTransactional());
-		$transaction->rollback();
+		$available = false;
+		try
+		{
+			$transaction = new Transaction(new ModelTransactional());
+			$transaction->rollback();
 
-		$available = $transaction->isAvailable();
-
+			$available = $transaction->isAvailable();
+		}
+		catch (Exception $e)
+		{
+			$this->markTestSkipped("Transactions thrown exception");
+		}
 		$this->assertNotNull($available);
 
 		if ($available)
