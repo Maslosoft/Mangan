@@ -161,7 +161,6 @@ return [
 		RegexProxy::class => RegexValidator::class,
 		RequiredProxy::class => RequiredValidator::class,
 		StringProxy::class => StringValidator::class,
-		UniqueProxy::class => UniqueValidator::class,
 		UrlProxy::class => UrlValidator::class
 	],
 	/**
