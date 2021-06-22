@@ -148,24 +148,24 @@ class Criteria implements CriteriaInterface,
 	/**
 	 * Sort Ascending
 	 */
-	const SortAsc = SortInterface::SortAsc;
+	public const SortAsc = SortInterface::SortAsc;
 
 	/**
 	 * Sort Descending
 	 */
-	const SortDesc = SortInterface::SortDesc;
+	public const SortDesc = SortInterface::SortDesc;
 
 	/**
 	 * Sort Ascending
 	 * @deprecated since version 4.0.7
 	 */
-	const SORT_ASC = SortInterface::SortAsc;
+	public const SORT_ASC = SortInterface::SortAsc;
 
 	/**
 	 * Sort Descending
 	 * @deprecated since version 4.0.7
 	 */
-	const SORT_DESC = SortInterface::SortDesc;
+	public const SORT_DESC = SortInterface::SortDesc;
 
 	private $_conditions = [];
 
@@ -233,12 +233,12 @@ class Criteria implements CriteriaInterface,
 	 * );
 	 * </pre>
 	 * @param mixed|CriteriaInterface|Conditions $criteria
-	 * @param AnnotatedInterface|null Model to use for criteria decoration
+	 * @param AnnotatedInterface|null $model Model to use for criteria decoration
 	 * @throws Exception
 	 */
 	public function __construct($criteria = null, AnnotatedInterface $model = null)
 	{
-		if (!empty($model))
+		if ($model !== null)
 		{
 			$this->setModel($model);
 		}
@@ -348,10 +348,10 @@ class Criteria implements CriteriaInterface,
 		$model = $this->getModel();
 
 		// Fall back to merged criteria model
-		if (empty($model))
+		if ($model === null)
 		{
 			$model = $criteria->getModel();
-			if (!empty($model))
+			if ($model !== null)
 			{
 				$this->setModel($model);
 			}
@@ -359,7 +359,7 @@ class Criteria implements CriteriaInterface,
 
 		// Use same model for decorating both criteria,
 		// current one and merged one
-		if (!empty($model))
+		if ($model !== null)
 		{
 			if ($criteria instanceof DecoratableInterface)
 			{
