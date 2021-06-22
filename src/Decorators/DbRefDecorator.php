@@ -20,10 +20,16 @@ use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
+use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
+use function get_class;
+use function gettype;
+use function is_array;
+use function json_encode;
+use const JSON_PRETTY_PRINT;
 
 /**
  * DbRefDecorator
@@ -50,6 +56,12 @@ class DbRefDecorator implements DecoratorInterface
 			$model->$name = $transformatorClass::toModel($dbValue);
 			return;
 		}
+		assert(is_array($dbValue), sprintf(
+			'Expected array on `%s`, field `%s`, got: `%s`: `%s`',
+			get_class($model),
+			$name,
+			gettype($dbValue),
+			json_encode($dbValue, JSON_PRETTY_PRINT, 10)));
 		$dbValue['_class'] = DbRef::class;
 		$dbRef = $transformatorClass::toModel($dbValue);
 		assert($dbRef instanceof DbRef);
@@ -82,7 +94,7 @@ class DbRefDecorator implements DecoratorInterface
 		$dbValue[$name] = $transformatorClass::fromModel($dbRef, false);
 	}
 
-	public static function ensureClass($model, $name, DbRef $dbRef)
+	public static function ensureClass($model, $name, DbRef $dbRef): void
 	{
 		if (!ClassChecker::exists($dbRef->class))
 		{
@@ -94,7 +106,9 @@ class DbRefDecorator implements DecoratorInterface
 			}
 			else
 			{
-				throw new ManganException(sprintf("Referenced model class `%s` not found in model `%s` field `%s`", $dbRef->class, get_class($model), $name));
+				$pk = PkManager::getFromModel($model);
+				$encodedPk = json_encode($pk);
+				throw new ManganException(sprintf("Referenced model class `%s` not found in model `%s` field `%s`, pk: `%s`", $dbRef->class, get_class($model), $name, $encodedPk));
 			}
 		}
 	}
