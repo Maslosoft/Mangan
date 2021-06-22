@@ -66,7 +66,7 @@
         "php": ">= 7.1",
         "ext-json": "*",
         "ext-gd": "*",
-        "alcaeus/mongo-php-adapter": "^1.1",
+        "alcaeus/mongo-php-adapter": "^1",
         "maslosoft/addendum": "*",
         "maslosoft/cli-shared": "*",
         "maslosoft/embedi": "*",
