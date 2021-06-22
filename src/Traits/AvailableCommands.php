@@ -23,6 +23,14 @@ trait AvailableCommands
 	abstract public function call($command, $arguments = []);
 	
 	/**
+	 * Internal command, do not call directly. Creates a collection on a shard with UUID existing on primary.
+	 */
+	public function _cloneCollectionOptionsFromPrimaryShard()
+	{
+		return $this->call('_cloneCollectionOptionsFromPrimaryShard', func_get_args());
+	}
+
+	/**
 	 * { _isSelf : 1 } INTERNAL ONLY
 	 */
 	public function _isSelf()
@@ -82,15 +90,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * clone this database from an instance of the db on another host
-	 * {clone: "host13"[, slaveOk: <bool>]}
-	 */
-	public function cloneDb()
-	{
-		return $this->call('clone', func_get_args());
-	}
-
-	/**
 	 * { cloneCollection: <collection>, from: <host> [,query: <query_filter>] [,copyIndexes:<bool>] }
 	 * Copies a collection from one server to another. Do not use on a single server as the destination is placed at the same db.collection (namespace) as the source.
 	 * 
@@ -110,8 +109,7 @@ trait AvailableCommands
 
 	/**
 	 * Sets collection options.
-	 * Example: { collMod: 'foo', usePowerOf2Sizes:true }
-	 * Example: { collMod: 'foo', index: {keyPattern: {a: 1}, expireAfterSeconds: 600} Example: { collMod: 'foo', index: {name: 'bar', expireAfterSeconds: 600} }
+	 * Example: { collMod: 'foo', viewOn: 'bar'} Example: { collMod: 'foo', index: {keyPattern: {a: 1}, expireAfterSeconds: 600} Example: { collMod: 'foo', index: {name: 'bar', expireAfterSeconds: 600} }
 	 * 
 	 */
 	public function collMod()
@@ -131,8 +129,7 @@ trait AvailableCommands
 	/**
 	 * compact collection
 	 * warning: this operation locks the database and is slow. you can cancel with killOp()
-	 * { compact : <collection_name>, [force:<bool>], [validate:<bool>],
-	 *   [paddingFactor:<num>], [paddingBytes:<num>] }
+	 * { compact : <collection_name>, [force:<bool>], [validate:<bool>] }
 	 *   force - allows to run on a replica set primary
 	 *   validate - check records are noncorrupt before adding to newly compacting extents. slower but safer (defaults to true in this version)
 	 * 
@@ -183,8 +180,24 @@ trait AvailableCommands
 	}
 
 	/**
-	 * create a collection explicitly
-	 * { create: <ns>[, capped: <bool>, size: <collSizeInBytes>, max: <nDocs>] }
+	 * explicitly creates a collection or view
+	 * {
+	 *   create: <string: collection or view name> [,
+	 *   capped: <bool: capped collection>,
+	 *   autoIndexId: <bool: automatic creation of _id index>,
+	 *   idIndex: <document: _id index specification>,
+	 *   size: <int: size in bytes of the capped collection>,
+	 *   max: <int: max number of documents in the capped collection>,
+	 *   storageEngine: <document: storage engine configuration>,
+	 *   validator: <document: validation rules>,
+	 *   validationLevel: <string: validation level>,
+	 *   validationAction: <string: validation action>,
+	 *   indexOptionDefaults: <document: default configuration for indexes>,
+	 *   viewOn: <string: name of source collection or view>,
+	 *   pipeline: <array<object>: aggregation pipeline stage>,
+	 *   collation: <document: default collation for the collection or view>,
+	 *   writeConcern: <document: write concern expression for the operation>]
+	 * }
 	 */
 	public function create()
 	{
@@ -201,7 +214,6 @@ trait AvailableCommands
 
 	/**
 	 * Adds a role to the system
-	 * 
 	 */
 	public function createRole()
 	{
@@ -210,7 +222,6 @@ trait AvailableCommands
 
 	/**
 	 * Adds a user to the system
-	 * 
 	 */
 	public function createUser()
 	{
@@ -281,7 +292,6 @@ trait AvailableCommands
 
 	/**
 	 * Drops all roles from the given database.  Before deleting the roles completely it must remove them from any users or other roles that reference them.  If any errors occur in the middle of that process it's possible to be left in a state where the roles have been removed from some user/roles but otherwise still exist.
-	 * 
 	 */
 	public function dropAllRolesFromDatabase()
 	{
@@ -290,7 +300,6 @@ trait AvailableCommands
 
 	/**
 	 * Drops all users for a single database.
-	 * 
 	 */
 	public function dropAllUsersFromDatabase()
 	{
@@ -315,7 +324,6 @@ trait AvailableCommands
 
 	/**
 	 * Drops a single role.  Before deleting the role completely it must remove it from any users or roles that reference it.  If any errors occur in the middle of that process it's possible to be left in a state where the role has been removed from some user/roles but otherwise still exists.
-	 * 
 	 */
 	public function dropRole()
 	{
@@ -324,7 +332,6 @@ trait AvailableCommands
 
 	/**
 	 * Drops a single user.
-	 * 
 	 */
 	public function dropUser()
 	{
@@ -337,16 +344,6 @@ trait AvailableCommands
 	public function endSessions()
 	{
 		return $this->call('endSessions', func_get_args());
-	}
-
-	/**
-	 * DEPRECATED
-	 * Evaluate javascript at the server.
-	 * http://dochub.mongodb.org/core/serversidecodeexecution
-	 */
-	public function evalJs()
-	{
-		return $this->call('eval', func_get_args());
 	}
 
 	/**
@@ -394,22 +391,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * for testing purposes only.  forces a user assertion exception
-	 */
-	public function forceerror()
-	{
-		return $this->call('forceerror', func_get_args());
-	}
-
-	/**
-	 * http://dochub.mongodb.org/core/geo#GeospatialIndexing-geoNearCommand
-	 */
-	public function geoNear()
-	{
-		return $this->call('geoNear', func_get_args());
-	}
-
-	/**
 	 * no help defined
 	 */
 	public function geoSearch()
@@ -440,14 +421,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * check for errors since last reseterror commandcal
-	 */
-	public function getPrevError()
-	{
-		return $this->call('getPrevError', func_get_args());
-	}
-
-	/**
 	 * internal
 	 */
 	public function getnonce()
@@ -457,7 +430,6 @@ trait AvailableCommands
 
 	/**
 	 * Grants privileges to a role
-	 * 
 	 */
 	public function grantPrivilegesToRole()
 	{
@@ -466,7 +438,6 @@ trait AvailableCommands
 
 	/**
 	 * Grants roles to another role.
-	 * 
 	 */
 	public function grantRolesToRole()
 	{
@@ -475,7 +446,6 @@ trait AvailableCommands
 
 	/**
 	 * Grants roles to a user.
-	 * 
 	 */
 	public function grantRolesToUser()
 	{
@@ -483,19 +453,12 @@ trait AvailableCommands
 	}
 
 	/**
-	 * http://dochub.mongodb.org/core/aggregation
+	 * Check if this server is primary for a replica set
+	 * { hello : 1 }
 	 */
-	public function group()
+	public function hello()
 	{
-		return $this->call('group', func_get_args());
-	}
-
-	/**
-	 * internal
-	 */
-	public function handshake()
-	{
-		return $this->call('handshake', func_get_args());
+		return $this->call('hello', func_get_args());
 	}
 
 	/**
@@ -515,7 +478,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Check if this server is primary for a replica pair/set; also if it is --master or --slave in simple master/slave setups.
+	 * Check if this server is primary for a replica set
 	 * { isMaster : 1 }
 	 */
 	public function isMaster()
@@ -580,6 +543,14 @@ trait AvailableCommands
 	}
 
 	/**
+	 * Log a custom application message string to the audit log. Must be a string.Example: { logApplicationMessage: "it's a trap!" }
+	 */
+	public function logApplicationMessage()
+	{
+		return $this->call('logApplicationMessage', func_get_args());
+	}
+
+	/**
 	 * de-authenticate
 	 */
 	public function logout()
@@ -603,14 +574,6 @@ trait AvailableCommands
 	public function mapReduceShardedFinish()
 	{
 		return $this->call('mapreduce.shardedfinish', func_get_args());
-	}
-
-	/**
-	 * no help defined
-	 */
-	public function parallelCollectionScan()
-	{
-		return $this->call('parallelCollectionScan', func_get_args());
 	}
 
 	/**
@@ -646,7 +609,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Displays the cached plans for a query shape.
+	 * Deprecated. Prefer the $planCacheStats aggregation pipeline stage.
 	 */
 	public function planCacheListPlans()
 	{
@@ -654,7 +617,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Displays all query shapes in a collection.
+	 * Deprecated. Prefer the $planCacheStats aggregation pipeline stage.
 	 */
 	public function planCacheListQueryShapes()
 	{
@@ -670,11 +633,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * enable or disable performance profiling
-	 * { profile : <n> }
-	 * 0=off 1=log slow ops 2=log all
-	 * -1 to get current values
-	 * http://docs.mongodb.org/manual/reference/command/profile/#dbcmd.profile
+	 * controls the behaviour of the performance profiler, the fraction of eligible operations which are sampled for logging/profiling, and the threshold duration at which ops become eligible. See http://docs.mongodb.org/manual/reference/command/profile
 	 */
 	public function profile()
 	{
@@ -698,14 +657,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * renew a set of logical sessions
-	 */
-	public function refreshSessionsInternal()
-	{
-		return $this->call('refreshSessionsInternal', func_get_args());
-	}
-
-	/**
 	 * no help defined
 	 */
 	public function repairCursor()
@@ -714,7 +665,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * repair database.  also compacts. note: slow.
+	 * This command has been removed. If you would like to compact your data, use the 'compact' command. If you would like to rebuild indexes, use the 'reIndex' command. If you need to recover data, please see the documentation for repairing your database offline: http://dochub.mongodb.org/core/repair
 	 */
 	public function repairDatabase()
 	{
@@ -722,7 +673,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * reset error state (used with getpreverror)
+	 * reset error state
 	 */
 	public function resetError()
 	{
@@ -731,7 +682,6 @@ trait AvailableCommands
 
 	/**
 	 * Revokes privileges from a role
-	 * 
 	 */
 	public function revokePrivilegesFromRole()
 	{
@@ -740,7 +690,6 @@ trait AvailableCommands
 
 	/**
 	 * Revokes roles from another role.
-	 * 
 	 */
 	public function revokeRolesFromRole()
 	{
@@ -749,7 +698,6 @@ trait AvailableCommands
 
 	/**
 	 * Revokes roles from a user.
-	 * 
 	 */
 	public function revokeRolesFromUser()
 	{
@@ -758,7 +706,6 @@ trait AvailableCommands
 
 	/**
 	 * Returns information about roles.
-	 * 
 	 */
 	public function rolesInfo()
 	{
@@ -814,11 +761,27 @@ trait AvailableCommands
 	}
 
 	/**
+	 * no help defined
+	 */
+	public function startRecordingTraffic()
+	{
+		return $this->call('startRecordingTraffic', func_get_args());
+	}
+
+	/**
 	 * start a logical session
 	 */
 	public function startSession()
 	{
 		return $this->call('startSession', func_get_args());
+	}
+
+	/**
+	 * no help defined
+	 */
+	public function stopRecordingTraffic()
+	{
+		return $this->call('stopRecordingTraffic', func_get_args());
 	}
 
 	/**
@@ -843,7 +806,6 @@ trait AvailableCommands
 
 	/**
 	 * Used to update a role
-	 * 
 	 */
 	public function updateRole()
 	{
@@ -852,7 +814,6 @@ trait AvailableCommands
 
 	/**
 	 * Used to update a user, for example to change its password
-	 * 
 	 */
 	public function updateUser()
 	{
@@ -861,7 +822,6 @@ trait AvailableCommands
 
 	/**
 	 * Returns information about users.
-	 * 
 	 */
 	public function usersInfo()
 	{
@@ -871,7 +831,6 @@ trait AvailableCommands
 	/**
 	 * Validate contents of a namespace by scanning its data structures for correctness.  Slow.
 	 * Add full:true option to do a more thorough check
-	 * Add scandata:false to skip the scan of the collection data without skipping scans of any indexes
 	 */
 	public function validate()
 	{
