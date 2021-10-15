@@ -29,7 +29,7 @@ trait AspectsTrait
 	 * Add aspect
 	 * @param string $aspect
 	 */
-	public function addAspect($aspect)
+	public function addAspect($aspect): void
 	{
 		$this->aspects[(string)$aspect] = true;
 		assert($this instanceof AnnotatedInterface);
@@ -45,7 +45,7 @@ trait AspectsTrait
 	 * Remove aspect
 	 * @param string $aspect
 	 */
-	public function removeAspect($aspect)
+	public function removeAspect($aspect): void
 	{
 		unset($this->aspects[(string)$aspect]);
 		assert($this instanceof AnnotatedInterface);
@@ -62,7 +62,7 @@ trait AspectsTrait
 	 * @param string $aspect
 	 * @return bool
 	 */
-	public function hasAspect($aspect)
+	public function hasAspect($aspect): bool
 	{
 		return isset($this->aspects[(string)$aspect]);
 	}
