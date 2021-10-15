@@ -12,6 +12,8 @@ use Maslosoft\ManganTest\Models\Indexes\ModelWithCompoundI18NIndexShortNotation;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithHashedIndex;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithI18NIndex;
 use Maslosoft\ManganTest\Models\Indexes\ModelWithSimpleIndex;
+use function json_decode;
+use const JSON_OBJECT_AS_ARRAY;
 
 class IndexManagerTest extends \Codeception\Test\Unit
 {
@@ -163,10 +165,15 @@ class IndexManagerTest extends \Codeception\Test\Unit
 		$formatted = [];
 		foreach($idxs as $name => $meta)
 		{
-			$info = json_decode($meta['metadata']['infoObj'], JSON_OBJECT_AS_ARRAY);
+			$key = 'N/A';
+			if(isset($meta['metadata']['infoObj']))
+			{
+				$info = json_decode($meta['metadata']['infoObj'], JSON_OBJECT_AS_ARRAY);
+				$key = $info['key'];
+			}
 			$formatted[$name] = [
-				'name' => $info['name'],
-				'key' => $info['key']
+				'name' => $name,
+				'key' => $key
 			];
 		}
 		codecept_debug($formatted);
