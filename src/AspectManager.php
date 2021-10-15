@@ -19,13 +19,13 @@ class AspectManager
 	 * if model implements AspectsInterface
 	 * and add only if it does.
 	 *
+	 * @param AnnotatedInterface|null $model
+	 * @param string                  $aspect
 	 * @see AspectsInterface
-	 * @param AnnotatedInterface $model
-	 * @param                    $aspect
 	 */
-	public static function addAspect(AnnotatedInterface $model = null, $aspect = '')
+	public static function addAspect(AnnotatedInterface $model = null, string $aspect = ''): void
 	{
-		if(empty($model))
+		if($model === null)
 		{
 			return;
 		}
@@ -44,13 +44,13 @@ class AspectManager
 	 * if model implements AspectsInterface
 	 * and remove only if it does.
 	 *
+	 * @param AnnotatedInterface|null $model
+	 * @param string                  $aspect
 	 * @see AspectsInterface
-	 * @param AnnotatedInterface $model
-	 * @param                    $aspect
 	 */
-	public static function removeAspect(AnnotatedInterface $model = null, $aspect = '')
+	public static function removeAspect(AnnotatedInterface $model = null, string $aspect = ''): void
 	{
-		if(empty($model))
+		if($model === null)
 		{
 			return;
 		}
@@ -65,20 +65,20 @@ class AspectManager
 	}
 
 	/**
-	 * Gracefully check if has aspect, this will check
+	 * Gracefully check if it has aspect, this will check
 	 * if model implements `AspectsInterface`
 	 * and check only if it does. If model does not
 	 * implement AspectsInterface it will return `false`,
 	 * like if it has no such aspect.
 	 *
-	 * @see AspectsInterface
-	 * @param AnnotatedInterface $model
-	 * @param                    $aspect
+	 * @param AnnotatedInterface|null $model
+	 * @param string                  $aspect
 	 * @return bool
+	 * @see AspectsInterface
 	 */
-	public static function hasAspect(AnnotatedInterface $model = null, $aspect = '')
+	public static function hasAspect(AnnotatedInterface $model = null, string $aspect = ''): bool
 	{
-		if(empty($model))
+		if($model === null)
 		{
 			return false;
 		}
