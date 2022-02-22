@@ -39,6 +39,14 @@ trait AvailableCommands
 	}
 
 	/**
+	 * Internal command. Do not call directly. Enable/disable migrations in a collection.
+	 */
+	public function _shardsvrSetAllowMigrations()
+	{
+		return $this->call('_shardsvrSetAllowMigrations', func_get_args());
+	}
+
+	/**
 	 * Runs the aggregation command. See http://dochub.mongodb.org/core/aggregation for more details.
 	 */
 	public function aggregate()
@@ -61,6 +69,14 @@ trait AvailableCommands
 	public function authenticate()
 	{
 		return $this->call('authenticate', func_get_args());
+	}
+
+	/**
+	 * Internal command returning the split points for a chunk, given the maximum chunk size.
+	 */
+	public function autoSplitVector()
+	{
+		return $this->call('autoSplitVector', func_get_args());
 	}
 
 	/**

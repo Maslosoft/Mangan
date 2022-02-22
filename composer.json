@@ -63,15 +63,15 @@
         "docs": "https://maslosoft.com/mangan/docs/"
     },
     "require": {
-        "php": ">= 7.1",
+        "php": ">= 7.4",
         "ext-json": "*",
         "ext-gd": "*",
         "alcaeus/mongo-php-adapter": "^1",
-        "maslosoft/addendum": "*",
+        "maslosoft/addendum": "^7",
         "maslosoft/cli-shared": "*",
-        "maslosoft/embedi": "*",
-        "maslosoft/gazebo": "*",
-        "maslosoft/signals": "*",
+        "maslosoft/embedi": "^2",
+        "maslosoft/gazebo": "^2",
+        "maslosoft/signals": "^4",
         "masterexploder/phpthumb": "^2",
         "psr/log": "^1",
         "symfony/yaml": ">=2.7 <5.0"
@@ -79,11 +79,11 @@
     "require-dev": {
         "ext-curl": "*",
         "codeception/codeception": "^4",
-        "codeception/specify": "*",
-        "maslosoft/hedron": "*",
-        "maslosoft/zamm": "*",
-        "maslosoft/miniview": "*",
-        "maslosoft/mangan-examples": "*",
+        "codeception/specify": "^2",
+        "maslosoft/hedron": "^1 | ^2",
+        "maslosoft/zamm": "^1 | ^2",
+        "maslosoft/miniview": "^1 | ^2",
+        "maslosoft/mangan-examples": "^1 | ^2",
         "codeception/module-asserts": "^1"
     },
     "suggest": {
