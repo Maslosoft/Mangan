@@ -32,6 +32,7 @@ use Maslosoft\Mangan\Traits\Criteria\SelectableTrait;
 use Maslosoft\Mangan\Traits\Criteria\SortableTrait;
 use Maslosoft\Mangan\Traits\ModelAwareTrait;
 use UnexpectedValueException;
+use function is_array;
 
 /**
  * Criteria
@@ -269,7 +270,10 @@ class Criteria implements CriteriaInterface,
 			{
 				foreach ($criteria['conditions'] as $fieldName => $conditions)
 				{
-					assert(is_array($conditions), new UnexpectedValueException('Each condition must be array with operator as key and value, ie: ["_id" => ["==" => "123"]]'));
+					if(!is_array($conditions))
+					{
+						throw new UnexpectedValueException('Each condition must be array with operator as key and value, ie: ["_id" => ["==" => "123"]]');
+					}
 					foreach ($conditions as $operator => $value)
 					{
 						$operator = strtolower($operator);
