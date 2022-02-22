@@ -24,7 +24,6 @@ class CustomPkTest extends Unit
     // tests
     public function testGettingCustomPkWithTypedProperty()
     {
-    	$this->markTestSkipped("Test must be ran only on PHP 7.4 or above, there is no constraint now. However issues comes from annotations lib.");
     	$model = new ModelWithCustomPkAndTypedProperty;
     	$keys = PkManager::getPkKeys($model);
     	codecept_debug($keys);

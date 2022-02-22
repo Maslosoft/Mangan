@@ -5,6 +5,7 @@ namespace Maslosoft\ManganTest\Models\Criteria;
 
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
+use Maslosoft\Mangan\Sanitizers\None;
 use Maslosoft\Mangan\Sort;
 
 class ModelWithCustomPkAndTypedProperty implements AnnotatedInterface
@@ -23,7 +24,7 @@ class ModelWithCustomPkAndTypedProperty implements AnnotatedInterface
 	 * @PrimaryKey
 	 *
 	 * @see Sort
-	 * @var string
+	 * @var ?string
 	 */
 	public ?string $date = '';
 
@@ -41,6 +42,7 @@ class ModelWithCustomPkAndTypedProperty implements AnnotatedInterface
 	 * ```
 	 *
 	 * @Sanitizer(None)
+	 * @see None
 	 * @var int[]
 	 */
 	public array $browsers = [];
