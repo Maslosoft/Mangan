@@ -135,24 +135,23 @@
         },
         {
             "name": "maslosoft/addendum",
-            "version": "7.0.0",
+            "version": "7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Addendum.git",
-                "reference": "755565386d85ef09b569cfc7a9312b981304563f"
+                "reference": "2fbd8197d16b92028b483ac048a7103e804a6f8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/755565386d85ef09b569cfc7a9312b981304563f",
-                "reference": "755565386d85ef09b569cfc7a9312b981304563f",
+                "url": "https://api.github.com/repos/Maslosoft/Addendum/zipball/2fbd8197d16b92028b483ac048a7103e804a6f8c",
+                "reference": "2fbd8197d16b92028b483ac048a7103e804a6f8c",
                 "shasum": ""
             },
             "require": {
                 "maslosoft/cache": "*",
-                "maslosoft/cli-shared": "*",
+                "maslosoft/cli-shared": "^1 | ^2",
                 "maslosoft/embedi": "^2",
                 "maslosoft/gazebo": "^2",
-                "maslosoft/signals": "*",
                 "php": ">=7.4",
                 "psr/log": "~1"
             },
@@ -199,9 +198,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Maslosoft/Addendum/issues",
-                "source": "https://github.com/Maslosoft/Addendum/tree/7.0.0"
+                "source": "https://github.com/Maslosoft/Addendum/tree/7.0.1"
             },
-            "time": "2022-02-22T17:43:43+00:00"
+            "time": "2022-02-23T17:38:10+00:00"
         },
         {
             "name": "maslosoft/cache",
@@ -342,22 +341,21 @@
         },
         {
             "name": "maslosoft/gazebo",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maslosoft/Gazebo.git",
-                "reference": "70ebc96866fb49bb3130332171ea2ed572c47f42"
+                "reference": "d73a1bae0b5cca4ac5020eb239945e98be0bd0bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/70ebc96866fb49bb3130332171ea2ed572c47f42",
-                "reference": "70ebc96866fb49bb3130332171ea2ed572c47f42",
+                "url": "https://api.github.com/repos/Maslosoft/Gazebo/zipball/d73a1bae0b5cca4ac5020eb239945e98be0bd0bf",
+                "reference": "d73a1bae0b5cca4ac5020eb239945e98be0bd0bf",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "maslosoft/addendum": "*",
-                "maslosoft/embedi": "^2",
+                "maslosoft/embedi": "*",
                 "php": ">=7.4"
             },
             "require-dev": {
@@ -387,9 +385,9 @@
             "homepage": "https://maslosoft.com/gazebo/",
             "support": {
                 "issues": "https://github.com/Maslosoft/Gazebo/issues",
-                "source": "https://github.com/Maslosoft/Gazebo/tree/2.0.0"
+                "source": "https://github.com/Maslosoft/Gazebo/tree/2.0.1"
             },
-            "time": "2022-02-22T17:02:59+00:00"
+            "time": "2022-02-23T17:50:30+00:00"
         },
         {
             "name": "maslosoft/signals",
@@ -2694,16 +2692,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.11",
+            "version": "9.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f"
+                "reference": "deac8540cb7bd40b2b8cfa679b76202834fd04e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/665a1ac0a763c51afc30d6d130dac0813092b17f",
-                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/deac8540cb7bd40b2b8cfa679b76202834fd04e8",
+                "reference": "deac8540cb7bd40b2b8cfa679b76202834fd04e8",
                 "shasum": ""
             },
             "require": {
@@ -2759,7 +2757,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.11"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.13"
             },
             "funding": [
                 {
@@ -2767,7 +2765,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-18T12:46:09+00:00"
+            "time": "2022-02-23T17:02:38+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3012,16 +3010,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.14",
+            "version": "9.5.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1883687169c017d6ae37c58883ca3994cfc34189"
+                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1883687169c017d6ae37c58883ca3994cfc34189",
-                "reference": "1883687169c017d6ae37c58883ca3994cfc34189",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
+                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
                 "shasum": ""
             },
             "require": {
@@ -3037,7 +3035,7 @@
                 "phar-io/version": "^3.0.2",
                 "php": ">=7.3",
                 "phpspec/prophecy": "^1.12.1",
-                "phpunit/php-code-coverage": "^9.2.7",
+                "phpunit/php-code-coverage": "^9.2.13",
                 "phpunit/php-file-iterator": "^3.0.5",
                 "phpunit/php-invoker": "^3.1.1",
                 "phpunit/php-text-template": "^2.0.3",
@@ -3099,7 +3097,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.14"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.16"
             },
             "funding": [
                 {
@@ -3111,7 +3109,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-18T12:54:07+00:00"
+            "time": "2022-02-23T17:10:58+00:00"
         },
         {
             "name": "psr/event-dispatcher",

@@ -68,7 +68,7 @@
         "ext-gd": "*",
         "alcaeus/mongo-php-adapter": "^1",
         "maslosoft/addendum": "^7",
-        "maslosoft/cli-shared": "*",
+        "maslosoft/cli-shared": "^1 | ^2",
         "maslosoft/embedi": "^2",
         "maslosoft/gazebo": "^2",
         "maslosoft/signals": "^4",
