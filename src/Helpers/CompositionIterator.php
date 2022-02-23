@@ -50,7 +50,7 @@ class CompositionIterator implements Iterator, Countable
 	 * Limit results to only direct descendants.
 	 * @return $this
 	 */
-	public function direct()
+	public function direct(): CompositionIterator
 	{
 		$this->direct = true;
 		return $this;
@@ -68,7 +68,7 @@ class CompositionIterator implements Iterator, Countable
 	 * @param $include boolean Whether to include this type or skip
 	 * @return $this
 	 */
-	public function ofType($type, $include = true)
+	public function ofType($type, $include = true): CompositionIterator
 	{
 		if (is_object($type))
 		{
@@ -85,7 +85,7 @@ class CompositionIterator implements Iterator, Countable
 	 * which have models
 	 * @return string
 	 */
-	public function getCurrentField()
+	public function getCurrentField(): string
 	{
 		if(isset($this->fieldNames[$this->pointer]))
 		{
@@ -94,7 +94,7 @@ class CompositionIterator implements Iterator, Countable
 		return '';
 	}
 
-	private function init()
+	private function init(): void
 	{
 		if (null === $this->models)
 		{
@@ -151,7 +151,7 @@ class CompositionIterator implements Iterator, Countable
 		}
 	}
 
-	private function skip($model)
+	private function skip($model): bool
 	{
 		// Non-object
 		if (!is_object($model))
@@ -171,7 +171,7 @@ class CompositionIterator implements Iterator, Countable
 	 * @param $model
 	 * @return bool
 	 */
-	private function doInclude($model)
+	private function doInclude($model): bool
 	{
 		// Don't skip if no types
 		if (empty($this->types))
@@ -190,42 +190,44 @@ class CompositionIterator implements Iterator, Countable
 		return false;
 	}
 
-	private function recurse()
+	private function recurse(): bool
 	{
 		return !$this->direct;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function current()
 	{
 		$this->init();
 		return $this->models[$this->pointer];
 	}
 
-	public function next()
+	public function next(): void
 	{
 		$this->init();
 		++$this->pointer;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function key()
 	{
 		$this->init();
 		return $this->pointer;
 	}
 
-	public function valid()
+	public function valid(): bool
 	{
 		$this->init();
 		return isset($this->models[$this->pointer]);
 	}
 
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->init();
 		$this->pointer = 0;
 	}
 
-	public function count()
+	public function count(): int
 	{
 		$this->init();
 		return count($this->models);
