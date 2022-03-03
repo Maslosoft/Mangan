@@ -26,8 +26,6 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlString implements TransformatorInterface
 {
-	const AspectYamlStringFromModel = 'AspectYamlStringFromModel';
-	const AspectYamlStringToModel = 'AspectYamlStringToModel';
 
 	/**
 	 * Returns the given object as an associative array
@@ -41,9 +39,7 @@ class YamlString implements TransformatorInterface
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [], $inline = 2, $indent = 4, $exceptionOnInvalidType = false)
 	{
-		AspectManager::addAspect($model, self::AspectYamlStringFromModel);
 		$data = Yaml::dump(YamlArray::fromModel($model, $fields), $inline, $indent, $exceptionOnInvalidType);
-		AspectManager::removeAspect($model, self::AspectYamlStringFromModel);
 		return $data;
 	}
 
@@ -61,10 +57,7 @@ class YamlString implements TransformatorInterface
 	 */
 	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, $exceptionOnInvalidType = false)
 	{
-		AspectManager::addAspect($instance, self::AspectYamlStringToModel);
 		$model = YamlArray::toModel(Yaml::parse($data, $exceptionOnInvalidType), $className, $instance);
-		AspectManager::removeAspect($instance, self::AspectYamlStringToModel);
-		AspectManager::removeAspect($model, self::AspectYamlStringToModel);
 		return $model;
 	}
 

@@ -24,23 +24,5 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  */
 class YamlArray extends Transformer implements TransformatorInterface
 {
-	const AspectYamlArrayFromModel = 'AspectYamlArrayFromModel';
-	const AspectYamlArrayToModel = 'AspectYamlArrayToModel';
 
-	public static function fromModel(AnnotatedInterface $model, $fields = [])
-	{
-		AspectManager::addAspect($model, self::AspectYamlArrayFromModel);
-		$data = parent::fromModel($model, $fields);
-		AspectManager::removeAspect($model, self::AspectYamlArrayFromModel);
-		return $data;
-	}
-
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, AnnotatedInterface $parent = null, $parentField = '')
-	{
-		AspectManager::addAspect($instance, self::AspectYamlArrayToModel);
-		$model = parent::toModel($data, $className, $instance, $parent, $parentField);
-		AspectManager::removeAspect($instance, self::AspectYamlArrayToModel);
-		AspectManager::removeAspect($model, self::AspectYamlArrayToModel);
-		return $model;
-	}
 }

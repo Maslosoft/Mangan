@@ -24,23 +24,5 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  */
 class RawArray extends Transformer implements TransformatorInterface
 {
-	const AspectRawArrayFromModel = 'AspectRawArrayFromModel';
-	const AspectRawArrayToModel = 'AspectRawArrayToModel';
 
-	public static function fromModel(AnnotatedInterface $model, $fields = [])
-	{
-		AspectManager::addAspect($model, self::AspectRawArrayFromModel);
-		$data = parent::fromModel($model, $fields);
-		AspectManager::removeAspect($model, self::AspectRawArrayFromModel);
-		return $data;
-	}
-
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, AnnotatedInterface $parent = null, $parentField = '')
-	{
-		AspectManager::addAspect($instance, self::AspectRawArrayToModel);
-		$model = parent::toModel($data, $className, $instance, $parent, $parentField);
-		AspectManager::removeAspect($instance, self::AspectRawArrayToModel);
-		AspectManager::removeAspect($model, self::AspectRawArrayToModel);
-		return $model;
-	}
 }

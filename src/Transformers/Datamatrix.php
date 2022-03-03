@@ -30,9 +30,6 @@ use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
  */
 class Datamatrix implements TransformatorInterface
 {
-	const AspectDatamatrixFromModel = 'AspectDatamatrixFromModel';
-	const AspectDatamatrixToModel = 'AspectDatamatrixToModel';
-
 	/**
 	 * Returns the given object as an associative array
 	 * @param AnnotatedInterface|object $model
@@ -46,9 +43,7 @@ class Datamatrix implements TransformatorInterface
 			throw new ManganException('Missing php-dmtx library');
 		}
 		assert(Os::commandExists('dmtxwrite'));
-		AspectManager::addAspect($model, self::AspectDatamatrixFromModel);
 		$data = YamlString::fromModel($model, $fields, 1, 1);
-		AspectManager::removeAspect($model, self::AspectDatamatrixFromModel);
 		return (new Writer())->encode($data)->dump();
 	}
 
@@ -69,10 +64,7 @@ class Datamatrix implements TransformatorInterface
 		}
 		assert(Os::commandExists('dmtxread'));
 		$data = (new Reader())->decode($data);
-		AspectManager::addAspect($instance, self::AspectDatamatrixToModel);
 		$model = YamlString::toModel($data, $className, $instance);
-		AspectManager::removeAspect($instance, self::AspectDatamatrixToModel);
-		AspectManager::removeAspect($model, self::AspectDatamatrixToModel);
 		return $model;
 	}
 
