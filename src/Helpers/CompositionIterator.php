@@ -13,7 +13,6 @@ use Countable;
 use Iterator;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
-use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\ManganMeta;
 
 /**
@@ -25,21 +24,21 @@ use Maslosoft\Mangan\Meta\ManganMeta;
  */
 class CompositionIterator implements Iterator, Countable
 {
-	private $model = null;
+	private ?AnnotatedInterface $model;
 
-	private $direct = false;
+	private bool $direct = false;
 
-	private $types = [];
+	private array $types = [];
 
 	/**
 	 * Models holder
 	 * @var null|AnnotatedInterface[]
 	 */
-	private $models = null;
+	private ?array $models = null;
 
-	private $pointer = 0;
+	private int $pointer = 0;
 
-	private $fieldNames = [];
+	private array $fieldNames = [];
 
 	public function __construct(AnnotatedInterface $model)
 	{
@@ -87,11 +86,7 @@ class CompositionIterator implements Iterator, Countable
 	 */
 	public function getCurrentField(): string
 	{
-		if(isset($this->fieldNames[$this->pointer]))
-		{
-			return $this->fieldNames[$this->pointer];
-		}
-		return '';
+		return $this->fieldNames[$this->pointer] ?? '';
 	}
 
 	private function init(): void
