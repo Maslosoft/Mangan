@@ -164,7 +164,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 	 * ];
 	 * ```
 	 *
-	 * @param mixed[] Array of stributes and values in form of ['attributeName' => 'value']
+	 * @param mixed[] Array of attributes and values in form of ['attributeName' => 'value']
 	 * @return AnnotatedInterface|null
 	 */
 	public function findByAttributes(array $attributes)
@@ -317,7 +317,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 	/**
 	 * Checks whether there is document satisfying the specified condition.
 	 *
-	 * @param CriteriaInterface $criteria
+	 * @param CriteriaInterface|null $criteria
 	 * @return bool
 	 */
 	public function exists(CriteriaInterface $criteria = null)
