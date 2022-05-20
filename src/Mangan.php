@@ -288,12 +288,10 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Set PSR compliant logger
 	 * @param LoggerInterface $logger
-	 * @return Mangan
 	 */
-	public function setLogger(LoggerInterface $logger)
+	public function setLogger(LoggerInterface $logger): void
 	{
 		$this->_logger = $logger;
-		return $this;
 	}
 
 	/**
