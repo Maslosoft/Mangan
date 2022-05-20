@@ -73,7 +73,7 @@
         "maslosoft/gazebo": "^2",
         "maslosoft/signals": "^4",
         "masterexploder/phpthumb": "^2",
-        "psr/log": "^1",
+        "psr/log": "^1|^2|3",
         "symfony/yaml": ">=2.7 <5.0"
     },
     "require-dev": {
