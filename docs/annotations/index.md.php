@@ -1,13 +1,7 @@
 <?php
-
-use Maslosoft\Ilmatar\Components\Controller;
-use Maslosoft\Ilmatar\Widgets\Form\ActiveForm;
 use Maslosoft\Staple\Widgets\SubNavRecursive;
 ?>
 <?php
-
-/* @var $this Controller */
-/* @var $form ActiveForm */
 ?>
 <title>5. Annotations</title>
 #Annotations

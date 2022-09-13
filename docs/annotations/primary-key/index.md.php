@@ -1,7 +1,4 @@
 <?php
-
-use Maslosoft\Ilmatar\Components\Controller;
-use Maslosoft\Ilmatar\Widgets\Form\ActiveForm;
 use Maslosoft\Mangan\Annotations\PrimaryKeyAnnotation;
 use Maslosoft\Mangan\Document;
 use Maslosoft\Zamm\DocBlock;
@@ -9,8 +6,6 @@ use Maslosoft\Zamm\ShortNamer;
 ?>
 <?php
 
-/* @var $this Controller */
-/* @var $form ActiveForm */
 $doc = new DocBlock(PrimaryKeyAnnotation::class);
 $md = new ShortNamer(Document::class);
 ?>

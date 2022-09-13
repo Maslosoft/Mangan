@@ -1,7 +1,5 @@
 <?php
 
-use Maslosoft\Ilmatar\Components\Controller;
-use Maslosoft\Ilmatar\Widgets\Form\ActiveForm;
 use Maslosoft\Mangan\Annotations\Indexes\IndexAnnotation;
 use Maslosoft\Mangan\Annotations\PrimaryKeyAnnotation;
 use Maslosoft\Mangan\Document;
@@ -10,8 +8,6 @@ use Maslosoft\Zamm\ShortNamer;
 ?>
 <?php
 
-/* @var $this Controller */
-/* @var $form ActiveForm */
 /* @var $ia IndexAnnotation */
 $doc = new DocBlock(IndexAnnotation::class);
 $ia = new ShortNamer(IndexAnnotation::class);
