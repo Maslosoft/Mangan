@@ -1,7 +1,7 @@
 <!--header-->
 <!-- Auto generated do not modify between `header` and `/header` -->
 
-# <a href="https://maslosoft.com/mangan/">Maslosoft Mangan</a>
+# <a href="https://maslosoft.com/mangan/"><img src="https://maslosoft.com/mangan/mangan.svg" style="height:24px;" alt="Mangan Logo"></a> <a href="https://maslosoft.com/mangan/">Maslosoft Mangan</a>
 <a href="https://maslosoft.com/mangan/">_MongoDB Object Document Mapper (ODM)_</a>
 
 <a href="https://packagist.org/packages/maslosoft/mangan" title="Latest Stable Version">
