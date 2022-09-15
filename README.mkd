@@ -2,7 +2,7 @@
 <!-- Auto generated do not modify between `header` and `/header` -->
 
 # <a href="https://maslosoft.com/mangan/">Maslosoft Mangan</a>
-<a href="https://maslosoft.com/mangan/">MongoDB Object Persister</a>
+<a href="https://maslosoft.com/mangan/">_MongoDB Object Document Mapper (ODM)_</a>
 
 <a href="https://packagist.org/packages/maslosoft/mangan" title="Latest Stable Version">
 <img src="https://poser.pugx.org/maslosoft/mangan/v/stable.svg" alt="Latest Stable Version" style="height: 20px;"/>
@@ -11,19 +11,20 @@
 <img src="https://poser.pugx.org/maslosoft/mangan/license.svg" alt="License" style="height: 20px;"/>
 </a>
 <a href="https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master">
-<img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"
+	<img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/>
 </a>
 <a href="https://scrutinizer-ci.com/g/Maslosoft/Mangan/?branch=master">
-<img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master" alt="Code Coverage" />
-</a>
-<a href="https://travis-ci.org/Maslosoft/Mangan">
-<img src="https://travis-ci.org/Maslosoft/Mangan.svg?branch=master"/>
+	<img src="https://scrutinizer-ci.com/g/Maslosoft/Mangan/badges/coverage.png?b=master" alt="Code Coverage" />
 </a>
 
 ### Quick Install
 ```bash
 composer require maslosoft/mangan
 ```
+
+
+
+
 
 <!--/header-->
 
