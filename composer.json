@@ -1,106 +1,106 @@
 {
-    "name": "maslosoft/mangan",
-    "description": "MongoDB Object Document Mapper (ODM)",
-    "homepage": "https://maslosoft.com/mangan/",
-    "license": [
-        "AGPL-3.0-only",
-        "proprietary"
-    ],
-    "type": "library",
-    "keywords": [
-        "php",
-        "mongodb",
-        "orm",
-        "odm",
-        "mangan",
-        "persister",
-        "database"
-    ],
-    "authors": [
-        {
-            "name": "Peter Maselkowski",
-            "email": "peter@maslosoft.com",
-            "homepage": "https://maslosoft.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Ianar\u00e9 S\u00e9vi",
-            "role": "Developer"
-        },
-        {
-            "name": "Dariusz G\u00f3recki",
-            "email": "darek.krk@gmail.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Invenzzia Group",
-            "homepage": "http://www.invenzzia.org",
-            "role": "Developer"
-        },
-        {
-            "name": "Philippe Gaultier",
-            "email": "pgaultier@ibitux.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Ibitux",
-            "homepage": "http://www.ibitux.com",
-            "role": "Developer"
-        },
-        {
-            "name": "CleverIT",
-            "homepage": "http://www.cleverit.com.pl",
-            "role": "Developrt"
-        },
-        {
-            "name": "Florian Fackler",
-            "email": "florian.fackler@mintao.com",
-            "homepage": "http://mintao.com"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/Maslosoft/Mangan/issues",
-        "docs": "https://maslosoft.com/mangan/docs/"
-    },
-    "require": {
-        "php": ">= 7.4",
-        "ext-json": "*",
-        "ext-gd": "*",
-        "alcaeus/mongo-php-adapter": "^1",
-        "maslosoft/addendum": "^7",
-        "maslosoft/cli-shared": "^1 | ^2",
-        "maslosoft/embedi": "^2",
-        "maslosoft/gazebo": "^2",
-        "maslosoft/signals": "^4",
-        "masterexploder/phpthumb": "^2",
-        "psr/log": "^1|^2|3",
-        "symfony/yaml": ">=2.7 <5.0"
-    },
-    "require-dev": {
-        "ext-curl": "*",
-        "codeception/codeception": "^4",
-        "codeception/specify": "^2",
-        "maslosoft/hedron": "^1 | ^2",
-        "maslosoft/zamm": "^1 | ^2",
-        "maslosoft/miniview": "^1 | ^2",
-        "maslosoft/mangan-examples": "^1 | ^2",
-        "codeception/module-asserts": "^1"
-    },
-    "suggest": {
-        "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
-        "ptachoire/php-dmtx": "Generate DataMatrix Codes",
-        "endroid/qrcode": "Generate QR Codes",
-        "khanamiryan/qrcode-detector-decoder": "Decode QR Codes"
-    },
-    "autoload": {
-        "psr-4": {
-            "Maslosoft\\Mangan\\": "src/",
-            "Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Maslosoft\\ManganTest\\Models\\": "tests/models/"
-        }
-    }
+	"name": "maslosoft/mangan",
+	"description": "MongoDB Object Document Mapper (ODM)",
+	"homepage": "https://maslosoft.com/mangan/",
+	"license": [
+		"AGPL-3.0-only",
+		"proprietary"
+	],
+	"type": "library",
+	"keywords": [
+		"php",
+		"mongodb",
+		"orm",
+		"odm",
+		"mangan",
+		"persister",
+		"database"
+	],
+	"authors": [
+		{
+			"name": "Peter Maselkowski",
+			"email": "peter@maslosoft.com",
+			"homepage": "https://maslosoft.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Ianar\u00e9 S\u00e9vi",
+			"role": "Developer"
+		},
+		{
+			"name": "Dariusz G\u00f3recki",
+			"email": "darek.krk@gmail.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Invenzzia Group",
+			"homepage": "http://www.invenzzia.org",
+			"role": "Developer"
+		},
+		{
+			"name": "Philippe Gaultier",
+			"email": "pgaultier@ibitux.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Ibitux",
+			"homepage": "http://www.ibitux.com",
+			"role": "Developer"
+		},
+		{
+			"name": "CleverIT",
+			"homepage": "http://www.cleverit.com.pl",
+			"role": "Developrt"
+		},
+		{
+			"name": "Florian Fackler",
+			"email": "florian.fackler@mintao.com",
+			"homepage": "http://mintao.com"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/Maslosoft/Mangan/issues",
+		"docs": "https://maslosoft.com/mangan/docs/"
+	},
+	"require": {
+		"php": ">= 7.4",
+		"ext-json": "*",
+		"ext-gd": "*",
+		"alcaeus/mongo-php-adapter": "^1",
+		"maslosoft/addendum": "^7",
+		"maslosoft/cli-shared": "^1 | ^2",
+		"maslosoft/embedi": "^2",
+		"maslosoft/gazebo": "^2",
+		"maslosoft/signals": "^4",
+		"masterexploder/phpthumb": "^2",
+		"psr/log": "^1|^2|3",
+		"symfony/yaml": ">=2.7 <6.0"
+	},
+	"require-dev": {
+		"ext-curl": "*",
+		"codeception/codeception": "^5",
+		"codeception/specify": "^2",
+		"maslosoft/hedron": "^1 | ^2",
+		"maslosoft/zamm": "^1 | ^2",
+		"maslosoft/miniview": "^1 | ^2",
+		"maslosoft/mangan-examples": "^1 | ^2",
+		"codeception/module-asserts": "^3"
+	},
+	"suggest": {
+		"monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
+		"ptachoire/php-dmtx": "Generate DataMatrix Codes",
+		"endroid/qrcode": "Generate QR Codes",
+		"khanamiryan/qrcode-detector-decoder": "Decode QR Codes"
+	},
+	"autoload": {
+		"psr-4": {
+			"Maslosoft\\Mangan\\": "src/",
+			"Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Maslosoft\\ManganTest\\Models\\": "tests/models/"
+		}
+	}
 }
