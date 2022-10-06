@@ -2,11 +2,12 @@
 
 namespace Debug;
 
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\ManganTest\Models\Debug\WithI18N;
 use UnitTester;
 
-class I18NGetterTest extends \Codeception\TestCase\Test
+class I18NGetterTest extends Unit
 {
 
 	/**
@@ -15,7 +16,7 @@ class I18NGetterTest extends \Codeception\TestCase\Test
 	protected $tester;
 
 	// tests
-	public function testIfWillProperlyGetRawI18N()
+	public function testIfWillProperlyGetRawI18N(): void
 	{
 		$model = new WithI18N();
 		$model->setLanguages(['en', 'pl']);
@@ -34,7 +35,7 @@ class I18NGetterTest extends \Codeception\TestCase\Test
 		$this->assertSame('Styczeń', $rawI18N['name']['pl']);
 	}
 
-	public function testIfWillProperlyConvertRawI18NToJson()
+	public function testIfWillProperlyConvertRawI18NToJson(): void
 	{
 		$model = new WithI18N();
 		$model->setLanguages(['en', 'pl']);

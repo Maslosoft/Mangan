@@ -2,13 +2,14 @@
 
 namespace TestExtensions;
 
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Extensions\ModelComparator;
 use Maslosoft\ManganTest\Models\Embedded\WithEmbeddedArrayI18NModel;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use UnitTester;
 
-class ModelComparatorTest extends \Codeception\TestCase\Test
+class ModelComparatorTest extends Unit
 {
 
 	/**
@@ -17,7 +18,7 @@ class ModelComparatorTest extends \Codeception\TestCase\Test
 	protected $tester;
 
 	// tests
-	public function testIfWillCompareModel()
+	public function testIfWillCompareModel(): void
 	{
 		$langs = [];
 		$model = new WithEmbeddedArrayI18NModel();

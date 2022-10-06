@@ -2,6 +2,7 @@
 
 namespace Event;
 
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
@@ -10,7 +11,7 @@ use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\ModelWithI18NSecond;
 use UnitTester;
 
-class PropagateTest extends \Codeception\TestCase\Test
+class PropagateTest extends Unit
 {
 
 	/**
@@ -19,7 +20,7 @@ class PropagateTest extends \Codeception\TestCase\Test
 	protected $tester;
 
 	// tests
-	public function testIfEventWillPropagate()
+	public function testIfEventWillPropagate(): void
 	{
 
 		$model = new WithEmbeddedArrayI18NModel();
@@ -55,7 +56,7 @@ class PropagateTest extends \Codeception\TestCase\Test
 		$this->assertTrue($triggered2);
 	}
 
-	public function testIfEventWillPropagateAndRevokeSave()
+	public function testIfEventWillPropagateAndRevokeSave(): void
 	{
 
 		$model = new WithEmbeddedArrayI18NModel();
@@ -91,7 +92,7 @@ class PropagateTest extends \Codeception\TestCase\Test
 		$this->assertTrue($triggered2);
 	}
 
-		public function testIfEventWillStopPropagateAndAllowAlmostRevokedSave()
+	public function testIfEventWillStopPropagateAndAllowAlmostRevokedSave(): void
 	{
 
 		$model = new WithEmbeddedArrayI18NModel();

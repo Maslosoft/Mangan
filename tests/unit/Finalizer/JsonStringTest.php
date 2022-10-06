@@ -2,10 +2,13 @@
 namespace Finalizer;
 
 
-class JsonStringTest extends \Codeception\TestCase\Test
+use Codeception\Test\Unit;
+use UnitTester;
+
+class JsonStringTest extends Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 
@@ -18,7 +21,7 @@ class JsonStringTest extends \Codeception\TestCase\Test
     }
 
     // tests
-    public function testMe()
+    public function testMe(): void
     {
 
     }

@@ -3,13 +3,14 @@
 namespace Validator;
 
 use Codeception\Specify;
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validators\BuiltIn\UniqueValidator;
 use Maslosoft\ManganTest\Models\Debug\ModelWithUniqueValidatorCriteria;
 use Maslosoft\ManganTest\Models\ModelWithI18NFullAr;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
 use UnitTester;
 
-class UniqueTest extends \Codeception\TestCase\Test
+class UniqueTest extends Unit
 {
 
 	use Specify;
@@ -20,7 +21,7 @@ class UniqueTest extends \Codeception\TestCase\Test
 	protected $tester;
 
 	// tests
-	public function testIfWillValidateWithNewModel()
+	public function testIfWillValidateWithNewModel(): void
 	{
 		$validator = new UniqueValidator();
 		$model = new ModelWithLabel();
@@ -28,7 +29,7 @@ class UniqueTest extends \Codeception\TestCase\Test
 		$this->assertTrue($valid);
 	}
 
-	public function testIfWillValidateWithExtraCriteria()
+	public function testIfWillValidateWithExtraCriteria(): void
 	{
 		// One
 		$model1 = new ModelWithUniqueValidatorCriteria;
@@ -72,7 +73,7 @@ class UniqueTest extends \Codeception\TestCase\Test
 		$this->assertFalse($saved4, 'That fourth model was NOT saved');
 	}
 
-	public function testIfWillValidateAfterSave()
+	public function testIfWillValidateAfterSave(): void
 	{
 		$validator = new UniqueValidator();
 
@@ -98,7 +99,7 @@ class UniqueTest extends \Codeception\TestCase\Test
 		codecept_debug($msg);
 	}
 
-	public function testIfWillValidateSavedModelWithI18N()
+	public function testIfWillValidateSavedModelWithI18N(): void
 	{
 		$validator = new UniqueValidator();
 
