@@ -32,7 +32,7 @@ use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
  * Usage:
  *
  * ```
- * @Scope(EmbeddedClassName)
+ * @Scope(ClassName)
  * ```
  *
  * @Target('class')
@@ -44,9 +44,9 @@ use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
 class ScopeAnnotation extends ManganTypeAnnotation
 {
 
-	public $value = true;
+	public bool $value = true;
 
-	public function init()
+	public function init(): void
 	{
 		$data = ParamsExpander::expand($this, ['class']);
 		$className = $data['class'];
