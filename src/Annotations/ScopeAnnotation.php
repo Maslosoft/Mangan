@@ -44,13 +44,16 @@ use Maslosoft\Mangan\Meta\ManganTypeAnnotation;
 class ScopeAnnotation extends ManganTypeAnnotation
 {
 
-	public bool $value = true;
+	/**
+	 * @var mixed
+	 */
+	public $value = true;
 
 	public function init(): void
 	{
 		$data = ParamsExpander::expand($this, ['class']);
 		$className = $data['class'];
-		assert(ClassChecker::exists($className));
+		assert(ClassChecker::exists($className), "Class `$className` not found on `" . $this->getEntity()->name . '` @Scope annotation');
 		assert(is_a($className, ScopeInterface::class, true));
 		$this->getEntity()->scopes[] = $className;
 	}
