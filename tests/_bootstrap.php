@@ -13,8 +13,7 @@ use Maslosoft\ManganTest\Models\BaseAttributesAnnotations;
 
 date_default_timezone_set('Europe/Paris');
 
-define('VENDOR_DIR', __DIR__ . '/../vendor');
-define('YII_DIR', VENDOR_DIR . '/yiisoft/yii/framework/');
+const VENDOR_DIR = __DIR__ . '/../vendor';
 require VENDOR_DIR . '/autoload.php';
 
 if (!defined('MANGAN_TEST_ENV'))
