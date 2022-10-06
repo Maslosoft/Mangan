@@ -80,7 +80,6 @@
 		"ext-curl": "*",
 		"codeception/codeception": "^5",
 		"codeception/specify": "^2",
-		"maslosoft/hedron": "^1 | ^2",
 		"maslosoft/zamm": "^1 | ^2",
 		"maslosoft/miniview": "^1 | ^2",
 		"maslosoft/mangan-examples": "^1 | ^2",

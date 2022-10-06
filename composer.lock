@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9801f4eb071f1601436aae0edb2ee95b",
+    "content-hash": "b4ebb378f980c1dde0852dc5ef037fc5",
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
@@ -1874,65 +1874,6 @@
                 "fixtures"
             ],
             "time": "2022-09-08T13:28:08+00:00"
-        },
-        {
-            "name": "maslosoft/hedron",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Maslosoft/Hedron.git",
-                "reference": "04bcfe484fbfd2766a1014d1b5f754994143d82d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Maslosoft/Hedron/zipball/04bcfe484fbfd2766a1014d1b5f754994143d82d",
-                "reference": "04bcfe484fbfd2766a1014d1b5f754994143d82d",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "maslosoft/addendum": "*",
-                "maslosoft/cli-shared": "*",
-                "php": ">=7.4",
-                "symfony/console": ">=2.7 <5.0",
-                "symfony/finder": ">=2.7 <5.0",
-                "symfony/yaml": ">=2.7 <5.0",
-                "zordius/lightncandy": "^1"
-            },
-            "require-dev": {
-                "maslosoft/sitcom": "*",
-                "roave/security-advisories": "dev-latest"
-            },
-            "suggest": {
-                "maslosoft/sitcom": "Collect commands with signals"
-            },
-            "bin": [
-                "hedron"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Maslosoft\\Hedron\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "AGPL-3.0-only",
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Peter Maselkowski",
-                    "email": "pmaselkowski@gmail.com"
-                }
-            ],
-            "description": "PHP source code class header applier",
-            "homepage": "https://maslosoft.com/hedron/",
-            "support": {
-                "issues": "https://github.com/Maslosoft/Hedron/issues",
-                "source": "https://github.com/Maslosoft/Hedron/tree/2.0.0"
-            },
-            "time": "2022-09-15T11:46:05+00:00"
         },
         {
             "name": "maslosoft/mangan-examples",
@@ -4134,62 +4075,6 @@
                 }
             ],
             "time": "2021-07-28T10:34:58+00:00"
-        },
-        {
-            "name": "zordius/lightncandy",
-            "version": "v1.2.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zordius/lightncandy.git",
-                "reference": "b451f73e8b5c73e62e365997ba3c993a0376b72a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zordius/lightncandy/zipball/b451f73e8b5c73e62e365997ba3c993a0376b72a",
-                "reference": "b451f73e8b5c73e62e365997ba3c993a0376b72a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=7"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "LightnCandy\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Zordius Chen",
-                    "email": "zordius@gmail.com"
-                }
-            ],
-            "description": "An extremely fast PHP implementation of handlebars ( http://handlebarsjs.com/ ) and mustache ( http://mustache.github.io/ ).",
-            "homepage": "https://github.com/zordius/lightncandy",
-            "keywords": [
-                "handlebars",
-                "logicless",
-                "mustache",
-                "php",
-                "template"
-            ],
-            "support": {
-                "issues": "https://github.com/zordius/lightncandy/issues",
-                "source": "https://github.com/zordius/lightncandy/tree/v1.2.6"
-            },
-            "time": "2021-07-11T04:52:41+00:00"
         }
     ],
     "aliases": [],
