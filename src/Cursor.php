@@ -79,6 +79,7 @@ class Cursor implements Iterator, Countable
 	 * @return AnnotatedInterface|Document|null
 	 * @since v1.3.4
 	 */
+	#[\ReturnTypeWillChange]
 	public function current()
 	{
 		$document = $this->cursor->current();
@@ -95,6 +96,7 @@ class Cursor implements Iterator, Countable
 	 * @return scalar
 	 * @since v1.3.4
 	 */
+	#[\ReturnTypeWillChange]
 	public function key()
 	{
 		return $this->cursor->key();
@@ -105,7 +107,7 @@ class Cursor implements Iterator, Countable
 	 * @return void
 	 * @since v1.3.4
 	 */
-	public function next()
+	public function next(): void
 	{
 		$this->cursor->next();
 	}
@@ -115,7 +117,7 @@ class Cursor implements Iterator, Countable
 	 * @return void
 	 * @since v1.3.4
 	 */
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->cursor->rewind();
 	}
@@ -125,7 +127,7 @@ class Cursor implements Iterator, Countable
 	 * @return boolean
 	 * @since v1.3.4
 	 */
-	public function valid()
+	public function valid(): bool
 	{
 		return $this->cursor->valid();
 	}
@@ -137,7 +139,7 @@ class Cursor implements Iterator, Countable
 	 * @return integer count of documents found
 	 * @since v1.3.4
 	 */
-	public function count($foundOnly = false)
+	public function count($foundOnly = false): int
 	{
 		return $this->cursor->count($foundOnly);
 	}
