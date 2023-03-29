@@ -7,7 +7,7 @@ use Maslosoft\Mangan\Validators\BuiltIn\ImmutableValidator;
 use Maslosoft\ManganTest\Models\ModelWithImmutableAgainstValidator;
 use Maslosoft\ManganTest\Models\ModelWithImmutableValidator;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ImmutableTest extends Unit

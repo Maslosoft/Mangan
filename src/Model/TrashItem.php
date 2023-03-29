@@ -17,7 +17,7 @@ use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
 use Maslosoft\Mangan\Traits\Model\TrashableTrait;
-use MongoDate;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 
 /**
  * TrashItem

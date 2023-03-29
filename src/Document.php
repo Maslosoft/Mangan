@@ -21,7 +21,7 @@ use Maslosoft\Mangan\Traits\EntityManagerTrait;
 use Maslosoft\Mangan\Traits\FinderTrait;
 use Maslosoft\Mangan\Traits\WithCriteriaTrait;
 use MongoDB;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Document

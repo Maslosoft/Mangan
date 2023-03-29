@@ -17,7 +17,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Modifier;
-use MongoCollection;
+use MongoDB\Collection;
 
 /**
  *
@@ -240,7 +240,7 @@ interface EntityManagerInterface
 
 	/**
 	 * Get mongodb collection
-	 * @return MongoCollection PHP Driver MongoCollection instance
+	 * @return Collection PHP Driver Collection instance
 	 */
 	public function getCollection();
 }

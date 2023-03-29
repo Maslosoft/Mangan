@@ -9,7 +9,7 @@
 namespace Maslosoft\ManganTest\Models;
 
 use Maslosoft\Mangan\Document;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithAlias

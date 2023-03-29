@@ -24,7 +24,7 @@ use Maslosoft\Mangan\Interfaces\FileInterface;
 use Maslosoft\Mangan\Mangan;
 use MongoDB;
 use MongoGridFSFile;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Class for storing embedded files

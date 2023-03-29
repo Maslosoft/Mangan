@@ -14,7 +14,8 @@
 namespace Maslosoft\Mangan\Traits\Defaults;
 
 use Maslosoft\Mangan\Options\AuthMechanism;
-use MongoClient;
+use MongoDb\Client;
+use MongoDB\Driver\ReadPreference;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -46,7 +47,7 @@ trait MongoClientOptions
 	/**
 	 * If the constructor should connect before returning.
 	 * Default is FALSE. When set to FALSE the driver will automatically connect to the server whenever it is necessary to do a query.
-	 * Alternatively, you can run MongoClient::connect() manually.
+	 * Alternatively, you can run Client::connect() manually.
 	 * @var boolean
 	 */
 	public $connect = false;
@@ -105,12 +106,19 @@ trait MongoClientOptions
 	/**
 	 * Specifies the read preference type. Read preferences provide you with control from which secondaries data can be read from.
 	 *
-	 * Allowed values are: MongoClient::RP_PRIMARY, MongoClient::RP_PRIMARY_PREFERRED, MongoClient::RP_SECONDARY, MongoClient::RP_SECONDARY_PREFERRED and MongoClient::RP_NEAREST.
+	 * Allowed values are:
+	 *
+	 * * ReadPreference::RP_PRIMARY
+	 * * ReadPreference::RP_PRIMARY_PREFERRED
+	 * * ReadPreference::RP_SECONDARY
+	 * * ReadPreference::RP_SECONDARY_PREFERRED
+	 * * ReadPreference::RP_NEAREST.
 	 *
 	 * See the documentation on read preferences for more information.
+	 * @see ReadPreference
 	 * @var int
 	 */
-	public $readPreference = MongoClient::RP_PRIMARY;
+	public $readPreference = ReadPreference::RP_PRIMARY;
 
 	/**
 	 * Specifies the read preference tags as an array of strings. Tags can be used in combination with the readPreference option to further control which secondaries data might be read from.
@@ -173,7 +181,7 @@ trait MongoClientOptions
 	 * This option specifies the time limit, in milliseconds, for write concern acknowledgement.
 	 * It is only applicable when "w" is greater than 1, as the timeout pertains to replication.
 	 * If the write concern is not satisfied within the time limit, a MongoCursorException will be thrown.
-	 * A value of 0 may be specified to block indefinitely. The default value for MongoClient is 10000 (ten seconds).
+	 * A value of 0 may be specified to block indefinitely. The default value for Client is 10000 (ten seconds).
 	 * @var int
 	 */
 	public $wTimeoutMS = 10000;

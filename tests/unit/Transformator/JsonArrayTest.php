@@ -8,7 +8,7 @@ use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\ModelWithI18NAndIgnoredJsonField;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class JsonArrayTest extends Unit

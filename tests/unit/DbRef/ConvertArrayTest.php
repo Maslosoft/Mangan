@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\DbRef\WithPlainDbRefArray;
 use Maslosoft\ManganTest\Models\DbRef\WithPlainDbRefArrayDifferentTypes;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRefSecond;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ConvertArrayTest extends Unit

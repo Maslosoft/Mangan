@@ -7,7 +7,7 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class PlainTest extends Unit

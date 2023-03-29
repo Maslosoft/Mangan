@@ -5,7 +5,7 @@ namespace Maslosoft\ManganTest\Models\ScenarioManager;
 use Maslosoft\Mangan\Interfaces\ModelInterface;
 use Maslosoft\Mangan\Interfaces\ScenariosInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Basic php types

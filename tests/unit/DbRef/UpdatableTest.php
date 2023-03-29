@@ -12,7 +12,7 @@ use Maslosoft\ManganTest\Models\DbRef\ModelWithNotUpdatableDbRefShortNotation2;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithNotUpdatableDbRefWrongAnnotationValue;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithUpdatableDbRef;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnexpectedValueException;
 use UnitTester;
 use function codecept_debug;

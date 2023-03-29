@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use MongoDate;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 
 /**
  * UnixDateSanitizer

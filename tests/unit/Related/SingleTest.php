@@ -7,7 +7,7 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Related\ModelWithSingleSimpleRelation;
 use Maslosoft\ManganTest\Models\Related\RelatedStats;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class SingleTest extends Unit

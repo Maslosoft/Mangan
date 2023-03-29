@@ -9,7 +9,7 @@ use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbeddedArray;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbeddedArrayDifferentTypes;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbeddedSecond;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ArrayTest extends Unit

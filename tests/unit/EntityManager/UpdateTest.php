@@ -7,7 +7,7 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Exceptions\BadAttributeException;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class UpdateTest extends Unit

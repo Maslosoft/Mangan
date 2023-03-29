@@ -8,7 +8,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\CompositePrimaryKey;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use Maslosoft\ManganTest\Models\SimplePrimaryKey;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class PlainTest extends Unit
@@ -40,6 +40,7 @@ class PlainTest extends Unit
 		$this->assertSame($model->string, $found->string);
 		$this->assertSame($model->bool, $found->bool);
 		$this->assertSame($model->float, $found->float);
+		$this->assertIsArray($found->array);
 		$this->assertSame($model->array, $found->array);
 
 	}

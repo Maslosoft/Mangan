@@ -15,7 +15,7 @@ namespace Maslosoft\ManganTest\Extensions;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Transformers\RawArray;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ArrayTester

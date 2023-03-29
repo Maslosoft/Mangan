@@ -10,7 +10,7 @@ namespace Maslosoft\ManganTest\Models\Tree;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithSimpleTree
@@ -37,7 +37,7 @@ class ModelWithDbRefTree implements AnnotatedInterface
 
 	public function __construct($name = '', $children = [])
 	{
-		$this->_id = new \MongoId;
+		$this->_id = new MongoId;
 		$this->name = $name;
 		$this->children = $children;
 	}

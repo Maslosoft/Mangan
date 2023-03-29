@@ -8,7 +8,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transaction;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
 use Maslosoft\ManganTest\Models\TokuMX\ModelTransactional;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class TransactionTest extends Unit

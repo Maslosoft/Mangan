@@ -63,11 +63,11 @@
 		"docs": "https://maslosoft.com/mangan/docs/"
 	},
 	"require": {
-		"php": ">= 7.4",
+		"php": ">= 8.2",
 		"ext-json": "*",
 		"ext-gd": "*",
 		"ext-mongodb": "*",
-		"alcaeus/mongo-php-adapter": "^1",
+		"mongodb/mongodb": "^1",
 		"maslosoft/addendum": "^7",
 		"maslosoft/cli-shared": "^1 | ^2",
 		"maslosoft/embedi": "^2",

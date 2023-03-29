@@ -10,7 +10,7 @@ namespace Maslosoft\ManganTest\Models;
 
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Sanitizers\StringSanitizer;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithArrayField

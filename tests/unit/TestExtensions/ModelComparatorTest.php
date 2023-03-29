@@ -7,6 +7,7 @@ use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Extensions\ModelComparator;
 use Maslosoft\ManganTest\Models\Embedded\WithEmbeddedArrayI18NModel;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
+use MongoDB\BSON\ObjectId;
 use UnitTester;
 
 class ModelComparatorTest extends Unit
@@ -26,7 +27,7 @@ class ModelComparatorTest extends Unit
 		// Attach first
 		$m = new ModelWithI18N;
 		$m->setLang('en');
-		$m->_id = new \MongoId;
+		$m->_id = new ObjectId;
 		$m->setLanguages($langs);
 		$m->layout = 'new';
 		$m->title = 'New York';
@@ -38,7 +39,7 @@ class ModelComparatorTest extends Unit
 		// Attach second
 		$m2 = new ModelWithI18N;
 		$m2->setLang('en');
-		$m2->_id = new \MongoId;
+		$m2->_id = new ObjectId;
 		$m2->setLanguages($langs);
 		$m2->layout = 'new';
 		$m2->title = 'Prague';

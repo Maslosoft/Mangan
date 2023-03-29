@@ -4,7 +4,7 @@ namespace Maslosoft\ManganTest\Models;
 
 use Maslosoft\Mangan\Interfaces\ModelInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Basic php types

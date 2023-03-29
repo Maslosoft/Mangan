@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * DbRef

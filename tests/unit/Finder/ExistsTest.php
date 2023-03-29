@@ -9,7 +9,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\CompositePrimaryKey;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\WithBaseAttributes;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ExistsTest extends Unit
@@ -21,6 +21,14 @@ class ExistsTest extends Unit
 	protected $tester;
 
 	// tests
+	public function testIfNotExistsAnything()
+	{
+		$model = new WithBaseAttributes();
+		$finder = new Finder($model);
+
+		$this->assertFalse($finder->exists());
+	}
+
 	public function testIfExistsAnything()
 	{
 		$model = new WithBaseAttributes();

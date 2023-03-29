@@ -21,7 +21,7 @@ use Maslosoft\Mangan\Traits\I18NAbleTrait;
 use Maslosoft\Mangan\Traits\OwneredTrait;
 use Maslosoft\Mangan\Traits\ScenariosTrait;
 use Maslosoft\Mangan\Traits\ValidatableTrait;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * EmbeddedDocument

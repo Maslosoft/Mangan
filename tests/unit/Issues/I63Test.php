@@ -6,7 +6,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Issues\Model63;
 use Maslosoft\ManganTest\Models\Issues\ModelWithId63;
 use MongoCursorException;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 class I63Test extends \Codeception\Test\Unit
 {

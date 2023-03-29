@@ -9,7 +9,7 @@
 namespace Maslosoft\ManganTest\Models\Embedded;
 
 use Maslosoft\Mangan\Interfaces\ModelInterface;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * PlainDeepEmbedded

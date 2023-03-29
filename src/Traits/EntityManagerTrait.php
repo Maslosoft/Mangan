@@ -19,7 +19,7 @@ use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Modifier;
-use MongoCollection;
+use MongoDB\Collection;
 
 /**
  * This trait contains same methods as `EntityManagerInterface`, and it forwards
@@ -299,7 +299,7 @@ trait EntityManagerTrait
 	 *
 	 * Should not be called manually in most cases.
 	 *
-	 * @return MongoCollection
+	 * @return Collection
 	 * @Ignored
 	 */
 	public function getCollection()

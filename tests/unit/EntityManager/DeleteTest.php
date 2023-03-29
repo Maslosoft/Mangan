@@ -9,7 +9,7 @@ use Maslosoft\Mangan\Exceptions\BadAttributeException;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class DeleteTest extends Unit

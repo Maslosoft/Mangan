@@ -73,10 +73,10 @@ class NotFoundResolver
 	 *
 	 * TODO Consider to bind to AnnotatedInterface to always provide some reaction for not found classes
 	 *
-	 * @param AnnotatedInterface $document
+	 * @param AnnotatedInterface|object|string $document
 	 * @param string[] $classMap
 	 */
-	public function __construct(AnnotatedInterface $document, $classMap = [])
+	public function __construct($document, $classMap = [])
 	{
 		$onClassNotFound = function($event)
 		{

@@ -10,7 +10,7 @@ use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\ModelWithI18NAndIgnoredArrayField;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class DocumentArrayTest extends Unit

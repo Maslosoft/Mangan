@@ -4,7 +4,7 @@ namespace Sanitizers;
 
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\ManganTest\Models\Sanitizers\ModelWithNullableBoolean;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 class NullableBooleanTest extends \Codeception\Test\Unit
 {

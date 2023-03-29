@@ -14,7 +14,8 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
-use MongoDate;
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 
 /**
  * Date
@@ -52,7 +53,7 @@ class DateSanitizer implements SanitizerInterface
 	{
 		$sec = $value;
 		$usec = 0;
-		if ($value instanceof MongoDate)
+		if ($value instanceof UTCDateTime)
 		{
 			return $value;
 		}
@@ -71,7 +72,7 @@ class DateSanitizer implements SanitizerInterface
 		{
 			$sec = time();
 		}
-		return new MongoDate($sec, $usec);
+		return new UTCDateTime($sec * 1000);
 	}
 
 }

@@ -11,7 +11,7 @@ namespace Maslosoft\ManganTest\Models\Tree;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use Maslosoft\Mangan\Traits\Model\SimpleTreeTrait;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithSimpleTree

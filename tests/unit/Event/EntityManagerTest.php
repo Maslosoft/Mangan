@@ -7,6 +7,7 @@ use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
+use MongoDB\BSON\ObjectId;
 use UnitTester;
 
 class EntityManagerTest extends Unit
@@ -189,7 +190,7 @@ class EntityManagerTest extends Unit
 		$triggered = false;
 
 		$model = new DocumentBaseAttributes();
-		$model->_id = new \MongoId;
+		$model->_id = new ObjectId;
 
 		$beforeDelete = function(ModelEvent $event)use(&$triggered)
 		{

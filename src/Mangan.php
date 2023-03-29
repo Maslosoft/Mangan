@@ -18,6 +18,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
+use Maslosoft\Mangan\Helpers\NotFoundResolver;
 use Maslosoft\Mangan\Interfaces\EventHandlersInterface;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
@@ -27,8 +28,9 @@ use Maslosoft\Mangan\Profillers\NullProfiler;
 use Maslosoft\Mangan\Signals\ConfigInit;
 use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
 use Maslosoft\Signals\Signal;
-use MongoClient;
 use MongoDB;
+use MongoDB\Client;
+use MongoDB\Driver\Manager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -223,6 +225,16 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
+		static $initializedBc = false;
+		if (!$initializedBc)
+		{
+			new NotFoundResolver(AnnotatedInterface::class, [
+				'MongoId' => MongoDB\BSON\ObjectId::class,
+				'MongoDate' => MongoDB\BSON\UTCDateTime::class,
+			]);
+		}
+
+
 		$this->di = EmbeDi::fly($connectionId);
 
 		// Load built-in config
@@ -416,7 +428,7 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Returns Mongo connection instance if not exists will create new
 	 *
-	 * @return MongoClient
+	 * @return Client
 	 * @throws ManganException
 	 * @since v1.0
 	 */
@@ -437,8 +449,14 @@ class Mangan implements LoggerAwareInterface
 					$options[$name] = $this->$name;
 				}
 			}
-
-			$this->cs->mongoClient = new MongoClient($this->connectionString);
+			$driverOptions = [
+				'typeMap' => [
+					'array' => 'array',
+					'document' => 'array',
+					'root' => 'array',
+				],
+			];
+			$this->cs->mongoClient = new Client($this->connectionString, [], $driverOptions);
 
 			return $this->cs->mongoClient;
 		}
@@ -448,15 +466,20 @@ class Mangan implements LoggerAwareInterface
 		}
 	}
 
+	public function	getManager(): Manager
+	{
+		return $this->getConnection()->getManager();
+	}
+
 	/**
-	 * Set the connection by supplying `MongoClient` instance.
+	 * Set the connection by supplying `Client` instance.
 	 *
 	 * Use this to set connection from external source.
 	 * In most scenarios this does not need to be called.
 	 *
-	 * @param MongoClient $connection
+	 * @param Client $connection
 	 */
-	public function setConnection(MongoClient $connection)
+	public function setConnection(Client $connection)
 	{
 		$this->cs->mongoClient = $connection;
 	}
@@ -477,7 +500,7 @@ class Mangan implements LoggerAwareInterface
 			}
 			try
 			{
-				$db = $this->getConnection()->selectDB($this->dbName);
+				$db = $this->getConnection()->selectDatabase($this->dbName);
 			}
 			catch (Exception $e)
 			{

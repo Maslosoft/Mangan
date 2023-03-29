@@ -14,7 +14,7 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * MongoObjectId

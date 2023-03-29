@@ -192,7 +192,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 			$cursor = $this->getAdapter()->findMany($criteria);
 
 			assert(is_object($cursor), sprintf('Expected cursor to be compatible object, got %s', gettype($cursor)));
-			assert($cursor instanceof FinderCursorInterface || $cursor instanceof MongoCursor, new UnexpectedValueException(sprintf('Expected `%s` or `%s` got `%s`', FinderCursorInterface::class, MongoCursor::class, get_class($cursor))));
+			assert($cursor instanceof FinderCursorInterface || $cursor instanceof \MongoDB\Driver\Cursor, new UnexpectedValueException(sprintf('Expected `%s` or `%s` got `%s`', FinderCursorInterface::class, MongoCursor::class, get_class($cursor))));
 
 			if ($criteria->getSort() !== null)
 			{
@@ -358,6 +358,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 
 	/**
 	 * Whenever to use cursor
+	 * @deprecated
 	 * @param bool $useCursor
 	 * @return FinderInterface
 	 */
@@ -367,6 +368,10 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 		return $this;
 	}
 
+	/**
+	 * @deprecated
+	 * @return bool
+	 */
 	public function isWithCursor()
 	{
 		return $this->useCursor;
@@ -382,27 +387,30 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 	 */
 	protected function populateRecord($data)
 	{
-		if ($data !== null)
-		{
-			$model = $this->createModel($data);
-			ScenarioManager::setScenario($model, ScenariosInterface::Update);
-			$this->getFinderEvents()->afterFind($this, $model);
-			return $model;
-		}
-		else
+		// Check for null for compatibility with other finder implementations
+		if ($data === null)
 		{
 			return null;
 		}
+		if($data === false)
+		{
+			return null;
+		}
+		$model = $this->createModel($data);
+		ScenarioManager::setScenario($model, ScenariosInterface::Update);
+		$this->getFinderEvents()->afterFind($this, $model);
+		return $model;
 	}
 
 	/**
 	 * Creates a list of documents based on the input data.
 	 * This method is internally used by the find methods.
+	 * @internal
 	 * @param Iterator|array $cursor Results found to populate active records.
 	 * @return AnnotatedInterface[] array list of active records.
 	 * @since v1.0
 	 */
-	private function populateRecords($cursor)
+	protected function populateRecords($cursor)
 	{
 		$records = array();
 		foreach ($cursor as $data)

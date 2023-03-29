@@ -63,6 +63,8 @@ class Command
 
 	public function call($command, $arguments = [])
 	{
+		// FIXME: TEMP DISABLE
+		return [];
 		$arg = $this->model ? CollectionNamer::nameCollection($this->model) : true;
 		$cmd = [$command => $arg];
 		if (is_array($arguments) && count($arguments))

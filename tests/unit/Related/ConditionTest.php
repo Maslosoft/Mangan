@@ -7,7 +7,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Related\ModelWithConditionalRelation;
 use Maslosoft\ManganTest\Models\Related\RelatedStats;
 use Maslosoft\ManganTest\Models\Related\RelatedType;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ConditionTest extends \Codeception\Test\Unit

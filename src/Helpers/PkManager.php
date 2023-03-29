@@ -16,11 +16,10 @@ namespace Maslosoft\Mangan\Helpers;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\Exceptions\CriteriaException;
-use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnexpectedValueException;
 
 /**
@@ -252,7 +251,7 @@ class PkManager
 			$trgVal = $trg[$name];
 
 			// Special case for mongo id
-			if ($srcVal instanceof \MongoId || $trgVal instanceof \MongoId)
+			if ($srcVal instanceof MongoId || $trgVal instanceof MongoId)
 			{
 				if ((string) $srcVal !== (string) $trgVal)
 				{

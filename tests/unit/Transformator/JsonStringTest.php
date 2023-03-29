@@ -7,7 +7,7 @@ use Maslosoft\Mangan\Transformers\JsonString;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class JsonStringTest extends Unit

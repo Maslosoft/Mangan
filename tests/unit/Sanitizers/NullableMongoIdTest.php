@@ -5,7 +5,7 @@ namespace Sanitizers;
 use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\ManganTest\Models\Sanitizers\ModelWithNullableMongoId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class NullableMongoIdTest extends Unit

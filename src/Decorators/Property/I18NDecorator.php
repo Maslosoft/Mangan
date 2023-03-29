@@ -19,6 +19,7 @@ use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use MongoDB\Model\BSONDocument;
 
 /**
  * This creates i18n fields
@@ -43,6 +44,12 @@ class I18NDecorator implements DecoratorInterface
 			throw new ManganException(sprintf('Model class %s must implement interface %s to support I18N fields. You can use trait I18NAbleTrait as default implementation.', get_class($model), InternationalInterface::class));
 		}
 		$lang = $model->getLang();
+
+		// Convert BSONDocument to array to ensure not conversion to string errors
+		if($dbValue instanceof BSONDocument)
+		{
+			$dbValue = (array)$dbValue;
+		}
 
 		if (!is_array($dbValue))
 		{

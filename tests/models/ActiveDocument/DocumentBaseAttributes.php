@@ -4,7 +4,7 @@ namespace Maslosoft\ManganTest\Models\ActiveDocument;
 
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
   int

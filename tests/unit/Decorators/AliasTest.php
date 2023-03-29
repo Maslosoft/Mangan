@@ -7,7 +7,7 @@ use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\ManganTest\Models\ModelWithAlias;
 use Maslosoft\ManganTest\Models\ModelWithAliasDefault;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class AliasTest extends Unit

@@ -4,7 +4,7 @@ use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\UseCases\ModelWithNullableDate;
-use MongoDate;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 use UnitTester;
 
 class NullableTest extends Unit

@@ -11,7 +11,7 @@ use Maslosoft\Mangan\Transformers\Datamatrix;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use PHPUnit\Framework\SkippedTestError;
 use UnitTester;
 

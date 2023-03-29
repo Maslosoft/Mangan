@@ -10,7 +10,7 @@ use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ClassNotFoundTest extends Unit
@@ -37,6 +37,7 @@ class ClassNotFoundTest extends Unit
 		define('BogusClass', 'SomeClass');
 		$model = new WithPlainEmbedded();
 		$model->_id = new MongoId;
+		codecept_debug($model->_id);
 		$model->stats = new SimplePlainEmbedded();
 
 		$em = new EntityManager($model);
@@ -49,18 +50,19 @@ class ClassNotFoundTest extends Unit
 				'stats._class' => BogusClass
 			]
 		];
-		$em->getCollection()->update($pkCriteria, $set);
+		$em->getCollection()->updateOne($pkCriteria, $set);
 
 		$finder = new Finder($model);
 
 		try
 		{
-			$finder->findByPk($model->_id);
-			$this->assertFalse(true);
+			$found = $finder->findByPk($model->_id);
+			$this->assertInstanceOf(WithPlainEmbedded::class, $found);
+			$this->assertFalse(true, 'Expected exception was not thrown');
 		}
 		catch (ManganException $ex)
 		{
-			$this->assertTrue(true);
+			$this->assertTrue(true, 'Expected exception was thrown');
 		}
 
 		// Attach class not found handlers

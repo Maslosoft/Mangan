@@ -13,8 +13,8 @@ use Maslosoft\Mangan\Sanitizers\PassThrough;
 use Maslosoft\Mangan\Sanitizers\StringSanitizer;
 use Maslosoft\Mangan\Sanitizers\DateReadUnixSanitizer;
 use Maslosoft\ManganTest\Models\VoidModel;
-use MongoDate;
-use MongoId;
+use MongoDB\BSON\UTCDateTime as MongoDate;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class SimpleSanitizersTest extends Unit
@@ -54,7 +54,7 @@ class SimpleSanitizersTest extends Unit
 		$this->assertSame($sanitizer->write($model, $id), (string) $id);
 
 		$this->assertSame($sanitizer->read($model, (string) $id), (string) $id);
-		$this->assertSame($sanitizer->write($model, (string) $id), $id->{'$id'});
+		$this->assertSame($sanitizer->write($model, (string) $id), (string)$id);
 
 
 		$sanitizer = new DoubleSanitizer();
@@ -71,7 +71,7 @@ class SimpleSanitizersTest extends Unit
 		$sanitizer = new DateReadUnixSanitizer();
 		$date = new MongoDate();
 		// NOTE: Need to cast $date->sec to int or hhvm complains about ".0"
-		$this->assertSame($sanitizer->read($model, $date->sec), (int) $date->sec);
+		$this->assertSame($sanitizer->read($model, $date->toDateTime()->getTimestamp()), (int) $date->toDateTime()->getTimestamp());
 		$this->assertSame($sanitizer->write($model, $date), $date);
 
 		$sanitizer = new BooleanSanitizer();

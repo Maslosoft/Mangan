@@ -8,7 +8,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\ModelWithI18N;
 use Maslosoft\ManganTest\Models\ModelWithI18NAllowAnyAndDefault;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class I18NTest extends Unit

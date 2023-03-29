@@ -8,7 +8,7 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\CompositePrimaryKey;
 use Maslosoft\ManganTest\Models\WithBaseAttributes;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class FindAllTest extends Unit
@@ -186,19 +186,19 @@ class FindAllTest extends Unit
 	public function testIfWillFindAllByCompositePks()
 	{
 		$pks[] = [
-			'primaryOne' => new \MongoId,
+			'primaryOne' => new MongoId,
 			'primaryTwo' => 1,
 			'primaryThree' => 'one',
 			'title' => 'xxx',
 		];
 		$pks[] = [
-			'primaryOne' => new \MongoId,
+			'primaryOne' => new MongoId,
 			'primaryTwo' => 2,
 			'primaryThree' => 'two',
 			'title' => 'yyy',
 		];
 		$pks[] = [
-			'primaryOne' => new \MongoId,
+			'primaryOne' => new MongoId,
 			'primaryTwo' => 3,
 			'primaryThree' => 'three',
 			'title' => 'zzz',
@@ -217,7 +217,7 @@ class FindAllTest extends Unit
 
 		$model = new CompositePrimaryKey();
 		$em = new EntityManager($model);
-		$model->primaryOne = new \MongoId;
+		$model->primaryOne = new MongoId;
 		$model->primaryTwo = 12;
 		$model->primaryThree = 'ddd';
 		$em->insert();

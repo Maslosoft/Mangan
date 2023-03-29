@@ -8,7 +8,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class ConvertTest extends Unit

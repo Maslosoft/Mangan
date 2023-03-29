@@ -20,7 +20,7 @@ use Maslosoft\Mangan\Events\ModelEvent;
 use Maslosoft\Mangan\Helpers\RawFinder;
 use Maslosoft\Mangan\Interfaces\SimpleTreeInterface;
 use Maslosoft\Mangan\Interfaces\TrashInterface;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Related Tree Trait

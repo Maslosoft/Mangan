@@ -3,7 +3,7 @@ namespace Document;
 
 use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\BaseAttributesNoAnnotations;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Document_BaseAttributesNoAnnotationsTest

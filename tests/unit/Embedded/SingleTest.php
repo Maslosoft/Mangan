@@ -8,7 +8,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Embedded\PlainDeepEmbedded;
 use Maslosoft\ManganTest\Models\Embedded\WithPlainEmbedded;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class SingleTest extends Unit

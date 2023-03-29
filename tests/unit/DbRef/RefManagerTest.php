@@ -6,7 +6,7 @@ use Codeception\Test\Unit;
 use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\ManganTest\Models\DbRef\WithPlainDbRef;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class RefManagerTest extends Unit

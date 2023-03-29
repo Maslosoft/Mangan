@@ -14,6 +14,7 @@
 namespace Maslosoft\Mangan\Sanitizers;
 
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
+use MongoDB\Model\BSONDocument;
 use UnexpectedValueException;
 
 /**

@@ -14,8 +14,8 @@
 namespace Maslosoft\Mangan\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use MongoDate;
-use MongoId;
+use MongoDB\BSON\UTCDateTime as MongoDate;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * Session model. This can be used to display session data.

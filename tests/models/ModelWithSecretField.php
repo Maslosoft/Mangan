@@ -11,7 +11,7 @@ namespace Maslosoft\ManganTest\Models;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use Maslosoft\ManganTest\Extensions\Hasher;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithSecretField

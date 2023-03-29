@@ -8,7 +8,7 @@ use Maslosoft\Mangan\DataProvider;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\NonHomogenous\ModelOne;
 use Maslosoft\ManganTest\Models\NonHomogenous\ModelTwo;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class NonHomogeneousCollectionTest extends Unit

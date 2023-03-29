@@ -10,7 +10,7 @@ namespace Maslosoft\ManganTest\Models\GridFS;
 
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Model\File;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithEmbeddedFile

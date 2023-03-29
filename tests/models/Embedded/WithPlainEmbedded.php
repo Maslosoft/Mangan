@@ -11,7 +11,7 @@ namespace Maslosoft\ManganTest\Models\Embedded;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * WithPlainEmbedded

@@ -86,7 +86,7 @@ class ModifierTest extends Unit
 		$this->assertSame(2, $found->int);
 	}
 
-	public function testIfWillUpdateOne()
+	public function testIfWillUpdateOne(): void
 	{
 		$model = new DocumentBaseAttributes();
 		$model->bool = false;

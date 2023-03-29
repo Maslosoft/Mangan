@@ -12,7 +12,7 @@ use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Interfaces\ModelInterface;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
 use Maslosoft\Mangan\Traits\I18NAbleTrait;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithI18NAllowAnyAndDefault

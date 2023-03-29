@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * IdHelper

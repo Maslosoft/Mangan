@@ -7,8 +7,8 @@ namespace Maslosoft\ManganTest\Models\UseCases;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Sanitizers\DateSanitizer;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoDate;
-use MongoId;
+use MongoDB\BSON\UTCDateTime as MongoDate;
+use MongoDB\BSON\ObjectId as MongoId;
 
 class ModelWithNullableDate implements AnnotatedInterface
 {

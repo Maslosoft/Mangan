@@ -3,7 +3,7 @@ namespace Document;
 
 use Codeception\Test\Unit;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 

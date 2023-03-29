@@ -7,7 +7,7 @@ use Maslosoft\Mangan\Transformers\JsonArray;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithNullableAndUpdatableDbRef;
 use Maslosoft\ManganTest\Models\DbRef\ModelWithNullableDbRef;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainDbRef;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class NullableTest extends Unit

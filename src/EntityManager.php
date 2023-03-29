@@ -33,7 +33,10 @@ use Maslosoft\Mangan\Traits\Finder\CreateModel;
 use Maslosoft\Mangan\Transformers\RawArray;
 use Maslosoft\Mangan\Transformers\SafeArray;
 use Maslosoft\Signals\Signal;
-use MongoCollection;
+use MongoDB\Collection;
+use MongoDB\DeleteResult;
+use MongoDB\InsertOneResult;
+use MongoDB\UpdateResult;
 
 /**
  * EntityManager
@@ -83,7 +86,7 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 * Current collection
-	 * @var MongoCollection
+	 * @var Collection
 	 */
 	private $_collection = null;
 
@@ -115,7 +118,7 @@ class EntityManager implements EntityManagerInterface
 		{
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
 		}
-		$this->_collection = new MongoCollection($mangan->getDbInstance(), $this->collectionName);
+		$this->_collection = new Collection($mangan->getManager(), $mangan->dbName, $this->collectionName);
 	}
 
 	/**
@@ -177,7 +180,7 @@ class EntityManager implements EntityManagerInterface
 			$rawData = RawArray::fromModel($model);
 
 			$opts = $this->options->getSaveOptions();
-			$rawResult = $this->_collection->insert($rawData, $opts);
+			$rawResult = $this->getCollection()->insertOne($rawData, $opts);
 			$result = $this->insertResult($rawResult);
 
 			if ($result)
@@ -230,7 +233,7 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @param array|CriteriaInterface $criteria   query criteria.
 	 * @param array                   $attributes list of attributes that need to be saved. Defaults to null,
-	 * @param bool Whether tu force update/upsert document
+	 * @param bool Whether to force update/upsert document
 	 *                                            meaning all attributes that are loaded from DB will be saved.
 	 * @return bool
 	 */
@@ -284,7 +287,15 @@ class EntityManager implements EntityManagerInterface
 		$opts = $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]);
 		$collection = $this->getCollection();
 
-		$result = $collection->update($conditions, $data, $opts);
+		if ($attributes !== null)
+		{
+			$result = $collection->updateOne($conditions, $data, $opts);
+		}
+		else
+		{
+			$result = $collection->replaceOne($conditions, $data, $opts);
+		}
+
 		return $this->updateResult($result);
 	}
 
@@ -303,11 +314,8 @@ class EntityManager implements EntityManagerInterface
 			$criteria = $this->sm->apply($criteria);
 			$conditions = $criteria->getConditions();
 			$mods = $modifier->getModifiers();
-			$opts = $this->options->getSaveOptions([
-				'upsert' => false,
-				'multiple' => true
-			]);
-			$result = $this->getCollection()->update($conditions, $mods, $opts);
+			$opts = $this->options->getSaveOptions();
+			$result = $this->getCollection()->updateMany($conditions, $mods, $opts);
 			return $this->updateResult($result);
 		}
 		else
@@ -550,9 +558,7 @@ class EntityManager implements EntityManagerInterface
 	{
 		$criteria = $this->sm->apply($criteria);
 
-		$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-			'justOne' => true
-		]));
+		$result = $this->getCollection()->deleteOne($criteria->getConditions(), $this->options->getSaveOptions());
 		return $this->deleteResult($result);
 	}
 
@@ -573,9 +579,7 @@ class EntityManager implements EntityManagerInterface
 			$criteria = $this->sm->apply($criteria);
 			$criteria->mergeWith(PkManager::prepare($this->model, $pkValue));
 
-			$result = $this->getCollection()->remove($criteria->getConditions(), $this->options->getSaveOptions([
-				'justOne' => true
-			]));
+			$result = $this->getCollection()->deleteOne($criteria->getConditions(), $this->options->getSaveOptions());
 			return $this->deleteResult($result);
 		}
 		return false;
@@ -598,7 +602,7 @@ class EntityManager implements EntityManagerInterface
 			$opts = $this->options->getSaveOptions([
 				'justOne' => false
 			]);
-			$result = $this->getCollection()->remove($conditions, $opts);
+			$result = $this->getCollection()->deleteMany($conditions, $opts);
 			return $this->deleteResult($result);
 		}
 		return false;
@@ -622,7 +626,7 @@ class EntityManager implements EntityManagerInterface
 
 		// NOTE: Do not use [justOne => false] here
 		$opts = $this->options->getSaveOptions();
-		$result = $this->getCollection()->remove($conditions, $opts);
+		$result = $this->getCollection()->deleteMany($conditions, $opts);
 		return $this->deleteResult($result);
 	}
 
@@ -633,52 +637,40 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 * Make status uniform
-	 * @param bool|array $result
+	 * @param DeleteResult $result
 	 * @return bool Return true if succeed
 	 */
-	private function deleteResult($result)
+	private function deleteResult(DeleteResult $result): bool
 	{
 		$this->lastResult = $result;
-		if (is_array($result))
-		{
-			return $result['n'] > 0;
-		}
-		return $result;
+		return $result->getDeletedCount() > 0;
 	}
 
 	/**
 	 * Make status uniform
-	 * @param bool|array $result
+	 * @param InsertOneResult $result
 	 * @return bool Return true if succeed
 	 */
-	private function insertResult($result)
+	private function insertResult(InsertOneResult $result): bool
 	{
 		$this->lastResult = $result;
-		if (is_array($result))
-		{
-			return $result['ok'] > 0;
-		}
-		return $result;
+		return $result->getInsertedCount() > 0;
 	}
 
 	/**
 	 * Make status uniform
-	 * @param bool|array $result
+	 * @param UpdateResult $result
 	 * @return bool Return true if succeed
 	 */
-	private function updateResult($result)
+	private function updateResult(UpdateResult $result): bool
 	{
 		$this->lastResult = $result;
-		if (is_array($result))
-		{
-			return $result['ok'] > 0;
-		}
-		return $result;
+		return $result->isAcknowledged();
 	}
 
 // <editor-fold defaultstate="collapsed" desc="Event and Signal handling">
 
-	private function beforeValidate($model)
+	private function beforeValidate($model): void
 	{
 		AspectManager::addAspect($model, self::AspectSaving);
 	}
@@ -690,7 +682,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param string $event
 	 * @return boolean
 	 */
-	private function beforeSave($model, $event = null)
+	private function beforeSave($model, $event = null): bool
 	{
 		AspectManager::addAspect($model, self::AspectSaving);
 		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
@@ -711,7 +703,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param                 $model
 	 * @param null|ModelEvent $event
 	 */
-	private function afterSave($model, $event = null)
+	private function afterSave($model, $event = null): void
 	{
 		Event::trigger($model, EntityManagerInterface::EventAfterSave);
 		if (!empty($event))
@@ -730,7 +722,7 @@ class EntityManager implements EntityManagerInterface
 	 * Make sure you call the parent implementation so that the event is raised properly.
 	 * @return boolean whether the record should be deleted. Defaults to true.
 	 */
-	private function beforeDelete()
+	private function beforeDelete(): bool
 	{
 		AspectManager::addAspect($this->model, self::AspectRemoving);
 		$result = Event::valid($this->model, EntityManagerInterface::EventBeforeDelete);
@@ -748,7 +740,7 @@ class EntityManager implements EntityManagerInterface
 	 * You may override this method to do postprocessing after the record is deleted.
 	 * Make sure you call the parent implementation so that the event is raised properly.
 	 */
-	private function afterDelete()
+	private function afterDelete(): void
 	{
 		$event = new ModelEvent($this->model);
 		Event::trigger($this->model, EntityManagerInterface::EventAfterDelete, $event);

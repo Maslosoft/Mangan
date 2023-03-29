@@ -8,7 +8,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\Tree\ModelWithSimpleTree;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class SimpleTest extends Unit

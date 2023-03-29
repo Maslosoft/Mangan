@@ -11,7 +11,7 @@ namespace Maslosoft\ManganTest\Models\Sanitizers;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Sanitizers\BooleanSanitizer;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithNullableBoolean

@@ -9,7 +9,7 @@ use Maslosoft\Mangan\Mangan;
 use Maslosoft\ManganTest\Models\ActiveDocument\DocumentBaseAttributes;
 use Maslosoft\ManganTest\Models\ModelWithLabel;
 use MongoDB;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class SelectDbTest extends Unit

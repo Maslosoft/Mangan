@@ -10,7 +10,7 @@ namespace Maslosoft\ManganTest\Models;
 
 use Maslosoft\Mangan\Document;
 use Maslosoft\Mangan\Sanitizers\MongoObjectId;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 
 /**
  * ModelWithI18N

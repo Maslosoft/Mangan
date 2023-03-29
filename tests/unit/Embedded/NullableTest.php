@@ -6,7 +6,7 @@ use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Models\Embedded\WithNullableEmbedded;
 use Maslosoft\ManganTest\Models\Plain\SimplePlainEmbedded;
-use MongoId;
+use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
 
 class NullableTest extends Unit

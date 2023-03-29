@@ -13,7 +13,7 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use MongoDate;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 
 /**
  * UnixDateSanitizer
@@ -30,9 +30,9 @@ class DateReadUnixSanitizer extends DateSanitizer
 	{
 		if ($dbValue instanceof MongoDate)
 		{
-			return (int) $dbValue->sec;
+			return $dbValue->toDateTime()->getTimestamp();
 		}
-		return (int) parent::read($model, $dbValue)->sec;
+		return parent::read($model, $dbValue)->toDateTime()->getTimestamp();
 	}
 
 }
