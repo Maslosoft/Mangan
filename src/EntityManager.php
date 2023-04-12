@@ -237,7 +237,7 @@ class EntityManager implements EntityManagerInterface
 	 *                                            meaning all attributes that are loaded from DB will be saved.
 	 * @return bool
 	 */
-	public function updateOne($criteria = null, array $attributes = null, $modify = false)
+	public function updateOne($criteria = null, array $attributes = null, $modify = false): bool
 	{
 		$criteria = $this->sm->apply($criteria);
 		$rawData = RawArray::fromModel($this->model, $attributes);
@@ -275,7 +275,7 @@ class EntityManager implements EntityManagerInterface
 		}
 		if ($modify)
 		{
-			// Id could be altered, so skip it as it cannot be changed
+			// It could be altered, so skip it as it cannot be changed anyway
 			unset($rawData['_id']);
 			$data = ['$set' => $rawData];
 		}
@@ -303,11 +303,11 @@ class EntityManager implements EntityManagerInterface
 	 * Atomic, in-place update method. This method does not raise
 	 * events and does not emit signals.
 	 *
-	 * @param Modifier          $modifier updating rules to apply
-	 * @param CriteriaInterface $criteria condition to limit updating rules
+	 * @param Modifier               $modifier updating rules to apply
+	 * @param CriteriaInterface|null $criteria condition to limit updating rules
 	 * @return boolean
 	 */
-	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null)
+	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null): bool
 	{
 		if ($modifier->canApply())
 		{
@@ -318,10 +318,7 @@ class EntityManager implements EntityManagerInterface
 			$result = $this->getCollection()->updateMany($conditions, $mods, $opts);
 			return $this->updateResult($result);
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	/**
@@ -344,7 +341,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param bool                    $returnUpdated
 	 * @return AnnotatedInterface|null
 	 */
-	public function findAndModify($criteria, Modifier $modifier, $returnUpdated = true)
+	public function findAndModify($criteria, Modifier $modifier, $returnUpdated = true): ?AnnotatedInterface
 	{
 		if (!$this->beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
 		{
@@ -391,7 +388,7 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @return boolean whether the saving succeeds
 	 */
-	public function replace($runValidation = true)
+	public function replace($runValidation = true): bool
 	{
 		$this->beforeValidate($this->model);
 		if (!$runValidation || $this->validator->validate())
@@ -418,11 +415,8 @@ class EntityManager implements EntityManagerInterface
 			AspectManager::removeAspect($model, self::AspectSaving);
 			return false;
 		}
-		else
-		{
-			AspectManager::removeAspect($this->model, self::AspectSaving);
-			return false;
-		}
+		AspectManager::removeAspect($this->model, self::AspectSaving);
+		return false;
 	}
 
 	/**
@@ -441,7 +435,7 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @return boolean whether the saving succeeds
 	 */
-	public function save($runValidation = true)
+	public function save($runValidation = true): bool
 	{
 		return $this->upsert($runValidation);
 	}
@@ -456,7 +450,7 @@ class EntityManager implements EntityManagerInterface
 	 * @return boolean
 	 * @throws ManganException
 	 */
-	public function upsert($runValidation = true)
+	public function upsert($runValidation = true): bool
 	{
 		$this->beforeValidate($this->model);
 		if (!$runValidation || $this->validator->validate())
@@ -486,42 +480,35 @@ class EntityManager implements EntityManagerInterface
 				}
 				throw new ManganException("Can't save the document to disk, or attempting to save an empty document. $errmsg");
 			}
-			AspectManager::removeAspect($this->model, self::AspectSaving);
-			return false;
 		}
-		else
-		{
-			AspectManager::removeAspect($this->model, self::AspectSaving);
-			return false;
-		}
+		AspectManager::removeAspect($this->model, self::AspectSaving);
+		return false;
 	}
 
 	/**
 	 * Reloads document from database.
-	 * It return true if document is reloaded and false if it's no longer exists.
+	 * It returns true if document is reloaded and false if it's no longer exists.
 	 *
 	 * @return boolean
 	 */
-	public function refresh()
+	public function refresh(): bool
 	{
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
 		$data = $this->getCollection()->findOne($conditions);
 		if (null !== $data)
 		{
+			// Update current model instance
 			RawArray::toModel($data, $this->model, $this->model);
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	/**
 	 * Deletes the document from database.
 	 * @return boolean whether the deletion is successful.
 	 */
-	public function delete()
+	public function delete(): bool
 	{
 		if ($this->beforeDelete())
 		{
@@ -533,15 +520,9 @@ class EntityManager implements EntityManagerInterface
 				$this->afterDelete();
 				return true;
 			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
 			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -551,7 +532,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return bool
 	 */
-	public function deleteOne($criteria = null)
+	public function deleteOne($criteria = null): bool
 	{
 		$criteria = $this->sm->apply($criteria);
 
@@ -569,7 +550,7 @@ class EntityManager implements EntityManagerInterface
 	 *
 	 * @return bool
 	 */
-	public function deleteByPk($pkValue, $criteria = null)
+	public function deleteByPk($pkValue, $criteria = null): bool
 	{
 		if ($this->beforeDelete())
 		{
@@ -589,7 +570,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return bool
 	 */
-	public function deleteAllByPk($pkValues, $criteria = null)
+	public function deleteAllByPk($pkValues, $criteria = null): bool
 	{
 		if ($this->beforeDelete())
 		{
@@ -615,7 +596,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param array|CriteriaInterface $criteria query criteria.
 	 * @return bool
 	 */
-	public function deleteAll($criteria = null)
+	public function deleteAll($criteria = null): bool
 	{
 		$criteria = $this->sm->apply($criteria);
 
@@ -674,12 +655,12 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 * Take care of EventBeforeSave
-	 * @see EventBeforeSave
 	 * @param                 $model
-	 * @param string $event
+	 * @param string|null $event
 	 * @return boolean
+	 *@see EventBeforeSave
 	 */
-	private function beforeSave($model, $event = null): bool
+	private function beforeSave($model, string $event = null): bool
 	{
 		AspectManager::addAspect($model, self::AspectSaving);
 		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
@@ -696,11 +677,11 @@ class EntityManager implements EntityManagerInterface
 
 	/**
 	 * Take care of EventAfterSave
-	 * @see EventAfterSave
-	 * @param                 $model
-	 * @param null|ModelEvent $event
+	 * @param             $model
+	 * @param string|null $event
+	 *@see EventAfterSave
 	 */
-	private function afterSave($model, $event = null): void
+	private function afterSave($model, string $event = null): void
 	{
 		Event::trigger($model, EntityManagerInterface::EventAfterSave);
 		if (!empty($event))
