@@ -134,7 +134,7 @@ class EntityManager implements EntityManagerInterface
 	 * This will create customized entity manger if defined in model with EntityManager annotation.
 	 * If no custom entity manager is defined this will return default EntityManager.
 	 * @param AnnotatedInterface $model
-	 * @param Mangan             $mangan
+	 * @param Mangan|null        $mangan
 	 * @return EntityManagerInterface
 	 */
 	public static function create($model, Mangan $mangan = null)
@@ -327,7 +327,7 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Find and modify single document atomically.
 	 *
-	 * By default this function will return updated document, ie document
+	 * By default, this function will return updated document, ie document
 	 * with applied Modifier operations.
 	 *
 	 * To return document before applied updates, set parameter
@@ -627,7 +627,7 @@ class EntityManager implements EntityManagerInterface
 		return $this->deleteResult($result);
 	}
 
-	public function getCollection()
+	public function getCollection(): Collection
 	{
 		return $this->_collection;
 	}
