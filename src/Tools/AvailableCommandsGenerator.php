@@ -41,6 +41,11 @@ class AvailableCommandsGenerator
 			{
 				continue;
 			}
+			// Skip internal
+			if($name[0] === '_')
+			{
+				continue;
+			}
 			$functions[] = $view->render('command', [
 				'mongoName' => $name,
 				'name' => $this->_sanitize($name),
