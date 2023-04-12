@@ -17,7 +17,7 @@ class SecretTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testIfWillStoreNonEmptyPassword()
+	public function testIfWillStoreNonEmptyPassword(): void
 	{
 		$model = new ModelWithSecretField();
 		$em = new EntityManager($model);
@@ -40,7 +40,7 @@ class SecretTest extends Unit
 		$this->assertSame('foo', $found2->password, 'That empty password was NOT saved');
 	}
 
-	public function testIfWillGenerateAndStoreNonEmptyHash()
+	public function testIfWillGenerateAndStoreNonEmptyHash(): void
 	{
 		$hash = sha1('123');
 		$model = new ModelWithSecretField();
@@ -65,7 +65,7 @@ class SecretTest extends Unit
 		$this->assertSame($hash, $found2->hash, 'That empty hash was NOT saved');
 	}
 
-	public function testIfWillGenerateAndStoreNonActivationKeyWithArrayCallback()
+	public function testIfWillGenerateAndStoreNonActivationKeyWithArrayCallback(): void
 	{
 
 		$model = new ModelWithSecretField();
