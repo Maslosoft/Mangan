@@ -20,7 +20,7 @@ class ConvertTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testIfWIllConvertDbRefToJsonArray()
+	public function testIfWIllConvertDbRefToJsonArray(): void
 	{
 		$model = new WithPlainDbRef();
 		$model->_id = new MongoId();
