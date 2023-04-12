@@ -109,7 +109,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		$dbValue[$name] = $transformatorClass::fromModel($model->$name);
 	}
 
-	public static function ensureClass($model, $name, &$dbValue)
+	public static function ensureClass($model, $name, &$dbValue): void
 	{
 		if (!is_array($dbValue) || !array_key_exists('_class', $dbValue) || empty($dbValue['_class']))
 		{
