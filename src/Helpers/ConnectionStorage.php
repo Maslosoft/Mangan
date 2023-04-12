@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\EmbeDi\StaticStorage;
 use MongoDB\Client;
-use MongoDB;
+use MongoDB\Database;
 
 /**
  * ConnectionStorage
@@ -27,7 +27,7 @@ class ConnectionStorage extends StaticStorage
 
 	/**
 	 * Mongo DB instance
-	 * @var MongoDB
+	 * @var Database
 	 */
 	public $mongoDB = null;
 
