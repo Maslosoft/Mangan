@@ -114,12 +114,14 @@ class PkManager
 		{
 			foreach ($pkField as $name)
 			{
-				$pkValue[$name] = $sanitizer->write($name, $model->$name);
+				// Ensure that model value is sanitized, as it might generate ObjectId and it would differ from model
+				$pkValue[$name] = $model->$name = $sanitizer->write($name, $model->$name);
 			}
 		}
 		else
 		{
-			$pkValue = $sanitizer->write($pkField, $model->$pkField);
+			// Ensure that model value is sanitized, as it might generate ObjectId and it would differ from model
+			$pkValue = $model->$pkField = $sanitizer->write($pkField, $model->$pkField);
 		}
 		return $pkValue;
 	}
