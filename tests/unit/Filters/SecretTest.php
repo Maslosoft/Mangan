@@ -17,7 +17,7 @@ class SecretTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testIfWillStoreNonEmptyPassword(): void
+	public function testIfWillStoreNonEmptyPasswordAndNotOverwriteWithEmpty(): void
 	{
 		$model = new ModelWithSecretField();
 		$em = new EntityManager($model);
