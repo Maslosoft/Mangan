@@ -28,7 +28,6 @@ use Maslosoft\Mangan\Meta\ManganMeta;
 use function get_class;
 use function is_string;
 use function strtolower;
-use function var_dump;
 
 /**
  * EmbeddedDecorator
@@ -131,8 +130,6 @@ class EmbeddedDecorator implements DecoratorInterface
 
 		if(is_string($dbValue) && strtolower($dbValue) === 'null')
 		{
-//			var_dump($dbValue);
-//			exit;
 			$dbValue = null;
 		}
 
@@ -144,8 +141,6 @@ class EmbeddedDecorator implements DecoratorInterface
 		// be sure that we can reconstruct proper object from some scalar value.
 		if(!is_array($dbValue) && null !==$dbValue)
 		{
-//			var_dump(get_class($dbValue));
-//			exit;
 			$data = $dbValue;
 			$dbValue = [];
 			$dbValue['data'] = $data;
