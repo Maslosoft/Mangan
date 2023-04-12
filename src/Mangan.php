@@ -457,13 +457,8 @@ class Mangan implements LoggerAwareInterface
 				],
 			];
 			$this->cs->mongoClient = new Client($this->connectionString, [], $driverOptions);
-
-			return $this->cs->mongoClient;
 		}
-		else
-		{
-			return $this->cs->mongoClient;
-		}
+		return $this->cs->mongoClient;
 	}
 
 	public function	getManager(): Manager
