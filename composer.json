@@ -96,7 +96,11 @@
 		"psr-4": {
 			"Maslosoft\\Mangan\\": "src/",
 			"Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
-		}
+		},
+		"files": [
+			"src/Helpers/functions.php",
+			"src/Helpers/Cursor/functions.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {
