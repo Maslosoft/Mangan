@@ -50,7 +50,7 @@ use Psr\Log\NullLogger;
 class Mangan implements LoggerAwareInterface
 {
 
-	const DefaultConnectionId = 'mongodb';
+	public const DefaultConnectionId = 'mongodb';
 
 	use MongoClientOptions;
 
@@ -160,7 +160,7 @@ class Mangan implements LoggerAwareInterface
 	 *
 	 * Note: {@see Cursor} does not implement ArrayAccess interface and cannot be used like an array,
 	 * because offset access to cursor is highly ineffective and pointless.
-	 *
+	 * @deprecated This has no effect, as cursor is always used
 	 * @var boolean $useCursor state of Use Cursor flag (global scope)
 	 */
 	public $useCursor = false;
@@ -523,9 +523,9 @@ class Mangan implements LoggerAwareInterface
 	 * @param string $name
 	 * @throws ManganException
 	 */
-	public function setDbInstance($name)
+	public function setDbInstance($name): void
 	{
-		$this->cs->mongoDB = $this->getConnection()->selectDb($name);
+		$this->cs->mongoDB = $this->getConnection()->selectDatabase($name);
 	}
 
 	/**
