@@ -4,6 +4,7 @@ namespace Transformator;
 
 use Codeception\Test\Unit;
 use Maslosoft\Mangan\Transformers\RawArray;
+use Maslosoft\ManganTest\Models\ModelWithSecretField;
 use Maslosoft\ManganTest\Models\Plain\PlainWithBasicAttributes;
 use UnitTester;
 
@@ -26,7 +27,7 @@ class RawArrayTest extends Unit
 	}
 
 	// tests
-	public function testIfWillPopulateSimplePlainModel()
+	public function testIfWillPopulateSimplePlainModel(): void
 	{
 		$data = [
 			'_class' => PlainWithBasicAttributes::class,
@@ -47,4 +48,10 @@ class RawArrayTest extends Unit
 		}
 	}
 
+	public function testConvertingToRawArray(): void
+	{
+		$model = new ModelWithSecretField();
+		$data = RawArray::fromModel($model);
+		$this->assertCount(2, $data, 'That secret fields are not converted');
+	}
 }
