@@ -25,8 +25,8 @@ use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Model\DbRef;
+use MongoDB\Model\BSONDocument;
 use function get_class;
-use function gettype;
 use function is_array;
 use function json_encode;
 use const JSON_PRETTY_PRINT;
@@ -41,6 +41,10 @@ class DbRefDecorator implements DecoratorInterface
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
+		if($dbValue instanceof BSONDocument)
+		{
+			$dbValue = (array)$dbValue;
+		}
 		if (empty($dbValue))
 		{
 			$fieldMeta = ManganMeta::create($model)->field($name);
@@ -60,8 +64,8 @@ class DbRefDecorator implements DecoratorInterface
 			'Expected array on `%s`, field `%s`, got: `%s`: `%s`',
 			get_class($model),
 			$name,
-			gettype($dbValue),
-			json_encode($dbValue, JSON_PRETTY_PRINT, 10)));
+			get_debug_type($dbValue),
+			json_encode($dbValue, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT, 10)));
 		$dbValue['_class'] = DbRef::class;
 		$dbRef = $transformatorClass::toModel($dbValue);
 		assert($dbRef instanceof DbRef);
