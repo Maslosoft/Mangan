@@ -29,7 +29,7 @@ class AliasTest extends Unit
 	}
 
 	// tests
-	public function testIfWillPopulateArrayWithAliasedField()
+	public function testIfWillPopulateArrayWithAliasedField(): void
 	{
 		$model = new ModelWithAlias();
 
@@ -48,7 +48,7 @@ class AliasTest extends Unit
 		$this->assertSame($data['id'], $data['_id']);
 	}
 
-	public function testIfWillPopulateModelWithRawData()
+	public function testIfWillPopulateModelWithRawData(): void
 	{
 		// This model uses custom alias setup
 		$src = new ModelWithAlias();
@@ -64,7 +64,7 @@ class AliasTest extends Unit
 		$this->assertSame('5612522b66a195f1328b4575', (string) $model->id);
 	}
 
-	public function testIfWillPopulateDefaultModelWithRawData()
+	public function testIfWillPopulateDefaultModelWithRawData(): void
 	{
 		// This model uses default alias setup from Document class
 		$src = new ModelWithAliasDefault();
@@ -80,7 +80,7 @@ class AliasTest extends Unit
 		$this->assertSame('5612522b66a195f1328b4575', (string) $model->id);
 	}
 
-	public function testIfWillPopulateJsonArrayWithModelDataWithAutoIdFromSanitizers()
+	public function testIfWillPopulateJsonArrayWithModelDataWithAutoIdFromSanitizers(): void
 	{
 		// This model uses default alias setup from Document class
 		// Do not set ID explicitly. Should auto set, and make alias too.
@@ -94,15 +94,15 @@ class AliasTest extends Unit
 		$this->assertSame((string) $src->id, (string) $data['id']);
 	}
 
-	public function testIfWillCreateModelWithAliasedField()
+	public function testIfWillCreateModelWithAliasedField(): void
 	{
 		$data = [
 			'_class' => ModelWithAlias::class,
 			'id' => new MongoId()
 		];
 
-		$encoded = json_encode($data);
-		$decoded = json_decode($encoded);
+		$encoded = json_encode($data, JSON_THROW_ON_ERROR);
+		$decoded = json_decode($encoded, false, 512, JSON_THROW_ON_ERROR);
 		$model = JsonArray::toModel($decoded);
 
 		$this->assertSame((string) $model->_id, (string) $model->id);
@@ -112,8 +112,8 @@ class AliasTest extends Unit
 			'_id' => new MongoId()
 		];
 
-		$encoded = json_encode($data);
-		$decoded = json_decode($encoded);
+		$encoded = json_encode($data, JSON_THROW_ON_ERROR);
+		$decoded = json_decode($encoded, false, 512, JSON_THROW_ON_ERROR);
 		$model = JsonArray::toModel($decoded);
 
 		$this->assertSame((string) $model->_id, (string) $model->id);
