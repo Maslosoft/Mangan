@@ -7,6 +7,7 @@ use Maslosoft\Mangan\Command;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Model\Command\Roles;
 use Maslosoft\Mangan\Model\Command\User;
+use MongoDB\Driver\Exception\CommandException;
 use UnitTester;
 
 class CommandsTest extends Unit
@@ -43,6 +44,9 @@ class CommandsTest extends Unit
 				'db' => Mangan::fly()->dbName
 			]
 		];
+
+		$this->tryDrop($user);
+
 		$info = $cmd->createUser($user);
 		$this->isOk($info);
 
@@ -61,6 +65,8 @@ class CommandsTest extends Unit
 		$rolesArray = $roles->toArray();
 		codecept_debug($rolesArray);
 
+		$this->tryDrop($user);
+
 		$this->assertCount(1, $rolesArray);
 		$this->assertSame('readWrite', $rolesArray[0]['role']);
 		$this->assertSame(Mangan::fly()->dbName, $rolesArray[0]['db']);
@@ -76,6 +82,25 @@ class CommandsTest extends Unit
 	{
 		codecept_debug($info);
 		$this->assertTrue((bool) $info['ok'], 'That command result is OK');
+	}
+
+	/**
+	 * Try to drop user in case it was left out after previous tests
+	 * @param User $user
+	 * @return void
+	 */
+	private function tryDrop(User $user)
+	{
+
+		try
+		{
+			$cmd = new Command();
+			$cmd->dropUser($user);
+		}
+		catch (CommandException $e)
+		{
+			codecept_debug("Pre-test drop trying result: " . $e->getMessage());
+		}
 	}
 
 }
