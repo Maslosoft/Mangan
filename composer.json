@@ -65,6 +65,7 @@
 	"require": {
 		"php": ">= 8.2",
 		"ext-json": "*",
+		"ext-fileinfo": "*",
 		"ext-gd": "*",
 		"ext-mongodb": "*",
 		"mongodb/mongodb": "^1",
