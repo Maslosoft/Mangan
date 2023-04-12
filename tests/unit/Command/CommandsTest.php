@@ -18,7 +18,7 @@ class CommandsTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testCollStats()
+	public function testCollStats(): void
 	{
 		$cmd = new Command();
 		$info = $cmd->create('test');
@@ -31,7 +31,7 @@ class CommandsTest extends Unit
 		$this->assertArrayHasKey('ns', $info2);
 	}
 
-	public function testCreateAndDropUser()
+	public function testCreateAndDropUser(): void
 	{
 		$cmd = new Command();
 		$user = new User;
@@ -50,7 +50,7 @@ class CommandsTest extends Unit
 		$this->isOk($info2);
 	}
 
-	public function testCreateAndDropUserUsingRolesModel()
+	public function testCreateAndDropUserUsingRolesModel(): void
 	{
 		$cmd = new Command();
 		$user = new User;
@@ -72,7 +72,7 @@ class CommandsTest extends Unit
 		$this->isOk($info2);
 	}
 
-	private function isOk($info)
+	private function isOk($info): void
 	{
 		codecept_debug($info);
 		$this->assertTrue((bool) $info['ok'], 'That command result is OK');
