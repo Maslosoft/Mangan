@@ -41,14 +41,14 @@ abstract class Transformer
 
 	/**
 	 * Returns the given object as an associative array
-	 * @param AnnotatedInterface|object $model
+	 * @param AnnotatedInterface $model
 	 * @param string[] $fields Fields to transform
 	 * @return array an associative array of the contents of this object
 	 */
-	public static function fromModel(AnnotatedInterface $model, $fields = [])
+	public static function fromModel(AnnotatedInterface $model, $fields = []): array
 	{
 		$meta = ManganMeta::create($model);
-		$calledClass = get_called_class();
+		$calledClass = static::class;
 		$decorator = new Decorator($model, $calledClass, $meta);
 		$md = new ModelDecorator($model, $calledClass, $meta);
 		$sanitizer = new Sanitizer($model, $calledClass, $meta);
@@ -70,7 +70,7 @@ abstract class Transformer
 				$arr[$name] = null;
 				continue;
 			}
-			// NOTE: Sanitizers must be ran for all
+			// NOTE: Sanitizers must be run for all
 			// fields, as types *might* change between
 			// transformations.
 
@@ -96,7 +96,7 @@ abstract class Transformer
 	 *
 	 * @param mixed[]                 $data
 	 * @param string|object           $className
-	 * @param AnnotatedInterface      $instance
+	 * @param AnnotatedInterface|null $instance
 	 * @param AnnotatedInterface|null $parent
 	 * @param string                  $parentField
 	 * @return AnnotatedInterface
@@ -204,7 +204,7 @@ abstract class Transformer
 	 * @param AnnotatedInterface $model
 	 * @return ManganMeta
 	 */
-	protected static function getMeta(AnnotatedInterface $model)
+	protected static function getMeta(AnnotatedInterface $model): ManganMeta
 	{
 		return ManganMeta::create($model);
 	}
@@ -217,7 +217,7 @@ abstract class Transformer
 	 * @param $class
 	 * @throws ManganException
 	 */
-	protected static function ensureClass(&$class)
+	protected static function ensureClass(&$class): void
 	{
 		if (!ClassChecker::exists($class))
 		{
