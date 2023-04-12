@@ -520,6 +520,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function setDbInstance($name): void
 	{
+		$this->dbName = $name;
 		$this->cs->mongoDB = $this->getConnection()->selectDatabase($name);
 	}
 
