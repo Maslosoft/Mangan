@@ -361,7 +361,7 @@ class EntityManager implements EntityManagerInterface
 			{
 				$opts = ['new' => true];
 			}
-			$data = $this->getCollection()->findAndModify($conditions, $mods, null, $opts);
+			$data = $this->getCollection()->findOneAndUpdate($conditions, $mods, $opts);
 			if(empty($data))
 			{
 				return null;
