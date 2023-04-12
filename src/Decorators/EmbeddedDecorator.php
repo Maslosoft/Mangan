@@ -25,6 +25,7 @@ use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use MongoDB\Model\BSONDocument;
 use function get_class;
 use function is_string;
 use function strtolower;
@@ -39,7 +40,11 @@ class EmbeddedDecorator implements DecoratorInterface
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
-		if (is_object($dbValue) && $dbValue instanceof AnnotatedInterface)
+		if($dbValue instanceof BSONDocument)
+		{
+			$dbValue = (array)$dbValue;
+		}
+		if ($dbValue instanceof AnnotatedInterface)
 		{
 			$model->$name = $dbValue;
 			return;
