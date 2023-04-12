@@ -56,7 +56,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		{
 			$meta = ManganMeta::create($model)->$name;
 			assert($meta instanceof DocumentPropertyMeta);
-			if($meta->nullable || $meta->embedded && $meta->embedded->nullable)
+			if($meta->nullable || ($meta->embedded && $meta->embedded->nullable))
 			{
 				$model->$name = null;
 				return null;
@@ -82,7 +82,7 @@ class EmbeddedDecorator implements DecoratorInterface
 		{
 			$meta = ManganMeta::create($model)->$name;
 			assert($meta instanceof DocumentPropertyMeta);
-			if($meta->nullable || $meta->embedded && $meta->embedded->nullable)
+			if($meta->nullable || ($meta->embedded && $meta->embedded->nullable))
 			{
 				$dbValue[$name] = null;
 				return null;
