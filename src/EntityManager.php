@@ -54,6 +54,8 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public $model = null;
 
+	private Mangan $mangan;
+
 	/**
 	 *
 	 * @var ScopeManager
@@ -114,6 +116,7 @@ class EntityManager implements EntityManagerInterface
 		{
 			$mangan = Mangan::fromModel($model);
 		}
+		$this->mangan = $mangan;
 		if (!$this->collectionName)
 		{
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
@@ -270,7 +273,7 @@ class EntityManager implements EntityManagerInterface
 
 			if (!empty($diff))
 			{
-				$modify = true;
+				$modify = (new Finder($this->model, $this, $this->mangan))->exists();
 			}
 		}
 		if ($modify)
@@ -283,11 +286,12 @@ class EntityManager implements EntityManagerInterface
 		{
 			$data = $rawData;
 		}
+		$criteria->setModel($this->model);
 		$conditions = $criteria->getConditions();
 		$opts = $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]);
 		$collection = $this->getCollection();
 
-		if ($attributes !== null)
+		if ($attributes !== null || $modify)
 		{
 			$result = $collection->updateOne($conditions, $data, $opts);
 		}
