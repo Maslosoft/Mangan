@@ -20,7 +20,7 @@ class PlainTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testIfWillFindPlainDocumentBySimplePk()
+	public function testIfWillFindPlainDocumentBySimplePk(): void
 	{
 		$model = new PlainWithBasicAttributes();
 		$model->_id = new MongoId();
@@ -45,7 +45,7 @@ class PlainTest extends Unit
 
 	}
 
-	public function testIfWillFindPlainDocumentWithCustomPk()
+	public function testIfWillFindPlainDocumentWithCustomPk(): void
 	{
 		$model = new SimplePrimaryKey();
 		$model->primaryKey = new MongoId;
@@ -61,7 +61,7 @@ class PlainTest extends Unit
 		$this->assertSame($model->title, $found->title);
 	}
 
-	public function testIfWillFindPlainDocumentWithCompositePk()
+	public function testIfWillFindPlainDocumentWithCompositePk(): void
 	{
 		$model = new CompositePrimaryKey();
 		$model->title = 'fooo';
@@ -86,7 +86,7 @@ class PlainTest extends Unit
 		$this->assertSame($model->title, $found->title);
 	}
 
-	public function testIfWillFindPlainDocumentWithCompositePkWithWrongPkTypes()
+	public function testIfWillFindPlainDocumentWithCompositePkWithWrongPkTypes(): void
 	{
 //exit;
 		$model = new CompositePrimaryKey();
