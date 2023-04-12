@@ -18,9 +18,9 @@ use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Interfaces\Adapters\FinderAdapterInterface;
 use Maslosoft\Mangan\Interfaces\CriteriaInterface;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
-use Maslosoft\Mangan\Interfaces\SortInterface;
 use Maslosoft\Mangan\Mangan;
-use function Sodium\library_version_minor;
+use MongoDB\Driver\Cursor;
+use function Maslosoft\Mangan\Helpers\Cursor\first;
 
 /**
  *
@@ -34,24 +34,24 @@ class MongoAdapter implements FinderAdapterInterface
 	 * Entity manager instance
 	 * @var EntityManagerInterface
 	 */
-	private $em = null;
+	private EntityManagerInterface $em;
 
 	public function __construct(AnnotatedInterface $model, Mangan $mangan, EntityManagerInterface $em = null)
 	{
 		$this->em = $em ?: EntityManager::create($model, $mangan);
 	}
 
-	public function count(CriteriaInterface $criteria)
+	public function count(CriteriaInterface $criteria): int
 	{
 		return $this->em->getCollection()->count($criteria->getConditions());
 	}
 
-	public function findMany(CriteriaInterface $criteria, $fields = [], $options = [])
+	public function findMany(CriteriaInterface $criteria, $fields = [], $options = []): Cursor
 	{
 		return $this->em->getCollection()->find($criteria->getConditions(), $options);
 	}
 
-	public function findOne(CriteriaInterface $criteria, $fields = [])
+	public function findOne(CriteriaInterface $criteria, $fields = []): array|null
 	{
 		$options = [
 			'sort' => $criteria->getSort(),
@@ -60,16 +60,10 @@ class MongoAdapter implements FinderAdapterInterface
 		if(!empty($fields))
 		{
 			// FIXME: Check if $fields format is correct
-			$otions['projection'] = $fields;
+			$options['projection'] = $fields;
 		}
 		// Use find instead of findOne here so sort can be applied
-		$cursor = $this->em->getCollection()->find($criteria->getConditions(), $options);
-		foreach($cursor as $item)
-		{
-			return $item;
-		}
-		return null;
+		return first($this->em->getCollection()->find($criteria->getConditions(), $options));
 	}
-
 
 }
