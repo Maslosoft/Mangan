@@ -17,25 +17,25 @@ class BuildinfoTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testIfWillGetBuildInformation()
+	public function testIfWillGetBuildInformation(): void
 	{
 		$cmd = new Command();
 		$info = $cmd->buildinfo();
 
-		$this->assertTrue(array_key_exists('version', $info));
+		$this->assertArrayHasKey('version', $info);
 	}
 
-	public function testIfWillGetBuildInformationWithModelParam()
+	public function testIfWillGetBuildInformationWithModelParam(): void
 	{
 		$cmd = new Command(new ModelWithSecondConnection());
 		$info = $cmd->buildinfo();
 
-		$this->assertTrue(array_key_exists('version', $info));
+		$this->assertArrayHasKey('version', $info);
 
 		$cmd = new Command(new SimplePrimaryKey());
 		$info = $cmd->buildinfo();
 
-		$this->assertTrue(array_key_exists('version', $info));
+		$this->assertArrayHasKey('version', $info);
 	}
 
 }
