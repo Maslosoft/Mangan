@@ -18,6 +18,8 @@ use Maslosoft\Mangan\Helpers\DbRefManager;
 use Maslosoft\Mangan\Helpers\UnknownDocumentTypePanicker;
 use Maslosoft\Mangan\Interfaces\Decorators\Property\DecoratorInterface;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * EmbeddedArrayDecorator
@@ -29,11 +31,19 @@ class EmbeddedArrayDecorator extends EmbeddedDecorator implements DecoratorInter
 
 	public function read($model, $name, &$dbValue, $transformatorClass = TransformatorInterface::class)
 	{
+		if($dbValue instanceof BSONArray)
+		{
+			$dbValue = (array)$dbValue;
+		}
 		if (is_array($dbValue))
 		{
 			$docs = [];
 			foreach ($dbValue as $key => $data)
 			{
+				if($data instanceof BSONDocument)
+				{
+					$data = (array)$data;
+				}
 				static::ensureClass($model, $name, $data);
 				// Set ensured class to $dbValue
 				$instance = $this->_getInstance($model->$name, $dbValue, $data, $model, $name);
