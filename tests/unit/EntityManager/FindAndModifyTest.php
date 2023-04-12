@@ -3,7 +3,6 @@
 namespace EntityManager;
 
 use Codeception\Test\Unit;
-use Maslosoft\Mangan\Criteria;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\PkManager;
@@ -19,7 +18,7 @@ class FindAndModifyTest extends Unit
 	 */
 	protected $tester;
 
-	public function testIfWillModify()
+	public function testIfWillModify(): void
 	{
 		$model = new DocumentBaseAttributes();
 		$model->bool = false;
@@ -61,7 +60,7 @@ class FindAndModifyTest extends Unit
 		$this->assertSame(1, $found->int, 'That `string` attribute was really updated');
 	}
 
-	public function testIfWillNotFailModifyOnNotFoundDocument()
+	public function testIfWillNotFailModifyOnNotFoundDocument(): void
 	{
 		$model = new DocumentBaseAttributes();
 
