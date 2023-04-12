@@ -370,10 +370,7 @@ class EntityManager implements EntityManagerInterface
 			ScenarioManager::setScenario($model, ScenariosInterface::Update);
 			return $model;
 		}
-		else
-		{
-			return false;
-		}
+		return null;
 	}
 
 
