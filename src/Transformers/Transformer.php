@@ -30,6 +30,7 @@ use Maslosoft\Mangan\Helpers\Sanitizer\Sanitizer;
 use Maslosoft\Mangan\Helpers\UnknownDocumentTypePanicker;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
+use MongoDB\Model\BSONArray;
 
 /**
  * Transformer
@@ -181,6 +182,10 @@ abstract class Transformer
 				// As a last resort set to default
 				$value = $fieldMeta->default;
 			}
+			if($value instanceof BSONArray)
+			{
+				$value = (array)$value;
+			}
 			if (!$filter->toModel($model, $fieldMeta))
 			{
 				continue;
@@ -189,6 +194,10 @@ abstract class Transformer
 			{
 				$model->$name = null;
 				continue;
+			}
+			if($name === 'array')
+			{
+				echo 'X';
 			}
 			$decorator->read($name, $value);
 			$model->$name = $sanitizer->read($name, $model->$name);
