@@ -1,17 +1,22 @@
 <?php
 namespace Issues;
 
+use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\ManganTest\Models\Issues\Model63;
 use Maslosoft\ManganTest\Models\Issues\ModelWithId63;
-use MongoCursorException;
 use MongoDB\BSON\ObjectId as MongoId;
+use MongoDB\Driver\Exception\BulkWriteException;
+use UnitTester;
 
-class I63Test extends \Codeception\Test\Unit
+/**
+ * @link https://github.com/Maslosoft/Mangan/issues/63
+ */
+class I63Test extends Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 
@@ -24,17 +29,17 @@ class I63Test extends \Codeception\Test\Unit
     }
 
     // tests
-    public function testIfWillAllowUpdatingByCompositePk()
+    public function testIfWillAllowUpdatingByCompositePk(): void
     {
     	$this->withTypeOf(Model63::class);
     }
 
-	public function testIfWillAllowUpdatingByCompositePkWithIdField()
+	public function testIfWillAllowUpdatingByCompositePkWithIdField(): void
 	{
 		$this->withTypeOf(ModelWithId63::class);
 	}
 
-    private function withTypeOf($class)
+    private function withTypeOf($class): void
 	{
 		$widgetId = 'myWidget';
 		$userId = new MongoId;
@@ -69,7 +74,7 @@ class I63Test extends \Codeception\Test\Unit
 		try
 		{
 			$saved3 = $em->upsert();
-		}catch (MongoCursorException $e)
+		}catch (BulkWriteException $e)
 		{
 			// Expected behavior
 			codecept_debug($e->getMessage());
