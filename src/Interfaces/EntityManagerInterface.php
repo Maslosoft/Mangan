@@ -25,16 +25,16 @@ use MongoDB\Collection;
  */
 interface EntityManagerInterface
 {
-	const AspectSaving = 'saving';
-	const AspectRemoving = 'removing';
-	const EventBeforeSave = 'beforeSave';
-	const EventAfterSave = 'afterSave';
-	const EventBeforeInsert = 'beforeInsert';
-	const EventAfterInsert = 'afterInsert';
-	const EventBeforeUpdate = 'beforeUpdate';
-	const EventAfterUpdate = 'afterUpdate';
-	const EventBeforeDelete = 'beforeDelete';
-	const EventAfterDelete = 'afterDelete';
+	public const AspectSaving = 'saving';
+	public const AspectRemoving = 'removing';
+	public const EventBeforeSave = 'beforeSave';
+	public const EventAfterSave = 'afterSave';
+	public const EventBeforeInsert = 'beforeInsert';
+	public const EventAfterInsert = 'afterInsert';
+	public const EventBeforeUpdate = 'beforeUpdate';
+	public const EventAfterUpdate = 'afterUpdate';
+	public const EventBeforeDelete = 'beforeDelete';
+	public const EventAfterDelete = 'afterDelete';
 
 	/**
 	 * Replaces the current document.
