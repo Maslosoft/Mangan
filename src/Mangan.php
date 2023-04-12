@@ -30,6 +30,7 @@ use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
 use Maslosoft\Signals\Signal;
 use MongoDB;
 use MongoDB\Client;
+use MongoDB\Database;
 use MongoDB\Driver\Manager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -261,6 +262,7 @@ class Mangan implements LoggerAwareInterface
 		}
 
 		// Initialize event handlers once
+		// TODO Possibly is should depend on instance ID?
 		static $once = true;
 		if ($once)
 		{
@@ -284,11 +286,16 @@ class Mangan implements LoggerAwareInterface
 		$this->{'set' . ucfirst($name)}($value);
 	}
 
+	public function __isset(string $name): bool
+	{
+		return method_exists($this, 'get' . ucfirst($name));
+	}
+
 	/**
 	 * Get mangan version
 	 * @return string
 	 */
-	public function getVersion()
+	public function getVersion(): string
 	{
 		if (null === self::$_version)
 		{
@@ -310,7 +317,7 @@ class Mangan implements LoggerAwareInterface
 	 * Get PSR compliant logger
 	 * @return LoggerInterface
 	 */
-	public function getLogger()
+	public function getLogger(): LoggerInterface
 	{
 		if (null === $this->_logger)
 		{
@@ -324,7 +331,7 @@ class Mangan implements LoggerAwareInterface
 	 * @see NullProfiler
 	 * @return ProfilerInterface
 	 */
-	public function getProfiler()
+	public function getProfiler(): ProfilerInterface
 	{
 		if (null === $this->_profiler)
 		{
@@ -340,19 +347,17 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Set profiler instance
 	 * @param ProfilerInterface $profiler
-	 * @return Mangan
 	 */
-	public function setProfiler(ProfilerInterface $profiler)
+	public function setProfiler(ProfilerInterface $profiler): void
 	{
 		$this->_profiler = $profiler;
-		return $this;
 	}
 
 	/**
 	 * Get dependency injector.
 	 * @return EmbeDi
 	 */
-	public function getDi()
+	public function getDi(): EmbeDi
 	{
 		return $this->di;
 	}
@@ -482,10 +487,10 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Get MongoDB instance
 	 *
-	 * @return MongoDB Mongo DB instance
+	 * @return Database Mongo DB instance
 	 * @throws ManganException
 	 */
-	public function getDbInstance()
+	public function getDbInstance(): Database
 	{
 		if ($this->cs->mongoDB === null)
 		{
@@ -495,18 +500,14 @@ class Mangan implements LoggerAwareInterface
 			}
 			try
 			{
-				$db = $this->getConnection()->selectDatabase($this->dbName);
+				$this->cs->mongoDB = $this->getConnection()->selectDatabase($this->dbName);
 			}
 			catch (Exception $e)
 			{
 				throw new ManganException(sprintf('Could not select db name: `%s`, for connectionId: `%s` - %s', $this->dbName, $this->connectionId, $e->getMessage()), ExceptionCodeInterface::CouldNotSelect, $e);
 			}
-			return $this->cs->mongoDB = $db;
 		}
-		else
-		{
-			return $this->cs->mongoDB;
-		}
+		return $this->cs->mongoDB;
 	}
 
 	/**
