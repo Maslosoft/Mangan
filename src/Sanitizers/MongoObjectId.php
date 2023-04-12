@@ -49,13 +49,13 @@ class MongoObjectId implements SanitizerInterface
 		}
 		if (!$value instanceof MongoId)
 		{
-			if (is_array($value) && isset($value['$id']))
+			if (is_array($value) && isset($value['$oid']))
 			{
-				$value = $value['$id'];
+				$value = $value['$oid'];
 			}
-			if (is_object($value) && isset($value->{'$id'}))
+			if (is_object($value) && isset($value->{'$oid'}))
 			{
-				$value = $value->{'$id'};
+				$value = $value->{'$oid'};
 			}
 
 			if (!preg_match(self::IdPattern, (string) $value))
