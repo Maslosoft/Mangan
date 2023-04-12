@@ -8,7 +8,7 @@ function first(Cursor $cursor): null|array
 {
 	foreach($cursor as $item)
 	{
-		return $item;
+		return (array)$item;
 	}
 	return null;
 }
