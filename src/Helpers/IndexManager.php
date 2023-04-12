@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
+use Maslosoft\Cli\Shared\Io;
 use function dirname;
-use function file_exists;
 use Maslosoft\Addendum\Addendum;
 use Maslosoft\Addendum\Helpers\SoftIncluder;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
@@ -24,18 +24,17 @@ use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Extensions\IndexMetaCleaner;
-use function mkdir;
 
 class IndexManager
 {
-	const IndexTypeHashed = 'hashed';
-	const IndexType2dSphere = '2dsphere';
+	public const IndexTypeHashed = 'hashed';
+	public const IndexType2dSphere = '2dsphere';
 
-	const DefaultInstanceId = 'indexManager';
+	public const DefaultInstanceId = 'indexManager';
 
-	private static $instances = [];
+	private static array $instances = [];
 
-	private static $paths = [];
+	private static array $paths = [];
 
 	/**
 	 * NOTE: This is public because of IndexMetaCleaner testing extension
@@ -46,7 +45,7 @@ class IndexManager
 	 * @internal
 	 * @var array
 	 */
-	public static $haveIndex = [];
+	public static array $haveIndex = [];
 
 	/**
 	 * NOTE: This is public because of IndexMetaCleaner testing extension
@@ -57,14 +56,14 @@ class IndexManager
 	 * @internal
 	 * @var bool
 	 */
-	public static $haveDir = false;
+	public static bool $haveDir = false;
 
 	/**
 	 * Create flyweight instance of index manager
 	 * @param string $instanceId
 	 * @return static
 	 */
-	public static function fly($instanceId = self::DefaultInstanceId)
+	public static function fly($instanceId = self::DefaultInstanceId): static
 	{
 		if (empty(self::$instances[$instanceId]))
 		{
@@ -73,7 +72,7 @@ class IndexManager
 		return self::$instances[$instanceId];
 	}
 
-	public function create(AnnotatedInterface $model)
+	public function create(AnnotatedInterface $model): bool
 	{
 		$className = get_class($model);
 
@@ -130,16 +129,10 @@ class IndexManager
 
 		$dir = dirname($path);
 
-		if(!self::$haveDir && !file_exists($dir))
+		if(!self::$haveDir && !Io::dirExists($dir))
 		{
-			$mask = umask(0000);
-			$parentDir = dirname($dir);
-			if(!file_exists($parentDir))
-			{
-				mkdir($parentDir, 0777);
-			}
-			self::$haveDir = mkdir($dir, 0777);
-			umask($mask);
+			Io::mkdir($dir);
+			self::$haveDir = Io::dirExists($dir);
 		}
 
 		file_put_contents($path, PhpExporter::export($indexes, 'Auto generated, do not modify'));
@@ -148,7 +141,7 @@ class IndexManager
 		return array_sum($results) === count($results);
 	}
 
-	public function getStoragePath(AnnotatedInterface $model = null, $className = null)
+	public function getStoragePath(AnnotatedInterface $model = null, $className = null): string
 	{
 		if(empty($className))
 		{
@@ -156,7 +149,7 @@ class IndexManager
 		}
 		if(empty(self::$paths[$className]))
 		{
-			if(empty($model))
+			if($model === null)
 			{
 				$mn = Mangan::fly();
 			}
@@ -171,7 +164,7 @@ class IndexManager
 				$mn->connectionId,
 				$mn->dbName,
 				str_replace('\\', '.', $className),
-];
+			];
 			self::$paths[$className] = vsprintf('%s/%s/%s.%s@%s.php', $params);
 		}
 		return self::$paths[$className];
