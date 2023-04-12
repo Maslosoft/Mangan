@@ -19,6 +19,7 @@ use Maslosoft\Mangan\Exceptions\CommandNotFoundException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
 use Maslosoft\Mangan\Model\Command\User;
 use Maslosoft\Mangan\Traits\AvailableCommands;
+use function Maslosoft\Mangan\Helpers\Cursor\first;
 
 /**
  * Command
@@ -63,15 +64,18 @@ class Command
 
 	public function call($command, $arguments = [])
 	{
-		// FIXME: TEMP DISABLE
-		return [];
 		$arg = $this->model ? CollectionNamer::nameCollection($this->model) : true;
 		$cmd = [$command => $arg];
 		if (is_array($arguments) && count($arguments))
 		{
 			$cmd = array_merge($cmd, $arguments);
 		}
-		$result = $this->mn->getDbInstance()->command($cmd);
+		$results = $this->mn->getDbInstance()->command($cmd);
+
+		foreach($results as $row)
+		{
+			$result = $row;
+		}
 
 		if (array_key_exists('errmsg', $result) && array_key_exists('ok', $result) && $result['ok'] == 0)
 		{
@@ -116,7 +120,7 @@ class Command
 		$cmd = [
 			'create' => $collectionName
 		];
-		return $this->mn->getDbInstance()->command(array_merge($cmd, $params));
+		return first($this->mn->getDbInstance()->command(array_merge($cmd, $params)));
 	}
 
 	public function createUser(User $user, $writeConcerns = [])
@@ -131,10 +135,10 @@ class Command
 			$cmd['customData'] = $user->customData;
 		}
 		$cmd = array_merge($cmd, $user->toArray(['user', 'customData']));
-		return $this->mn->getDbInstance()->command($cmd);
+		return first($this->mn->getDbInstance()->command($cmd));
 	}
 
-	public function dropUser($username, $writeConcerns = [])
+	public function dropUser(string|User $username, array $writeConcerns = []): array
 	{
 		if ($username instanceof User)
 		{
@@ -143,17 +147,18 @@ class Command
 		$cmd = [
 			'dropUser' => $username
 		];
-		return $this->mn->getDbInstance()->command(array_merge($cmd, $writeConcerns));
+		return first($this->mn->getDbInstance()->command(array_merge($cmd, $writeConcerns)));
 	}
 
-	public function createIndex($keys, $options = [])
+	public function createIndex($keys, $options = []): bool
 	{
 		// Ensure array
 		if(empty($options))
 		{
 			$options = [];
 		}
-		return $this->mn->getDbInstance()->selectCollection($this->collection)->createIndex($keys, $options);
+		$value = $this->mn->getDbInstance()->selectCollection($this->collection)->createIndex($keys, $options);
+		return !empty($value);
 	}
 
 	/**
@@ -161,9 +166,9 @@ class Command
 	 * @return array
 	 * @throws Exceptions\ManganException
 	 */
-	public function getIndexes()
+	public function getIndexes(): array
 	{
-		return $this->mn->getDbInstance()->selectCollection($this->collection)->getIndexInfo();
+		return first($this->mn->getDbInstance()->selectCollection($this->collection)->getIndexInfo());
 	}
 
 	/**
@@ -174,14 +179,14 @@ class Command
 	 * @param boolean $verbose Optional. When true, collStats increases reporting for the MMAPv1 Storage Engine. Defaults to false.
 	 * @return array
 	 */
-	public function collStats($collectionName, $scale = 1, $verbose = false)
+	public function collStats(string $collectionName, int $scale = 1, $verbose = false): array
 	{
 		$cmd = [
 			'collStats' => $collectionName,
 			'scale' => $scale,
 			'verbose' => $verbose
 		];
-		return $this->mn->getDbInstance()->command($cmd);
+		return first($this->mn->getDbInstance()->command($cmd));
 	}
 
 }
