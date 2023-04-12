@@ -31,7 +31,7 @@ class ArrayTest extends Unit
 	}
 
 	// tests
-	public function testIfWillEmbedArrayOfDocuments()
+	public function testIfWillEmbedArrayOfDocuments(): void
 	{
 		$model = new WithPlainEmbeddedArray();
 		$id = new MongoId();
@@ -76,13 +76,13 @@ class ArrayTest extends Unit
 		$found = $finder->findByPk($id);
 
 		$this->assertNotNull($found);
-		$this->assertTrue($found instanceof WithPlainEmbeddedArray);
-		$this->assertSame(count($stats), count($found->stats));
+		$this->assertInstanceOf(WithPlainEmbeddedArray::class, $found);
+		$this->assertCount(count($stats), $found->stats);
 
 		foreach ($data as $key => $value)
 		{
 			$this->assertNotNull($found->stats[$key]);
-			$this->assertTrue($found->stats[$key] instanceof SimplePlainEmbedded);
+			$this->assertInstanceOf(SimplePlainEmbedded::class, $found->stats[$key]);
 			foreach ($value as $field => $fieldValue)
 			{
 				$this->assertSame($found->stats[$key]->$field, $fieldValue);
@@ -90,7 +90,7 @@ class ArrayTest extends Unit
 		}
 	}
 
-	public function testIfWillEmbedArrayOfDifferentTypeDocuments()
+	public function testIfWillEmbedArrayOfDifferentTypeDocuments(): void
 	{
 		$model = new WithPlainEmbeddedArrayDifferentTypes();
 		$id = new MongoId();
@@ -125,7 +125,7 @@ class ArrayTest extends Unit
 
 			foreach ($value as $field => $fieldValue)
 			{
-				if ($field == '_type')
+				if ($field === '_type')
 				{
 					continue;
 				}
@@ -142,18 +142,18 @@ class ArrayTest extends Unit
 		$found = $finder->findByPk($id);
 
 		$this->assertNotNull($found);
-		$this->assertTrue($found instanceof WithPlainEmbeddedArray);
-		$this->assertSame(count($stats), count($found->stats));
+		$this->assertInstanceOf(WithPlainEmbeddedArray::class, $found);
+		$this->assertCount(count($stats), $found->stats);
 
 		foreach ($data as $key => $value)
 		{
 			$this->assertNotNull($found->stats[$key]);
 //			$this->write(sprintf('Should be of type: %s', $value['_type']));
 			$this->assertSame(get_class($found->stats[$key]), $value['_type']);
-			$this->assertTrue($found->stats[$key] instanceof $value['_type']);
+			$this->assertInstanceOf($value['_type'], $found->stats[$key]);
 			foreach ($value as $field => $fieldValue)
 			{
-				if ($field == '_type')
+				if ($field === '_type')
 				{
 					continue;
 				}
