@@ -32,7 +32,7 @@ class EmbeddedFileTest extends Unit
 	}
 
 	// tests
-	public function testIfWillEmbedFile()
+	public function testIfWillEmbedFile(): void
 	{
 		$fileName = __FILE__;
 
@@ -58,7 +58,7 @@ class EmbeddedFileTest extends Unit
 		$this->assertSame($md5, md5($file));
 	}
 
-	public function testIfWillDeleteEmbeddedFile()
+	public function testIfWillDeleteEmbeddedFile(): void
 	{
 		$fileName = __FILE__;
 
@@ -100,7 +100,7 @@ class EmbeddedFileTest extends Unit
 		$this->assertSame(0, $gf->count($criteria));
 	}
 
-	public function testIfWillDeleteEmbeddedImage()
+	public function testIfWillDeleteEmbeddedImage(): void
 	{
 		$fileName = __DIR__ . '/logo-1024.png';
 
