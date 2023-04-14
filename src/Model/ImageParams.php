@@ -13,47 +13,48 @@
 
 namespace Maslosoft\Mangan\Model;
 
+use Maslosoft\Mangan\Traits\Access\GetSet;
+
 /**
- * Description of EMongoImageParams
+ * Image parameter holder
  * @since 2.0.2
- * @property int $width Width of image
- * @property int $height Height of image
- * @property bool $adaptive If true adaptive (with crop) resize will be used, if false best match scalling will be used
- * @property bool $isTemp This is to indicate that image is temporary, will be automatically set to true
  * @author Piotr
  */
 class ImageParams
 {
 
-	use \Maslosoft\Mangan\Traits\Access\GetSet;
+	use GetSet;
 
 	/**
-	 *
+	 * Width of image
 	 * @var int
 	 */
-	private $_width = 0;
+	public int $width = 0;
 
 	/**
-	 *
+	 * Height of image
 	 * @var int
 	 */
-	private $_height = 0;
+	public int $height = 0;
 
 	/**
-	 * If true adaptive (with crop) resize will be used, if false best match scalling will be used
+	 * If set to `true` adaptive (with crop) resize will be used,
+	 * if value is `false` best match scaling will be used
 	 * @var bool
 	 */
-	private $_adaptive = false;
+	public bool $adaptive = false;
 
 	/**
-	 * This is to indicate that image is temporary, this should set to true for thumbs etc.
+	 * This is to indicate that image is temporary,
+	 * this should set to true for thumbs or other ephemeral images that could be
+	 * rebuilt from source image
 	 * @var bool
 	 */
-	private $_isTemp = false;
+	public bool $isTemp = false;
 
-	public function toArray()
+	public function toArray(): array
 	{
-		if ($this->_width || $this->_height)
+		if ($this->width > 0 || $this->height > 0)
 		{
 			// Get resized
 			return [
@@ -63,57 +64,51 @@ class ImageParams
 				'isTemp' => $this->getIsTemp()
 			];
 		}
-		else
-		{
-			// Get original image
-			return [
-				'isTemp' => false
-			];
-		}
+
+		// Get original image
+		return [
+			'isTemp' => false
+		];
 	}
 
-	public function getWidth()
+	public function getWidth(): int
 	{
-		return (int) $this->_width;
+		return $this->width;
 	}
 
-	public function getHeight()
+	public function getHeight(): int
 	{
-		return (int) $this->_height;
+		return $this->height;
 	}
 
-	public function getAdaptive()
+	public function getAdaptive(): bool
 	{
-		return (bool) $this->_adaptive;
+		return $this->adaptive;
 	}
 
-	public function getIsTemp()
+	public function getIsTemp(): bool
 	{
-		return $this->_isTemp;
+		return $this->isTemp;
 	}
 
-	public function setWidth($width)
+	public function setWidth(int $width): void
 	{
-		$this->_width = $width;
-		return $this;
+		$this->width = $width;
 	}
 
-	public function setHeight($height)
+	public function setHeight(int $height): void
 	{
-		$this->_height = $height;
-		return $this;
+		$this->height = $height;
 	}
 
-	public function setAdaptive($adaptive)
+	public function setAdaptive(bool $adaptive): void
 	{
-		$this->_adaptive = $adaptive;
-		return $this;
+		$this->adaptive = $adaptive;
 	}
 
-	public function setIsTemp($isTemp)
+	public function setIsTemp(bool $isTemp): void
 	{
-		$this->_isTemp = $isTemp;
-		return $this;
+		$this->isTemp = $isTemp;
 	}
 
 }
