@@ -20,7 +20,7 @@ class ImageTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testIfWillResizeSavedImage()
+	public function testIfWillResizeSavedImage(): void
 	{
 		// Temp file location
 		$fileName = __DIR__ . '/logo-1024.png';
@@ -43,7 +43,7 @@ class ImageTest extends Unit
 		/* @var $found ModelWithEmbeddedFile */
 
 		$file = $found->file->get()->getBytes();
-		$this->assertSame($fileName, $found->file->filename);
+		$this->assertSame(basename($fileName), $found->file->filename);
 		$this->assertSame($md5, md5($file));
 
 		$image = $found->file;
@@ -57,9 +57,10 @@ class ImageTest extends Unit
 
 		$scaledName = tempnam('/tmp/', 'image-test') . '.png';
 
-		$image->get($params)->write($scaledName);
+		$succeed = $image->get($params)->write($scaledName);
+		$this->assertTrue($succeed, 'File was successfully written');
 
-		$this->assertTrue(file_exists($scaledName));
+		$this->assertFileExists($scaledName);
 
 		$gd = new ImageThumb($scaledName);
 

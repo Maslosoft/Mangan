@@ -11,6 +11,7 @@ use Maslosoft\Mangan\Model\Image;
 use Maslosoft\Mangan\Model\ImageParams;
 use Maslosoft\ManganTest\Models\GridFS\ModelWithEmbeddedFile;
 use Maslosoft\ManganTest\Models\GridFS\ModelWithEmbeddedImage;
+use MongoDB\GridFS\Bucket;
 use UnitTester;
 
 class EmbeddedFileTest extends Unit
@@ -85,19 +86,18 @@ class EmbeddedFileTest extends Unit
 
 		$mangan = new Mangan();
 
-		$gf = $mangan->getDbInstance()->getGridFS();
+		$bucket = $mangan->getDbInstance()->selectGridFSBucket();
 
 		$criteria = [
-			'parentId' => $found->file->_id
+			'metadata.parentId' => $found->file->_id
 		];
-
-		$this->assertSame(1, $gf->count($criteria));
+		$this->assertCount(1, $this->getItemsFromBucket($bucket, $criteria));
 
 		$deleted = $found->delete();
 
 		$this->assertTrue($deleted);
 
-		$this->assertSame(0, $gf->count($criteria));
+		$this->assertCount(0, $this->getItemsFromBucket($bucket, $criteria));
 	}
 
 	public function testIfWillDeleteEmbeddedImage(): void
@@ -136,23 +136,33 @@ class EmbeddedFileTest extends Unit
 
 		$mangan = new Mangan();
 
-		$gfs = $mangan->getDbInstance()->getGridFS();
+		$bucket = $mangan->getDbInstance()->selectGridFSBucket();
 
-		$tmp = $mangan->getDbInstance()->getGridFS(File::TmpPrefix);
+		$tmpBucket = $mangan->getDbInstance()->selectGridFSBucket(['prefix' => File::TmpPrefix]);
 
 		$criteria = [
-			'parentId' => $found->file->_id
+			'metadata.parentId' => $found->file->_id
 		];
 
-		$this->assertSame(1, $gfs->count($criteria));
-		$this->assertSame(1, $tmp->count($criteria));
+		$this->assertCount(1, $this->getItemsFromBucket($bucket, $criteria));
+		$this->assertCount(1, $this->getItemsFromBucket($tmpBucket, $criteria));
 
 		$deleted = $found->delete();
 
 		$this->assertTrue($deleted);
 
-		$this->assertSame(0, $gfs->count($criteria));
-		$this->assertSame(0, $tmp->count($criteria));
+		$this->assertCount(0, $this->getItemsFromBucket($bucket, $criteria));
+		$this->assertCount(0, $this->getItemsFromBucket($tmpBucket, $criteria));
+	}
+
+	private function getItemsFromBucket(Bucket $bucket, array $criteria): array
+	{
+		$items = [];
+		foreach($bucket->find($criteria) as $item)
+		{
+			$items[] = $item;
+		}
+		return $items;
 	}
 
 }
