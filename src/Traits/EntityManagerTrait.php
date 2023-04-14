@@ -130,17 +130,14 @@ trait EntityManagerTrait
 	 * Updates the document represented by this active document.
 	 * All loaded attributes will be saved to the database.
 	 * Note, validation is not performed in this method. You may call `validate()` to perform the validation.
-	 * 
-	 * @param array $attributes list of attributes that need to be updated. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
+	 *
+	 * @param array|null $attributes list of attributes that need to be updated. Defaults to null, meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
-	 * @throws ManganException if the record is new
-	 * @throws ManganException on fail of update
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function update(array $attributes = null)
+	public function update(array $attributes = null): bool
 	{
 		return $this->_getEm()->update($attributes);
 	}
@@ -153,13 +150,13 @@ trait EntityManagerTrait
 	 * * Does not raise any events or signals
 	 * * Does not perform any validation
 	 *
-	 * @param array|CriteriaInterface $criteria query criteria.
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 * meaning all attributes that are loaded from DB will be saved.
-	 * @param bool Whether tu force update/upsert document
+	 * @param null       $criteria   query criteria.
+	 * @param array|null $attributes list of attributes that need to be saved. Defaults to null, meaning that all attributes that are loaded from DB will be saved.
+	 * @param bool       $modify     Whether tu force update/upsert document
+	 * @return bool
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, array $attributes = null, $modify = false)
+	public function updateOne($criteria = null, array $attributes = null, $modify = false): bool
 	{
 		return $this->_getEm()->updateOne($criteria, $attributes, $modify);
 	}
@@ -167,13 +164,13 @@ trait EntityManagerTrait
 	/**
 	 * Atomic, in-place update method.
 	 *
-	 * @since v1.3.6
-	 * @param Modifier $modifier updating rules to apply
-	 * @param CriteriaInterface $criteria condition to limit updating rules
-	 * @return boolean|mixed[]
+	 * @param Modifier               $modifier updating rules to apply
+	 * @param CriteriaInterface|null $criteria condition to limit updating rules
+	 * @return boolean
 	 * @Ignored
+	 * @since v1.3.6
 	 */
-	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null)
+	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null): bool
 	{
 		return $this->_getEm()->updateAll($modifier, $criteria);
 	}
@@ -181,7 +178,7 @@ trait EntityManagerTrait
 	/**
 	 * Find and modify single document atomically.
 	 *
-	 * By default this function will return updated document, ie document
+	 * By default, this function will return updated document, ie document
 	 * with applied Modifier operations.
 	 *
 	 * To return document before applied updates, set parameter
@@ -198,19 +195,19 @@ trait EntityManagerTrait
 	 * @param bool                    $returnUpdated
 	 * @return AnnotatedInterface|null
 	 */
-	public function findAndModify($criteria, Modifier $modifier, $returnUpdated = true)
+	public function findAndModify($criteria, Modifier $modifier, $returnUpdated = true): ?AnnotatedInterface
 	{
 		return $this->_getEm()->findAndModify($criteria, $modifier, $returnUpdated);
 	}
 
 	/**
-	 * Deletes the databse document corresponding to this `Document`.
+	 * Deletes the database document corresponding to this `Document`.
 	 * @return boolean whether the deletion is successful.
 	 * @throws ManganException if the record is new
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function delete()
+	public function delete(): bool
 	{
 		return $this->_getEm()->delete();
 	}
@@ -227,7 +224,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function deleteByPk($pkValue, $criteria = null)
+	public function deleteByPk($pkValue, $criteria = null): bool
 	{
 		return $this->_getEm()->deleteByPk($pkValue, $criteria);
 	}
@@ -244,7 +241,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function deleteAllByPk($pkValues, $criteria = null)
+	public function deleteAllByPk($pkValues, $criteria = null): bool
 	{
 		return $this->_getEm()->deleteAllByPk($pkValues, $criteria);
 	}
@@ -260,7 +257,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function deleteAll($criteria = null)
+	public function deleteAll($criteria = null): bool
 	{
 		return $this->_getEm()->deleteAll($criteria);
 	}
@@ -277,7 +274,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function deleteOne($criteria = null)
+	public function deleteOne($criteria = null): bool
 	{
 		return $this->_getEm()->deleteOne($criteria);
 	}
@@ -289,7 +286,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function refresh()
+	public function refresh(): bool
 	{
 		return $this->_getEm()->refresh();
 	}
@@ -302,7 +299,7 @@ trait EntityManagerTrait
 	 * @return Collection
 	 * @Ignored
 	 */
-	public function getCollection()
+	public function getCollection(): Collection
 	{
 		return $this->_getEm()->getCollection();
 	}
@@ -311,7 +308,7 @@ trait EntityManagerTrait
 	 * Get entity manager instance
 	 * @return EntityManagerInterface|EntityManager
 	 */
-	private function _getEm()
+	private function _getEm(): EntityManager|EntityManagerInterface
 	{
 		if (null === $this->_em)
 		{

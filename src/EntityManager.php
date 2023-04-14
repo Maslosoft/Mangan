@@ -202,14 +202,11 @@ class EntityManager implements EntityManagerInterface
 	 * All loaded attributes will be saved to the database.
 	 * Note, validation is not performed in this method. You may call {@link validate} to perform the validation.
 	 *
-	 * @param array $attributes list of attributes that need to be saved. Defaults to null,
-	 *                          meaning all attributes that are loaded from DB will be saved.
+	 * @param array|null $attributes list of attributes that need to be saved. Defaults to null, meaning all attributes that are loaded from DB will be saved.
 	 * @return boolean whether the update is successful
-	 * @throws ManganException if the record is new
-	 * @throws ManganException on fail of update
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 */
-	public function update(array $attributes = null)
+	public function update(array $attributes = null): bool
 	{
 		if ($this->beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
 		{
@@ -234,10 +231,9 @@ class EntityManager implements EntityManagerInterface
 	 * * Does not raise any events or signals
 	 * * Does not perform any validation
 	 *
-	 * @param array|CriteriaInterface $criteria   query criteria.
-	 * @param array                   $attributes list of attributes that need to be saved. Defaults to null,
-	 * @param bool Whether to force update/upsert document
-	 *                                            meaning all attributes that are loaded from DB will be saved.
+	 * @param null       $criteria                query criteria.
+	 * @param array|null $attributes              list of attributes that need to be saved. Defaults to null,  meaning all attributes that are loaded from DB will be saved.
+	 * @param bool       $modify                  Whether to force update/upsert document
 	 * @return bool
 	 */
 	public function updateOne($criteria = null, array $attributes = null, $modify = false): bool
@@ -401,8 +397,9 @@ class EntityManager implements EntityManagerInterface
 			if ($this->beforeSave($model))
 			{
 				$data = RawArray::fromModel($model);
-				$rawResult = $this->_collection->save($data, $this->options->getSaveOptions());
-				$result = $this->insertResult($rawResult);
+				$conditions = PkManager::prepareFromModel($model)->getConditions();
+				$rawResult = $this->getCollection()->replaceOne($conditions, $data, $this->options->getSaveOptions());
+				$result = $this->updateResult($rawResult);
 
 				if ($result)
 				{
