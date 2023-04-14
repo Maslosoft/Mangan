@@ -3,12 +3,12 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan\Model;
@@ -18,26 +18,30 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
-use Maslosoft\Mangan\Exceptions\FileNotFoundException;
+use Maslosoft\Mangan\File\Sender\Sender;
+use Maslosoft\Mangan\File\Sender\Streamer;
+use Maslosoft\Mangan\File\Wrappers\BucketWrapper;
 use Maslosoft\Mangan\Helpers\IdHelper;
+use Maslosoft\Mangan\Interfaces\File\WrapperInterface;
 use Maslosoft\Mangan\Interfaces\FileInterface;
 use Maslosoft\Mangan\Mangan;
-use MongoDB;
-use MongoGridFSFile;
 use MongoDB\BSON\ObjectId as MongoId;
+use MongoDB\Database;
+use MongoDB\GridFS\Bucket;
 
 /**
- * Class for storing embedded files
- * @since 2.0.1
+ * Class for storing embedded files, also stores some file information to
+ * avoid querying GridFS
+ * @since  2.0.1
  * @author Piotr
  */
 class File extends EmbeddedDocument
 {
-
-	const TmpPrefix = 'tmp';
+	public const DefaultPrefix = 'fs';
+	public const TmpPrefix = 'tmp';
 
 	/**
-	 * NOTE: This is also in gridfs, here is added to avoid querying gridfs just to get filename
+	 * NOTE: This is also in GridFS, here is added to avoid querying GridFS just to get filename
 	 * @var string
 	 */
 	public $filename = '';
@@ -68,7 +72,7 @@ class File extends EmbeddedDocument
 
 	/**
 	 * Mongo DB instance
-	 * @var MongoDB
+	 * @var Database
 	 */
 	private $_db = null;
 
@@ -80,19 +84,19 @@ class File extends EmbeddedDocument
 		$this->_db = $mangan->getDbInstance();
 	}
 
-	public function setOwner(AnnotatedInterface $owner = null)
+	public function setOwner(AnnotatedInterface $owner = null): void
 	{
 		parent::setOwner($owner);
+		// TODO: Move to event handler class and attach fo File class or newly created interface
 		$root = $this->getRoot();
-		$onAfterDelete = function()
-		{
+		$onAfterDelete = function () {
 			$this->_onAfterDelete();
 		};
 		$onAfterDelete->bindTo($this);
 		Event::on($root, EntityManager::EventAfterDelete, $onAfterDelete);
 	}
 
-	public function getId()
+	public function getId(): MongoId
 	{
 		if (!$this->_id instanceof MongoId)
 		{
@@ -103,9 +107,9 @@ class File extends EmbeddedDocument
 
 	/**
 	 * Get file from mongo grid
-	 * @return MongoGridFSFile
+	 * @return ?WrapperInterface
 	 */
-	public function get()
+	public function get(): ?WrapperInterface
 	{
 		return $this->_get();
 	}
@@ -113,24 +117,24 @@ class File extends EmbeddedDocument
 	/**
 	 * Send file to browser
 	 */
-	public function send()
+	public function send(): never
 	{
-		$this->_send($this->_get());
+		(new Sender)->send($this->_get());
 	}
 
 	/**
 	 * Stream file to browser
 	 */
-	public function stream()
+	public function stream(): never
 	{
-		$this->_stream($this->_get());
+		(new Streamer)->send($this->_get());
 	}
 
 	/**
 	 * Set file data
-	 * @param FileInterface|string $file
+	 * @param string|FileInterface $file
 	 */
-	public function set($file)
+	public function set(FileInterface|string $file): void
 	{
 		if ($file instanceof FileInterface)
 		{
@@ -147,95 +151,39 @@ class File extends EmbeddedDocument
 
 	/**
 	 * Get file with optional criteria params
-	 * @param mixed[] $params
-	 * @return MongoGridFSFile
+	 * @param array $params
+	 * @return WrapperInterface|null
 	 */
-	protected function _get($params = [])
+	protected function _get(array $params = []): ?WrapperInterface
 	{
 		$criteria = [
 			'parentId' => $this->_id,
 			'isTemp' => false
 		];
 		$conditions = array_merge($criteria, $params);
-		if (!$conditions['isTemp'])
+		$target = $conditions['isTemp'] ? self::TmpPrefix : self::DefaultPrefix;
+		$bucket = $this->select($target);
+		$this->decorate($conditions);
+		$result = $bucket->findOne($conditions);
+		if ($result === null)
 		{
-			return $this->_db->getGridFS()->findOne($conditions);
+			return null;
 		}
-		else
-		{
-			return $this->_db->getGridFS(self::TmpPrefix)->findOne($conditions);
-		}
-	}
-
-	/**
-	 * Send file to the browser
-	 * @param MongoGridFSFile $file
-	 */
-	protected function _send(MongoGridFSFile $file = null)
-	{
-		if (null === $file)
-		{
-			throw new FileNotFoundException('File not found');
-		}
-		$meta = (object) $file->file;
-		header(sprintf('Content-Length: %d', $file->getSize()));
-		header(sprintf('Content-Type: %s', $meta->contentType));
-		header(sprintf('ETag: %s', $meta->md5));
-		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->sec)));
-		header(sprintf('Content-Disposition: filename="%s"', basename($meta->filename)));
-
-		// Cache it
-		header('Pragma: public');
-		header('Cache-Control: max-age=86400');
-		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
-		echo $file->getBytes();
-		// Exit application after sending file
-		exit;
-	}
-
-	protected function _stream(MongoGridFSFile $file)
-	{
-		$meta = (object) $file->file;
-		if (ob_get_length())
-		{
-			ob_end_clean();
-		}
-		header(sprintf('Content-Length: %d', $file->getSize()));
-		header(sprintf('Content-Type: %s', $meta->contentType));
-		header(sprintf('ETag: %s', $meta->md5));
-		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->sec)));
-		header(sprintf('Content-Disposition: filename="%s"', basename($meta->filename)));
-		// Cache it
-		header('Pragma: public');
-		header('Cache-Control: max-age=86400');
-		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
-		$stream = $file->getResource();
-
-		while (!feof($stream))
-		{
-			echo fread($stream, 8192);
-			if (ob_get_length())
-			{
-				ob_flush();
-			}
-			flush();
-		}
-		// Exit application after stream completed
-		exit;
+		return new BucketWrapper($bucket, $result);
 	}
 
 	/**
 	 * Set file with optional criteria params
-	 * @param string $tempName
-	 * @param string $fileName
+	 * @param string  $tempName
+	 * @param string  $fileName
 	 * @param mixed[] $params
 	 */
-	protected function _set($tempName, $fileName, $params = [])
+	protected function _set($tempName, $fileName, $params = []): void
 	{
 		$info = new finfo(FILEINFO_MIME);
 		$mime = $info->file($tempName);
 		/**
-		 * TODO Check if root data is saved corectly
+		 * TODO Check if root data is saved correctly
 		 */
 		if (!$this->getRoot()->_id instanceof MongoId)
 		{
@@ -243,7 +191,7 @@ class File extends EmbeddedDocument
 			if (IdHelper::isId($this->getRoot()->_id))
 			{
 				// Convert existing string id to MongoId
-				$this->getRoot()->_id = new MongoId((string) $this->getRoot()->_id);
+				$this->getRoot()->_id = new MongoId((string)$this->getRoot()->_id);
 			}
 			else
 			{
@@ -257,12 +205,12 @@ class File extends EmbeddedDocument
 			'parentId' => $this->_id,
 			'rootClass' => get_class($this->getRoot()),
 			'rootId' => $rootId,
-			'filename' => $fileName,
+			'filename' => basename($fileName),
 			'contentType' => $mime,
 			'isTemp' => false
 		];
 
-		$this->filename = $fileName;
+		$this->filename = basename($fileName);
 		$this->contentType = $mime;
 		$this->size = filesize($tempName);
 		$params = array_merge($data, $params);
@@ -273,33 +221,60 @@ class File extends EmbeddedDocument
 			$oldFiles = [
 				'parentId' => $this->_id
 			];
-			$this->_db->getGridFS()->remove($oldFiles);
-			$this->_db->getGridFS(self::TmpPrefix)->remove($oldFiles);
+			// TODO: Update file, not delete
+//			$this->select()->delete($oldFiles);
+			// TODO: Find ids first, as the new API doesn't allow filtering
+			// and remove temp files
+			$this->deleteByCriteria(self::TmpPrefix, $oldFiles);
 		}
 
 		// Store new file
-		if (!$params['isTemp'])
-		{
-			// In main storage
-			$this->_db->getGridFS()->put($tempName, $params);
-		}
-		else
-		{
-			// In temporary gfs
-			$this->_db->getGridFS(self::TmpPrefix)->put($tempName, $params);
-		}
+		$stream = fopen($tempName, 'rb');
+		$target = $params['isTemp'] ? self::TmpPrefix : self::DefaultPrefix;
+		// In main storage
+		$options = [
+			'metadata' => $params
+		];
+		$this->select($target)->uploadFromStream($fileName, $stream, $options);
 	}
 
 	/**
-	 * This is fired after delete to remove chunks from gridfs
+	 * This is fired after delete to remove chunks from GridFS
 	 */
-	protected function _onAfterDelete()
+	protected function _onAfterDelete(): void
 	{
 		$criteria = [
 			'parentId' => $this->_id
 		];
-		$this->_db->getGridFS()->remove($criteria);
-		$this->_db->getGridFS(self::TmpPrefix)->remove($criteria);
+		$this->deleteByCriteria(self::DefaultPrefix, $criteria);
+		$this->deleteByCriteria(self::TmpPrefix, $criteria);
 	}
 
+	private function select(string $prefix = 'fs'): Bucket
+	{
+		$options = [
+			'bucketName' => $prefix
+		];
+		return $this->_db->selectGridFSBucket($options);
+	}
+
+	private function deleteByCriteria(string $prefix, array $criteria): void
+	{
+		$this->decorate($criteria);
+		$results = $this->select($prefix)->find($criteria);
+		foreach ($results as $result)
+		{
+			$this->select($prefix)->delete($result['_id']);
+		}
+	}
+
+	private function decorate(array &$criteria): void
+	{
+		$decorated = [];
+		foreach($criteria as $name => $value)
+		{
+			$decorated["metadata.$name"] = $value;
+		}
+		$criteria = $decorated;
+	}
 }

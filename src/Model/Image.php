@@ -16,8 +16,10 @@ namespace Maslosoft\Mangan\Model;
 use Maslosoft\Mangan\Events\Event;
 use Maslosoft\Mangan\Events\ImageEvent;
 use Maslosoft\Mangan\Exceptions\FileNotFoundException;
+use Maslosoft\Mangan\File\Sender\Sender;
+use Maslosoft\Mangan\File\Sender\Streamer;
 use Maslosoft\Mangan\Helpers\ImageThumb;
-use MongoGridFSFile;
+use Maslosoft\Mangan\Interfaces\File\WrapperInterface;
 
 /**
  * Class for storing embedded images
@@ -26,9 +28,9 @@ use MongoGridFSFile;
  */
 class Image extends File
 {
-	const EventBeforeResize = 'beforeResize';
+	public const EventBeforeResize = 'beforeResize';
 
-	const EventAfterResize = 'afterResize';
+	public const EventAfterResize = 'afterResize';
 
 	/**
 	 * Image width
@@ -44,13 +46,13 @@ class Image extends File
 
 	/**
 	 * Get resized image
-	 * @param ImageParams $params
-	 * @return MongoGridFSFile
+	 * @param ImageParams|null $params
+	 * @return ?WrapperInterface
 	 */
-	public function get(ImageParams $params = null)
+	public function get(ImageParams $params = null): ?WrapperInterface
 	{
 		// Get original image or file if it is not image
-		if (!$params || !$this->isImage($this->filename))
+		if ($params === null || !$this->isImage($this->filename))
 		{
 			return $this->_get();
 		}
@@ -60,17 +62,20 @@ class Image extends File
 		$result = $this->_get($params->toArray());
 
 		// Resize and store if not found
-		if (!$result)
+		if ($result === null)
 		{
 			$result = $this->_get();
-			if (!$result)
+			if ($result === null)
 			{
 				throw new FileNotFoundException('File not found');
 			}
 
-			$originalFilename = $result->file['filename'];
+			$originalFilename = $result->getMetadata()['filename'];
+			$basename = basename($originalFilename);
 			$fileName = tempnam('/tmp/', str_replace('\\', '.', __CLASS__));
-			$result->write($fileName);
+			// Ensure extension is same as original filename
+			$fileName = $fileName . '_' . $basename;
+			file_put_contents($fileName, $result->getBytes());
 
 			$ie = new ImageEvent;
 			$ie->sender = $this;
@@ -79,6 +84,7 @@ class Image extends File
 			Event::trigger($this, self::EventBeforeResize, $ie);
 
 			$image = new ImageThumb($fileName);
+
 			if ($params->adaptive)
 			{
 				$image->adaptiveResize($params->width, $params->height)->save($fileName);
@@ -96,6 +102,8 @@ class Image extends File
 
 			$this->_set($fileName, $originalFilename, $params->toArray());
 			unlink($fileName);
+			// TODO: Reuse already available image, ie do not reload from DB
+			// using $image->getImageAsString(); and (newly developed) StringWrapper
 			return $this->_get($params->toArray());
 		}
 		return $result;
@@ -105,12 +113,12 @@ class Image extends File
 	 * Return true if it is really image
 	 * @return bool
 	 */
-	public function isImage($name)
+	public function isImage($name): bool
 	{
 		return in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'gif', 'png']);
 	}
 
-	protected function _set($tempName, $fileName, $params = [])
+	protected function _set($tempName, $fileName, $params = []): void
 	{
 		if ($this->isImage($fileName))
 		{
@@ -125,17 +133,17 @@ class Image extends File
 	/**
 	 * Send file to browser
 	 */
-	public function send(ImageParams $params = null)
+	public function send(ImageParams $params = null): never
 	{
-		$this->_send($this->get($params));
+		(new Sender)->send($this->get($params));
 	}
 
 	/**
 	 * Stream file to browser
 	 */
-	public function stream(ImageParams $params = null)
+	public function stream(ImageParams $params = null): never
 	{
-		$this->_stream($this->get($params));
+		(new Streamer)->send($this->get($params));
 	}
 
 }
