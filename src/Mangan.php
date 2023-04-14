@@ -418,6 +418,7 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Connect to DB if connection is already connected this method return connection status.
 	 *
+	 * @deprecated
 	 * @return bool Returns true if connected
 	 * @throws ManganException
 	 */
@@ -437,7 +438,7 @@ class Mangan implements LoggerAwareInterface
 	 * @throws ManganException
 	 * @since v1.0
 	 */
-	public function getConnection()
+	public function getConnection(): Client
 	{
 		if ($this->cs->mongoClient === null)
 		{
@@ -479,7 +480,7 @@ class Mangan implements LoggerAwareInterface
 	 *
 	 * @param Client $connection
 	 */
-	public function setConnection(Client $connection)
+	public function setConnection(Client $connection): void
 	{
 		$this->cs->mongoClient = $connection;
 	}
@@ -519,7 +520,7 @@ class Mangan implements LoggerAwareInterface
 	 * @param string $name
 	 * @throws ManganException
 	 */
-	public function setDbInstance($name): void
+	public function setDbInstance(string $name): void
 	{
 		$this->dbName = $name;
 		$this->cs->mongoDB = $this->getConnection()->selectDatabase($name);
@@ -529,7 +530,7 @@ class Mangan implements LoggerAwareInterface
 	 * Closes the currently active Mongo connection.
 	 * It does nothing if the connection is already closed.
 	 */
-	protected function close()
+	protected function close(): void
 	{
 		if ($this->cs->mongoClient !== null)
 		{
@@ -543,7 +544,7 @@ class Mangan implements LoggerAwareInterface
 	 * Change working database
 	 * @param $name
 	 */
-	public function selectDb($name)
+	public function selectDb($name): void
 	{
 		$this->setDbInstance($name);
 	}
@@ -551,7 +552,7 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Drop current database
 	 */
-	public function dropDb()
+	public function dropDb(): void
 	{
 		$this->getDbInstance()->drop();
 	}
