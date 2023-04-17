@@ -12,7 +12,7 @@ abstract class Base
 		header(sprintf('Content-Length: %d', $wrapper->getLength()));
 		header(sprintf('Content-Type: %s', $meta->contentType));
 		header(sprintf('ETag: %s', $meta->md5));
-		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->sec)));
+		header(sprintf('Last-Modified: %s', gmdate('D, d M Y H:i:s \G\M\T', $meta->uploadDate->toDateTime()->getTimestamp())));
 		header(sprintf('Content-Disposition: filename="%s"', basename($meta->filename)));
 		// Cache it
 		header('Pragma: public');
