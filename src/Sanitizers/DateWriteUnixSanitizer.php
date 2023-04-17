@@ -28,7 +28,7 @@ class DateWriteUnixSanitizer extends DateSanitizer
 
 	public function write($model, $dbValue)
 	{
-		return (int) parent::write($model, $dbValue)->sec;
+		return (int) parent::write($model, $dbValue)->toDateTime()->getTimestamp();
 	}
 
 }
