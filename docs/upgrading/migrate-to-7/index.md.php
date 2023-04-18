@@ -8,6 +8,7 @@ use MongoDB\BSON\UTCDateTime;
 $mongoId = new Namer(ObjectId::class);
 $mongoDate = new Namer(UTCDateTime::class);
 $imageParams = new Namer(ImageParams::class);
+/* $var $mongoDate UTCDateTime */
 ?>
 
 <title>1. Upgrade to version 7</title>
@@ -23,9 +24,19 @@ be changed in code. To minimize required edits, it is recommended to import clas
 
 ```php
 use MongoDB\BSON\ObjectId as MongoId;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 ```
 
 The stored class names in database will be handled by Mangan automatically.
 
 The <?= $imageParams; ?> class no longer have fluent setters. Additionally, properties are now
 public and typed. Getters and setters still can be used.
+
+The <?= $mongoDate; ?> no longer have `sec` attribute available, to obtain timestamp,
+and it required milliseconds as constructor parameter, following construct must be used:
+
+```php
+$timestamp = time();
+$date = new UTCDateTime($timestamp * 1000)
+echo $date->toDateTime()->getTimestamp();
+```
