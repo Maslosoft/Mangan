@@ -1,5 +1,6 @@
 <?php
 
+use Maslosoft\Mangan\Helpers\IdHelper;
 use Maslosoft\Mangan\Model\ImageParams;
 use Maslosoft\Zamm\Namer;
 use MongoDB\BSON\ObjectId;
@@ -8,6 +9,7 @@ use MongoDB\BSON\UTCDateTime;
 $mongoId = new Namer(ObjectId::class);
 $mongoDate = new Namer(UTCDateTime::class);
 $imageParams = new Namer(ImageParams::class);
+$idHelper = new Namer(IdHelper::class);
 /* $var $mongoDate UTCDateTime */
 ?>
 
@@ -40,3 +42,5 @@ $timestamp = time();
 $date = new UTCDateTime($timestamp * 1000)
 echo $date->toDateTime()->getTimestamp();
 ```
+
+The function `MongoId::isValid()` is no longer available. Use <?= $idHelper::isId(); ?> instead.
