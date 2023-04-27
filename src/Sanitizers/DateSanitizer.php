@@ -59,6 +59,7 @@ class DateSanitizer implements SanitizerInterface
 		}
 		if (is_array($value))
 		{
+			// Old MongoDate format
 			if (isset($value['sec']))
 			{
 				$sec = (int) $value['sec'];
@@ -66,6 +67,14 @@ class DateSanitizer implements SanitizerInterface
 			if (isset($value['usec']))
 			{
 				$usec = (int) $value['usec'];
+			}
+			// New date format serialized
+			if(isset($value['$date']))
+			{
+				if(isset($value['$date']['$numberLong']))
+				{
+					$sec = round($value['$date']['$numberLong'] / 1000);
+				}
 			}
 		}
 		if ((int) $value === 0)
