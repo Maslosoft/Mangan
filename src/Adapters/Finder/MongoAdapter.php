@@ -48,7 +48,9 @@ class MongoAdapter implements FinderAdapterInterface
 
 	public function findMany(CriteriaInterface $criteria, $fields = [], $options = []): Cursor
 	{
-		return $this->em->getCollection()->find($criteria->getConditions(), $options);
+		$cursor = $this->em->getCollection()->find($criteria->getConditions(), $options);
+		$cursor->setTypeMap(Mangan::TypeMap);
+		return $cursor;
 	}
 
 	public function findOne(CriteriaInterface $criteria, $fields = []): array|null
@@ -63,7 +65,9 @@ class MongoAdapter implements FinderAdapterInterface
 			$options['projection'] = $fields;
 		}
 		// Use find instead of findOne here so sort can be applied
-		return first($this->em->getCollection()->find($criteria->getConditions(), $options));
+		$cursor = $this->em->getCollection()->find($criteria->getConditions(), $options);
+		$cursor->setTypeMap(Mangan::TypeMap);
+		return first($cursor);
 	}
 
 }

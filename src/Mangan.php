@@ -53,6 +53,8 @@ class Mangan implements LoggerAwareInterface
 
 	public const DefaultConnectionId = 'mongodb';
 
+	public const TypeMap = ['root' => 'array', 'document' => 'array', 'array' => 'array'];
+
 	use MongoClientOptions;
 
 	/**
@@ -456,11 +458,7 @@ class Mangan implements LoggerAwareInterface
 				}
 			}
 			$driverOptions = [
-				'typeMap' => [
-					'array' => 'array',
-					'document' => 'array',
-					'root' => 'array',
-				],
+				'typeMap' => self::TypeMap,
 			];
 			$this->cs->mongoClient = new Client($this->connectionString, [], $driverOptions);
 		}
