@@ -26,6 +26,7 @@ use Maslosoft\Mangan\Interfaces\File\WrapperInterface;
 use Maslosoft\Mangan\Interfaces\FileInterface;
 use Maslosoft\Mangan\Mangan;
 use MongoDB\BSON\ObjectId as MongoId;
+use MongoDB\Collection;
 use MongoDB\Database;
 use MongoDB\GridFS\Bucket;
 
@@ -76,12 +77,14 @@ class File extends EmbeddedDocument
 	 */
 	private $_db = null;
 
+	private Mangan $mangan;
+
 	public function __construct($scenario = 'insert', $lang = '')
 	{
 		parent::__construct($scenario, $lang);
 		$this->_id = new MongoId;
-		$mangan = Mangan::fromModel($this);
-		$this->_db = $mangan->getDbInstance();
+		$this->mangan = Mangan::fromModel($this);
+		$this->_db = $this->mangan->getDbInstance();
 	}
 
 	public function setOwner(AnnotatedInterface $owner = null): void
@@ -163,7 +166,6 @@ class File extends EmbeddedDocument
 		$conditions = array_merge($criteria, $params);
 		$target = $conditions['isTemp'] ? self::TmpPrefix : self::DefaultPrefix;
 		$bucket = $this->select($target);
-		$this->decorate($conditions);
 		$result = $bucket->findOne($conditions);
 		if ($result === null)
 		{
@@ -232,10 +234,17 @@ class File extends EmbeddedDocument
 		$stream = fopen($tempName, 'rb');
 		$target = $params['isTemp'] ? self::TmpPrefix : self::DefaultPrefix;
 		// In main storage
+		$id = $params['_id'];
+		unset($params['_id']);
 		$options = [
-			'metadata' => $params
+			'_id' => $id,
 		];
+
 		$this->select($target)->uploadFromStream($fileName, $stream, $options);
+
+		// This is to keep backwards compatible structure
+		$collection = new Collection($this->mangan->getManager(), $this->mangan->dbName, "$target.files");
+		$collection->updateOne(['_id' => $id], ['$set' => $params]);
 	}
 
 	/**
@@ -260,21 +269,10 @@ class File extends EmbeddedDocument
 
 	private function deleteByCriteria(string $prefix, array $criteria): void
 	{
-		$this->decorate($criteria);
 		$results = $this->select($prefix)->find($criteria);
 		foreach ($results as $result)
 		{
 			$this->select($prefix)->delete($result['_id']);
 		}
-	}
-
-	private function decorate(array &$criteria): void
-	{
-		$decorated = [];
-		foreach($criteria as $name => $value)
-		{
-			$decorated["metadata.$name"] = $value;
-		}
-		$criteria = $decorated;
 	}
 }

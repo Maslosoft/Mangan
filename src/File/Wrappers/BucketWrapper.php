@@ -26,7 +26,7 @@ class BucketWrapper extends Base implements WrapperInterface
 
 	public function getMetadata(): array
 	{
-		return $this->data['metadata'];
+		return $this->data;
 	}
 
 	public function getLength(): int
