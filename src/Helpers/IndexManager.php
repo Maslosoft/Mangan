@@ -13,17 +13,18 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\Cli\Shared\Io;
-use function dirname;
 use Maslosoft\Addendum\Addendum;
 use Maslosoft\Addendum\Helpers\SoftIncluder;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Cli\Shared\Helpers\PhpExporter;
+use Maslosoft\Cli\Shared\Io;
 use Maslosoft\Mangan\Helpers\Index\IndexModel;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\ManganTest\Extensions\IndexMetaCleaner;
+use MongoDB\Driver\Exception\CommandException;
+use function dirname;
 
 class IndexManager
 {
@@ -121,7 +122,13 @@ class IndexManager
 			foreach($fieldMeta->index as $indexMeta)
 			{
 				$index = new IndexModel($model, $indexMeta);
-				$results[] = (int)$index->apply();
+				try
+				{
+					$results[] = (int)$index->apply();
+				} catch (CommandException $e)
+				{
+					// TODO Log this?
+				}
 				$indexes[] = $index->getIndexes();
 			}
 		}

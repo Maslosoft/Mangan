@@ -89,7 +89,7 @@ class EmbeddedFileTest extends Unit
 		$bucket = $mangan->getDbInstance()->selectGridFSBucket();
 
 		$criteria = [
-			'metadata.parentId' => $found->file->_id
+			'parentId' => $found->file->_id
 		];
 		$this->assertCount(1, $this->getItemsFromBucket($bucket, $criteria));
 
@@ -141,7 +141,7 @@ class EmbeddedFileTest extends Unit
 		$tmpBucket = $mangan->getDbInstance()->selectGridFSBucket(['prefix' => File::TmpPrefix]);
 
 		$criteria = [
-			'metadata.parentId' => $found->file->_id
+			'parentId' => $found->file->_id
 		];
 
 		$this->assertCount(1, $this->getItemsFromBucket($bucket, $criteria));
