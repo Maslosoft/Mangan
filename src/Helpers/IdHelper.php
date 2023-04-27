@@ -25,16 +25,16 @@ class IdHelper
 
 	/**
 	 * Check if provided value id mongo id compatible
-	 * @param MongoId $mongoId
+	 * @param string|MongoId $mongoId
 	 * @return boolean true if it's MongoId compatible string or MongoId instance
 	 */
-	public static function isId($mongoId)
+	public static function isId(MongoId|string $mongoId): bool
 	{
 		if ($mongoId instanceof MongoId)
 		{
 			return true;
 		}
-		if (preg_match('^[a-f0-9]{24}$', $mongoId))
+		if (preg_match('~^[a-f0-9]{24}$~', $mongoId))
 		{
 			return true;
 		}
