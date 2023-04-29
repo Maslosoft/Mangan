@@ -13,8 +13,6 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
-use MongoDB\BSON\UTCDateTime as MongoDate;
-
 /**
  * UnixDateSanitizer
  *
@@ -28,7 +26,7 @@ class DateWriteUnixSanitizer extends DateSanitizer
 
 	public function write($model, $dbValue)
 	{
-		return (int) parent::write($model, $dbValue)->sec;
+		return parent::write($model, $dbValue)->toDateTime()->getTimestamp();
 	}
 
 }
