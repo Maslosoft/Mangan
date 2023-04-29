@@ -13,10 +13,12 @@
 
 namespace Maslosoft\Mangan;
 
-use Exception;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\Exceptions\TransactionException;
-use Maslosoft\Mangan\Helpers\CommandProxy;
+use Maslosoft\Mangan\Exceptions\ManganException;
+use Maslosoft\Mangan\Helpers\CollectionNamer;
+use MongoDB\Client;
+use MongoDB\Driver\Session;
+use UnexpectedValueException;
 
 /**
  * Transaction
@@ -25,87 +27,121 @@ use Maslosoft\Mangan\Helpers\CommandProxy;
  */
 class Transaction
 {
-
+//<editor-fold defaultstate="collapsed">
+	/**
+	 * @deprecated
+	 */
 	public const IsolationMVCC = 'mvcc';
+	/**
+	 * @deprecated
+	 */
 	public const IsolationSerializable = 'serializable';
+	/**
+	 * @deprecated
+	 */
 	public const IsolationReadUncommitted = 'readUncommitted';
+	/**
+	 * @deprecated
+	 */
 	public const CommandBegin = 'beginTransaction';
+	/**
+	 * @deprecated
+	 */
 	public const CommandCommit = 'commitTransaction';
+	/**
+	 * @deprecated
+	 */
 	public const CommandRollback = 'rollbackTransaction';
 
-	/**
-	 *
-	 * @var CommandProxy
-	 */
-	private $cmd;
+//</editor-fold>
+	private Client $client;
+
+	private Session $session;
+
+	private static $sessions = [];
 
 	/**
-	 * Whenever transaction is currently active
-	 * @var bool
+	 * Begin new transaction. The `$options` parameter is same as the `Manager::startSession` method.
+	 * @link https://www.php.net/manual/en/mongodb-driver-manager.startsession.php
+	 * @see  Manager
+	 * @param AnnotatedInterface|array|string $model
+	 * @param array                           $options Transaction options
+	 * @throws ManganException
 	 */
-	private static $isActive = false;
-
-	/**
-	 * Whenever transactions are available in current database
-	 * @var bool
-	 */
-	private static $isAvailable;
-
-	/**
-	 * Begin new transaction
-	 * @param AnnotatedInterface $model
-	 * @param string             $isolation
-	 */
-	public function __construct(AnnotatedInterface $model, $isolation = self::IsolationMVCC)
+	public function __construct(AnnotatedInterface|array|string $model, array $options = [])
 	{
-		$this->cmd = new CommandProxy($model);
-		if (null === self::$isAvailable)
+		if (is_array($model))
 		{
-			self::$isAvailable = $this->isAvailable();
+			$models = $model;
 		}
-		if (!self::$isAvailable)
+		else
 		{
-			return;
+			$models = [$model];
 		}
-		if (self::$isActive)
+		if (empty($models))
 		{
-			throw new TransactionException('Transaction is already running');
+			throw new UnexpectedValueException('The parameter `$model` must be an array or model instance or model class name');
 		}
-
-		$this->cmd->call(self::CommandBegin, [
-			'isolation' => $isolation
-		]);
-
-		self::$isActive = true;
+		$connectionIds = [];
+		foreach ($models as $m)
+		{
+			$mangan = Mangan::fromModel($m);
+			$connectionIds[$mangan->connectionId] = true;
+			$cmd = new Command($m);
+			$cmd->create(CollectionNamer::nameCollection($m));
+		}
+		assert($mangan instanceof Mangan);
+		if (count($connectionIds) > 1)
+		{
+			throw new UnexpectedValueException("All models in transaction must have the same `connectionId`, provided connection Id's: " . implode(', ', array_keys($connectionIds)));
+		}
+		if (empty($options))
+		{
+			$options = $mangan->transactionOptions;
+		}
+		$client = $mangan->getConnection();
+		$this->session = $client->startSession();
+		$this->session->startTransaction($options);
+		self::$sessions[] = $this->session;
 	}
 
+	/**
+	 * @return true
+	 * @deprecated Return always true
+	 */
 	public function isAvailable(): bool
 	{
-		return $this->cmd->isAvailable(self::CommandBegin) && $this->cmd->isAvailable(self::CommandCommit);
+		return true;
 	}
 
 	public function commit(): void
 	{
-		$this->_finish(self::CommandCommit);
+		$this->session->commitTransaction();
+		$this->finish();
 	}
 
 	public function rollback(): void
 	{
-		$this->_finish(self::CommandRollback);
+		$this->session->abortTransaction();
+		$this->finish();
 	}
 
-	private function _finish($command): void
+	/**
+	 * @return ?Session
+	 * @internal Experimental
+	 */
+	public static function getRunningSession(): ?Session
 	{
-		try
-		{
-			$this->cmd->call($command);
-		} catch (Exception $e)
-		{
-			throw $e;
-		} finally
-		{
-			self::$isActive = false;
-		}
+		return end(self::$sessions);
 	}
 
+	public static function isRunning(): bool
+	{
+		return count(self::$sessions) > 0;
+	}
+
+	private function finish(): void
+	{
+		array_pop(self::$sessions);
+	}
 }

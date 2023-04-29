@@ -231,9 +231,9 @@ class EntityManager implements EntityManagerInterface
 	 * * Does not raise any events or signals
 	 * * Does not perform any validation
 	 *
-	 * @param null       $criteria                query criteria.
-	 * @param array|null $attributes              list of attributes that need to be saved. Defaults to null,  meaning all attributes that are loaded from DB will be saved.
-	 * @param bool       $modify                  Whether to force update/upsert document
+	 * @param null       $criteria   query criteria.
+	 * @param array|null $attributes list of attributes that need to be saved. Defaults to null,  meaning all attributes that are loaded from DB will be saved.
+	 * @param bool       $modify     Whether to force update/upsert document
 	 * @return bool
 	 */
 	public function updateOne($criteria = null, array $attributes = null, $modify = false): bool
@@ -287,6 +287,11 @@ class EntityManager implements EntityManagerInterface
 		$opts = $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]);
 		$collection = $this->getCollection();
 
+		if (Transaction::isRunning())
+		{
+			$opts['session'] = Transaction::getRunningSession();
+		}
+
 		if ($attributes !== null || $modify)
 		{
 			$result = $collection->updateOne($conditions, $data, $opts);
@@ -315,6 +320,12 @@ class EntityManager implements EntityManagerInterface
 			$conditions = $criteria->getConditions();
 			$mods = $modifier->getModifiers();
 			$opts = $this->options->getSaveOptions();
+
+			if (Transaction::isRunning())
+			{
+				$opts['session'] = Transaction::getRunningSession();
+			}
+
 			$result = $this->getCollection()->updateMany($conditions, $mods, $opts);
 			return $this->updateResult($result);
 		}
@@ -354,12 +365,18 @@ class EntityManager implements EntityManagerInterface
 			$conditions = $criteria->getConditions();
 			$mods = $modifier->getModifiers();
 			$opts = [];
-			if($returnUpdated)
+			if ($returnUpdated)
 			{
 				$opts = ['new' => true];
 			}
+
+			if (Transaction::isRunning())
+			{
+				$opts['session'] = Transaction::getRunningSession();
+			}
+
 			$data = $this->getCollection()->findOneAndUpdate($conditions, $mods, $opts);
-			if(empty($data))
+			if (empty($data))
 			{
 				return null;
 			}
@@ -398,7 +415,14 @@ class EntityManager implements EntityManagerInterface
 			{
 				$data = RawArray::fromModel($model);
 				$conditions = PkManager::prepareFromModel($model)->getConditions();
-				$rawResult = $this->getCollection()->replaceOne($conditions, $data, $this->options->getSaveOptions());
+
+				$opts = $this->options->getSaveOptions();
+				if (Transaction::isRunning())
+				{
+					$opts['session'] = Transaction::getRunningSession();
+				}
+
+				$rawResult = $this->getCollection()->replaceOne($conditions, $data, $opts);
 				$result = $this->updateResult($rawResult);
 
 				if ($result)
@@ -657,9 +681,9 @@ class EntityManager implements EntityManagerInterface
 	/**
 	 * Take care of EventBeforeSave
 	 * @param                 $model
-	 * @param string|null $event
+	 * @param string|null     $event
 	 * @return boolean
-	 *@see EventBeforeSave
+	 * @see EventBeforeSave
 	 */
 	private function beforeSave($model, string $event = null): bool
 	{
@@ -680,7 +704,7 @@ class EntityManager implements EntityManagerInterface
 	 * Take care of EventAfterSave
 	 * @param             $model
 	 * @param string|null $event
-	 *@see EventAfterSave
+	 * @see EventAfterSave
 	 */
 	private function afterSave($model, string $event = null): void
 	{

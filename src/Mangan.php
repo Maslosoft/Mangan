@@ -3,12 +3,12 @@
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
- * @package maslosoft/mangan
- * @licence AGPL or Commercial
+ * @package   maslosoft/mangan
+ * @licence   AGPL or Commercial
  * @copyright Copyright (c) Piotr Masełkowski <pmaselkowski@gmail.com>
  * @copyright Copyright (c) Maslosoft
  * @copyright Copyright (c) Others as mentioned in code
- * @link https://maslosoft.com/mangan/
+ * @link      https://maslosoft.com/mangan/
  */
 
 namespace Maslosoft\Mangan;
@@ -40,13 +40,13 @@ use Psr\Log\NullLogger;
  * MongoDB
  *
  * This is merge work of tyohan, Alexander Makarov and mine
- * @author Ianaré Sévi
- * @author Dariusz Górecki <darek.krk@gmail.com>
- * @author Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
+ * @author    Ianaré Sévi
+ * @author    Dariusz Górecki <darek.krk@gmail.com>
+ * @author    Invenzzia Group, open-source division of CleverIT company http://www.invenzzia.org
  * @copyright 2011 CleverIT http://www.cleverit.com.pl
- * @property LoggerInterface $logger Logger
- * @property-read string $version Current version
- * @since v1.0
+ * @property LoggerInterface $logger  Logger
+ * @property-read string     $version Current version
+ * @since     v1.0
  */
 class Mangan implements LoggerAwareInterface
 {
@@ -62,7 +62,7 @@ class Mangan implements LoggerAwareInterface
 	 * mongodb://[username:password@]host1[:port1][,host2[:port2:],...]
 	 * @example mongodb://localhost:27017
 	 * @var string host:port
-	 * @since v1.0
+	 * @since   v1.0
 	 */
 	public $connectionString = 'mongodb://localhost:27017';
 
@@ -74,10 +74,10 @@ class Mangan implements LoggerAwareInterface
 	 * Example:
 	 * ```
 	 * $annotationsDefaults = [
-	 * 		I18NAnnotation::class => [
-	 * 			'allowAny' => true,
-	 * 			'allowDefault' => true
-	 * 		]
+	 *        I18NAnnotation::class => [
+	 *            'allowAny' => true,
+	 *            'allowDefault' => true
+	 *        ]
 	 * ];
 	 * ```
 	 *
@@ -175,6 +175,15 @@ class Mangan implements LoggerAwareInterface
 	 * @var boolean whether to enable profiling the mongo queries being executed.
 	 */
 	public $enableProfiling = false;
+
+	/**
+	 * Default transaction options, can be configured per connection ID.
+	 * @var array
+	 */
+	public array $transactionOptions = [
+		// Default value anyway
+		'causalConsistency' => true,
+	];
 
 	/**
 	 * Connection storage
@@ -330,8 +339,8 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Get profiler instance. This is guaranteed, if not configured will return NullProfiler.
-	 * @see NullProfiler
 	 * @return ProfilerInterface
+	 * @see NullProfiler
 	 */
 	public function getProfiler(): ProfilerInterface
 	{
@@ -392,7 +401,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public static function fromModel($model)
 	{
-		if(is_object($model))
+		if (is_object($model))
 		{
 			$key = get_class($model);
 		}
@@ -420,9 +429,9 @@ class Mangan implements LoggerAwareInterface
 	/**
 	 * Connect to DB if connection is already connected this method return connection status.
 	 *
-	 * @deprecated
 	 * @return bool Returns true if connected
 	 * @throws ManganException
+	 * @deprecated
 	 */
 	public function connect()
 	{
@@ -465,7 +474,7 @@ class Mangan implements LoggerAwareInterface
 		return $this->cs->mongoClient;
 	}
 
-	public function	getManager(): Manager
+	public function getManager(): Manager
 	{
 		return $this->getConnection()->getManager();
 	}
@@ -500,8 +509,7 @@ class Mangan implements LoggerAwareInterface
 			try
 			{
 				$this->cs->mongoDB = $this->getConnection()->selectDatabase($this->dbName);
-			}
-			catch (Exception $e)
+			} catch (Exception $e)
 			{
 				throw new ManganException(sprintf('Could not select db name: `%s`, for connectionId: `%s` - %s', $this->dbName, $this->connectionId, $e->getMessage()), ExceptionCodeInterface::CouldNotSelect, $e);
 			}

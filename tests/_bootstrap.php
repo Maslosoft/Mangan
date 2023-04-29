@@ -3,13 +3,13 @@
 use Maslosoft\Addendum\Addendum;
 use Maslosoft\Mangan\Annotations\MetaOptionsHelper;
 use Maslosoft\Mangan\Annotations\Validators\ValidatorAnnotation;
-use Maslosoft\Mangan\Mangan;
-use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
-use Maslosoft\ManganTest\Models\ValidatorProxy\RequiredValidator;
 use Maslosoft\Mangan\Command;
+use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Tools\AvailableCommandsGenerator;
 use Maslosoft\Mangan\Transaction;
+use Maslosoft\Mangan\Validators\Proxy\RequiredProxy;
 use Maslosoft\ManganTest\Models\BaseAttributesAnnotations;
+use Maslosoft\ManganTest\Models\ValidatorProxy\RequiredValidator;
 
 date_default_timezone_set('Europe/Paris');
 
@@ -33,30 +33,36 @@ const ManganSecondDbName = 'ManganTestSecond';
 const ManganThirdDbName = 'ManganTestThird';
 const ManganForthDbName = 'ManganTestFour';
 const ManganCustomValidatorsDbName = 'ManganTestCustomValidators';
+const ReplicaSet = 'rs0';
 
 $mangan = new Mangan();
 $mangan->connectionString = 'mongodb://localhost:27017';
+$mangan->replicaSet = ReplicaSet;
 $mangan->dbName = ManganFirstDbName;
 $mangan->init();
 
 $mangan2 = new Mangan('second');
 $mangan2->connectionString = 'mongodb://localhost:27017';
+$mangan2->replicaSet = ReplicaSet;
 $mangan2->dbName = ManganSecondDbName;
 $mangan2->init();
 
 $mangan3 = new Mangan('tokumx');
 $mangan3->connectionString = 'mongodb://localhost:27017';
+$mangan3->replicaSet = ReplicaSet;
 $mangan3->dbName = ManganThirdDbName;
 $mangan3->init();
 
 $mangan3 = new Mangan('four');
 $mangan3->connectionString = 'mongodb://localhost:27017';
+$mangan3->replicaSet = ReplicaSet;
 $mangan3->dbName = ManganForthDbName;
 $mangan3->init();
 
 
 $mangan4 = new Mangan('custom-validators');
 $mangan4->connectionString = 'mongodb://localhost:27017';
+$mangan4->replicaSet = ReplicaSet;
 $mangan4->dbName = ManganCustomValidatorsDbName;
 $mangan4->validators[RequiredProxy::class] = RequiredValidator::class;
 $mangan4->init();
@@ -75,15 +81,14 @@ try
 	{
 		$transactions = 'true';
 	}
-}
-catch(Exception $e)
+} catch (Exception $e)
 {
 	echo $e->getMessage() . PHP_EOL;
 }
 (new AvailableCommandsGenerator)->generate();
 echo "Transactions: " . $transactions . PHP_EOL;
 
-foreach(['mongodb', 'second', 'tokumx', 'custom-validators'] as $connectionId)
+foreach (['mongodb', 'second', 'tokumx', 'custom-validators'] as $connectionId)
 {
 	echo "Using DB: " . Mangan::fly($connectionId)->dbName . PHP_EOL;
 }
