@@ -2,11 +2,11 @@
 
 namespace Transaction;
 
+use Codeception\Specify;
 use Codeception\Test\Unit;
 use Exception;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transaction;
-use Maslosoft\ManganTest\Models\ModelWithLabel;
 use Maslosoft\ManganTest\Models\TokuMX\ModelTransactional;
 use MongoDB\BSON\ObjectId as MongoId;
 use UnitTester;
@@ -14,7 +14,7 @@ use UnitTester;
 class TransactionTest extends Unit
 {
 
-	use \Codeception\Specify;
+	use Specify;
 
 	/**
 	 * @var UnitTester
@@ -22,7 +22,7 @@ class TransactionTest extends Unit
 	protected $tester;
 
 	// tests
-	public function testTransactions()
+	public function testTransactions(): void
 	{
 		$available = false;
 		try
@@ -31,8 +31,7 @@ class TransactionTest extends Unit
 			$transaction->rollback();
 
 			$available = $transaction->isAvailable();
-		}
-		catch (Exception $e)
+		} catch (Exception $e)
 		{
 			$this->markTestSkipped("Transactions thrown exception");
 		}
@@ -42,17 +41,15 @@ class TransactionTest extends Unit
 		{
 			codecept_debug('Transactions Available');
 
-			$this->assertTrue("That transactions are available");
+			$this->assertTrue(true, "That transactions are available");
 
-			$canCommitTest = function()
-			{
+			$canCommitTest = function () {
 				$this->canCommitTest();
 			};
 			$canCommitTest->bindTo($this);
 			$this->specify("That transactions can commit", $canCommitTest);
 
-			$canRollbackTest = function()
-			{
+			$canRollbackTest = function () {
 				$this->canRollbackTest();
 			};
 			$canRollbackTest->bindTo($this);
@@ -66,7 +63,7 @@ class TransactionTest extends Unit
 		}
 	}
 
-	public function notAvailableTest()
+	public function notAvailableTest(): void
 	{
 		$this->assertTrue(true);
 	}
@@ -76,7 +73,7 @@ class TransactionTest extends Unit
 		$this->assertTrue(true);
 	}
 
-	public function canCommitTest()
+	public function canCommitTest(): void
 	{
 		$model = new ModelTransactional();
 
@@ -99,7 +96,7 @@ class TransactionTest extends Unit
 		$this->assertInstanceOf(ModelTransactional::class, $found2);
 	}
 
-	public function canRollbackTest()
+	public function canRollbackTest(): void
 	{
 		$model = new ModelTransactional();
 
