@@ -56,6 +56,7 @@ class MongoAdapter implements FinderAdapterInterface
 		$options = [
 			'sort' => $criteria->getSort(),
 			'limit' => 1,
+			'skip' => $criteria->getOffset()
 		];
 		if(!empty($fields))
 		{
