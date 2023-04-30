@@ -30,7 +30,7 @@ composer require maslosoft/mangan
 
 ### More details
 
-[Visit Project Website](https://maslosoft.com/mangan/) or [Quick Start Guide](https://maslosoft.com/mangan/docs/)
+[Visit project website](https://maslosoft.com/mangan/) or [quick start guide](https://maslosoft.com/mangan/docs/)
 
 ## Resources
 
@@ -39,7 +39,7 @@ composer require maslosoft/mangan
  * [Report a bug](https://github.com/Maslosoft/Mangan/issues)
  * [MongoDB documentation](https://www.mongodb.com/docs/manual/)
  * [MongoDB PHP library](https://www.mongodb.com/docs/php-library/current/)
- * [MongoDB PHP's low driver docs](https://www.php.net/manual/en/set.mongodb.php)
+ * [MongoDB PHP's low level driver docs](https://www.php.net/manual/en/set.mongodb.php)
  * [Standard Yii ActiveRecord documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
- * [Addendum Annotations](https://maslosoft.com/addendum/)
+ * [Addendum annotations](https://maslosoft.com/addendum/)
 
