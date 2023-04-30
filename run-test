@@ -1,3 +1,0 @@
-#!/bin/bash
-rm -rf runtime/addendum/*
-vendor/bin/codecept run unit "$@"Test.php -vv

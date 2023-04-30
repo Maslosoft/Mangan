@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-rm -rf runtime/addendum/*
-hhvm vendor/bin/codecept run unit --debug
