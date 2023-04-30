@@ -35,10 +35,11 @@ composer require maslosoft/mangan
 ## Resources
 
  * [Project website](https://maslosoft.com/mangan/)
- * [Project Page on GitHub](https://github.com/Maslosoft/Mangan)
- * [Report a Bug](https://github.com/Maslosoft/Mangan/issues)
- * [MongoDB Documentation](http://www.mongodb.org/display/DOCS/Home)
- * [PHP MongoDB Driver docs](http://www.php.net/manual/en/book.mongo.php)
- * [Standard Yii ActiveRecord Documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
+ * [Project page on GitHub](https://github.com/Maslosoft/Mangan)
+ * [Report a bug](https://github.com/Maslosoft/Mangan/issues)
+ * [MongoDB documentation](https://www.mongodb.com/docs/manual/)
+ * [MongoDB PHP library](https://www.mongodb.com/docs/php-library/current/)
+ * [MongoDB PHP's low driver docs](https://www.php.net/manual/en/set.mongodb.php)
+ * [Standard Yii ActiveRecord documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
  * [Addendum Annotations](https://maslosoft.com/addendum/)
 
