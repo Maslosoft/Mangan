@@ -2,32 +2,33 @@
 
 namespace Maslosoft\Mangan\File\Wrappers;
 
+use Maslosoft\Mangan\File\Wrappers\Traits\Data;
 use Maslosoft\Mangan\Interfaces\File\WrapperInterface;
 
 class StringWrapper extends Base implements WrapperInterface
 {
+	use Data;
+
 	public function __construct(private readonly string $value, private readonly array $data)
 	{
 
 	}
 	public function getStream()
 	{
-		// TODO: Implement getStream() method.
+		$stream = fopen('php://memory', 'rb+');
+		fwrite($stream, $this->value);
+		rewind($stream);
+		return $stream;
 	}
 
 	public function getBytes(): string
 	{
-		// TODO: Implement getBytes() method.
-	}
-
-	public function getMetadata()
-	{
-		// TODO: Implement getMetadata() method.
+		return $this->value;
 	}
 
 	public function getLength(): int
 	{
-		// TODO: Implement getLength() method.
+		return strlen($this->value);
 	}
 
 }

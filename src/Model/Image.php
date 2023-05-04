@@ -18,6 +18,7 @@ use Maslosoft\Mangan\Events\ImageEvent;
 use Maslosoft\Mangan\Exceptions\FileNotFoundException;
 use Maslosoft\Mangan\File\Sender\Sender;
 use Maslosoft\Mangan\File\Sender\Streamer;
+use Maslosoft\Mangan\File\Wrappers\StringWrapper;
 use Maslosoft\Mangan\Helpers\ImageThumb;
 use Maslosoft\Mangan\Interfaces\File\WrapperInterface;
 
@@ -47,21 +48,26 @@ class Image extends File
 	/**
 	 * Get resized image
 	 * @param ImageParams|null $params
-	 * @return ?WrapperInterface
+	 * @return WrapperInterface
 	 */
-	public function get(ImageParams $params = null): ?WrapperInterface
+	public function get(ImageParams $params = null): WrapperInterface
 	{
 		// Get original image or file if it is not image
 		if ($params === null || !$this->isImage($this->filename))
 		{
-			return $this->_get();
+			$wrapper = $this->_get();
+			if($wrapper === null)
+			{
+				throw new FileNotFoundException('File not found');
+			}
+			return $wrapper;
 		}
 
 		// Get resized image
 		$params->isTemp = true;
 		$result = $this->_get($params->toArray());
 
-		// Resize and store if not found
+		// Resize and store if thumb not found
 		if ($result === null)
 		{
 			$result = $this->_get();
@@ -100,11 +106,9 @@ class Image extends File
 
 			Event::trigger($this, self::EventAfterResize, $ie);
 
-			$this->_set($fileName, $originalFilename, $params->toArray());
+			$resultParams = $this->_set($fileName, $originalFilename, $params->toArray());
 			unlink($fileName);
-			// TODO: Reuse already available image, ie do not reload from DB
-			// using $image->getImageAsString(); and (newly developed) StringWrapper
-			return $this->_get($params->toArray());
+			return new StringWrapper($image->getImageAsString(), $resultParams);
 		}
 		return $result;
 	}
@@ -118,7 +122,7 @@ class Image extends File
 		return in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'gif', 'png']);
 	}
 
-	protected function _set($tempName, $fileName, $params = []): void
+	protected function _set($tempName, $fileName, $params = []): array
 	{
 		if ($this->isImage($fileName))
 		{
@@ -127,7 +131,7 @@ class Image extends File
 			$this->width = $dimensions->width;
 			$this->height = $dimensions->height;
 		}
-		parent::_set($tempName, $fileName, $params);
+		return parent::_set($tempName, $fileName, $params);
 	}
 
 	/**

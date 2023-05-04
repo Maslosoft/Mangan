@@ -4,6 +4,7 @@ namespace GridFS;
 
 use Codeception\Test\Unit;
 use Maslosoft\Mangan\EntityManager;
+use Maslosoft\Mangan\File\Wrappers\StringWrapper;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Helpers\ImageThumb;
 use Maslosoft\Mangan\Model\Image;
@@ -71,4 +72,30 @@ class ImageTest extends Unit
 		$this->assertSame($params->height, $dimensions->height);
 	}
 
+	public function testIfWillUseStringWrapperForResizedImage(): void
+	{
+		// Temp file location
+		$fileName = __DIR__ . '/logo-1024.png';
+
+		$model = new ModelWithEmbeddedFile();
+
+		$model->file = new Image();
+
+		$model->file->set($fileName);
+
+		$em = new EntityManager($model);
+		$em->save();
+
+		$finder = new Finder($model);
+
+		$found = $finder->findByPk($model->_id);
+
+		$params = new ImageParams();
+		$params->width = 100;
+		$params->height = 100;
+
+		$wrapper = $found->file->get($params);
+
+		$this->assertInstanceOf(StringWrapper::class, $wrapper);
+	}
 }

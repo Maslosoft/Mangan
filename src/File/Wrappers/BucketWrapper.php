@@ -24,11 +24,6 @@ class BucketWrapper extends Base implements WrapperInterface
 		return stream_get_contents($stream);
 	}
 
-	public function getMetadata(): array
-	{
-		return $this->data;
-	}
-
 	public function getLength(): int
 	{
 		return $this->data['length'];

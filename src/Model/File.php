@@ -18,6 +18,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\EmbeddedDocument;
 use Maslosoft\Mangan\EntityManager;
 use Maslosoft\Mangan\Events\Event;
+use Maslosoft\Mangan\Exceptions\FileNotFoundException;
 use Maslosoft\Mangan\File\Sender\Sender;
 use Maslosoft\Mangan\File\Sender\Streamer;
 use Maslosoft\Mangan\File\Wrappers\BucketWrapper;
@@ -110,11 +111,16 @@ class File extends EmbeddedDocument
 
 	/**
 	 * Get file from mongo grid
-	 * @return ?WrapperInterface
+	 * @return WrapperInterface
 	 */
-	public function get(): ?WrapperInterface
+	public function get(): WrapperInterface
 	{
-		return $this->_get();
+		$file = $this->_get();
+		if($file === null)
+		{
+			throw new FileNotFoundException('File not found');
+		}
+		return $file;
 	}
 
 	/**
@@ -180,7 +186,7 @@ class File extends EmbeddedDocument
 	 * @param string  $fileName
 	 * @param mixed[] $params
 	 */
-	protected function _set($tempName, $fileName, $params = []): void
+	protected function _set($tempName, $fileName, $params = []): array
 	{
 		$info = new finfo(FILEINFO_MIME);
 		$mime = $info->file($tempName);
@@ -235,6 +241,7 @@ class File extends EmbeddedDocument
 		$target = $params['isTemp'] ? self::TmpPrefix : self::DefaultPrefix;
 		// In main storage
 		$id = $params['_id'];
+		// Unset ID as it cannot be changed in DB after inserting
 		unset($params['_id']);
 		$options = [
 			'_id' => $id,
@@ -245,6 +252,8 @@ class File extends EmbeddedDocument
 		// This is to keep backwards compatible structure
 		$collection = new Collection($this->mangan->getManager(), $this->mangan->dbName, "$target.files");
 		$collection->updateOne(['_id' => $id], ['$set' => $params]);
+		$result = $collection->findOne(['_id' => $id]);
+		return (array)$result;
 	}
 
 	/**
