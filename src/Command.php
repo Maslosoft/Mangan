@@ -62,7 +62,7 @@ class Command
 		$this->collection = CollectionNamer::nameCollection($model);
 	}
 
-	public function call($command, $arguments = [])
+	public function call($command, $arguments = [], $multiple = false)
 	{
 		$arg = $this->model ? CollectionNamer::nameCollection($this->model) : true;
 		$cmd = [$command => $arg];
@@ -72,17 +72,22 @@ class Command
 		}
 		$results = $this->mn->getDbInstance()->command($cmd);
 
-		foreach($results as $row)
+		$result = null;
+		if(is_array($results))
 		{
-			$result = $row;
+			foreach ($results as $row)
+			{
+				$result = $row;
+				break;
+			}
 		}
 
-		if (array_key_exists('errmsg', $result) && array_key_exists('ok', $result) && $result['ok'] == 0)
+		if (is_array($result) && array_key_exists('errmsg', $result) && array_key_exists('ok', $result) && $result['ok'] == 0)
 		{
 			if (array_key_exists('bad cmd', $result))
 			{
 				$badCmd = key($result['bad cmd']);
-				if ($badCmd == $command)
+				if ($badCmd === $command)
 				{
 					throw new CommandNotFoundException(sprintf('Command `%s` not found', $command));
 				}
@@ -93,7 +98,11 @@ class Command
 			}
 			throw new CommandException(sprintf('Could not execute command `%s`, mongo returned: "%s"', $command, $result['errmsg']));
 		}
-		return $result;
+		if($multiple)
+		{
+			return $results;
+		}
+		return first($results);
 	}
 
 	public function __call($name, $arguments)
@@ -189,4 +198,19 @@ class Command
 		return first($this->mn->getDbInstance()->command($cmd));
 	}
 
+	public function listCollections()
+	{
+		return $this->call('listCollections', [], true);
+	}
+
+	public function listCollectionNames(): array
+	{
+		$cursor = $this->listCollections();
+		$result = [];
+		foreach($cursor as $collData)
+		{
+			$result[] = $collData['name'];
+		}
+		return $result;
+	}
 }
