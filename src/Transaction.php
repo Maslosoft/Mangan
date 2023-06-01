@@ -83,12 +83,26 @@ class Transaction
 			throw new UnexpectedValueException('The parameter `$model` must be an array or model instance or model class name');
 		}
 		$connectionIds = [];
+		$collectionSets = [];
 		foreach ($models as $m)
 		{
 			$mangan = Mangan::fromModel($m);
 			$connectionIds[$mangan->connectionId] = true;
-			$cmd = new Command($m);
-			$cmd->create(CollectionNamer::nameCollection($m));
+
+			// Create collection only if not exists or exception will be thrown
+			(new Finder($m))->exists();
+			if(!array_key_exists($mangan->connectionId, $collectionSets))
+			{
+				$cmd = new Command($m);
+				$collections = array_flip($cmd->listCollectionNames());
+				$collectionSets[$mangan->connectionId] = $collections;
+			}
+			$collectionName = CollectionNamer::nameCollection($m);
+			if(!array_key_exists($collectionName, $collectionSets[$mangan->connectionId]))
+			{
+				$cmd = new Command($m);
+				$cmd->create($collectionName);
+			}
 		}
 		assert($mangan instanceof Mangan);
 		if (count($connectionIds) > 1)

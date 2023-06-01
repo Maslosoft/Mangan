@@ -44,6 +44,50 @@ class TransactionTest extends Unit
 		$this->assertInstanceOf(ModelTransactional::class, $found2);
 	}
 
+	public function testCommittingTwiceToEnsureThatAttemptToCreateExistingCollectionIsNotMade(): void
+	{
+		// Just to have 2 collections
+		$model = new ModelTransactional2();
+		$model->title = 'blah';
+		$model->save();
+
+		$model = new ModelTransactional();
+		$finder = new Finder($model);
+		$tx = new Transaction($model);
+
+		$model->_id = new MongoId;
+		$model->title = 'blah';
+		$model->save();
+
+		$found = $finder->findByPk($model->_id);
+
+		$this->assertInstanceOf(ModelTransactional::class, $found);
+
+		$tx->commit();
+
+		$found2 = $finder->findByPk($model->_id);
+
+		$this->assertInstanceOf(ModelTransactional::class, $found2);
+
+		$model = new ModelTransactional();
+		$finder = new Finder($model);
+		$tx = new Transaction($model);
+
+		$model->_id = new MongoId;
+		$model->title = 'blah';
+		$model->save();
+
+		$found = $finder->findByPk($model->_id);
+
+		$this->assertInstanceOf(ModelTransactional::class, $found);
+
+		$tx->commit();
+
+		$found2 = $finder->findByPk($model->_id);
+
+		$this->assertInstanceOf(ModelTransactional::class, $found2);
+	}
+
 	public function testRollback(): void
 	{
 		$model = new ModelTransactional();
