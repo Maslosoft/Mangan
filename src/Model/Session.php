@@ -14,8 +14,9 @@
 namespace Maslosoft\Mangan\Model;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use MongoDB\BSON\UTCDateTime as MongoDate;
+use Maslosoft\Mangan\Sanitizers\MongoStringId;
 use MongoDB\BSON\ObjectId as MongoId;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 
 /**
  * Session model. This can be used to display session data.
@@ -43,7 +44,7 @@ class Session implements AnnotatedInterface
 	/**
 	 * Activity datetime
 	 * @Label('Last activity')
-	 * @Sanitizer('MongoDate')
+	 * @Sanitizer(MongoDate)
 	 * @Readonly
 	 * @var MongoDate
 	 */
@@ -51,7 +52,8 @@ class Session implements AnnotatedInterface
 
 	/**
 	 * @Readonly
-	 * @Sanitizer('MongoStringId')
+	 * @Sanitizer(MongoStringId)
+	 * @see MongoStringId
 	 * @var MongoId
 	 */
 	public $userId = null;
