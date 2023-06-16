@@ -57,13 +57,13 @@ class CommandProxy extends Command
 		return $this->available->$command;
 	}
 
-	public function call($command, $arguments = []): array
+	public function call($command, $arguments = [], $multiple = false)
 	{
 		if ($this->isAvailable($command))
 		{
 			try
 			{
-				return parent::call($command, $arguments);
+				return parent::call($command, $arguments, $multiple);
 			}
 			catch (CommandNotFoundException $e)
 			{
