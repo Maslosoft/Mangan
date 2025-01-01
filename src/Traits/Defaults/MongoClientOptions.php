@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Traits\Defaults;
 
 use Maslosoft\Mangan\Options\AuthMechanism;
-use MongoDb\Client;
 use MongoDB\Driver\ReadPreference;
 use ReflectionClass;
 use ReflectionProperty;
@@ -108,17 +107,17 @@ trait MongoClientOptions
 	 *
 	 * Allowed values are:
 	 *
-	 * * ReadPreference::RP_PRIMARY
-	 * * ReadPreference::RP_PRIMARY_PREFERRED
-	 * * ReadPreference::RP_SECONDARY
-	 * * ReadPreference::RP_SECONDARY_PREFERRED
-	 * * ReadPreference::RP_NEAREST.
+	 * * ReadPreference::PRIMARY
+	 * * ReadPreference::PRIMARY_PREFERRED
+	 * * ReadPreference::SECONDARY
+	 * * ReadPreference::SECONDARY_PREFERRED
+	 * * ReadPreference::NEAREST
 	 *
 	 * See the documentation on read preferences for more information.
 	 * @see ReadPreference
 	 * @var int
 	 */
-	public $readPreference = ReadPreference::RP_PRIMARY;
+	public $readPreference = ReadPreference::PRIMARY;
 
 	/**
 	 * Specifies the read preference tags as an array of strings. Tags can be used in combination with the readPreference option to further control which secondaries data might be read from.
