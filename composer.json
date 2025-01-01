@@ -80,8 +80,8 @@
 	},
 	"require-dev": {
 		"ext-curl": "*",
-		"codeception/codeception": "^5",
-		"codeception/specify": "^2",
+		"codeception/codeception": "@dev",
+		"codeception/specify": "^2|^3",
 		"maslosoft/zamm": "^1 | ^2",
 		"maslosoft/miniview": "^1 | ^2",
 		"maslosoft/mangan-examples": "^1 | ^2",
