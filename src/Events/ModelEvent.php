@@ -91,7 +91,7 @@ class ModelEvent
 	 * @param AnnotatedInterface $sender
 	 * @param mixed[] $params
 	 */
-	public function __construct(AnnotatedInterface $sender = null, $params = null)
+	public function __construct(?AnnotatedInterface $sender = null, $params = null)
 	{
 		$this->sender = $sender;
 		$this->params = $params;

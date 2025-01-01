@@ -182,7 +182,7 @@ trait FinderTrait
 	 * @return bool
 	 * @Ignored
 	 */
-	public function exists(CriteriaInterface $criteria = null)
+	public function exists(?CriteriaInterface $criteria = null)
 	{
 		return $this->_getFinder()->exists($criteria);
 	}

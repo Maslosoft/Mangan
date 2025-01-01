@@ -148,7 +148,7 @@ class IndexManager
 		return array_sum($results) === count($results);
 	}
 
-	public function getStoragePath(AnnotatedInterface $model = null, $className = null): string
+	public function getStoragePath(?AnnotatedInterface $model = null, $className = null): string
 	{
 		if(empty($className))
 		{

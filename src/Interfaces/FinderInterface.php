@@ -173,10 +173,10 @@ interface FinderInterface
 	/**
 	 * Checks whether there is document satisfying the specified condition.
 	 *
-	 * @param CriteriaInterface $criteria
+	 * @param CriteriaInterface|null $criteria
 	 * @return bool
 	 */
-	public function exists(CriteriaInterface $criteria = null);
+	public function exists(?CriteriaInterface $criteria = null);
 
 	/**
 	 * Whenever to use cursor

@@ -16,7 +16,6 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Abstracts\AbstractFinder;
 use Maslosoft\Mangan\Adapters\Finder\MongoAdapter;
-use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\FinderEvents;
 use Maslosoft\Mangan\Helpers\PkManager;
 use Maslosoft\Mangan\Interfaces\Adapters\FinderCursorInterface;
@@ -26,9 +25,9 @@ use Maslosoft\Mangan\Interfaces\FinderInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Traits\Finder\CreateModel;
 use Maslosoft\Mangan\Traits\Finder\FinderHelpers;
-use Maslosoft\Mangan\Transformers\RawArray;
-use UnexpectedValueException;
 use MongoDB\Driver\Cursor;
+use UnexpectedValueException;
+
 /**
  * Basic Finder implementation
  *
@@ -105,7 +104,7 @@ class Finder extends AbstractFinder
 		return [];
 	}
 
-	public function exists(CriteriaInterface $criteria = null)
+	public function exists(?CriteriaInterface $criteria = null)
 	{
 		if ($this->getFinderEvents()->beforeExists($this))
 		{
@@ -136,12 +135,12 @@ class Finder extends AbstractFinder
 	 * This will create customized finder if defined in model with Finder annotation.
 	 * If no custom finder is defined this will return default Finder.
 	 *
-	 * @param AnnotatedInterface     $model
-	 * @param EntityManagerInterface $em
-	 * @param Mangan                 $mangan
+	 * @param AnnotatedInterface $model
+	 * @param null               $em
+	 * @param Mangan|null        $mangan
 	 * @return FinderInterface
 	 */
-	public static function create(AnnotatedInterface $model, $em = null, Mangan $mangan = null)
+	public static function create(AnnotatedInterface $model, $em = null, ?Mangan $mangan = null)
 	{
 		$finderClass = ManganMeta::create($model)->type()->finder ?: static::class;
 		return new $finderClass($model, $em, $mangan);

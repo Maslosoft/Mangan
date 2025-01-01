@@ -31,10 +31,10 @@ trait SelectableTrait
 	 * List of fields to get from DB
 	 * Multiple calls to this method will merge all given fields
 	 *
-	 * @param array $fields list of fields to select
+	 * @param array|null $fields list of fields to select
 	 * @return CriteriaInterface
 	 */
-	public function select(array $fields = null)
+	public function select(?array $fields = null)
 	{
 		if ($fields !== null)
 		{

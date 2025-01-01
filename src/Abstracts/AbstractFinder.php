@@ -320,7 +320,7 @@ abstract class AbstractFinder implements FinderInterface, ModelAwareInterface
 	 * @param CriteriaInterface|null $criteria
 	 * @return bool
 	 */
-	public function exists(CriteriaInterface $criteria = null)
+	public function exists(?CriteriaInterface $criteria = null)
 	{
 		if ($this->getFinderEvents()->beforeExists($this))
 		{

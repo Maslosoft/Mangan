@@ -140,7 +140,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param Mangan|null        $mangan
 	 * @return EntityManagerInterface
 	 */
-	public static function create($model, Mangan $mangan = null)
+	public static function create($model, ?Mangan $mangan = null)
 	{
 		$emClass = ManganMeta::create($model)->type()->entityManager ?: static::class;
 		return new $emClass($model, $mangan);

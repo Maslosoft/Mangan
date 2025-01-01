@@ -28,5 +28,5 @@ interface SortInterface
 	const SortAsc = 1;
 	const SortDesc = -1;
 
-	public function setModel(AnnotatedInterface $model = null);
+	public function setModel(?AnnotatedInterface $model = null);
 }

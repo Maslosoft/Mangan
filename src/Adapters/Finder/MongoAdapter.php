@@ -37,7 +37,7 @@ class MongoAdapter implements FinderAdapterInterface
 	 */
 	private EntityManagerInterface $em;
 
-	public function __construct(AnnotatedInterface $model, Mangan $mangan, EntityManagerInterface $em = null)
+	public function __construct(AnnotatedInterface $model, Mangan $mangan, ?EntityManagerInterface $em = null)
 	{
 		$this->em = $em ?: EntityManager::create($model, $mangan);
 	}

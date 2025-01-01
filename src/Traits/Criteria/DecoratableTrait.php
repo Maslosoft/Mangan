@@ -66,11 +66,11 @@ trait DecoratableTrait
 
 	/**
 	 * Decorate and sanitize criteria with provided model.
-	 * @param AnnotatedInterface $model Model to use for decorators and sanitizer when creating conditions. If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
-	 * @param ConditionDecoratorInterface $decorator
+	 * @param AnnotatedInterface               $model Model to use for decorators and sanitizer when creating conditions. If null no decorators will be used. If model is provided it's sanitizers and decorators will be used.
+	 * @param ConditionDecoratorInterface|null $decorator
 	 * @return $this
 	 */
-	public function decorateWith($model, ConditionDecoratorInterface $decorator = null)
+	public function decorateWith($model, ?ConditionDecoratorInterface $decorator = null)
 	{
 		if (null !== $decorator)
 		{

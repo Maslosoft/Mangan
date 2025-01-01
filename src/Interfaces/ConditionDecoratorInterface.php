@@ -22,7 +22,7 @@ use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 interface ConditionDecoratorInterface
 {
 
-	public function __construct(AnnotatedInterface $model = null);
+	public function __construct(?AnnotatedInterface $model = null);
 
 	public function decorate($field, $value = null);
 }

@@ -237,7 +237,7 @@ class Criteria implements CriteriaInterface,
 	 * @param AnnotatedInterface|null $model Model to use for criteria decoration
 	 * @throws Exception
 	 */
-	public function __construct($criteria = null, AnnotatedInterface $model = null)
+	public function __construct($criteria = null, ?AnnotatedInterface $model = null)
 	{
 		if ($model !== null)
 		{

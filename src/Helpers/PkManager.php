@@ -37,7 +37,7 @@ class PkManager
 	 * @param CriteriaInterface|null $criteria
 	 * @return Criteria|CriteriaInterface|null
 	 */
-	public static function prepareAll($model, $pkValues, CriteriaInterface $criteria = null)
+	public static function prepareAll($model, $pkValues, ?CriteriaInterface $criteria = null)
 	{
 		if (null === $criteria)
 		{

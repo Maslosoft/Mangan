@@ -46,7 +46,7 @@ class Command
 	 */
 	private $collection;
 
-	public function __construct(AnnotatedInterface $model = null, Mangan $mangan = null)
+	public function __construct(?AnnotatedInterface $model = null, ?Mangan $mangan = null)
 	{
 		$this->model = $model;
 		if ($mangan !== null)

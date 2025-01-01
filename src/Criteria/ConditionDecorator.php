@@ -15,7 +15,6 @@ namespace Maslosoft\Mangan\Criteria;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Interfaces\ConditionDecoratorInterface;
-use Maslosoft\Mangan\Interfaces\Decorators\ConditionDecoratorTypeAwareInterface;
 use Maslosoft\Mangan\Interfaces\Decorators\ConditionDecoratorTypeInterface;
 use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -45,7 +44,7 @@ class ConditionDecorator implements ConditionDecoratorInterface, ConditionDecora
 
 	private $decoratorType = CriteriaArray::class;
 
-	public function __construct(AnnotatedInterface $model = null)
+	public function __construct(?AnnotatedInterface $model = null)
 	{
 		if (!$model || !$model instanceof AnnotatedInterface)
 		{
