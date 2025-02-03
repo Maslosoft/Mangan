@@ -1,6 +1,6 @@
 {
     "name": "maslosoft/mangan",
-    "version": "7.0.4",
+    "version": "7.0.5",
     "description": "MongoDB Object Document Mapper (ODM)",
     "homepage": "https://maslosoft.com/mangan/",
     "license": [
