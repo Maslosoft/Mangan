@@ -70,22 +70,22 @@
         "ext-gd": "*",
         "ext-mongodb": "*",
         "mongodb/mongodb": "^1",
-        "maslosoft/addendum": "^7",
-        "maslosoft/cli-shared": "^1 | ^2",
-        "maslosoft/embedi": "^2",
-        "maslosoft/gazebo": "^2",
-        "maslosoft/signals": "^4",
+        "maslosoft/addendum": "^7|^8",
+        "maslosoft/cli-shared": "^1|^2|^3",
+        "maslosoft/embedi": "^2|^3",
+        "maslosoft/gazebo": "^2|^3",
+        "maslosoft/signals": "^4|^5",
         "masterexploder/phpthumb": "^2",
-        "psr/log": "^1|^2|3",
-        "symfony/yaml": ">=2.7 <6.0"
+        "psr/log": "^1|^2|^3",
+        "symfony/yaml": ">=2.7"
     },
     "require-dev": {
         "ext-curl": "*",
         "codeception/codeception": "@dev",
         "codeception/specify": "^2|^3",
-        "maslosoft/zamm": "^1 | ^2",
-        "maslosoft/miniview": "^1 | ^2",
-        "maslosoft/mangan-examples": "^1 | ^2",
+        "maslosoft/zamm": "^1|^2|^3",
+        "maslosoft/miniview": "^1|^2|^3",
+        "maslosoft/mangan-examples": "^1|^2|^3",
         "codeception/module-asserts": "^3"
     },
     "suggest": {
