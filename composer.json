@@ -69,7 +69,7 @@
         "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-mongodb": "*",
-        "mongodb/mongodb": "^1",
+        "mongodb/mongodb": "^1 | ^2",
         "maslosoft/addendum": "^7|^8",
         "maslosoft/cli-shared": "^1|^2|^3",
         "maslosoft/embedi": "^2|^3",
