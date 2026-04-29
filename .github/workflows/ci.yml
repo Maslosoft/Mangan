@@ -25,23 +25,41 @@ jobs:
           - '8.4'
           - '8.5'
 
-    services:
-      mongodb:
-        image: mongo:7
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok' || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-
     env:
-      MONGODB_URI: mongodb://127.0.0.1:27017
+      MONGODB_URI: mongodb://127.0.0.1:27017/?replicaSet=rs0
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Start MongoDB replica set
+        run: |
+          docker run -d \
+            --name mongodb \
+            -p 27017:27017 \
+            mongo:7 \
+            --replSet rs0 \
+            --bind_ip_all
+
+          echo "Waiting for MongoDB to accept connections..."
+          until docker exec mongodb mongosh --quiet --eval "db.adminCommand('ping').ok" | grep 1; do
+            sleep 1
+          done
+
+          echo "Initiating replica set..."
+          docker exec mongodb mongosh --quiet --eval '
+            rs.initiate({
+              _id: "rs0",
+              members: [
+                { _id: 0, host: "127.0.0.1:27017" }
+              ]
+            })
+          '
+
+          echo "Waiting for MongoDB replica set primary..."
+          until docker exec mongodb mongosh --quiet --eval "db.hello().isWritablePrimary" | grep true; do
+            sleep 1
+          done
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
