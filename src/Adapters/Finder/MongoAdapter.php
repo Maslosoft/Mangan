@@ -37,7 +37,7 @@ class MongoAdapter implements FinderAdapterInterface
 	 */
 	private EntityManagerInterface $em;
 
-	public function __construct(AnnotatedInterface $model, Mangan $mangan, ?EntityManagerInterface $em = null)
+	public function __construct(AnnotatedInterface $model, private Mangan $mangan, ?EntityManagerInterface $em = null)
 	{
 		$this->em = $em ?: EntityManager::create($model, $mangan);
 	}
@@ -45,18 +45,18 @@ class MongoAdapter implements FinderAdapterInterface
 	public function count(CriteriaInterface $criteria): int
 	{
 		$options = [];
-		if (Transaction::isRunning())
+		if (Transaction::isRunning($this->mangan))
 		{
-			$options['session'] = Transaction::getRunningSession();
+			$options['session'] = Transaction::getRunningSession($this->mangan);
 		}
-		return $this->em->getCollection()->count($criteria->getConditions(), $options);
+		return $this->em->getCollection()->countDocuments($criteria->getConditions(), $options);
 	}
 
 	public function findMany(CriteriaInterface $criteria, $fields = [], $options = []): Cursor
 	{
-		if (Transaction::isRunning())
+		if (Transaction::isRunning($this->mangan))
 		{
-			$options['session'] = Transaction::getRunningSession();
+			$options['session'] = Transaction::getRunningSession($this->mangan);
 		}
 		$cursor = $this->em->getCollection()->find($criteria->getConditions(), $options);
 		$cursor->setTypeMap(Mangan::TypeMap);
@@ -75,9 +75,9 @@ class MongoAdapter implements FinderAdapterInterface
 			// FIXME: Check if $fields format is correct
 			$options['projection'] = $fields;
 		}
-		if (Transaction::isRunning())
+		if (Transaction::isRunning($this->mangan))
 		{
-			$options['session'] = Transaction::getRunningSession();
+			$options['session'] = Transaction::getRunningSession($this->mangan);
 		}
 		// Use find instead of findOne here so sort can be applied
 		$cursor = $this->em->getCollection()->find($criteria->getConditions(), $options);

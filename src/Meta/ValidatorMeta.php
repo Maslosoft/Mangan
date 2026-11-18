@@ -14,10 +14,11 @@
 namespace Maslosoft\Mangan\Meta;
 
 /**
- * ValidatorMeta
+ * Validator configuration also contains arbitrary options declared by custom validators.
  *
  * @author Piotr Maselkowski <pmaselkowski at gmail.com>
  */
+#[\AllowDynamicProperties]
 class ValidatorMeta extends BaseMeta
 {
 

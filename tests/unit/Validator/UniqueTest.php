@@ -2,7 +2,6 @@
 
 namespace Validator;
 
-use Codeception\Specify;
 use Codeception\Test\Unit;
 use Maslosoft\Mangan\Validators\BuiltIn\UniqueValidator;
 use Maslosoft\ManganTest\Models\Debug\ModelWithUniqueValidatorCriteria;
@@ -13,7 +12,6 @@ use UnitTester;
 class UniqueTest extends Unit
 {
 
-	use Specify;
 
 	/**
 	 * @var UnitTester

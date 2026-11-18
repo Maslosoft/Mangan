@@ -44,7 +44,7 @@ class RawFinder extends Finder
 	 * @param Mangan $mangan
 	 * @return FinderInterface
 	 */
-	public static function create(AnnotatedInterface $model, $em = null, Mangan $mangan = null)
+	public static function create(AnnotatedInterface $model, $em = null, ?Mangan $mangan = null)
 	{
 		return new static($model, $em, $mangan);
 	}

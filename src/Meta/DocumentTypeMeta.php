@@ -141,7 +141,7 @@ class DocumentTypeMeta extends MetaType
 	private $_values = [];
 	private $_defaults = [];
 
-	public function __construct(ReflectionClass $info = null)
+	public function __construct(?ReflectionClass $info = null)
 	{
 		// Client Options must be unset to allow cascading int EntityOptions
 		parent::__construct($info);

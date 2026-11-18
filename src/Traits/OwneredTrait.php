@@ -82,7 +82,7 @@ trait OwneredTrait
 	 * @param AnnotatedInterface|null $owner
 	 * @Ignored
 	 */
-	public function setOwner(AnnotatedInterface $owner = null)
+	public function setOwner(?AnnotatedInterface $owner = null)
 	{
 		$this->_owner = $owner;
 	}

@@ -2,7 +2,6 @@
 
 namespace Transaction;
 
-use Codeception\Specify;
 use Codeception\Test\Unit;
 use Maslosoft\Mangan\Finder;
 use Maslosoft\Mangan\Transaction;
@@ -14,7 +13,6 @@ use UnitTester;
 class TransactionTest extends Unit
 {
 
-	use Specify;
 
 	/**
 	 * @var UnitTester
@@ -149,4 +147,39 @@ class TransactionTest extends Unit
 
 		$this->assertInstanceOf(ModelTransactional2::class, $found2);
 	}
+    public function testSessionsAreScopedToTheirConnection(): void
+    {
+        $model = new ModelTransactional();
+        $transaction = new Transaction($model);
+        try {
+            $own = \Maslosoft\Mangan\Mangan::fromModel($model);
+            $other = \Maslosoft\Mangan\Mangan::fly('second');
+            $this->assertNotNull(Transaction::getRunningSession($own));
+            $this->assertNull(Transaction::getRunningSession($other));
+            $this->assertFalse(Transaction::isRunning($other));
+            $options = new \Maslosoft\Mangan\Options\EntityOptions($model, $other);
+            $this->assertArrayNotHasKey('session', $options->getSaveOptions());
+            $options = new \Maslosoft\Mangan\Options\EntityOptions($model, $own);
+            $this->assertArrayHasKey('session', $options->getSaveOptions());
+            $this->assertArrayNotHasKey('writeConcern', $options->getSaveOptions());
+            try {
+                \Maslosoft\Mangan\Mangan::reset();
+                $this->fail('Resetting an active transaction must be rejected.');
+            } catch (\LogicException $exception) {
+                $this->assertTrue(Transaction::isRunning($own));
+            }
+        } finally {
+            $transaction->rollback();
+        }
+        $this->assertNull(Transaction::getRunningSession());
+    }
+
+    public function testClassNameModelsAreAccepted(): void
+    {
+        $transaction = new Transaction([ModelTransactional::class]);
+        $this->assertTrue(Transaction::isRunning());
+        $transaction->rollback();
+        $this->assertFalse(Transaction::isRunning());
+    }
+
 }

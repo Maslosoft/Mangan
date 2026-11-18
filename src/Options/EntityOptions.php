@@ -15,6 +15,8 @@ namespace Maslosoft\Mangan\Options;
 
 use Maslosoft\Mangan\Helpers\PropertyMaker;
 use Maslosoft\Mangan\Mangan;
+use Maslosoft\Mangan\Transaction;
+use MongoDB\Driver\WriteConcern;
 use Maslosoft\Mangan\Meta\DocumentTypeMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
 use Maslosoft\Mangan\Traits\Defaults\MongoClientOptions;
@@ -42,7 +44,7 @@ class EntityOptions
 	private $_values = [];
 	private $_defaults = [];
 
-	public function __construct($model)
+	public function __construct($model, ?Mangan $mangan = null)
 	{
 		// This is to use get/set
 		foreach ($this->_getOptionNames() as $name)
@@ -54,7 +56,7 @@ class EntityOptions
 		{
 			$this->_values[$name] = $value;
 		}
-		$this->_mangan = Mangan::fromModel($model);
+		$this->_mangan = $mangan ?? Mangan::fromModel($model);
 	}
 
 	public function __get($name)
@@ -83,17 +85,24 @@ class EntityOptions
 
 	public function getSaveOptions($extraOptions = [])
 	{
-		return $extraOptions;
-		$result = [];
-		foreach ($this->_getOptionNames() as $name)
-		{
-			$result[$name] = $this->$name;
-		}
-		foreach ($extraOptions as $name => $value)
-		{
-			$result[$name] = $value;
-		}
-		return $result;
+        $session = Transaction::getRunningSession($this->_mangan);
+        if ($session !== null) {
+            // Transaction write concern belongs to startTransaction(), not each write.
+            return array_replace(['session' => $session], $extraOptions);
+        }
+        $result = [];
+        $overrides = array_filter([
+            'w' => $this->w,
+            'wtimeout' => $this->wTimeoutMS,
+            'j' => $this->journal,
+        ], static fn($value): bool => $value !== null);
+        if ($overrides !== []) {
+            $inherited = (array)$this->_mangan->getManager()->getWriteConcern()->bsonSerialize();
+            // Restore a merged exported concern so an unspecified w remains
+            // unspecified when only journaling or the timeout is overridden.
+            $result['writeConcern'] = WriteConcern::__set_state(array_replace($inherited, $overrides));
+        }
+        return array_replace($result, $extraOptions);
 	}
 
 }

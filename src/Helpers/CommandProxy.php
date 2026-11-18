@@ -34,7 +34,7 @@ class CommandProxy extends Command
 	 */
 	private $available;
 
-	public function __construct(AnnotatedInterface $model = null)
+	public function __construct(?AnnotatedInterface $model = null)
 	{
 		parent::__construct($model);
 		if ($model === null)

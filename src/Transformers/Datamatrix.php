@@ -56,7 +56,7 @@ class Datamatrix implements TransformatorInterface
 	 * @return AnnotatedInterface
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
+	public static function toModel($data, $className = null, ?AnnotatedInterface $instance = null)
 	{
 		if(!ClassChecker::exists(Reader::class))
 		{

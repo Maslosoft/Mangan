@@ -13,7 +13,6 @@ use UnitTester;
 class ImmutableTest extends Unit
 {
 
-	use \Codeception\Specify;
 
 	/**
 	 * @var UnitTester

@@ -13,6 +13,8 @@
 
 namespace Maslosoft\Mangan\Sanitizers;
 
+use DateTimeInterface;
+use InvalidArgumentException;
 use Maslosoft\Mangan\Interfaces\Sanitizers\Property\SanitizerInterface;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\UTCDateTime as MongoDate;
@@ -49,39 +51,39 @@ class DateSanitizer implements SanitizerInterface
 	 * @param $value
 	 * @return MongoDate
 	 */
-	private function sanitize($value)
+	private function sanitize($value): UTCDateTime
 	{
-		$sec = $value;
-		$usec = 0;
 		if ($value instanceof UTCDateTime)
 		{
 			return $value;
 		}
+		if ($value instanceof DateTimeInterface)
+		{
+			return new UTCDateTime($value);
+		}
 		if (is_array($value))
 		{
-			// Old MongoDate format
+			// Canonical Extended JSON already contains milliseconds; do not round to seconds.
+			if (isset($value['$date']['$numberLong']))
+			{
+				return new UTCDateTime((int) $value['$date']['$numberLong']);
+			}
 			if (isset($value['sec']))
 			{
-				$sec = (int) $value['sec'];
+				return new UTCDateTime((int) $value['sec'] * 1000 + intdiv((int) ($value['usec'] ?? 0), 1000));
 			}
-			if (isset($value['usec']))
-			{
-				$usec = (int) $value['usec'];
-			}
-			// New date format serialized
-			if(isset($value['$date']))
-			{
-				if(isset($value['$date']['$numberLong']))
-				{
-					$sec = round($value['$date']['$numberLong'] / 1000);
-				}
-			}
+			throw new InvalidArgumentException('Expected a date with sec/usec or $date/$numberLong fields.');
 		}
-		if ((int) $value === 0)
+		// Preserve the default of using the current time for an empty scalar value.
+		if ($value === null || $value === '' || $value === false || $value === 0 || $value === '0')
 		{
-			$sec = time();
+			return new UTCDateTime();
 		}
-		return new UTCDateTime($sec * 1000);
+		if (!is_numeric($value))
+		{
+			throw new InvalidArgumentException('Expected a Unix timestamp, UTCDateTime, or DateTimeInterface.');
+		}
+		return new UTCDateTime((int) round($value * 1000));
 	}
 
 }

@@ -158,6 +158,35 @@ class IndexManagerTest extends Unit
 		$this->assertArrayHasKey('title_1', $indexes);
 	}
 
+    public function testFailedIndexCreationCanBeRetried(): void
+    {
+        $model = new ModelWithSimpleIndex();
+        $manager = IndexManager::fly();
+        $meta = \Maslosoft\Mangan\Meta\ManganMeta::create($model)->field('title')->index[0];
+        $originalOptions = $meta->options;
+        $collection = \Maslosoft\Mangan\Mangan::fromModel($model)->getDbInstance()
+            ->selectCollection(CollectionNamer::nameCollection($model));
+        $collection->insertMany([['title' => 'duplicate'], ['title' => 'duplicate']]);
+        try {
+            $oldPath = $manager->getStoragePath($model);
+            $meta->options['unique'] = true;
+            $path = $manager->getStoragePath($model);
+            $this->assertNotSame($oldPath, $path, 'Changed index definitions must have a new cache identity.');
+            try {
+                $manager->create($model);
+                $this->fail('A unique index over duplicate values must fail.');
+            } catch (\MongoDB\Driver\Exception\CommandException $exception) {
+                $this->assertFileDoesNotExist($path, 'A failed operation must not publish a success marker.');
+            }
+            $collection->deleteOne(['title' => 'duplicate']);
+            $this->assertTrue($manager->create($model), 'The same manager must retry after the data is corrected.');
+            $this->assertFileExists($path);
+        } finally {
+            $meta->options = $originalOptions;
+            $manager->reset();
+        }
+    }
+
 	private function showIndexes($model)
 	{
 		$cmd = new Command($model);

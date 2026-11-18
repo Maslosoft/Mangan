@@ -21,7 +21,14 @@ class BucketWrapper extends Base implements WrapperInterface
 	public function getBytes(): string
 	{
 		$stream = $this->bucket->openDownloadStream($this->id);
-		return stream_get_contents($stream);
+		try
+		{
+			return stream_get_contents($stream);
+		}
+		finally
+		{
+			fclose($stream);
+		}
 	}
 
 	public function getLength(): int

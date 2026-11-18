@@ -19,6 +19,7 @@ use Maslosoft\EmbeDi\EmbeDi;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\ConnectionStorage;
 use Maslosoft\Mangan\Helpers\NotFoundResolver;
+use Maslosoft\Mangan\Helpers\RuntimeState;
 use Maslosoft\Mangan\Interfaces\EventHandlersInterface;
 use Maslosoft\Mangan\Interfaces\Exception\ExceptionCodeInterface;
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
@@ -180,10 +181,10 @@ class Mangan implements LoggerAwareInterface
 	 * Default transaction options, can be configured per connection ID.
 	 * @var array
 	 */
-	public array $transactionOptions = [
-		// Default value anyway
-		'causalConsistency' => true,
-	];
+	public array $transactionOptions = [];
+
+	/** Options passed to MongoDB\Client::startSession(). */
+	public array $sessionOptions = ['causalConsistency' => true];
 
 	/**
 	 * Connection storage
@@ -216,18 +217,6 @@ class Mangan implements LoggerAwareInterface
 	private static $_version = null;
 
 	/**
-	 * Instances of mangan
-	 * @var Mangan[]
-	 */
-	private static $mn = [];
-
-	/**
-	 * Hash map of class name to id. This is to reduce overhead of Mangan::fromModel()
-	 * @var string[]
-	 */
-	private static $classToId = [];
-
-	/**
 	 * Create new mangan instance.
 	 *
 	 * **NOTE: While it's ok to use constructor to create Mangan, it is recommended to use
@@ -237,13 +226,15 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function __construct($connectionId = self::DefaultConnectionId)
 	{
-		static $initializedBc = false;
-		if (!$initializedBc)
+		$connectionId = empty($connectionId) ? self::DefaultConnectionId : (string)$connectionId;
+		$state = RuntimeState::current();
+		if (!$state->legacyResolverInitialized)
 		{
 			new NotFoundResolver(AnnotatedInterface::class, [
 				'MongoId' => MongoDB\BSON\ObjectId::class,
 				'MongoDate' => MongoDB\BSON\UTCDateTime::class,
 			]);
+			$state->legacyResolverInitialized = true;
 		}
 
 
@@ -258,24 +249,18 @@ class Mangan implements LoggerAwareInterface
 		// Apply built-in configuration, as other configurations might not exists
 		$this->di->apply($config, $this);
 
-		if (empty($connectionId))
-		{
-			$connectionId = self::DefaultConnectionId;
-		}
 		$this->connectionId = $connectionId;
 
 		// Apply any configurations loaded
 		$this->di->configure($this);
 		$this->cs = new ConnectionStorage($this, $connectionId);
-		if (empty(self::$mn[$connectionId]))
+		if (empty($state->instances[static::class][$connectionId]))
 		{
-			self::$mn[$connectionId] = $this;
+			$state->instances[static::class][$connectionId] = $this;
 		}
 
-		// Initialize event handlers once
-		// TODO Possibly is should depend on instance ID?
-		static $once = true;
-		if ($once)
+		// Class-level handlers are registered once per application context.
+		if (!$state->handlersInitialized)
 		{
 			foreach ($this->eventHandlers as $config)
 			{
@@ -283,7 +268,7 @@ class Mangan implements LoggerAwareInterface
 				assert($eh instanceof EventHandlersInterface);
 				$eh->setupHandlers();
 			}
-			$once = false;
+			$state->handlersInitialized = true;
 		}
 	}
 
@@ -375,7 +360,7 @@ class Mangan implements LoggerAwareInterface
 
 	/**
 	 * Get flyweight instance of Mangan component.
-	 * Only one instance will be created for each `$connectionId`.
+	 * One instance per concrete class and connection ID in the current Light context.
 	 *
 	 * @new
 	 * @param string $connectionId
@@ -383,15 +368,16 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public static function fly($connectionId = self::DefaultConnectionId)
 	{
+		$state = RuntimeState::current();
 		if (empty($connectionId))
 		{
 			$connectionId = self::DefaultConnectionId;
 		}
-		if (empty(self::$mn[$connectionId]))
+		if (empty($state->instances[static::class][$connectionId]))
 		{
-			self::$mn[$connectionId] = new static($connectionId);
+			$state->instances[static::class][$connectionId] = new static($connectionId);
 		}
-		return self::$mn[$connectionId];
+		return $state->instances[static::class][$connectionId];
 	}
 
 	/**
@@ -401,6 +387,7 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public static function fromModel($model)
 	{
+		$state = RuntimeState::current();
 		if (is_object($model))
 		{
 			$key = get_class($model);
@@ -409,17 +396,30 @@ class Mangan implements LoggerAwareInterface
 		{
 			$key = $model;
 		}
-		if (isset(self::$classToId[$key]))
+		if (isset($state->classToId[$key]))
 		{
-			$connectionId = self::$classToId[$key];
+			$connectionId = $state->classToId[$key];
 		}
 		else
 		{
 			$connectionId = ManganMeta::create($model)->type()->connectionId;
-			self::$classToId[$key] = $connectionId;
+			$state->classToId[$key] = $connectionId;
 		}
-		return self::fly($connectionId);
+		return static::fly($connectionId);
 	}
+
+    /**
+     * Clear Mangan-owned registries in the current Light context.
+     * Finish transactions first. Existing object references remain valid;
+     * reconfigure dependencies separately before processing another application.
+     */
+    public static function reset(): void
+    {
+        if (Transaction::isRunning()) {
+            throw new \LogicException('Finish active transactions before resetting Mangan.');
+        }
+        RuntimeState::reset();
+    }
 
 	public function init()
 	{
@@ -427,7 +427,7 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Connect to DB if connection is already connected this method return connection status.
+	 * Verify connectivity with a MongoDB ping command.
 	 *
 	 * @return bool Returns true if connected
 	 * @throws ManganException
@@ -435,11 +435,8 @@ class Mangan implements LoggerAwareInterface
 	 */
 	public function connect()
 	{
-		if (!$this->getConnection()->connected)
-		{
-			return $this->getConnection()->connect();
-		}
-		return $this->getConnection()->connected;
+		$this->getConnection()->selectDatabase('admin')->command(['ping' => 1])->toArray();
+		return true;
 	}
 
 	/**
@@ -469,7 +466,7 @@ class Mangan implements LoggerAwareInterface
 			$driverOptions = [
 				'typeMap' => self::TypeMap,
 			];
-			$this->cs->mongoClient = new Client($this->connectionString, [], $driverOptions);
+			$this->cs->mongoClient = new Client($this->connectionString, $options, $driverOptions);
 		}
 		return $this->cs->mongoClient;
 	}
@@ -490,6 +487,7 @@ class Mangan implements LoggerAwareInterface
 	public function setConnection(Client $connection): void
 	{
 		$this->cs->mongoClient = $connection;
+		$this->cs->mongoDB = null;
 	}
 
 	/**
@@ -533,14 +531,12 @@ class Mangan implements LoggerAwareInterface
 	}
 
 	/**
-	 * Closes the currently active Mongo connection.
-	 * It does nothing if the connection is already closed.
+	 * Release cached client and database handles. The driver owns pooled sockets.
 	 */
 	protected function close(): void
 	{
 		if ($this->cs->mongoClient !== null)
 		{
-			$this->cs->mongoClient->close();
 			$this->cs->mongoClient = null;
 			$this->cs->mongoDB = null;
 		}

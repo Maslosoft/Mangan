@@ -13,17 +13,15 @@ permissions:
 
 jobs:
   unit-tests:
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} / ${{ matrix.dependencies }}
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         php:
-          - '8.2'
-          - '8.3'
-          - '8.4'
           - '8.5'
+        dependencies: [locked, lowest]
 
     env:
       MONGODB_URI: mongodb://127.0.0.1:27017/?replicaSet=rs0
@@ -65,7 +63,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mongodb, gd, fileinfo
+          extensions: mongodb, gd, fileinfo, curl, mbstring, dom, xml, xmlwriter, swoole
           tools: composer:v2
           coverage: none
 
@@ -75,8 +73,19 @@ jobs:
           php -m | sort
           composer --version
 
-      - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Install locked dependencies
+        if: matrix.dependencies == 'locked'
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Install lowest supported dependencies
+        if: matrix.dependencies == 'lowest'
+        run: composer update --prefer-lowest --prefer-stable --with-all-dependencies --prefer-dist --no-interaction --no-progress
+
+      - name: Validate dependencies
+        run: |
+          composer validate --strict
+          composer check-platform-reqs
+          composer audit --locked
 
       - name: Prepare runtime
         run: |
@@ -84,4 +93,4 @@ jobs:
           rm -rf runtime/*
 
       - name: Run unit tests
-        run: vendor/bin/codecept run unit
+        run: composer check

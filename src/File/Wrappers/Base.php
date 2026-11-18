@@ -9,12 +9,25 @@ abstract class Base
 	public function write(string $filename): bool
 	{
 		$stream = $this->getStream();
-		$file = fopen($filename, 'wb');
-		while($buffer = fread($stream, 8192))
+		try
 		{
-			fwrite($file, $buffer);
+			$file = fopen($filename, 'wb');
+			if ($file === false)
+			{
+				return false;
+			}
+			try
+			{
+				return stream_copy_to_stream($stream, $file) !== false && fflush($file);
+			}
+			finally
+			{
+				fclose($file);
+			}
 		}
-
-		return fclose($stream) && fclose($file);
+		finally
+		{
+			fclose($stream);
+		}
 	}
 }

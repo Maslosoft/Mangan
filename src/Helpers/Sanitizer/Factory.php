@@ -13,8 +13,8 @@
 
 namespace Maslosoft\Mangan\Helpers\Sanitizer;
 
+use Maslosoft\Mangan\Helpers\RuntimeState;
 use Maslosoft\Addendum\Utilities\ClassChecker;
-use Maslosoft\Gazebo\PluginFactory;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
@@ -33,23 +33,23 @@ use Maslosoft\Mangan\Sanitizers\StringSanitizer;
  */
 class Factory
 {
-	private static $c = [];
+
 	public static function create(DocumentPropertyMeta $meta, DocumentTypeMeta $modelMeta, $transformatorClass)
 	{
-		$key = $modelMeta->name . $modelMeta->connectionId . $meta->name . $transformatorClass;
+		$cache = &RuntimeState::cache(self::class . '::c');
+		$key = serialize([$modelMeta->name, $modelMeta->connectionId, $meta->name, $transformatorClass]);
 
-		if(isset(self::$c[$key]))
+		if(isset($cache[$key]))
 		{
-			return self::$c[$key];
+			return $cache[$key];
 		}
 
 		$sanitizerClass = self::_resolve($meta, $modelMeta);
 		if(false === $sanitizerClass)
 		{
-			self::$c[$key] = false;
+			$cache[$key] = false;
 			return false;
 		}
-
 
 		// Remap sanitizer if needed
 		$mapConfig = [];
@@ -88,13 +88,8 @@ class Factory
 				'sanitizer' => $sanitizerConfig
 			];
 		}
-		$config = [
-			$transformatorClass => [
-				$sanitizerConfig
-			]
-		];
-		$sanitizer = PluginFactory::fly($modelMeta->connectionId)->instance($config, $transformatorClass)[0];
-		self::$c[$key] = $sanitizer;
+		$sanitizer = Mangan::fly($modelMeta->connectionId)->getDi()->apply($sanitizerConfig);
+		$cache[$key] = $sanitizer;
 		return $sanitizer;
 	}
 

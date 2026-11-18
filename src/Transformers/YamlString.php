@@ -14,7 +14,6 @@
 namespace Maslosoft\Mangan\Transformers;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
-use Maslosoft\Mangan\AspectManager;
 use Maslosoft\Mangan\Exceptions\TransformatorException;
 use Maslosoft\Mangan\Interfaces\Transformators\TransformatorInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -39,7 +38,7 @@ class YamlString implements TransformatorInterface
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [], $inline = 2, $indent = 4, $exceptionOnInvalidType = false)
 	{
-		$data = Yaml::dump(YamlArray::fromModel($model, $fields), $inline, $indent, $exceptionOnInvalidType);
+		$data = Yaml::dump(YamlArray::fromModel($model, $fields), $inline, $indent, $exceptionOnInvalidType ? Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE : 0);
 		return $data;
 	}
 
@@ -55,9 +54,9 @@ class YamlString implements TransformatorInterface
 	 * @return AnnotatedInterface
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, $exceptionOnInvalidType = false)
+	public static function toModel($data, $className = null, ?AnnotatedInterface $instance = null, $exceptionOnInvalidType = false)
 	{
-		$model = YamlArray::toModel(Yaml::parse($data, $exceptionOnInvalidType), $className, $instance);
+		$model = YamlArray::toModel(Yaml::parse($data, $exceptionOnInvalidType ? Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE : 0), $className, $instance);
 		return $model;
 	}
 

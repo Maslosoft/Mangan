@@ -14,7 +14,6 @@ use UnitTester;
 class EmbeddedI18NArraySortTest extends Unit
 {
 
-	use \Codeception\Specify;
 
 	/**
 	 * @var UnitTester

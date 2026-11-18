@@ -52,7 +52,6 @@ abstract class Transformator
 	 * @var string
 	 */
 	private $transformatorClass = TransformatorInterface::class;
-	private static $c = [];
 
 	/**
 	 * Class constructor
@@ -107,11 +106,12 @@ abstract class Transformator
 	 */
 	public function getFor($name)
 	{
-		$key = static::class . get_class($this->model) . $name . $this->transformatorClass;
+		$cache = &RuntimeState::cache(self::class . '::c');
+		$key = serialize([static::class, get_class($this->model), $this->meta->type()->connectionId, $name, $this->transformatorClass]);
 
-		if (isset(self::$c[$key]))
+		if (isset($cache[$key]))
 		{
-			return self::$c[$key];
+			return $cache[$key];
 		}
 
 		if (!array_key_exists($name, $this->transformators))
@@ -128,7 +128,7 @@ abstract class Transformator
 		{
 			$this->transformators[$name]->setName($name);
 		}
-		self::$c[$key] = $this->transformators[$name];
+		$cache[$key] = $this->transformators[$name];
 		return $this->transformators[$name];
 	}
 

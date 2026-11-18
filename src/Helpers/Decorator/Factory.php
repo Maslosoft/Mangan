@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers\Decorator;
 
+use Maslosoft\Mangan\Helpers\RuntimeState;
 use Maslosoft\Mangan\Decorators\Undecorated;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Interfaces\Decorators\Model\ModelDecoratorInterface;
@@ -31,20 +32,6 @@ class Factory
 {
 
 	/**
-	 * Decorator class names
-	 * @var bool[][][]
-	 */
-	private static $configs = [];
-
-	/**
-	 * Model decorators
-	 * @var ModelDecoratorInterface[]
-	 */
-	private static $modelDecorators = [];
-
-	private static $c = [];
-
-	/**
 	 * Create decorator
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $modelMeta
@@ -53,11 +40,12 @@ class Factory
 	 */
 	public static function createForField($transformatorClass, DocumentTypeMeta $modelMeta, DocumentPropertyMeta $meta)
 	{
-		$key = $modelMeta->name . $modelMeta->connectionId . $meta->name . $transformatorClass;
+		$cache = &RuntimeState::cache(self::class . '::c');
+		$key = serialize([$modelMeta->name, $modelMeta->connectionId, $meta->name, $transformatorClass]);
 
-		if(isset(self::$c[$key]))
+		if(isset($cache[$key]))
 		{
-			return self::$c[$key];
+			return $cache[$key];
 		}
 
 		if ($meta->decorators)
@@ -83,11 +71,11 @@ class Factory
 			if ($decorators)
 			{
 				$decorator = new CompoundDecorator($decorators);
-				self::$c[$key] = $decorator;
+				$cache[$key] = $decorator;
 				return $decorator;
 			}
 		}
-		self::$c[$key] = false;
+		$cache[$key] = false;
 		return false;
 	}
 
@@ -99,7 +87,8 @@ class Factory
 	 */
 	public static function createForModel($transformatorClass, DocumentTypeMeta $modelMeta)
 	{
-		if (!isset(self::$modelDecorators[$modelMeta->connectionId]) || !isset(self::$modelDecorators[$modelMeta->connectionId][$transformatorClass]))
+		$modelDecorators = &RuntimeState::cache(self::class . '::modelDecorators');
+		if (!isset($modelDecorators[$modelMeta->connectionId]) || !isset($modelDecorators[$modelMeta->connectionId][$transformatorClass]))
 		{
 
 			$decorators = [];
@@ -110,9 +99,9 @@ class Factory
 					$decorators[] = new $decoratorName;
 				}
 			}
-			self::$modelDecorators[$modelMeta->connectionId][$transformatorClass] = new CompoundModelDecorator($decorators);
+			$modelDecorators[$modelMeta->connectionId][$transformatorClass] = new CompoundModelDecorator($decorators);
 		}
-		return self::$modelDecorators[$modelMeta->connectionId][$transformatorClass];
+		return $modelDecorators[$modelMeta->connectionId][$transformatorClass];
 	}
 
 	/**
@@ -123,14 +112,14 @@ class Factory
 	 */
 	private static function getManganDecorators($connectionId, $transformatorClass)
 	{
-		if (!isset(self::$configs[$connectionId]))
+		$configs = &RuntimeState::cache(self::class . '::configs');
+		if (!isset($configs[$connectionId]))
 		{
-			self::$configs[$connectionId] = [];
+			$configs[$connectionId] = [];
 		}
-		if (!isset(self::$configs[$connectionId][$transformatorClass]))
+		if (!isset($configs[$connectionId][$transformatorClass]))
 		{
-			self::$configs[$connectionId] = [];
-			self::$configs[$connectionId][$transformatorClass] = [];
+			$configs[$connectionId][$transformatorClass] = [];
 			$mangan = Mangan::fly($connectionId);
 			$transformator = new $transformatorClass;
 			foreach ($mangan->decorators as $implementer => $decoratorClasses)
@@ -139,12 +128,12 @@ class Factory
 				{
 					if ($transformator instanceof $implementer)
 					{
-						self::$configs[$connectionId][$transformatorClass][$decoratorClass] = true;
+						$configs[$connectionId][$transformatorClass][$decoratorClass] = true;
 					}
 				}
 			}
 		}
-		return self::$configs[$connectionId][$transformatorClass];
+		return $configs[$connectionId][$transformatorClass];
 	}
 
 }

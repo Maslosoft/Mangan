@@ -31,8 +31,16 @@ trait AvailableCommands
 	}
 
 	/**
-	 * internal (sharding)
-	 * { applyOps : [ ] , preCondition : [ { ns : ... , q : ... , res : ... } ] }
+	 * Command to generate statistics for a collection for use in the optimizer.
+	 */
+	public function analyze()
+	{
+		return $this->call('analyze', func_get_args());
+	}
+
+	/**
+	 * internal command to apply oplog entries
+	 * { applyOps : [ ] }
 	 */
 	public function applyOps()
 	{
@@ -40,7 +48,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * internal
+	 * no help defined
 	 */
 	public function authenticate()
 	{
@@ -53,14 +61,6 @@ trait AvailableCommands
 	public function autoSplitVector()
 	{
 		return $this->call('autoSplitVector', func_get_args());
-	}
-
-	/**
-	 * no help defined
-	 */
-	public function availableQueryOptions()
-	{
-		return $this->call('availableQueryOptions', func_get_args());
 	}
 
 	/**
@@ -82,21 +82,67 @@ trait AvailableCommands
 	}
 
 	/**
-	 * { cloneCollection: <collection>, from: <host> [,query: <query_filter>] [,copyIndexes:<bool>] }
-	 * Copies a collection from one server to another. Do not use on a single server as the destination is placed at the same db.collection (namespace) as the source.
-	 * 
-	 */
-	public function cloneCollection()
-	{
-		return $this->call('cloneCollection', func_get_args());
-	}
-
-	/**
 	 * { cloneCollectionAsCapped:<fromName>, toCollection:<toName>, size:<sizeInBytes> }
 	 */
 	public function cloneCollectionAsCapped()
 	{
 		return $this->call('cloneCollectionAsCapped', func_get_args());
+	}
+
+	/**
+	 * Runs the sharded aggregation command. See http://dochub.mongodb.org/core/aggregation for more details.
+	 */
+	public function clusterAggregate()
+	{
+		return $this->call('clusterAggregate', func_get_args());
+	}
+
+	/**
+	 * no help defined
+	 */
+	public function clusterCount()
+	{
+		return $this->call('clusterCount', func_get_args());
+	}
+
+	/**
+	 * delete documents
+	 */
+	public function clusterDelete()
+	{
+		return $this->call('clusterDelete', func_get_args());
+	}
+
+	/**
+	 * query for documents
+	 */
+	public function clusterFind()
+	{
+		return $this->call('clusterFind', func_get_args());
+	}
+
+	/**
+	 * retrieve more documents for a cursor id
+	 */
+	public function clusterGetMore()
+	{
+		return $this->call('clusterGetMore', func_get_args());
+	}
+
+	/**
+	 * insert documents
+	 */
+	public function clusterInsert()
+	{
+		return $this->call('clusterInsert', func_get_args());
+	}
+
+	/**
+	 * update documents
+	 */
+	public function clusterUpdate()
+	{
+		return $this->call('clusterUpdate', func_get_args());
 	}
 
 	/**
@@ -110,8 +156,8 @@ trait AvailableCommands
 	}
 
 	/**
-	 * { collStats:"blog.posts" , scale : 1 } scale divides sizes e.g. for KB use 1024
-	 *     avgObjSize - in bytes
+	 * { collStats:"blog.posts" , scale : 1 } scale divides sizes e.g. for KB use 1024.
+	 * avgObjSize - in bytes
 	 */
 	public function collStats()
 	{
@@ -121,14 +167,21 @@ trait AvailableCommands
 	/**
 	 * compact collection
 	 * warning: this operation locks the database and is slow. you can cancel with killOp()
-	 * { compact : <collection_name>, [force:<bool>], [validate:<bool>] }
+	 * { compact : <collection_name>, [force:<bool>] }
 	 *   force - allows to run on a replica set primary
-	 *   validate - check records are noncorrupt before adding to newly compacting extents. slower but safer (defaults to true in this version)
 	 * 
 	 */
 	public function compact()
 	{
 		return $this->call('compact', func_get_args());
+	}
+
+	/**
+	 * no help defined
+	 */
+	public function compactStructuredEncryptionData()
+	{
+		return $this->call('compactStructuredEncryptionData', func_get_args());
 	}
 
 	/**
@@ -148,7 +201,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Returns connection-specific information such as logged-in users and their roles
+	 * no help defined
 	 */
 	public function connectionStatus()
 	{
@@ -188,6 +241,7 @@ trait AvailableCommands
 	 *   viewOn: <string: name of source collection or view>,
 	 *   pipeline: <array<object>: aggregation pipeline stage>,
 	 *   collation: <document: default collation for the collection or view>,
+	 *   changeStreamPreAndPostImages: <document: pre- and post-images options for change streams>,
 	 *   writeConcern: <document: write concern expression for the operation>]
 	 * }
 	 */
@@ -205,7 +259,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Adds a role to the system
+	 * no help defined
 	 */
 	public function createRole()
 	{
@@ -213,7 +267,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Adds a user to the system
+	 * no help defined
 	 */
 	public function createUser()
 	{
@@ -221,15 +275,35 @@ trait AvailableCommands
 	}
 
 	/**
-	 * determine data size for a set of data in a certain range
-	 * example: { dataSize:"blog.posts", keyPattern:{x:1}, min:{x:10}, max:{x:55} }
-	 * min and max parameters are optional. They must either both be included or both omitted
-	 * keyPattern is an optional parameter indicating an index pattern that would be usefulfor iterating over the min/max bounds. If keyPattern is omitted, it is inferred from the structure of min. 
-	 * note: This command may take a while to run
+	 * Determine data size for a set of data in a certain range.
+	 * Example: { dataSize:"blog.posts", keyPattern:{x:1}, min:{x:10}, max:{x:55} }
+	 * {min} and {max} parameters are optional. They must either both be included or both omitted.
+	 * {keyPattern} is an optional parameter indicating an index pattern that would be useful for iterating over the min/max bounds.
+	 * If keyPattern is omitted, it is inferred from the structure of min.
+	 * Note: This command may take a while to run.
 	 */
 	public function dataSize()
 	{
 		return $this->call('dataSize', func_get_args());
+	}
+
+	/**
+	 * Validate replica set consistency.
+	 * Invoke with { dbCheck: <collection name/uuid>,
+	 *               minKey: <first key, exclusive>,
+	 *               maxKey: <last key, inclusive>,
+	 *               maxCount: <try to keep a batch within maxCount number of docs>,
+	 *               maxSize: <try to keep a batch withing maxSize of docs (bytes)>,
+	 *               maxCountPerSecond: <max rate in docs/sec>
+	 *               maxDocsPerBatch: <max number of docs/batch>
+	 *               maxBytesPerBatch: <try to keep a batch within max bytes/batch>
+	 *               maxBatchTimeMillis: <max time processing a batch in milliseconds>
+	 * to check a collection.
+	 * Invoke with {dbCheck: 1} to check all collections in the database.
+	 */
+	public function dbCheck()
+	{
+		return $this->call('dbCheck', func_get_args());
 	}
 
 	/**
@@ -241,7 +315,8 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Get stats on a database. Not instantaneous. Slower for databases with large .ns files.
+	 * Get stats on a database. Not instantaneous.
+	 * Slower for databases with large .ns files.
 	 * Example: { dbStats:1, scale:1 }
 	 */
 	public function dbStats()
@@ -266,14 +341,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
-	 */
-	public function driverOIDTest()
-	{
-		return $this->call('driverOIDTest', func_get_args());
-	}
-
-	/**
 	 * drop a collection
 	 * {drop : <collectionName>}
 	 */
@@ -283,7 +350,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Drops all roles from the given database.  Before deleting the roles completely it must remove them from any users or other roles that reference them.  If any errors occur in the middle of that process it's possible to be left in a state where the roles have been removed from some user/roles but otherwise still exist.
+	 * no help defined
 	 */
 	public function dropAllRolesFromDatabase()
 	{
@@ -291,7 +358,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Drops all users for a single database.
+	 * no help defined
 	 */
 	public function dropAllUsersFromDatabase()
 	{
@@ -315,7 +382,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Drops a single role.  Before deleting the role completely it must remove it from any users or roles that reference it.  If any errors occur in the middle of that process it's possible to be left in a state where the role has been removed from some user/roles but otherwise still exists.
+	 * no help defined
 	 */
 	public function dropRole()
 	{
@@ -323,7 +390,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Drops a single user.
+	 * no help defined
 	 */
 	public function dropUser()
 	{
@@ -347,7 +414,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * return build level feature settings
+	 * no help defined
 	 */
 	public function features()
 	{
@@ -383,28 +450,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * no help defined
-	 */
-	public function geoSearch()
-	{
-		return $this->call('geoSearch', func_get_args());
-	}
-
-	/**
-	 * return error status of the last operation on this connection
-	 * options:
-	 *   { fsync:true } - fsync before returning, or wait for journal commit if running with --journal
-	 *   { j:true } - wait for journal commit if running with --journal
-	 *   { w:n } - await replication to n servers (including self) before returning
-	 *   { w:'majority' } - await replication to majority of set
-	 *   { wtimeout:m} - timeout for w in m milliseconds
-	 */
-	public function getLastError()
-	{
-		return $this->call('getLastError', func_get_args());
-	}
-
-	/**
 	 * retrieve more results from an existing cursor
 	 */
 	public function getMore()
@@ -413,15 +458,15 @@ trait AvailableCommands
 	}
 
 	/**
-	 * internal
+	 * no help defined
 	 */
-	public function getnonce()
+	public function getQueryableEncryptionCountInfo()
 	{
-		return $this->call('getnonce', func_get_args());
+		return $this->call('getQueryableEncryptionCountInfo', func_get_args());
 	}
 
 	/**
-	 * Grants privileges to a role
+	 * no help defined
 	 */
 	public function grantPrivilegesToRole()
 	{
@@ -429,7 +474,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Grants roles to another role.
+	 * no help defined
 	 */
 	public function grantRolesToRole()
 	{
@@ -437,7 +482,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Grants roles to a user.
+	 * no help defined
 	 */
 	public function grantRolesToUser()
 	{
@@ -454,7 +499,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * returns information about the daemon's host
+	 * no help defined
 	 */
 	public function hostInfo()
 	{
@@ -467,6 +512,14 @@ trait AvailableCommands
 	public function insert()
 	{
 		return $this->call('insert', func_get_args());
+	}
+
+	/**
+	 * no help defined
+	 */
+	public function invalidateUserCache()
+	{
+		return $this->call('invalidateUserCache', func_get_args());
 	}
 
 	/**
@@ -495,7 +548,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * kill a list of cursor ids
+	 * Kill a list of cursor ids
 	 */
 	public function killCursors()
 	{
@@ -551,21 +604,11 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Run a map/reduce operation on the server.
-	 * Note this is used for aggregation, not querying, in MongoDB.
-	 * http://dochub.mongodb.org/core/mapreduce
+	 * Runs the mapReduce command. See http://dochub.mongodb.org/core/mapreduce for details.
 	 */
 	public function mapReduce()
 	{
 		return $this->call('mapReduce', func_get_args());
-	}
-
-	/**
-	 * internal
-	 */
-	public function mapReduceShardedFinish()
-	{
-		return $this->call('mapreduce.shardedfinish', func_get_args());
 	}
 
 	/**
@@ -577,7 +620,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Drops one or all cached queries in a collection.
+	 * Drops one or all plan cache entries in a collection.
 	 */
 	public function planCacheClear()
 	{
@@ -601,22 +644,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Deprecated. Prefer the $planCacheStats aggregation pipeline stage.
-	 */
-	public function planCacheListPlans()
-	{
-		return $this->call('planCacheListPlans', func_get_args());
-	}
-
-	/**
-	 * Deprecated. Prefer the $planCacheStats aggregation pipeline stage.
-	 */
-	public function planCacheListQueryShapes()
-	{
-		return $this->call('planCacheListQueryShapes', func_get_args());
-	}
-
-	/**
 	 * Sets index filter for a query shape. Overrides existing filter.
 	 */
 	public function planCacheSetFilter()
@@ -633,7 +660,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * re-index a collection
+	 * re-index a collection (can only be run on a standalone mongod)
 	 */
 	public function reIndex()
 	{
@@ -651,29 +678,13 @@ trait AvailableCommands
 	/**
 	 * no help defined
 	 */
-	public function repairCursor()
-	{
-		return $this->call('repairCursor', func_get_args());
-	}
-
-	/**
-	 * reset error state
-	 */
-	public function resetError()
-	{
-		return $this->call('resetError', func_get_args());
-	}
-
-	/**
-	 * Revokes privileges from a role
-	 */
 	public function revokePrivilegesFromRole()
 	{
 		return $this->call('revokePrivilegesFromRole', func_get_args());
 	}
 
 	/**
-	 * Revokes roles from another role.
+	 * no help defined
 	 */
 	public function revokeRolesFromRole()
 	{
@@ -681,7 +692,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Revokes roles from a user.
+	 * no help defined
 	 */
 	public function revokeRolesFromUser()
 	{
@@ -689,7 +700,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Returns information about roles.
+	 * no help defined
 	 */
 	public function rolesInfo()
 	{
@@ -713,7 +724,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * returns lots of administrative server statistics
+	 * returns lots of administrative server statistics. Optionally set {..., all: 1} to retrieve all server status sections.
 	 */
 	public function serverStatus()
 	{
@@ -721,11 +732,34 @@ trait AvailableCommands
 	}
 
 	/**
-	 * stats about the shard connection pool
+	 * Resets the commitQuorum for the given index builds in a collection. Usage:
+	 * {
+	 *     setIndexCommitQuorum: <string> collection name,
+	 *     indexNames: array<string> list of index names,
+	 *     commitQuorum: <string|number|object> option to define the required quorum for
+	 *                   the index builds to commit
+	 * }
+	 * This command is useful if the commitQuorum of an active index build is no longer possible or desirable (replica set membership has changed), or potential secondary replication lag has become a greater concern
 	 */
-	public function shardConnPoolStats()
+	public function setIndexCommitQuorum()
 	{
-		return $this->call('shardConnPoolStats', func_get_args());
+		return $this->call('setIndexCommitQuorum', func_get_args());
+	}
+
+	/**
+	 * updates a global filter that determines which operations are eligible for logging/profiling
+	 */
+	public function setProfilingFilterGlobally()
+	{
+		return $this->call('setProfilingFilterGlobally', func_get_args());
+	}
+
+	/**
+	 * Set whether user write blocking is enabled
+	 */
+	public function setUserWriteBlockMode()
+	{
+		return $this->call('setUserWriteBlockMode', func_get_args());
 	}
 
 	/**
@@ -769,18 +803,6 @@ trait AvailableCommands
 	}
 
 	/**
-	 * touch collection
-	 * Page in all pages of memory containing every extent for the given collection
-	 * { touch : <collection_name>, [data : true] , [index : true] }
-	 *  at least one of data or index must be true; default is both are false
-	 * 
-	 */
-	public function touch()
-	{
-		return $this->call('touch', func_get_args());
-	}
-
-	/**
 	 * update documents
 	 */
 	public function update()
@@ -789,7 +811,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Used to update a role
+	 * no help defined
 	 */
 	public function updateRole()
 	{
@@ -797,7 +819,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Used to update a user, for example to change its password
+	 * no help defined
 	 */
 	public function updateUser()
 	{
@@ -805,7 +827,7 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Returns information about users.
+	 * no help defined
 	 */
 	public function usersInfo()
 	{
@@ -813,12 +835,26 @@ trait AvailableCommands
 	}
 
 	/**
-	 * Validate contents of a namespace by scanning its data structures for correctness.  Slow.
-	 * Add full:true option to do a more thorough check
+	 * Validate contents of a namespace by scanning its data structures for correctness.
+	 * This is a slow operation.
+	 * 	Add {full: true} option to do a more thorough check.
+	 * 	Add {background: true} to validate in the background.
+	 * 	Add {repair: true} to run repair mode.
+	 * 	Add {checkBSONConformance: true} to validate BSON documents more thoroughly.
+	 * 	Add {metadata: true} to only check collection metadata.
+	 * Cannot specify both {full: true, background: true}.
 	 */
 	public function validate()
 	{
 		return $this->call('validate', func_get_args());
+	}
+
+	/**
+	 * validateDBMetadata checks that the stored metadata of a database/collection is valid within a particular API version. If 'db' parameter is specified, only runs validation against that database, if not the validation will be run againt all dbs. Similarly if 'collection' parameter is specified, the validation is only run against that collection, if not the validation is run against all collections.
+	 */
+	public function validateDBMetadata()
+	{
+		return $this->call('validateDBMetadata', func_get_args());
 	}
 
 	/**

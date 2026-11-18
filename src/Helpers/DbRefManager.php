@@ -35,7 +35,7 @@ class DbRefManager
 	 * @param AnnotatedInterface $referenced
 	 * @return DbRef
 	 */
-	public static function extractRef(AnnotatedInterface $model, $field, AnnotatedInterface $referenced = null)
+	public static function extractRef(AnnotatedInterface $model, $field, ?AnnotatedInterface $referenced = null)
 	{
 		if (null === $referenced)
 		{

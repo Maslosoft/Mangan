@@ -14,168 +14,104 @@
 namespace Maslosoft\Mangan\Helpers;
 
 use Maslosoft\Addendum\Addendum;
-use Maslosoft\Addendum\Helpers\SoftIncluder;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Cli\Shared\Helpers\PhpExporter;
-use Maslosoft\Cli\Shared\Io;
 use Maslosoft\Mangan\Helpers\Index\IndexModel;
+use Maslosoft\Mangan\Interfaces\InternationalInterface;
 use Maslosoft\Mangan\Mangan;
-use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
 use Maslosoft\Mangan\Meta\ManganMeta;
-use Maslosoft\ManganTest\Extensions\IndexMetaCleaner;
-use MongoDB\Driver\Exception\CommandException;
-use function dirname;
+use RuntimeException;
 
 class IndexManager
 {
-	public const IndexTypeHashed = 'hashed';
-	public const IndexType2dSphere = '2dsphere';
+    public const IndexTypeHashed = 'hashed';
+    public const IndexType2dSphere = '2dsphere';
+    public const DefaultInstanceId = 'indexManager';
 
-	public const DefaultInstanceId = 'indexManager';
+    private array $haveIndex = [];
 
-	private static array $instances = [];
+    public static function fly($instanceId = self::DefaultInstanceId): static
+    {
+        return RuntimeState::current()->indexManagers[static::class][$instanceId] ??= new static();
+    }
 
-	private static array $paths = [];
+    /** Clear this manager's in-memory results; disk markers are managed separately. */
+    public function reset(): void
+    {
+        $this->haveIndex = [];
+    }
 
-	/**
-	 * NOTE: This is public because of IndexMetaCleaner testing extension
-	 *
-	 * DO NOT TOUCH!
-	 *
-	 * @see IndexMetaCleaner
-	 * @internal
-	 * @var array
-	 */
-	public static array $haveIndex = [];
+    public function create(AnnotatedInterface $model): bool
+    {
+        $path = $this->getStoragePath($model, $model::class);
+        if (array_key_exists($path, $this->haveIndex)) {
+            return $this->haveIndex[$path];
+        }
+        $fields = array_filter(ManganMeta::create($model)->fields(), static fn($field) => !empty($field->index));
+        if ($fields === []) {
+            return $this->haveIndex[$path] = false;
+        }
+        if (is_file($path)) {
+            return $this->haveIndex[$path] = true;
+        }
 
-	/**
-	 * NOTE: This is public because of IndexMetaCleaner testing extension
-	 *
-	 * DO NOT TOUCH!
-	 *
-	 * @see IndexMetaCleaner
-	 * @internal
-	 * @var bool
-	 */
-	public static bool $haveDir = false;
+        $indexes = [];
+        foreach ($fields as $field) {
+            foreach ($field->index as $meta) {
+                $index = new IndexModel($model, $meta);
+                // Errors must remain visible and retryable: never cache failed creation.
+                if (!$index->apply()) {
+                    return false;
+                }
+                $indexes[] = $index->getIndexes();
+            }
+        }
 
-	/**
-	 * Create flyweight instance of index manager
-	 * @param string $instanceId
-	 * @return static
-	 */
-	public static function fly($instanceId = self::DefaultInstanceId): static
-	{
-		if (empty(self::$instances[$instanceId]))
-		{
-			self::$instances[$instanceId] = new static();
-		}
-		return self::$instances[$instanceId];
-	}
+        $dir = dirname($path);
+        if (!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+            throw new RuntimeException('Cannot create index cache directory: ' . $dir);
+        }
+        // Multiple workers may issue the same idempotent index operation. Publish a
+        // complete marker atomically only after every index operation succeeded.
+        $temporary = tempnam($dir, '.index-');
+        if ($temporary === false) {
+            throw new RuntimeException('Cannot create index cache file in: ' . $dir);
+        }
+        try {
+            if (file_put_contents($temporary, PhpExporter::export($indexes, 'Auto generated, do not modify')) === false
+                || !rename($temporary, $path)) {
+                throw new RuntimeException('Cannot write index cache: ' . $path);
+            }
+        } finally {
+            if (is_file($temporary)) {
+                unlink($temporary);
+            }
+        }
+        return $this->haveIndex[$path] = true;
+    }
 
-	public function create(AnnotatedInterface $model): bool
-	{
-		$className = get_class($model);
-
-		// If have or don't have indexes skip further checks
-		if(array_key_exists($className, self::$haveIndex))
-		{
-			return self::$haveIndex[$className];
-		}
-
-		$fieldMetas = ManganMeta::create($model)->fields();
-
-		// Filter out fields without index
-		foreach($fieldMetas as $key => $metaProperty)
-		{
-			if(empty($metaProperty->index))
-			{
-				unset($fieldMetas[$key]);
-			}
-		}
-
-		// Does not have indexes, mark as index-less
-		if(empty($fieldMetas))
-		{
-			self::$haveIndex[$className] = false;
-			return false;
-		}
-
-		$path = $this->getStoragePath($model, $className);
-
-		$data = SoftIncluder::includeFile($path);
-
-		if(!empty($data))
-		{
-			return true;
-		}
-		$results = [];
-		$indexes = [];
-		foreach($fieldMetas as $fieldMeta)
-		{
-			if(empty($fieldMeta->index))
-			{
-				continue;
-			}
-			/* @var $fieldMeta DocumentPropertyMeta */
-
-			foreach($fieldMeta->index as $indexMeta)
-			{
-				$index = new IndexModel($model, $indexMeta);
-				try
-				{
-					$results[] = (int)$index->apply();
-				} catch (CommandException $e)
-				{
-					// TODO Log this?
-				}
-				$indexes[] = $index->getIndexes();
-			}
-		}
-		self::$haveIndex[$className] = true;
-
-		$dir = dirname($path);
-
-		if(!self::$haveDir && !Io::dirExists($dir))
-		{
-			Io::mkdir($dir);
-			self::$haveDir = Io::dirExists($dir);
-		}
-
-		file_put_contents($path, PhpExporter::export($indexes, 'Auto generated, do not modify'));
-		@chmod($path, 0666);
-
-		return array_sum($results) === count($results);
-	}
-
-	public function getStoragePath(?AnnotatedInterface $model = null, $className = null): string
-	{
-		if(empty($className))
-		{
-			$className = __CLASS__;
-		}
-		if(empty(self::$paths[$className]))
-		{
-			if($model === null)
-			{
-				$mn = Mangan::fly();
-			}
-			else
-			{
-				$mn = Mangan::fromModel($model);
-			}
-
-			$params = [
-				Addendum::fly()->runtimePath,
-				str_replace('\\', '.', static::class),
-				$mn->connectionId,
-				$mn->dbName,
-				str_replace('\\', '.', $className),
-			];
-			self::$paths[$className] = vsprintf('%s/%s/%s.%s@%s.php', $params);
-		}
-		return self::$paths[$className];
-	}
-
-
+    public function getStoragePath(?AnnotatedInterface $model = null, $className = null): string
+    {
+        $mangan = $model === null ? Mangan::fly() : Mangan::fromModel($model);
+        // Database selection and languages may change even inside one context.
+        $definitions = [];
+        if ($model !== null) {
+            foreach (ManganMeta::create($model)->fields() as $name => $field) {
+                if (!empty($field->index)) {
+                    $definitions[$name] = $field->index;
+                }
+            }
+        }
+        $identity = [
+            (string)$mangan->getConnection(),
+            $mangan->connectionId,
+            $mangan->dbName,
+            $model === null ? null : CollectionNamer::nameCollection($model),
+            $className ?? ($model === null ? self::class : $model::class),
+            $model instanceof InternationalInterface ? $model->getLanguages() : [],
+            $definitions,
+        ];
+        return sprintf('%s/%s/%s.php', rtrim(Addendum::fly()->runtimePath, '/'),
+            str_replace('\\', '.', static::class), hash('sha256', serialize($identity)));
+    }
 }

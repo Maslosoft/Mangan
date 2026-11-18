@@ -28,18 +28,27 @@ composer require maslosoft/mangan
 
 <!--/header-->
 
-### More details
+Mangan maps PHP objects to MongoDB documents using active documents or plain PHP
+models. This branch requires **PHP 8.5 or newer**, the MongoDB PHP extension 2.x,
+and the runtime extensions declared in `composer.json`.
 
-[Visit project website](https://maslosoft.com/mangan/) or [quick start guide](https://maslosoft.com/mangan/docs/)
+Read [Getting started](docs/getting-started/index.md) for a complete model and
+connection example, [Configuration](docs/configuration/index.md) for named
+connections, and [Application servers](docs/application-servers/index.md) for
+Light contexts and worker cleanup. Upgrade existing applications using the
+[PHP 8.5 migration guide](docs/upgrading/php-85/index.md), including the EmbeDi 3
+dependency and required companion source fix. That
+EmbeDi fix has not been published yet; the current migration must be developed
+with the fixed local dependency checkout.
+
+For library work, see [Development and testing](docs/development/index.md).
+The maintained [mangan skill](.agents/skills/mangan/SKILL.md) covers application usage;
+[mangan-dev](.agents/skills/mangan-dev/SKILL.md) covers development of this library.
 
 ## Resources
 
- * [Project website](https://maslosoft.com/mangan/)
- * [Project page on GitHub](https://github.com/Maslosoft/Mangan)
- * [Report a bug](https://github.com/Maslosoft/Mangan/issues)
- * [MongoDB documentation](https://www.mongodb.com/docs/manual/)
- * [MongoDB PHP library](https://www.mongodb.com/docs/php-library/current/)
- * [MongoDB PHP's low level driver docs](https://www.php.net/manual/en/set.mongodb.php)
- * [Standard Yii ActiveRecord documentation](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
- * [Addendum annotations](https://maslosoft.com/addendum/)
-
+- [Project website](https://maslosoft.com/mangan/)
+- [Project on GitHub](https://github.com/Maslosoft/Mangan)
+- [Report a bug](https://github.com/Maslosoft/Mangan/issues)
+- [MongoDB PHP library](https://www.mongodb.com/docs/php-library/current/)
+- [MongoDB PHP extension](https://www.php.net/manual/en/set.mongodb.php)

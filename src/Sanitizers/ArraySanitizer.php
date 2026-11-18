@@ -30,7 +30,7 @@ class ArraySanitizer implements SanitizerInterface
 	 */
 	public $sanitizer = null;
 
-	public function __construct(SanitizerInterface $sanitizer = null)
+	public function __construct(?SanitizerInterface $sanitizer = null)
 	{
 		$this->sanitizer = $sanitizer;
 	}

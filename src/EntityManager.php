@@ -36,6 +36,7 @@ use Maslosoft\Signals\Signal;
 use MongoDB\Collection;
 use MongoDB\DeleteResult;
 use MongoDB\InsertOneResult;
+use MongoDB\Operation\FindOneAndUpdate;
 use MongoDB\UpdateResult;
 
 /**
@@ -104,11 +105,10 @@ class EntityManager implements EntityManagerInterface
 	 * @param Mangan             $mangan
 	 * @throws ManganException
 	 */
-	public function __construct(AnnotatedInterface $model, Mangan $mangan = null)
+	public function __construct(AnnotatedInterface $model, ?Mangan $mangan = null)
 	{
 		$this->model = $model;
 		$this->sm = new ScopeManager($model);
-		$this->options = new EntityOptions($model);
 		$this->collectionName = CollectionNamer::nameCollection($model);
 		$this->meta = ManganMeta::create($model);
 		$this->validator = new Validator($model);
@@ -117,11 +117,12 @@ class EntityManager implements EntityManagerInterface
 			$mangan = Mangan::fromModel($model);
 		}
 		$this->mangan = $mangan;
+		$this->options = new EntityOptions($model, $mangan);
 		if (!$this->collectionName)
 		{
 			throw new ManganException(sprintf('Invalid collection name for model: `%s`', $this->meta->type()->name));
 		}
-		$this->_collection = new Collection($mangan->getManager(), $mangan->dbName, $this->collectionName);
+		$this->_collection = $mangan->getDbInstance()->selectCollection($this->collectionName);
 	}
 
 	/**
@@ -175,7 +176,7 @@ class EntityManager implements EntityManagerInterface
 	 * @throws ManganException on fail of insert, when safe flag is set to true
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 */
-	public function insert(AnnotatedInterface $model = null)
+	public function insert(?AnnotatedInterface $model = null)
 	{
 		$model = $model ?: $this->model;
 		if ($this->beforeSave($model, EntityManagerInterface::EventBeforeInsert))
@@ -206,7 +207,7 @@ class EntityManager implements EntityManagerInterface
 	 * @return boolean whether the update is successful
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 */
-	public function update(array $attributes = null): bool
+	public function update(?array $attributes = null): bool
 	{
 		if ($this->beforeSave($this->model, EntityManagerInterface::EventBeforeUpdate))
 		{
@@ -236,7 +237,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param bool       $modify     Whether to force update/upsert document
 	 * @return bool
 	 */
-	public function updateOne($criteria = null, array $attributes = null, $modify = false): bool
+	public function updateOne($criteria = null, ?array $attributes = null, $modify = false): bool
 	{
 		$criteria = $this->sm->apply($criteria);
 		$rawData = RawArray::fromModel($this->model, $attributes);
@@ -287,9 +288,9 @@ class EntityManager implements EntityManagerInterface
 		$opts = $this->options->getSaveOptions(['multiple' => false, 'upsert' => true]);
 		$collection = $this->getCollection();
 
-		if (Transaction::isRunning())
+		if (Transaction::isRunning($this->mangan))
 		{
-			$opts['session'] = Transaction::getRunningSession();
+			$opts['session'] = Transaction::getRunningSession($this->mangan);
 		}
 
 		if ($attributes !== null || $modify)
@@ -312,7 +313,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param CriteriaInterface|null $criteria condition to limit updating rules
 	 * @return boolean
 	 */
-	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null): bool
+	public function updateAll(Modifier $modifier, ?CriteriaInterface $criteria = null): bool
 	{
 		if ($modifier->canApply())
 		{
@@ -321,9 +322,9 @@ class EntityManager implements EntityManagerInterface
 			$mods = $modifier->getModifiers();
 			$opts = $this->options->getSaveOptions();
 
-			if (Transaction::isRunning())
+			if (Transaction::isRunning($this->mangan))
 			{
-				$opts['session'] = Transaction::getRunningSession();
+				$opts['session'] = Transaction::getRunningSession($this->mangan);
 			}
 
 			$result = $this->getCollection()->updateMany($conditions, $mods, $opts);
@@ -364,15 +365,14 @@ class EntityManager implements EntityManagerInterface
 			$criteria = $this->sm->apply($criteria);
 			$conditions = $criteria->getConditions();
 			$mods = $modifier->getModifiers();
-			$opts = [];
-			if ($returnUpdated)
-			{
-				$opts = ['new' => true];
-			}
+			$opts = [
+				'returnDocument' => $returnUpdated ? FindOneAndUpdate::RETURN_DOCUMENT_AFTER : FindOneAndUpdate::RETURN_DOCUMENT_BEFORE,
+				'typeMap' => Mangan::TypeMap,
+			];
 
-			if (Transaction::isRunning())
+			if (Transaction::isRunning($this->mangan))
 			{
-				$opts['session'] = Transaction::getRunningSession();
+				$opts['session'] = Transaction::getRunningSession($this->mangan);
 			}
 
 			$data = $this->getCollection()->findOneAndUpdate($conditions, $mods, $opts);
@@ -417,9 +417,9 @@ class EntityManager implements EntityManagerInterface
 				$conditions = PkManager::prepareFromModel($model)->getConditions();
 
 				$opts = $this->options->getSaveOptions();
-				if (Transaction::isRunning())
+				if (Transaction::isRunning($this->mangan))
 				{
-					$opts['session'] = Transaction::getRunningSession();
+					$opts['session'] = Transaction::getRunningSession($this->mangan);
 				}
 
 				$rawResult = $this->getCollection()->replaceOne($conditions, $data, $opts);
@@ -519,7 +519,12 @@ class EntityManager implements EntityManagerInterface
 	public function refresh(): bool
 	{
 		$conditions = PkManager::prepareFromModel($this->model)->getConditions();
-		$data = $this->getCollection()->findOne($conditions);
+		$options = [];
+		if (Transaction::isRunning($this->mangan))
+		{
+			$options['session'] = Transaction::getRunningSession($this->mangan);
+		}
+		$data = $this->getCollection()->findOne($conditions, $options);
 		if (null !== $data)
 		{
 			// Update current model instance
@@ -685,7 +690,7 @@ class EntityManager implements EntityManagerInterface
 	 * @return boolean
 	 * @see EventBeforeSave
 	 */
-	private function beforeSave($model, string $event = null): bool
+	private function beforeSave($model, ?string $event = null): bool
 	{
 		AspectManager::addAspect($model, self::AspectSaving);
 		$result = Event::Valid($model, EntityManagerInterface::EventBeforeSave);
@@ -706,7 +711,7 @@ class EntityManager implements EntityManagerInterface
 	 * @param string|null $event
 	 * @see EventAfterSave
 	 */
-	private function afterSave($model, string $event = null): void
+	private function afterSave($model, ?string $event = null): void
 	{
 		Event::trigger($model, EntityManagerInterface::EventAfterSave);
 		if (!empty($event))

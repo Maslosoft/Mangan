@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan;
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Mangan\Exceptions\ManganException;
 use Maslosoft\Mangan\Helpers\CollectionNamer;
-use MongoDB\Client;
+use Maslosoft\Mangan\Helpers\RuntimeState;
 use MongoDB\Driver\Session;
 use UnexpectedValueException;
 
@@ -54,16 +54,13 @@ class Transaction
 	public const CommandRollback = 'rollbackTransaction';
 
 //</editor-fold>
-	private Client $client;
-
 	private Session $session;
 
-	private static $sessions = [];
 
 	/**
-	 * Begin new transaction. The `$options` parameter is same as the `Manager::startSession` method.
-	 * @link https://www.php.net/manual/en/mongodb-driver-manager.startsession.php
-	 * @see  Manager
+	 * Begin new transaction. The `$options` parameter is passed to Session::startTransaction().
+	 * @link https://www.php.net/manual/en/mongodb-driver-session.starttransaction.php
+	 * @see  Session
 	 * @param AnnotatedInterface|array|string $model
 	 * @param array                           $options Transaction options
 	 * @throws ManganException
@@ -86,6 +83,12 @@ class Transaction
 		$collectionSets = [];
 		foreach ($models as $m)
 		{
+            if (is_string($m) && is_a($m, AnnotatedInterface::class, true)) {
+                $m = new $m();
+            }
+            if (!$m instanceof AnnotatedInterface) {
+                throw new UnexpectedValueException('Each transaction model must implement AnnotatedInterface.');
+            }
 			$mangan = Mangan::fromModel($m);
 			$connectionIds[$mangan->connectionId] = true;
 
@@ -114,9 +117,10 @@ class Transaction
 			$options = $mangan->transactionOptions;
 		}
 		$client = $mangan->getConnection();
-		$this->session = $client->startSession();
+		$this->session = $client->startSession($mangan->sessionOptions);
 		$this->session->startTransaction($options);
-		self::$sessions[] = $this->session;
+		RuntimeState::current()->sessions[] = $this->session;
+		RuntimeState::current()->sessionConnections[spl_object_id($this->session)] = $client;
 	}
 
 	/**
@@ -144,18 +148,32 @@ class Transaction
 	 * @return ?Session
 	 * @internal Experimental
 	 */
-	public static function getRunningSession(): ?Session
-	{
-		return end(self::$sessions);
-	}
+	public static function getRunningSession(?Mangan $mangan = null): ?Session
+    {
+        $state = RuntimeState::current();
+        foreach (array_reverse($state->sessions) as $session) {
+            if ($mangan === null || $state->sessionConnections[spl_object_id($session)] === $mangan->getConnection()) {
+                return $session;
+            }
+        }
+        return null;
+    }
 
-	public static function isRunning(): bool
+	public static function isRunning(?Mangan $mangan = null): bool
 	{
-		return count(self::$sessions) > 0;
+		return self::getRunningSession($mangan) !== null;
 	}
 
 	private function finish(): void
 	{
-		array_pop(self::$sessions);
+		foreach (RuntimeState::current()->sessions as $key => $session)
+        {
+            if ($session === $this->session)
+            {
+                unset(RuntimeState::current()->sessions[$key]);
+                unset(RuntimeState::current()->sessionConnections[spl_object_id($session)]);
+                break;
+            }
+        }
 	}
 }

@@ -50,7 +50,7 @@ class Image extends File
 	 * @param ImageParams|null $params
 	 * @return WrapperInterface
 	 */
-	public function get(ImageParams $params = null): WrapperInterface
+	public function get(?ImageParams $params = null): WrapperInterface
 	{
 		// Get original image or file if it is not image
 		if ($params === null || !$this->isImage($this->filename))
@@ -77,38 +77,45 @@ class Image extends File
 			}
 
 			$originalFilename = $result->getMetadata()['filename'];
-			$basename = basename($originalFilename);
-			$fileName = tempnam('/tmp/', str_replace('\\', '.', __CLASS__));
-			// Ensure extension is same as original filename
-			$fileName = $fileName . '_' . $basename;
-			file_put_contents($fileName, $result->getBytes());
-
-			$ie = new ImageEvent;
-			$ie->sender = $this;
-			$ie->path = $fileName;
-
-			Event::trigger($this, self::EventBeforeResize, $ie);
-
-			$image = new ImageThumb($fileName);
-
-			if ($params->adaptive)
+			$fileName = tempnam(sys_get_temp_dir(), 'mangan-image-');
+			if ($fileName === false)
 			{
-				$image->adaptiveResize($params->width, $params->height)->save($fileName);
+				throw new \RuntimeException('Could not create temporary image file.');
 			}
-			else
+			try
 			{
-				$image->resize($params->width, $params->height)->save($fileName);
+				file_put_contents($fileName, $result->getBytes());
+
+				$ie = new ImageEvent;
+				$ie->sender = $this;
+				$ie->path = $fileName;
+
+				Event::trigger($this, self::EventBeforeResize, $ie);
+
+				$image = new ImageThumb($fileName);
+
+				if ($params->adaptive)
+				{
+					$image->adaptiveResize($params->width, $params->height)->save($fileName);
+				}
+				else
+				{
+					$image->resize($params->width, $params->height)->save($fileName);
+				}
+
+				$ie = new ImageEvent;
+				$ie->sender = $this;
+				$ie->path = $fileName;
+
+				Event::trigger($this, self::EventAfterResize, $ie);
+
+				$resultParams = $this->_set($fileName, $originalFilename, $params->toArray());
+				return new StringWrapper($image->getImageAsString(), $resultParams);
 			}
-
-			$ie = new ImageEvent;
-			$ie->sender = $this;
-			$ie->path = $fileName;
-
-			Event::trigger($this, self::EventAfterResize, $ie);
-
-			$resultParams = $this->_set($fileName, $originalFilename, $params->toArray());
-			unlink($fileName);
-			return new StringWrapper($image->getImageAsString(), $resultParams);
+			finally
+			{
+				unlink($fileName);
+			}
 		}
 		return $result;
 	}
@@ -137,7 +144,7 @@ class Image extends File
 	/**
 	 * Send file to browser
 	 */
-	public function send(ImageParams $params = null): never
+	public function send(?ImageParams $params = null): never
 	{
 		(new Sender)->send($this->get($params));
 	}
@@ -145,7 +152,7 @@ class Image extends File
 	/**
 	 * Stream file to browser
 	 */
-	public function stream(ImageParams $params = null): never
+	public function stream(?ImageParams $params = null): never
 	{
 		(new Streamer)->send($this->get($params));
 	}

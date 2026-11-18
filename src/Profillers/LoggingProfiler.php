@@ -16,7 +16,7 @@ namespace Maslosoft\Mangan\Profillers;
 use Maslosoft\Mangan\Interfaces\ManganAwareInterface;
 use Maslosoft\Mangan\Interfaces\ProfilerInterface;
 use Maslosoft\Mangan\Mangan;
-use MongoCursor;
+use MongoDB\Driver\CursorInterface;
 
 /**
  * Profiller
@@ -43,11 +43,18 @@ class LoggingProfiler implements ProfilerInterface, ManganAwareInterface
 
 	/**
 	 * Profile cursor
-	 * @param MongoCursor $cursor
+	 * @param CursorInterface $cursor
 	 */
 	public function cursor($cursor)
 	{
-		$this->mangan->getLogger()->info(var_export($cursor->explain(), true));
+		$context = ['cursorType' => get_debug_type($cursor)];
+		if ($cursor instanceof CursorInterface)
+		{
+			$server = $cursor->getServer();
+			$context['cursorId'] = (string) $cursor->getId();
+			$context['server'] = $server->getHost() . ':' . $server->getPort();
+		}
+		$this->mangan->getLogger()->info('MongoDB query cursor', $context);
 	}
 
 	/**

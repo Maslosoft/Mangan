@@ -35,7 +35,7 @@ class JsonString implements TransformatorInterface
 	 */
 	public static function fromModel(AnnotatedInterface $model, $fields = [], $options = null)
 	{
-		$data = json_encode(JsonArray::fromModel($model, $fields), JSON_THROW_ON_ERROR | $options);
+		$data = json_encode(JsonArray::fromModel($model, $fields), JSON_THROW_ON_ERROR | ($options ?? 0));
 		return $data;
 	}
 
@@ -48,9 +48,9 @@ class JsonString implements TransformatorInterface
 	 * @return AnnotatedInterface
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null)
+	public static function toModel($data, $className = null, ?AnnotatedInterface $instance = null)
 	{
-		$model = JsonArray::toModel(json_decode($data, true), $className, $instance);
+		$model = JsonArray::toModel(json_decode($data, true, 512, JSON_THROW_ON_ERROR), $className, $instance);
 		return $model;
 	}
 

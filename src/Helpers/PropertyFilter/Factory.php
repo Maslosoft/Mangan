@@ -13,6 +13,7 @@
 
 namespace Maslosoft\Mangan\Helpers\PropertyFilter;
 
+use Maslosoft\Mangan\Helpers\RuntimeState;
 use Maslosoft\Mangan\Interfaces\Filters\Property\TransformatorFilterInterface;
 use Maslosoft\Mangan\Mangan;
 use Maslosoft\Mangan\Meta\DocumentPropertyMeta;
@@ -28,14 +29,6 @@ class Factory
 {
 
 	/**
-	 * Filter instances
-	 * @var TransformatorFilterInterface[][]
-	 */
-	private static $_configs = [];
-
-	private static $c = [];
-
-	/**
 	 * Create filter
 	 * @param string $transformatorClass
 	 * @param DocumentTypeMeta $documentMeta
@@ -44,11 +37,12 @@ class Factory
 	 */
 	public static function create($transformatorClass, DocumentTypeMeta $documentMeta, DocumentPropertyMeta $fieldMeta)
 	{
-		$key = $documentMeta->name . $documentMeta->connectionId . $fieldMeta->name . $transformatorClass;
+		$cache = &RuntimeState::cache(self::class . '::c');
+		$key = serialize([$documentMeta->name, $documentMeta->connectionId, $fieldMeta->name, $transformatorClass]);
 
-		if(isset(self::$c[$key]))
+		if(isset($cache[$key]))
 		{
-			return self::$c[$key];
+			return $cache[$key];
 		}
 
 		$filterNames = self::getManganFilters($documentMeta->connectionId, $transformatorClass);
@@ -57,15 +51,15 @@ class Factory
 			if (count($filterNames) > 1)
 			{
 				$filter = new MultiFilter($filterNames);
-				self::$c[$key] = $filter;
+				$cache[$key] = $filter;
 				return $filter;
 			}
 			$filter = current($filterNames);
-			
-			self::$c[$key] = $filter;
+
+			$cache[$key] = $filter;
 			return $filter;
 		}
-		self::$c[$key] = false;
+		$cache[$key] = false;
 		return false;
 	}
 
@@ -77,14 +71,14 @@ class Factory
 	 */
 	private static function getManganFilters($connectionId, $transformatorClass)
 	{
-		if (!isset(self::$_configs[$connectionId]))
+		$configs = &RuntimeState::cache(self::class . '::_configs');
+		if (!isset($configs[$connectionId]))
 		{
-			self::$_configs[$connectionId] = [];
+			$configs[$connectionId] = [];
 		}
-		if (!isset(self::$_configs[$connectionId][$transformatorClass]))
+		if (!isset($configs[$connectionId][$transformatorClass]))
 		{
-			self::$_configs[$connectionId] = [];
-			self::$_configs[$connectionId][$transformatorClass] = [];
+			$configs[$connectionId][$transformatorClass] = [];
 			$mangan = Mangan::fly($connectionId);
 			$tranformator = new $transformatorClass;
 			foreach ($mangan->filters as $implementer => $filterClasses)
@@ -93,12 +87,12 @@ class Factory
 				{
 					if ($tranformator instanceof $implementer)
 					{
-						self::$_configs[$connectionId][$transformatorClass][] = new $filterClass;
+						$configs[$connectionId][$transformatorClass][] = new $filterClass;
 					}
 				}
 			}
 		}
-		return self::$_configs[$connectionId][$transformatorClass];
+		return $configs[$connectionId][$transformatorClass];
 	}
 
 }

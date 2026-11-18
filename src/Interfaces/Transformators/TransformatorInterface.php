@@ -39,5 +39,5 @@ interface TransformatorInterface
 	 * @param AnnotatedInterface $instance
 	 * @return AnnotatedInterface Model instance
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null);
+	public static function toModel($data, $className = null, ?AnnotatedInterface $instance = null);
 }

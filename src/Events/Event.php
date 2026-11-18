@@ -15,7 +15,7 @@ namespace Maslosoft\Mangan\Events;
 
 use Maslosoft\Addendum\Interfaces\AnnotatedInterface;
 use Maslosoft\Addendum\Utilities\ClassChecker;
-use Maslosoft\Hi5Edit\Models\Href;
+use Maslosoft\Mangan\Helpers\RuntimeState;
 use Maslosoft\Mangan\Interfaces\EntityManagerInterface;
 use Maslosoft\Mangan\Interfaces\Events\EventInterface;
 use Maslosoft\Mangan\Meta\ManganMeta;
@@ -77,12 +77,6 @@ class Event implements EventInterface
 	public $data;
 
 	/**
-	 * Array of events. This contains all event registered for application.
-	 * @var EventInterface[]
-	 */
-	private static $events = [];
-
-	/**
 	 * Array containing partial classes for class. This holds traits, interfaces,
 	 * parent classes names for class.
 	 *
@@ -107,28 +101,6 @@ class Event implements EventInterface
 	 * @var string[][]
 	 */
 	private static $partials = [];
-
-	/**
-	 * Propagated properties cache. It contains only properties which should
-	 * propagate, others are skipped, thus value is always true.
-	 *
-	 * Structure is like follow:
-	 * ```
-	 * $propagated = [
-	 * 		'\Vendor\Package\ClassOne' => [
-	 * 			'fieldOne' => true,
-	 * 			'fieldTwo' => true
-	 * 		],
-	 * 		'\Vendor\Package\ClassTwo' => [
-	 * 			'otherFieldOne' => true,
-	 * 			'otherFieldTwo' => true
-	 * 		],
-	 *
-	 * ];
-	 * ```
-	 * @var bool[]
-	 */
-	private static $propagated = [];
 
 	/**
 	 * Attaches an event handler to a class-level event.
@@ -164,13 +136,13 @@ class Event implements EventInterface
 	public static function on($model, $name, $handler, $data = null, $append = true)
 	{
 		$class = self::getName($model);
-		if ($append || empty(self::$events[$name][$class]))
+		if ($append || empty(RuntimeState::current()->events[$name][$class]))
 		{
-			self::$events[$name][$class][] = [$handler, $data];
+			RuntimeState::current()->events[$name][$class][] = [$handler, $data];
 		}
 		else
 		{
-			array_unshift(self::$events[$name][$class], [$handler, $data]);
+			array_unshift(RuntimeState::current()->events[$name][$class], [$handler, $data]);
 		}
 	}
 
@@ -189,29 +161,29 @@ class Event implements EventInterface
 	public static function off($model, $name, $handler = null)
 	{
 		$class = self::getName($model);
-		if (empty(self::$events[$name][$class]))
+		if (empty(RuntimeState::current()->events[$name][$class]))
 		{
 			return false;
 		}
 		if ($handler === null)
 		{
-			unset(self::$events[$name][$class]);
+			unset(RuntimeState::current()->events[$name][$class]);
 			return true;
 		}
 		else
 		{
 			$removed = false;
-			foreach (self::$events[$name][$class] as $i => $event)
+			foreach (RuntimeState::current()->events[$name][$class] as $i => $event)
 			{
 				if ($event[0] === $handler)
 				{
-					unset(self::$events[$name][$class][$i]);
+					unset(RuntimeState::current()->events[$name][$class][$i]);
 					$removed = true;
 				}
 			}
 			if ($removed)
 			{
-				self::$events[$name][$class] = array_values(self::$events[$name][$class]);
+				RuntimeState::current()->events[$name][$class] = array_values(RuntimeState::current()->events[$name][$class]);
 			}
 			return $removed;
 		}
@@ -229,7 +201,7 @@ class Event implements EventInterface
 	public static function trigger($model, $name, &$event = null)
 	{
 		$wasTriggered = false;
-		if (empty(self::$events[$name]))
+		if (empty(RuntimeState::current()->events[$name]))
 		{
 			return self::propagate($model, $name, $event);
 		}
@@ -257,7 +229,7 @@ class Event implements EventInterface
 		$partials = [];
 		foreach ($allPartials as $className)
 		{
-			if (empty(self::$events[$name][$className]))
+			if (empty(RuntimeState::current()->events[$name][$className]))
 			{
 				continue;
 			}
@@ -267,7 +239,7 @@ class Event implements EventInterface
 		// Trigger all partial events if applicable
 		foreach ($partials as $className)
 		{
-			foreach (self::$events[$name][$className] as $handler)
+			foreach (RuntimeState::current()->events[$name][$className] as $handler)
 			{
 				// Assign source for easier debugging or other uses
 				$event->source = $className;
@@ -345,7 +317,7 @@ class Event implements EventInterface
 		$partials = self::getPartials(self::getName($class));
 		foreach ($partials as $className)
 		{
-			if (!empty(self::$events[$name][$className]))
+			if (!empty(RuntimeState::current()->events[$name][$className]))
 			{
 				return true;
 			}
@@ -382,6 +354,9 @@ class Event implements EventInterface
 	 */
 	private static function propagate($model, $name, &$event = null)
 	{
+        if (!is_object($model)) {
+            return false;
+        }
 		$wasTriggered = false;
 		if ($event && !$event->propagate())
 		{
@@ -421,8 +396,8 @@ class Event implements EventInterface
 	 */
 	private static function getPropagatedProperties($model)
 	{
-		$key = get_class($model);
-		if (empty(self::$propagated[$key]))
+		$key = is_object($model) ? get_class($model) : $model;
+		if (empty(RuntimeState::current()->propagated[$key]))
 		{
 			$propagated = [];
 			foreach (ManganMeta::create($model)->properties('propagateEvents') as $name => $isPropagated)
@@ -433,9 +408,9 @@ class Event implements EventInterface
 				}
 				$propagated[$name] = true;
 			}
-			self::$propagated[$key] = $propagated;
+			RuntimeState::current()->propagated[$key] = $propagated;
 		}
-		return self::$propagated[$key];
+		return RuntimeState::current()->propagated[$key];
 	}
 
 	/**
@@ -446,6 +421,7 @@ class Event implements EventInterface
 	 */
 	public static function getPartials($className)
 	{
+		$originalClassName = $className;
 		if (array_key_exists($className, self::$partials))
 		{
 			return self::$partials[$className];
@@ -489,13 +465,13 @@ class Event implements EventInterface
 		while (($className = get_parent_class($className)) !== false);
 		$partials = array_unique($partials);
 		sort($partials);
-		self::$partials[$className] = $partials;
+		self::$partials[$originalClassName] = $partials;
 		return $partials;
 	}
 
 	protected static function destroyEvents()
 	{
-		self::$events = [];
+		RuntimeState::current()->events = [];
 	}
 
 }

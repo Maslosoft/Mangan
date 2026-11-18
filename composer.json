@@ -1,6 +1,5 @@
 {
     "name": "maslosoft/mangan",
-    "version": "7.0.6",
     "description": "MongoDB Object Document Mapper (ODM)",
     "homepage": "https://maslosoft.com/mangan/",
     "license": [
@@ -25,11 +24,11 @@
             "role": "Developer"
         },
         {
-            "name": "Ianar\u00e9 S\u00e9vi",
+            "name": "Ianaré Sévi",
             "role": "Developer"
         },
         {
-            "name": "Dariusz G\u00f3recki",
+            "name": "Dariusz Górecki",
             "email": "darek.krk@gmail.com",
             "role": "Developer"
         },
@@ -64,29 +63,28 @@
         "docs": "https://maslosoft.com/mangan/docs/"
     },
     "require": {
-        "php": ">= 8.2",
-        "ext-json": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
-        "ext-mongodb": "*",
-        "mongodb/mongodb": "^1 | ^2",
-        "maslosoft/addendum": "^7|^8",
-        "maslosoft/cli-shared": "^1|^2|^3",
-        "maslosoft/embedi": "^2|^3",
-        "maslosoft/gazebo": "^2|^3",
-        "maslosoft/signals": "^4|^5",
-        "masterexploder/phpthumb": "^2",
-        "psr/log": "^1|^2|^3",
-        "symfony/yaml": ">=2.7"
+        "ext-json": "*",
+        "ext-mongodb": "^2.1",
+        "imagine/imagine": "^1.5",
+        "maslosoft/addendum": "^7.0.6",
+        "maslosoft/cli-shared": "^2.0.5",
+        "maslosoft/embedi": "^3.0",
+        "maslosoft/gazebo": "^2.0.2",
+        "maslosoft/light": "^2.0",
+        "maslosoft/signals": "^4.0.7",
+        "mongodb/mongodb": "^2.1",
+        "php": ">=8.5",
+        "psr/log": "^3.0",
+        "symfony/yaml": "^8.0"
     },
     "require-dev": {
+        "codeception/codeception": "^5.3",
+        "codeception/module-asserts": "^3.3",
         "ext-curl": "*",
-        "codeception/codeception": "@dev",
-        "codeception/specify": "^2|^3",
-        "maslosoft/zamm": "^1|^2|^3",
-        "maslosoft/miniview": "^1|^2|^3",
-        "maslosoft/mangan-examples": "^1|^2|^3",
-        "codeception/module-asserts": "^3"
+        "maslosoft/miniview": "^2.0.4",
+        "phpunit/phpunit": "^13.0"
     },
     "suggest": {
         "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services",
@@ -96,8 +94,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Maslosoft\\Mangan\\": "src/",
-            "Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
+            "Maslosoft\\Mangan\\": "src/"
         },
         "files": [
             "src/Helpers/functions.php",
@@ -106,7 +103,27 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Maslosoft\\ManganTest\\Models\\": "tests/models/"
+            "Maslosoft\\ManganTest\\Models\\": "tests/models/",
+            "Maslosoft\\ManganTest\\Extensions\\": "tests/extensions/"
         }
+    },
+    "scripts": {
+        "lint": "@php tools/lint.php",
+        "test:build": "@php -d register_argc_argv=1 vendor/bin/codecept build",
+        "test:compatibility": "@php -d error_reporting=-1 tests/compatibility.php",
+        "test": [
+            "@test:build @no_additional_args",
+            "@php -d register_argc_argv=1 -d error_reporting=-1 vendor/bin/codecept run unit"
+        ],
+        "check": [
+            "@lint",
+            "@test:compatibility",
+            "@test:runtime",
+            "@test"
+        ],
+        "test:runtime": "@php -d error_reporting=-1 tests/runtime.php"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

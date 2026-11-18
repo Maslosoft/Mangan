@@ -23,7 +23,7 @@ class AspectManager
 	 * @param string                  $aspect
 	 * @see AspectsInterface
 	 */
-	public static function addAspect(AnnotatedInterface $model = null, string $aspect = ''): void
+	public static function addAspect(?AnnotatedInterface $model = null, string $aspect = ''): void
 	{
 		if($model === null)
 		{
@@ -48,7 +48,7 @@ class AspectManager
 	 * @param string                  $aspect
 	 * @see AspectsInterface
 	 */
-	public static function removeAspect(AnnotatedInterface $model = null, string $aspect = ''): void
+	public static function removeAspect(?AnnotatedInterface $model = null, string $aspect = ''): void
 	{
 		if($model === null)
 		{
@@ -76,7 +76,7 @@ class AspectManager
 	 * @return bool
 	 * @see AspectsInterface
 	 */
-	public static function hasAspect(AnnotatedInterface $model = null, string $aspect = ''): bool
+	public static function hasAspect(?AnnotatedInterface $model = null, string $aspect = ''): bool
 	{
 		if($model === null)
 		{

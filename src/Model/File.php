@@ -88,7 +88,7 @@ class File extends EmbeddedDocument
 		$this->_db = $this->mangan->getDbInstance();
 	}
 
-	public function setOwner(AnnotatedInterface $owner = null): void
+	public function setOwner(?AnnotatedInterface $owner = null): void
 	{
 		parent::setOwner($owner);
 		// TODO: Move to event handler class and attach fo File class or newly created interface

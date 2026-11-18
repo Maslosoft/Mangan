@@ -104,7 +104,7 @@ abstract class Transformer
 	 * @throws ManganException
 	 * @throws TransformatorException
 	 */
-	public static function toModel($data, $className = null, AnnotatedInterface $instance = null, AnnotatedInterface $parent = null, $parentField = '')
+	public static function toModel($data, $className = null, ?AnnotatedInterface $instance = null, ?AnnotatedInterface $parent = null, $parentField = '')
 	{
 		$data = (array) $data;
 		if (is_object($className))
@@ -194,10 +194,6 @@ abstract class Transformer
 			{
 				$model->$name = null;
 				continue;
-			}
-			if($name === 'array')
-			{
-				echo 'X';
 			}
 			$decorator->read($name, $value);
 			$model->$name = $sanitizer->read($name, $model->$name);

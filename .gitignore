@@ -6,3 +6,7 @@ page.html
 /runtime/*
 .idea
 .idea/
+
+/composer.local.json
+/composer.local.lock
+/tests/_output/

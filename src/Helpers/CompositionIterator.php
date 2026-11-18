@@ -190,11 +190,10 @@ class CompositionIterator implements Iterator, Countable
 		return !$this->direct;
 	}
 
-	#[\ReturnTypeWillChange]
-	public function current()
+	public function current(): mixed
 	{
 		$this->init();
-		return $this->models[$this->pointer];
+		return $this->models[$this->pointer] ?? null;
 	}
 
 	public function next(): void
@@ -203,8 +202,7 @@ class CompositionIterator implements Iterator, Countable
 		++$this->pointer;
 	}
 
-	#[\ReturnTypeWillChange]
-	public function key()
+	public function key(): mixed
 	{
 		$this->init();
 		return $this->pointer;

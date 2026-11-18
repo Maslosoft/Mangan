@@ -60,6 +60,20 @@ class FindAndModifyTest extends Unit
 		$this->assertSame(1, $found->int, 'That `string` attribute was really updated');
 	}
 
+	public function testCanReturnDocumentBeforeModification(): void
+	{
+		$model = new DocumentBaseAttributes();
+		$model->int = 7;
+		$this->assertTrue($model->save());
+
+		$em = new EntityManager($model);
+		$modifier = new Modifier(['int' => ['set' => 42]]);
+		$before = $em->findAndModify(PkManager::prepareFromModel($model), $modifier, false);
+
+		$this->assertSame(7, $before->int);
+		$this->assertSame(42, (new Finder($model))->findByPk($model->_id)->int);
+	}
+
 	public function testIfWillNotFailModifyOnNotFoundDocument(): void
 	{
 		$model = new DocumentBaseAttributes();

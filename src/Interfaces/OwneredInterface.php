@@ -33,7 +33,7 @@ interface OwneredInterface
 	 * Get class owner
 	 * @param AnnotatedInterface|null $owner
 	 */
-	public function setOwner(AnnotatedInterface $owner = null);
+	public function setOwner(?AnnotatedInterface $owner = null);
 
 	/**
 	 * Get document root

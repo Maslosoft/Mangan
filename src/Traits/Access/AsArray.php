@@ -25,7 +25,7 @@ use Maslosoft\Addendum\Collections\Meta;
 trait AsArray
 {
 
-	public function offsetExists($offset)
+	public function offsetExists(mixed $offset): bool
 	{
 		// Allow only hash access
 		if (!is_numeric($offset))
@@ -35,17 +35,17 @@ trait AsArray
 		return false;
 	}
 
-	public function offsetGet($offset)
+	public function offsetGet(mixed $offset): mixed
 	{
 		return $this->$offset;
 	}
 
-	public function offsetSet($offset, $value)
+	public function offsetSet(mixed $offset, mixed $value): void
 	{
 		$this->$offset = $value;
 	}
 
-	public function offsetUnset($offset)
+	public function offsetUnset(mixed $offset): void
 	{
 		$this->$offset = $this->meta->$offset->default;
 	}

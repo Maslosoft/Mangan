@@ -124,4 +124,24 @@ class CountTest extends Unit
 		$this->assertSame(3, $attributesCount);
 	}
 
+	public function testCountIgnoresPaginationAndReturnsZeroForNoMatches(): void
+	{
+		$model = new WithBaseAttributes();
+		$model->string = 'count-pagination';
+		$em = new EntityManager($model);
+		for ($i = 0; $i < 3; ++$i)
+		{
+			$em->insert(new WithBaseAttributes());
+		}
+
+		$finder = new Finder($model);
+		$criteria = new Criteria();
+		$criteria->setLimit(1);
+		$criteria->setOffset(1);
+		$this->assertSame(3, $finder->count($criteria));
+
+		$criteria->addCond('string', '==', 'no-matching-document');
+		$this->assertSame(0, $finder->count($criteria));
+	}
+
 }

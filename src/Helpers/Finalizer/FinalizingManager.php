@@ -33,7 +33,7 @@ class FinalizingManager
 
 		if (!empty($finalizers))
 		{
-			$plugins = PluginFactory::fly()->instance($finalizers, $transformerClass, ModelFinalizerInterface::class);
+			$plugins = (new PluginFactory(Mangan::fromModel($model)->connectionId))->create($finalizers, $transformerClass, ModelFinalizerInterface::class);
 			foreach ($plugins as $finalizer)
 			{
 				/* @var $finalizer ModelFinalizerInterface */
@@ -45,7 +45,7 @@ class FinalizingManager
 
 	public static function toModel($transformerClass, AnnotatedInterface $model)
 	{
-		$plugins = PluginFactory::fly()->instance(Mangan::fromModel($model)->finalizers, $transformerClass, ModelFinalizerInterface::class);
+		$plugins = (new PluginFactory(Mangan::fromModel($model)->connectionId))->create(Mangan::fromModel($model)->finalizers, $transformerClass, ModelFinalizerInterface::class);
 		foreach ($plugins as $finalizer)
 		{
 			/* @var $finalizer ArrayFinalizerInterface */

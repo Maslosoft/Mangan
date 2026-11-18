@@ -56,7 +56,7 @@ class Sort implements SortInterface
 	 */
 	private $cd;
 
-	public function __construct($sort = [], AnnotatedInterface $model = null)
+	public function __construct($sort = [], ?AnnotatedInterface $model = null)
 	{
 		foreach ($sort as $field => $order)
 		{
@@ -129,7 +129,7 @@ class Sort implements SortInterface
 		return $sort;
 	}
 
-	public function setModel(AnnotatedInterface $model = null)
+	public function setModel(?AnnotatedInterface $model = null)
 	{
 		if (null !== $model)
 		{

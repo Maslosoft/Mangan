@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This software package is licensed under AGPL or Commercial license.
  *
@@ -13,28 +15,38 @@
 
 namespace Maslosoft\Mangan\Helpers;
 
-use Maslosoft\EmbeDi\StaticStorage;
 use MongoDB\Client;
 use MongoDB\Database;
 
-/**
- * ConnectionStorage
- *
- * @author Piotr Maselkowski <pmaselkowski at gmail.com>
- */
-class ConnectionStorage extends StaticStorage
+/** Connection handles shared by connection ID in the current Mangan context. @internal */
+final class ConnectionStorage
 {
+    private string $key;
 
-	/**
-	 * Mongo DB instance
-	 * @var Database
-	 */
-	public $mongoDB = null;
+    public function __construct(object|string $owner, string $instanceId)
+    {
+        $this->key = serialize([is_object($owner) ? $owner::class : $owner, $instanceId]);
+    }
 
-	/**
-	 * Mongo Client instance
-	 * @var Client
-	 */
-	public $mongoClient = null;
+    private function values(): object
+    {
+        $cache = &RuntimeState::cache(self::class);
+        return $cache[$this->key] ??= new class {
+            public ?Client $mongoClient = null;
+            public ?Database $mongoDB = null;
+        };
+    }
 
+    public function __get(string $name): Client|Database|null
+    {
+        return $this->values()->$name;
+    }
+
+    public function __set(string $name, Client|Database|null $value): void
+    {
+        if (!in_array($name, ['mongoClient', 'mongoDB'], true)) {
+            throw new \InvalidArgumentException('Unknown connection storage property: ' . $name);
+        }
+        $this->values()->$name = $value;
+    }
 }

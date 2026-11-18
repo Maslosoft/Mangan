@@ -79,8 +79,7 @@ class Cursor implements Iterator, Countable
 	 * @return AnnotatedInterface|Document|null
 	 * @since v1.3.4
 	 */
-	#[\ReturnTypeWillChange]
-	public function current()
+	public function current(): mixed
 	{
 		$document = $this->cursor->current();
 		if (empty($document))
@@ -96,8 +95,7 @@ class Cursor implements Iterator, Countable
 	 * @return scalar
 	 * @since v1.3.4
 	 */
-	#[\ReturnTypeWillChange]
-	public function key()
+	public function key(): mixed
 	{
 		return $this->cursor->key();
 	}

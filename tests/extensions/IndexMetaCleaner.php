@@ -42,8 +42,7 @@ class IndexMetaCleaner extends Extension
 		}
 		$path = IndexManager::fly()->getStoragePath();
 		$dir = realpath(dirname($path));
-		IndexManager::$haveDir = false;
-		IndexManager::$haveIndex = [];
+		IndexManager::fly()->reset();
 		// Not exists
 		if(empty($dir))
 		{

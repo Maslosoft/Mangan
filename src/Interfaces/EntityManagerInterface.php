@@ -72,7 +72,7 @@ interface EntityManagerInterface
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function insert(AnnotatedInterface $model = null);
+	public function insert(?AnnotatedInterface $model = null);
 
 	/**
 	 * Updates the document represented by this active record.
@@ -88,7 +88,7 @@ interface EntityManagerInterface
 	 * @throws ManganException on timeout of db operation , when safe flag is set to true
 	 * @since v1.0
 	 */
-	public function update(array $attributes = null);
+	public function update(?array $attributes = null);
 
 	/**
 	 * Updates one document with the specified criteria and attributes
@@ -104,7 +104,7 @@ interface EntityManagerInterface
 	 * @param bool Whether tu force update/upsert document
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, array $attributes = null, $modify = false);
+	public function updateOne($criteria = null, ?array $attributes = null, $modify = false);
 
 	/**
 	 * Atomic, in-place update method.
@@ -114,7 +114,7 @@ interface EntityManagerInterface
 	 * @param CriteriaInterface $criteria condition to limit updating rules
 	 * @return boolean|mixed[]
 	 */
-	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null);
+	public function updateAll(Modifier $modifier, ?CriteriaInterface $criteria = null);
 
 	/**
 	 * Find and modify single document atomically.

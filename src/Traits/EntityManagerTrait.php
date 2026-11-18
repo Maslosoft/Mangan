@@ -121,7 +121,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function insert(AnnotatedInterface $model = null)
+	public function insert(?AnnotatedInterface $model = null)
 	{
 		return $this->_getEm()->insert($model);
 	}
@@ -137,7 +137,7 @@ trait EntityManagerTrait
 	 * @since v1.0
 	 * @Ignored
 	 */
-	public function update(array $attributes = null): bool
+	public function update(?array $attributes = null): bool
 	{
 		return $this->_getEm()->update($attributes);
 	}
@@ -156,7 +156,7 @@ trait EntityManagerTrait
 	 * @return bool
 	 * @since v1.0
 	 */
-	public function updateOne($criteria = null, array $attributes = null, $modify = false): bool
+	public function updateOne($criteria = null, ?array $attributes = null, $modify = false): bool
 	{
 		return $this->_getEm()->updateOne($criteria, $attributes, $modify);
 	}
@@ -170,7 +170,7 @@ trait EntityManagerTrait
 	 * @Ignored
 	 * @since v1.3.6
 	 */
-	public function updateAll(Modifier $modifier, CriteriaInterface $criteria = null): bool
+	public function updateAll(Modifier $modifier, ?CriteriaInterface $criteria = null): bool
 	{
 		return $this->_getEm()->updateAll($modifier, $criteria);
 	}
